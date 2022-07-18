@@ -17,4 +17,10 @@
 
 #include "shared/linkedList/DoubleLinkedList.hpp"
 
+
+
+#include "shared/iterator/impl/NodeIterator.hpp"
+
+#include "shared/linkedList/impl/DoubleLinkedList.hpp"
+
 #endif // __CDS_EX_LINKED_LIST_HPP__

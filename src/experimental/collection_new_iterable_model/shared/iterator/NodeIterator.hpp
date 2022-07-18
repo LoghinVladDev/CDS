@@ -10,8 +10,31 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+
+                template <
+                        typename __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >
+                > class __SingleLinkedList;      // NOLINT(bugprone-reserved-identifier)
+
+
+                template <
+                        typename __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >
+                > class __DoubleLinkedList;      // NOLINT(bugprone-reserved-identifier)
+
+            }
+        }
+
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class UnidirectionalNodeIterator : public meta :: ForwardIterator {
+
+        private:
+            template <
+                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < _T > _e
+            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList;  // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -20,14 +43,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Node = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
         private:
-            Node * _pCurrentNode { nullptr };
+            Node * _pCurrentNode    { nullptr };
+
+        private:
+            Node * _pPreviousNode   { nullptr };
 
         public:
             constexpr UnidirectionalNodeIterator () noexcept;
 
         public:
             constexpr UnidirectionalNodeIterator (
-                    Node * pNode
+                    Node * pPreviousNode,
+                    Node * pCurrentNode
             ) noexcept;
 
         public:
@@ -57,21 +84,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeIterator;
-
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> UnidirectionalNodeIterator &;
-
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> UnidirectionalNodeIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeIterator;
         };
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class UnidirectionalNodeConstIterator : public meta :: ForwardIterator {
+
+        private:
+            template <
+                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < _T > _e
+            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList;  // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -80,14 +107,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Node = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
         private:
-            Node const * _pCurrentNode { nullptr };
+            Node const * _pCurrentNode    { nullptr };
+
+        private:
+            Node const * _pPreviousNode   { nullptr };
 
         public:
             constexpr UnidirectionalNodeConstIterator () noexcept;
 
         public:
             constexpr UnidirectionalNodeConstIterator (
-                    Node const * pNode
+                    Node const * pPreviousNode,
+                    Node const * pCurrentNode
             ) noexcept;
 
         public:
@@ -117,21 +148,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeConstIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeConstIterator;
-
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> UnidirectionalNodeConstIterator &;
-
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> UnidirectionalNodeConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeConstIterator;
         };
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class AbstractBidirectionalNodeIterator : public meta :: BidirectionalIterator {
+
+        private:
+            template <
+                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < _T > _e
+            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList;  // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -140,14 +171,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Node = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;
 
         protected:
-            Node * _pCurrentNode { nullptr };
+            Node * _pCurrentNode    { nullptr };
+
+        protected:
+            Node * _pPreviousNode   { nullptr };
 
         protected:
             constexpr AbstractBidirectionalNodeIterator () noexcept;
 
         protected:
-            constexpr AbstractBidirectionalNodeIterator (
-                    Node * pNode
+            __CDS_Explicit constexpr AbstractBidirectionalNodeIterator (
+                    Node * pPreviousNode,
+                    Node * pCurrentNode
             ) noexcept;
 
         protected:
@@ -181,6 +216,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class AbstractBidirectionalNodeConstIterator : public meta :: BidirectionalIterator {
 
+        private:
+            template <
+                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < _T > _e
+            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList;  // NOLINT(bugprone-reserved-identifier)
+
         public:
             using ElementType = __ElementType;
 
@@ -188,14 +229,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Node = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;
 
         protected:
-            Node const * _pCurrentNode { nullptr };
+            Node const * _pCurrentNode    { nullptr };
+
+        protected:
+            Node const * _pPreviousNode   { nullptr };
 
         protected:
             constexpr AbstractBidirectionalNodeConstIterator () noexcept;
 
         protected:
-            constexpr AbstractBidirectionalNodeConstIterator (
-                    Node const * pNode
+            __CDS_Explicit constexpr AbstractBidirectionalNodeConstIterator (
+                    Node const * pPreviousNode,
+                    Node const * pCurrentNode
             ) noexcept;
 
         protected:
@@ -239,8 +284,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr ForwardBidirectionalNodeIterator () noexcept;
 
         public:
-            constexpr ForwardBidirectionalNodeIterator (
-                    Node * pNode
+            __CDS_Explicit constexpr ForwardBidirectionalNodeIterator (
+                    Node * pPreviousNode,
+                    Node * pCurrentNode
             ) noexcept;
 
         public:
@@ -264,16 +310,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeIterator;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ForwardBidirectionalNodeIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ForwardBidirectionalNodeIterator;
         };
 
 
@@ -290,8 +336,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr ForwardBidirectionalNodeConstIterator () noexcept;
 
         public:
-            constexpr ForwardBidirectionalNodeConstIterator (
-                    Node const * pNode
+            __CDS_Explicit constexpr ForwardBidirectionalNodeConstIterator (
+                    Node const * pPreviousNode,
+                    Node const * pCurrentNode
             ) noexcept;
 
         public:
@@ -315,16 +362,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeConstIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeConstIterator;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeConstIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ForwardBidirectionalNodeConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ForwardBidirectionalNodeConstIterator;
         };
 
 
@@ -341,8 +388,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr BackwardBidirectionalNodeIterator () noexcept;
 
         public:
-            constexpr BackwardBidirectionalNodeIterator (
-                    Node * pNode
+            __CDS_Explicit constexpr BackwardBidirectionalNodeIterator (
+                    Node * pPreviousNode,
+                    Node * pCurrentNode
             ) noexcept;
 
         public:
@@ -366,16 +414,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeIterator;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardBidirectionalNodeIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardBidirectionalNodeIterator;
         };
 
 
@@ -392,8 +440,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr BackwardBidirectionalNodeConstIterator () noexcept;
 
         public:
-            constexpr BackwardBidirectionalNodeConstIterator (
-                    Node const * pNode
+            __CDS_Explicit constexpr BackwardBidirectionalNodeConstIterator (
+                    Node const * pPreviousNode,
+                    Node const * pCurrentNode
             ) noexcept;
 
         public:
@@ -417,16 +466,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeConstIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeConstIterator;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeConstIterator &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardBidirectionalNodeConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardBidirectionalNodeConstIterator;
         };
 
     }

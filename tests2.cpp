@@ -172,6 +172,7 @@ void timingTest (int n) {
 
 int main () {
 
+
     std :: cout << sizeof ( Array < int > ) << '\n';
 
     Array < int > a;

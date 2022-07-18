@@ -43,10 +43,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __NodeType * _pBack     { nullptr };
 
                 private:
-                    __CDS_NoDiscard auto __dll_allocateNode () const noexcept -> __NodeType *;  // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard static auto __dll_allocateNode () noexcept -> __NodeType *;  // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    auto __dll_freeNode (   // NOLINT(bugprone-reserved-identifier)
+                    static auto __dll_freeNode ( // NOLINT(bugprone-reserved-identifier)
                             __NodeType * pNode
                     ) noexcept -> void;
 
@@ -59,7 +59,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > __DoubleLinkedList (                              // NOLINT(bugprone-reserved-identifier)
+                    > __DoubleLinkedList (                              // NOLINT(bugprone-reserved-identifier,google-explicit-constructor)
                             __DoubleLinkedList const & list
                     ) noexcept;
 
@@ -70,6 +70,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     auto __dll_clear () noexcept -> void;   // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __dll_empty () const noexcept -> bool;   // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __dll_removeFront () noexcept -> void; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __dll_removeBack () noexcept -> void;  // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     auto __dll_remove (                     // NOLINT(bugprone-reserved-identifier)
@@ -115,14 +124,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             bool                * pNewElementCreated
                     ) noexcept -> __ElementType *;
 
-                protected:
+                private:
                     __CDS_NoDiscard auto __dll_newBefore (    // NOLINT(bugprone-reserved-identifier)
-                            __NodeType const * pNode
+                            __NodeType  const * pPrevious,
+                            __NodeType  const * pCurrent
                     ) noexcept -> __ElementType *;
 
-                protected:
+                private:
                     auto __dll_newArrayBefore ( // NOLINT(bugprone-reserved-identifier)
-                            __NodeType  const * pNode,
+                            __NodeType  const * pPrevious,
+                            __NodeType  const * pCurrent,
                             Size                count,
                             __ElementType    ** ppElements
                     ) noexcept -> void;
@@ -217,7 +228,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __dll_copy (
+                    > auto __dll_copy ( // NOLINT(bugprone-reserved-identifier)
                             __DoubleLinkedList const & list
                     ) noexcept -> void;
 
@@ -232,7 +243,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __dll_copyCleared (
+                    > auto __dll_copyCleared (  // NOLINT(bugprone-reserved-identifier)
                             __DoubleLinkedList const & list
                     ) noexcept -> void;
 
