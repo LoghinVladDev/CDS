@@ -5,403 +5,489 @@
 #ifndef CDS_RBTREE_H
 #define CDS_RBTREE_H
 #include <CDS/Object>
+#include "./../src/shared/Node.hpp"
+#include "./../src/shared/memory/PrimitiveAllocation.hpp"
+namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
+    namespace __hidden {
+        namespace __impl {
 
-namespace cds {
-
-    template <typename DataType>
-    class RBTree : public Object {
-    public:
-        class RBTreeNode {
-        public:
-            using Node = RBTreeNode;
-            using NodePointer = Node *;
-            using NodePointerRefference = NodePointer &;
-            enum Colour { RED, BLACK };
-        private:
-            NodePointer parent { nullptr };
-            NodePointer left { nullptr };
-            NodePointer right { nullptr };
-            Colour colour { RED };
-            DataType key { 0 };
-        public:
-            RBTreeNode() = default;
-            explicit RBTreeNode( DataType const & );
-            auto getLeft () -> NodePointerRefference;
-            auto getRight () -> NodePointerRefference;
-            auto getParent () -> NodePointerRefference;
-            auto getColour () -> Colour;
-            auto getKey () -> DataType const &;
-            auto setKey ( DataType const & ) -> void;
-            auto setColour ( Colour ) -> void;
-            auto insertLeft ( DataType const & ) -> NodePointerRefference;
-            auto insertRight ( DataType const & ) -> NodePointerRefference;
-            auto isRed () -> bool;
-            auto isLeftChild () -> bool;
-
-        };
-    private:
-        RBTreeNode * root { nullptr };
-        auto leftRotate ( RBTreeNode * ) -> void;
-        auto rightRotate ( RBTreeNode * ) -> void;
-        auto insertFixup ( RBTreeNode * ) -> void;
-        auto transplant ( RBTreeNode *, RBTreeNode * ) -> void;
-        auto deleteFixup ( RBTreeNode* ) -> void;
-
-        static RBTreeNode * __getLeftNode ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
-            return pNode->getLeft();
-        }
-
-        static RBTreeNode * __getRightNode ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
-            return pNode->getRight();
-        }
-
-        static bool __isLeftChild ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
-            return pNode->getParent()->getLeft() == pNode;
-        }
-
-        static bool __isRightChild ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
-            return pNode->getParent()->getRight() == pNode;
-        }
-
-        template <
-                bool rotationDecision,
-                RBTreeNode * ( * __locateAuxiliary ) ( RBTreeNode * ) = rotationDecision ? & __getRightNode : & __getLeftNode,
-                bool ( * __ifS1 ) ( RBTreeNode * ) = rotationDecision ? & __isRightChild : & __isLeftChild,
-                void ( RBTree :: *  __rotateS1 ) ( RBTreeNode * ) = rotationDecision ? & RBTree :: leftRotate : & RBTree :: rightRotate,
-                void ( RBTree :: *  __rotateS2 ) ( RBTreeNode * ) = rotationDecision ? & RBTree :: rightRotate : & RBTree :: leftRotate
-        > auto __identifyAndApplyRotation (
-                RBTreeNode * pNewNode
-        ) noexcept -> void;
-
-    public:
-        RBTree () = default;
-        auto Insert ( DataType const & ) -> void;
-        auto Delete ( DataType const & ) -> void;
-        auto Find ( DataType const & ) -> RBTreeNode *;
-    };
-    template < typename DataType >
-    RBTree < DataType > :: RBTreeNode :: RBTreeNode ( DataType const & data ) : key ( data ) { } ;
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: getLeft() -> NodePointerRefference { return this->left; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: getRight() -> NodePointerRefference { return this->right; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: getParent() -> NodePointerRefference { return this->parent; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: getColour() -> Colour { return this->colour; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: getKey () -> const DataType& { return this->key; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: setKey ( DataType const & data ) -> void { this->key = data; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: setColour ( Colour c ) -> void { this->colour = c; }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: insertLeft ( DataType const & data ) -> NodePointerRefference {
-        if ( this->left == nullptr ) {
-            NodePointer x = new NodePointer ( data );
-            this->left = x;
-        }
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: insertRight ( DataType const & data ) -> NodePointerRefference {
-        if ( this->right == nullptr ) {
-            NodePointer x = new NodePointer ( data );
-            this->right = x;
-        }
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: isRed () -> bool {
-        return this->colour == RED;
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: RBTreeNode :: isLeftChild () -> bool {
-        return ( this == this->parent->left );
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: leftRotate ( RBTreeNode * pivot ) -> void {
-        RBTreeNode * aux = pivot->getRight();
-        pivot->getRight() = aux->getLeft();
-        if ( aux->getLeft() != nullptr )
-            aux->getLeft()->getParent() = pivot;
-        aux->getParent() = pivot->getParent();
-        if ( pivot->getParent() == nullptr )
-            this->root = aux;
-        else
-            if ( pivot->isLeftChild() )
-                pivot->getParent()->getLeft() = aux;
-            else
-                pivot->getParent()->getRight() = aux;
-        aux->getLeft() = pivot;
-        pivot->getParent() = aux;
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: rightRotate ( RBTreeNode * pivot ) -> void {
-        RBTreeNode * aux = pivot->getLeft();
-        pivot->getLeft() = aux->getRight();
-        if ( aux->getRight() != nullptr )
-            aux->getRight()->getParent() = pivot;
-        aux->getParent() = pivot->getParent();
-        if ( pivot->getParent() != nullptr )
-            this->root = aux;
-        else
-            if ( pivot->isLeftChild() )
-                pivot->getParent()->getLeft() = aux;
-            else
-                pivot->getParent()->getRight() = aux;
-        aux->getRight() = pivot;
-        pivot->getParent() = aux;
-    }
-
-    template <
-            typename __ElementType
-    > template <
-            bool rotationDecision,
-            typename RBTree < __ElementType > :: RBTreeNode * ( * __locateAuxiliary ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
-            bool ( * __ifS1 ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
-            void ( RBTree < __ElementType > :: *  __rotateS1 ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
-            void ( RBTree < __ElementType > :: *  __rotateS2 ) ( typename RBTree < __ElementType > :: RBTreeNode * )
-    > auto RBTree < __ElementType > :: __identifyAndApplyRotation (
-            RBTreeNode * newNode
-    ) noexcept -> void {
-
-        RBTreeNode * aux = __locateAuxiliary ( newNode->getParent()->getParent() );
-//        RBTreeNode * aux = newNode->getParent()->getParent()->getRight(); // locateAuxiliary, ifS1, rotateS1, rotateS2
-        if ( aux != nullptr && aux->isRed() ) {
-            newNode->getParent()->setColour ( RBTreeNode :: RED );
-            aux->setColour ( RBTreeNode :: BLACK );
-            newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
-            newNode = newNode->getParent()->getParent();
-        }
-        else {
-//            if ( !newNode->isLeftChild () ) {
-            if ( __ifS1 ( newNode ) ) {
-                newNode = newNode->getParent();
-                ( this->*__rotateS1 ) ( newNode );
-//                this->leftRotate ( newNode );
+            template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+            inline auto __getLeftNode ( __RBTreeNode < __ElementType > * pNode ) -> __RBTreeNode < __ElementType > * {      // NOLINT(bugprone-reserved-identifier)
+                return pNode->_pLeft;
             }
 
-            newNode->getParent()->setColour ( RBTreeNode::BLACK );
-            newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
-            ( this->*__rotateS2 ) ( newNode->getParent()->getParent() );
-//            this->rightRotate ( newNode->getParent()->getParent() );
-        }
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: insertFixup ( RBTreeNode * newNode ) -> void {
-        while ( newNode->getParent()->isRed() ) {
-            if ( newNode->getParent()->isLeftChild() ) {
-                this->__identifyAndApplyRotation < true > ( newNode );
-//                RBTreeNode * aux = newNode->getParent()->getParent()->getRight(); // locateAuxiliary, ifS1, rotateS1, rotateS2
-//                if ( aux != nullptr && aux->isRed() ) {
-//                    newNode->getParent()->setColour ( RBTreeNode :: RED );
-//                    aux->setColour ( RBTreeNode :: BLACK );
-//                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
-//                    newNode = newNode->getParent()->getParent();
-//                }
-//                else {
-//                    if ( !newNode->isLeftChild () ) {
-//                        newNode = newNode->getParent();
-//                        this->leftRotate ( newNode );
-//                    }
-//                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
-//                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
-//                    this->rightRotate ( newNode->getParent()->getParent() );
-//                }
+            template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+            inline auto __getRightNode ( __RBTreeNode < __ElementType > * pNode ) -> __RBTreeNode < __ElementType > * {     // NOLINT(bugprone-reserved-identifier)
+                return pNode->_pRight;
             }
-            else {
-                this->__identifyAndApplyRotation < false > ( newNode );
-//                RBTreeNode * aux = newNode->getParent()->getParent()->getLeft();
-//                if ( aux != nullptr && aux->isRed() ) {
-//                    newNode->getParent()->setColour ( RBTreeNode :: RED );
-//                    aux->setColour ( RBTreeNode :: BLACK );
-//                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
-//                    newNode = newNode->getParent()->getParent();
-//                }
-//                else {
-//                    if ( newNode->isLeftChild () ) {
-//                        newNode = newNode->getParent();
-//                        this->rightRotate ( newNode );
-//                    }
-//                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
-//                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
-//                    this->leftRotate ( newNode->getParent()->getParent() );
-//                }
+
+            template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+            static auto __isLeftChild ( __RBTreeNode < __ElementType > * pNode ) -> bool {     // NOLINT(bugprone-reserved-identifier)
+                return pNode->_pParent->_pLeft == pNode;
             }
-        }
-        this->root->setColour ( RBTreeNode :: BLACK );
-    }
 
-    template < typename DataType >
-    auto RBTree < DataType > :: transplant ( RBTreeNode * u, RBTreeNode * v ) -> void {
-        if ( u->getParent() == nullptr )
-            this->root = v;
-        else
-            if ( u->isLeftChild() )
-                u->getParent()->getLeft() = v;
-            else
-                u->getParent()->getRight() = v;
-        if ( v != nullptr )
-            v->getParent() = u->getParent();
-    }
+            template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+            static auto __isRightChild ( __RBTreeNode < __ElementType > * pNode ) -> bool {     // NOLINT(bugprone-reserved-identifier)
+                return pNode->_pParent->_pRight == pNode;
+            }
 
-    template < typename DataType >
-    auto RBTree < DataType > :: deleteFixup ( RBTreeNode * deletedNode ) -> void {
-        while ( deletedNode != this->root && !deletedNode->isRed() ) {
-            if ( deletedNode->isLeftChild() ) {
-                RBTreeNode * aux = deletedNode->getParent()->getRight();
-                if ( aux != nullptr && aux->isRed() ) {
-                    aux->setColour ( RBTreeNode :: BLACK );
-                    deletedNode->getParent()->setColour ( RBTreeNode :: RED );
-                    this->leftRotate ( deletedNode->getParent() );
-                    aux = deletedNode->getParent()->getRight();
+            template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+            static auto __isRed ( __RBTreeNode < __ElementType > * pNode ) -> bool {    // NOLINT(bugprone-reserved-identifier)
+                return pNode->_colour == __RBTreeNode < __ElementType > :: RED;
+            }
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            class RBTree : public Object {
+
+            private:
+                using ElementType       =       __ElementType;
+                using RBTreeNode        =       __RBTreeNode < __ElementType >;
+
+            private:
+                static auto pNull = __allocation :: __allocPrimitiveObject < RBTreeNode * > ();
+
+
+            private:
+
+
+            private:
+                RBTreeNode * root { nullptr };
+
+                auto __allocateNode ( ElementType const & ) -> RBTreeNode *;    // NOLINT(bugprone-reserved-identifier)
+
+                auto __leftRotate ( RBTreeNode * ) -> void;                     // NOLINT(bugprone-reserved-identifier)
+
+                auto __rightRotate ( RBTreeNode * ) -> void;                    // NOLINT(bugprone-reserved-identifier)
+
+                auto __insertReBalance ( RBTreeNode * ) -> void;                // NOLINT(bugprone-reserved-identifier)
+
+                auto __transplant ( RBTreeNode *, RBTreeNode * ) -> void;       // NOLINT(bugprone-reserved-identifier)
+
+                auto __deleteReBalance ( RBTreeNode * ) -> void;                    // NOLINT(bugprone-reserved-identifier)
+
+                template <
+                        bool rotationDecision,
+                        RBTreeNode * ( *__locateAuxiliary )( RBTreeNode * ) = rotationDecision ? &__getRightNode < ElementType >        // NOLINT(bugprone-reserved-identifier)
+                                                                                            : &__getLeftNode < ElementType >,
+                        bool ( *__ifS1 )( RBTreeNode * ) = rotationDecision ? &__isRightChild < ElementType > :                         // NOLINT(bugprone-reserved-identifier)
+                                                                            &__isLeftChild < ElementType >,
+                        void ( RBTree :: *  __rotateS1 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __leftRotate                  // NOLINT(bugprone-reserved-identifier)
+                                                                                        : & RBTree :: __rightRotate,
+                        void ( RBTree :: *  __rotateS2 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __rightRotate                 // NOLINT(bugprone-reserved-identifier)
+                                                                                        : & RBTree :: __leftRotate
+                >
+                auto __identifyAndApplyRotationOnInsert (    // NOLINT(bugprone-reserved-identifier)
+                        RBTreeNode * pPivot
+                ) noexcept -> void;
+
+                template <
+                        bool rotationDecision,
+                        RBTreeNode * ( *__locateAuxiliary )( RBTreeNode * ) = rotationDecision ? &__getRightNode < ElementType >        // NOLINT(bugprone-reserved-identifier)
+                                                                                               : &__getLeftNode < ElementType >,
+                        RBTreeNode * ( *__locateReversedAuxiliary )( RBTreeNode * ) = rotationDecision ? &__getLeftNode < ElementType >        // NOLINT(bugprone-reserved-identifier)
+                                                                                               : &__getRightNode < ElementType >,
+                        bool ( *__ifS1 )( RBTreeNode * ) = rotationDecision ? &__isRightChild < ElementType > :                         // NOLINT(bugprone-reserved-identifier)
+                                                           &__isLeftChild < ElementType >,
+                        void ( RBTree :: *  __rotateS1 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __leftRotate                  // NOLINT(bugprone-reserved-identifier)
+                                                                                            : & RBTree :: __rightRotate,
+                        void ( RBTree :: *  __rotateS2 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __rightRotate                 // NOLINT(bugprone-reserved-identifier)
+                                                                                            : & RBTree :: __leftRotate
+                >
+                auto __identifyAndApplyRotationOnDelete (    // NOLINT(bugprone-reserved-identifier)
+                        RBTreeNode * pPivot
+                ) noexcept -> void;
+
+            public:
+                RBTree() = default;
+
+                auto insert ( ElementType const & ) -> void;
+
+                auto remove ( ElementType const & ) -> void;
+
+                auto find ( ElementType const & ) -> RBTreeNode *;
+            };
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __allocateNode (
+                    const ElementType &
+                ) -> RBTreeNode * {
+                    RBTreeNode * p = __allocation :: __allocPrimitiveObject < RBTreeNode > ();
+                    p->_colour = __RBTreeNode < ElementType > :: RED;
+                    p->_pLeft = p->_pRight = p->_pParent = pNull;
+                    return p;
+            }
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __leftRotate ( RBTreeNode * pPivot ) -> void {
+                RBTreeNode * pAux = pPivot->_pRight;
+                pPivot->_pRight = pAux->_pLeft;
+                if ( pAux->_pLeft != pNull )
+                    pAux->_pLeft->_pParent = pPivot;
+                pAux->_pParent = pPivot;
+                if ( pPivot->_pParent == pNull )
+                    this->root = pAux;
+                else
+                    if (__isLeftChild ( pPivot ) )
+                        pPivot->_pParent->_pLeft = pAux;
+                    else
+                        pPivot->_pParent->_pRight = pAux;
+                pAux->_pLeft = pPivot;
+                pPivot->_pParent = pAux;
+            }
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __rightRotate ( RBTreeNode * pPivot ) -> void {
+                RBTreeNode * pAux = pPivot->_pLeft;
+                pPivot->_pLeft = pAux->_pRight;
+                if ( pAux->_pRight != pNull )
+                    pAux->_pLeft = pPivot;
+                pAux->_pParent = pPivot->_pParent;
+                if ( pPivot->_pParent == pNull )
+                    this->root = pAux;
+                else
+                    if (__isLeftChild ( pPivot ) )
+                        pPivot->_pParent->_pLeft = pAux;
+                    else
+                        pPivot->_pParent->_pRight = pAux;
+                pAux->_pRight = pPivot;
+                pPivot->_pParent = pAux;
+            }
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __insertReBalance ( RBTreeNode * pPivot ) -> void {
+                while ( __isRed ( pPivot->_pParent ) ) {
+                    __identifyAndApplyRotationOnInsert < __isLeftChild (pPivot ) > ( pPivot );
                 }
-                if ( ( aux->getLeft() == nullptr || !aux->getLeft()->isRed() ) && ( aux->getRight() == nullptr || !aux->getRight()->isRed() ) ) {
-                    aux->setColour ( RBTreeNode :: RED );
-                    deletedNode = deletedNode->getParent();
-                }
-                else {
-                    if ( ( aux->getRight() == nullptr || !aux->getRight()->isRed () ) ) {
-                        aux->getLeft()->setColour ( RBTreeNode::BLACK );
-                        aux->setColour( RBTreeNode::RED );
-                        this->rightRotate( aux );
-                        aux = deletedNode->getParent()->getRight();
+                this->root->_colour = RBTreeNode :: BLACK;
+            }
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            template <
+                    bool rotationDecision,
+                    typename RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                            > :: RBTreeNode * ( *__locateAuxiliary )(       // NOLINT(bugprone-reserved-identifier)
+
+                            typename RBTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyExtractor,
+                                    __KeyLowerComparator,
+                                    __KeyEqualsComparator,
+                                    __ElementTypeDestruct
+                            > :: RBTreeNode * ),
+                    bool ( *__ifS1 )(                                       // NOLINT(bugprone-reserved-identifier)
+                            typename RBTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyExtractor,
+                                    __KeyLowerComparator,
+                                    __KeyEqualsComparator,
+                                    __ElementTypeDestruct
+                            > :: RBTreeNode *),
+                    void ( RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: *  __rotateS1 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode *),
+                    void ( RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: *  __rotateS2 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode * )
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __identifyAndApplyRotationOnInsert (
+                    RBTreeNode * pPivot
+            ) noexcept -> void {
+                RBTreeNode * pAux = __locateAuxiliary ( pPivot->_pParent->_pParent );
+                if ( __isRed ( pAux ) ) {
+                    pPivot->_pParent->_colour = RBTreeNode :: RED;
+                    pAux->_colour = RBTreeNode :: BLACK;
+                    pPivot->_pParent->_pParent->_colour = RBTreeNode :: RED;
+                    pPivot = pPivot->_pParent->_pParent;
+                } else {
+                    if ( __ifS1 ( pPivot ) ) {
+                        pPivot = pPivot->_pParent;
+                        ( this->*__rotateS1 )( pPivot );
                     }
-                    aux->setColour ( deletedNode->getParent()->getColour() );
-                    deletedNode->getParent()->setColour ( RBTreeNode :: BLACK );
-                    aux->getRight()->setColour ( RBTreeNode :: BLACK );
-                    this->leftRotate ( deletedNode->getParent() );
-                    deletedNode = this->root;
+                    pPivot->_pParent->_colour = RBTreeNode :: BLACK;
+                    pPivot->_pParent->_pParent->_colour = RBTreeNode :: RED;
+                    ( this->*__rotateS2 )( pPivot->_pParent->_pParent );
                 }
             }
-            else {
-                RBTreeNode * aux = deletedNode->getParent()->getLeft();
-                if ( aux != nullptr && aux->isRed() ) {
-                    aux->setColour ( RBTreeNode :: BLACK );
-                    deletedNode->getParent()->setColour ( RBTreeNode :: RED );
-                    this->rightRotate ( deletedNode->getParent() );
-                    aux = deletedNode->getParent()->getLeft();
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __transplant ( RBTreeNode * pRemoved, RBTreeNode * pMovedIn ) -> void {
+                if ( pRemoved->_pParent == pNull )
+                    this->root = pMovedIn;
+                else
+                    if ( __isLeftChild ( pRemoved ) )
+                        pRemoved->_pParent->_pLeft = pRemoved;
+                    else
+                        pRemoved->_pParent->_pRight = pRemoved;
+                pMovedIn->_pParent = pRemoved->_pParent;
+            }
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __deleteReBalance ( RBTreeNode * pPivot ) -> void {
+                while ( pPivot != this->root && !__isRed (pPivot ) )
+                    __identifyAndApplyRotationOnDelete < __isLeftChild ( pPivot ) >( pPivot );
+            }
+
+
+            template <
+                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
+            >
+            template <
+                    bool rotationDecision,
+                    typename RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode * ( *__locateAuxiliary )(       // NOLINT(bugprone-reserved-identifier)
+                            typename RBTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyExtractor,
+                                    __KeyLowerComparator,
+                                    __KeyEqualsComparator,
+                                    __ElementTypeDestruct
+                            > :: RBTreeNode * ),
+                    typename RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode * ( *__locateReversedAuxiliary )(       // NOLINT(bugprone-reserved-identifier)
+                            typename RBTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyExtractor,
+                                    __KeyLowerComparator,
+                                    __KeyEqualsComparator,
+                                    __ElementTypeDestruct
+                            > :: RBTreeNode * ),
+                    bool ( *__ifS1 )(                                       // NOLINT(bugprone-reserved-identifier)
+                            typename RBTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyExtractor,
+                                    __KeyLowerComparator,
+                                    __KeyEqualsComparator,
+                                    __ElementTypeDestruct
+                            > :: RBTreeNode *),
+                    void ( RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: *  __rotateS1 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode *),
+                    void ( RBTree <
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: *  __rotateS2 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
+                            __ElementType,
+                            __KeyType,
+                            __KeyExtractor,
+                            __KeyLowerComparator,
+                            __KeyEqualsComparator,
+                            __ElementTypeDestruct
+                    > :: RBTreeNode * )
+            >
+            auto RBTree <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyLowerComparator,
+                    __KeyEqualsComparator,
+                    __ElementTypeDestruct
+            > :: __identifyAndApplyRotationOnDelete (
+                    RBTreeNode * pPivot
+            ) noexcept -> void {
+                RBTreeNode * pAux = __locateAuxiliary ( pPivot->_pParent );
+                if ( __isRed ( pAux) ) {
+                    pAux->_colour = RBTreeNode :: BLACK;
+                    pPivot->_pParent->_colour = RBTreeNode :: RED;
+                    ( this->*__rotateS1 )( pPivot->_pParent );
+                    pAux = __locateAuxiliary ( pPivot->_pParent );
                 }
-                if ( ( aux->getRight() == nullptr || !aux->getRight()->isRed() ) && ( aux->getLeft() == nullptr || !aux->getLeft()->isRed() ) ) {
-                    aux->setColour ( RBTreeNode :: RED );
-                    deletedNode = deletedNode->getParent();
+                if ( !__isRed ( pAux->_pLeft ) && !__isRed ( pAux->_pRight ) ) {
+                    pAux->_colour = RBTreeNode :: RED;
+                    pPivot = pPivot->_pParent;
                 }
                 else {
-                    if ( ( aux->getLeft() == nullptr || !aux->getLeft ()->isRed () ) ) {
-                        aux->getRight()->setColour ( RBTreeNode::BLACK );
-                        aux->setColour( RBTreeNode::RED );
-                        this->leftRotate( aux );
-                        aux = deletedNode->getParent()->getLeft();
+                    if ( !__isRed ( __locateAuxiliary ( pAux ) ) ) {
+                        __locateReversedAuxiliary ( pAux )->_colour = RBTreeNode :: BLACK;
+                        pAux->_colour = RBTreeNode :: RED;
+                        ( this->*__rotateS2 )( pAux );
+                        pAux = __locateAuxiliary ( pPivot->_pParent );
                     }
-                    aux->setColour ( deletedNode->getParent()->getColour() );
-                    deletedNode->getParent()->setColour ( RBTreeNode :: BLACK );
-                    aux->getLeft()->setColour ( RBTreeNode :: BLACK );
-                    this->rightRotate ( deletedNode->getParent() );
-                    deletedNode = this->root;
+                    pAux->_colour = pPivot->_pParent->_colour;
+                    pPivot->_pParent->_colour = RBTreeNode :: BLACK;
+                    ( this->*__rotateS1 )( pPivot->_pParent );
+                    pPivot = this->root;
                 }
+                pPivot->_colour = RBTreeNode :: BLACK;
             }
         }
-        deletedNode->setColour ( RBTreeNode :: BLACK );
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: Insert ( const DataType & data ) -> void {
-        RBTreeNode * x = this->root;
-        if ( x == nullptr ) {
-            this->root = new RBTreeNode ( data );
-            this->root->setColour ( RBTreeNode :: BLACK );
-            return;
-        }
-        RBTreeNode * y = x;
-        while ( x != nullptr ) {
-            y = x;
-            if ( data < x->getKey() )
-                x = x->getLeft();
-            else
-                x = x->getRight();
-        }
-        auto z = new RBTreeNode ( data );
-        if ( data < y->getKey() )
-            y->getLeft() = z;
-        else
-            y->getRight() = z;
-        z->getParent() = y;
-        this->insertFixup( z );
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: Delete ( const DataType & data ) -> void {
-        RBTreeNode * z = this->root;
-        while ( z != nullptr ) {
-            if ( data == z->getKey() )
-                break;
-            if ( data < z->getKey() )
-                z = z->getLeft();
-            else
-                z = z->getRight();
-        }
-        if ( z == nullptr ) {
-            throw std :: runtime_error ( "Data does not exist in RB-tree" );
-        }
-        RBTreeNode * y = z;
-        RBTreeNode * x;
-        bool isBlack = !y->isRed();
-        if ( z->getLeft() == nullptr ) {
-            x = z->getRight();
-            this->transplant( z, z->getRight() );
-        }
-        else
-            if ( z->getRight() == nullptr ) {
-                x = z->getLeft();
-                this->transplant( z, z->getLeft() );
-            }
-            else {
-                y = z->getRight();
-                while ( y->getLeft() != nullptr )
-                    y = y->getLeft();
-                isBlack = !y->isRed();
-                x = y->getRight();
-                if ( y->getParent() == z )
-                    x->getParent() = y;
-                else {
-                    this->transplant( y, y->getRight() );
-                    y->getRight() = z->getRight();
-                    y->getRight()->getParent() = y;
-                }
-                this->transplant( z, y );
-                y->getLeft() = z->getLeft();
-                y->getLeft()->getParent() = y;
-                y->setColour ( z->getColour() );
-            }
-        if ( isBlack )
-            deleteFixup ( x );
-    }
-
-    template < typename DataType >
-    auto RBTree < DataType > :: Find ( DataType const & data ) -> RBTreeNode * {
-        RBTreeNode * x = this->root;
-        while ( x != nullptr ) {
-            if ( data == x->getKey() )
-                return x;
-            if ( data < x->getKey() )
-                x = x->getLeft();
-            else
-                x = x->getRight();
-        }
-        return nullptr;
     }
 }
 
