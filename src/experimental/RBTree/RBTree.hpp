@@ -74,16 +74,19 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         bool rotationDecision,
-                        RBTreeNode * ( *__locateAuxiliary )( RBTreeNode * ) = rotationDecision ? &__getRightNode < ElementType >        // NOLINT(bugprone-reserved-identifier)
-                                                                                            : &__getLeftNode < ElementType >,
-                        bool ( *__ifS1 )( RBTreeNode * ) = rotationDecision ? &__isRightChild < ElementType > :                         // NOLINT(bugprone-reserved-identifier)
+                        typename __NodeType = RBTreeNode,
+                        typename __ClassType = RBTree,
+                        __NodeType * ( *__locateAuxiliary )( __NodeType * ) =
+                                rotationDecision                ?
+                                & __getRightNode < ElementType > :
+                                & __getLeftNode < ElementType >,
+                        bool ( *__ifS1 )( __NodeType * ) = rotationDecision ? &__isRightChild < ElementType > :                         // NOLINT(bugprone-reserved-identifier)
                                                                             &__isLeftChild < ElementType >,
-                        void ( RBTree :: *  __rotateS1 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __leftRotate                  // NOLINT(bugprone-reserved-identifier)
-                                                                                        : & RBTree :: __rightRotate,
-                        void ( RBTree :: *  __rotateS2 )( RBTreeNode * ) = rotationDecision ? & RBTree :: __rightRotate                 // NOLINT(bugprone-reserved-identifier)
-                                                                                        : & RBTree :: __leftRotate
-                >
-                auto __identifyAndApplyRotationOnInsert (    // NOLINT(bugprone-reserved-identifier)
+                        void ( __ClassType :: *  __rotateS1 )( __NodeType * ) = rotationDecision ? & __ClassType :: __leftRotate                  // NOLINT(bugprone-reserved-identifier)
+                                                                                        : & __ClassType :: __rightRotate,
+                        void ( __ClassType :: *  __rotateS2 )( __NodeType * ) = rotationDecision ? & __ClassType :: __rightRotate                 // NOLINT(bugprone-reserved-identifier)
+                                                                                        : & __ClassType :: __leftRotate
+                > auto __identifyAndApplyRotationOnInsert (    // NOLINT(bugprone-reserved-identifier)
                         RBTreeNode * pPivot
                 ) noexcept -> void;
 
@@ -228,73 +231,21 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
             template <
-                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
-                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            template <
-                    bool rotationDecision,
-                    typename RBTree <
-                            __ElementType,
-                            __KeyType,
-                            __KeyExtractor,
-                            __KeyLowerComparator,
-                            __KeyEqualsComparator,
-                            __ElementTypeDestruct
-                            > :: RBTreeNode * ( *__locateAuxiliary )(       // NOLINT(bugprone-reserved-identifier)
-
-                            typename RBTree <
-                                    __ElementType,
-                                    __KeyType,
-                                    __KeyExtractor,
-                                    __KeyLowerComparator,
-                                    __KeyEqualsComparator,
-                                    __ElementTypeDestruct
-                            > :: RBTreeNode * ),
-                    bool ( *__ifS1 )(                                       // NOLINT(bugprone-reserved-identifier)
-                            typename RBTree <
-                                    __ElementType,
-                                    __KeyType,
-                                    __KeyExtractor,
-                                    __KeyLowerComparator,
-                                    __KeyEqualsComparator,
-                                    __ElementTypeDestruct
-                            > :: RBTreeNode *),
-                    void ( RBTree <
-                            __ElementType,
-                            __KeyType,
-                            __KeyExtractor,
-                            __KeyLowerComparator,
-                            __KeyEqualsComparator,
-                            __ElementTypeDestruct
-                    > :: *  __rotateS1 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
-                            __ElementType,
-                            __KeyType,
-                            __KeyExtractor,
-                            __KeyLowerComparator,
-                            __KeyEqualsComparator,
-                            __ElementTypeDestruct
-                    > :: RBTreeNode *),
-                    void ( RBTree <
-                            __ElementType,
-                            __KeyType,
-                            __KeyExtractor,
-                            __KeyLowerComparator,
-                            __KeyEqualsComparator,
-                            __ElementTypeDestruct
-                    > :: *  __rotateS2 )( typename RBTree <                 // NOLINT(bugprone-reserved-identifier)
-                            __ElementType,
-                            __KeyType,
-                            __KeyExtractor,
-                            __KeyLowerComparator,
-                            __KeyEqualsComparator,
-                            __ElementTypeDestruct
-                    > :: RBTreeNode * )
-            >
-            auto RBTree <
+                    typename __ElementType,                                 // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,                                     // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,                                // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyLowerComparator,                          // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator,                         // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct                          // NOLINT(bugprone-reserved-identifier)
+            > template <
+                    bool rotationDecision,                                  // NOLINT(bugprone-reserved-identifier)
+                    typename __NodeType,                                    // NOLINT(bugprone-reserved-identifier)
+                    typename __ClassType,                                   // NOLINT(bugprone-reserved-identifier)
+                    __NodeType * ( *__locateAuxiliary )( __NodeType * ),    // NOLINT(bugprone-reserved-identifier)
+                    bool ( *__ifS1 )( __NodeType * ),                       // NOLINT(bugprone-reserved-identifier)
+                    void ( __ClassType :: *  __rotateS1 )( __NodeType * ),  // NOLINT(bugprone-reserved-identifier)
+                    void ( __ClassType :: *  __rotateS2 )( __NodeType * )   // NOLINT(bugprone-reserved-identifier)
+            > auto RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
