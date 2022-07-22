@@ -70,7 +70,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto count (
-                            __Predicate const & predicate
+                            __Predicate const & predicate = & predicates :: alwaysTrue < __ElementType >
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
                 protected:

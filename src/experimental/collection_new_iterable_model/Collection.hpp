@@ -172,7 +172,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
         public:
-            __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
+            __CDS_cpplang_VirtualConstexpr __CDS_Explicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;

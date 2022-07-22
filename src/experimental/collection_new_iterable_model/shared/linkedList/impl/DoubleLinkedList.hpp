@@ -190,6 +190,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     if ( this->_pFront == nullptr ) {
                         this->_pBack = nullptr;
+                    } else {
+                        this->_pFront->_pPrevious = nullptr;
                     }
 
                     -- this->_size;
@@ -214,6 +216,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     if ( this->_pBack == nullptr ) {
                         this->_pFront = nullptr;
+                    } else {
+                        this->_pBack->_pNext = nullptr;
                     }
 
                     -- this->_size;
@@ -423,7 +427,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     pNewNode->_pNext        = nullptr;
 
                     if ( this->_pBack != nullptr ) {
-                        this->_pFront->_pNext = pNewNode;
+                        this->_pBack->_pNext = pNewNode;
                     }
 
                     this->_pBack = pNewNode;
@@ -524,6 +528,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     pChainCurrent->_pNext = nullptr;
+                    this->_pBack = pChainCurrent;
 
                     if ( this->_pFront == nullptr ) {
                         this->_pFront = pChainFront;
@@ -565,8 +570,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __NodeType * pNewNode           = __DoubleLinkedList :: __dll_allocateNode();
                     pNewNode->_pNext                = const_cast < __NodeType * > ( pCurrent );
                     pNewNode->_pPrevious            = const_cast < __NodeType * > ( pPrevious );
-                    pNewNode->_pNext->_pPrevious    = pNewNode;
-                    pNewNode->_pPrevious->_pNext    = pNewNode;
+
+                    if ( pNewNode->_pNext != nullptr ) {
+                        pNewNode->_pNext->_pPrevious = pNewNode;
+                    } else {
+                        this->_pBack = pNewNode;
+                    }
+
+                    if ( pNewNode->_pPrevious != nullptr ) {
+                        pNewNode->_pPrevious->_pNext = pNewNode;
+                    } else {
+                        this->_pFront = pNewNode;
+                    }
+
                     ++ this->_size;
 
                     return & pNewNode->_data;
@@ -679,13 +695,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType * {
 
-                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr || iterator._pPreviousNode == nullptr ) {
+                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
                         return nullptr;
                     }
 
+                    if ( iterator._pCurrentNode == this->_pFront && this->_pBack == this->_pFront ) {
+                        return this->__dll_newBack ();
+                    }
+
                     return this->__dll_newBetweenNodes (
-                            iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious
+                            iterator._pCurrentNode,
+                            iterator._pCurrentNode->_pNext
                     );
                 }
 
@@ -704,9 +724,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return nullptr;
                     }
 
+                    if ( iterator._pCurrentNode == this->_pFront && this->_pBack == this->_pFront ) {
+                        return this->__dll_newBack ();
+                    }
+
                     return this->__dll_newBetweenNodes (
-                            iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious
+                            iterator._pCurrentNode,
+                            iterator._pCurrentNode->_pNext
                     );
                 }
 

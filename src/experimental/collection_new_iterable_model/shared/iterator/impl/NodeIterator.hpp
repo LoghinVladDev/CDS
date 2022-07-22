@@ -63,7 +63,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -73,9 +76,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 UnidirectionalNodeIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -160,7 +161,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -170,9 +174,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 UnidirectionalNodeConstIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode  != iterator._pCurrentNode ||
-                    this->_pPreviousNode != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -257,7 +259,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode == nullptr ||
+                            iterator._pCurrentNode == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -267,9 +272,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 AbstractBidirectionalNodeIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -335,7 +338,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -345,9 +351,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 AbstractBidirectionalNodeConstIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -399,7 +403,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode == nullptr ||
+                            iterator._pCurrentNode == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -409,9 +416,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardBidirectionalNodeIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -494,7 +499,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -504,9 +512,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardBidirectionalNodeConstIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -589,7 +595,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -599,9 +608,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardBidirectionalNodeIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 
@@ -684,7 +691,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     == iterator._pCurrentNode || (
+                            this->_pCurrentNode     == nullptr ||
+                            iterator._pCurrentNode  == nullptr
+                    ) &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -694,9 +704,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardBidirectionalNodeConstIterator const & iterator
         ) const noexcept -> bool {
 
-            return
-                    this->_pCurrentNode     != iterator._pCurrentNode ||
-                    this->_pPreviousNode    != iterator._pPreviousNode;
+            return ! this->operator == ( iterator );
         }
 
 

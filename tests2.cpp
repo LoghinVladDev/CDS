@@ -182,14 +182,29 @@ int main () {
     std :: cout << a << '\n';
 
     a.insertBefore ( a.begin(), -1 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertAfter ( a.begin(), -2 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertBefore ( ++ a.begin(), 4 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertAfter ( ++ a.begin(), 5 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertBefore ( a.end(), 7 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertAfter ( a.end(), 8 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertBefore ( -- a.end(), 9 );
+    std :: cout << a << '\n';
+    std::cout.flush();
     a.insertAfter ( -- a.end(), 10 );
     std :: cout << a << '\n';
+    std::cout.flush();
 
     std :: cout << a.sub ( 2, 5 ) << '\n';
 
@@ -248,14 +263,17 @@ int main () {
 //    pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
 //    pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
 
-    pList->sub(* pList, 2, 3);
+    pList->sub(otherAsList, 2, 3);
     (*pList)[2] = 3;
     pList->removeAt ( { 1, 3 } );
-    pList->removeAt ( * pList );
 
-    pList->sort();
-    pList->sort(& cds :: predicates :: greaterThan);
-    pList->sort([](int a, int b){ return a < b; });
+    cds :: experimental :: Array < cds :: Index > indices = { 2, 3 };
+    pList->removeAt ( indices );
+
+    /// TODO : client/server for sort
+//    pList->sort();
+//    pList->sort(& cds :: predicates :: greaterThan);
+//    pList->sort([](int a, int b){ return a < b; });
 
     pList->replace ( 3, 1, 2 );
     pList->replaceFirst ( 1, 2 );
@@ -587,7 +605,7 @@ int main () {
 
     pMutColl->insert (5) = 3;
 
-    timingTest ( 1000000 );
+    timingTest ( 1000 );
 
     return 0;
 }
