@@ -7,6 +7,8 @@
 
 #include <CDS/Compiler>
 
+#include "../shared/impl/generalPredicates.hpp"
+
 namespace cds {
 
     template < typename T >
@@ -16,8 +18,6 @@ namespace cds {
     };
 
 }
-
-#include "../shared/impl/generalPredicates.hpp"
 
 namespace cds {
 

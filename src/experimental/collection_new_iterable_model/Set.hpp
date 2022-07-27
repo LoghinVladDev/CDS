@@ -5,4 +5,6 @@
 #ifndef __CDS_EX_SET_HPP__
 #define __CDS_EX_SET_HPP__
 
+#include <CDS/experimental/Collection>
+
 #endif // __CDS_EX_SET_HPP__

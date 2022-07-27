@@ -32,9 +32,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             template <
-                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < _T > _e
-            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList;  // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                    // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >
+            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList;     // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -99,9 +99,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             template <
-                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < _T > _e
-            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList;  // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >
+            > friend class cds :: experimental :: __hidden :: __impl :: __SingleLinkedList; // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -166,9 +166,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             template <
-                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < _T > _e
-            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList;  // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >
+            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList; // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;
@@ -227,9 +227,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             template <
-                    typename _T,                                                            // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < _T > _e
-            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList;  // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >
+            > friend class cds :: experimental :: __hidden :: __impl :: __DoubleLinkedList; // NOLINT(bugprone-reserved-identifier)
 
         public:
             using ElementType = __ElementType;

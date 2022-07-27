@@ -9,6 +9,10 @@
 #include <CDS/experimental/List>
 #include <CDS/experimental/Array>
 #include <CDS/experimental/LinkedList>
+#include <CDS/experimental/HashSet>
+#include <CDS/experimental/HashMap>
+#include <CDS/experimental/LinkedHashSet>
+#include <CDS/experimental/LinkedHashMap>
 
 
 enum class E1 {

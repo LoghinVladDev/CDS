@@ -28,7 +28,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public List < __ElementType >,
                 protected __hidden :: __impl :: __LinkedListServer < __ElementType >,
                 public __hidden :: __impl :: __LinkedListImplementation < __ElementType >,
-                public __hidden :: __impl :: __LinkedListImplementation < __ElementType > :: __Dispatcher,
+                public __hidden :: __impl :: __LinkedListDispatcher < __ElementType >,
                 public __hidden :: __impl :: __LinkedListDelegateIterableServer < __ElementType >,
                 public __hidden :: __impl :: __LinkedListRandomInsertionClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListBoundaryInsertionClient < __ElementType >,

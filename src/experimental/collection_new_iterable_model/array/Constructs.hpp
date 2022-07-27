@@ -18,6 +18,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayDispatcher =           // NOLINT(bugprone-reserved-identifier)
+                        typename __ArrayImplementation < __ElementType > :: template __Dispatcher < Array < __ElementType > >;
+
+
                 template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
                 using __ArrayServer =                       // NOLINT(bugprone-reserved-identifier)
                         __ListServer <

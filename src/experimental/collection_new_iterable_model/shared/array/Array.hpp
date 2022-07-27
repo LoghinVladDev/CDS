@@ -34,7 +34,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using __a_ConstReverseIterator          = AddressIterator < __ElementType const, true >; // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    class __Dispatcher; // NOLINT(bugprone-reserved-identifier)
+                    template < typename __ServerType >  // NOLINT(bugprone-reserved-identifier)
+                    class __Dispatcher;                 // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)
@@ -284,11 +285,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ElementType,                                         // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ComparisonFunction < __ElementType > __equals // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __ServerType                                           // NOLINT(bugprone-reserved-identifier)
                 > class __Array <
                         __ElementType,
                         __equals
                 > :: __Dispatcher : public __ListServerDispatcher <
-                        cds :: experimental :: Array < __ElementType >,
+                        __ServerType,
                         __Array < __ElementType, __equals >,
                         __ElementType,
                         AbstractAddressIterator < __ElementType >,

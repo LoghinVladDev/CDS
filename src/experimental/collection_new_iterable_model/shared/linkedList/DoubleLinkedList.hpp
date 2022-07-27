@@ -31,6 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using __dll_ConstReverseIterator    = BackwardBidirectionalNodeConstIterator < __ElementType >; // NOLINT(bugprone-reserved-identifier)
 
                 public:
+                    template < typename __ServerType >
                     class __Dispatcher; // NOLINT(bugprone-reserved-identifier)
 
                 private:
@@ -78,19 +79,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard constexpr auto __dll_empty () const noexcept -> bool;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_size () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto __dll_size () const noexcept -> Size;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_front () const noexcept -> __ElementType const *;
+                    __CDS_NoDiscard constexpr auto __dll_front () const noexcept -> __ElementType const *;  // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_back () const noexcept -> __ElementType const *;
+                    __CDS_NoDiscard constexpr auto __dll_back () const noexcept -> __ElementType const *;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_front () noexcept -> __ElementType *;
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_front () noexcept -> __ElementType *;  // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_back () noexcept -> __ElementType *;
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_back () noexcept -> __ElementType *;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     auto __dll_removeFront () noexcept -> void; // NOLINT(bugprone-reserved-identifier)
@@ -104,7 +105,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 protected:
-                    auto __dll_removeAt (
+                    auto __dll_removeAt (   // NOLINT(bugprone-reserved-identifier)
                             Index index
                     ) noexcept -> void;
 
@@ -280,11 +281,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ElementType,                                         // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ComparisonFunction < __ElementType > __equals // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __ServerType                                           // NOLINT(bugprone-reserved-identifier)
                 > class __DoubleLinkedList <
                         __ElementType,
                         __equals
                 > :: __Dispatcher : public __ListServerDispatcher <
-                        cds :: experimental :: LinkedList < __ElementType >,
+                        __ServerType,
                         __DoubleLinkedList < __ElementType, __equals >,
                         __ElementType,
                         AbstractBidirectionalNodeIterator < __ElementType >,
