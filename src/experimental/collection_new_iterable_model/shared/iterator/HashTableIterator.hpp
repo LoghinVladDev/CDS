@@ -57,6 +57,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             DataNode ** _pListArray     { nullptr };
 
+        private:
+            __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
+
         public:
             constexpr HashTableIterator () noexcept;
 
@@ -67,7 +70,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_cpplang_ConstexprConditioned HashTableIterator (
+            constexpr HashTableIterator (
                     DataNode ** pListArray,
                     Size        bucketCount,
                     DataNode  * pCurrentNode,
@@ -95,19 +98,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     HashTableIterator && iterator
             ) noexcept -> HashTableIterator &;
 
-        public:
+        private:
             __CDS_NoDiscard constexpr auto listArray () const noexcept -> DataNode **;
 
-        public:
+        private:
             __CDS_NoDiscard constexpr auto bucketCount () const noexcept -> Size;
 
-        public:
+        private:
             __CDS_NoDiscard constexpr auto bucketIndex () const noexcept -> Size;
 
-        public:
+        private:
             __CDS_NoDiscard constexpr auto currentNode () const noexcept -> DataNode *;
 
-        public:
+        private:
             __CDS_NoDiscard constexpr auto previousNode () const noexcept -> DataNode *;
 
         public:
@@ -169,6 +172,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             DataNode    const * const * _pListArray     { nullptr };
 
+        private:
+            __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
+
         public:
             constexpr HashTableConstIterator () noexcept;
 
@@ -229,10 +235,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> HashTableConstIterator;
 
         public:
-            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
+            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
         public:
-            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
+            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
         public:
             __CDS_NoDiscard constexpr auto operator != (
