@@ -11,12 +11,18 @@
 #include <CDS/Extractor>
 #include <CDS/Hasher>
 #include <CDS/Destructor>
+#include <CDS/CopyConstructor>
 
 #include "../../shared/Node.hpp"
-#include "../../shared/hashTable/hashTable/HashTableUtils.hpp"
+
+#include "shared/iterator/HashTableIterator.hpp"
 
 #include "shared/hashTable/HashTable.hpp"
 
+
+
 #include "shared/hashTable/impl/HashTable.hpp"
+
+#include "shared/iterator/impl/HashTableIterator.hpp"
 
 #endif // __CDS_EX_HASH_SET_HPP__
