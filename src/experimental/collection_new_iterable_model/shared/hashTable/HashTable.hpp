@@ -182,7 +182,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 private:
                     auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
-                            __NodeType  const * pNode,
+                            __NodeType  const * pPreviousNode,
+                            __NodeType  const * pCurrentNode,
                             Size                bucketIndex
                     ) noexcept -> bool;
 
@@ -211,24 +212,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> void;
 
                 protected:
-                    auto __ht_move (
+                    auto __ht_move (    // NOLINT(bugprone-reserved-identifier)
                             __HashTable && table
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveCleared (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveCleared (   // NOLINT(bugprone-reserved-identifier)
                             __HashTable && table
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_NoDiscard auto _ht_find (
+                    __CDS_NoDiscard auto _ht_find ( // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) noexcept -> __ht_Iterator;
 
                 protected:
                     template <
-                            cds :: utility :: ComparisonFunction < __ElementType > __comparator
-                    > __CDS_NoDiscard auto __ht_equals (
+                            cds :: utility :: ComparisonFunction < __ElementType > __comparator // NOLINT(bugprone-reserved-identifier)
+                    > __CDS_NoDiscard auto __ht_equals (                                        // NOLINT(bugprone-reserved-identifier)
                             __HashTable const & table
                     ) const noexcept -> bool;
                 };

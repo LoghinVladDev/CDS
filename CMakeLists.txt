@@ -23,7 +23,8 @@ elseif (linux)
     add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
 endif()
 
-set(CDS_INCLUDE_DIRECTORIES
+set (
+        CDS_INCLUDE_DIRECTORIES
         include
 )
 
