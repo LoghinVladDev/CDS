@@ -442,7 +442,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_get (
+                > :: __ht_getConst (
                         __KeyType const & key
                 ) const noexcept -> __ElementType const * {
 
@@ -504,7 +504,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_at (
+                > :: __ht_atConst (
                         __KeyType const & key
                 ) const noexcept -> __ElementType const * {
 
@@ -906,7 +906,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_remove (
+                > :: __ht_removeIterator (
                         __ht_Iterator const & iterator
                 ) noexcept -> bool {
 
@@ -934,7 +934,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_remove (
+                > :: __ht_removeIteratorConst (
                         __ht_ConstIterator const & iterator
                 ) noexcept -> bool {
 
@@ -1106,7 +1106,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_find (
+                > :: __ht_findIterator (
                         __KeyType const & key
                 ) noexcept -> __ht_Iterator {
 
@@ -1155,7 +1155,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_find (
+                > :: __ht_findIteratorConst (
                         __KeyType const & key
                 ) const noexcept -> __ht_ConstIterator {
 

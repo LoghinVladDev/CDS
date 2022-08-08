@@ -40,7 +40,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename __ServerType >  // NOLINT(bugprone-reserved-identifier)
-                    class __Dispatcher;                 // NOLINT(bugprone-reserved-identifier)
+                    class __SetDispatcher;              // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    template < typename __ServerType >  // NOLINT(bugprone-reserved-identifier)
+                    class __MapDispatcher;              // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using __NodeType    = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >; // NOLINT(bugprone-reserved-identifier)
@@ -122,7 +126,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> __ElementType *;
 
                 protected:
-                    auto __ht_get (                        // NOLINT(bugprone-reserved-identifier)
+                    auto __ht_getConst (    // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) const noexcept -> __ElementType const *;
 
@@ -132,7 +136,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> __ElementType *;
 
                 protected:
-                    auto __ht_at (                         // NOLINT(bugprone-reserved-identifier)
+                    auto __ht_atConst (                         // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) const noexcept -> __ElementType const *;
 
@@ -188,12 +192,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 protected:
-                    auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
+                    auto __ht_removeIterator (                                             // NOLINT(bugprone-reserved-identifier)
                             __ht_Iterator const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
+                    auto __ht_removeIteratorConst (                                         // NOLINT(bugprone-reserved-identifier)
                             __ht_ConstIterator const & iterator
                     ) noexcept -> bool;
 
@@ -222,12 +226,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_NoDiscard auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __ht_findIterator ( // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) noexcept -> __ht_Iterator;
 
                 protected:
-                    __CDS_NoDiscard auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __ht_findIteratorConst ( // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) const noexcept -> __ht_ConstIterator;
 
@@ -238,6 +242,157 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __HashTable const & table
                     ) const noexcept -> bool;
                 };
+
+
+#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ )
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename                                                            __ServerType        // NOLINT(bugprone-reserved-identifier)
+                > class __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+            > :: __SetDispatcher : public __SetServerDispatcher <
+                    __ServerType,
+                    __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    >,
+                    __ElementType,
+                    HashTableConstIterator < __ElementType >,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_get,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_removeIteratorConst,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_findIteratorConst
+            > {};
+
+#endif
+
+
+#if defined ( __CDS_SHARED_MAP_SERVER_DISPATCHER_HPP__ )
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename                                                            __ServerType        // NOLINT(bugprone-reserved-identifier)
+                > class __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+            > :: __MapDispatcher : public __MapServerDispatcher <
+                    __ServerType,
+                    __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    >,
+                    __ElementType,
+                    __KeyType,
+                    HashTableIterator < __ElementType >,
+                    HashTableConstIterator < __ElementType >,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_get,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_removeIterator,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_removeIteratorConst,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_findIterator,
+                    & __HashTable <
+                            __ElementType,
+                            __KeyType,
+                            __KeyHasher,
+                            __RehashPolicy,
+                            __keyExtractor,
+                            __keyComparator,
+                            __nodeDestructor
+                    > :: __ht_findIteratorConst
+            > {};
+
+#endif
+
 
             }
         }
