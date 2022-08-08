@@ -1,9 +1,9 @@
 //
-// Created by loghin on 24/07/22.
+// Created by loghin on 09/07/22.
 //
 
-#ifndef __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__
-#define __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__
+#ifndef __CDS_SHARED_SET_SERVER_DISPATCHER_IMPL_HPP__
+#define __CDS_SHARED_SET_SERVER_DISPATCHER_IMPL_HPP__
 
 #include "CollectionServerDispatcher.hpp"
 
@@ -20,26 +20,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *,     // NOLINT(bugprone-reserved-identifier)
                         auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool,                // NOLINT(bugprone-reserved-identifier)
                         auto ( __ServiceType :: * __findConstFunction )     ( __ElementType const & ) const     -> __ConstIteratorType  // NOLINT(bugprone-reserved-identifier)
-                > class __SetServerDispatcher :                                                                                         // NOLINT(bugprone-reserved-identifier)
-                        public __CollectionServerDispatcher <
-                                __ServerType,
-                                __ServiceType,
-                                __ElementType,
-                                __ConstIteratorType,
-                                __newAddressFunction,
-                                __removeConstFunction
-                        > {
+                > __CDS_OptimalInline auto __SetServerDispatcher <
+                        __ServerType,
+                        __ServiceType,
+                        __ElementType,
+                        __ConstIteratorType,
+                        __newAddressFunction,
+                        __removeConstFunction,
+                        __findConstFunction
+                > :: __findConst (
+                        __ElementType const & element
+                ) const noexcept -> __ConstIteratorType {
 
-                protected:
-                    auto __findConst ( // NOLINT(bugprone-reserved-identifier)
-                            __ElementType const & element
-                    ) const noexcept -> __ConstIteratorType;
-                };
+                    return ( reinterpret_cast < __ServerType const * > ( this ) ->* __findConstFunction ) (
+                            element
+                    );
+                }
 
             }
         }
     }
 }
 
-#endif // __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__
-
+#endif // __CDS_SHARED_SET_SERVER_DISPATCHER_IMPL_HPP__

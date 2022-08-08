@@ -19,10 +19,14 @@
 
 #include "shared/hashTable/HashTable.hpp"
 
+#include "shared/collectionInternalCommunication/server/SetServerDispatcher.hpp"
+
 
 
 #include "shared/hashTable/impl/HashTable.hpp"
 
 #include "shared/iterator/impl/HashTableIterator.hpp"
+
+#include "shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
 
 #endif // __CDS_EX_HASH_SET_HPP__

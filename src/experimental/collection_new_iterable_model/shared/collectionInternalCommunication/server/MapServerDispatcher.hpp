@@ -13,15 +13,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __ServerType,                                                                                              // NOLINT(bugprone-reserved-identifier)
-                        typename __ServiceType,                                                                                             // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                                                                                             // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType,                                                                                            // NOLINT(bugprone-reserved-identifier)
-                        typename __ConstIteratorType,                                                                                       // NOLINT(bugprone-reserved-identifier)
-                        __ElementType * ( __ServiceType :: *  __newAddressFunction ) ( __ElementType const *, bool * ),                     // NOLINT(bugprone-reserved-identifier)
-                        bool ( __ServiceType :: * __removeFunction ) ( __IteratorType const & ),                                            // NOLINT(bugprone-reserved-identifier)
-                        bool ( __ServiceType :: * __removeConstFunction ) ( __ConstIteratorType const & )                                   // NOLINT(bugprone-reserved-identifier)
-                > class __MapServerDispatcher :                                                                                            // NOLINT(bugprone-reserved-identifier)
+                        typename __ServerType,                                                                                          // NOLINT(bugprone-reserved-identifier)
+                        typename __ServiceType,                                                                                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,                                                                                         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                                                                                             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                                                                                        // NOLINT(bugprone-reserved-identifier)
+                        typename __ConstIteratorType,                                                                                   // NOLINT(bugprone-reserved-identifier)
+                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *,     // NOLINT(bugprone-reserved-identifier)
+                        auto ( __ServiceType :: * __removeFunction )        ( __IteratorType const & )          -> bool,                // NOLINT(bugprone-reserved-identifier)
+                        auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool,                // NOLINT(bugprone-reserved-identifier)
+                        auto ( __ServiceType :: * __findFunction )          ( __KeyType const & )               -> __IteratorType,      // NOLINT(bugprone-reserved-identifier)
+                        auto ( __ServiceType :: * __findConstFunction )     ( __KeyType const & ) const         -> __ConstIteratorType  // NOLINT(bugprone-reserved-identifier)
+                > class __MapServerDispatcher :                                                                                         // NOLINT(bugprone-reserved-identifier)
                         public __MutableCollectionServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
@@ -33,6 +36,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 __removeConstFunction
                         > {
 
+                protected:
+                    auto __find ( // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key
+                    ) noexcept -> __IteratorType;
+
+                protected:
+                    auto __findConst ( // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key
+                    ) const noexcept -> __ConstIteratorType;
                 };
 
             }
