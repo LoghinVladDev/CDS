@@ -858,7 +858,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Size                bucketIndex
                 ) noexcept -> bool {
 
-                    if ( this->__ht_empty() ) {
+                    if ( this->__ht_empty() || bucketIndex >= this->_bucketCount ) {
                         return false;
                     }
 
@@ -910,35 +910,334 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ht_Iterator const & iterator
                 ) noexcept -> bool {
 
-                    if (
-                            this->__ht_empty() ||
-                            iterator._pCurrentNode == nullptr
-                    ) {
+                    return this->__ht_remove (
+                            iterator._pPreviousNode,
+                            iterator._pCurrentNode,
+                            iterator._bucketIndex
+                    );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_remove (
+                        __ht_ConstIterator const & iterator
+                ) noexcept -> bool {
+
+                    return this->__ht_remove (
+                            iterator._pPreviousNode,
+                            iterator._pCurrentNode,
+                            iterator._bucketIndex
+                    );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_copy (
+                        __HashTable const & table
+                ) noexcept -> void {
+
+                    if ( this == & table ) {
+                        return;
+                    }
+
+                    this->__ht_clear();
+                    this->__ht_copyCleared < __copy > ( table );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      // NOLINT(bugprone-reserved-identifier)
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_copyCleared (
+                        __HashTable const & table
+                ) noexcept -> void {
+
+                    if ( table.__ht_empty() ) {
+                        return;
+                    }
+
+                    this->_size = table._size;
+                    this->__ht_allocateBuckets ( table._bucketCount );
+                    for ( Size bucketIndex = 0ULL; bucketIndex < table._bucketCount; ++ bucketIndex ) {
+
+                        auto & thisBucket   = this->__ht_bucket ( bucketIndex );
+                        auto & tableBucket  = table.__ht_bucket ( bucketIndex );
+
+                        __NodeType * pTableHead     = tableBucket;
+                        __NodeType * pThisBack      = nullptr;
+
+                        while ( pTableHead != nullptr ) {
+
+                            auto pNewNode       = this->__ht_allocateNode ();
+                            pNewNode->_pNext    = nullptr;
+                            __copy ( pNewNode->_data, pTableHead->_data );
+
+                            pTableHead = pTableHead->_pNext;
+
+                            if ( pThisBack == nullptr ) {
+                                thisBucket          = pNewNode;
+                            } else {
+                                pThisBack->_pNext   = pNewNode;
+                            }
+
+                            pThisBack = pNewNode;
+                        }
+                    }
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_move (
+                        __HashTable && table
+                ) noexcept -> void {
+
+                    if ( this == & table ) {
+                        return;
+                    }
+
+                    this->__ht_clear();
+                    this->__ht_moveCleared ( std :: move ( table ) );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_moveCleared (
+                        __HashTable && table
+                ) noexcept -> void {
+
+                    this->_pBucketArray = cds :: exchange ( table._pBucketArray, nullptr );
+                    this->_bucketCount  = cds :: exchange ( table._bucketCount, 0ULL );
+                    this->_size         = cds :: exchange ( table._size, 0ULL );
+                    this->_rehash       = std :: move ( table._rehash );
+                    this->_hasher       = std :: move ( table._hasher );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_find (
+                        __KeyType const & key
+                ) noexcept -> __ht_Iterator {
+
+                    if ( this->__ht_empty() ) {
+                        return __ht_Iterator ();
+                    }
+
+                    Size bucketIndex = this->_hasher ( key ) % this->_bucketCount;
+
+                    __NodeType * pPrevious  = nullptr;
+                    __NodeType * pCurrent   = this->_pBucketArray [ bucketIndex ];
+
+                    while ( pCurrent != nullptr ) {
+
+                        if ( __keyComparator ( __keyExtractor ( pCurrent->_data ), key ) ) {
+                            return __ht_Iterator (
+                                    this->_pBucketArray,
+                                    this->_bucketCount,
+                                    pCurrent,
+                                    pPrevious,
+                                    bucketIndex
+                            );
+                        }
+
+                        pPrevious   = pCurrent;
+                        pCurrent    = pCurrent->_pNext;
+                    }
+
+                    return __ht_Iterator ();
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_find (
+                        __KeyType const & key
+                ) const noexcept -> __ht_ConstIterator {
+
+                    if ( this->__ht_empty() ) {
+                        return __ht_ConstIterator ();
+                    }
+
+                    Size bucketIndex = this->_hasher ( key ) % this->_bucketCount;
+
+                    __NodeType const * pPrevious  = nullptr;
+                    __NodeType const * pCurrent   = this->_pBucketArray [ bucketIndex ];
+
+                    while ( pCurrent != nullptr ) {
+
+                        if ( __keyComparator ( __keyExtractor ( pCurrent->_data ), key ) ) {
+                            return __ht_ConstIterator (
+                                    this->_pBucketArray,
+                                    this->_bucketCount,
+                                    pCurrent,
+                                    pPrevious,
+                                    bucketIndex
+                            );
+                        }
+
+                        pPrevious   = pCurrent;
+                        pCurrent    = pCurrent->_pNext;
+                    }
+
+                    return __ht_ConstIterator ();
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        cds :: utility :: ComparisonFunction < __ElementType >              __comparator        // NOLINT(bugprone-reserved-identifier)
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_equals (
+                        __HashTable const & table
+                ) const noexcept -> bool {
+
+                    if ( this == & table ) {
+                        return true;
+                    }
+
+                    if ( this->__ht_empty() ) {
+                        return table.__ht_empty();
+                    }
+
+                    if ( table.__ht_empty() || this->_bucketCount != table._bucketCount ) {
                         return false;
                     }
 
-                    __NodeType * & pBucket = this->__ht_bucket ( bucketIndex );
+                    for ( Size bucketIndex = 0ULL; bucketIndex < this->_bucketCount; ++ bucketIndex ) {
 
-                    if (
-                            pPreviousNode   == nullptr &&
-                            pCurrentNode    == pBucket
-                    ) {
+                        auto pThisBucketHead    = this->_pBucketArray [ bucketIndex ];
+                        auto pOtherBucketHead   = table._pBucketArray [ bucketIndex ];
 
-                        pBucket = pBucket->_pNext;
-                        this->__ht_freeNode ( pCurrentNode );
-                    } else if (
-                            pCurrentNode    != nullptr &&
-                            pPreviousNode   != nullptr
-                    ) {
+                        while ( pThisBucketHead != nullptr && pOtherBucketHead != nullptr ) {
+                            if ( ! __comparator ( pThisBucketHead->_data, pOtherBucketHead->_data ) ) {
+                                return false;
+                            }
+                        }
 
-                        pPreviousNode->_pNext = pCurrentNode->_pNext;
-                        this->__ht_freeNode(pCurrentNode);
-                    } else {
-
-                        return false;
+                        if ( pThisBucketHead != nullptr || pOtherBucketHead != nullptr ) {
+                            return false;
+                        }
                     }
 
-                    -- this->_size;
                     return true;
                 }
 

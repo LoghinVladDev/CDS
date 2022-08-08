@@ -200,14 +200,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  // NOLINT(bugprone-reserved-identifier)
-                    > auto __ht_copy (
+                    > auto __ht_copy (                                                          // NOLINT(bugprone-reserved-identifier)
                             __HashTable const & table
                     ) noexcept -> void;
 
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  // NOLINT(bugprone-reserved-identifier)
-                    > auto __ht_copyCleared (
+                    > auto __ht_copyCleared (                                                   // NOLINT(bugprone-reserved-identifier)
                             __HashTable const & table
                     ) noexcept -> void;
 
@@ -222,9 +222,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_NoDiscard auto _ht_find ( // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) noexcept -> __ht_Iterator;
+
+                protected:
+                    __CDS_NoDiscard auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key
+                    ) const noexcept -> __ht_ConstIterator;
 
                 protected:
                     template <
