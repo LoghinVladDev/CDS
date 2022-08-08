@@ -51,6 +51,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected __hidden :: __impl :: __CollectionFunctions < __ElementType > {
 
         public:     using ElementType                           = __ElementType;
+        protected:  using CommunicationChannel                  = __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
         protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
         protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >;
         protected:  using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
@@ -63,6 +64,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >;
         protected:  using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
         protected:  using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
+
+        protected:  using typename CommunicationChannel :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename CommunicationChannel :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
 
         public:
             using typename DelegateForwardConstIterableClient :: ConstIterator;

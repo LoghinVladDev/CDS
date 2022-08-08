@@ -40,6 +40,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using FindByClient                      = __hidden :: __impl :: __MutableCollectionFindByClient < __ElementType >;
         protected:  using GenericStatementsClient           = __hidden :: __impl :: __MutableCollectionGenericStatementsClient < __ElementType >;
 
+        protected:  using typename CollectionBase :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename CollectionBase :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
 
         public:
             using typename DelegateForwardIterableClient :: Iterator;

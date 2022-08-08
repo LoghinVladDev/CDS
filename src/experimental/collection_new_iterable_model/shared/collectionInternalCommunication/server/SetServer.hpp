@@ -2,8 +2,8 @@
 // Created by loghin on 7/3/22.
 //
 
-#ifndef __CDS_SHARED_LIST_SERVER_HPP__
-#define __CDS_SHARED_LIST_SERVER_HPP__
+#ifndef __CDS_SHARED_SET_SERVER_HPP__
+#define __CDS_SHARED_SET_SERVER_HPP__
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
@@ -13,7 +13,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType      // NOLINT(bugprone-reserved-identifier)
-                > class __ListServer {              // NOLINT(bugprone-reserved-identifier)
+                > class __SetServer {               // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using __GenericHandler      = auto ( Collection < __ElementType > :: * ) () -> void; // NOLINT(bugprone-reserved-identifier)
@@ -32,10 +32,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ];
 
                 protected:
-                    constexpr auto __ls_handlers () const noexcept -> __GenericHandler const *; // NOLINT(bugprone-reserved-identifier)
+                    constexpr auto __ss_handlers () const noexcept -> __GenericHandler const *; // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    constexpr auto __ls_constHandlers () const noexcept -> __GenericConstHandler const *;   // NOLINT(bugprone-reserved-identifier)
+                    constexpr auto __ss_constHandlers () const noexcept -> __GenericConstHandler const *;   // NOLINT(bugprone-reserved-identifier)
                 };
 
             }
@@ -43,4 +43,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_LIST_SERVER_HPP__
+#endif // __CDS_SHARED_SET_SERVER_HPP__

@@ -72,6 +72,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     /// Represents a Request for multiple element addresses after a given abstract const iterator
                     __cirt_newAfterAddressArrayConst    = 0x12U,    // NOLINT(bugprone-reserved-identifier)
+
+                    /// Represents a Request for finding an iterator to an element by key/value
+                    __cirt_find                         = 0x13U,    // NOLINT(bugprone-reserved-identifier)
+
+                    /// Represents a Request for finding a const iterator to an element by key/value
+                    __cirt_findConst                    = 0x14U,    // NOLINT(bugprone-reserved-identifier)
+
+                    /// Represents the number of possible requests, not to be used in requests
+                    __cirt_requestCountDoNotUse         = 0x15U     // NOLINT(bugprone-reserved-identifier)
                 };
 
             }

@@ -60,11 +60,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename, typename >
                     friend class __AbstractConstIteratorRelativeInsertionPrimitiveClient;   // NOLINT(bugprone-reserved-identifier)
 
-                private:
-                    using __GenericHandler  = void ( __ReceiverType :: * ) ();               // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    using __GenericHandler  = auto ( __ReceiverType :: * ) () -> void;      // NOLINT(bugprone-reserved-identifier)
 
-                private:
-                    using __GenericConstHandler  = void ( __ReceiverType :: * ) () const;    // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    using __GenericConstHandler  = auto ( __ReceiverType :: * ) () const -> void;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)

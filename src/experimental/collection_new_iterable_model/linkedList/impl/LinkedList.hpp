@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: __cicch_obtainGenericHandler (
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
-        ) noexcept -> void ( Collection < __ElementType > :: * ) () {
+        ) noexcept -> __GenericHandler {
 
             return this->__ls_handlers() [ static_cast < uint32 > ( requestType ) ];
         }
@@ -20,7 +20,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: __cicch_obtainGenericConstHandler (
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
-        ) const noexcept -> void ( Collection < __ElementType > :: * ) () const {
+        ) const noexcept -> __GenericConstHandler {
 
             return this->__ls_constHandlers() [ static_cast < uint32 > ( requestType ) ];
         }

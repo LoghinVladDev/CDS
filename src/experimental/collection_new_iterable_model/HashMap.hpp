@@ -17,9 +17,12 @@
 
 #include "shared/iterator/HashTableIterator.hpp"
 
+#include "shared/collectionInternalCommunication/server/MapServerDispatcher.hpp"
+
 #include "shared/hashTable/HashTable.hpp"
 
-#include "shared/collectionInternalCommunication/server/MapServerDispatcher.hpp"
+#include "shared/collectionInternalCommunication/server/MapServer.hpp"
+#include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
 
 
@@ -27,6 +30,8 @@
 
 #include "shared/hashTable/impl/HashTable.hpp"
 
+#include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/MapServerDispatcher.hpp"
+#include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
 #endif // __CDS_EX_HASH_MAP_HPP__

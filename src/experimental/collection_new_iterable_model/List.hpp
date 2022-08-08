@@ -69,8 +69,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using IndicesOfInitializerListClient        = __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
         protected:  using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
 
-        protected:
-            using MutableCollectionBase = MutableCollection < __ElementType >;
+        protected:  using MutableCollectionBase = MutableCollection < __ElementType >;
+
+        protected:  using typename MutableCollectionBase :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename MutableCollectionBase :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
 
         public:
             static Index const invalidIndex = -1;

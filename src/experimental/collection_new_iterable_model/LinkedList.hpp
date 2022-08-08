@@ -107,24 +107,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using ReverseIterator               = typename Implementation :: __dll_ReverseIterator;
         public: using ConstReverseIterator          = typename Implementation :: __dll_ConstReverseIterator;
 
+        protected:  using ListBase                  = List < __ElementType >;
+
+        protected:  using typename ListBase :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename ListBase :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
+
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
-            ) noexcept -> void ( Collection < __ElementType > :: * ) () override;
+            ) noexcept -> __GenericHandler override;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler ( // NOLINT(bugprone-reserved-identifier)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
-            ) const noexcept -> void ( Collection < __ElementType > :: * ) () const override;
+            ) const noexcept -> __GenericConstHandler override;
 
-        protected: using List < __ElementType > :: begin;
-        protected: using List < __ElementType > :: end;
-        protected: using List < __ElementType > :: cbegin;
-        protected: using List < __ElementType > :: cend;
-        protected: using List < __ElementType > :: rbegin;
-        protected: using List < __ElementType > :: rend;
-        protected: using List < __ElementType > :: crbegin;
-        protected: using List < __ElementType > :: crend;
+        protected: using ListBase :: begin;
+        protected: using ListBase :: end;
+        protected: using ListBase :: cbegin;
+        protected: using ListBase :: cend;
+        protected: using ListBase :: rbegin;
+        protected: using ListBase :: rend;
+        protected: using ListBase :: crbegin;
+        protected: using ListBase :: crend;
+
         public: using RandomInsertionClient :: insert;
         public: using RandomInsertionClient :: insertAll;
         public: using RandomInsertionClient :: insertAllOf;
