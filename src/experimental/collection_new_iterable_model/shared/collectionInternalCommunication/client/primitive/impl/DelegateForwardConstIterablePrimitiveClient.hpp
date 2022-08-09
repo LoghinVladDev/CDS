@@ -54,7 +54,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     reinterpret_cast <
                                             __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
                                     > (
-                                                    reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                                            reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
                                                     __CollectionInternalRequestType :: __cirt_begin
                                             )
                                     )
