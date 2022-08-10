@@ -376,12 +376,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyComparator,
                         __nodeDestructor
                 > :: __ht_new (
-                        __ElementType const & element,
+                        __ElementType const * pReferenceElement,
                         bool                * pIsNew
                 ) noexcept -> __ElementType * {
 
                     return this->__ht_get (
-                            __keyExtractor ( element ),
+                            __keyExtractor ( * pReferenceElement ),
                             pIsNew
                     );
                 }
@@ -409,7 +409,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> __ElementType * {
 
                     if ( this->__ht_empty() ) {
-                        return this->__ht_allocateBuckets ( this->_rehash.currentFactor () );
+                        this->__ht_allocateBuckets ( this->_rehash.currentFactor () );
                     }
 
                     auto hashValue                  = this->_hasher ( key );
@@ -433,7 +433,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     ++ this->_size;
 
-                    if ( bucketSize >= this->_rehashPolicy.loadFactor() ) {
+                    if ( bucketSize >= this->_rehash.loadFactor() ) {
                         auto rehashRequiredData = this->_rehash.rehashRequired (
                                 this->_bucketCount,
                                 this->_size,
@@ -713,14 +713,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Size bucketCount
                 ) noexcept -> void {
 
-                    this->_pBucketArray = reinterpret_cast < __NodeType * > (
+                    this->_pBucketArray = reinterpret_cast < __NodeType ** > (
                             std :: memset (
                                     cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                             this->_pBucketArray,
                                             bucketCount
                                     ) + this->_bucketCount,
                                     0ULL,
-                                    sizeof ( __NodeType ) * ( bucketCount - this->_bucketCount )
+                                    sizeof ( __NodeType * ) * ( bucketCount - this->_bucketCount )
                             )
                     ) - this->_bucketCount;
 

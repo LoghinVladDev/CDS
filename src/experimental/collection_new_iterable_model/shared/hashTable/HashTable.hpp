@@ -56,7 +56,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size                                    _size           { 0ULL };
 
                 private:
-                    __NodeType                            * _pBucketArray   { nullptr };
+                    __NodeType                           ** _pBucketArray   { nullptr };
 
                 private:
                     __CDS_NoUniqueAddress __KeyHasher       _hasher;
@@ -121,7 +121,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     auto __ht_new (
-                            __ElementType const & element,
+                            __ElementType const * pReferenceElement,
                             bool                * pIsNew
                     ) noexcept -> __ElementType *;
 
