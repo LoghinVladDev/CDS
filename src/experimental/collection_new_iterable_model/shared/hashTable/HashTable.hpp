@@ -120,6 +120,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
+                    auto __ht_new (
+                            __ElementType const & element,
+                            bool                * pIsNew
+                    ) noexcept -> __ElementType *;
+
+                protected:
                     auto __ht_get ( // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key,
                             bool            * pIsNew
@@ -264,47 +270,47 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-            > :: __SetDispatcher : public __SetServerDispatcher <
-                    __ServerType,
-                    __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    >,
-                    __ElementType,
-                    HashTableConstIterator < __ElementType >,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_get,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_removeIteratorConst,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_findIteratorConst
-            > {};
+                > :: __SetDispatcher : public __SetServerDispatcher <
+                        __ServerType,
+                        __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        >,
+                        __ElementType,
+                        HashTableConstIterator < __ElementType >,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_new,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_removeIteratorConst,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_findIteratorConst
+                > {};
 
 #endif
 
@@ -329,67 +335,67 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-            > :: __MapDispatcher : public __MapServerDispatcher <
-                    __ServerType,
-                    __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    >,
-                    __ElementType,
-                    __KeyType,
-                    HashTableIterator < __ElementType >,
-                    HashTableConstIterator < __ElementType >,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_get,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_removeIterator,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_removeIteratorConst,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_findIterator,
-                    & __HashTable <
-                            __ElementType,
-                            __KeyType,
-                            __KeyHasher,
-                            __RehashPolicy,
-                            __keyExtractor,
-                            __keyComparator,
-                            __nodeDestructor
-                    > :: __ht_findIteratorConst
-            > {};
+                > :: __MapDispatcher : public __MapServerDispatcher <
+                        __ServerType,
+                        __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        >,
+                        __ElementType,
+                        __KeyType,
+                        HashTableIterator < __ElementType >,
+                        HashTableConstIterator < __ElementType >,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_new,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_removeIterator,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_removeIteratorConst,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_findIterator,
+                        & __HashTable <
+                                __ElementType,
+                                __KeyType,
+                                __KeyHasher,
+                                __RehashPolicy,
+                                __keyExtractor,
+                                __keyComparator,
+                                __nodeDestructor
+                        > :: __ht_findIteratorConst
+                > {};
 
 #endif
 

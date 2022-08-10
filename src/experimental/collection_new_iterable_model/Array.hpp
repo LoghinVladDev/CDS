@@ -538,10 +538,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard constexpr auto data() const noexcept -> __ElementType const *;
+            __CDS_NoDiscard constexpr auto data () const noexcept -> __ElementType const *;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data() noexcept -> __ElementType *;
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> __ElementType *;
 
         public:
             __CDS_NoDiscard auto sequence () & noexcept -> Sequence < Array < __ElementType > >;

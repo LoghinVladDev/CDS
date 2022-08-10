@@ -176,6 +176,7 @@ void timingTest (int n) {
 
 int main () {
 
+    HashSet < int > hs;
 
     std :: cout << sizeof ( Array < int > ) << '\n';
 
