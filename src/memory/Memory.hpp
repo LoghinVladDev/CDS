@@ -139,7 +139,7 @@ namespace cds {
 
     private:
         Allocator * pAllocator { nullptr }; // NOLINT(clion-misra-cpp2008-18-4-1)
-        utility :: hidden :: memoryImpl :: ArraySizeManager sizeManager;
+//        utility :: hidden :: memoryImpl :: ArraySizeManager sizeManager;
 
         Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default
 

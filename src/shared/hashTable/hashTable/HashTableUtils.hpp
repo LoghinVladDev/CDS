@@ -10,7 +10,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
         namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
             template < typename __Hasher, typename __RehashPolicy > // NOLINT(bugprone-reserved-identifier)
-            struct __HashTableUtils { // NOLINT(bugprone-reserved-identifier)
+            struct __HashTableUtils {                               // NOLINT(bugprone-reserved-identifier)
                 __Hasher        _hasher;
                 __RehashPolicy  _rehashPolicy;
 

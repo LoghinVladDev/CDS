@@ -107,7 +107,7 @@ auto CollectionTest :: execute() noexcept -> bool {
 #if defined(CDS_TEST_EXPERIMENTAL)
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/experimental/Array>
-#include <CDS/experimental/LinkedList>
+//#include <CDS/experimental/LinkedList>
 
 using namespace cds;
 
@@ -222,6 +222,8 @@ auto constructionTest () noexcept -> bool {
     return true;
 }
 
+using namespace cds :: experimental;
+
 auto CollectionTest :: execute() noexcept -> bool {
     bool allOk = true;
 
@@ -329,52 +331,6 @@ auto CollectionTest :: execute() noexcept -> bool {
                 allOk = false;
             }
 
-            elementCount = 0;
-            elementSum = 0;
-            for ( auto it = collection.rbegin(); it != collection.rend(); ++ it ) {
-
-                if ( elementSum == 0 && * it != 9 ) {
-                    this->logError ( "ConstReverseIterator error. Expected value : %d. Value : %d", 9, * it );
-                    allOk = false;
-                }
-
-                elementSum += * it;
-                elementCount ++;
-            }
-
-            if ( elementCount != expectedElementCount ) {
-                this->logError ( "ConstReverseIterator iteration count different than expected. expected %d, occurred %d", expectedElementCount, elementCount );
-                allOk = false;
-            }
-
-            if ( elementSum != expectedElementSum ) {
-                this->logError ( "ConstReverseIterator yielded elements different than expected. expected sum %d, occurred sum %d", expectedElementSum, elementSum );
-                allOk = false;
-            }
-
-            elementCount = 0;
-            elementSum = 0;
-            for ( auto it = collection.crbegin(); it != collection.crend(); ++ it ) {
-
-                if ( elementSum == 0 && * it != 9 ) {
-                    this->logError ( "ConstReverseIterator error. Expected value : %d. Value : %d", 9, * it );
-                    allOk = false;
-                }
-
-                elementSum += * it;
-                elementCount ++;
-            }
-
-            if ( elementCount != expectedElementCount ) {
-                this->logError ( "ConstReverseIterator iteration count different than expected. expected %d, occurred %d", expectedElementCount, elementCount );
-                allOk = false;
-            }
-
-            if ( elementSum != expectedElementSum ) {
-                this->logError ( "ConstReverseIterator yielded elements different than expected. expected sum %d, occurred sum %d", expectedElementSum, elementSum );
-                allOk = false;
-            }
-
             for ( auto it = emptyCollection.begin(); it != emptyCollection.end(); ++ it ) {
                 this->logError ( "ConstIterator Error. Empty collection should not be iterable" );
                 allOk = false;
@@ -382,16 +338,6 @@ auto CollectionTest :: execute() noexcept -> bool {
 
             for ( auto it = emptyCollection.cbegin(); it != emptyCollection.cend(); ++ it ) {
                 this->logError ( "ConstIterator Error. Empty collection should not be iterable" );
-                allOk = false;
-            }
-
-            for ( auto it = emptyCollection.rbegin(); it != emptyCollection.rend(); ++ it ) {
-                this->logError ( "ConstReverseIterator Error. Empty collection should not be iterable" );
-                allOk = false;
-            }
-
-            for ( auto it = emptyCollection.crbegin(); it != emptyCollection.crend(); ++ it ) {
-                this->logError ( "ConstReverseIterator Error. Empty collection should not be iterable" );
                 allOk = false;
             }
 
@@ -454,7 +400,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             removeAt = 3;
             valueExpectedAt = 6;
             at = 0;
-            meta :: RemoveReference < decltype (collection) > :: ConstIterator iter;
+            cds :: meta :: RemoveReference < decltype (collection) > :: ConstIterator iter;
 
             for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
                 if ( at != removeAt ) {
@@ -514,25 +460,6 @@ auto CollectionTest :: execute() noexcept -> bool {
             valueExpectedAt = 5;
             at = 0;
 
-            for ( auto it = collection.rbegin(); it != collection.rend(); ++ it ) {
-                if ( at != removeAt ) {
-                    ++ at;
-                    continue;
-                }
-
-                if ( ! collection.remove ( it ) ) {
-                    this->logError ( "remove (ConstIterator) error Failed to remove valid iterator" );
-                    allOk = false;
-                }
-
-                break;
-            }
-
-            if ( collection.contains (valueExpectedAt) ) {
-                this->logError ( "remove not working as expected. did not remove. Collection : %s", collection.toString().cStr() );
-                allOk = false;
-            }
-
             expectedRemaining = { 3, 7, 8, 9 };
             for ( auto e : expectedRemaining ) {
                 if ( ! collection.contains(e) ) {
@@ -564,40 +491,6 @@ auto CollectionTest :: execute() noexcept -> bool {
             if ( collection.contains(3) ) {
                 this->logError ( "Removal did not work" );
                 allOk = false;
-            }
-
-            removeAt = 1;
-            valueExpectedAt = 8;
-            at = 0;
-            meta :: RemoveReference < decltype (collection) > :: ConstReverseIterator iter2;
-
-            for ( auto it = collection.rbegin(); it != collection.rend(); ++ it ) {
-                if ( at != removeAt ) {
-                    ++ at;
-                    continue;
-                }
-
-                iter2 = it;
-
-                break;
-            }
-
-            if ( ! collection.remove (iter2) ) {
-                this->logError ( "remove did not work" );
-                allOk = false;
-            }
-
-            if ( collection.contains (valueExpectedAt) ) {
-                this->logError ( "remove not working as expected. did not remove. Collection : %s", collection.toString().cStr() );
-                allOk = false;
-            }
-
-            expectedRemaining = { 7, 9 };
-            for ( auto e : expectedRemaining ) {
-                if ( ! collection.contains(e) ) {
-                    this->logError ( "remove error, removed more than expected" );
-                    allOk = false;
-                }
             }
 
             if ( collection.remove ( collection.end() ) ) {
@@ -672,13 +565,13 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 8 );
             collection.add ( 9 );
 
-            collection.remove ( 9, [](int v){ return v >= 6; } );
+            collection.removeIf ( 9, [](int v){ return v >= 6; } );
             if ( collection.any ( [](int v){ return v >= 6; } ) ) {
                 this->logError("remove Predicate error");
                 allOk = false;
             }
 
-            collection.removeFirst ( []( int v ) { return v == 3; } );
+            collection.removeFirstIf ( []( int v ) { return v == 3; } );
             if ( collection.contains (3) ) {
                 this->logError ("removeFirst Predicate error");
                 allOk = false;
@@ -687,13 +580,13 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 3 );
             collection.add ( 3 );
 
-            collection.removeFirst ( []( int v ) { return v == 3; } );
+            collection.removeFirstIf ( []( int v ) { return v == 3; } );
             if ( ! collection.contains (3) ) {
                 this->logError ("removeFirst Predicate error");
                 allOk = false;
             }
 
-            collection.removeLast ( []( int v ) { return v == 3; } );
+            collection.removeLastIf ( []( int v ) { return v == 3; } );
             if ( collection.contains (3) ) {
                 this->logError ("removeLast Predicate error");
                 allOk = false;
@@ -702,7 +595,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 3 );
             collection.add ( 3 );
 
-            collection.removeLast ( []( int v ) { return v == 3; } );
+            collection.removeLastIf ( []( int v ) { return v == 3; } );
             if ( ! collection.contains (3) ) {
                 this->logError ("removeLast Predicate error");
                 allOk = false;
@@ -713,7 +606,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 3 );
             collection.add ( 3 );
 
-            collection.removeAll ( []( int v ) { return v == 3; } );
+            collection.removeAllIf ( []( int v ) { return v == 3; } );
             if ( collection.contains (3) ) {
                 this->logError ("removeAll Predicate error");
                 allOk = false;
@@ -723,13 +616,13 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 3 );
             collection.add ( 3 );
 
-            collection.remove ( 2, 3 );
+            collection.remove ( 3 );
             if ( ! collection.contains ( 3 ) ) {
                 this->logError ( "remove ElementType, Size error" );
                 allOk = false;
             }
 
-            collection.remove ( 2, 3 );
+            collection.remove ( 3 );
             if ( collection.contains ( 3 ) ) {
                 this->logError ( "remove ElementType, Size error" );
                 allOk = false;
@@ -737,42 +630,6 @@ auto CollectionTest :: execute() noexcept -> bool {
 
             collection.add (3);
             collection.add (3);
-
-            collection.removeFirst ( 3 );
-            if ( ! collection.contains ( 3 ) ) {
-                this->logError ( "removeFirst ElementType error" );
-                allOk = false;
-            }
-
-            collection.removeFirst ( 3 );
-            if ( collection.contains ( 3 ) ) {
-                this->logError ( "removeFirst ElementType error" );
-                allOk = false;
-            }
-
-            collection.add (3);
-            collection.add (3);
-
-            collection.removeLast ( 3 );
-            if ( ! collection.contains ( 3 ) ) {
-                this->logError ( "removeFirst ElementType error" );
-                allOk = false;
-            }
-
-            collection.removeLast ( 3 );
-            if ( collection.contains ( 3 ) ) {
-                this->logError ( "removeFirst ElementType error" );
-                allOk = false;
-            }
-
-            collection.add (3);
-            collection.add (3);
-
-            collection.removeAll ( 3 );
-            if ( collection.contains ( 3 ) ) {
-                this->logError ( "removeAll ElementType error" );
-                allOk = false;
-            }
 
             collection.clear ();
 
@@ -1211,7 +1068,7 @@ auto CollectionTest :: execute() noexcept -> bool {
 
             collection.addAll ( 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 );
 
-            Array < meta :: RemoveReference < decltype ( collection ) > :: ConstIterator > iterators;
+            Array < cds :: meta :: RemoveReference < decltype ( collection ) > :: ConstIterator > iterators;
             collection.find ( 2, 5, iterators );
 
             if ( iterators.size () != 2 ) {
