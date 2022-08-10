@@ -5,7 +5,7 @@
 #ifndef __CDS_MAP_ENTRY_HPP__
 #define __CDS_MAP_ENTRY_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
         namespace __impl {
