@@ -32,6 +32,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
             struct __RBTreeNode {       // NOLINT(bugprone-reserved-identifier)
+
+                /// TODO : CamelCase : Black, Red
                 enum __Colour { BLACK, RED };   // NOLINT(bugprone-reserved-identifier)
                 __ElementType           _data;
                 __Colour                _colour;

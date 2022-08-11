@@ -2,17 +2,26 @@
 // Created by stefan on 22.07.2022.
 //
 
-#ifndef __CDS_RBTREE_HPP__
-#define __CDS_RBTREE_HPP__
+#ifndef __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
+#define __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
 
-#include "./../../shared/Node.hpp"
-#include "./../../shared/memory/PrimitiveAllocation.hpp"
-#include "./../../std-types.h"
+
+/// TODO : do not include these here, include in class using RedBlackTree
+#include "../../../../shared/Node.hpp"
+#include "../../../../shared/memory/PrimitiveAllocation.hpp"
+#include "../../../../std-types.h"
 
 namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
+
+    /// TODO : experimental namespace
+
     namespace __hidden {
         namespace __impl {
 
+            /// TODO : noexcepts
+            /// TODO : function for const as well ? tbd at constexpr
+            /// TODO : no inlines at declaration, apply inline at definition
+            /// TODO : __CDS_OptimalInline - always there, __CDS_OptionalInline - only heavy optimization ( no -OS - optimize size )
             template < typename __ElementType >                                                                             // NOLINT(bugprone-reserved-identifier)
             inline auto __getLeftNode ( __RBTreeNode < __ElementType > * pNode ) -> __RBTreeNode < __ElementType > *;       // NOLINT(bugprone-reserved-identifier)
 
@@ -30,6 +39,8 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                 return pNode->_colour == __RBTreeNode < __ElementType > :: RED;
             }
 
+            /// TODO : Perhaps __RedBlackTree ?
+            /// TODO : Functions that are always the same ( __KeyEqualsComparator, __KeyExtractor ) can be made as direct functions instead of classes
             template <
                     typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                     typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
@@ -66,6 +77,7 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     __ElementTypeDestruct   _destruct;
 
+                /// TODO : __CDS_NoUniqueAddress
                 private:
                     __KeyLowerComparator    _lower;
 
@@ -82,15 +94,16 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                 private:
-                    Size _size { 0ULL };
+                    Size            _size { 0ULL };
                 private:
-                    RBTreeNode * _root { nullptr };
+                    RBTreeNode    * _root { nullptr };
 
 
                 private:
                     auto __rbt_allocateNode () -> RBTreeNode *;         // NOLINT(bugprone-reserved-identifier)
 
                 private:
+                    /// TODO : parameter names
                     auto __rbt_freeNode ( RBTreeNode * ) -> void;                     // NOLINT(bugprone-reserved-identifier)
 
                 private:
@@ -114,21 +127,21 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                             typename __NodeType = RBTreeNode,                             // NOLINT(bugprone-reserved-identifier)
                             typename __ClassType = __RBTree,                              // NOLINT(bugprone-reserved-identifier)
                             __NodeType * ( *__locateAuxiliary )( __NodeType * ) =         // NOLINT(bugprone-reserved-identifier)
-                            rotationDecision                    ?
-                            & __getRightNode < __ElementType >    :
-                            & __getLeftNode < __ElementType >,
-                    bool ( *__ifS1 )( __NodeType * ) =                            // NOLINT(bugprone-reserved-identifier)
-                            rotationDecision                    ?
-                            &__isRightChild < __ElementType >     :
-                            &__isLeftChild < __ElementType >,
-                    void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
-                            rotationDecision                ?
-                            & __ClassType :: __rbt_leftRotate      :
-                            & __ClassType :: __rbt_rightRotate,
-                    void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
-                    rotationDecision                ?
-                    & __ClassType :: __rbt_rightRotate     :
-                    & __ClassType :: __rbt_leftRotate
+                                    rotationDecision                        ?
+                                    & __getRightNode < __ElementType >      :
+                                    & __getLeftNode < __ElementType >,
+                            bool ( *__ifS1 )( __NodeType * ) =                            // NOLINT(bugprone-reserved-identifier)
+                                    rotationDecision                        ?
+                                    &__isRightChild < __ElementType >       :
+                                    &__isLeftChild < __ElementType >,
+                            void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
+                                    rotationDecision                        ?
+                                    & __ClassType :: __rbt_leftRotate       :
+                                    & __ClassType :: __rbt_rightRotate,
+                            void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
+                                    rotationDecision                        ?
+                                    & __ClassType :: __rbt_rightRotate      :
+                                    & __ClassType :: __rbt_leftRotate
                     > auto __identifyAndApplyRotationOnInsert (                           // NOLINT(bugprone-reserved-identifier)
                             RBTreeNode * pPivot
                     ) noexcept -> void;
@@ -147,6 +160,7 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                                 rotationDecision                    ?
                                 & __getRightNode < __ElementType >    :
                                 & __getLeftNode < __ElementType >,
+                            /// TODO : maybe better name than __ifS1?
                             bool ( *__ifS1 )( __NodeType * ) =                                    // NOLINT(bugprone-reserved-identifier)
                                 rotationDecision                    ?
                                 &__isRightChild < __ElementType >     :
@@ -163,8 +177,9 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
                             RBTreeNode * pPivot
                     ) noexcept -> void;
 
+                /// TODO : protected
                 public:
-                    __RBTree() = default;
+                    constexpr __RBTree() noexcept = default;
 
                 public:
                     constexpr auto __rbt_empty () const -> bool;                            // NOLINT(bugprone-reserved-identifier)
@@ -188,6 +203,6 @@ namespace cds {     // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "RBTree/impl/RBTree.hpp"
+#include "impl/RedBlackTree.hpp"
 
-#endif //__CDS_RBTREE_HPP__
+#endif // __CDS_EX_SHARED_RED_BLACK_TREE_HPP__

@@ -2,9 +2,8 @@
 // Created by stefan on 02.07.2022.
 //
 
-#ifndef __CDS_RBTREE_IMPL_HPP__
-#define __CDS_RBTREE_IMPL_HPP__
-#include "../../RBTree.hpp"
+#ifndef __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__
+#define __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {        // NOLINT(bugprone-reserved-identifier)
@@ -17,8 +16,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                     typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            auto __RBTree <
+            > __CDS_OptimalInline auto __RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
@@ -27,9 +25,10 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __ElementTypeDestruct
             > :: __rbt_allocateNode () -> RBTreeNode * {
 
-                RBTreeNode * p = __allocation :: __allocPrimitiveObject < RBTreeNode > ();
-                p->_colour = __RBTreeNode < __ElementType > :: RED;
-                p->_pLeft = p->_pRight = p->_pParent = __RBTree :: __endNode();
+                /// TODO : variable names. pNode, pCurrentNode, pNewNode.
+                RBTreeNode * p  = __allocation :: __allocPrimitiveObject < RBTreeNode > ();
+                p->_colour      = __RBTreeNode < __ElementType > :: RED;
+                p->_pLeft       = p->_pRight = p->_pParent = __RBTree :: __endNode();
                 return p;
             }
 
@@ -41,8 +40,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                     typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            auto __RBTree <
+            > auto __RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
@@ -50,6 +48,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyEqualsComparator,
                     __ElementTypeDestruct
             > :: __rbt_freeNode ( RBTreeNode * pRemoved ) -> void {
+
                 this->_destruct ( pRemoved->_data );
                 __allocation ::__freePrimitiveObject ( pRemoved );
             }
@@ -62,8 +61,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                     typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            auto __RBTree <
+            > auto __RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
@@ -112,6 +110,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
                 RBTreeNode * pAux = pPivot->_pLeft;
                 pPivot->_pLeft = pAux->_pRight;
+
+                /// TODO : brackets for everything {}
                 if ( pAux->_pRight != __RBTree :: __endNode() )
                     pAux->_pLeft = pPivot;
                 pAux->_pParent = pPivot->_pParent;
@@ -146,7 +146,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             ) -> void {
 
                 while ( __isRed ( pPivot->_pParent ) ) {
-                    __identifyAndApplyRotationOnInsert < __isLeftChild (pPivot ) > ( pPivot );
+                    __identifyAndApplyRotationOnInsert < __isLeftChild ( pPivot ) > ( pPivot );
                 }
                 this->_root->_colour = RBTreeNode :: BLACK;
             }
@@ -259,8 +259,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                     typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            template <
+            > template <
                     bool rotationDecision,                                              // NOLINT(bugprone-reserved-identifier)
                     typename __NodeType,                                                // NOLINT(bugprone-reserved-identifier)
                     typename __ClassType,                                               // NOLINT(bugprone-reserved-identifier)
@@ -269,8 +268,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     bool ( *__ifS1 )( __NodeType * ),                                   // NOLINT(bugprone-reserved-identifier)
                     void ( __ClassType :: *  __rotateS1 )( __NodeType * ),              // NOLINT(bugprone-reserved-identifier)
                     void ( __ClassType :: *  __rotateS2 )( __NodeType * )               // NOLINT(bugprone-reserved-identifier)
-            >
-            auto __RBTree <
+            > auto __RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
@@ -283,27 +281,33 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
                 RBTreeNode * pAux = __locateAuxiliary ( pPivot->_pParent );
                 if ( __isRed ( pAux) ) {
+
                     pAux->_colour = RBTreeNode :: BLACK;
                     pPivot->_pParent->_colour = RBTreeNode :: RED;
                     ( this->*__rotateS1 )( pPivot->_pParent );
                     pAux = __locateAuxiliary ( pPivot->_pParent );
                 }
+
                 if ( !__isRed ( pAux->_pLeft ) && !__isRed ( pAux->_pRight ) ) {
+
                     pAux->_colour = RBTreeNode :: RED;
                     pPivot = pPivot->_pParent;
-                }
-                else {
+                } else {
+
                     if ( !__isRed ( __locateAuxiliary ( pAux ) ) ) {
+
                         __locateReversedAuxiliary ( pAux )->_colour = RBTreeNode :: BLACK;
                         pAux->_colour = RBTreeNode :: RED;
                         ( this->*__rotateS2 )( pAux );
                         pAux = __locateAuxiliary ( pPivot->_pParent );
                     }
+
                     pAux->_colour = pPivot->_pParent->_colour;
                     pPivot->_pParent->_colour = RBTreeNode :: BLACK;
                     ( this->*__rotateS1 )( pPivot->_pParent );
                     pPivot = this->_root;
                 }
+
                 pPivot->_colour = RBTreeNode :: BLACK;
             }
 
@@ -314,8 +318,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                     typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            >
-            constexpr auto __RBTree <
+            > constexpr auto __RBTree <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,
@@ -438,30 +441,28 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         if ( pToBeDeleted->_pLeft == __RBTree :: __endNode() ) {
                             pBalancePivot = pToBeDeleted->_pRight;
                             this->__rbt_transplant ( pToBeDeleted, pToBeDeleted->_pRight );
-                        }
-                        else
-                            if ( pToBeDeleted->_pRight == __RBTree :: __endNode() ) {
-                                pBalancePivot = pToBeDeleted->_pLeft;
-                                this->__rbt_transplant ( pToBeDeleted, pToBeDeleted->_pLeft );
-                            }
+                        } else if ( pToBeDeleted->_pRight == __RBTree :: __endNode() ) {
+                            pBalancePivot = pToBeDeleted->_pLeft;
+                            this->__rbt_transplant ( pToBeDeleted, pToBeDeleted->_pLeft );
+                        } else {
+                            RBTreeNode * pDeletedPlaceholder = pToBeDeleted->_pRight;
+                            while ( pDeletedPlaceholder->_pLeft != __RBTree :: __endNode() )
+                                pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
+                            isOriginallyBlack = __isRed ( pDeletedPlaceholder );
+                            pBalancePivot = pDeletedPlaceholder->_pRight;
+                            if ( pDeletedPlaceholder->_pParent == pToBeDeleted )
+                                pBalancePivot = pDeletedPlaceholder;
                             else {
-                                RBTreeNode * pDeletedPlaceholder = pToBeDeleted->_pRight;
-                                while ( pDeletedPlaceholder->_pLeft != __RBTree :: __endNode() )
-                                    pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
-                                isOriginallyBlack = __isRed ( pDeletedPlaceholder );
-                                pBalancePivot = pDeletedPlaceholder->_pRight;
-                                if ( pDeletedPlaceholder->_pParent == pToBeDeleted )
-                                    pBalancePivot = pDeletedPlaceholder;
-                                else {
-                                    this->__rbt_transplant ( pDeletedPlaceholder, pDeletedPlaceholder->_pRight );
-                                    pDeletedPlaceholder->_pRight = pToBeDeleted->_pRight;
-                                    pDeletedPlaceholder->_pRight->_pParent = pDeletedPlaceholder;
-                                }
-                                this->__rbt_transplant ( pToBeDeleted, pDeletedPlaceholder );
-                                pDeletedPlaceholder->_pLeft = pToBeDeleted->_pLeft;
-                                pDeletedPlaceholder->_pLeft->_pParent = pDeletedPlaceholder;
-                                pDeletedPlaceholder->_colour = pToBeDeleted->_colour;
+                                this->__rbt_transplant ( pDeletedPlaceholder, pDeletedPlaceholder->_pRight );
+                                pDeletedPlaceholder->_pRight = pToBeDeleted->_pRight;
+                                pDeletedPlaceholder->_pRight->_pParent = pDeletedPlaceholder;
                             }
+                            this->__rbt_transplant ( pToBeDeleted, pDeletedPlaceholder );
+                            pDeletedPlaceholder->_pLeft = pToBeDeleted->_pLeft;
+                            pDeletedPlaceholder->_pLeft->_pParent = pDeletedPlaceholder;
+                            pDeletedPlaceholder->_colour = pToBeDeleted->_colour;
+                        }
+
                         this->__rbt_freeNode ( pToBeDeleted );
                         if ( isOriginallyBlack )
                             this->__rbt_deleteReBalance ( pBalancePivot );
@@ -522,8 +523,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
                 return this->_size;
             }
+
         }
     }
 }
 
-#endif //__CDS_RBTREE_IMPL_HPP__
+#endif //__CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__
