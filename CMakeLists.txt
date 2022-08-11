@@ -159,6 +159,7 @@ add_executable(
         CDS-dummy2
         tests2.cpp
         ${CDS_HEADERS}
+        src/experimental/RBTree/RBTree.hpp
 )
 
 target_link_libraries(

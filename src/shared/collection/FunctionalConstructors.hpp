@@ -150,24 +150,6 @@ namespace cds {
 
 
 
-#if defined (__CDS_HASH_MAP_HPP__) && ! defined ( __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR__ )
-#define __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR__ // NOLINT(bugprone-reserved-identifier)
-
-#if defined (__CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE)
-#undef __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE
-#endif
-
-#define __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE HashMap // NOLINT(bugprone-reserved-identifier)
-
-    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-    inline auto hashMapOf (
-            __ArgumentTypes && ... values
-    ) noexcept -> HashMap < cds :: meta :: Common < __ArgumentTypes ... > >;
-
-#endif // __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR__
-
-
-
 #if defined (__CDS_LIST_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR__ )
 #define __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR__ // NOLINT(bugprone-reserved-identifier)
 
@@ -189,18 +171,6 @@ namespace cds {
     ) noexcept -> __CDS_SET_FUNCTIONAL_CONSTRUCTOR_TYPE < cds :: meta :: Common < __ArgumentTypes ... > >;
 
 #endif // __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR__
-
-
-
-#if defined (__CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR__ )
-#define __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR__ // NOLINT(bugprone-reserved-identifier)
-
-    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-    inline auto mapOf (
-            __ArgumentTypes && ... values
-    ) noexcept -> __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE < cds :: meta :: Common < __ArgumentTypes ... > >;
-
-#endif // __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR__
 
 
 }
