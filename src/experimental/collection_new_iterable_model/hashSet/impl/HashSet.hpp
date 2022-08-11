@@ -46,6 +46,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                HashSet const & set
+        ) noexcept {
+
+        };
+
+
+        template <
                 typename __ElementType, // NOLINT(bugprone-reserved-identifier)
                 typename __Hasher       // NOLINT(bugprone-reserved-identifier)
         > __CDS_OptimalInline HashSet <

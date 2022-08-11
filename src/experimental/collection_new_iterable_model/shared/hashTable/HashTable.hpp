@@ -120,7 +120,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __ht_new (
+                    auto __ht_new ( // NOLINT(bugprone-reserved-identifier)
                             __ElementType const * pReferenceElement,
                             bool                * pIsNew
                     ) noexcept -> __ElementType *;

@@ -55,12 +55,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:     using ConstIterator = typename Implementation :: __ht_ConstIterator;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (    // NOLINT(bugprone-reserved-identifier)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
@@ -78,7 +78,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
-            > HashSet (
+            > HashSet ( // NOLINT(google-explicit-constructor)
                     HashSet const & set
             ) noexcept;
 

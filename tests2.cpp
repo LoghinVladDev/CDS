@@ -174,7 +174,19 @@ void timingTest (int n) {
     delete [] pClassic;
 }
 
+#include <CDS/Function>
+
 int main () {
+
+    cds :: Function < int (int) > fact = [& fact](int n) -> int {
+        if ( n == 1 ) {
+            return 1;
+        }
+
+        return fact(n-1) * n;
+    };
+
+    std :: cout << fact(5) << '\n';
 
     HashSet < int > hs;
 
