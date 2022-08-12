@@ -95,9 +95,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
             > HashSet (
-                    __Hasher        const & hasher,
-                    __IteratorType  const & begin,
-                    __IteratorType  const & end
+                    __IteratorType const & begin,
+                    __IteratorType const & end
             ) noexcept;
 
         public:
@@ -108,8 +107,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
             > HashSet (
-                    __IteratorType const & begin,
-                    __IteratorType const & end
+                    __Hasher        const & hasher,
+                    __IteratorType  const & begin,
+                    __IteratorType  const & end
             ) noexcept;
 
         public:
@@ -139,7 +139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                     > = 0
-            > HashSet (
+            > __CDS_Explicit HashSet (
                     Collection < __OtherElementType > const & collection
             ) noexcept;
 
@@ -164,12 +164,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
             > auto operator = (
-                    HashSet const & array
+                    HashSet const & set
             ) noexcept -> HashSet &;
 
         public:
             auto operator = (
-                    HashSet && array
+                    HashSet && set
             ) noexcept -> HashSet &;
 
         public:

@@ -26,6 +26,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __hashSetCopyConstructor (       // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       & destination,
+                        __ElementType const & source
+                ) noexcept -> void {
+
+                    (void) new ( & destination ) __ElementType ( source );
+                }
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
                 constexpr auto __hashSetDestructor (      // NOLINT(bugprone-reserved-identifier)
                         __ElementType & element
                 ) noexcept -> void {
