@@ -251,7 +251,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            this->__ht_copy ( set );
+            this-> template __ht_copy <
+                    & cds :: experimental :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
+            > ( set );
+
             return * this;
         }
 
