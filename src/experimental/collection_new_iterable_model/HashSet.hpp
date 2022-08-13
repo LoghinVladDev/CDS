@@ -38,13 +38,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetDispatcher < __ElementType, __Hasher >,
-                public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher > {
+                public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetRandomInsertionClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetIteratorRemoveClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetFindOfCollectionClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetFindOfInitializerListClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetFindByClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetRemoveOfCollectionClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher > {
 
-        protected:  using SetBase                   = Set < __ElementType >;
-        protected:  using Server                    = __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >;
-        protected:  using Implementation            = __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >;
-        protected:  using Dispatcher                = __hidden :: __impl :: __HashSetDispatcher < __ElementType, __Hasher >;
-        protected:  using DelegateIterableServer    = __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher >;
+        protected:  using SetBase                           = Set < __ElementType >;
+        protected:  using Server                            = __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >;
+        protected:  using Implementation                    = __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >;
+        protected:  using Dispatcher                        = __hidden :: __impl :: __HashSetDispatcher < __ElementType, __Hasher >;
+        protected:  using DelegateIterableServer            = __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher >;
+        protected:  using RandomInsertionClient             = __hidden :: __impl :: __HashSetRandomInsertionClient < __ElementType, __Hasher >;
+        protected:  using IteratorRemoveClient              = __hidden :: __impl :: __HashSetIteratorRemoveClient < __ElementType, __Hasher >;
+        protected:  using FindOfCollectionClient            = __hidden :: __impl :: __HashSetFindOfCollectionClient < __ElementType, __Hasher >;
+        protected:  using FindOfInitializerListClient       = __hidden :: __impl :: __HashSetFindOfInitializerListClient < __ElementType, __Hasher >;
+        protected:  using FindByClient                      = __hidden :: __impl :: __HashSetFindByClient < __ElementType, __Hasher >;
+        protected:  using RemoveOfCollectionClient          = __hidden :: __impl :: __HashSetRemoveOfCollectionClient < __ElementType, __Hasher >;
+        protected:  using RemoveOfInitializerListClient     = __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >;
+        protected:  using RemoveByClient                    = __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >;
+        protected:  using GenericStatementsClient           = __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >;
 
         protected:  friend Server;
 
@@ -53,6 +71,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:     using ElementType   = __ElementType;
         public:     using ConstIterator = typename Implementation :: __ht_ConstIterator;
+
+        private:    friend RandomInsertionClient;
+        private:    friend IteratorRemoveClient;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
@@ -68,6 +89,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using SetBase :: end;
         protected:  using SetBase :: cbegin;
         protected:  using SetBase :: cend;
+
+        public: using RemoveByClient :: removeIf;
+        public: using RemoveByClient :: removeFirstIf;
+        public: using RemoveByClient :: removeLastIf;
+        public: using RemoveByClient :: removeAllIf;
+
+        public: using GenericStatementsClient :: forEach;
+        public: using GenericStatementsClient :: some;
+        public: using GenericStatementsClient :: atLeast;
+        public: using GenericStatementsClient :: atMost;
+        public: using GenericStatementsClient :: moreThan;
+        public: using GenericStatementsClient :: fewerThan;
+        public: using GenericStatementsClient :: count;
+        public: using GenericStatementsClient :: any;
+        public: using GenericStatementsClient :: all;
+        public: using GenericStatementsClient :: none;
+
+        public: using RemoveOfCollectionClient :: removeOf;
+        public: using RemoveOfCollectionClient :: removeFirstOf;
+        public: using RemoveOfCollectionClient :: removeLastOf;
+        public: using RemoveOfCollectionClient :: removeAllOf;
+        public: using RemoveOfCollectionClient :: removeNotOf;
+        public: using RemoveOfCollectionClient :: removeFirstNotOf;
+        public: using RemoveOfCollectionClient :: removeLastNotOf;
+        public: using RemoveOfCollectionClient :: removeAllNotOf;
+
+        public: using RemoveOfInitializerListClient :: removeOf;
+        public: using RemoveOfInitializerListClient :: removeFirstOf;
+        public: using RemoveOfInitializerListClient :: removeLastOf;
+        public: using RemoveOfInitializerListClient :: removeAllOf;
+        public: using RemoveOfInitializerListClient :: removeNotOf;
+        public: using RemoveOfInitializerListClient :: removeFirstNotOf;
+        public: using RemoveOfInitializerListClient :: removeLastNotOf;
+        public: using RemoveOfInitializerListClient :: removeAllNotOf;
+
+        public: using FindByClient :: findThat;
+        public: using FindByClient :: findFirstThat;
+        public: using FindByClient :: findLastThat;
+        public: using FindByClient :: findAllThat;
+
+        public: using FindOfCollectionClient :: findOf;
+        public: using FindOfCollectionClient :: findFirstOf;
+        public: using FindOfCollectionClient :: findLastOf;
+        public: using FindOfCollectionClient :: findAllOf;
+        public: using FindOfCollectionClient :: findNotOf;
+        public: using FindOfCollectionClient :: findFirstNotOf;
+        public: using FindOfCollectionClient :: findLastNotOf;
+        public: using FindOfCollectionClient :: findAllNotOf;
+
+        public: using FindOfInitializerListClient :: findOf;
+        public: using FindOfInitializerListClient :: findFirstOf;
+        public: using FindOfInitializerListClient :: findLastOf;
+        public: using FindOfInitializerListClient :: findAllOf;
+        public: using FindOfInitializerListClient :: findNotOf;
+        public: using FindOfInitializerListClient :: findFirstNotOf;
+        public: using FindOfInitializerListClient :: findLastNotOf;
+        public: using FindOfInitializerListClient :: findAllNotOf;
+
+        public: using RandomInsertionClient :: add;
+        public: using RandomInsertionClient :: addAll;
+        public: using RandomInsertionClient :: addAllOf;
+        public: using RandomInsertionClient :: insert;
+        public: using RandomInsertionClient :: insertAll;
+        public: using RandomInsertionClient :: insertAllOf;
+        public: using RandomInsertionClient :: emplace;
 
         public:
             constexpr HashSet () noexcept;
