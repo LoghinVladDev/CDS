@@ -189,6 +189,13 @@ int main () {
     std :: cout << fact(5) << '\n';
 
     HashSet < int > hs;
+    hs.emplace (3);
+    hs.emplace (4);
+    hs.emplace (5);
+    hs.emplace (3);
+    hs.emplace (5);
+
+    std :: cout << hs << '\n';
 
     std :: cout << sizeof ( Array < int > ) << '\n';
 
@@ -500,7 +507,7 @@ int main () {
     pMutColl->insertAll(5, 3, 1);
     pMutColl->insertAllOf({1, 4, 5});
     pMutColl->insertAllOf(otherAsList);
-    pMutColl->insertAllOf(pMutColl->begin(), pMutColl->end());
+    pMutColl->insertAllOf(otherAsList.begin(), otherAsList.end());
 
     pMutColl->removeIf (
             3,

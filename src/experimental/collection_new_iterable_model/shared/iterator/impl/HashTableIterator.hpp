@@ -37,6 +37,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _pListArray ( pListArray ),
                 _bucketCount ( bucketCount ) {
 
+            this->advanceBucket();
         }
 
 
@@ -212,10 +213,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode || (
-                            this->_pCurrentNode     == nullptr ||
-                            iterator._pCurrentNode  == nullptr
-                    ) &&
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     != nullptr ||
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -256,6 +256,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _pListArray ( pListArray ),
                 _bucketCount ( bucketCount ) {
 
+            this->advanceBucket();
         }
 
 
@@ -431,10 +432,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode || (
-                            this->_pCurrentNode     == nullptr ||
-                            iterator._pCurrentNode  == nullptr
-                    ) &&
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     != nullptr ||
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 

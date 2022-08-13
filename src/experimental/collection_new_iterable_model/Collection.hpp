@@ -167,6 +167,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using RandomInsertionClient :: insert;
         public: using RandomInsertionClient :: insertAll;
         public: using RandomInsertionClient :: insertAllOf;
+        public: using RandomInsertionClient :: emplace;
 
 
         public:
