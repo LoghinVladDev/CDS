@@ -230,5 +230,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
 #include "hashSet/impl/HashSet.hpp"
+#include "hashSet/impl/CTAD.hpp"
+
+#include "shared/hashSet/HashSetSequence.hpp"
 
 #endif // __CDS_EX_HASH_SET_HPP__
