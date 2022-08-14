@@ -200,7 +200,24 @@ int main () {
     hs.emplace (3);
     hs.emplace (5);
 
-    HashMap < int, cds :: String > hm; // uncomment this to get a lot of errors :)
+    HashMap < int, cds :: String > hm;
+    hm.emplace ( 3, "Abc" );
+    hm.emplace ( 3, "Bcd" );
+    hm.emplace ( 4, "cad" );
+
+    auto & keys = hm.keys ();
+
+    try {
+        keys.emplace( 3 );
+    } catch ( cds :: Exception const & e ) {
+        std :: cout << e << '\n';
+    }
+
+    auto & entries = hm.entries ();
+
+    entries.emplace ( 5, "bdc" );
+
+    std :: cout << hm << '\n';
 
     std :: cout << hs << '\n';
 

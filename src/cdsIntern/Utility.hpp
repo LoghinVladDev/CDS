@@ -57,12 +57,12 @@ namespace cds {
     };
 
 
-    class UnsupportedOperationException : public RuntimeException {
+    class UnsupportedOperationException : public Exception {
     public:
-        UnsupportedOperationException () noexcept : RuntimeException ("Unsupported Operation") { }
+        UnsupportedOperationException () noexcept : Exception ("Unsupported Operation") { }
         UnsupportedOperationException ( UnsupportedOperationException const & ) noexcept = default;
         UnsupportedOperationException ( UnsupportedOperationException && ) noexcept = default;
-        __CDS_MaybeUnused explicit UnsupportedOperationException ( String const & message ) noexcept : RuntimeException ( String("Unsupported Operation : ") + message ) { }
+        __CDS_MaybeUnused explicit UnsupportedOperationException ( String const & message ) noexcept : Exception ( String("Unsupported Operation : ") + message ) { }
 
         ~UnsupportedOperationException() noexcept override = default;
     };

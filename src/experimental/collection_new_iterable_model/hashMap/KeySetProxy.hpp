@@ -128,7 +128,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
                     __KeyType const * pReferenceKey,
                     bool            * pIsNew
-            ) noexcept (false) -> __KeyType const *;
+            ) noexcept (false) -> __KeyType *;
 
         public:
             __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator;

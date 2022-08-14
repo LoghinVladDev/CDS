@@ -57,13 +57,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     bool newElementCreated;
                     auto pElementLocation = (
                                 reinterpret_cast < __ReceiverType * > ( this )->*
                                 reinterpret_cast <
-                                        __ElementType * ( __ReceiverType :: * ) (
-                                                __ElementType const *,
-                                                bool                *
+                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                                __ConstructibleElementType const *,
+                                                bool                             *
                                         )
                                 > (
                                         reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -102,13 +103,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     bool newElementCreated;
                     auto pElementLocation = (
                             reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
-                                    __ElementType * ( __ReceiverType :: * ) (
-                                            __ElementType const *,
-                                            bool                *
+                                    __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                            __ConstructibleElementType const *,
+                                            bool                             *
                                     )
                             > (
                                     reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -186,6 +188,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
@@ -197,9 +200,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         auto pElementLocation = (
                                 reinterpret_cast < __ReceiverType * > ( this )->*
                                 reinterpret_cast <
-                                        __ElementType * ( __ReceiverType :: * ) (
-                                                __ElementType const *,
-                                                bool                *
+                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                                __ConstructibleElementType const *,
+                                                bool                             *
                                         )
                                 > (
                                         reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (

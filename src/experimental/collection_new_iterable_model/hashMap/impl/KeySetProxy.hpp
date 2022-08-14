@@ -67,7 +67,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         > :: KeySetProxy :: __newAddress (
                 __KeyType const * pReferenceKey,
                 bool            * pIsNew        // NOLINT(readability-non-const-parameter)
-        ) noexcept (false) -> __KeyType const * {
+        ) noexcept (false) -> __KeyType * {
 
             (void) pReferenceKey;
             (void) pIsNew;
