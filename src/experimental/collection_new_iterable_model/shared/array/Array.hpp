@@ -83,12 +83,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> void;
 
                 protected:
-                    auto __a_remove ( // NOLINT(bugprone-reserved-identifier)
+                    auto __a_removeIterator ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __a_remove ( // NOLINT(bugprone-reserved-identifier)
+                    auto __a_removeConstIterator ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType const > const & iterator
                     ) noexcept -> bool;
 
@@ -309,8 +309,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         & __Array < __ElementType, __equals > :: __a_newBeforeArrayConst,
                         & __Array < __ElementType, __equals > :: __a_newAfterArray,
                         & __Array < __ElementType, __equals > :: __a_newAfterArrayConst,
-                        & __Array < __ElementType, __equals > :: __a_remove,
-                        & __Array < __ElementType, __equals > :: __a_remove
+                        & __Array < __ElementType, __equals > :: __a_removeIterator,
+                        & __Array < __ElementType, __equals > :: __a_removeConstIterator
                 > {};
 
             }

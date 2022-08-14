@@ -36,7 +36,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             template < typename __DerivedType = Map < __KeyType, __ValueType > > // NOLINT(bugprone-reserved-identifier)
-            auto map () const noexcept -> __DerivedType *;
+            auto map () noexcept -> __DerivedType *;
+
+        protected:
+            template < typename __DerivedType = Map < __KeyType, __ValueType > > // NOLINT(bugprone-reserved-identifier)
+            auto map () const noexcept -> __DerivedType const *;
 
         };
 

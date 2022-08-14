@@ -60,6 +60,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename, typename >
                     friend class __AbstractConstIteratorRelativeInsertionPrimitiveClient;   // NOLINT(bugprone-reserved-identifier)
 
+                private:
+                    template < typename, typename, typename, bool >
+                    friend class __FindUniqueImmutablePrimitiveClient;                      // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename, typename, typename, bool >
+                    friend class __FindUniqueMutablePrimitiveClient;                        // NOLINT(bugprone-reserved-identifier)
+
                 protected:
                     using __GenericHandler  = auto ( __ReceiverType :: * ) () -> void;      // NOLINT(bugprone-reserved-identifier)
 

@@ -178,6 +178,11 @@ void timingTest (int n) {
 
 int main () {
 
+//    cds :: experimental :: HashMap < int, int > * pM;
+//
+//    pM->remove(pM->begin());
+
+
     cds :: Function < int (int) > fact = [& fact](int n) -> int {
         if ( n == 1 ) {
             return 1;

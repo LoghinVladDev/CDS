@@ -34,6 +34,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using typename MutableCollectionBase :: __GenericHandler;       // NOLINT(bugprone-reserved-identifier)
         protected:  using typename MutableCollectionBase :: __GenericConstHandler;  // NOLINT(bugprone-reserved-identifier)
         public:     using typename MutableCollectionBase :: ElementType;
+        public:     using MutableCollectionBase :: remove;
 
         public:     using EntryType = ElementType;
         public:     using KeyType   = __KeyType;
@@ -62,22 +63,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
 
         public:

@@ -57,6 +57,17 @@ namespace cds {
     };
 
 
+    class UnsupportedOperationException : public RuntimeException {
+    public:
+        UnsupportedOperationException () noexcept : RuntimeException ("Unsupported Operation") { }
+        UnsupportedOperationException ( UnsupportedOperationException const & ) noexcept = default;
+        UnsupportedOperationException ( UnsupportedOperationException && ) noexcept = default;
+        __CDS_MaybeUnused explicit UnsupportedOperationException ( String const & message ) noexcept : RuntimeException ( String("Unsupported Operation : ") + message ) { }
+
+        ~UnsupportedOperationException() noexcept override = default;
+    };
+
+
     class NullPointerException : public Exception {
     public:
         NullPointerException () noexcept : Exception ("Tried De-Referencing a null valued Pointer") { }

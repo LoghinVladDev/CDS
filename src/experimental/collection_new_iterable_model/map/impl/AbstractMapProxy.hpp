@@ -54,13 +54,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType    // NOLINT(bugprone-reserved-identifier)
         > template <
-                typename __DerivedType
+                typename __DerivedType  // NOLINT(bugprone-reserved-identifier)
         > __CDS_OptimalInline auto Map <
                 __KeyType,
                 __ValueType
-        > :: AbstractMapProxy :: map () const noexcept -> __DerivedType * {
+        > :: AbstractMapProxy :: map () noexcept -> __DerivedType * {
 
             return reinterpret_cast < __DerivedType * > ( this->_pMap );
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __DerivedType  // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractMapProxy :: map () const noexcept -> __DerivedType const * {
+
+            return reinterpret_cast < __DerivedType const * > ( this->_pMap );
         }
 
     }
