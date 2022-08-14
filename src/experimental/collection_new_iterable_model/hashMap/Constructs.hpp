@@ -9,9 +9,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
 
         template <
-                typename __KeyType,
-                typename __ValueType,
-                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >
+                typename __KeyType,                                                             // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,                                                           // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
         > class HashMap;
 
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -58,7 +58,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __hashMapEquals (      // NOLINT(bugprone-reserved-identifier)
                         typename Map < __KeyType, __ValueType > :: EntryType const & leftEntry,
                         typename Map < __KeyType, __ValueType > :: EntryType const & rightEntry
-                ) noexcept -> void {
+                ) noexcept -> bool {
 
                     return
                             cds :: meta :: equals ( leftEntry.key(), rightEntry.key() ) &&
@@ -78,7 +78,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 cds :: __hidden :: __impl :: __PrimeRehashPolicy,
                                 & __hashMapKeyExtractor < __KeyType, __ValueType >,
                                 & cds :: meta :: equals < __KeyType >,
-                                & __hashSetDestructor < __KeyType, __ValueType >
+                                & __hashMapDestructor < __KeyType, __ValueType >
                         >;
 
 

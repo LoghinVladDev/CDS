@@ -87,16 +87,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using typename MapBase :: AbstractKeySetProxy;
         protected:  using typename MapBase :: AbstractValueMutableCollectionProxy;
         protected:  using typename MapBase :: AbstractEntryMutableCollectionProxy;
-        protected:  using typename MapBase :: DefaultEntryMutableCollectionProxy;
 
         protected:  class KeySetProxy;
         protected:  class ValueMutableCollectionProxy;
+        protected:  class EntryMutableCollectionProxy;
         protected:  friend class KeySetProxy;
         protected:  friend class ValueMutableCollectionProxy;
+        protected:  friend class EntryMutableCollectionProxy;
 
-        private:    KeySetProxy                         _keySetProxy;
-        private:    ValueMutableCollectionProxy         _valueMutableCollectionProxy;
-        private:    DefaultEntryMutableCollectionProxy  _entryMutableCollectionProxy;
+        private:    KeySetProxy                 _keySetProxy;
+        private:    ValueMutableCollectionProxy _valueMutableCollectionProxy;
+        private:    EntryMutableCollectionProxy _entryMutableCollectionProxy;
 
         public:     using ElementType   = typename MapBase :: ElementType;
         public:     using EntryType     = typename MapBase :: EntryType;
@@ -226,16 +227,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () noexcept -> AbstractKeySetProxy & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & override;
 
         public:
             constexpr HashMap () noexcept;
@@ -395,6 +396,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "hashMap/KeySetProxy.hpp"
+#include "hashMap/ValueMutableCollectionProxy.hpp"
+#include "hashMap/EntryMutableCollectionProxy.hpp"
+
 #include "shared/iterator/impl/HashTableIterator.hpp"
 
 #include "shared/hashTable/impl/HashTable.hpp"
@@ -405,6 +410,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/CTAD.hpp"
+#include "hashMap/impl/KeySetProxy.hpp"
+#include "hashMap/impl/ValueMutableCollectionProxy.hpp"
+#include "hashMap/impl/EntryMutableCollectionProxy.hpp"
 
 #include "shared/hashMap/HashMapSequence.hpp"
 

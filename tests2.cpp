@@ -195,6 +195,8 @@ int main () {
     hs.emplace (3);
     hs.emplace (5);
 
+//    HashMap < int, cds :: String > hm; // uncomment this to get a lot of errors :)
+
     std :: cout << hs << '\n';
 
     std :: cout << sizeof ( Array < int > ) << '\n';

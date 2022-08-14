@@ -10,6 +10,7 @@
 
 #include "shared/collectionInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/server/MutableCollectionServer.hpp"
 
 #include "../../collection/mutableCollection/map/map/entry/Entry.hpp"
 
@@ -43,8 +44,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  class AbstractValueMutableCollectionProxy;
         protected:  class AbstractEntryMutableCollectionProxy;
 
-        protected:  class DefaultEntryMutableCollectionProxy;
-
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
 
@@ -64,22 +63,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> Set < KeyType const > const & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> Set < KeyType const > & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () const noexcept -> MutableCollection < ValueType > const & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () noexcept -> MutableCollection < ValueType > & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () const noexcept -> MutableCollection < EntryType > const & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () noexcept -> MutableCollection < EntryType > & = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
 
         public:
             constexpr Map () noexcept;
@@ -115,11 +114,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "map/AbstractMapProxy.hpp"
+#include "map/AbstractKeySetProxy.hpp"
+#include "map/AbstractValueMutableCollectionProxy.hpp"
+#include "map/AbstractEntryMutableCollectionProxy.hpp"
+
 #include "shared/collectionInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/server/impl/MutableCollectionServer.hpp"
 
 #include "../../collection/mutableCollection/map/map/entry/impl/Entry.hpp"
 
 #include "map/impl/Map.hpp"
+#include "map/impl/AbstractMapProxy.hpp"
+#include "map/impl/AbstractKeySetProxy.hpp"
+#include "map/impl/AbstractValueMutableCollectionProxy.hpp"
+#include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
 
 #endif // __CDS_EX_MAP_HPP__

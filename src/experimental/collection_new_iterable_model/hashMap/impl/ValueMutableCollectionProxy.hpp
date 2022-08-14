@@ -2,8 +2,8 @@
 // Created by loghin on 14/08/22.
 //
 
-#ifndef __CDS_EX_HASH_MAP_IMPL_HPP__
-#define __CDS_EX_HASH_MAP_IMPL_HPP__
+#ifndef __CDS_EX_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
+#define __CDS_EX_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -16,14 +16,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: HashMap () noexcept :
-                _keySetProxy ( this ),
-                _valueMutableCollectionProxy ( this ),
-                _entryMutableCollectionProxy ( this ) {
-
+        > :: ValueMutableCollectionProxy :: ValueMutableCollectionProxy (
+                HashMap < __KeyType, __ValueType, __Hasher > * pMap
+        ) noexcept :
+                AbstractValueMutableCollectionProxy ( pMap ) {
+                    
         }
 
     }
 }
 
-#endif // __CDS_EX_HASH_MAP_IMPL_HPP__
+#endif // __CDS_EX_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
