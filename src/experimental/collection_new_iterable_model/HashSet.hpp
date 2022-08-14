@@ -38,7 +38,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetDispatcher < __ElementType, __Hasher >,
-                public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetRandomInsertionClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetIteratorRemoveClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetFindOfCollectionClient < __ElementType, __Hasher >,
@@ -47,7 +46,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashSetRemoveOfCollectionClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >,
-                public __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher > {
+                public __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher > {
 
         protected:  using SetBase                           = Set < __ElementType >;
         protected:  using Server                            = __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >;
@@ -292,16 +292,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard auto sequence () & noexcept -> Sequence < HashSet < __ElementType > >;
+            __CDS_NoDiscard auto sequence () & noexcept -> Sequence < HashSet < __ElementType, __Hasher > >;
 
         public:
-            __CDS_NoDiscard auto sequence () && noexcept -> Sequence < HashSet < __ElementType > >;
+            __CDS_NoDiscard auto sequence () && noexcept -> Sequence < HashSet < __ElementType, __Hasher > >;
 
         public:
-            __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < HashSet < __ElementType > const >;
+            __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < HashSet < __ElementType, __Hasher > const >;
 
         public:
-            __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < HashSet < __ElementType > const >;
+            __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < HashSet < __ElementType, __Hasher > const >;
         };
 
     }

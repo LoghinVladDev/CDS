@@ -6,6 +6,7 @@
 #define __CDS_EX_MAP_HPP__
 
 #include <CDS/experimental/MutableCollection>
+#include <CDS/experimental/Set>
 
 #include "shared/collectionInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"

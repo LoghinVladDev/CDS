@@ -7,7 +7,7 @@
 
 #if __CDS_cpplang_CTAD_available
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template <

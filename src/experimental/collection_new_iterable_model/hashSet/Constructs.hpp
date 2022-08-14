@@ -97,7 +97,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                         __Hasher
                                 >,
                                 __ElementType,
-                                __ElementType
+                                __ElementType const
                         >;
 
 
@@ -111,7 +111,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                         __Hasher
                                 >,
                                 __ElementType,
-                                AbstractAddressIterator < __ElementType >
+                                HashTableConstIterator < __ElementType >
                         >;
 
 

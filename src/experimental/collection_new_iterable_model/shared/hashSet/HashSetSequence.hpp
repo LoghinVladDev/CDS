@@ -11,29 +11,29 @@
 namespace cds {
     namespace experimental {
 
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashSet < __ElementType, __HashCalculator > :: sequence () & noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > > {
+        template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: sequence () & noexcept -> Sequence < HashSet < __ElementType, __Hasher > > {
 
             return Sequence < cds :: meta :: RemoveReference < decltype (*this) > > ( * this );
         }
 
 
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashSet < __ElementType, __HashCalculator > :: sequence () const & noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > const > {
+        template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: sequence () const & noexcept -> Sequence < HashSet < __ElementType, __Hasher > const > {
 
             return Sequence < cds :: meta :: RemoveReference < decltype (*this) > > (*this);
         }
 
 
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashSet < __ElementType, __HashCalculator > :: sequence () && noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > > {
+        template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: sequence () && noexcept -> Sequence < HashSet < __ElementType, __Hasher > > {
 
             return Sequence < cds :: meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
 
 
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashSet < __ElementType, __HashCalculator > :: sequence () const && noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > const > {
+        template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: sequence () const && noexcept -> Sequence < HashSet < __ElementType, __Hasher > const > {
 
             return Sequence < cds :: meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
