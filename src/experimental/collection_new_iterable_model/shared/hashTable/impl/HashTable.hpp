@@ -123,8 +123,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __nodeDestructor
                 > :: __HashTable (
                         __HashTable const & hashTable
-                ) noexcept :
-                        _rehash ( hashTable._rehash ) {
+                ) noexcept {
 
                     this->__ht_copyCleared < __copy > ( hashTable );
                 }
@@ -148,8 +147,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __nodeDestructor
                 > :: __HashTable (
                         __HashTable && hashTable
-                ) noexcept :
-                        _rehash ( std :: move ( hashTable._rehash ) ) {
+                ) noexcept {
 
                     this->__ht_moveCleared ( std :: move ( hashTable ) );
                 }
@@ -1058,6 +1056,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             pThisBack = pNewNode;
                         }
                     }
+
+                    this->_rehash = table._rehash;
                 }
 
 
