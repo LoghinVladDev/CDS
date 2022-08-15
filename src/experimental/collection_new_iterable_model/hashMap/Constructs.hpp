@@ -268,6 +268,38 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,           // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapFindUniqueClient =     // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindUniqueMutablePrimitiveClient <
+                                cds :: experimental :: HashMap <
+                                        __KeyType,
+                                        __ValueType,
+                                        __Hasher
+                                >,
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >
+                        >;
+
+
+                template <
+                        typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,               // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                   // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapFindUniqueConstClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindUniqueImmutablePrimitiveClient <
+                                cds :: experimental :: HashMap <
+                                        __KeyType,
+                                        __ValueType,
+                                        __Hasher
+                                >,
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >
+                        >;
+
+
+                template <
                         typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType,               // NOLINT(bugprone-reserved-identifier)
                         typename __Hasher                   // NOLINT(bugprone-reserved-identifier)

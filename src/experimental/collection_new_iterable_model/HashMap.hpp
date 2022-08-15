@@ -50,6 +50,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashMapFindOfConstInitializerListClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapFindByClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapFindByConstClient < __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapFindUniqueClient < __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapFindUniqueConstClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapRemoveOfCollectionClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapRemoveOfInitializerListClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapRemoveByClient < __KeyType, __ValueType, __Hasher >,
@@ -70,6 +72,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using FindOfConstInitializerListClient  = __hidden :: __impl :: __HashMapFindOfConstInitializerListClient < __KeyType, __ValueType, __Hasher >;
         protected:  using FindByClient                      = __hidden :: __impl :: __HashMapFindByClient < __KeyType, __ValueType, __Hasher >;
         protected:  using FindByConstClient                 = __hidden :: __impl :: __HashMapFindByConstClient < __KeyType, __ValueType, __Hasher >;
+        protected:  using FindUniqueClient                  = __hidden :: __impl :: __HashMapFindUniqueClient < __KeyType, __ValueType, __Hasher >;
+        protected:  using FindUniqueConstClient             = __hidden :: __impl :: __HashMapFindUniqueConstClient < __KeyType, __ValueType, __Hasher >;
         protected:  using RemoveOfCollectionClient          = __hidden :: __impl :: __HashMapRemoveOfCollectionClient < __KeyType, __ValueType, __Hasher >;
         protected:  using RemoveOfInitializerListClient     = __hidden :: __impl :: __HashMapRemoveOfInitializerListClient < __KeyType, __ValueType, __Hasher >;
         protected:  using RemoveByClient                    = __hidden :: __impl :: __HashMapRemoveByClient < __KeyType, __ValueType, __Hasher >;
@@ -225,6 +229,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:     using RandomInsertionClient :: insertAll;
         public:     using RandomInsertionClient :: insertAllOf;
         public:     using RandomInsertionClient :: emplace;
+
+        public:     using FindUniqueClient :: find;
+        public:     using FindUniqueConstClient :: find;
 
         protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
