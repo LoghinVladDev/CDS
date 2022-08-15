@@ -2,8 +2,8 @@
 // Created by loghin on 27/07/22.
 //
 
-#ifndef __CDS_SHARED_HASH_TABLE_HPP__
-#define __CDS_SHARED_HASH_TABLE_HPP__
+#ifndef __CDS_EX_SHARED_HASH_TABLE_HPP__
+#define __CDS_EX_SHARED_HASH_TABLE_HPP__
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
@@ -254,14 +254,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_HASH_TABLE_HPP__
+#endif // __CDS_EX_SHARED_HASH_TABLE_HPP__
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ )
+#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_EX_SHARED_HASH_TABLE_HPP__)
 #define __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ // NOLINT(bugprone-reserved-identifier)
 
                 template <
@@ -328,7 +328,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
 
-#if defined ( __CDS_SHARED_MAP_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ )
+#if defined ( __CDS_SHARED_MAP_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_EX_SHARED_HASH_TABLE_HPP__)
 #define __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ // NOLINT(bugprone-reserved-identifier)
 
                 template <

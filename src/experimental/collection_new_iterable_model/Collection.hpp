@@ -72,19 +72,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using typename DelegateForwardConstIterableClient :: ConstIterator;
 
         protected:
+            /**
+             * @brief Default Constructor
+             * @exceptsafe
+             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             */
             constexpr Collection () noexcept;
 
         protected:
+            /**
+             * @brief Copy Constructor
+             * @param collection : Collection cref = Constant Reference to a collection to copy data from
+             * @exceptsafe
+             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             */
             constexpr Collection (
                     Collection const & collection
             ) noexcept;
 
         protected:
+            /**
+             * @brief Move Constructor
+             * @param collection : Collection mref = Move Reference to a collection to copy data from
+             * @exceptsafe
+             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             */
             constexpr Collection (
                     Collection && collection
             ) noexcept;
 
         public:
+            /**
+             * @brief Destructor Constructor
+             * @exceptsafe
+             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             */
             __CDS_cpplang_ConstexprDestructor ~Collection() noexcept;
 
         public: using DelegateForwardConstIterableClient :: begin;
@@ -171,39 +193,79 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         public:
+            /**
+             * @brief Function used to acquire the number of elements in the collection
+             * @exceptsafe
+             * @return Size = number of elements inside the collection
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00004-MF-size, CT-00010-MF-clear }
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
         public:
+            /**
+             * @brief Function used to check if the collection does not contain any elements ( is empty )
+             * @exceptsafe
+             * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00005-MF-empty, CT-00010-MF-clear }
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
         public:
-            __CDS_cpplang_VirtualConstexpr __CDS_Explicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
+            /**
+             * @brief Bool cast operator, functionality equal to python's iterable empty check. '(bool) collection' is equivalent to '! collection.empty()'
+             * @exceptsafe
+             * @return bool = true if collection is not empty, false otherwise
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00006-MF-boolCast, CT-00010-MF-clear }
+             */
+            __CDS_cpplang_VirtualConstexpr __CDS_Explicit operator bool () const noexcept;
 
         public:
+            /**
+             * @brief String conversion function, used to obtain String representation of the Collection
+             * @exceptsafe
+             * @return String = string representation
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00003-MF-toString, CT-00010-MF-clear }
+             */
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
+            /**
+             * @brief Hash function, used to obtain the hash value of the Collection
+             * @exceptsafe
+             * @return Index = hash code value of the instance
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00009-MF-hash, CT-00010-MF-clear }
+             */
             __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
+            /**
+             * @brief Explicit Comparison Function with generic CDS/Object
+             * @param object : Object cref = Constant Reference to an Object-derived instance
+             * @exceptsafe
+             * @return bool = true if objects are equal, false otherwise
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00010-MF-clear, CT-00011-MF-equalsSelf,
+             *      CT-00012-MF-equalsTrueSameType, CT-00013-MF-equalsTrueDifferentType, CT-00014-MF-equalsFalseSameType,
+             *      CT-00015-MF-equalsFalseDifferentType, CT-00016-MF-equalsFalseNotCollection }
+             */
             __CDS_NoDiscard auto equals (
                     Object const & object
             ) const noexcept -> bool override;
 
         public:
+            /**
+             * @brief Function used to clear the collection, removing all elements from it
+             * @exceptsafe
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00010-MF-clear }
+             */
             virtual auto clear () noexcept -> void = 0;
 
         public:
-            virtual auto remove (
-                    ElementType const & element
-            ) noexcept -> bool;
-
-        public:
-            __CDS_NoDiscard virtual auto find (
-                    ElementType const & element
-            ) const noexcept -> ConstIterator;
-
-        public:
+            /**
+             * @brief Function used to check if the collection contains the requested element.
+             * @param element : ElementType cref = Constant Reference to the element to be found in the collection
+             * @return bool = true if the element exists in the collection, false otherwise
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00007-MF-containsTrue, CT-00008-MF-containsFalse, CT-00010-MF-clear }
+             */
             __CDS_NoDiscard virtual auto contains (
                     ElementType const & element
             ) const noexcept -> bool;

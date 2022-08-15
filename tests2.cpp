@@ -205,6 +205,9 @@ int main () {
     hm.emplace ( 3, "Bcd" );
     hm.emplace ( 4, "cad" );
 
+    HashMap < int, int > hm2 = { {1, 2}, {3, 4} };
+    auto hm3 = HashMap < int, int > { {1, 2}, {3, 4} };
+
     auto & keys = hm.keys ();
 
     try {
@@ -290,26 +293,26 @@ int main () {
 
     std :: cout << a << '\n';
 
-//    pList->insertBefore( pList->begin(), 3);
-//    pList->insertBefore ( pList->cbegin(), 3);
-//    pList->insertAfter( pList->begin(), 3);
-//    pList->insertAfter ( pList->cbegin(), 3);
-//    pList->insertAllBefore ( pList->begin(), 1, 2, 3);
-//    pList->insertAllBefore ( pList->cbegin(), 1, 2, 3);
-//    pList->insertAllAfter ( pList->begin(), 1, 2, 3);
-//    pList->insertAllAfter ( pList->cbegin(), 1, 2, 3);
-//    pList->insertAllOfBefore ( pList->begin(), { 1, 2, 3 } );
-//    pList->insertAllOfBefore ( pList->cbegin(), { 1, 2, 3 } );
-//    pList->insertAllOfAfter ( pList->begin(), { 1, 2, 3 } );
-//    pList->insertAllOfAfter ( pList->cbegin(), { 1, 2, 3 } );
-//    pList->insertAllOfBefore ( pList->begin(), * pList );
-//    pList->insertAllOfBefore ( pList->cbegin(), * pList );
-//    pList->insertAllOfAfter ( pList->begin(), * pList );
-//    pList->insertAllOfAfter ( pList->cbegin(), * pList );
-//    pList->insertAllOfBefore ( pList->begin(), pList->begin(), pList->end() );
-//    pList->insertAllOfBefore ( pList->cbegin(), pList->begin(), pList->end() );
-//    pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
-//    pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
+    pList->insertBefore( pList->begin(), 3);
+    pList->insertBefore ( pList->cbegin(), 3);
+    pList->insertAfter( pList->begin(), 3);
+    pList->insertAfter ( pList->cbegin(), 3);
+    pList->insertAllBefore ( pList->begin(), 1, 2, 3);
+    pList->insertAllBefore ( pList->cbegin(), 1, 2, 3);
+    pList->insertAllAfter ( pList->begin(), 1, 2, 3);
+    pList->insertAllAfter ( pList->cbegin(), 1, 2, 3);
+    pList->insertAllOfBefore ( pList->begin(), { 1, 2, 3 } );
+    pList->insertAllOfBefore ( pList->cbegin(), { 1, 2, 3 } );
+    pList->insertAllOfAfter ( pList->begin(), { 1, 2, 3 } );
+    pList->insertAllOfAfter ( pList->cbegin(), { 1, 2, 3 } );
+    pList->insertAllOfBefore ( pList->begin(), * pList );
+    pList->insertAllOfBefore ( pList->cbegin(), * pList );
+    pList->insertAllOfAfter ( pList->begin(), * pList );
+    pList->insertAllOfAfter ( pList->cbegin(), * pList );
+    pList->insertAllOfBefore ( pList->begin(), pList->begin(), pList->end() );
+    pList->insertAllOfBefore ( pList->cbegin(), pList->begin(), pList->end() );
+    pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
+    pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
 
     pList->sub(otherAsList, 2, 3);
     (*pList)[2] = 3;
@@ -392,7 +395,6 @@ int main () {
     pColl->remove(pColl->cbegin());
     pColl->remove(pColl->end());
     pColl->remove(pColl->cend());
-    pColl->remove(5);
 
     (void)pColl->size();
     (void)pColl->empty();
@@ -401,7 +403,6 @@ int main () {
     (void)pColl->hash();
     (void)pColl->equals(* pColl);
     pColl->clear();
-    (void)pColl->find(5);
     (void)pColl->contains(5);
     pColl->insert(5);
     pColl->insertAll(5, 3, 1);
@@ -516,7 +517,6 @@ int main () {
     pMutColl->remove(pMutColl->cbegin());
     pMutColl->remove(pMutColl->end());
     pMutColl->remove(pMutColl->cend());
-    pMutColl->remove(5);
 
     (void)pMutColl->size();
     (void)pMutColl->empty();

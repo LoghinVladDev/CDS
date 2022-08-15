@@ -98,7 +98,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept {
 
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                this->insert ( iterator );
+                this->insert ( * iterator );
             }
         }
 

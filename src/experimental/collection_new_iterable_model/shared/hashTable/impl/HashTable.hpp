@@ -2,8 +2,8 @@
 // Created by loghin on 27/07/22.
 //
 
-#ifndef __CDS_SHARED_HASH_TABLE_IMPL_HPP__
-#define __CDS_SHARED_HASH_TABLE_IMPL_HPP__
+#ifndef __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__
+#define __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
@@ -1274,4 +1274,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_HASH_TABLE_IMPL_HPP__
+#endif // __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__
