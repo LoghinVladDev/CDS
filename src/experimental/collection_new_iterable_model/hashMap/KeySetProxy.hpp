@@ -78,6 +78,127 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 void
                         >;
 
+
+                template <                                          
+                        typename __ServerType,                      // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                       // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                           // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyRandomInsertionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRandomInsertionPrimitiveClient <
+                                __ServerType,
+                                __KeyType,
+                                __KeyType const
+                        >;
+
+
+                template <
+                        typename __ServerType,                  // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                     // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                   // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                       // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyIteratorRemoveClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalIteratorRemovePrimitiveClient <
+                                __ServerType,
+                                __KeyType,
+                                __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >
+                        >;
+
+
+                template <
+                        typename __ServerType,                      // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                       // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                           // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyFindOfCollectionClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                __ServerType,
+                                __KeyType,
+                                __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >,
+                                cds :: experimental :: Collection < __KeyType >,
+                                & __collectionContains < __KeyType >
+                        >;
+
+
+                template <
+                        typename __ServerType,                          // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                             // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                           // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                               // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyFindOfInitializerListClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                __ServerType,
+                                __KeyType,
+                                __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >,
+                                std :: initializer_list < __KeyType >,
+                                & __initializerListContains < __KeyType, & cds :: meta :: equals < __KeyType > >
+                        >;
+
+
+                template <
+                        typename __ServerType,          // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,           // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyFindByClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindByImmutableCompositeClient <
+                                __ServerType,
+                                __KeyType,
+                                __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >
+                        >;
+
+
+                template <
+                        typename __ServerType,                      // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                       // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                           // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyRemoveOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                __ServerType,
+                                __KeyType,
+                                cds :: experimental :: Collection < __KeyType >,
+                                & __collectionContains < __KeyType >
+                        >;
+
+
+                template <
+                        typename __ServerType,                              // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                               // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                                   // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyRemoveOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                __ServerType,
+                                __KeyType,
+                                std :: initializer_list < __KeyType >,
+                                & __initializerListContains < __KeyType, & cds :: meta :: equals < __KeyType > >
+                        >;
+
+
+                template <
+                        typename __ServerType,              // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,               // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                   // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyRemoveByClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveByCompositeClient <
+                                __ServerType,
+                                __KeyType
+                        >;
+
+
+                template <
+                        typename __ServerType,                      // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                       // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                           // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyGenericStatementsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericImmutableStatementsCompositeClient <
+                                __ServerType,
+                                __KeyType
+                        >;
+
             }
         }
 
@@ -92,6 +213,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         > :: KeySetProxy :
                 public AbstractKeySetProxy,
                 protected __hidden :: __impl :: __HashMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyFindOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyFindOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapKeyProxyDelegateIterableServer < KeySetProxy, __KeyType, __ValueType, __Hasher > {
 
         protected:  using HashMapBase   = HashMap < __KeyType, __ValueType, __Hasher >;
