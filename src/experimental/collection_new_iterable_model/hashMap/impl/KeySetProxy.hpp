@@ -60,22 +60,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
                 typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > __CDS_OptimalInline auto HashMap <
+        > __CDS_cpplang_ConstexprDestructor HashMap <
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: KeySetProxy :: __newAddress (
-                __KeyType const * pReferenceKey,
-                bool            * pIsNew        // NOLINT(readability-non-const-parameter)
-        ) noexcept (false) -> __KeyType * {
-
-            (void) pReferenceKey;
-            (void) pIsNew;
-
-            throw cds :: UnsupportedOperationException (
-                    cds :: String ( "Cannot insert a value into a Map Key Set" )
-            );
-        }
+        > :: KeySetProxy :: ~KeySetProxy () noexcept = default;
 
 
         template <
@@ -163,6 +152,75 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> ConstIterator {
 
             return ConstIterator ( this->template map < HashMapBase > ()->__findConst ( key ) );
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: KeySetProxy :: __equals (
+                KeySetProxy const & set
+        ) const noexcept -> bool {
+
+            if ( this == & set ) {
+                return true;
+            }
+
+            if ( this->size() != set.size() ) {
+                return false;
+            }
+
+            for (
+                    auto
+                        leftIt  = this->begin(),    rightIt     = set.begin(),
+                        leftEnd = this->end(),      rightEnd    = set.end();
+
+                    leftIt != leftEnd;
+                    ++ leftIt, ++ rightIt
+            ) {
+                if ( ! cds :: meta :: equals ( * leftIt, * rightIt ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: KeySetProxy :: operator == (
+                KeySetProxy const & set
+        ) const noexcept -> bool {
+
+            return this->__equals ( set );
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: KeySetProxy :: operator != (
+                KeySetProxy const & set
+        ) const noexcept -> bool {
+
+            return ! this->__equals ( set );
         }
 
     }

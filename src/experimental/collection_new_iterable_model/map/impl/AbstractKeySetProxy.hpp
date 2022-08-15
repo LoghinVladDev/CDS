@@ -25,6 +25,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_ConstexprDestructor Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractKeySetProxy :: ~AbstractKeySetProxy () noexcept = default;
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
         > __CDS_OptimalInline auto Map <
                 __KeyType,
                 __ValueType
@@ -45,6 +54,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept -> bool {
 
             return this->map()->remove(key);
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_VirtualConstexpr auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractKeySetProxy :: size () const noexcept -> Size {
+
+            return this->map()->size();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractKeySetProxy :: __newAddress (
+                __KeyType const * pReferenceKey,
+                bool            * pIsNew        // NOLINT(readability-non-const-parameter)
+        ) noexcept (false) -> __KeyType * {
+
+            (void) pReferenceKey;
+            (void) pIsNew;
+
+            throw cds :: UnsupportedOperationException (
+                    cds :: String ( "Cannot insert a value into a Map Key Set" )
+            );
         }
 
     }

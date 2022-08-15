@@ -125,10 +125,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
-                    __KeyType const * pReferenceKey,
-                    bool            * pIsNew
-            ) noexcept (false) -> __KeyType *;
+            KeySetProxy (
+                    KeySetProxy const &
+            ) noexcept = delete;
+
+        public:
+            KeySetProxy (
+                    KeySetProxy &&
+            ) noexcept = delete;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~KeySetProxy() noexcept override;
+
+        public:
+            auto operator = (
+                    KeySetProxy const &
+            ) noexcept -> KeySetProxy & = delete;
+
+        public:
+            auto operator = (
+                    KeySetProxy &&
+            ) noexcept -> KeySetProxy & = delete;
 
         public:
             __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator;
@@ -142,15 +159,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator;
 
-        public:
+        protected:
             auto __removeConst (    // NOLINT(bugprone-reserved-identifier)
                     ConstIterator const * pIterator
             ) noexcept -> bool;
 
-        public:
+        protected:
             auto __findConst (    // NOLINT(bugprone-reserved-identifier)
                     __KeyType const & key
             ) const noexcept -> ConstIterator;
+
+        private:
+            __CDS_NoDiscard auto __equals ( // NOLINT(bugprone-reserved-identifier)
+                    KeySetProxy const & set
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator == (
+                    KeySetProxy const & set
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    KeySetProxy const & set
+            ) const noexcept -> bool;
         };
 
     }

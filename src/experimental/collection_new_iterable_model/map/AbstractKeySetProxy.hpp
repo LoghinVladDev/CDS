@@ -30,12 +30,44 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
+            AbstractKeySetProxy (
+                    AbstractKeySetProxy const & set
+            ) noexcept = delete;
+
+        public:
+            AbstractKeySetProxy (
+                    AbstractKeySetProxy &&
+            ) noexcept = delete;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~AbstractKeySetProxy () noexcept override;
+
+        public:
+            auto operator = (
+                    AbstractKeySetProxy const &
+            ) noexcept -> AbstractKeySetProxy & = delete;
+
+        public:
+            auto operator = (
+                    AbstractKeySetProxy &&
+            ) noexcept -> AbstractKeySetProxy & = delete;
+
+        public:
             auto clear () noexcept -> void override;
 
         public:
             auto remove (
                     KeyType const & key
             ) noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
+
+        protected:
+            auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
+                    __KeyType const * pReferenceKey,
+                    bool            * pIsNew
+            ) noexcept (false) -> __KeyType *;
         };
 
     }
