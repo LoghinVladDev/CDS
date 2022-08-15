@@ -30,7 +30,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
+            AbstractEntryMutableCollectionProxy (
+                    AbstractEntryMutableCollectionProxy const &
+            ) noexcept = delete;
+
+        public:
+            AbstractEntryMutableCollectionProxy (
+                    AbstractEntryMutableCollectionProxy &&
+            ) noexcept = delete;
+
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~AbstractEntryMutableCollectionProxy () noexcept override;
+
+        public:
+            auto operator = (
+                    AbstractEntryMutableCollectionProxy const &
+            ) noexcept -> AbstractEntryMutableCollectionProxy & = delete;
+
+        public:
+            auto operator = (
+                    AbstractEntryMutableCollectionProxy &&
+            ) noexcept -> AbstractEntryMutableCollectionProxy & = delete;
+
+        public:
             auto clear () noexcept -> void override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
         };
 
     }

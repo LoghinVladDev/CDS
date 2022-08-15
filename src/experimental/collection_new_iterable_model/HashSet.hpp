@@ -47,6 +47,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetFindUniqueClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher > {
 
         protected:  using SetBase                           = Set < __ElementType >;
@@ -63,6 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using RemoveOfInitializerListClient     = __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >;
         protected:  using RemoveByClient                    = __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >;
         protected:  using GenericStatementsClient           = __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >;
+        protected:  using FindUniqueClient                  = __hidden :: __impl :: __HashSetFindUniqueClient < __ElementType, __Hasher >;
 
         protected:  friend Server;
 
@@ -154,6 +156,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using RandomInsertionClient :: insertAll;
         public: using RandomInsertionClient :: insertAllOf;
         public: using RandomInsertionClient :: emplace;
+
+        public: using IteratorRemoveClient :: remove;
+
+        public: using FindUniqueClient :: find;
 
         public:
             constexpr HashSet () noexcept;

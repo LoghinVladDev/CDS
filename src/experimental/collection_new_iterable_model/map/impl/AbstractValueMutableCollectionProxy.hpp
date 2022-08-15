@@ -33,6 +33,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             this->map()->clear();
         }
 
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_ConstexprDestructor Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractValueMutableCollectionProxy :: ~AbstractValueMutableCollectionProxy () noexcept = default;
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_VirtualConstexpr auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractValueMutableCollectionProxy :: size () const noexcept -> Size {
+
+            return this->map()->size();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractValueMutableCollectionProxy :: __newAddress (
+                __ValueType const * pReferenceKey,
+                bool              * pIsNew        // NOLINT(readability-non-const-parameter)
+        ) noexcept (false) -> __ValueType * {
+
+            (void) pReferenceKey;
+            (void) pIsNew;
+
+            throw cds :: UnsupportedOperationException (
+                    cds :: String ( "Cannot insert a value into a Map Value Collection" )
+            );
+        }
+
     }
 }
 

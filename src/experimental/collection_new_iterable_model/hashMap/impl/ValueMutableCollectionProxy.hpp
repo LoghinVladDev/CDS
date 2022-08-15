@@ -60,28 +60,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
                 typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > __CDS_OptimalInline auto HashMap <
-                __KeyType,
-                __ValueType,
-                __Hasher
-        > :: ValueMutableCollectionProxy :: __newAddress (
-                __ValueType const * pReferenceValue,
-                bool              * pIsNew          // NOLINT(readability-non-const-parameter)
-        ) noexcept (false) -> __ValueType * {
-
-            (void) pReferenceValue;
-            (void) pIsNew;
-
-            throw cds :: UnsupportedOperationException (
-                    cds :: String ( "Cannot insert a value into a Map Value Mutable Collection" )
-            );
-        }
-
-
-        template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
         > __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap <
                 __KeyType,
                 __ValueType,

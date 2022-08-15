@@ -33,6 +33,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             this->map()->clear();
         }
 
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_ConstexprDestructor Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractEntryMutableCollectionProxy :: ~AbstractEntryMutableCollectionProxy () noexcept = default;
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_VirtualConstexpr auto Map <
+                __KeyType,
+                __ValueType
+        > :: AbstractEntryMutableCollectionProxy :: size () const noexcept -> Size {
+
+            return this->map()->size();
+        }
+
     }
 }
 

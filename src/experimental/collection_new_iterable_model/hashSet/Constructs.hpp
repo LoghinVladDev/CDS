@@ -218,6 +218,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetFindUniqueClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindUniqueImmutablePrimitiveClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableIterator < __ElementType >
+                        >;
+
+
+                template <
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         typename __Hasher                   // NOLINT(bugprone-reserved-identifier)
                 > using __HashSetDelegateIterableServer =   // NOLINT(bugprone-reserved-identifier)

@@ -199,6 +199,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 __KeyType
                         >;
 
+
+                template <
+                        typename __ServerType,                      // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType,                       // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher                           // NOLINT(bugprone-reserved-identifier)
+                > using __HashMapKeyProxyFindUniqueClient =         // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindUniqueImmutablePrimitiveClient <
+                                __ServerType,
+                                __KeyType,
+                                __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >
+                        >;
+
             }
         }
 
@@ -222,10 +235,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapKeyProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapKeyProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapKeyProxyFindUniqueClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapKeyProxyDelegateIterableServer < KeySetProxy, __KeyType, __ValueType, __Hasher > {
 
-        protected:  using HashMapBase   = HashMap < __KeyType, __ValueType, __Hasher >;
-        protected:  using Server        = __hidden :: __impl :: __HashMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using HashMapBase                   = HashMap < __KeyType, __ValueType, __Hasher >;
+        protected:  using Server                        = __hidden :: __impl :: __HashMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using RandomInsertionClient         = __hidden :: __impl :: __HashMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using IteratorRemoveClient          = __hidden :: __impl :: __HashMapKeyProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using FindOfCollectionClient        = __hidden :: __impl :: __HashMapKeyProxyFindOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using FindOfInitializerListClient   = __hidden :: __impl :: __HashMapKeyProxyFindOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using FindByClient                  = __hidden :: __impl :: __HashMapKeyProxyFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using RemoveOfCollectionClient      = __hidden :: __impl :: __HashMapKeyProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using RemoveOfInitializerListClient = __hidden :: __impl :: __HashMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using RemoveByClient                = __hidden :: __impl :: __HashMapKeyProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using GenericStatementsClient       = __hidden :: __impl :: __HashMapKeyProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using FindUniqueClient              = __hidden :: __impl :: __HashMapKeyProxyFindUniqueClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
 
         protected:  using typename AbstractKeySetProxy :: __GenericHandler;         // NOLINT(bugprone-reserved-identifier)
         protected:  using typename AbstractKeySetProxy :: __GenericConstHandler;    // NOLINT(bugprone-reserved-identifier)
@@ -238,6 +262,75 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using AbstractKeySetProxy :: end;
         protected:  using AbstractKeySetProxy :: cbegin;
         protected:  using AbstractKeySetProxy :: cend;
+
+        public: using RemoveByClient :: removeIf;
+        public: using RemoveByClient :: removeFirstIf;
+        public: using RemoveByClient :: removeLastIf;
+        public: using RemoveByClient :: removeAllIf;
+
+        public: using GenericStatementsClient :: forEach;
+        public: using GenericStatementsClient :: some;
+        public: using GenericStatementsClient :: atLeast;
+        public: using GenericStatementsClient :: atMost;
+        public: using GenericStatementsClient :: moreThan;
+        public: using GenericStatementsClient :: fewerThan;
+        public: using GenericStatementsClient :: count;
+        public: using GenericStatementsClient :: any;
+        public: using GenericStatementsClient :: all;
+        public: using GenericStatementsClient :: none;
+
+        public: using RemoveOfCollectionClient :: removeOf;
+        public: using RemoveOfCollectionClient :: removeFirstOf;
+        public: using RemoveOfCollectionClient :: removeLastOf;
+        public: using RemoveOfCollectionClient :: removeAllOf;
+        public: using RemoveOfCollectionClient :: removeNotOf;
+        public: using RemoveOfCollectionClient :: removeFirstNotOf;
+        public: using RemoveOfCollectionClient :: removeLastNotOf;
+        public: using RemoveOfCollectionClient :: removeAllNotOf;
+
+        public: using RemoveOfInitializerListClient :: removeOf;
+        public: using RemoveOfInitializerListClient :: removeFirstOf;
+        public: using RemoveOfInitializerListClient :: removeLastOf;
+        public: using RemoveOfInitializerListClient :: removeAllOf;
+        public: using RemoveOfInitializerListClient :: removeNotOf;
+        public: using RemoveOfInitializerListClient :: removeFirstNotOf;
+        public: using RemoveOfInitializerListClient :: removeLastNotOf;
+        public: using RemoveOfInitializerListClient :: removeAllNotOf;
+
+        public: using FindByClient :: findThat;
+        public: using FindByClient :: findFirstThat;
+        public: using FindByClient :: findLastThat;
+        public: using FindByClient :: findAllThat;
+
+        public: using FindOfCollectionClient :: findOf;
+        public: using FindOfCollectionClient :: findFirstOf;
+        public: using FindOfCollectionClient :: findLastOf;
+        public: using FindOfCollectionClient :: findAllOf;
+        public: using FindOfCollectionClient :: findNotOf;
+        public: using FindOfCollectionClient :: findFirstNotOf;
+        public: using FindOfCollectionClient :: findLastNotOf;
+        public: using FindOfCollectionClient :: findAllNotOf;
+
+        public: using FindOfInitializerListClient :: findOf;
+        public: using FindOfInitializerListClient :: findFirstOf;
+        public: using FindOfInitializerListClient :: findLastOf;
+        public: using FindOfInitializerListClient :: findAllOf;
+        public: using FindOfInitializerListClient :: findNotOf;
+        public: using FindOfInitializerListClient :: findFirstNotOf;
+        public: using FindOfInitializerListClient :: findLastNotOf;
+        public: using FindOfInitializerListClient :: findAllNotOf;
+
+        public: using RandomInsertionClient :: add;
+        public: using RandomInsertionClient :: addAll;
+        public: using RandomInsertionClient :: addAllOf;
+        public: using RandomInsertionClient :: insert;
+        public: using RandomInsertionClient :: insertAll;
+        public: using RandomInsertionClient :: insertAllOf;
+        public: using RandomInsertionClient :: emplace;
+
+        public: using IteratorRemoveClient :: remove;
+
+        public: using FindUniqueClient :: find;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
