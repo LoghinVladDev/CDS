@@ -3,10 +3,9 @@
 //
 
 #ifndef __CDS_EX_COLLECTION_HPP__
-#define __CDS_EX_COLLECTION_HPP__
+#define __CDS_EX_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include <CDS/Object>
-
 #include <CDS/Comparator>
 
 #include "../../shared/memory/PrimitiveAllocation.hpp"
@@ -30,10 +29,35 @@
 
 #include "collection/CollectionConstructs.hpp"
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        /**
+         * @class Abstract Object representing any Iterable Container of given elements of type
+         * @tparam __ElementType is the type of elements contained into Collection
+         *
+         * @extends [public]            __CollectionCommunicationChannel - Base class used to communicate requests from Abstract Collection to Derived Collections
+         * @extends [public,implicit]   Object - base cds Class, inherited from __CollectionCommunicationChannel
+         * @extends [protected]         __CollectionFunctions - container for statically stored equals function
+         *
+         * @implements [public]         __CollectionDelegateForwardConstIterableClient - Abstract Iterator Request Client - begin / end / cbegin / cend
+         * @implements [public]         __CollectionConstIteratorRemoveClient - Abstract Iterator Remove Client - remove
+         * @implements [public]         __CollectionRandomInsertionClient - Insertion without specified position Client - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
+         * @implements [public]         __CollectionContainsOfCollectionClient - Contains Functions for Collection parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+         * @implements [public]         __CollectionContainsOfInitializerListClient - Contains Functions for std :: initializer_list parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+         * @implements [public]         __CollectionFindOfCollectionClient - Find Of Functions for Collection parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+         * @implements [public]         __CollectionFindOfInitializerListClient - Find Of Functions for std :: initializer_list parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+         * @implements [public]         __CollectionFindByClient - Find By Functions for Predicates Client - findThat / findFirstThat / findLastThat / findAllThat
+         * @implements [public]         __CollectionRemoveOfCollectionClient - Remove Of Functions for Collection parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+         * @implements [public]         __CollectionRemoveOfInitializerListClient - Remove Of Functions for std :: initializer_list parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+         * @implements [public]         __CollectionRemoveByClient - Remove By Functions for Predicates Client - removeThat / removeFirstThat / removeLastThat / removeAllThat
+         * @implements [public]         __CollectionGenericStatementsClient - Generic Functional Statements for Predicates - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
+         *
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @namespace cds :: experimental
+         * @public
+         */
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class Collection :
                 public __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >,
                 public __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >,
@@ -50,41 +74,142 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >,
                 protected __hidden :: __impl :: __CollectionFunctions < __ElementType > {
 
-        public:     using ElementType                           = __ElementType;
-        protected:  using CommunicationChannel                  = __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
-        protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
-        protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >;
-        protected:  using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
-        protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
-        protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
-        protected:  using FindOfCollectionClient                = __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
-        protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
-        protected:  using FindByClient                          = __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
-        protected:  using RemoveOfCollectionClient              = __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >;
-        protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >;
-        protected:  using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
-        protected:  using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
+        public:
+            /**
+             * @typedef public alias for __ElementType, the type of the contained elements,
+             * publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+             * @public
+             */
+            using ElementType                           = __ElementType;
 
-        protected:  using typename CommunicationChannel :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
-        protected:  using typename CommunicationChannel :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
+        protected:
+            /**
+             * @typedef protected alias for __CollectionCommunicationChannel base interface - providing communication channel abstract functions __cicch_obtainGenericHandler / __cicch_obtainGenericConstHandler
+             * @protected
+             */
+            using CommunicationChannel                  = __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionDelegateForwardConstIterableClient base interface - providing begin / end / cbegin / cend for Abstract Iterators
+             * @protected
+             */
+            using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionConstIteratorRemoveClient base interface - providing remove for Abstract Iterators
+             * @protected
+             */
+            using ConstIteratorRemoveClient             = __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionRandomInsertionClient base interface - providing insertion functions - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
+             * @protected
+             */
+            using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionContainsOfCollectionClient base interface - providing contains-of functions with a Collection parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+             * @protected
+             */
+            using ContainsOfCollectionClient            = __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionContainsOfInitializerListClient base interface - providing contains-of functions with a std :: initializer_list parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+             * @protected
+             */
+            using ContainsOfInitializerListClient       = __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionFindOfCollectionClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+             * @protected
+             */
+            using FindOfCollectionClient                = __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionFindOfInitializerListClient base interface - providing find-of functions with a std :: initializer_list parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+             * @protected
+             */
+            using FindOfInitializerListClient           = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionFindByClient base interface - providing find-by-predicate functions - findThat / findFirstThat / findLastThat / findAllThat
+             * @protected
+             */
+             using FindByClient                          = __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionRemoveOfCollectionClient base interface - providing remove-of functions with a Collection parameter - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+             * @protected
+             */
+            using RemoveOfCollectionClient              = __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionRemoveOfInitializerListClient base interface - providing remove-of functions with a std :: initializer_list parameter - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+             * @protected
+             */
+            using RemoveOfInitializerListClient         = __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionRemoveByClient base interface - providing remove-by-predicate functions - removeThat / removeFirstThat / removeLastThat / removeAllThat
+             * @protected
+             */
+            using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __CollectionGenericStatementsClient base interface - providing functional-predicate functions - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
+             * @protected
+             */
+            using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
+             * @protected
+             */
+            using __GenericHandler                      = typename CommunicationChannel :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+
+        protected:
+            /**
+             * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
+             * @protected
+             */
+            using __GenericConstHandler                 = typename CommunicationChannel :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            using typename DelegateForwardConstIterableClient :: ConstIterator;
+            /**
+             * @typedef The Const Iterator Type, imported from Abstract Forward Iterator Client
+             * @public
+             */
+            using ConstIterator                         = typename DelegateForwardConstIterableClient :: ConstIterator;
 
         protected:
             /**
              * @brief Default Constructor
              * @exceptsafe
-             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+             * @protected
              */
             constexpr Collection () noexcept;
 
         protected:
             /**
              * @brief Copy Constructor
-             * @param collection : Collection cref = Constant Reference to a collection to copy data from
+             * @param [in] collection : Collection cref = Constant Reference to a collection to copy data from
              * @exceptsafe
-             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+             * @protected
              */
             constexpr Collection (
                     Collection const & collection
@@ -93,9 +218,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             /**
              * @brief Move Constructor
-             * @param collection : Collection mref = Move Reference to a collection to copy data from
+             * @param [in] collection : Collection mref = Move Reference to a collection to copy data from
              * @exceptsafe
-             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+             * @protected
              */
             constexpr Collection (
                     Collection && collection
@@ -105,21 +231,53 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @brief Destructor Constructor
              * @exceptsafe
-             * @test Suite: CTS-00001, Group : All - requirement for running, Tests : All - requirement for running
+             * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+             * @public
              */
             __CDS_cpplang_ConstexprDestructor ~Collection() noexcept;
 
-        public: using DelegateForwardConstIterableClient :: begin;
-        public: using DelegateForwardConstIterableClient :: end;
-        public: using DelegateForwardConstIterableClient :: cbegin;
-        public: using DelegateForwardConstIterableClient :: cend;
+        public: 
+            /** 
+             * @inherit begin function inherited from DelegateForwardConstIterableClient interface.
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+             *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: begin;
+            
+        public:
+            /**
+             * @inherit end function inherited from DelegateForwardConstIterableClient interface.
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+             *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: end;
+
+        public:
+            /**
+             * @inherit cbegin function inherited from DelegateForwardConstIterableClient interface.
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
+             *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: cbegin;
+
+        public:
+            /**
+             * @inherit cend function inherited from DelegateForwardConstIterableClient interface.
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
+             *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
+             * @public
+             */
+             using DelegateForwardConstIterableClient :: cend;
 
         public: using ConstIteratorRemoveClient :: remove;
 
-        public: using RemoveByClient :: removeIf;
-        public: using RemoveByClient :: removeFirstIf;
-        public: using RemoveByClient :: removeLastIf;
-        public: using RemoveByClient :: removeAllIf;
+        public: using RemoveByClient :: removeThat;
+        public: using RemoveByClient :: removeFirstThat;
+        public: using RemoveByClient :: removeLastThat;
+        public: using RemoveByClient :: removeAllThat;
 
         public: using GenericStatementsClient :: forEach;
         public: using GenericStatementsClient :: some;
@@ -197,7 +355,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Function used to acquire the number of elements in the collection
              * @exceptsafe
              * @return Size = number of elements inside the collection
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00004-MF-size, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00004-MF-size, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
@@ -206,7 +365,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Function used to check if the collection does not contain any elements ( is empty )
              * @exceptsafe
              * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00005-MF-empty, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00005-MF-empty, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
@@ -215,7 +375,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Bool cast operator, functionality equal to python's iterable empty check. '(bool) collection' is equivalent to '! collection.empty()'
              * @exceptsafe
              * @return bool = true if collection is not empty, false otherwise
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00006-MF-boolCast, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00006-MF-boolCast, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_cpplang_VirtualConstexpr __CDS_Explicit operator bool () const noexcept;
 
@@ -224,7 +385,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief String conversion function, used to obtain String representation of the Collection
              * @exceptsafe
              * @return String = string representation
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00003-MF-toString, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00003-MF-toString, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
@@ -233,19 +395,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Hash function, used to obtain the hash value of the Collection
              * @exceptsafe
              * @return Index = hash code value of the instance
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00009-MF-hash, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00009-MF-hash, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
             /**
              * @brief Explicit Comparison Function with generic CDS/Object
-             * @param object : Object cref = Constant Reference to an Object-derived instance
+             * @param [in] object : Object cref = Constant Reference to an Object-derived instance
              * @exceptsafe
              * @return bool = true if objects are equal, false otherwise
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00010-MF-clear, CT-00011-MF-equalsSelf,
-             *      CT-00012-MF-equalsTrueSameType, CT-00013-MF-equalsTrueDifferentType, CT-00014-MF-equalsFalseSameType,
-             *      CT-00015-MF-equalsFalseDifferentType, CT-00016-MF-equalsFalseNotCollection }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00010-MF-clear, CTC-00011-MF-equalsSelf,
+             *      CTC-00012-MF-equalsTrueSameType, CTC-00013-MF-equalsTrueDifferentType, CTC-00014-MF-equalsFalseSameType,
+             *      CTC-00015-MF-equalsFalseDifferentType, CTC-00016-MF-equalsFalseNotCollection }
+             * @public
              */
             __CDS_NoDiscard auto equals (
                     Object const & object
@@ -255,16 +419,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @brief Function used to clear the collection, removing all elements from it
              * @exceptsafe
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00010-MF-clear }
+             * @public
              */
             virtual auto clear () noexcept -> void = 0;
 
         public:
             /**
              * @brief Function used to check if the collection contains the requested element.
-             * @param element : ElementType cref = Constant Reference to the element to be found in the collection
+             * @param [in] element : ElementType cref = Constant Reference to the element to be found in the collection
              * @return bool = true if the element exists in the collection, false otherwise
-             * @test Suite: CTS-00001, Group: CTG-00002-MF, Tests: { CT-00007-MF-containsTrue, CT-00008-MF-containsFalse, CT-00010-MF-clear }
+             * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00007-MF-containsTrue, CTC-00008-MF-containsFalse, CTC-00010-MF-clear }
+             * @public
              */
             __CDS_NoDiscard virtual auto contains (
                     ElementType const & element
@@ -294,4 +460,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "collection/impl/Collection.hpp"
 
-#endif // __CDS_EX_COLLECTION_HPP__
+#endif /* __CDS_EX_COLLECTION_HPP__ */

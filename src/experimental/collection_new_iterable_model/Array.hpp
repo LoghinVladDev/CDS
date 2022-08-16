@@ -235,10 +235,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using RemoveOfInitializerListClient :: removeLastNotOf;
         public: using RemoveOfInitializerListClient :: removeAllNotOf;
 
-        public: using RemoveByClient :: removeIf;
-        public: using RemoveByClient :: removeFirstIf;
-        public: using RemoveByClient :: removeLastIf;
-        public: using RemoveByClient :: removeAllIf;
+        public: using RemoveByClient :: removeThat;
+        public: using RemoveByClient :: removeFirstThat;
+        public: using RemoveByClient :: removeLastThat;
+        public: using RemoveByClient :: removeAllThat;
 
         public: using GenericStatementsClient :: forEach;
         public: using GenericStatementsClient :: some;
@@ -575,4 +575,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/array/impl/Sequence.hpp"
 #include "array/impl/CTAD.hpp"
 
-#endif // __CDS_EX_ARRAY_HPP__
+#endif /* __CDS_EX_ARRAY_HPP__ */

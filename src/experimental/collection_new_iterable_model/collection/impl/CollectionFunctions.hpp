@@ -19,7 +19,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __cf_equals (
                         __ElementType const & left,
                         __ElementType const & right
-                ) const noexcept -> bool {
+                ) noexcept -> bool {
 
                     return __compare ( left, right );
                 }

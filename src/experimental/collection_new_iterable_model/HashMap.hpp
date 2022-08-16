@@ -131,10 +131,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:     using IteratorRemoveClient :: remove;
         public:     using ConstIteratorRemoveClient :: remove;
 
-        public:     using RemoveByClient :: removeIf;
-        public:     using RemoveByClient :: removeFirstIf;
-        public:     using RemoveByClient :: removeLastIf;
-        public:     using RemoveByClient :: removeAllIf;
+        public:     using RemoveByClient :: removeThat;
+        public:     using RemoveByClient :: removeFirstThat;
+        public:     using RemoveByClient :: removeLastThat;
+        public:     using RemoveByClient :: removeAllThat;
 
         public:     using GenericStatementsClient :: forEach;
         public:     using GenericStatementsClient :: some;
@@ -438,4 +438,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "shared/hashMap/HashMapSequence.hpp"
 
-#endif // __CDS_EX_HASH_MAP_HPP__
+#endif /* __CDS_EX_HASH_MAP_HPP__ */

@@ -34,12 +34,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
             __CDS_OptimalInline auto __MapEntry < __KeyType, __ValueType > :: toString () const noexcept -> String {
 
-                if ( this->empty() ) {
-                    return "()";
-                }
-
                 std :: stringstream oss;
-                cds :: meta :: print ( cds :: meta :: print ( oss << "( ", * this->_key ) << ", ", * this->_value ) << " )";
+                cds :: meta :: print ( cds :: meta :: print ( oss << "( ", this->_key ) << ", ", this->_value ) << " )";
                 return oss.str();
             }
 
@@ -159,6 +155,16 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: getSecond () noexcept -> ValueType & {
 
                 return this->value();
+            }
+
+
+            template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_OptimalInline auto operator << (
+                    std :: ostream                                & out,
+                    __MapEntry < __TKeyType, __TValueType > const & object
+            ) noexcept -> std :: ostream & {
+
+                return cds :: meta :: print ( cds :: meta :: print ( out << "( ", object.key() ) << ", ", object.value() ) << " )";
             }
 
         }

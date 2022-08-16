@@ -92,10 +92,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using SetBase :: cbegin;
         protected:  using SetBase :: cend;
 
-        public: using RemoveByClient :: removeIf;
-        public: using RemoveByClient :: removeFirstIf;
-        public: using RemoveByClient :: removeLastIf;
-        public: using RemoveByClient :: removeAllIf;
+        public: using RemoveByClient :: removeThat;
+        public: using RemoveByClient :: removeFirstThat;
+        public: using RemoveByClient :: removeLastThat;
+        public: using RemoveByClient :: removeAllThat;
 
         public: using GenericStatementsClient :: forEach;
         public: using GenericStatementsClient :: some;
@@ -326,4 +326,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "shared/hashSet/HashSetSequence.hpp"
 
-#endif // __CDS_EX_HASH_SET_HPP__
+#endif /* __CDS_EX_HASH_SET_HPP__ */

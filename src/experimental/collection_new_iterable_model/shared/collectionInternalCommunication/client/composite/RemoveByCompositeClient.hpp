@@ -20,26 +20,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeIf (
+                    auto removeThat (
                             Size                count,
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
                 protected:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeFirstIf (
+                    auto removeFirstThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
                 protected:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeLastIf (
+                    auto removeLastThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
                 protected:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeAllIf (
+                    auto removeAllThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
                 };
