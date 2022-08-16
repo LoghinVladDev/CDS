@@ -1334,7 +1334,7 @@ template <
     }
 
     /* CollectionTest-MemberFunctions-hash-CPP20 : CT-00014-MF-equalsFalseSameType-CPP20 */
-    auto notEqualsToSameType = collection.equals ( notEqualDifferentType );
+    auto notEqualsToSameType = collection.equals ( notEqualSameType );
     pTestLib->log ( "object 'equals to not equal, same type' : '%s', expected 'equals to not equal, same type' : '%s'", notEqualsToSameType ? "true" : "false", "false" );
     if ( notEqualsToSameType ) {
         pTestLib->logError( "'CT-00014-MF-equalsFalseSameType-CPP20' failed" );
@@ -1582,6 +1582,163 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         auto status = collectionTestGroupMemberFunctions (
                 intIntHashMapObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringArray", [& allOk, this] {
+
+        cds :: experimental :: Array < cds :: String > stringArrayObjectUnderTest;
+        stringArrayObjectUnderTest     = { "Ana", "are", "mere" };
+
+        auto expectedToString       = "[ Ana, are, mere ]";
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = "Ana";
+        auto expectedToBeNotFound   = "ana";
+        auto expectedHash           = (
+                cds :: hash ( "Ana" ) * 31 + cds :: hash ( "are" )
+        ) * 31 + cds :: hash ( "mere" );
+
+        auto equalSameType          = cds :: experimental :: Array < cds :: String > { "Ana", "are", "mere" };
+        auto equalDifferentType     = cds :: experimental :: LinkedList < cds :: String > { "Ana", "are", "mere" };
+        auto notEqualSameType       = cds :: experimental :: Array < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualDifferentType  = cds :: experimental :: LinkedList < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: String > (
+                stringArrayObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringLinkedList", [& allOk, this] {
+
+        cds :: experimental :: LinkedList < cds :: String > stringLinkedListObjectUnderTest;
+        stringLinkedListObjectUnderTest     = { "Ana", "are", "mere" };
+
+        auto expectedToString       = "[ Ana, are, mere ]";
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = "Ana";
+        auto expectedToBeNotFound   = "ana";
+        auto expectedHash           = (
+                                              cds :: hash ( "Ana" ) * 31 + cds :: hash ( "are" )
+                                      ) * 31 + cds :: hash ( "mere" );
+
+        auto equalSameType          = cds :: experimental :: LinkedList < cds :: String > { "Ana", "are", "mere" };
+        auto equalDifferentType     = cds :: experimental :: Array < cds :: String > { "Ana", "are", "mere" };
+        auto notEqualSameType       = cds :: experimental :: LinkedList < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualDifferentType  = cds :: experimental :: Array < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: String > (
+                stringLinkedListObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringHashSet", [& allOk, this] {
+
+        cds :: experimental :: HashSet < cds :: String > stringHashSetObjectUnderTest;
+        stringHashSetObjectUnderTest     = { "Ana", "are", "mere" };
+
+        auto expectedToString       = "{ are, Ana, mere }"; /// due to hash table
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = "Ana";
+        auto expectedToBeNotFound   = "ana";
+        auto expectedHash           = (
+                                              cds :: hash ( "are" ) * 31 + cds :: hash ( "Ana" )
+                                      ) * 31 + cds :: hash ( "mere" );
+
+        auto equalSameType          = cds :: experimental :: HashSet < cds :: String > { "Ana", "are", "mere" };
+        auto equalDifferentType     = cds :: experimental :: HashSet < cds :: String > { "Ana", "are", "mere" };
+        auto notEqualSameType       = cds :: experimental :: HashSet < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualDifferentType  = cds :: experimental :: HashSet < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: String > (
+                stringHashSetObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringToStringHashMap", [& allOk, this] {
+
+        cds :: experimental :: HashMap < cds :: String, cds :: String > stringStringHashMapObjectUnderTest;
+        stringStringHashMapObjectUnderTest = { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+
+        auto expectedToString       = "{ are: verb, Ana: name, mere: noun }"; /// due to hash table
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = decltype ( stringStringHashMapObjectUnderTest ) :: EntryType ( "are", "verb" );
+        auto expectedToBeNotFound   = decltype ( stringStringHashMapObjectUnderTest ) :: EntryType ( "pere", "noun" );
+        auto expectedHash           = (
+                                               (( cds :: hash ("are") ^ cds :: hash ("verb") ) * 31 + ( cds :: hash ( "Ana" ) ^ cds :: hash ("name")))
+                                          * 31 + ( cds :: hash ( "mere" ) ^ cds :: hash ("noun")));
+
+        /* error reported by IDE makes no sense? */
+        auto equalSameType          = cds :: experimental :: HashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto equalDifferentType     = cds :: experimental :: HashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto notEqualSameType       = cds :: experimental :: HashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "pere", "noun" } };
+        auto notEqualDifferentType  = cds :: experimental :: HashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "other" } };
+        auto notEqualNonCollection  = cds :: String { "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: MapEntry < cds :: String, cds :: String > > (
+                stringStringHashMapObjectUnderTest,
                 this,
                 expectedToString,
                 expectedSize,

@@ -22,7 +22,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     template <
             typename __ElementType,                                                                 // NOLINT(bugprone-reserved-identifier)
-            typename __Hasher = FunctionHasher < __ElementType, & cds :: hash < __ElementType > >   // NOLINT(bugprone-reserved-identifier)
+            typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > >   // NOLINT(bugprone-reserved-identifier)
     > class HashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __HashTable <

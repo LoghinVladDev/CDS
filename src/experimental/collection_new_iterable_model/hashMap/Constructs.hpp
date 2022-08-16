@@ -9,9 +9,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
 
         template <
-                typename __KeyType,                                                             // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType,                                                           // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
+                typename __KeyType,                                                         // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,                                                       // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  // NOLINT(bugprone-reserved-identifier)
         > class HashMap;
 
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)

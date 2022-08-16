@@ -9,8 +9,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
 
         template <
-                typename __ElementType,                                                                 // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher = FunctionHasher < __ElementType, & cds :: hash < __ElementType > >   // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,                                                     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > > // NOLINT(bugprone-reserved-identifier)
         > class HashSet;
 
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)

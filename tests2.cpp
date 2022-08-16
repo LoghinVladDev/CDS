@@ -182,6 +182,16 @@ int main () {
 //
 //    pM->remove(pM->begin());
 
+    cds :: experimental :: HashMap < cds :: String, cds :: String > hm12312;
+    hm12312.emplace ( "Ana", "name" );
+    hm12312.emplace ( "are", "verb" );
+    hm12312.emplace ("mere", "noun");
+
+    std :: cout << hm12312.hash () << '\n'
+        << ( ( ( ( cds :: hash ("are") ^ cds :: hash ( "verb" ) ) * 31 ) + ( cds :: hash ( "Ana" ) ^ cds :: hash ( "name" ) ) ) *
+        31 + ( cds :: hash ( "mere" ) ^ cds :: hash  ("noun") )) << '\n';
+
+    auto v123 = cds :: hash ( "Ana" );
 
     cds :: Function < int (int) > fact = [& fact](int n) -> int {
         if ( n == 1 ) {

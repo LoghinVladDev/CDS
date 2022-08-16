@@ -11,15 +11,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher = cds :: FunctionHasher < __ElementType, & cds :: hash < __ElementType > > // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,                                                             // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = cds :: WrapperHasher < __ElementType, Hash < __ElementType > >  // NOLINT(bugprone-reserved-identifier)
         > HashSet (
                 std :: initializer_list < __ElementType >
         ) -> HashSet < __ElementType, __Hasher >;
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher = cds :: FunctionHasher < __ElementType, & cds :: hash < __ElementType > > // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,                                                             // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = cds :: WrapperHasher < __ElementType, Hash < __ElementType > >  // NOLINT(bugprone-reserved-identifier)
         > HashSet (
                 __Hasher,
                 std :: initializer_list < __ElementType >

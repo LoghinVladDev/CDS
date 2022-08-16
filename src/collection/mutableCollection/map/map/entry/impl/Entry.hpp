@@ -19,8 +19,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 return
-                        & this->_key == & entry._key ||
-                        cds :: meta :: equals ( this->_key, entry._key );
+                        cds :: meta :: equals ( this->_key, entry._key ) &&
+                        cds :: meta :: equals ( this->_value, entry._value );
             }
 
 
