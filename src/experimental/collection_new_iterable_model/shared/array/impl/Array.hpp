@@ -786,14 +786,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         auto const leftShiftCount  = count - rightShiftCount;
 
                         (void) std :: memmove (
-                                this->_pData->_pFront + index + rightShiftCount,
-                                this->_pData->_pFront + index,
+                                reinterpret_cast < void * > (this->_pData->_pFront + index + rightShiftCount),
+                                reinterpret_cast < void const * > (this->_pData->_pFront + index),
                                 sizeof ( __ElementType ) * rightShiftCount
                         );
 
                         (void) std :: memmove (
-                                this->_pData->_pFront - leftShiftCount,
-                                this->_pData->_pFront,
+                                reinterpret_cast < void * > (this->_pData->_pFront - leftShiftCount),
+                                reinterpret_cast < void const * > (this->_pData->_pFront),
                                 sizeof ( __ElementType ) * leftShiftCount
                         );
 
