@@ -375,8 +375,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using typename AbstractEntryMutableCollectionProxy :: __GenericHandler;         // NOLINT(bugprone-reserved-identifier)
         protected:  using typename AbstractEntryMutableCollectionProxy :: __GenericConstHandler;    // NOLINT(bugprone-reserved-identifier)
 
-        public:     using Iterator      = typename HashMapBase :: Iterator;
-        public:     using ConstIterator = typename HashMapBase :: ConstIterator;
+        public:     using Iterator      = typename __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator;
+        public:     using ConstIterator = typename __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator;
+        public:     using EntryType     = typename cds :: experimental :: Map < __KeyType, __ValueType > :: EntryType;
 
         protected:  friend Server;
 
