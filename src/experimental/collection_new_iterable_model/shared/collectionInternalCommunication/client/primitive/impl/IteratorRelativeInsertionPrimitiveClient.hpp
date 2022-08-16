@@ -218,7 +218,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             (
                                     reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
-                                            void ( __ReceiverType :: * ) (
+                                            bool ( __ReceiverType :: * ) (
                                                     __GenericIterator,
                                                     Size,
                                                     __ElementType **
@@ -270,7 +270,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             (
                                     reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
-                                            void ( __ReceiverType :: * ) (
+                                            bool ( __ReceiverType :: * ) (
                                                     __GenericIterator,
                                                     Size,
                                                     __ElementType **
@@ -413,7 +413,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             (
                                     reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
-                                            void ( __ReceiverType :: * ) (
+                                            bool ( __ReceiverType :: * ) (
                                                     __GenericIterator,
                                                     Size,
                                                     __ElementType **
@@ -466,7 +466,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             (
                                     reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
-                                            void ( __ReceiverType :: * ) (
+                                            bool ( __ReceiverType :: * ) (
                                                     __GenericIterator,
                                                     Size,
                                                     __ElementType **

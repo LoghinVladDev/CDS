@@ -123,43 +123,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     leftIt != leftEnd;
                     ++ leftIt, ++ rightIt
             ) {
-                if ( this->__cf_equals ( * leftIt, * rightIt ) ) {
+                if ( ! this->__cf_equals ( * leftIt, * rightIt ) ) {
                     return false;
                 }
             }
 
             return true;
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: remove (
-                ElementType const & element
-        ) noexcept -> bool {
-
-            for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
-                if ( this->__cf_equals ( element, * iterator ) ) {
-                    return this->remove ( iterator );
-                }
-            }
-
-            return false;
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: find (
-                ElementType const & element
-        ) const noexcept -> ConstIterator {
-
-            auto end = this->cend();
-            for ( auto iterator = this->cbegin(); iterator != end; ++ iterator ) {
-                if ( this->__cf_equals ( element, * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
         }
 
 

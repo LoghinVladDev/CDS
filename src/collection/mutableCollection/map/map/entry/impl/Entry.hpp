@@ -27,7 +27,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
             constexpr auto __MapEntry < __KeyType, __ValueType > :: hash () const noexcept -> Size {
 
-                return cds :: hash ( this->_key );
+                return cds :: hash ( this->_key ) ^ cds :: hash ( this->_value );
             }
 
 
@@ -163,6 +163,19 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
         }
     }
+
+    template <
+            typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+            typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+    > struct Hash < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > const & entry
+        ) noexcept -> Size {
+
+            return entry.hash();
+        }
+    };
 }
 
 #endif // __CDS_MAP_ENTRY_IMPL_HPP__

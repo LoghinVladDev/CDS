@@ -2,8 +2,8 @@
 // Created by loghin on 27/07/22.
 //
 
-#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
-#define __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
+#ifndef __CDS_EX_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
+#define __CDS_EX_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -37,6 +37,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _pListArray ( pListArray ),
                 _bucketCount ( bucketCount ) {
 
+            this->advanceBucket();
         }
 
 
@@ -212,10 +213,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode || (
-                            this->_pCurrentNode     == nullptr ||
-                            iterator._pCurrentNode  == nullptr
-                    ) &&
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     != nullptr ||
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -256,6 +256,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _pListArray ( pListArray ),
                 _bucketCount ( bucketCount ) {
 
+            this->advanceBucket();
         }
 
 
@@ -431,10 +432,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             return
-                    this->_pCurrentNode     == iterator._pCurrentNode || (
-                            this->_pCurrentNode     == nullptr ||
-                            iterator._pCurrentNode  == nullptr
-                    ) &&
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
+                    this->_pCurrentNode     != nullptr ||
+                    this->_pCurrentNode     == iterator._pCurrentNode &&
                     this->_pPreviousNode    == iterator._pPreviousNode;
         }
 
@@ -448,4 +448,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
+#endif // __CDS_EX_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__

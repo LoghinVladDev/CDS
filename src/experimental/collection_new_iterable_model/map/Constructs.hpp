@@ -28,8 +28,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
                 template <
-                        typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueType                // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,               // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType              // NOLINT(bugprone-reserved-identifier)
                 > using __MapFindUniqueMutableClient =    // NOLINT(bugprone-reserved-identifier)
                         __FindUniqueMutablePrimitiveClient <
                                 cds :: experimental :: Map < __KeyType, __ValueType >,
@@ -37,7 +37,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 __KeyType,
                                 false
                         >;
-
 
             }
         }

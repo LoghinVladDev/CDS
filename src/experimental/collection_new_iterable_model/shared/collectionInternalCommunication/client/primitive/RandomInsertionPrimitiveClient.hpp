@@ -88,7 +88,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insert (
                             ElementType const & element
-                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -98,7 +98,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insert (
                             ElementType && element
-                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -108,7 +108,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: add' has been deprecated. Use 'Collection :: insert' instead") auto add (
                             ElementType const & element
-                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -118,31 +118,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: add' has been deprecated. Use 'Collection :: insert' instead") auto add (
                             ElementType && element
-                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAll (
                             __ArgumentTypes && ... values
-                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
-                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IterableType const & iterable
-                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template <
@@ -152,14 +152,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insertAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
-                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template <
@@ -169,21 +169,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
                 };
 
 
@@ -227,7 +227,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insert (
                             ElementType const & element
-                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -237,7 +237,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insert (
                             ElementType && element
-                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -247,7 +247,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: add' has been deprecated. Use 'Collection :: insert' instead") auto add (
                             ElementType const & element
-                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template <
@@ -257,31 +257,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: add' has been deprecated. Use 'Collection :: insert' instead") auto add (
                             ElementType && element
-                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
+                    ) noexcept ( false ) -> ElementReference;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAll (
                             __ArgumentTypes && ... values
-                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
-                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IterableType const & iterable
-                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template <
@@ -291,14 +291,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto insertAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
-                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template <
@@ -308,21 +308,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
+                    ) noexcept ( false ) -> void;
                 };
 
             }

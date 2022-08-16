@@ -2,8 +2,8 @@
 // Created by loghin on 27/07/22.
 //
 
-#ifndef __CDS_SHARED_HASH_TABLE_IMPL_HPP__
-#define __CDS_SHARED_HASH_TABLE_IMPL_HPP__
+#ifndef __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__
+#define __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
@@ -16,7 +16,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
@@ -35,7 +35,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
@@ -59,7 +59,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
@@ -83,7 +83,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
@@ -109,7 +109,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > template <
                         cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      // NOLINT(bugprone-reserved-identifier)
@@ -123,8 +123,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __nodeDestructor
                 > :: __HashTable (
                         __HashTable const & hashTable
-                ) noexcept :
-                        _rehash ( hashTable._rehash ) {
+                ) noexcept {
 
                     this->__ht_copyCleared < __copy > ( hashTable );
                 }
@@ -136,7 +135,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
@@ -148,8 +147,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __nodeDestructor
                 > :: __HashTable (
                         __HashTable && hashTable
-                ) noexcept :
-                        _rehash ( std :: move ( hashTable._rehash ) ) {
+                ) noexcept {
 
                     this->__ht_moveCleared ( std :: move ( hashTable ) );
                 }
@@ -161,7 +159,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -199,7 +197,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -221,7 +219,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -243,7 +241,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -265,7 +263,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_cpplang_NonConstConstexprMemberFunction auto __HashTable <
                         __ElementType,
@@ -290,7 +288,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_cpplang_NonConstConstexprMemberFunction auto __HashTable <
                         __ElementType,
@@ -315,7 +313,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -340,7 +338,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -365,7 +363,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -393,7 +391,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -460,7 +458,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -498,7 +496,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -522,7 +520,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -546,7 +544,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -625,7 +623,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -651,7 +649,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_cpplang_NonConstConstexprMemberFunction auto __HashTable <
                         __ElementType,
@@ -675,7 +673,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -699,7 +697,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -734,7 +732,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -763,7 +761,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -785,7 +783,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -810,7 +808,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -870,7 +868,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -924,7 +922,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -952,7 +950,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -980,7 +978,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > template <
                         cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      // NOLINT(bugprone-reserved-identifier)
@@ -1011,7 +1009,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > template <
                         cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      // NOLINT(bugprone-reserved-identifier)
@@ -1058,6 +1056,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             pThisBack = pNewNode;
                         }
                     }
+
+                    this->_rehash = table._rehash;
                 }
 
 
@@ -1067,7 +1067,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
@@ -1096,7 +1096,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __HashTable <
                         __ElementType,
@@ -1124,7 +1124,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -1173,7 +1173,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > auto __HashTable <
                         __ElementType,
@@ -1222,7 +1222,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                            __KeyHasher,        // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __RehashPolicy,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >              __keyComparator,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    // NOLINT(bugprone-reserved-identifier)
                 > template <
                         cds :: utility :: ComparisonFunction < __ElementType >              __comparator        // NOLINT(bugprone-reserved-identifier)
@@ -1274,4 +1274,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_HASH_TABLE_IMPL_HPP__
+#endif // __CDS_EX_SHARED_HASH_TABLE_IMPL_HPP__

@@ -9,6 +9,15 @@
 
 namespace cds {
 
+    template < typename T >
+    struct Hash {
+
+        __CDS_NoDiscard constexpr static auto hash ( T const & object ) noexcept -> Size {
+
+            return 0ULL;
+        }
+    };
+
     template < typename T, cds :: meta :: EnableIf < cds :: meta :: isObjectDerived < T > () > = 0 >
     __CDS_cpplang_VirtualConstexpr auto hash (
             T const & object
@@ -22,7 +31,7 @@ namespace cds {
             T const & object
     ) noexcept -> Size {
 
-        return 0ULL;
+        return Hash < T > :: hash ( object );
     }
 
 }

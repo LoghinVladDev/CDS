@@ -60,7 +60,164 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 HashSet const & set
         ) noexcept {
 
-        };
+            this-> template __ht_copyCleared <
+                    & cds :: experimental :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
+            > ( set );
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > constexpr HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                HashSet && set
+        ) noexcept :
+                Implementation ( std :: move ( set ) ) {
+
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                __IteratorType const & begin,
+                __IteratorType const & end
+        ) noexcept {
+
+            for ( auto iterator = begin; iterator != end; ++ iterator ) {
+                this->insert ( * iterator );
+            }
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                __Hasher        const & hasher,
+                __IteratorType  const & begin,
+                __IteratorType  const & end
+        ) noexcept :
+                Implementation ( hasher ) {
+
+            for ( auto iterator = begin; iterator != end; ++ iterator ) {
+                this->insert ( iterator );
+            }
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                std :: initializer_list < __ElementType > const & initializerList
+        ) noexcept :
+                HashSet (
+                        initializerList.begin (),
+                        initializerList.end ()
+                ) {
+
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                __Hasher                                    const & hasher,
+                std :: initializer_list < __ElementType >   const & initializerList
+        ) noexcept :
+                HashSet (
+                        hasher,
+                        initializerList.begin (),
+                        initializerList.end ()
+                ) {
+
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                Collection < __OtherElementType > const & collection
+        ) noexcept :
+                HashSet (
+                        collection.begin (),
+                        collection.end ()
+                ) {
+
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
+                >
+        > __CDS_OptimalInline HashSet <
+                __ElementType,
+                __Hasher
+        > :: HashSet (
+                __Hasher                            const & hasher,
+                Collection < __OtherElementType >   const & collection
+        ) noexcept :
+                HashSet (
+                        hasher,
+                        collection.begin (),
+                        collection.end ()
+                ) {
+
+        }
 
 
         template <
@@ -72,6 +229,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         > :: ~HashSet () noexcept {
 
             this->__ht_clear ();
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > __CDS_OptimalInline auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator = (
+                HashSet const & set
+        ) noexcept -> HashSet & {
+
+            if ( this == & set ) {
+                return * this;
+            }
+
+            this-> template __ht_copy <
+                    & cds :: experimental :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
+            > ( set );
+
+            return * this;
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator = (
+                HashSet && set
+        ) noexcept -> HashSet & {
+
+            if ( this == & set ) {
+                return * this;
+            }
+
+            this->__ht_move ( std :: move ( set ) );
+            return * this;
+        }
+
+
+        template <
+                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+        > template <
+                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
+                >
+        > __CDS_OptimalInline auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator = (
+                Collection < __OtherElementType > const & collection
+        ) noexcept -> HashSet & {
+
+            if ( this == & collection ) {
+                return * this;
+            }
+
+            this->__ht_clear ();
+            for ( auto iterator = collection.begin(); iterator != collection.end(); ++ iterator ) {
+                this->insert ( * iterator );
+            }
+
+            return * this;
         }
 
 

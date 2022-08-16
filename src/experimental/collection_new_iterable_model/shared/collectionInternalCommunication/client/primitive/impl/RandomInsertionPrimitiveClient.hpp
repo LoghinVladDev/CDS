@@ -55,15 +55,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType const & element
-                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     bool newElementCreated;
                     auto pElementLocation = (
                                 reinterpret_cast < __ReceiverType * > ( this )->*
                                 reinterpret_cast <
-                                        __ElementType * ( __ReceiverType :: * ) (
-                                                __ElementType const *,
-                                                bool                *
+                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                                __ConstructibleElementType const *,
+                                                bool                             *
                                         )
                                 > (
                                         reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -100,15 +101,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType && element
-                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     bool newElementCreated;
                     auto pElementLocation = (
                             reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
-                                    __ElementType * ( __ReceiverType :: * ) (
-                                            __ElementType const *,
-                                            bool                *
+                                    __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                            __ConstructibleElementType const *,
+                                            bool                             *
                                     )
                             > (
                                     reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -145,7 +147,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType const & element
-                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     return this->insert ( element );
                 }
@@ -166,7 +168,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType && element
-                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     return this->insert ( std :: move ( element ) );
                 }
@@ -184,42 +186,49 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplace (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
+                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
                     bool newElementCreated;
-                    auto pElementLocation = (
-                            reinterpret_cast < __ReceiverType * > ( this )->*
-                            reinterpret_cast <
-                                    __ElementType * ( __ReceiverType :: * ) (
-                                            __ElementType const *,
-                                            bool                *
-                                    )
-                            > (
-                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newAddress
-                                    )
-                            )
-                    ) (
-                            & referenceElementContainer.data(),
-                            & newElementCreated
-                    );
 
-                    if ( ! newElementCreated ) {
-                        referenceElementContainer.destruct();
-                    } else {
-                        std::memcpy (
-                                pElementLocation,
-                                & referenceElementContainer._data[0],
-                                sizeof ( __ElementType )
+                    try {
+                        auto pElementLocation = (
+                                reinterpret_cast < __ReceiverType * > ( this )->*
+                                reinterpret_cast <
+                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
+                                                __ConstructibleElementType const *,
+                                                bool                             *
+                                        )
+                                > (
+                                        reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                __CollectionInternalRequestType :: __cirt_newAddress
+                                        )
+                                )
+                        ) (
+                                & referenceElementContainer.data(),
+                                & newElementCreated
                         );
-                    }
 
-                    return * pElementLocation;
+                        if ( ! newElementCreated ) {
+                            referenceElementContainer.destruct();
+                        } else {
+                            std::memcpy (
+                                    pElementLocation,
+                                    & referenceElementContainer._data[0],
+                                    sizeof ( __ElementType )
+                            );
+                        }
+
+                        return * pElementLocation;
+                    } catch (...) {
+                        referenceElementContainer.destruct();
+                        throw;
+                    }
                 }
 
 
@@ -235,7 +244,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAll (
                         __ArgumentTypes && ... values
-                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
+                ) noexcept ( false ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -256,7 +265,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAll (
                         __ArgumentTypes && ... values
-                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
+                ) noexcept ( false ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -277,7 +286,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         __IterableType const & iterable
-                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             iterable.begin(),
@@ -301,7 +310,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -322,7 +331,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         __IterableType const & iterable
-                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             iterable.begin(),
@@ -346,7 +355,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -368,7 +377,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         this->insert ( * iterator );
@@ -389,7 +398,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: addAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     return this->insertAllOf (
                             begin,
@@ -413,7 +422,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType const & element
-                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
@@ -446,7 +455,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType && element
-                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
@@ -479,7 +488,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType const & element
-                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     return this->insert ( element );
                 }
@@ -500,7 +509,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType && element
-                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     return this->insert ( std :: move ( element ) );
                 }
@@ -518,7 +527,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplace (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
+                ) noexcept ( false ) -> ElementReference {
 
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
@@ -526,22 +535,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     bool newElementCreated;
-                    auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
-                            & referenceElementContainer.data(),
-                            & newElementCreated
-                    );
 
-                    if ( ! newElementCreated ) {
-                        referenceElementContainer.destruct();
-                    } else {
-                        std::memcpy (
-                                pElementLocation,
-                                & referenceElementContainer._data[0],
-                                sizeof ( __ElementType )
+                    try {
+                        auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
+                                & referenceElementContainer.data(),
+                                & newElementCreated
                         );
-                    }
 
-                    return * pElementLocation;
+                        if ( ! newElementCreated ) {
+                            referenceElementContainer.destruct();
+                        } else {
+                            std::memcpy (
+                                    pElementLocation,
+                                    & referenceElementContainer._data[0],
+                                    sizeof ( __ElementType )
+                            );
+                        }
+
+                        return * pElementLocation;
+                    } catch (...) {
+                        referenceElementContainer.destruct();
+                        throw;
+                    }
                 }
 
 
@@ -557,7 +572,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAll (
                         __ArgumentTypes && ... values
-                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
+                ) noexcept ( false ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -578,7 +593,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAll (
                         __ArgumentTypes && ... values
-                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
+                ) noexcept ( false ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -599,7 +614,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         __IterableType const & iterable
-                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             iterable.begin(),
@@ -623,7 +638,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -644,7 +659,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         __IterableType const & iterable
-                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             iterable.begin(),
@@ -668,7 +683,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -690,7 +705,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         this->insert ( * iterator );
@@ -711,7 +726,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: addAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
+                ) noexcept ( false ) -> void {
 
                     return this->insertAllOf (
                             begin,

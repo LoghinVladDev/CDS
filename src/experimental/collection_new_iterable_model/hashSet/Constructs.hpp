@@ -26,6 +26,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __hashSetCopyConstructor (       // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       & destination,
+                        __ElementType const & source
+                ) noexcept -> void {
+
+                    (void) new ( & destination ) __ElementType ( source );
+                }
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
                 constexpr auto __hashSetDestructor (      // NOLINT(bugprone-reserved-identifier)
                         __ElementType & element
                 ) noexcept -> void {
@@ -48,6 +58,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 & __hashSetDestructor < __ElementType >
                         >;
 
+
                 template <
                         typename __ElementType, // NOLINT(bugprone-reserved-identifier)
                         typename __Hasher       // NOLINT(bugprone-reserved-identifier)
@@ -62,6 +73,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 >
                         >;
 
+
                 template <
                         typename __ElementType, // NOLINT(bugprone-reserved-identifier)
                         typename __Hasher       // NOLINT(bugprone-reserved-identifier)
@@ -73,6 +85,151 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 >,
                                 __ElementType
                         >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetRandomInsertionClient =      // NOLINT(bugprone-reserved-identifier)
+                        __LocalRandomInsertionPrimitiveClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                __ElementType const
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetIteratorRemoveClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalIteratorRemovePrimitiveClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableConstIterator < __ElementType >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetFindOfCollectionClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableConstIterator < __ElementType >,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetFindOfInitializerListClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableConstIterator < __ElementType >,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetFindByClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindByImmutableCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableConstIterator < __ElementType >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetRemoveOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetRemoveOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetRemoveByClient =       // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveByCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType
+                        >;
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher               // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetGenericStatementsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericImmutableStatementsCompositeClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType
+                        >;
+
+
+                template <
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                > using __HashSetFindUniqueClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindUniqueImmutablePrimitiveClient <
+                                cds :: experimental :: HashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >,
+                                __ElementType,
+                                HashTableIterator < __ElementType >
+                        >;
+
 
                 template <
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)

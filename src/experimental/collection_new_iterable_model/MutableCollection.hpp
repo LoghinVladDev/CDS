@@ -138,6 +138,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using RandomInsertionClient :: add;
         public: using RandomInsertionClient :: addAll;
         public: using RandomInsertionClient :: addAllOf;
+        public: using RandomInsertionClient :: emplace;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;

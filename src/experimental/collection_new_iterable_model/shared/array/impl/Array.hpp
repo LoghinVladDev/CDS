@@ -942,7 +942,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_remove (
+                > :: __a_removeIterator (
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
@@ -962,7 +962,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_remove (
+                > :: __a_removeConstIterator (
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> bool {
 
