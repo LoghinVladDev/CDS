@@ -58,6 +58,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: size () const noexcept -> Size {
 
+            /* by default, return 0. No pure virtual implementation due to MinGW bug with cpp-14 constexpr */
             return 0ULL;
         }
 
@@ -65,6 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
+            /* A collection is empty if the size is equal to 0 */
             return this->size() == 0ULL;
         }
 
@@ -72,6 +74,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_VirtualConstexpr Collection < __ElementType > :: operator bool () const noexcept {
 
+            /* Operation equivalent to empty */
             return this->empty();
         }
 
@@ -79,8 +82,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Collection < __ElementType > :: toString () const noexcept -> String {
 
+            /* Default toString implementation, store 'Collection at 0x....'. Use a stringstream for simplicity */
             std :: stringstream oss;
             oss << "Collection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+
+            /* converted to std :: string, and to cds :: String afterwards */
             return oss.str();
         }
 
@@ -88,6 +94,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Collection < __ElementType > :: hash () const noexcept -> Size {
 
+            /* Default Collection hash computation formula :
+             *      ( ... ( ( h(a[0]) * 31 + h(a[1]) ) * 31 + h(a[2]) ) * 31 + ... ) * 31 + h(a[n - 1])
+             *      where h(x) represents a cds :: hash computation over x */
             Size totalHash = 0ULL;
 
             for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
@@ -103,19 +112,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Object const & object
         ) const noexcept -> bool {
 
+            /* First compute self comparison */
             if ( this == & object ) {
                 return true;
             }
 
+            /* Then, if not same, Compute Collection type identification */
             auto pObject = dynamic_cast < decltype ( this ) > ( & object );
             if ( pObject == nullptr ) {
                 return false;
             }
 
+            /* Then, if both are at least Collection, check sizes */
             if ( this->size() != pObject->size() ) {
                 return false;
             }
 
+            /* If sizes are equal, compare each element */
             for (
                     auto
                             leftIt  = this->cbegin(),    leftEnd = this->cend(),
@@ -123,11 +136,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     leftIt != leftEnd;
                     ++ leftIt, ++ rightIt
             ) {
+
+                /* If, by forward iteration, one pair's elements are different, not equal */
                 if ( ! this->__cf_equals ( * leftIt, * rightIt ) ) {
                     return false;
                 }
             }
 
+            /* Otherwise, objects are equal content-wise */
             return true;
         }
 
@@ -137,12 +153,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) const noexcept -> bool {
 
+            /* Parse object via forward iteration */
             for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+
+                /* If object found, the object is contained in the collection */
                 if ( this->__cf_equals ( element, * iterator ) ) {
                     return true;
                 }
             }
 
+            /* If full parse complete and not found, object not contained in the collection */
             return false;
         }
 
