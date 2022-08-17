@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -31,7 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Index               to
                     ) const noexcept -> __CollectionType &;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -43,7 +43,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Index               to
                     ) const noexcept -> __CollectionType;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,            // NOLINT(bugprone-reserved-identifier)
@@ -55,22 +55,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Index               to
                     ) const noexcept -> __CollectionType < __ElementType >;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto operator [] (
                             Index index
                     ) const noexcept (false) -> ElementType const &;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto operator [] (
                             Index index
                     ) noexcept (false) -> ElementType &;
 
-                protected:
+                public:
                     auto removeAt (
                             Collection < Index > const & indices
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     auto removeAt (
                             std :: initializer_list < Index > const & indices
                     ) noexcept -> Size;
@@ -85,7 +85,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -98,7 +98,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Index               to
                     ) const noexcept -> __CollectionType &;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType = __ReceiverType, // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -110,7 +110,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Index               to
                     ) const noexcept -> __CollectionType;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,            // NOLINT(bugprone-reserved-identifier)

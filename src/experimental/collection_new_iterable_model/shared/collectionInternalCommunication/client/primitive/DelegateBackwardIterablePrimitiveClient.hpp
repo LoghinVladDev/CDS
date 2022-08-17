@@ -34,10 +34,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     __ForwardDelegateWrapperIterator < __dbic_ElementType >
                             >;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto rbegin () noexcept -> ReverseIterator;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto rend () noexcept -> ReverseIterator;
                 };
 

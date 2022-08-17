@@ -26,7 +26,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using AbstractIterator          = // NOLINT(bugprone-reserved-identifier)
                             __AbstractDelegateWrapperIterator < __acirc_ElementType >;
 
-                protected:
+                public:
                     auto remove (
                             AbstractIterator const & iterator
                     ) noexcept -> bool;
@@ -53,7 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using Iterator              = // NOLINT(bugprone-reserved-identifier)
                             __IteratorType;
 
-                protected:
+                public:
                     auto remove (
                             Iterator const & iterator
                     ) noexcept -> bool;

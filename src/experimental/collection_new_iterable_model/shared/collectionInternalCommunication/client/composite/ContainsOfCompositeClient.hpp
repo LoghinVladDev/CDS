@@ -16,22 +16,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __FromIterableType     // NOLINT(bugprone-reserved-identifier)
                 > class __ContainsOfCompositeClient {   // NOLINT(bugprone-reserved-identifier)
 
-                protected:
+                public:
                     __CDS_NoDiscard auto containsAnyOf (
                             __FromIterableType const & from
                     ) const noexcept -> bool;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto containsAnyNotOf (
                             __FromIterableType const & from
                     ) const noexcept -> bool;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto containsAllOf (
                             __FromIterableType const & from
                     ) const noexcept -> bool;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto containsAllNotOf (
                             __FromIterableType const & from
                     ) const noexcept -> bool;

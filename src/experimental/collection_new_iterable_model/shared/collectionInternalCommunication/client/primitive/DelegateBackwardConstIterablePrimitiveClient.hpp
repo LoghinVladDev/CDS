@@ -34,16 +34,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     __ForwardDelegateWrapperIterator < __dbcic_ElementType >
                             >;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto rbegin () const noexcept -> ConstReverseIterator;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto rend () const noexcept -> ConstReverseIterator;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto crbegin () const noexcept -> ConstReverseIterator;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto crend () const noexcept -> ConstReverseIterator;
                 };
 

@@ -21,7 +21,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using Iterator = __IteratorType;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
@@ -31,7 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate                         const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > &;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
@@ -40,21 +40,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator >;
 
-                protected:
+                public:
                     template <
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto findFirstThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Iterator;
 
-                protected:
+                public:
                     template <
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto findLastThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Iterator;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
@@ -63,7 +63,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate                         const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > &;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)

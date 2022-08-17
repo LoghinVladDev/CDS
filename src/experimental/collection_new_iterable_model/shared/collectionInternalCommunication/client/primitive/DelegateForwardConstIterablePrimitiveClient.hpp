@@ -58,47 +58,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     __ForwardDelegateWrapperIterator < __dfcic_ElementType >
                             >;
 
-                protected:
+                public:
                     /**
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
                      * @exceptsafe
                      * @return ConstIterator = Wrapper for the received forward, immutable, begin iterator
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
                      *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
-                     * @protected Inherit and change access level to public in base class. Readability Purposes.
+                     * @public
                      */
                     __CDS_NoDiscard auto begin () const noexcept -> ConstIterator;
 
-                protected:
+                public:
                     /**
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
                      * @exceptsafe
                      * @return ConstIterator = Wrapper for the received forward, immutable, end iterator
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
                      *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
-                     * @protected Inherit and change access level to public in base class. Readability Purposes.
+                     * @public
                      */
                     __CDS_NoDiscard auto end () const noexcept -> ConstIterator;
 
-                protected:
+                public:
                     /**
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
                      * @exceptsafe
                      * @return ConstIterator = Wrapper for the received forward, immutable, begin iterator
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
                      *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
-                     * @protected Inherit and change access level to public in base class. Readability Purposes.
+                     * @public
                      */
                     __CDS_NoDiscard auto cbegin () const noexcept -> ConstIterator;
 
-                protected:
+                public:
                     /**
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
                      * @exceptsafe
                      * @return ConstIterator = Wrapper for the received forward, immutable, end iterator
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
                      *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
-                     * @protected Inherit and change access level to public in base class. Readability Purposes.
+                     * @public
                      */
                     __CDS_NoDiscard auto cend () const noexcept -> ConstIterator;
                 };

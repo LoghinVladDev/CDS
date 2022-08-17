@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType,  // NOLINT(bugprone-reserved-identifier)
                             typename __Predicate        // NOLINT(bugprone-reserved-identifier)
@@ -28,7 +28,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate         const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename __Predicate                                // NOLINT(bugprone-reserved-identifier)
@@ -37,19 +37,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
 
-                protected:
+                public:
                     template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto firstIndexOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
-                protected:
+                public:
                     template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto lastIndexOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
-                protected:
+                public:
                     template <
                             typename __CollectionType,  // NOLINT(bugprone-reserved-identifier)
                             typename __Predicate        // NOLINT(bugprone-reserved-identifier)
@@ -58,7 +58,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Predicate         const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
 
-                protected:
+                public:
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
