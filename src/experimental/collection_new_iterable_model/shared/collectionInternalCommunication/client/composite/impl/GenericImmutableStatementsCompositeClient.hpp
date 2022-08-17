@@ -20,7 +20,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: forEach (
                         __Action const & action
-                ) const noexcept ( noexcept ( action ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> void {
+                ) const noexcept ( noexcept ( __forEach (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        action
+                ) ) ) -> void {
 
                     return __forEach (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -41,7 +45,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: some (
                         Size                count,
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __some (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        count,
+                        predicate
+                ) ) ) -> bool {
 
                     return __some (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -63,7 +72,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: atLeast (
                         Size                count,
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __atLeast (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        count,
+                        predicate
+                ) ) ) -> bool {
 
                     return __atLeast (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -85,7 +99,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: atMost (
                         Size                count,
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __atMost (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        count,
+                        predicate
+                ) ) ) -> bool {
 
                     return __atMost (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -107,7 +126,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: moreThan (
                         Size                count,
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __moreThan (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        count,
+                        predicate
+                ) ) ) -> bool {
 
                     return __moreThan (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -129,7 +153,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: fewerThan (
                         Size                count,
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __fewerThan (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        count,
+                        predicate
+                ) ) ) -> bool {
 
                     return __fewerThan (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -150,7 +179,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: count (
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Size {
+                ) const noexcept ( noexcept ( __count (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        predicate
+                ) ) ) -> Size {
 
                     return __count (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -170,7 +203,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: any (
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __any (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        predicate
+                ) ) ) -> bool {
 
                     return __any (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -190,7 +227,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: all (
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __all (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        predicate
+                ) ) ) -> bool {
 
                     return __all (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -210,7 +251,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: none (
                         __Predicate const & predicate
-                ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+                ) const noexcept ( noexcept ( __none (
+                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
+                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
+                        predicate
+                ) ) ) -> bool {
 
                     return __none (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),

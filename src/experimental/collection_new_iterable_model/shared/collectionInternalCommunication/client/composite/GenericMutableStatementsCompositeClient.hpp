@@ -6,6 +6,7 @@
 #define __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__
 
 #include "../../../iterator/IteratorStatements.hpp"
+#include "../../../iterator/IteratorMemberStatements.hpp"
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
@@ -24,7 +25,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename __Action > // NOLINT(bugprone-reserved-identifier)
                     auto forEach (
                             __Action const & action
-                    ) noexcept ( noexcept ( action ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> void;
+                    ) noexcept ( noexcept ( __forEach (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            action
+                    ) ) ) -> void;
 
                 public:
                     template <
@@ -32,7 +37,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > __CDS_NoDiscard auto some (
                             Size                count,
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __some (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            count,
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
@@ -40,7 +50,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > __CDS_NoDiscard auto atLeast (
                             Size                count,
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __atLeast (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            count,
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
@@ -48,7 +63,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > __CDS_NoDiscard auto atMost (
                             Size                count,
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __atMost (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            count,
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
@@ -56,7 +76,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > __CDS_NoDiscard auto moreThan (
                             Size                count,
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __moreThan (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            count,
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
@@ -64,35 +89,56 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > __CDS_NoDiscard auto fewerThan (
                             Size                count,
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __fewerThan (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            count,
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto count (
                             __Predicate const & predicate = & predicates :: alwaysTrue < __ElementType >
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
+                    ) noexcept ( noexcept ( __count (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            predicate
+                    ) ) ) -> Size;
 
                 public:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto any (
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __any (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto all (
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __all (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            predicate
+                    ) ) ) -> bool;
 
                 public:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
                     > __CDS_NoDiscard auto none (
                             __Predicate const & predicate
-                    ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+                    ) noexcept ( noexcept ( __none (
+                            cds :: meta :: addressOf < __IterableType > ()->begin(),
+                            cds :: meta :: addressOf < __IterableType > ()->end(),
+                            predicate
+                    ) ) ) -> bool;
                 };
 
 
@@ -111,5 +157,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 }
 
 #include "../../../iterator/impl/IteratorStatements.hpp"
+#include "../../../iterator/impl/IteratorMemberStatements.hpp"
 
 #endif // __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__

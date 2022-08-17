@@ -1,9 +1,9 @@
 //
-// Created by loghin on 6/26/22.
+// Created by loghin on 17/08/22.
 //
 
-#ifndef __CDS_SHARED_ITERATOR_STATEMENTS_IMPL_HPP__
-#define __CDS_SHARED_ITERATOR_STATEMENTS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__
+#define __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -11,22 +11,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Action,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,
+                        typename __Action,
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Action,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         >
-                > constexpr auto __forEach (        /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType const & begin,
-                        __IteratorType const & end,
-                        __Action       const & action
-                ) noexcept ( noexcept ( action ( * begin ) ) ) -> void {
+                > constexpr auto __forEach (
+                        __IteratorType  const & begin,
+                        __IteratorType  const & end,
+                        __Action        const & action
+                ) noexcept ( noexcept ( ( ( * begin ).* action ) () ) ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        action ( * iterator );
+                        ( ( * iterator ).* action ) ();
                     }
                 }
 
@@ -35,7 +35,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -45,11 +45,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     Size trueCount = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             ++ trueCount;
                         }
 
@@ -66,7 +66,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -76,11 +76,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     Size trueCount = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             ++ trueCount;
                         }
 
@@ -97,7 +97,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -107,11 +107,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     Size trueCount = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             ++ trueCount;
                         }
 
@@ -128,7 +128,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -138,7 +138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     return __atLeast ( begin, end, count + 1ULL, predicate );
                 }
@@ -148,7 +148,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -158,7 +158,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     if ( count == 0ULL ) {
                         return false;
@@ -172,7 +172,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -181,11 +181,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> Size {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> Size {
 
                     Size trueCount = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             ++ trueCount;
                         }
                     }
@@ -198,7 +198,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -207,10 +207,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             return true;
                         }
                     }
@@ -223,7 +223,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -232,10 +232,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( ! predicate ( * iterator ) ) {
+                        if ( ! ( ( * iterator ).* predicate ) () ) {
                             return false;
                         }
                     }
@@ -248,7 +248,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -257,10 +257,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool {
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( predicate ( * iterator ) ) {
+                        if ( ( ( * iterator ).* predicate ) () ) {
                             return false;
                         }
                     }
@@ -273,4 +273,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_SHARED_ITERATOR_STATEMENTS_IMPL_HPP__ */
+#endif /* __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ */

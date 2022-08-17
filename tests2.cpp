@@ -181,6 +181,23 @@ int main () {
 //    cds :: experimental :: HashMap < int, int > * pM;
 //
 //    pM->remove(pM->begin());
+    cds :: experimental :: Array < cds :: String > strArr = { "Ana", "are", "mere" };
+
+    cds :: experimental :: __hidden :: __impl :: __forEach (
+            strArr.cbegin(),
+            strArr.cend(),
+            & cds :: String :: length
+    );
+
+    cds :: experimental :: __hidden :: __impl :: __forEach (
+            strArr.begin(),
+            strArr.end(),
+            [] ( cds :: String & e ) { e = "ana"; }
+    );
+
+    strArr.forEach ( & cds :: String :: clear );
+
+    std :: cout << strArr << '\n';
 
     cds :: experimental :: HashMap < cds :: String, cds :: String > hm12312;
     hm12312.emplace ( "Ana", "name" );

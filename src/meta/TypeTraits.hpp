@@ -356,15 +356,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: * >   : __BoolConstant < __IsFunction < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
             }
 
-            /**
-             * @brief Meta-type implementation used to check if a given type is a member function of an object
-             * @tparam __T is the type checked
-             */
-            template < typename __T, typename = void > struct __IsMemberFunctionPointer : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
-
-            template < typename __T >               struct __IsMemberFunctionPointer < __T >                : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
-            template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: *, __C >  : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T __C :: * > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
-
 
             /**
              * @brief Meta-type implementation used to check if a given type is a Pair type
@@ -451,6 +442,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             public:
                 using Type = typename __decayImpl :: __Decay < FirstParseDecayedType > :: Type;
             };
+
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a member function of an object
+             * @tparam __T is the type checked
+             */
+            template < typename __T, typename = void > struct __IsMemberFunctionPointer : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+
+            template < typename __T >               struct __IsMemberFunctionPointer < __T >                : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: *, __C >  : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T __Decay < __C > :: Type :: * > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
 
 
             /**
