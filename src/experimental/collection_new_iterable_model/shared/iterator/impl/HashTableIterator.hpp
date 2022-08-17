@@ -35,7 +35,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size        bucketCount
         ) noexcept :
                 _pListArray ( pListArray ),
-                _bucketCount ( bucketCount ) {
+                _bucketCount ( bucketCount ),
+                _pCurrentNode ( pListArray == nullptr ? nullptr : pListArray [ 0ULL ] ) {
 
             this->advanceBucket();
         }
@@ -254,7 +255,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                        bucketCount
         ) noexcept :
                 _pListArray ( pListArray ),
-                _bucketCount ( bucketCount ) {
+                _bucketCount ( bucketCount ),
+                _pCurrentNode ( pListArray == nullptr ? nullptr : pListArray [ 0ULL ] ) {
 
             this->advanceBucket();
         }

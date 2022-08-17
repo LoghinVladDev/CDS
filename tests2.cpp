@@ -420,20 +420,20 @@ int main () {
     pColl->insertAllOf(otherAsList);
     pColl->insertAllOf(otherArray);
 
-    pColl->removeIf (
+    pColl->removeThat (
             3,
             [](int){return true;}
     );
 
-    pColl->removeFirstIf (
+    pColl->removeFirstThat (
             [](int){return true;}
     );
 
-    pColl->removeLastIf (
+    pColl->removeLastThat (
             [](int){return true;}
     );
 
-    pColl->removeAllIf (
+    pColl->removeAllThat (
             [](int){return true;}
     );
 
@@ -543,20 +543,20 @@ int main () {
     pMutColl->insertAllOf(otherAsList);
     pMutColl->insertAllOf(otherAsList.begin(), otherAsList.end());
 
-    pMutColl->removeIf (
+    pMutColl->removeThat (
             3,
             [](int){return true;}
     );
 
-    pMutColl->removeFirstIf (
+    pMutColl->removeFirstThat (
             [](int){return true;}
     );
 
-    pMutColl->removeLastIf (
+    pMutColl->removeLastThat (
             [](int){return true;}
     );
 
-    pMutColl->removeAllIf (
+    pMutColl->removeAllThat (
             [](int){return true;}
     );
 
