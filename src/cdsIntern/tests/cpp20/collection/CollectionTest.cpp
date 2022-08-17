@@ -469,7 +469,7 @@ template <
     return true;
 }
 
-/* CollectionTestSuiteCPP20 : CTS-00001-CPP20 */
+/* CollectionTestSuite-CPP20 : CTS-00001-CPP20 */
 auto CollectionTest :: execute () noexcept -> bool {
     bool allOk = true;
 

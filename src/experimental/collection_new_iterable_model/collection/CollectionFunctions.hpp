@@ -46,7 +46,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00015-MF-equalsFalseDifferentType, CTC-00016-MF-equalsFalseNotCollection }
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr static auto __cf_equals ( // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard constexpr static auto __cf_equals ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const & left,
                             __ElementType const & right
                     ) noexcept -> bool;

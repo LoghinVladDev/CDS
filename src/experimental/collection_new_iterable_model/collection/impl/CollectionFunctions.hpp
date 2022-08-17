@@ -3,16 +3,16 @@
 //
 
 #ifndef __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__
-#define __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__
+#define __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename                                                __ElementType,  // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __ElementType >  __compare       // NOLINT(bugprone-reserved-identifier)
+                        typename                                                __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >  __compare       /* NOLINT(bugprone-reserved-identifier) */
                 > constexpr auto __CollectionFunctions <
                         __ElementType,
                         __compare
@@ -29,4 +29,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__
+#endif /* __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__ */

@@ -279,16 +279,95 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public: using RemoveByClient :: removeLastThat;
         public: using RemoveByClient :: removeAllThat;
 
-        public: using GenericStatementsClient :: forEach;
-        public: using GenericStatementsClient :: some;
-        public: using GenericStatementsClient :: atLeast;
-        public: using GenericStatementsClient :: atMost;
-        public: using GenericStatementsClient :: moreThan;
-        public: using GenericStatementsClient :: fewerThan;
-        public: using GenericStatementsClient :: count;
-        public: using GenericStatementsClient :: any;
-        public: using GenericStatementsClient :: all;
-        public: using GenericStatementsClient :: none;
+        public:
+            /**
+             * @inherit forEach functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00201-FSMF-forEach }
+             * @public
+             */
+            using GenericStatementsClient :: forEach;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00136-FS-someExact, CTC-00137-FS-someLessFalse, CTC-00138-someMoreFalse }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00202-FSMF-someEqual, CTC-00203-FSMF-someLess, CTC-00204-someMore }
+             * @public
+             */
+             using GenericStatementsClient :: some;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00132-FS-atLeastTrue, CTC-00133-FS-atLeastCloseTrue, CTC-00134-atLeastCloseFalse, CTC-00135-atLeastFalse }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00205-FSMF-atLeast, CTC-00206-FSMF-atLeastLess, CTC-00207-atLeastMore }
+             * @public
+             */
+            using GenericStatementsClient :: atLeast;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00128-FS-atMostTrue, CTC-00129-FS-atMostCloseTrue, CTC-00130-atMostCloseFalse, CTC-00131-atMostFalse }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00208-FSMF-atMost, CTC-00209-FSMF-atMostLess, CTC-00210-atMostMore }
+             * @public
+             */
+            using GenericStatementsClient :: atMost;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00123-FS-moreThanTrue, CTC-00124-FS-moreThanCloseTrue, CTC-00125-moreThanCloseFalse, CTC-00126-moreThanFalse, CTC-00127-moreThanCompletelyFalse }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00211-FSMF-moreThan, CTC-00212-FSMF-moreThanLess, CTC-00213-moreThanMore }
+             * @public
+             */
+            using GenericStatementsClient :: moreThan;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00118-FS-fewerThanTrue, CTC-00119-FS-fewerThanCloseTrue, CTC-00120-fewerThanCloseFalse, CTC-00121-fewerThanFalse, CTC-00122-fewerThanCompletelyFalse }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00214-FSMF-fewerThan, CTC-00215-FSMF-fewerThanLess, CTC-00216-fewerThanMore }
+             * @public
+             */
+            using GenericStatementsClient :: fewerThan;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00113-FS-countProp1, CTC-00114-FS-countProp2, CTC-00115-countProp3, CTC-00116-countProp4, CTC-00117-countPropLbd }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00217-FSMF-countExact }
+             * @public
+             */
+             using GenericStatementsClient :: count;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00101-FS-anyNone, CTC-00102-FS-anyOne, CTC-00103-anyMore, CTC-00104-anyAll }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00218-FSMF-anyNone, CTC-00219-FSMF-anyOne, CTC-00220-anyMore, CTC-00221-anyAll }
+             * @public
+             */
+             using GenericStatementsClient :: any;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00105-FS-allNone, CTC-00106-FS-allOne, CTC-00107-allMore, CTC-00108-allAll }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00222-FSMF-allNone, CTC-00223-FSMF-allOne, CTC-00224-allMore, CTC-00225-allAll }
+             * @public
+             */
+            using GenericStatementsClient :: all;
+
+        public:
+            /**
+             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00109-FS-noneNone, CTC-00110-FS-noneOne, CTC-00111-noneMore, CTC-00112-noneAll }
+             * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00226-FSMF-noneNone, CTC-00227-FSMF-noneOne, CTC-00228-noneMore, CTC-00229-noneAll }
+             * @public
+             */
+            using GenericStatementsClient :: none;
 
         public: using RemoveOfCollectionClient :: removeOf;
         public: using RemoveOfCollectionClient :: removeFirstOf;

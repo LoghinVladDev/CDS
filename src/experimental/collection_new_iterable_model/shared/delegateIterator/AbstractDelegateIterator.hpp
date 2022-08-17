@@ -77,7 +77,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Validity Function. Checks if delegate is valid for the base derived collection. Called by Wrapper
                      * @exceptsafe
                      * @return bool = true if iterator is valid, false otherwise
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool = 0;
@@ -87,7 +87,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the base iterator of the derived class, used in extraction of base iterator, such as Collection :: remove ( abstract ) -> Array :: remove ( base iterator )
                      * @exceptsafe
                      * @return __GenericIterator = unknown type, pointer to iterator. To be returned by delegates and to be reinterpreted by base derived class functions
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> __GenericIterator;

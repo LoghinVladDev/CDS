@@ -3,18 +3,18 @@
 //
 
 #ifndef __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__
+#define __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Action           // NOLINT(bugprone-reserved-identifier)
+                        typename __Action           /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -26,6 +26,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         action
                 ) ) ) -> void {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __forEach (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -35,10 +36,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -52,6 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __some (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -62,10 +64,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -79,6 +81,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __atLeast (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -89,10 +92,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -106,6 +109,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __atMost (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -116,10 +120,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -133,6 +137,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __moreThan (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -143,10 +148,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -160,6 +165,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __fewerThan (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -170,10 +176,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -185,6 +191,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> Size {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __count (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -194,10 +201,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -209,6 +216,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __any (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -218,10 +226,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -233,6 +241,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __all (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -242,10 +251,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate        /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                         __IterableType,
                         __ElementType
@@ -257,6 +266,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         predicate
                 ) ) ) -> bool {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __none (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -269,4 +279,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__ */

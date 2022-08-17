@@ -21,7 +21,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @extends __AbstractDelegateWrapperIterator - base class containing Collection information
                  * @implements meta :: BidirectionalIterator - model
                  *
-                 * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -41,7 +41,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Default Constructor, constexpr
                      * @exceptsafe
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     constexpr __BidirectionalDelegateWrapperIterator () noexcept;
@@ -52,7 +52,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] pOwner : Object cptr = Immutable Pointer to the owner object, used to identify iterators passed to functions from outside collection.
                      * @param [in] pDelegate : __AbstractDelegateIterator = Pointer to the delegate that is to be wrapped. Ownership of the wrapped abstract iterator will be granted to the wrapper.
                      * @exceptsafe
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     constexpr __BidirectionalDelegateWrapperIterator (
@@ -65,7 +65,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Copy Constructor.
                      * @param [in] iterator : __BidirectionalDelegateWrapperIterator cref = Constant Reference to the Iterator to copy from. Will create a new abstract iterator for the new wrapper to own.
                      * @exceptsafe
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __BidirectionalDelegateWrapperIterator (
@@ -77,7 +77,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Move Constructor.
                      * @param [in, out] iterator : __BidirectionalDelegateWrapperIterator mref = Move Reference to the Iterator to acquire items from. Ownership of the abstract wrapped iterator passed to the newly created wrapper. Given iterator as parameter should not be used anymore, as it will not contain and wrapped abstract iterator
                      * @exceptsafe
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     constexpr __BidirectionalDelegateWrapperIterator (
@@ -88,7 +88,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Destructor. Releases ownership of the owned wrapped abstract iterator, if any owned
                      * @exceptsafe
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     ~__BidirectionalDelegateWrapperIterator () noexcept override;
@@ -99,7 +99,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] iterator : __BidirectionalDelegateWrapperIterator cref = Constant Reference to the Iterator to copy from. Will create a new abstract iterator for the left hand wrapper to own.
                      * @exceptsafe
                      * @return __BidirectionalDelegateWrapperIterator ref = Reference to the newly modified left-hand iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     auto operator = (
@@ -112,7 +112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in, out] iterator : __BidirectionalDelegateWrapperIterator mref = Move Reference to the Iterator to move from. Will transfer ownership of the wrapped abstract iterator from right hand wrapper to left hand wrapper.
                      * @exceptsafe
                      * @return __BidirectionalDelegateWrapperIterator ref = Reference to the newly modified left-hand iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     auto operator = (
@@ -125,7 +125,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] iterator : __BidirectionalDelegateWrapperIterator cref = Constant Reference to the Iterator to compare current Iterator to
                      * @exceptsafe
                      * @return bool = true if iterators are equal, false otherwise
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator == (
@@ -138,7 +138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] iterator : __BidirectionalDelegateWrapperIterator cref = Constant Reference to the Iterator to compare current Iterator to
                      * @exceptsafe
                      * @return bool = false if iterators are equal, true otherwise
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator != (
@@ -151,7 +151,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * To prevent generation of range-based loop using postfixed increment, it is not generated.
                      * @exceptsafe
                      * @return __BidirectionalDelegateWrapperIterator ref = Reference to the modified iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> __BidirectionalDelegateWrapperIterator &;
@@ -162,7 +162,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * To keep in line with the model of __ForwardDelegateWrapperIterator, the postfix will not be created.
                      * @exceptsafe
                      * @return __BidirectionalDelegateWrapperIterator ref = Reference to the modified iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> __BidirectionalDelegateWrapperIterator &;
@@ -172,7 +172,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Dereference Operator. Will acquire value at given iterator.
                      * @exceptsafe
                      * @return __ElementType ref = Reference to element at iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType &;
@@ -182,7 +182,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Address Member Operator. Will acquire address of element at given iterator.
                      * @exceptsafe
                      * @return __ElementType ptr = Pointer to element at iterator
-                     * @test Suite: TBD, Group: TBD, Test Cases: TBD
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator -> () const noexcept -> ElementType *;
