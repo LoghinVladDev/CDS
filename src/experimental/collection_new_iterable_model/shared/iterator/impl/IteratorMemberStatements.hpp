@@ -26,7 +26,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( noexcept ( ( ( * begin ).* action ) () ) ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        ( ( * iterator ).* action ) ();
+                        (void) ( ( * iterator ).* action ) ();
                     }
                 }
 

@@ -17,9 +17,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Action,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
                         > = 0
                 > constexpr auto __forEach (
@@ -35,11 +32,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
-                        >
+                        > = 0
                 > __CDS_NoDiscard constexpr auto __some (   /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
@@ -54,9 +48,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
                         > = 0
                 > __CDS_NoDiscard constexpr auto __atLeast (    /* NOLINT(bugprone-reserved-identifier) */
@@ -73,9 +64,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
                         > = 0
                 > __CDS_NoDiscard constexpr auto __atMost ( /* NOLINT(bugprone-reserved-identifier) */
@@ -92,9 +80,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
                         > = 0
                 > __CDS_NoDiscard constexpr auto __moreThan (   /* NOLINT(bugprone-reserved-identifier) */
@@ -111,9 +96,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
-                                > () &&
-                                ! cds :: meta :: isPointer <
-                                        decltype ( * cds :: meta :: valueOf < __IteratorType > () )
                                 > ()
                         > = 0
                 > __CDS_NoDiscard constexpr auto __fewerThan (  /* NOLINT(bugprone-reserved-identifier) */

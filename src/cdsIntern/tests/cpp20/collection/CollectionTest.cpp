@@ -4570,8 +4570,337 @@ auto CollectionTest :: execute () noexcept -> bool {
         }
     });
 
+    /* CollectionTestGroup-FunctionalStatementsMemberFunction-CPP20 : CTG-00200-FSMF-CPP20 - Tests CTC-00201-FSMF to CTC-00229-FSMF */
     this->executeSubtest ( "CollectionTestGroup-FunctionalStatementsMemberFunction-CPP20 : CTG-00200-FSMF-CPP20 : StringArray", [& allOk, this] {
 
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-forEach-CPP20 : CTC-00201-FSMF-forEach-CPP20. Test Success if compile success */
+        cds :: experimental :: Array < String > fs201 = { "Ana", "are", "mere" };
+        fs201.forEach ( [](auto e){ (void) e.length(); } );
+        fs201.forEach ( & String :: length );
+        this->logOK ( "'CTC-00201-FSMF-forEach-CPP20' OK" );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-someEqual-CPP20 : CTC-00202-FSMF-someEqual-CPP20. */
+        cds :: experimental :: Array < String > fs202 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00202-FSMF-someEqual-CPP20",
+                /* objUnderTest */  fs202,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: some,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-someLess-CPP20 : CTC-00203-FSMF-someLess-CPP20. */
+        cds :: experimental :: Array < String > fs203 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00203-FSMF-someLess-CPP20",
+                /* objUnderTest */  fs203,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: some,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-someMore-CPP20 : CTC-00204-FSMF-someMore-CPP20. */
+        cds :: experimental :: Array < String > fs204 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00204-FSMF-someMore-CPP20",
+                /* objUnderTest */  fs204,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: some,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atLeast-CPP20 : CTC-00205-FSMF-atLeast-CPP20. */
+        cds :: experimental :: Array < String > fs205 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00205-FSMF-atLeast-CPP20",
+                /* objUnderTest */  fs205,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atLeast,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atLeastLess-CPP20 : CTC-00206-FSMF-atLeastLess-CPP20. */
+        cds :: experimental :: Array < String > fs206 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00206-FSMF-atLeastLess-CPP20",
+                /* objUnderTest */  fs206,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atLeast,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 0,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atLeastMore-CPP20 : CTC-00207-FSMF-atLeastMore-CPP20. */
+        cds :: experimental :: Array < String > fs207 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00207-FSMF-atLeastMore-CPP20",
+                /* objUnderTest */  fs207,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atLeast,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atMost-CPP20 : CTC-00208-FSMF-atMost-CPP20. */
+        cds :: experimental :: Array < String > fs208 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00208-FSMF-atMost-CPP20",
+                /* objUnderTest */  fs208,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atMost,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atMostLess-CPP20 : CTC-00209-FSMF-atMostLess-CPP20. */
+        cds :: experimental :: Array < String > fs209 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00209-FSMF-atMostLess-CPP20",
+                /* objUnderTest */  fs209,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atMost,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-atMostMore-CPP20 : CTC-00210-FSMF-atMostMore-CPP20. */
+        cds :: experimental :: Array < String > fs210 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00210-FSMF-atMostMore-CPP20",
+                /* objUnderTest */  fs210,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: atMost,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-moreThan-CPP20 : CTC-00211-FSMF-moreThan-CPP20. */
+        cds :: experimental :: Array < String > fs211 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00211-FSMF-moreThan-CPP20",
+                /* objUnderTest */  fs211,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: moreThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-moreThanLess-CPP20 : CTC-00212-FSMF-moreThanLess-CPP20. */
+        cds :: experimental :: Array < String > fs212 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00212-FSMF-moreThanLess-CPP20",
+                /* objUnderTest */  fs212,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: moreThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 0,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-moreThanMore-CPP20 : CTC-00213-FSMF-moreThanMore-CPP20. */
+        cds :: experimental :: Array < String > fs213 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00213-FSMF-moreThanMore-CPP20",
+                /* objUnderTest */  fs213,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: moreThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-fewerThan-CPP20 : CTC-00214-FSMF-fewerThan-CPP20. */
+        cds :: experimental :: Array < String > fs214 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00214-FSMF-fewerThan-CPP20",
+                /* objUnderTest */  fs214,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-fewerThanLess-CPP20 : CTC-00215-FSMF-fewerThanLess-CPP20. */
+        cds :: experimental :: Array < String > fs215 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00215-FSMF-fewerThanLess-CPP20",
+                /* objUnderTest */  fs215,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-fewerThanMore-CPP20 : CTC-00216-FSMF-fewerThanMore-CPP20. */
+        cds :: experimental :: Array < String > fs216 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00216-FSMF-fewerThanMore-CPP20",
+                /* objUnderTest */  fs216,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
+                /* predicate */     & String :: empty,
+                /* expectedCount */ 3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-countExact-CPP20 : CTC-00217-FSMF-countExact-CPP20. */
+        cds :: experimental :: Array < String > fs217 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00217-FSMF-countExact-CPP20",
+                /* objUnderTest */  fs217,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: count,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-anyNone-CPP20 : CTC-00218-FSMF-anyNone-CPP20. */
+        cds :: experimental :: Array < String > fs218 = { "a", "b", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00218-FSMF-anyNone-CPP20",
+                /* objUnderTest */  fs218,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: any,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-anyOne-CPP20 : CTC-00219-FSMF-anyOne-CPP20. */
+        cds :: experimental :: Array < String > fs219 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00219-FSMF-anyOne-CPP20",
+                /* objUnderTest */  fs219,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: any,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-anyMore-CPP20 : CTC-00220-FSMF-anyMore-CPP20. */
+        cds :: experimental :: Array < String > fs220 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00220-FSMF-anyMore-CPP20",
+                /* objUnderTest */  fs220,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: any,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-anyAll-CPP20 : CTC-00221-FSMF-anyAll-CPP20. */
+        cds :: experimental :: Array < String > fs221 = { "", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00221-FSMF-anyAll-CPP20",
+                /* objUnderTest */  fs221,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: any,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-allNone-CPP20 : CTC-00222-FSMF-allNone-CPP20. */
+        cds :: experimental :: Array < String > fs222 = { "a", "b", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00222-FSMF-allNone-CPP20",
+                /* objUnderTest */  fs222,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: all,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-allOne-CPP20 : CTC-00223-FSMF-allOne-CPP20. */
+        cds :: experimental :: Array < String > fs223 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00223-FSMF-allOne-CPP20",
+                /* objUnderTest */  fs223,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: all,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-allMore-CPP20 : CTC-00224-FSMF-allMore-CPP20. */
+        cds :: experimental :: Array < String > fs224 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00224-FSMF-allMore-CPP20",
+                /* objUnderTest */  fs224,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: all,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-allAll-CPP20 : CTC-00225-FSMF-allAll-CPP20. */
+        cds :: experimental :: Array < String > fs225 = { "", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00225-FSMF-allAll-CPP20",
+                /* objUnderTest */  fs225,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: all,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-noneNone-CPP20 : CTC-00226-FSMF-noneNone-CPP20. */
+        cds :: experimental :: Array < String > fs226 = { "a", "b", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00226-FSMF-noneNone-CPP20",
+                /* objUnderTest */  fs226,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: none,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-noneOne-CPP20 : CTC-00227-FSMF-noneOne-CPP20. */
+        cds :: experimental :: Array < String > fs227 = { "a", "", "c" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00227-FSMF-noneOne-CPP20",
+                /* objUnderTest */  fs227,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: none,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-noneMore-CPP20 : CTC-00228-FSMF-noneMore-CPP20. */
+        cds :: experimental :: Array < String > fs228 = { "a", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00228-FSMF-noneMore-CPP20",
+                /* objUnderTest */  fs228,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: none,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatementsMemberFunction-noneAll-CPP20 : CTC-00229-FSMF-noneAll-CPP20. */
+        cds :: experimental :: Array < String > fs229 = { "", "", "" };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00229-FSMF-noneAll-CPP20",
+                /* objUnderTest */  fs229,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < String > :: none,
+                /* predicate */     & String :: empty,
+                /* expectedRes. */  false
+        );
     });
 
     return allOk;

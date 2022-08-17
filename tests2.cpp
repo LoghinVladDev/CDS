@@ -195,6 +195,13 @@ int main () {
             [] ( cds :: String & e ) { e = "ana"; }
     );
 
+//    cds :: experimental :: __hidden :: __impl :: __some (
+//            strArr.begin(),
+//            strArr.end(),
+//            2,
+//            & cds :: String :: empty
+//    );
+
     strArr.forEach ( & cds :: String :: clear );
 
     std :: cout << strArr << '\n';
