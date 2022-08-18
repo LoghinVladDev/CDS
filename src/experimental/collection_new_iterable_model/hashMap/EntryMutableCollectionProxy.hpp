@@ -325,6 +325,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 typename __HashMap :: EntryType
                         >;
 
+
+                template <
+                        typename __ServerType,                          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher,                              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __HashMap =                            /* NOLINT(bugprone-reserved-identifier) */
+                        HashMap <
+                                __KeyType,
+                                __ValueType,
+                                __Hasher
+                        >
+                > using __HashMapEntryProxyContainsOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                __ServerType,
+                                typename __HashMap :: EntryType,
+                                cds :: experimental :: Collection < typename __HashMap :: EntryType >,
+                                __collectionContains < typename __HashMap :: EntryType >
+                        >;
+
+
+                template <
+                        typename __ServerType,                                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher,                                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename __HashMap =                                    /* NOLINT(bugprone-reserved-identifier) */
+                        HashMap <
+                                __KeyType,
+                                __ValueType,
+                                __Hasher
+                        >
+                > using __HashMapEntryProxyContainsOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                __ServerType,
+                                typename __HashMap :: EntryType,
+                                std :: initializer_list < typename __HashMap :: EntryType >,
+                                __initializerListContains <
+                                        typename __HashMap :: EntryType,
+                                        & cds :: meta :: equals < typename __HashMap :: EntryType >
+                                >
+                        >;
+
             }
         }
 
@@ -353,6 +396,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashMapEntryProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapEntryProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapEntryProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapEntryProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapEntryProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapEntryProxyDelegateIterableServer < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher > {
 
         protected:  using HashMapBase                       = HashMap < __KeyType, __ValueType, __Hasher >;
@@ -370,6 +415,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using RemoveOfInitializerListClient     = __hidden :: __impl :: __HashMapEntryProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
         protected:  using RemoveByClient                    = __hidden :: __impl :: __HashMapEntryProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
         protected:  using GenericStatementsClient           = __hidden :: __impl :: __HashMapEntryProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using ContainsOfCollectionClient        = __hidden :: __impl :: __HashMapEntryProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+        protected:  using ContainsOfInitializerListClient   = __hidden :: __impl :: __HashMapEntryProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
         protected:  using ConstGenericStatementsClient      = __hidden :: __impl :: __HashMapEntryProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
 
         protected:  using typename AbstractEntryMutableCollectionProxy :: __GenericHandler;         // NOLINT(bugprone-reserved-identifier)
@@ -430,6 +477,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using RemoveOfInitializerListClient :: removeFirstNotOf;
         public: using RemoveOfInitializerListClient :: removeLastNotOf;
         public: using RemoveOfInitializerListClient :: removeAllNotOf;
+
+        public: using ContainsOfCollectionClient :: containsAnyOf;
+        public: using ContainsOfCollectionClient :: containsAnyNotOf;
+        public: using ContainsOfCollectionClient :: containsAllOf;
+        public: using ContainsOfCollectionClient :: containsNoneOf;
+
+        public: using ContainsOfInitializerListClient :: containsAnyOf;
+        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public: using ContainsOfInitializerListClient :: containsAllOf;
+        public: using ContainsOfInitializerListClient :: containsNoneOf;
 
         public: using FindByClient :: findThat;
         public: using FindByClient :: findFirstThat;

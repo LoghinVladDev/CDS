@@ -469,6 +469,368 @@ template <
     return true;
 }
 
+template <
+        typename __ElementType,
+        typename __OtherIterableType,
+        typename __EqualsFunction
+> auto composePredicate (
+        __OtherIterableType const & other,
+        __EqualsFunction    const & equals,
+        bool                        onEquals
+) {
+
+    return [& other, & equals, onEquals]( __ElementType const & e ) {
+        for ( __ElementType const & otherE : other ) {
+            if ( equals ( e, otherE ) ) {
+                return onEquals;
+            }
+        }
+
+        return ! onEquals;
+    };
+}
+
+template <
+        typename __OtherIterableType,
+        typename __ElementType,
+        typename __PredicateType
+> auto collectionTestCaseContainsWithEquivalent (
+        StringLiteral                                           caseName,
+        experimental :: Collection < __ElementType >    const & collection,
+        Test                                                  * pTestLib,
+        __OtherIterableType                             const & other,
+        bool ( experimental :: Collection < __ElementType > :: * collectionOperation ) ( __OtherIterableType const & ) const,
+        bool ( experimental :: Collection < __ElementType > :: * equivalentWithEquals ) ( __PredicateType const & ) const,
+        __PredicateType                                 const & predicate
+) -> bool {
+
+    auto status         = ( collection.*collectionOperation ) ( other );
+    auto expectedStatus = ( collection.*equivalentWithEquals ) ( predicate );
+
+    if ( status != expectedStatus ) {
+        pTestLib->logError( "'%s' failed", caseName );
+        return false;
+    }
+
+    pTestLib->logOK ( "'%s' OK", caseName );
+    return true;
+}
+
+/* CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20. Tests CTC-00301-CO to CTC-30320-CO [-Collection/-InitializerList Groups] */
+template <
+        typename __OtherIterableType,
+        typename __ElementType
+> auto collectionTestGroupContainsGroupByEquivalent (
+        StringLiteral                                        groupName,
+        experimental :: Collection < __ElementType > const & collection,
+        Test                                               * pTestLib,
+        __OtherIterableType                          const & noneCommon,
+        __OtherIterableType                          const & oneCommon,
+        __OtherIterableType                          const & moreCommon,
+        __OtherIterableType                          const & allCommon,
+        __OtherIterableType                          const & allCommonAndMore
+) -> bool {
+
+    bool status = true;
+
+    /* CollectionTestCase-ContainsOf-containsAnyOfCollectionNoneCommon-CPP20 : CTC-00301-CO-containsAnyOfCollectionNoneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00301-CO-containsAnyOfCollectionNoneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                noneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    noneCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyOfCollectionOneCommon-CPP20 : CTC-00302-CO-containsAnyOfCollectionOneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00302-CO-containsAnyOfCollectionOneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                oneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    oneCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyOfCollectionMoreCommon-CPP20 : CTC-00303-CO-containsAnyOfCollectionMoreCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00303-CO-containsAnyOfCollectionMoreCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                moreCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    moreCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyOfCollectionAllCommon-CPP20 : CTC-00304-CO-containsAnyOfCollectionAllCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00304-CO-containsAnyOfCollectionAllCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyOfCollectionAllCommonAndMore-CPP20 : CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommonAndMore,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommonAndMore,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAllOfCollectionNoneCommon-CPP20 : CTC-00306-CO-containsAllOfCollectionNoneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00306-CO-containsAllOfCollectionNoneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                noneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAllOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    noneCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAllOfCollectionOneCommon-CPP20 : CTC-00307-CO-containsAllOfCollectionOneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00307-CO-containsAllOfCollectionOneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                oneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAllOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    oneCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAllOfCollectionMoreCommon-CPP20 : CTC-00308-CO-containsAllOfCollectionMoreCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00308-CO-containsAllOfCollectionMoreCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                moreCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAllOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    moreCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAllOfCollectionAllCommon-CPP20 : CTC-00309-CO-containsAllOfCollectionAllCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00309-CO-containsAllOfCollectionAllCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAllOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommon,
+                    meta :: equals < __ElementType >,
+                    true
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAllOfCollectionAllCommonAndMore-CPP20 : CTC-00310-CO-containsAllOfCollectionAllCommonAndMore-CPP20. */
+    auto containsAllOfCollectionAllCommonAndMoreStatus          = collection.containsAllOf ( allCommonAndMore );
+    auto containsAllOfCollectionAllCommonAndMoreExpectedStatus  = false;
+    if ( containsAllOfCollectionAllCommonAndMoreStatus != containsAllOfCollectionAllCommonAndMoreExpectedStatus ) {
+        pTestLib->logError ( "'%s' failed", ( String ("CTC-00310-CO-containsAllOfCollectionAllCommonAndMore-") + groupName + "-CPP20" ).cStr() );
+        return false;
+    }
+
+    pTestLib->logOK ( "'%s' OK", ( String ("CTC-00310-CO-containsAllOfCollectionAllCommonAndMore-") + groupName + "-CPP20" ).cStr() );
+
+    /* CollectionTestCase-ContainsOf-containsAnyNotOfNoneCommon-CPP20 : CTC-00311-CO-containsAnyNotOfNoneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00311-CO-containsAnyNotOfNoneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                noneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyNotOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    noneCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyNotOfOneCommon-CPP20 : CTC-00312-CO-containsAnyNotOfOneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00312-CO-containsAnyNotOfOneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                oneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyNotOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    oneCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyNotOfMoreCommon-CPP20 : CTC-00313-CO-containsAnyNotOfMoreCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00313-CO-containsAnyNotOfMoreCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                moreCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyNotOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    moreCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyNotOfAllCommon-CPP20 : CTC-00314-CO-containsAnyNotOfAllCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00314-CO-containsAnyNotOfAllCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyNotOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsAnyNotOfAllCommonAndMore-CPP20 : CTC-00315-CO-containsAnyNotOfAllCommonAndMore-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00315-CO-containsAnyNotOfAllCommonAndMore-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommonAndMore,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsAnyNotOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: any,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommonAndMore,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsNoneOfNoneCommon-CPP20 : CTC-00316-CO-containsNoneOfNoneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00316-CO-containsNoneOfNoneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                noneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsNoneOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    noneCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsNoneOfOneCommon-CPP20 : CTC-00317-CO-containsNoneOfOneCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00317-CO-containsNoneOfOneCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                oneCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsNoneOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    oneCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsNoneOfMoreCommon-CPP20 : CTC-00318-CO-containsNoneOfMoreCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00318-CO-containsNoneOfMoreCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                moreCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsNoneOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    moreCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsNoneOfAllCommon-CPP20 : CTC-00319-CO-containsNoneOfAllCommon-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00319-CO-containsNoneOfAllCommon-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommon,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsNoneOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommon,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    /* CollectionTestCase-ContainsOf-containsNoneOfAllCommonAndMore-CPP20 : CTC-00320-CO-containsNoneOfAllCommonAndMore-CPP20. */
+    status = status && collectionTestCaseContainsWithEquivalent < __OtherIterableType > (
+            /* caseName= */             ( String ("CTC-00320-CO-containsNoneOfAllCommonAndMore-") + groupName + "-CPP20" ).cStr(),
+            /* collection= */           collection,
+            /* pTestLib= */             pTestLib,
+            /* other= */                allCommonAndMore,
+            /* collectionOperation= */  & experimental :: Collection < __ElementType > :: containsNoneOf,
+            /* equivalentWithEquals= */ & experimental :: Collection < __ElementType > :: all,
+            /* predicate= */            composePredicate < __ElementType > (
+                    allCommonAndMore,
+                    meta :: equals < __ElementType >,
+                    false
+            )
+    );
+
+    return status;
+}
+
 /* CollectionTestSuite-CPP20 : CTS-00001-CPP20 */
 auto CollectionTest :: execute () noexcept -> bool {
     bool allOk = true;
@@ -4900,6 +5262,328 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* funcCaller */    & experimental :: Collection < String > :: none,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntArray", [& allOk, this] {
+
+        cds :: experimental :: Array < int > intArray = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: Array < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: Array < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: Array < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: Array < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: Array < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < int > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intArray,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < int > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < int > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < int > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < int > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < int > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < int > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intArray,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntLinkedList", [& allOk, this] {
+
+        cds :: experimental :: LinkedList < int > intLinkedList = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: LinkedList < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: LinkedList < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: LinkedList < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: LinkedList < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: LinkedList < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < int > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intLinkedList,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < int > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < int > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < int > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < int > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < int > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < int > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intLinkedList,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntHashSet", [& allOk, this] {
+
+        cds :: experimental :: HashSet < int > intHashSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: HashSet < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: HashSet < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: HashSet < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: HashSet < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: HashSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < int > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < int > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < int > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < int > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < int > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < int > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < int > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntToIntHashMap", [& allOk, this] {
+
+        cds :: experimental :: HashMap < int, int > intToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+
+        cds :: experimental :: HashMap < int, int > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: HashMap < int, int > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: HashMap < int, int > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: experimental :: HashMap < int, int > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: experimental :: HashMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < MapEntry < int, int > > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < MapEntry < int, int > > noneCommonList = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < int, int > > oneCommonList = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < int, int > > moreCommonList = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < int, int > > allCommonList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < int, int > > allCommonAndMoreList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < MapEntry < int, int > > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringArray", [& allOk, this] {
+
+        cds :: experimental :: Array < String > StringArray = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: Array < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: Array < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: Array < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: Array < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: Array < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < String > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringArray,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < String > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < String > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < String > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < String > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < String > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < String > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringArray,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringLinkedList", [& allOk, this] {
+
+        cds :: experimental :: LinkedList < String > StringLinkedList = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: LinkedList < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: LinkedList < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: LinkedList < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: LinkedList < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: LinkedList < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < String > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringLinkedList,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < String > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < String > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < String > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < String > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < String > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < String > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringLinkedList,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringHashSet", [& allOk, this] {
+
+        cds :: experimental :: HashSet < String > StringHashSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: HashSet < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: HashSet < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: HashSet < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: HashSet < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: HashSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < String > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < String > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < String > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < String > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < String > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < String > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < String > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringToIntHashMap", [& allOk, this] {
+
+        cds :: experimental :: HashMap < String, String > StringToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+
+        cds :: experimental :: HashMap < String, String > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: HashMap < String, String > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: HashMap < String, String > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: experimental :: HashMap < String, String > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: experimental :: HashMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < MapEntry < String, String > > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < MapEntry < String, String > > noneCommonList = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < String, String > > oneCommonList = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < String, String > > moreCommonList = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < String, String > > allCommonList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < String, String > > allCommonAndMoreList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < MapEntry < String, String > > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
 

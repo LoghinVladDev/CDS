@@ -48,6 +48,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetFindUniqueClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetContainsOfCollectionClient < __ElementType, __Hasher >,
+                public __hidden :: __impl :: __HashSetContainsOfInitializerListClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __HashSetDelegateIterableServer < __ElementType, __Hasher > {
 
         protected:  using SetBase                           = Set < __ElementType >;
@@ -64,6 +66,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using RemoveOfInitializerListClient     = __hidden :: __impl :: __HashSetRemoveOfInitializerListClient < __ElementType, __Hasher >;
         protected:  using RemoveByClient                    = __hidden :: __impl :: __HashSetRemoveByClient < __ElementType, __Hasher >;
         protected:  using GenericStatementsClient           = __hidden :: __impl :: __HashSetGenericStatementsClient < __ElementType, __Hasher >;
+        protected:  using ContainsOfCollectionClient        = __hidden :: __impl :: __HashSetContainsOfCollectionClient < __ElementType, __Hasher >;
+        protected:  using ContainsOfInitializerListClient   = __hidden :: __impl :: __HashSetContainsOfInitializerListClient < __ElementType, __Hasher >;
         protected:  using FindUniqueClient                  = __hidden :: __impl :: __HashSetFindUniqueClient < __ElementType, __Hasher >;
 
         protected:  friend Server;
@@ -148,6 +152,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using FindOfInitializerListClient :: findFirstNotOf;
         public: using FindOfInitializerListClient :: findLastNotOf;
         public: using FindOfInitializerListClient :: findAllNotOf;
+
+        public: using ContainsOfCollectionClient :: containsAnyOf;
+        public: using ContainsOfCollectionClient :: containsAnyNotOf;
+        public: using ContainsOfCollectionClient :: containsAllOf;
+        public: using ContainsOfCollectionClient :: containsNoneOf;
+
+        public: using ContainsOfInitializerListClient :: containsAnyOf;
+        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public: using ContainsOfInitializerListClient :: containsAllOf;
+        public: using ContainsOfInitializerListClient :: containsNoneOf;
 
         public: using RandomInsertionClient :: add;
         public: using RandomInsertionClient :: addAll;

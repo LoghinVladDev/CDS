@@ -57,6 +57,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __HashMapRemoveByClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapGenericStatementsClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapConstGenericStatementsClient < __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapContainsOfCollectionClient < __KeyType, __ValueType, __Hasher >,
+                public __hidden :: __impl :: __HashMapContainsOfInitializerListClient < __KeyType, __ValueType, __Hasher >,
                 public __hidden :: __impl :: __HashMapDelegateIterableServer < __KeyType, __ValueType, __Hasher > {
 
         protected:  using MapBase                           = Map < __KeyType, __ValueType >;
@@ -79,6 +81,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using RemoveByClient                    = __hidden :: __impl :: __HashMapRemoveByClient < __KeyType, __ValueType, __Hasher >;
         protected:  using GenericStatementsClient           = __hidden :: __impl :: __HashMapGenericStatementsClient < __KeyType, __ValueType, __Hasher >;
         protected:  using ConstGenericStatementsClient      = __hidden :: __impl :: __HashMapConstGenericStatementsClient < __KeyType, __ValueType, __Hasher >;
+        protected:  using ContainsOfCollectionClient        = __hidden :: __impl :: __HashMapContainsOfCollectionClient < __KeyType, __ValueType, __Hasher >;
+        protected:  using ContainsOfInitializerListClient   = __hidden :: __impl :: __HashMapContainsOfInitializerListClient < __KeyType, __ValueType, __Hasher >;
         protected:  using DelegateIterableServer            = __hidden :: __impl :: __HashMapDelegateIterableServer < __KeyType, __ValueType, __Hasher >;
 
         protected:  friend Server;
@@ -175,6 +179,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:     using RemoveOfInitializerListClient :: removeFirstNotOf;
         public:     using RemoveOfInitializerListClient :: removeLastNotOf;
         public:     using RemoveOfInitializerListClient :: removeAllNotOf;
+
+        public:     using ContainsOfCollectionClient :: containsAnyOf;
+        public:     using ContainsOfCollectionClient :: containsAnyNotOf;
+        public:     using ContainsOfCollectionClient :: containsAllOf;
+        public:     using ContainsOfCollectionClient :: containsNoneOf;
+
+        public:     using ContainsOfInitializerListClient :: containsAnyOf;
+        public:     using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public:     using ContainsOfInitializerListClient :: containsAllOf;
+        public:     using ContainsOfInitializerListClient :: containsNoneOf;
 
         public:     using FindByClient :: findThat;
         public:     using FindByClient :: findFirstThat;

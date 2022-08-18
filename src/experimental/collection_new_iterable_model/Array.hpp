@@ -55,6 +55,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayReplaceByClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayContainsOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayContainsOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayIndexedOperationsClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayIndicesClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayIndicesOfCollectionClient < __ElementType >,
@@ -90,6 +92,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >;
         protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >;
         protected:  using ReplaceByClient                       = __hidden :: __impl :: __ArrayReplaceByClient < __ElementType >;
+        protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __ArrayContainsOfCollectionClient < __ElementType >;
+        protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __ArrayContainsOfInitializerListClient < __ElementType >;
         protected:  using IndexedOperationsClient               = __hidden :: __impl :: __ArrayIndexedOperationsClient < __ElementType >;
         protected:  using IndicesClient                         = __hidden :: __impl :: __ArrayIndicesClient < __ElementType >;
         protected:  using IndicesOfCollectionClient             = __hidden :: __impl :: __ArrayIndicesOfCollectionClient < __ElementType >;
@@ -325,6 +329,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IndicesByClient :: firstIndexOfThat;
         public: using IndicesByClient :: lastIndexOfThat;
         public: using IndicesByClient :: allIndicesOfThat;
+
+        public: using ContainsOfCollectionClient :: containsAnyOf;
+        public: using ContainsOfCollectionClient :: containsAnyNotOf;
+        public: using ContainsOfCollectionClient :: containsAllOf;
+        public: using ContainsOfCollectionClient :: containsNoneOf;
+
+        public: using ContainsOfInitializerListClient :: containsAnyOf;
+        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public: using ContainsOfInitializerListClient :: containsAllOf;
+        public: using ContainsOfInitializerListClient :: containsNoneOf;
 
         public: using IteratorRemoveClient :: remove;
         public: using ConstIteratorRemoveClient :: remove;

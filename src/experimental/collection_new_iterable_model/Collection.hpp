@@ -272,13 +272,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
              using DelegateForwardConstIterableClient :: cend;
 
-        public: using ConstIteratorRemoveClient :: remove;
-
-        public: using RemoveByClient :: removeThat;
-        public: using RemoveByClient :: removeFirstThat;
-        public: using RemoveByClient :: removeLastThat;
-        public: using RemoveByClient :: removeAllThat;
-
         public:
             /**
              * @inherit forEach functional call, inherited from GenericStatementsClient interface
@@ -369,6 +362,126 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using GenericStatementsClient :: none;
 
+        public:
+            /**
+             * @inherit containsAnyOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-Collection Group],
+             *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-Collection Group],
+             *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-Collection Group],
+             *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-Collection Group],
+             *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using ContainsOfCollectionClient :: containsAnyOf;
+
+        public:
+            /**
+             * @inherit containsAllOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-Collection Group],
+             *      CTC-00307-CO-containsAllOfCollectionOneCommon [-Collection Group],
+             *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-Collection Group],
+             *      CTC-00309-CO-containsAllOfCollectionAllCommon [-Collection Group],
+             *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using ContainsOfCollectionClient :: containsAllOf;
+
+        public:
+            /**
+             * @inherit containsAnyNotOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-Collection Group],
+             *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-Collection Group],
+             *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-Collection Group],
+             *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-Collection Group],
+             *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using ContainsOfCollectionClient :: containsAnyNotOf;
+
+        public:
+            /**
+             * @inherit containsNoneOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-Collection Group],
+             *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-Collection Group],
+             *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-Collection Group],
+             *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-Collection Group],
+             *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using ContainsOfCollectionClient :: containsNoneOf;
+
+        public:
+            /**
+             * @inherit containsAnyOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-InitializerList Group],
+             *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-InitializerList Group],
+             *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-InitializerList Group],
+             *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-InitializerList Group],
+             *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using ContainsOfInitializerListClient :: containsAnyOf;
+
+        public:
+            /**
+             * @inherit containsAllOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-InitializerList Group],
+             *      CTC-00307-CO-containsAllOfCollectionOneCommon [-InitializerList Group],
+             *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-InitializerList Group],
+             *      CTC-00309-CO-containsAllOfCollectionAllCommon [-InitializerList Group],
+             *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using ContainsOfInitializerListClient :: containsAllOf;
+
+        public:
+            /**
+             * @inherit containsAnyNotOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-InitializerList Group],
+             *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-InitializerList Group],
+             *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-InitializerList Group],
+             *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-InitializerList Group],
+             *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using ContainsOfInitializerListClient :: containsAnyNotOf;
+
+        public:
+            /**
+             * @inherit containsNoneOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+             *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-InitializerList Group],
+             *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-InitializerList Group],
+             *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-InitializerList Group],
+             *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-InitializerList Group],
+             *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using ContainsOfInitializerListClient :: containsNoneOf;
+
+
+        public: using ConstIteratorRemoveClient :: remove;
+
+        public: using RemoveByClient :: removeThat;
+        public: using RemoveByClient :: removeFirstThat;
+        public: using RemoveByClient :: removeLastThat;
+        public: using RemoveByClient :: removeAllThat;
+
         public: using RemoveOfCollectionClient :: removeOf;
         public: using RemoveOfCollectionClient :: removeFirstOf;
         public: using RemoveOfCollectionClient :: removeLastOf;
@@ -386,16 +499,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public: using RemoveOfInitializerListClient :: removeFirstNotOf;
         public: using RemoveOfInitializerListClient :: removeLastNotOf;
         public: using RemoveOfInitializerListClient :: removeAllNotOf;
-
-        public: using ContainsOfCollectionClient :: containsAnyOf;
-        public: using ContainsOfCollectionClient :: containsAllOf;
-        public: using ContainsOfCollectionClient :: containsAnyNotOf;
-        public: using ContainsOfCollectionClient :: containsAllNotOf;
-
-        public: using ContainsOfInitializerListClient :: containsAnyOf;
-        public: using ContainsOfInitializerListClient :: containsAllOf;
-        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
-        public: using ContainsOfInitializerListClient :: containsAllNotOf;
 
         public: using FindByClient :: findThat;
         public: using FindByClient :: findFirstThat;

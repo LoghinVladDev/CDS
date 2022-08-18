@@ -120,7 +120,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ContainsOfCompositeClient <
                                 cds :: experimental :: Collection < __ElementType >,
                                 __ElementType,
-                                cds :: experimental :: Collection < __ElementType >
+                                cds :: experimental :: Collection < __ElementType >,
+                                __collectionContains < __ElementType >
                         >;
 
 
@@ -135,7 +136,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ContainsOfCompositeClient <
                                 cds :: experimental :: Collection < __ElementType >,
                                 __ElementType,
-                                std :: initializer_list < __ElementType >
+                                std :: initializer_list < __ElementType >,
+                                __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 

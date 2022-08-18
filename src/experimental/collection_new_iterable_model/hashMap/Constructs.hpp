@@ -379,6 +379,43 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
+                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                cds :: experimental :: HashMap <
+                                        __KeyType,
+                                        __ValueType,
+                                        __Hasher
+                                >,
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                cds :: experimental :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                        >;
+
+
+                template <
+                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                cds :: experimental :: HashMap <
+                                        __KeyType,
+                                        __ValueType,
+                                        __Hasher
+                                >,
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                __initializerListContains <
+                                        typename Map < __KeyType, __ValueType > :: EntryType,
+                                        & cds :: meta :: equals < typename Map < __KeyType, __ValueType > :: EntryType >
+                                >
+                        >;
+
+
+                template <
                         typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType,               // NOLINT(bugprone-reserved-identifier)
                         typename __Hasher                   // NOLINT(bugprone-reserved-identifier)

@@ -279,6 +279,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
+                template <
+                        typename __ElementType                      /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedListContainsOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                __collectionContains < __ElementType >
+                        >;
+
+
+                template <
+                        typename __ElementType                          /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedListContainsOfInitializerListClient =   /* NOLINT(bugprone-reserved-identifier) */
+                        __LocalContainsOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                __initializerListContains <
+                                        __ElementType,
+                                        & cds :: meta :: equals < __ElementType >
+                                >
+                        >;
+
+
                 template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
                 using __LinkedListDelegateIterableServer =   // NOLINT(bugprone-reserved-identifier)
                         __DelegateIterableServer <

@@ -52,6 +52,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListReplaceByClient < __ElementType >,
+                public __hidden :: __impl :: __LinkedListContainsOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __LinkedListContainsOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListIndexedOperationsClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListIndicesClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListIndicesOfCollectionClient < __ElementType >,
@@ -87,6 +89,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >;
         protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >;
         protected:  using ReplaceByClient                       = __hidden :: __impl :: __LinkedListReplaceByClient < __ElementType >;
+        protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __LinkedListContainsOfCollectionClient < __ElementType >;
+        protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __LinkedListContainsOfInitializerListClient < __ElementType >;
         protected:  using IndexedOperationsClient               = __hidden :: __impl :: __LinkedListIndexedOperationsClient < __ElementType >;
         protected:  using IndicesClient                         = __hidden :: __impl :: __LinkedListIndicesClient < __ElementType >;
         protected:  using IndicesOfCollectionClient             = __hidden :: __impl :: __LinkedListIndicesOfCollectionClient < __ElementType >;
@@ -258,6 +262,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using GenericConstStatementsClient :: any;
         public: using GenericConstStatementsClient :: all;
         public: using GenericConstStatementsClient :: none;
+
+        public: using ContainsOfCollectionClient :: containsAnyOf;
+        public: using ContainsOfCollectionClient :: containsAnyNotOf;
+        public: using ContainsOfCollectionClient :: containsAllOf;
+        public: using ContainsOfCollectionClient :: containsNoneOf;
+
+        public: using ContainsOfInitializerListClient :: containsAnyOf;
+        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public: using ContainsOfInitializerListClient :: containsAllOf;
+        public: using ContainsOfInitializerListClient :: containsNoneOf;
 
         public: using SortClient :: sort;
 
