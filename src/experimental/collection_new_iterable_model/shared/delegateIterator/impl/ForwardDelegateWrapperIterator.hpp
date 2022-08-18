@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
 #define __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
@@ -65,7 +65,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
                 __CDS_OptimalInline auto __ForwardDelegateWrapperIterator < __ElementType > :: operator = (
                         __ForwardDelegateWrapperIterator && iterator
                 ) noexcept -> __ForwardDelegateWrapperIterator & {

@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP_IMPL__
 #define __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP_IMPL__ /* NOLINT(bugprone-reserved-identifier) */

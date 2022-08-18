@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__
 #define __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */

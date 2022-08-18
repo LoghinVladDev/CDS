@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_ITERATOR_ADVANCE_DIRECTION_HPP__
 #define __CDS_SHARED_ITERATOR_ADVANCE_DIRECTION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
@@ -16,10 +16,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 enum class __IteratorAdvanceDirection {     /* NOLINT(bugprone-reserved-identifier) */
 
-                    /// Represents a Request for a Beginning Iterator, Advancing Forward
+                    /** Represents a Request for a Beginning Iterator, Advancing Forward */
                     __iad_forward,                          /* NOLINT(bugprone-reserved-identifier) */
 
-                    /// Represents a Request for an End Iterator, Advancing Forward
+                    /** Represents a Request for an End Iterator, Advancing Forward */
                     __iad_backward,                         /* NOLINT(bugprone-reserved-identifier) */
                 };
 

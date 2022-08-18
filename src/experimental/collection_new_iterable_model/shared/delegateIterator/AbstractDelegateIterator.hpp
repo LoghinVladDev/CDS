@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__
 #define __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
@@ -19,7 +19,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 /**
-                 * @class Abstract Delegate Iterator, without defined proper type, abstract only, as Collection must not know the type of delegate.
+                 * @interface Abstract Delegate Iterator, without defined proper type, abstract only, as Collection must not know the type of delegate.
                  * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
                  *
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All

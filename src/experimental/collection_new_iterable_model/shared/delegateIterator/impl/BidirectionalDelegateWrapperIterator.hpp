@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_BIDIRECTIONAL_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
 #define __CDS_SHARED_BIDIRECTIONAL_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
@@ -61,7 +61,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> __BidirectionalDelegateWrapperIterator & {
 
                     /* Call base copy function and reinterpret result, as this is __BidirectionalDelegateWrapperIterator */
-                    return reinterpret_cast < __BidirectionalDelegateWrapperIterator & > ( this->copy ( iterator ) ); // NOLINT(misc-unconventional-assign-operator)
+                    return reinterpret_cast < __BidirectionalDelegateWrapperIterator & > ( this->copy ( iterator ) ); /* NOLINT(misc-unconventional-assign-operator) */
                 }
 
 
@@ -71,7 +71,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> __BidirectionalDelegateWrapperIterator & {
 
                     /* Call base move function and reinterpret result, as this is __BidirectionalDelegateWrapperIterator */
-                    return reinterpret_cast < __BidirectionalDelegateWrapperIterator & > ( this->move ( std :: move ( iterator ) ) ); // NOLINT(misc-unconventional-assign-operator)
+                    return reinterpret_cast < __BidirectionalDelegateWrapperIterator & > ( this->move ( std :: move ( iterator ) ) ); /* NOLINT(misc-unconventional-assign-operator) */
                 }
 
 
