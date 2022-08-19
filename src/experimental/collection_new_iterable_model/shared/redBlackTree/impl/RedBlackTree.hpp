@@ -22,6 +22,29 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > template < cds :: utility :: CopyConstructorFunction < __ElementType > __copy // NOLINT(bugprone-reserved-identifier)
+                > __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __RedBlackTree (
+                   __RedBlackTree const & tree
+                ) noexcept {
+
+                    this->__rbt_copyCleared ( std :: move ( tree ) );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
                 >  __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
@@ -29,11 +52,11 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_allocateNode () noexcept -> RBTreeNode * {
+                > :: __rbt_allocateNode () const noexcept -> RBTreeNode * {
 
                     RBTreeNode * pNode  = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < RBTreeNode > ();
                     pNode->_colour      = __RedBlackTreeNode < __ElementType > :: RED;
-                    pNode->_pLeft       = pNode->_pRight = pNode->_pParent = __RedBlackTree :: __endNode();
+                    pNode->_pLeft       = pNode->_pRight = pNode->_pParent = __endNode < __ElementType > ();
                     return pNode;
                 }
 
@@ -82,14 +105,14 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     RBTreeNode * pAux = pPivot->_pRight;
                     pPivot->_pRight = pAux->_pLeft;
 
-                    if ( pAux->_pLeft != __RedBlackTree :: __endNode() ) {
+                    if ( pAux->_pLeft != __endNode < __ElementType > () ) {
                         pAux->_pLeft->_pParent = pPivot;
                     }
 
                     pAux->_pParent = pPivot;
 
-                    if ( pPivot->_pParent == __RedBlackTree :: __endNode() ) {
-                        this->_root = pAux;
+                    if ( pPivot->_pParent == __endNode < __ElementType > () ) {
+                        this->_pRoot = pAux;
                     } else {
 
                         if ( __isLeftChild ( pPivot ) ) {
@@ -125,14 +148,14 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     RBTreeNode * pAux = pPivot->_pLeft;
                     pPivot->_pLeft = pAux->_pRight;
 
-                    if ( pAux->_pRight != __RedBlackTree :: __endNode() ) {
+                    if ( pAux->_pRight != __endNode < __ElementType > () ) {
                         pAux->_pLeft = pPivot;
                     }
 
                     pAux->_pParent = pPivot->_pParent;
 
-                    if ( pPivot->_pParent == __RedBlackTree :: __endNode() ) {
-                        this->_root = pAux;
+                    if ( pPivot->_pParent == __endNode < __ElementType > () ) {
+                        this->_pRoot = pAux;
                     } else {
 
                         if ( __isLeftChild ( pPivot ) ) {
@@ -168,7 +191,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __identifyAndApplyRotationOnInsert < __isLeftChild ( pPivot ) > ( pPivot );
                     }
 
-                    this->_root->_colour = RBTreeNode :: BLACK;
+                    this->_pRoot->_colour = RBTreeNode :: BLACK;
                 }
 
 
@@ -191,8 +214,8 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         RBTreeNode * pMovedIn
                 ) noexcept -> void {
 
-                    if ( pRemoved->_pParent == __RedBlackTree :: __endNode() ) {
-                        this->_root = pMovedIn;
+                    if ( pRemoved->_pParent == __endNode < __ElementType > () ) {
+                        this->_pRoot = pMovedIn;
                     } else {
 
                         if ( __isLeftChild ( pRemoved ) ) {
@@ -224,7 +247,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         RBTreeNode * pPivot
                 ) -> void {
 
-                    while ( pPivot != this->_root && !__isRed (pPivot ) ) {
+                    while ( pPivot != this->_pRoot && !__isRed (pPivot ) ) {
                         __identifyAndApplyRotationOnDelete < __isLeftChild ( pPivot ) > ( pPivot );
                     }
                 }
@@ -330,7 +353,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         pAux->_colour = pPivot->_pParent->_colour;
                         pPivot->_pParent->_colour = RBTreeNode :: BLACK;
                         ( this->*__rotateS1 )( pPivot->_pParent );
-                        pPivot = this->_root;
+                        pPivot = this->_pRoot;
                     }
 
                     pPivot->_colour = RBTreeNode :: BLACK;
@@ -352,7 +375,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __nodeDestructor
                 >  :: __rbt_empty () const -> bool {
 
-                    return this->_root == nullptr;
+                    return this->_pRoot == nullptr;
                 }
 
 
@@ -371,19 +394,19 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_get (
-                        __KeyType const & key,
-                        bool * pIsNew
+                        __KeyType const &   key,
+                        bool            *   pIsNew
                 ) noexcept -> __ElementType & {
 
                     if ( this->__rbt_empty() ) {
-                        this->_root = __rbt_allocateNode();
+                        this->_pRoot = __rbt_allocateNode();
                         return & this->_data;
                     }
 
-                    RBTreeNode * pAux = this->_root;
+                    RBTreeNode * pAux = this->_pRoot;
                     RBTreeNode * pNewPos;
 
-                    while ( pAux != __RedBlackTree :: __endNode() ) {
+                    while ( pAux != __endNode < __ElementType > () ) {
                         pNewPos = pAux;
 
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pAux->_data ) ) ) {
@@ -430,15 +453,15 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_get (
-                        KeyType const & key
-                ) const noexcept -> ElementType const & {
+                        __KeyType const & key
+                ) const noexcept -> __ElementType const & {
 
                     if ( this->__rbt_empty() )
                         return nullptr;
 
-                    RBTreeNode * pSearch = this->_root;
+                    RBTreeNode * pSearch = this->_pRoot;
 
-                    while ( pSearch != __RedBlackTree :: __endNode() ) {
+                    while ( pSearch != __endNode < __ElementType > () ) {
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pSearch->_data ) ) ) {
                             return & pSearch->_data;
                         }
@@ -467,68 +490,122 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_remove (
-                        ElementType const & key
-                ) noexcept -> void {
+                > :: __rbt_removeAt (
+                        RBTreeNode * pToBeRemoved
+                ) noexcept -> bool {
 
-                    if ( this->__rbt_empty() )
-                        return;
+                    bool isOriginallyBlack = __isRed ( pToBeRemoved );
+                    RBTreeNode * pBalancePivot;
 
-                    RBTreeNode * pToBeDeleted = this->_root;
+                    if ( pToBeRemoved->_pLeft == __endNode < __ElementType > () ) {
+                        pBalancePivot = pToBeRemoved->_pRight;
+                        this->__rbt_transplant ( pToBeRemoved, pToBeRemoved->_pRight );
+                    } else {
+                        if ( pToBeRemoved->_pRight == __endNode < __ElementType >  () ) {
+                            pBalancePivot = pToBeRemoved->_pLeft;
+                            this->__rbt_transplant ( pToBeRemoved, pToBeRemoved->_pLeft );
+                        } else {
+                            RBTreeNode*pDeletedPlaceholder = pToBeRemoved->_pRight;
 
-                    while ( pToBeDeleted != __RedBlackTree :: __endNode() ) {
+                            while ( pDeletedPlaceholder->_pLeft != __endNode < __ElementType >  () )
+                                pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
 
-                        if ( __keyEqualsComparator ( key, __keyExtractor ( pToBeDeleted->_data ) ) ) {
-                            bool isOriginallyBlack = __isRed ( pToBeDeleted );
-                            RBTreeNode * pBalancePivot;
+                            isOriginallyBlack = __isRed ( pDeletedPlaceholder );
+                            pBalancePivot = pDeletedPlaceholder->_pRight;
 
-                            if ( pToBeDeleted->_pLeft == __RedBlackTree :: __endNode() ) {
-                                pBalancePivot = pToBeDeleted->_pRight;
-                                this->__rbt_transplant ( pToBeDeleted, pToBeDeleted->_pRight );
+                            if ( pDeletedPlaceholder->_pParent == pToBeRemoved ) {
+                                pBalancePivot = pDeletedPlaceholder;
                             } else {
-                                if ( pToBeDeleted->_pRight == __RedBlackTree::__endNode () ) {
-                                    pBalancePivot = pToBeDeleted->_pLeft;
-                                    this->__rbt_transplant ( pToBeDeleted, pToBeDeleted->_pLeft );
-                                } else {
-                                    RBTreeNode*pDeletedPlaceholder = pToBeDeleted->_pRight;
-
-                                    while ( pDeletedPlaceholder->_pLeft != __RedBlackTree::__endNode () )
-                                        pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
-
-                                    isOriginallyBlack = __isRed ( pDeletedPlaceholder );
-                                    pBalancePivot = pDeletedPlaceholder->_pRight;
-
-                                    if ( pDeletedPlaceholder->_pParent == pToBeDeleted ) {
-                                        pBalancePivot = pDeletedPlaceholder;
-                                    } else {
-                                        this->__rbt_transplant ( pDeletedPlaceholder, pDeletedPlaceholder->_pRight );
-                                        pDeletedPlaceholder->_pRight = pToBeDeleted->_pRight;
-                                        pDeletedPlaceholder->_pRight->_pParent = pDeletedPlaceholder;
-                                    }
-
-                                    this->__rbt_transplant ( pToBeDeleted, pDeletedPlaceholder );
-                                    pDeletedPlaceholder->_pLeft = pToBeDeleted->_pLeft;
-                                    pDeletedPlaceholder->_pLeft->_pParent = pDeletedPlaceholder;
-                                    pDeletedPlaceholder->_colour = pToBeDeleted->_colour;
-                                }
+                                this->__rbt_transplant ( pDeletedPlaceholder, pDeletedPlaceholder->_pRight );
+                                pDeletedPlaceholder->_pRight = pToBeRemoved->_pRight;
+                                pDeletedPlaceholder->_pRight->_pParent = pDeletedPlaceholder;
                             }
 
-                            this->__rbt_freeNode ( pToBeDeleted );
+                            this->__rbt_transplant ( pToBeRemoved, pDeletedPlaceholder );
+                            pDeletedPlaceholder->_pLeft = pToBeRemoved->_pLeft;
+                            pDeletedPlaceholder->_pLeft->_pParent = pDeletedPlaceholder;
+                            pDeletedPlaceholder->_colour = pToBeRemoved->_colour;
+                        }
+                    }
 
-                            if ( isOriginallyBlack )
-                                this->__rbt_deleteReBalance ( pBalancePivot );
+                    this->__rbt_freeNode ( pToBeRemoved );
 
-                            -- this->_size;
+                    if ( isOriginallyBlack )
+                        this->__rbt_deleteReBalance ( pBalancePivot );
 
-                            return;
+                    -- this->_size;
+
+                    return true;
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_remove (
+                        __ElementType const & key
+                ) noexcept -> bool {
+
+                    if ( this->__rbt_empty() )
+                        return false;
+
+                    RBTreeNode * pToBeRemoved = this->_pRoot;
+
+                    while ( pToBeRemoved != __endNode < __ElementType > () ) {
+
+                        if ( __keyEqualsComparator ( key, __keyExtractor ( pToBeRemoved->_data ) ) ) {
+                            this->__rbt_removeAt ( pToBeRemoved );
+                            return true;
                         }
 
-                        if ( __keyLowerComparator ( key, __keyExtractor ( pToBeDeleted->_data ) ) )
-                            pToBeDeleted = pToBeDeleted->_pLeft;
+                        if ( __keyLowerComparator ( key, __keyExtractor ( pToBeRemoved->_data ) ) )
+                            pToBeRemoved = pToBeRemoved->_pLeft;
                         else
-                            pToBeDeleted = pToBeDeleted->_pRight;
+                            pToBeRemoved = pToBeRemoved->_pRight;
                     }
+
+                    return false;
                 }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_removeIterator (
+                    __rbt_ConstIterator const & iterator
+                ) noexcept -> bool {
+
+                    auto pToBeRemoved = const_cast < RBTreeNode * > ( iterator._pCurrentNode );
+
+                    if ( pToBeRemoved == nullptr ) {
+                        return false;
+                    }
+
+                    return this->__rbt_removeAt ( pToBeRemoved );
+                }
+
 
                 template <
                         typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
@@ -546,17 +623,17 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __nodeDestructor
                 > :: __rbt_clear () noexcept -> void {
 
-                    cds :: Function < void > _remove_recursively = [&] ( RBTreeNode * _pCurrNode ) {
-                        if ( _pCurrNode->_pLeft != __RedBlackTree :: __endNode() )
+                    cds :: Function < void ( RBTreeNode * ) > _remove_recursively = [&] ( RBTreeNode * _pCurrNode ) {
+                        if ( _pCurrNode->_pLeft != __endNode < __ElementType > () )
                             _remove_recursively ( _pCurrNode->_pLeft );
-                        if ( _pCurrNode->_pRight != __RedBlackTree :: __endNode() )
+                        if ( _pCurrNode->_pRight != __endNode < __ElementType > () )
                             _remove_recursively ( _pCurrNode->_pRight );
                         this->__rbt_freeNode ( _pCurrNode );
                     };
 
                     this->_size = 0ULL;
 
-                    _remove_recursively ( this->_root );
+                    _remove_recursively ( this->_pRoot );
                 }
 
 
@@ -577,6 +654,354 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 > :: __rbt_size () const noexcept -> Size {
 
                     return this->_size;
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                             // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > ::  __rbt_copy (
+                        const __RedBlackTree & tree
+                ) noexcept -> void {
+
+                    if ( this == &tree ) {
+                        return;
+                    }
+
+                    this->__rbt_clear();
+                    this->template __rbt_copyCleared < __copy > ( tree );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                             // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > ::  __rbt_copyCleared (
+                        const __RedBlackTree & tree
+                ) noexcept -> void {
+
+                    if ( tree.__rbt_empty() ) {
+                        return;
+                    }
+
+                    cds :: Function < void ( RBTreeNode *, RBTreeNode * ) > copyNodeRecursively = [ &copyNodeRecursively , this] (
+                            RBTreeNode * pDestination,
+                            RBTreeNode * pSource
+                    ) -> void {
+
+                        __copy ( pDestination->_data, pSource->_data );
+
+                        if ( pSource->_pLeft != __endNode < __ElementType > () ) {
+                            pDestination->_pLeft = this->__rbt_allocateNode();
+                            copyNodeRecursively ( pDestination->_pLeft, pSource->_pLeft );
+                        }
+
+                        if ( pSource->_pRight != __endNode < __ElementType > () ) {
+                            pDestination->_pRight = this->__rbt_allocateNode();
+                            copyNodeRecursively ( pDestination->_pRight, pSource->_pRight );
+                        }
+                    };
+
+                    this->_pRoot = this->__rbt_allocateNode();
+                    copyNodeRecursively ( this->_pRoot, tree._pRoot );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_move (
+                        __RedBlackTree && tree
+                ) noexcept -> void {
+
+                    if ( this == &tree ) {
+                        return;
+                    }
+
+                    this->__rbt_clear();
+                    this->__rbt_moveCleared( std :: move ( tree ) );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_moveCleared (
+                        __RedBlackTree && tree
+                ) noexcept -> void {
+
+                    this->_size = cds :: exchange ( tree._size, 0ULL );
+                    this->_pRoot = cds :: exchange ( tree._pRoot, nullptr );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_new (
+                        const __ElementType *   pReferenceElement,
+                        bool                *   pIsNew
+                ) noexcept -> __ElementType * {
+
+                    return this->__rbt_get (
+                            __keyExtractor ( * pReferenceElement ),
+                            pIsNew
+                    );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_begin () noexcept -> __rbt_Iterator {
+
+                    if ( this->_pRoot == nullptr ) {
+                        return __rbt_Iterator ( nullptr, nullptr );
+                    }
+
+                    RBTreeNode * pBegin = this->_pRoot;
+                    while ( pBegin->_pLeft != __endNode < __ElementType > () ) {
+                        pBegin = pBegin->_pLeft;
+                    }
+
+                    return __rbt_Iterator ( this->_pRoot, pBegin );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_end () noexcept -> __rbt_Iterator {
+
+                    return __rbt_Iterator ( this->_pRoot, nullptr );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_rbegin () noexcept -> __rbt_Iterator {
+
+                    if ( this->_pRoot == nullptr ) {
+                        return __rbt_Iterator ( nullptr, nullptr );
+                    }
+
+                    RBTreeNode * prEnd = this->_pRoot;
+                    while ( prEnd->_pRight != __endNode < __ElementType > () ) {
+                        prEnd = prEnd->_pRight;
+                    }
+
+                    return __rbt_Iterator ( this->_pRoot, prEnd );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_rend () noexcept -> __rbt_Iterator {
+
+                    return __rbt_Iterator ( this->_pRoot, nullptr );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_cbegin () const noexcept -> __rbt_ConstIterator {
+
+                    if ( this->_pRoot == nullptr ) {
+                        return __rbt_ConstIterator ( nullptr, nullptr );
+                    }
+
+                    RBTreeNode * pcBegin = this->_pRoot;
+                    while ( pcBegin->_pLeft != __endNode < __ElementType > () ) {
+                        pcBegin = pcBegin->_pLeft;
+                    }
+
+                    return __rbt_ConstIterator ( this->_pRoot, pcBegin );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_cend () const noexcept -> __rbt_ConstIterator {
+
+                    return __rbt_ConstIterator ( this->_pRoot, nullptr );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_crbegin () const noexcept -> __rbt_ConstIterator {
+
+                    if ( this->_pRoot == nullptr ) {
+                        return __rbt_ConstIterator ( nullptr, nullptr );
+                    }
+
+                    RBTreeNode * pcrBegin = this->_pRoot;
+                    while ( pcrBegin->_pRight != __endNode < __ElementType > () ) {
+                        pcrBegin = pcrBegin->_pRight;
+                    }
+
+                    return __rbt_ConstIterator ( this->_pRoot, pcrBegin );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_crend () const noexcept -> __rbt_ConstIterator {
+
+                    return __rbt_Iterator ( this->_pRoot, nullptr );
                 }
             }
         }

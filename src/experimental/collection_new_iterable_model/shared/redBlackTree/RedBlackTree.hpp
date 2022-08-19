@@ -14,6 +14,9 @@
 #include <CDS/Extractor>
 #include <CDS/Destructor>
 #include <CDS/Compiler>
+#include <CDS/CopyConstructor>
+#include <CDS/Options>
+#include "../iterator/RedBlackTreeIterator.h"
 
 namespace cds {                     // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -24,28 +27,40 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 /// TODO : function for const as well ? tbd at constexpr
                 /// TODO : no inlines at declaration, apply inline at definition
                 /// TODO : __CDS_OptimalInline - always there, __CDS_OptionalInline - only heavy optimization ( no -OS - optimize size )
-                template < typename __ElementType >                                             // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
                 using __RedBlackTreeNode = cds::__hidden::__impl::__RedBlackTreeNode < __ElementType >;     // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __ElementType >                                                                             // NOLINT(bugprone-reserved-identifier)
-                inline auto __getLeftNode ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> __RedBlackTreeNode < __ElementType > *;       // NOLINT(bugprone-reserved-identifier)
-
-                template < typename __ElementType >                                                                             // NOLINT(bugprone-reserved-identifier)
-                inline auto __getRightNode ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> __RedBlackTreeNode < __ElementType > *;      // NOLINT(bugprone-reserved-identifier)
-
-                template < typename __ElementType >                                                // NOLINT(bugprone-reserved-identifier)
-                static auto __isLeftChild ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool;      // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __getLeftNode ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> __RedBlackTreeNode < __ElementType > * {      // NOLINT(bugprone-reserved-identifier)
+                    return pNode->_pLeft;
+                }
 
                 template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
-                static auto __isRightChild ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool;      // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __getRightNode ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> __RedBlackTreeNode < __ElementType > * {    // NOLINT(bugprone-reserved-identifier)
+                    return pNode->_pRight;
+                }
 
-                template < typename __ElementType >                                         // NOLINT(bugprone-reserved-identifier)
-                static auto __isRed ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool {    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline static auto __isLeftChild ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool {       // NOLINT(bugprone-reserved-identifier)
+                    return pNode == pNode->_pParent->_pLeft;
+                }
+
+                template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline static auto __isRightChild ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool {      // NOLINT(bugprone-reserved-identifier)
+                    return !__isLeftChild ( pNode );
+                }
+
+                template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline static auto __isRed ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool {    // NOLINT(bugprone-reserved-identifier)
                     return pNode->_colour == __RedBlackTreeNode < __ElementType > :: RED;
                 }
 
-                /// TODO : Perhaps __RedBlackTree ?
-                /// TODO : Functions that are always the same ( __KeyEqualsComparator, __KeyExtractor ) can be made as direct functions instead of classes
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __endNode () noexcept -> __RedBlackTreeNode < __ElementType > * {       // NOLINT(bugprone-reserved-identifier)
+                    static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > > const nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
+                    return & nullNodeMemory.data();
+                }
+
                 template <
                         typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
@@ -54,62 +69,53 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
                 > class __RedBlackTree {                     // NOLINT(bugprone-reserved-identifier)
-                protected:
-                    using ElementType                   =           __ElementType;
-
-                protected:
-                    using KeyType                       =           __KeyType;
 
                 private:
                     using RBTreeNode                    =           __RedBlackTreeNode < __ElementType >;
 
+                public:
+                    using __rbt_Iterator                =           RedBlackTreeIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __rbt_ConstIterator           =           RedBlackTreeConstIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    static cds :: __hidden :: __impl :: __allocation :: __RawContainer < RBTreeNode > const nullNodeMemory;
-
+                    Size            _size   { 0ULL };
                 private:
-                    constexpr static auto __endNode () noexcept -> RBTreeNode * {        // NOLINT(bugprone-reserved-identifier)
-                        return & nullNodeMemory.data();
-                    }
-
-                private:
-                    Size            _size { 0ULL };
-                private:
-                    RBTreeNode    * _root { nullptr };
+                    RBTreeNode    * _pRoot  { nullptr };
 
 
                 private:
-                    auto __rbt_allocateNode () noexcept -> RBTreeNode *;         // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_allocateNode () const noexcept -> RBTreeNode *;          // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    /// TODO : parameter names
-                    auto __rbt_freeNode ( RBTreeNode * pRemoved ) noexcept -> void;                     // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_freeNode ( RBTreeNode * pRemoved ) noexcept -> void;         // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    auto __rbt_leftRotate ( RBTreeNode * pPivot ) noexcept -> void;                          // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_leftRotate ( RBTreeNode * pPivot ) noexcept -> void;         // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    auto __rbt_rightRotate ( RBTreeNode * pPivot ) noexcept -> void;                         // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_rightRotate ( RBTreeNode * pPivot ) noexcept -> void;            // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    auto __rbt_insertReBalance ( RBTreeNode * pPivot ) noexcept -> void;                     // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_insertReBalance ( RBTreeNode * pPivot ) noexcept -> void;            // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     auto __rbt_transplant ( RBTreeNode * pRemoved, RBTreeNode * pMovedIn ) noexcept -> void;            // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    auto __rbt_deleteReBalance ( RBTreeNode * pPivot ) -> void;                     // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_deleteReBalance ( RBTreeNode * pPivot ) -> void;         // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template <
                             bool rotationDecision,
                             typename __NodeType = RBTreeNode,                             // NOLINT(bugprone-reserved-identifier)
-                            typename __ClassType = __RedBlackTree,                              // NOLINT(bugprone-reserved-identifier)
+                            typename __ClassType = __RedBlackTree,                        // NOLINT(bugprone-reserved-identifier)
                             __NodeType * ( *__locateAuxiliary )( __NodeType * ) =         // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
                             & __getRightNode < __ElementType >      :
                             & __getLeftNode < __ElementType >,
-                            bool ( *__ifScenario1 )( __NodeType * ) =                            // NOLINT(bugprone-reserved-identifier)
+                            bool ( *__ifScenario1 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
                             &__isRightChild < __ElementType >       :
                             &__isLeftChild < __ElementType >,
@@ -129,54 +135,135 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 private:
                     template <
                             bool rotationDecision,
-                            typename __NodeType = RBTreeNode,                                     // NOLINT(bugprone-reserved-identifier)
+                            typename __NodeType = RBTreeNode,                                           // NOLINT(bugprone-reserved-identifier)
                             typename __ClassType = __RedBlackTree,                                      // NOLINT(bugprone-reserved-identifier)
-                            __NodeType * ( *__locateAuxiliary )( __NodeType * ) =                 // NOLINT(bugprone-reserved-identifier)
+                            __NodeType * ( *__locateAuxiliary )( __NodeType * ) =                       // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
                             & __getRightNode < __ElementType >    :
-                            & __getLeftNode < __ElementType >,                                // NOLINT(bugprone-reserved-identifier)
-                            __NodeType * ( *__locateReversedAuxiliary )( __NodeType * ) =         // NOLINT(bugprone-reserved-identifier)
+                            & __getLeftNode < __ElementType >,                                          // NOLINT(bugprone-reserved-identifier)
+                            __NodeType * ( *__locateReversedAuxiliary )( __NodeType * ) =               // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
                             & __getRightNode < __ElementType >    :
                             & __getLeftNode < __ElementType >,
-                            bool ( *__ifScenario1 )( __NodeType * ) =                                    // NOLINT(bugprone-reserved-identifier)
+                            bool ( *__ifScenario1 )( __NodeType * ) =                                   // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
                             &__isRightChild < __ElementType >     :
                             &__isLeftChild < __ElementType >,
-                            void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =               // NOLINT(bugprone-reserved-identifier)
+                            void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
                             & __ClassType :: __rbt_leftRotate     :
                             & __ClassType :: __rbt_rightRotate,
-                            void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =               // NOLINT(bugprone-reserved-identifier)
+                            void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
                             & __ClassType :: __rbt_rightRotate    :
                             & __ClassType :: __rbt_leftRotate
-                    > auto __identifyAndApplyRotationOnDelete (    // NOLINT(bugprone-reserved-identifier)
+                    > auto __identifyAndApplyRotationOnDelete (                                         // NOLINT(bugprone-reserved-identifier)
                             RBTreeNode * pPivot
                     ) noexcept -> void;
 
-                    /// TODO : protected
-                public:
+                protected:
                     constexpr __RedBlackTree() noexcept = default;
 
-                public:
-                    __CDS_NoDiscard auto __rbt_empty () const -> bool;                                                           // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    template <
+                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy // NOLINT(bugprone-reserved-identifier)
+                    > __CDS_Implicit __RedBlackTree (   // NOLINT(google-explicit-constructor)
+                            __RedBlackTree const & tree
+                    ) noexcept;
 
-                public:
-                    auto __rbt_get ( __KeyType const & key, bool * pIsNew ) noexcept -> __ElementType &;         // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    __CDS_NoDiscard auto __rbt_empty () const -> bool;                                           // NOLINT(bugprone-reserved-identifier)
 
-                public:
-                    auto __rbt_get ( __KeyType const & key ) const noexcept -> __ElementType const &;                         // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    auto __rbt_get (                                                // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key,
+                            bool * pIsNew
+                    ) noexcept -> __ElementType &;
 
-                public:
-                    auto __rbt_remove ( __ElementType const & key ) noexcept -> void;                                         // NOLINT(bugprone-reserved-identifier)
+                protected:
+                    auto __rbt_get (                                                                        // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key
+                    ) const noexcept -> __ElementType const &;
 
-                public:
-                    auto __rbt_clear () noexcept -> void;                                                                 // NOLINT(bugprone-reserved-identifier)
+                private:
+                    auto __rbt_removeAt (                                                                   // NOLINT(bugprone-reserved-identifier)
+                            RBTreeNode * pToBeRemoved
+                    ) noexcept -> bool;
 
-                public:
-                    __CDS_NoDiscard auto __rbt_size () const noexcept -> Size;                                                                  // NOLINT(bugprone-reserved-identifier)
-                };
+                protected:
+                    auto __rbt_remove (                                                                     // NOLINT(bugprone-reserved-identifier)
+                            __ElementType const & key
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __rbt_removeIterator (                                                             // NOLINT(bugprone-reserved-identifier)
+                            __rbt_ConstIterator const & iterator
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __rbt_clear () noexcept -> void;                                                   // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard auto __rbt_size () const noexcept -> Size;                              // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    template <
+                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy              // NOLINT(bugprone-reserved-identifier)
+                    > auto __rbt_copy (                                                                       // NOLINT(bugprone-reserved-identifier)
+                            __RedBlackTree const & tree
+                    ) noexcept -> void;
+
+                protected:
+                    template <
+                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy      // NOLINT(bugprone-reserved-identifier)
+                    > auto __rbt_copyCleared (                                                                       // NOLINT(bugprone-reserved-identifier)
+                            __RedBlackTree const & tree
+                    ) noexcept -> void;
+
+                protected:
+                    auto __rbt_move (                                                                       // NOLINT(bugprone-reserved-identifier)
+                            __RedBlackTree && tree
+                    ) noexcept -> void;
+
+                protected:
+                    auto __rbt_moveCleared (                                                                // NOLINT(bugprone-reserved-identifier)
+                            __RedBlackTree && tree
+                    ) noexcept -> void;
+
+
+                protected:
+                    auto __rbt_new (                                                                        // NOLINT(bugprone-reserved-identifier)
+                            __ElementType const * pReferenceElement,
+                            bool * pIsNew
+                    ) noexcept -> __ElementType *;
+
+
+                protected:
+                    auto __rbt_begin () noexcept -> __rbt_Iterator;                 // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_end () noexcept -> __rbt_Iterator;                   // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_rbegin () noexcept -> __rbt_Iterator;                // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_rend () noexcept -> __rbt_Iterator;                  // NOLINT(bugprone-reserved-identifier)
+
+
+                protected:
+                    auto __rbt_cbegin () const noexcept -> __rbt_ConstIterator;     // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_cend () const noexcept -> __rbt_ConstIterator;       // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_crbegin () const noexcept -> __rbt_ConstIterator;    // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __rbt_crend () const noexcept -> __rbt_ConstIterator;      // NOLINT(bugprone-reserved-identifier)
+
+                    };
             }
         }
     }
