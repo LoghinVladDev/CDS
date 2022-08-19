@@ -14,7 +14,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @brief Abstract Address Iterator, iterating over continuous address ranges.
          * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
          * @implements RandomAccessIterator
-         * @tparam __ElementType
          *
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
@@ -146,7 +145,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return __ElementType ptr = Pointer to the element the address is indicating to
              *
-             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
              * @public
              */
             __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
@@ -186,7 +185,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return Size = distance, positive, element count between the two iterators
              *
-             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
              * @public
              */
             __CDS_NoDiscard constexpr auto operator - (
@@ -201,7 +200,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return ElementType ref = Reference to the element at the given offset from this iterator
              *
-             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
              * @public
              */
             template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
@@ -222,72 +221,210 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         };
 
 
+        /**
+         * @brief Forward Address Iterator, iterating over continuous address ranges from low to high value.
+         * Used by __Array, __BaseString, __BaseStringView - begin / end / cbegin / cend
+         * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+         * @extends AbstractAddressIterator
+         *
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @namespace cds :: experimental
+         */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class ForwardAddressIterator : public AbstractAddressIterator < __ElementType > {
 
         public:
+            /**
+             * @typedef Alias for the __ElementType template parameter
+             * @public
+             */
             using ElementType = __ElementType;
 
         public:
+            /**
+             * @typedef Alias for the Address indicating at currently
+             * @public
+             */
             using Address = ElementType *;
 
         public:
+            /**
+             * @brief Default Constructor, constexpr
+             * @exceptsafe
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             constexpr ForwardAddressIterator () noexcept;
 
         public:
+            /**
+             * @brief Initialization Constructor, constexpr
+             * @param pElement : Address = address of the element the iterator is indicating at
+             * @exceptsafe
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_Explicit constexpr ForwardAddressIterator (
-                    Address pAddress
+                    Address pElement
             ) noexcept;
 
         public:
+            /**
+             * @brief Copy Constructor, constexpr
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
+             * @exceptsafe
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             constexpr ForwardAddressIterator (
                     ForwardAddressIterator const & iterator
             ) noexcept;
 
         public:
+            /**
+             * @brief Move Constructor, constexpr
+             * @param iterator : ForwardAddressIterator mref = Move Reference to the iterator to move the address from
+             * @exceptsafe
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             constexpr ForwardAddressIterator (
                     ForwardAddressIterator && iterator
             ) noexcept;
 
         public:
+            /**
+             * @brief Copy Operator, constexpr
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
+             * @exceptsafe
+             * @return ForwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     ForwardAddressIterator const & iterator
             ) noexcept -> ForwardAddressIterator &;
 
         public:
+            /**
+             * @brief Move Operator, constexpr
+             * @param iterator : ForwardAddressIterator mref = Move Reference to an iterator to move the address value from
+             * @exceptsafe
+             * @return ForwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     ForwardAddressIterator && iterator
             ) noexcept -> ForwardAddressIterator &;
 
         public:
+            /**
+             * @brief Equality Comparison Operator
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @exceptsafe
+             * @return bool = true if addresses are equal, false otherwise
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator == (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Inequality Comparison Operator
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @exceptsafe
+             * @return bool = true if addresses are not equal, false otherwise
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator != (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Prefix Increment Operator. Will advance forward one position and then return
+             * @exceptsafe
+             * @return ForwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardAddressIterator &;
 
         public:
+            /**
+             * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
+             * @exceptsafe
+             * @return ForwardAddressIterator = A copy of the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardAddressIterator;
 
         public:
+            /**
+             * @brief Prefix Decrement Operator. Will advance backward one position and then return
+             * @exceptsafe
+             * @return ForwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardAddressIterator &;
 
         public:
+            /**
+             * @brief Postfix Decrement Operator. Will return the original iterator, and then advance backward the current one
+             * @exceptsafe
+             * @return ForwardAddressIterator = A copy of the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ForwardAddressIterator;
 
         public:
+            /**
+             * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value
+             * @tparam __NumericType is the type of the numeric value given
+             * @param value : __NumericType = number of positions to advance
+             * @exceptsafe
+             * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_NoDiscard constexpr auto operator + (
                     __NumericType value
             ) const noexcept -> ForwardAddressIterator;
 
         public:
+            /**
+             * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator
+             * @tparam __FElementType is the type of the element enclosed at the iterator value
+             * @tparam __NumericType is the type of the numeric value given
+             * @param value : __NumericType = number of positions to advance
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
+             * @exceptsafe
+             * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __FElementType, typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             friend constexpr auto operator + (
                     __NumericType                                      value,
@@ -295,109 +432,315 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> ForwardAddressIterator < __FElementType >;
 
         public:
+            /**
+             * @brief Difference Operator. Acquires the iterator offset negatively with a number of positions from the original iterator
+             * @tparam __NumericType is the type of the numeric value
+             * @param value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
+             * @exceptsafe
+             * @return BackwardAddressIterator = Iterator at 'value' positions backward from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_NoDiscard constexpr auto operator - (
                     __NumericType value
             ) const noexcept -> ForwardAddressIterator;
 
         public:
+            /**
+             * @brief Difference Operator. Acquires the number of elements between two iterators
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return Size = distance, positive, element count between the two iterators
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator - (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> Size;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is ahead of the given iterator, absolute position - higher address
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a higher address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator > (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is behind the given iterator, absolute position - lower address
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a lower address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator < (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is ahead of or at the given iterator, absolute position - higher or equal address
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a higher or equal address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator >= (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is behind or at the given iterator, absolute position - lower or equal address
+             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a lower or equal address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator <= (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
         };
 
+        /**
+         * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator
+         * @tparam __FElementType is the type of the element enclosed at the iterator value
+         * @tparam __NumericType is the type of the numeric value given
+         * @param value : __NumericType = number of positions to advance
+         * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
+         * @exceptsafe
+         * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @namespace cds :: experimental
+         */
         template < typename __FElementType, typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr auto operator + (
                 __NumericType                                      value,
                 ForwardAddressIterator < __FElementType >  const & iterator
         ) noexcept -> ForwardAddressIterator < __FElementType >;
 
+
+        /**
+         * @brief Backward Address Iterator, iterating over continuous address ranges from high to low value.
+         * Used by __Array, __BaseString, __BaseStringView - rbegin / rend / crbegin / crend
+         * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+         * @extends AbstractAddressIterator
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @namespace cds :: experimental
+         */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class BackwardAddressIterator : public AbstractAddressIterator < __ElementType > {
 
         public:
+            /**
+             * @typedef Alias for the __ElementType template parameter
+             * @public
+             */
             using ElementType = __ElementType;
 
         public:
+            /**
+             * @typedef Alias for the Address indicating at currently
+             * @public
+             */
             using Address = ElementType *;
 
         public:
+            /**
+             * @brief Default Constructor, constexpr
+             * @exceptsafe
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             constexpr BackwardAddressIterator () noexcept;
 
         public:
+            /**
+             * @brief Initialization Constructor, constexpr
+             * @param pElement : Address = address of the element the iterator is indicating at
+             * @exceptsafe
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_Explicit constexpr BackwardAddressIterator (
-                    Address pAddress
+                    Address pElement
             ) noexcept;
 
         public:
+            /**
+             * @brief Copy Constructor, constexpr
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
+             * @exceptsafe
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             constexpr BackwardAddressIterator (
                     BackwardAddressIterator const & iterator
             ) noexcept;
 
         public:
+            /**
+             * @brief Move Constructor, constexpr
+             * @param iterator : BackwardAddressIterator mref = Move Reference to the iterator to move the address from
+             * @exceptsafe
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             constexpr BackwardAddressIterator (
                     BackwardAddressIterator && iterator
             ) noexcept;
 
         public:
+            /**
+             * @brief Copy Operator, constexpr
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
+             * @exceptsafe
+             * @return BackwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     BackwardAddressIterator const & iterator
             ) noexcept -> BackwardAddressIterator &;
 
         public:
+            /**
+             * @brief Move Operator, constexpr
+             * @param iterator : BackwardAddressIterator mref = Move Reference to an iterator to move the address value from
+             * @exceptsafe
+             * @return BackwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     BackwardAddressIterator && iterator
             ) noexcept -> BackwardAddressIterator &;
 
         public:
+            /**
+             * @brief Equality Comparison Operator
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @exceptsafe
+             * @return bool = true if addresses are equal, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator == (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Inequality Comparison Operator
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @exceptsafe
+             * @return bool = true if addresses are not equal, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator != (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Prefix Increment Operator. Will advance backward one position and then return
+             * @exceptsafe
+             * @return BackwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardAddressIterator &;
 
         public:
+            /**
+             * @brief Postfix Increment Operator. Will return the original iterator, and then advance backward the current one
+             * @exceptsafe
+             * @return BackwardAddressIterator = A copy of the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardAddressIterator;
 
         public:
+            /**
+             * @brief Prefix Decrement Operator. Will advance forward one position and then return
+             * @exceptsafe
+             * @return BackwardAddressIterator ref = Reference to the modified iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardAddressIterator &;
 
         public:
+            /**
+             * @brief Postfix Decrement Operator. Will return the original iterator, and then advance forward the current one
+             * @exceptsafe
+             * @return BackwardAddressIterator = A copy of the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardAddressIterator;
 
         public:
+            /**
+             * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value ( positive offset = backward advance - iterator is reverse )
+             * @tparam __NumericType is the type of the numeric value given
+             * @param value : __NumericType = number of positions to advance
+             * @exceptsafe
+             * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_NoDiscard constexpr auto operator + (
                     __NumericType value
             ) const noexcept -> BackwardAddressIterator;
 
         public:
+            /**
+             * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator ( positive offset = backward advance - iterator is reverse )
+             * @tparam __FElementType is the type of the element enclosed at the iterator value
+             * @tparam __NumericType is the type of the numeric value given
+             * @param value : __NumericType = number of positions to advance
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
+             * @exceptsafe
+             * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __FElementType, typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             friend constexpr auto operator + (
                     __NumericType                                       value,
@@ -405,37 +748,105 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> BackwardAddressIterator < __FElementType >;
 
         public:
+            /**
+             * @brief Difference Operator. Acquires the iterator offset negatively with a number of positions from the original iterator
+             * @tparam __NumericType is the type of the numeric value
+             * @param value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
+             * @exceptsafe
+             * @return BackwardAddressIterator = Iterator at 'value' positions backward ( forward, since reverse ) from the original iterator
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_NoDiscard constexpr auto operator - (
                     __NumericType value
             ) const noexcept -> BackwardAddressIterator;
 
         public:
+            /**
+             * @brief Difference Operator. Acquires the number of elements between two iterators
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return Size = distance, positive, element count between the two iterators
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator - (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> Size;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is ahead of the given iterator, absolute position - lower address
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a lower address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator > (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is behind the given iterator, absolute position - higher address
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a higher address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator < (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is ahead of or at the given iterator, absolute position - lower or equal address
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a lower or equal address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator >= (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
 
         public:
+            /**
+             * @brief Greater Than Operator. Checks if the current iterator is behind or at the given iterator, absolute position - higher or equal address
+             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @exceptsafe
+             * @return bool = true if current iterator has a higher or equal address than the parameter iterator, false otherwise
+             *
+             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @public
+             */
             __CDS_NoDiscard constexpr auto operator <= (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
         };
 
+
+        /**
+         * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator ( reverse positioning due to reverse iterator )
+         * @tparam __FElementType is the type of the element enclosed at the iterator value
+         * @tparam __NumericType is the type of the numeric value given
+         * @param value : __NumericType = number of positions to advance
+         * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
+         * @exceptsafe
+         * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @namespace cds :: experimental
+         */
         template < typename __FElementType, typename __NumericType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr auto operator + (
                 __NumericType                                       value,
@@ -443,6 +854,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> BackwardAddressIterator < __FElementType >;
 
 
+        /**
+         * @brief Generic Address Iterator, iterating over continuous address ranges from from low to high or high to low value, based on reverse value.
+         * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+         * @tparam __reverse is whether the iterator should go backward or forward. If false, it will go forward, being a ForwardAddressIterator. Otherwise, backward, and will be a BackwardAddressIterator
+         * @extends AbstractAddressIterator
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @namespace cds :: experimental
+         */
         template <
                 typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 bool     __reverse = false  /* NOLINT(bugprone-reserved-identifier) */
