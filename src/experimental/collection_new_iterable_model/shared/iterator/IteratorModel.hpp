@@ -11,25 +11,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace meta {
 
             /**
-             * @struct Model Structure representing a non-standard iterator model
+             * @interface Model Structure representing a non-standard iterator model
              * @public
              **/
             struct Iterator {};
 
             /**
-             * @struct Model Structure representing a Forward-Iterable Iterator. Can advance begin-to-end
+             * @interface Model Structure representing a Forward-Iterable Iterator. Can advance begin-to-end
+             * @extends Iterator
              * @public
              */
             struct ForwardIterator : Iterator {};
 
             /**
-             * @struct Model Structure representing a Bidirectional-Iterable Iterator. Can advance begin-to-end and end-to-begin
+             * @interface Model Structure representing a Bidirectional-Iterable Iterator. Can advance begin-to-end and end-to-begin
+             * @extends ForwardIterator
              * @public
              */
             struct BidirectionalIterator : ForwardIterator {};
 
             /**
-             * @struct Model Structure representing a Random-Access-Iterable Iterator. Can advance begin-to-end, end-to-begin, and jump positions more than one step at a time.
+             * @interface Model Structure representing a Random-Access-Iterable Iterator. Can advance begin-to-end, end-to-begin, and jump positions more than one step at a time.
+             * @extends BidirectionalIterator
              * @public
              */
             struct RandomAccessIterator : BidirectionalIterator {};
