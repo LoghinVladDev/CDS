@@ -495,12 +495,12 @@ int main () {
     (void)pColl->containsAnyOf ( * pColl );
     (void)pColl->containsAllOf ( * pColl );
     (void)pColl->containsAnyNotOf ( * pColl );
-    (void)pColl->containsAllNotOf ( * pColl );
+    (void)pColl->containsNoneOf ( * pColl );
 
     (void)pColl->containsAnyOf ( { 1, 2, 3 } );
     (void)pColl->containsAllOf ( { 1, 2, 3 } );
     (void)pColl->containsAnyNotOf ( { 1, 2, 3 } );
-    (void)pColl->containsAllNotOf ( { 1, 2, 3 } );
+    (void)pColl->containsNoneOf ( { 1, 2, 3 } );
 
     Collection < Collection < int > :: ConstIterator > * pItColl;
     (void) pColl->findThat(3, *pItColl, [](int){return true;});
@@ -618,12 +618,12 @@ int main () {
     (void)pMutColl->containsAnyOf ( * pMutColl );
     (void)pMutColl->containsAllOf ( * pMutColl );
     (void)pMutColl->containsAnyNotOf ( * pMutColl );
-    (void)pMutColl->containsAllNotOf ( * pMutColl );
+    (void)pMutColl->containsNoneOf ( * pMutColl );
 
     (void)pMutColl->containsAnyOf ( { 1, 2, 3 } );
     (void)pMutColl->containsAllOf ( { 1, 2, 3 } );
     (void)pMutColl->containsAnyNotOf ( { 1, 2, 3 } );
-    (void)pMutColl->containsAllNotOf ( { 1, 2, 3 } );
+    (void)pMutColl->containsNoneOf ( { 1, 2, 3 } );
 
     (void) pMutColl->findThat(3, *pItColl, [](int){return true;});
     (void) pMutColl->findFirstThat([](int){return true;});
