@@ -93,6 +93,54 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     );
                 }
 
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType    /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __LocalDelegateForwardConstIterablePrimitiveClient <
+                        __ReceiverType,
+                        __ConstIteratorType
+                > :: begin () const noexcept -> ConstIterator {
+
+                    return reinterpret_cast < __ReceiverType const * > ( this )->__cbeginLocal();
+                }
+
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType    /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __LocalDelegateForwardConstIterablePrimitiveClient <
+                        __ReceiverType,
+                        __ConstIteratorType
+                > :: end () const noexcept -> ConstIterator {
+
+                    return reinterpret_cast < __ReceiverType const * > ( this )->__cendLocal();
+                }
+
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType    /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __LocalDelegateForwardConstIterablePrimitiveClient <
+                        __ReceiverType,
+                        __ConstIteratorType
+                > :: cbegin () const noexcept -> ConstIterator {
+
+                    return reinterpret_cast < __ReceiverType const * > ( this )->__cbeginLocal();
+                }
+
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType    /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __LocalDelegateForwardConstIterablePrimitiveClient <
+                        __ReceiverType,
+                        __ConstIteratorType
+                > :: cend () const noexcept -> ConstIterator {
+
+                    return reinterpret_cast < __ReceiverType const * > ( this )->__cendLocal();
+                }
+
             }
         }
     }

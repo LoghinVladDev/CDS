@@ -16,11 +16,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename >
                 class __BidirectionalDelegateWrapperIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
+
                 /**
                  * @class pre-declaration of Uni-Directional Abstract Iterator Wrapper, to be used in Conditional
                  * */
                 template < typename >
                 class __ForwardDelegateWrapperIterator; /* NOLINT(bugprone-reserved-identifier) */
+
 
                 /**
                  * @class Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
@@ -101,6 +103,72 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @public
                      */
                     __CDS_NoDiscard auto cend () const noexcept -> ConstIterator;
+                };
+
+
+                /**
+                 * @class Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ConstIteratorType is the type of the iterator returned by the begin / end / cbegin / cend functions
+                 *
+                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
+                template <
+                        typename __ReceiverType,                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType                            /* NOLINT(bugprone-reserved-identifier) */
+                > class __LocalDelegateForwardConstIterablePrimitiveClient {    /* NOLINT(bugprone-reserved-identifier) */
+
+                public:
+                    /**
+                     * @typedef alias for chosen Wrapper Iterator, to be used in implementor class to represent the ConstIterator type.
+                     * @public
+                     */
+                    using ConstIterator = __ConstIteratorType;
+
+                public:
+                    /**
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
+                     * @exceptsafe
+                     * @return ConstIterator = Wrapper for the received forward, immutable, begin iterator
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+                     *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+                     * @public
+                     */
+                    __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator;
+
+                public:
+                    /**
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
+                     * @exceptsafe
+                     * @return ConstIterator = Wrapper for the received forward, immutable, end iterator
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+                     *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+                     * @public
+                     */
+                    __CDS_NoDiscard constexpr auto end () const noexcept -> ConstIterator;
+
+                public:
+                    /**
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
+                     * @exceptsafe
+                     * @return ConstIterator = Wrapper for the received forward, immutable, begin iterator
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
+                     *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
+                     * @public
+                     */
+                    __CDS_NoDiscard constexpr auto cbegin () const noexcept -> ConstIterator;
+
+                public:
+                    /**
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
+                     * @exceptsafe
+                     * @return ConstIterator = Wrapper for the received forward, immutable, end iterator
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @public
+                     */
+                    __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator;
                 };
 
             }

@@ -1,18 +1,18 @@
-//
-// Created by loghin on 09/08/22.
-//
+/*
+ * Created by loghin on 09/08/22.
+ */
 
 #ifndef __CDS_EX_SET_IMPL_HPP__
-#define __CDS_EX_SET_IMPL_HPP__
+#define __CDS_EX_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                > __enabler                 // NOLINT(bugprone-reserved-identifier)
+                > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
         > constexpr Set <
                 __ElementType,
                 __enabler
@@ -20,10 +20,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                > __enabler                 // NOLINT(bugprone-reserved-identifier)
+                > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
         > constexpr Set <
                 __ElementType,
                 __enabler
@@ -36,10 +36,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                > __enabler                 // NOLINT(bugprone-reserved-identifier)
+                > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
         > constexpr Set <
                 __ElementType,
                 __enabler
@@ -52,10 +52,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                > __enabler                 // NOLINT(bugprone-reserved-identifier)
+                > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprDestructor Set <
                 __ElementType,
                 __enabler
@@ -63,10 +63,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                > __enabler                 // NOLINT(bugprone-reserved-identifier)
+                > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
         > auto Set <
                 __ElementType,
                 __enabler
@@ -95,4 +95,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_SET_IMPL_HPP__
+#endif /* __CDS_EX_SET_IMPL_HPP__ */

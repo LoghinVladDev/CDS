@@ -41,23 +41,44 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __IteratorType,                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeFunction )        ( __IteratorType const & )          -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool             /* NOLINT(bugprone-reserved-identifier) */
-                > class __MutableCollectionServerDispatcher :                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractIteratorType,                                                                                        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,                                                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __beginFunction )         ()                                          -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __endFunction )           ()                                          -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeFunction )        ( __AbstractIteratorType const & )          -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool                 /* NOLINT(bugprone-reserved-identifier) */
+                > class __MutableCollectionServerDispatcher :                                                                                   /* NOLINT(bugprone-reserved-identifier) */
                         public __CollectionServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
                                 __ElementType,
+                                __AbstractConstIteratorType,
                                 __ConstIteratorType,
+                                __cbeginFunction,
+                                __cendFunction,
                                 __newAddressFunction,
                                 __removeConstFunction
                         > {
+
+                protected:
+                    __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -70,7 +91,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __remove ( /* NOLINT(bugprone-reserved-identifier) */
-                            __IteratorType const * pIterator
+                            __AbstractIteratorType const * pIterator
                     ) noexcept -> bool;
                 };
 

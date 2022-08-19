@@ -1,16 +1,16 @@
-//
-// Created by loghin on 14/08/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_EX_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
-#define __CDS_EX_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
+#define __CDS_EX_MAP_ABSTRACT_KEY_SET_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > class Map <
                 __KeyType,
                 __ValueType
@@ -21,8 +21,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using ProxyBase = Map < __KeyType, __ValueType > :: AbstractMapProxy;
         protected:  using SetBase   = Set < __KeyType const >;
 
-        protected:  using typename SetBase :: __GenericHandler;         // NOLINT(bugprone-reserved-identifier)
-        protected:  using typename SetBase :: __GenericConstHandler;    // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename SetBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier) */
+        protected:  using typename SetBase :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
             __CDS_Explicit constexpr AbstractKeySetProxy (
@@ -64,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
 
         protected:
-            auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
+            auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
                     __KeyType const * pReferenceKey,
                     bool            * pIsNew
             ) noexcept (false) -> __KeyType *;
@@ -73,4 +73,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
+#endif /* __CDS_EX_MAP_ABSTRACT_KEY_SET_PROXY_HPP__ */

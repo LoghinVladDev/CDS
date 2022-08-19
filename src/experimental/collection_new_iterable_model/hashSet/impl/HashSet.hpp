@@ -1,16 +1,16 @@
-//
-// Created by loghin on 10/08/22.
-//
+/*
+ * Created by loghin on 10/08/22.
+ */
 
 #ifndef __CDS_HASH_SET_HPP__
-#define __CDS_HASH_SET_HPP__
+#define __CDS_HASH_SET_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprOverride auto HashSet <
                 __ElementType,
                 __Hasher
@@ -23,8 +23,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprOverride auto HashSet <
                 __ElementType,
                 __Hasher
@@ -37,8 +37,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > constexpr HashSet <
                 __ElementType,
                 __Hasher
@@ -46,10 +46,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -67,8 +67,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > constexpr HashSet <
                 __ElementType,
                 __Hasher
@@ -81,11 +81,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -104,11 +104,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -129,10 +129,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -151,10 +151,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -175,10 +175,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                 >
@@ -197,10 +197,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                 >
@@ -221,8 +221,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline HashSet <
                 __ElementType,
                 __Hasher
@@ -233,10 +233,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -260,8 +260,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline auto HashSet <
                 __ElementType,
                 __Hasher
@@ -279,10 +279,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher           // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > template <
-                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                 >
@@ -307,8 +307,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprOverride auto HashSet <
                 __ElementType,
                 __Hasher
@@ -319,56 +319,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashSet <
-                __ElementType,
-                __Hasher
-        > :: begin () const noexcept -> ConstIterator {
-
-            return this->cbegin();
-        }
-
-
-        template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashSet <
-                __ElementType,
-                __Hasher
-        > :: end () const noexcept -> ConstIterator {
-
-            return this->cend();
-        }
-
-
-        template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashSet <
-                __ElementType,
-                __Hasher
-        > :: cbegin () const noexcept -> ConstIterator {
-
-            return this->__ht_cbegin();
-        }
-
-
-        template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashSet <
-                __ElementType,
-                __Hasher
-        > :: cend () const noexcept -> ConstIterator {
-
-            return this->__ht_cend();
-        }
-
-
-        template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline auto HashSet <
                 __ElementType,
                 __Hasher
@@ -379,8 +331,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline auto HashSet <
                 __ElementType,
                 __Hasher
@@ -394,4 +346,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_HASH_SET_HPP__
+#endif /* __CDS_HASH_SET_HPP__ */

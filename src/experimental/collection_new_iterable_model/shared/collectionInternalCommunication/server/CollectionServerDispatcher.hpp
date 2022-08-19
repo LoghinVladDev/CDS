@@ -35,13 +35,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool             /* NOLINT(bugprone-reserved-identifier) */
-                > class __CollectionServerDispatcher {                                                                              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool                 /* NOLINT(bugprone-reserved-identifier) */
+                > class __CollectionServerDispatcher {                                                                                          /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __cbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __cend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> __ConstIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> __ConstIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -70,7 +85,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __removeConst ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ConstIteratorType const * pIterator
+                            __AbstractConstIteratorType const * pIterator
                     ) noexcept -> bool;
                 };
 

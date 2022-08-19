@@ -1,9 +1,9 @@
-//
-// Created by loghin on 6/27/22.
-//
+/*
+ * Created by loghin on 6/27/22.
+ */
 
 #ifndef __CDS_EX_MAP_HPP__
-#define __CDS_EX_MAP_HPP__
+#define __CDS_EX_MAP_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include <CDS/experimental/MutableCollection>
 #include <CDS/experimental/Set>
@@ -16,12 +16,12 @@
 
 #include "map/Constructs.hpp"
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > class Map :
                 public MutableCollection < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > >,
                 public __hidden :: __impl :: __MapFindUniqueImmutableClient < __KeyType, __ValueType >,
@@ -31,8 +31,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using FindUniqueImmutableClient = __hidden :: __impl :: __MapFindUniqueImmutableClient < __KeyType, __ValueType >;
         protected:  using FindUniqueMutableClient   = __hidden :: __impl :: __MapFindUniqueMutableClient < __KeyType, __ValueType >;
 
-        protected:  using typename MutableCollectionBase :: __GenericHandler;       // NOLINT(bugprone-reserved-identifier)
-        protected:  using typename MutableCollectionBase :: __GenericConstHandler;  // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename MutableCollectionBase :: __GenericHandler;       /* NOLINT(bugprone-reserved-identifier) */
+        protected:  using typename MutableCollectionBase :: __GenericConstHandler;  /* NOLINT(bugprone-reserved-identifier) */
         public:     using typename MutableCollectionBase :: ElementType;
         public:     using MutableCollectionBase :: remove;
 
@@ -132,4 +132,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "map/impl/AbstractValueMutableCollectionProxy.hpp"
 #include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
 
-#endif // __CDS_EX_MAP_HPP__
+#endif /* __CDS_EX_MAP_HPP__ */

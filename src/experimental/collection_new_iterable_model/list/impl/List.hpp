@@ -1,38 +1,38 @@
-//
-// Created by loghin on 6/27/22.
-//
+/*
+ * Created by loghin on 6/27/22.
+ */
 
 #ifndef __CDS_EX_LIST_IMPL_HPP__
-#define __CDS_EX_LIST_IMPL_HPP__
+#define __CDS_EX_LIST_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         Index const List < __ElementType > :: invalidIndex;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr List < __ElementType > :: List () noexcept = default;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr List < __ElementType > :: List (
                 List const & list
         ) noexcept = default;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr List < __ElementType > :: List (
                 List && list
         ) noexcept = default;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprDestructor List < __ElementType > :: ~List () noexcept = default;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto List < __ElementType > :: toString () const noexcept -> String {
 
             if ( this->empty() ) {
@@ -56,7 +56,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto List < __ElementType > :: circularAdjustedIndex (
                 Index index
         ) const noexcept -> Index {
@@ -75,4 +75,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_LIST_IMPL_HPP__
+#endif /* __CDS_EX_LIST_IMPL_HPP__ */

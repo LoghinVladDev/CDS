@@ -1,21 +1,21 @@
-//
-// Created by loghin on 08/07/22.
-//
+/*
+ * Created by loghin on 08/07/22.
+ */
 
 #ifndef __CDS_MUTABLE_COLLECTION_CONSTRUCTS_HPP__
-#define __CDS_MUTABLE_COLLECTION_CONSTRUCTS_HPP__
+#define __CDS_MUTABLE_COLLECTION_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class MutableCollection;
 
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >                         // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionDelegateForwardIterableClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __DelegateForwardIterablePrimitiveClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType,
@@ -23,16 +23,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionIteratorRemoveClient = // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
                         __AbstractIteratorRemovePrimitiveClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionRandomInsertionClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionRandomInsertionClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __RandomInsertionPrimitiveClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType,
@@ -40,8 +40,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionFindOfCollectionClient =   // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __FindOfMutableCompositeClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType,
@@ -51,8 +51,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >                     // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionFindOfInitializerListClient =  // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionFindOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __FindOfMutableCompositeClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType,
@@ -62,8 +62,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionFindByClient = // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionFindByClient = /* NOLINT(bugprone-reserved-identifier) */
                         __FindByMutableCompositeClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType,
@@ -71,8 +71,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __MutableCollectionGenericStatementsClient =  // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __MutableCollectionGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __GenericMutableStatementsCompositeClient <
                                 cds :: experimental :: MutableCollection < __ElementType >,
                                 __ElementType
@@ -83,4 +83,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_MUTABLE_COLLECTION_CONSTRUCTS_HPP__
+#endif /* __CDS_MUTABLE_COLLECTION_CONSTRUCTS_HPP__ */

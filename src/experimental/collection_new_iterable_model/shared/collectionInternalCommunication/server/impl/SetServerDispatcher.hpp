@@ -13,18 +13,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ServerType,                                                                                          /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __findConstFunction )     ( __ElementType const & ) const     -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __findConstFunction )     ( __ElementType const & )           const   -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __SetServerDispatcher <
                         __ServerType,
                         __ServiceType,
                         __ElementType,
+                        __AbstractConstIteratorType,
                         __ConstIteratorType,
+                        __cbeginFunction,
+                        __cendFunction,
                         __newAddressFunction,
                         __removeConstFunction,
                         __findConstFunction

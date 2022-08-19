@@ -1,9 +1,9 @@
-//
-// Created by loghin on 6/27/22.
-//
+/*
+ * Created by loghin on 6/27/22.
+ */
 
 #ifndef __CDS_EX_LIST_HPP__
-#define __CDS_EX_LIST_HPP__
+#define __CDS_EX_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include <CDS/experimental/MutableCollection>
 
@@ -26,10 +26,10 @@
 
 #include "list/ListConstructs.hpp"
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class List :
                 public MutableCollection < __ElementType >,
                 public __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >,
@@ -71,8 +71,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:  using MutableCollectionBase = MutableCollection < __ElementType >;
 
-        protected:  using typename MutableCollectionBase :: __GenericHandler;        // NOLINT(bugprone-reserved-identifier)
-        protected:  using typename MutableCollectionBase :: __GenericConstHandler;   // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+        protected:  using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
 
         public:
             static Index const invalidIndex = -1;
@@ -93,114 +93,114 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             __CDS_cpplang_ConstexprDestructor ~List () noexcept override;
 
-        public: using DelegateForwardIterableClient :: begin;
-        public: using DelegateForwardIterableClient :: end;
+        public:     using DelegateForwardIterableClient :: begin;
+        public:     using DelegateForwardIterableClient :: end;
 
-        public: using DelegateBackwardIterableClient :: rbegin;
-        public: using DelegateBackwardIterableClient :: rend;
+        public:     using DelegateBackwardIterableClient :: rbegin;
+        public:     using DelegateBackwardIterableClient :: rend;
 
-        public: using DelegateForwardConstIterableClient :: begin;
-        public: using DelegateForwardConstIterableClient :: end;
-        public: using DelegateForwardConstIterableClient :: cbegin;
-        public: using DelegateForwardConstIterableClient :: cend;
+        public:     using DelegateForwardConstIterableClient :: begin;
+        public:     using DelegateForwardConstIterableClient :: end;
+        public:     using DelegateForwardConstIterableClient :: cbegin;
+        public:     using DelegateForwardConstIterableClient :: cend;
 
-        public: using DelegateBackwardConstIterableClient :: rbegin;
-        public: using DelegateBackwardConstIterableClient :: rend;
-        public: using DelegateBackwardConstIterableClient :: crbegin;
-        public: using DelegateBackwardConstIterableClient :: crend;
+        public:     using DelegateBackwardConstIterableClient :: rbegin;
+        public:     using DelegateBackwardConstIterableClient :: rend;
+        public:     using DelegateBackwardConstIterableClient :: crbegin;
+        public:     using DelegateBackwardConstIterableClient :: crend;
 
-        public: using BoundaryInsertionClient :: pushBack;
-        public: using BoundaryInsertionClient :: pushBackAll;
-        public: using BoundaryInsertionClient :: pushBackAllOf;
-        public: using BoundaryInsertionClient :: pushFront;
-        public: using BoundaryInsertionClient :: pushFrontAll;
-        public: using BoundaryInsertionClient :: pushFrontAllOf;
-        public: using BoundaryInsertionClient :: emplaceBack;
-        public: using BoundaryInsertionClient :: emplaceFront;
+        public:     using BoundaryInsertionClient :: pushBack;
+        public:     using BoundaryInsertionClient :: pushBackAll;
+        public:     using BoundaryInsertionClient :: pushBackAllOf;
+        public:     using BoundaryInsertionClient :: pushFront;
+        public:     using BoundaryInsertionClient :: pushFrontAll;
+        public:     using BoundaryInsertionClient :: pushFrontAllOf;
+        public:     using BoundaryInsertionClient :: emplaceBack;
+        public:     using BoundaryInsertionClient :: emplaceFront;
 
-        public: using IteratorRelativeInsertionClient :: insertBefore;
-        public: using IteratorRelativeInsertionClient :: insertAllBefore;
-        public: using IteratorRelativeInsertionClient :: insertAllOfBefore;
-        public: using IteratorRelativeInsertionClient :: insertAfter;
-        public: using IteratorRelativeInsertionClient :: insertAllAfter;
-        public: using IteratorRelativeInsertionClient :: insertAllOfAfter;
-        public: using IteratorRelativeInsertionClient :: emplaceBefore;
-        public: using IteratorRelativeInsertionClient :: emplaceAfter;
+        public:     using IteratorRelativeInsertionClient :: insertBefore;
+        public:     using IteratorRelativeInsertionClient :: insertAllBefore;
+        public:     using IteratorRelativeInsertionClient :: insertAllOfBefore;
+        public:     using IteratorRelativeInsertionClient :: insertAfter;
+        public:     using IteratorRelativeInsertionClient :: insertAllAfter;
+        public:     using IteratorRelativeInsertionClient :: insertAllOfAfter;
+        public:     using IteratorRelativeInsertionClient :: emplaceBefore;
+        public:     using IteratorRelativeInsertionClient :: emplaceAfter;
 
-        public: using ConstIteratorRelativeInsertionClient :: insertBefore;
-        public: using ConstIteratorRelativeInsertionClient :: insertAllBefore;
-        public: using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
-        public: using ConstIteratorRelativeInsertionClient :: insertAfter;
-        public: using ConstIteratorRelativeInsertionClient :: insertAllAfter;
-        public: using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
-        public: using ConstIteratorRelativeInsertionClient :: emplaceBefore;
-        public: using ConstIteratorRelativeInsertionClient :: emplaceAfter;
+        public:     using ConstIteratorRelativeInsertionClient :: insertBefore;
+        public:     using ConstIteratorRelativeInsertionClient :: insertAllBefore;
+        public:     using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+        public:     using ConstIteratorRelativeInsertionClient :: insertAfter;
+        public:     using ConstIteratorRelativeInsertionClient :: insertAllAfter;
+        public:     using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+        public:     using ConstIteratorRelativeInsertionClient :: emplaceBefore;
+        public:     using ConstIteratorRelativeInsertionClient :: emplaceAfter;
 
-        public: using IndexedOperationsClient :: sub;
-        public: using IndexedOperationsClient :: operator[];
-        public: using IndexedOperationsClient :: removeAt;
+        public:     using IndexedOperationsClient :: sub;
+        public:     using IndexedOperationsClient :: operator[];
+        public:     using IndexedOperationsClient :: removeAt;
 
-        public: using SortClient :: sort;
+        public:     using SortClient :: sort;
 
-        public: using ReplaceClient :: replace;
-        public: using ReplaceClient :: replaceFirst;
-        public: using ReplaceClient :: replaceLast;
-        public: using ReplaceClient :: replaceAll;
+        public:     using ReplaceClient :: replace;
+        public:     using ReplaceClient :: replaceFirst;
+        public:     using ReplaceClient :: replaceLast;
+        public:     using ReplaceClient :: replaceAll;
 
-        public: using ReplaceOfCollectionClient :: replaceOf;
-        public: using ReplaceOfCollectionClient :: replaceFirstOf;
-        public: using ReplaceOfCollectionClient :: replaceLastOf;
-        public: using ReplaceOfCollectionClient :: replaceAllOf;
-        public: using ReplaceOfCollectionClient :: replaceNotOf;
-        public: using ReplaceOfCollectionClient :: replaceFirstNotOf;
-        public: using ReplaceOfCollectionClient :: replaceLastNotOf;
-        public: using ReplaceOfCollectionClient :: replaceAllNotOf;
+        public:     using ReplaceOfCollectionClient :: replaceOf;
+        public:     using ReplaceOfCollectionClient :: replaceFirstOf;
+        public:     using ReplaceOfCollectionClient :: replaceLastOf;
+        public:     using ReplaceOfCollectionClient :: replaceAllOf;
+        public:     using ReplaceOfCollectionClient :: replaceNotOf;
+        public:     using ReplaceOfCollectionClient :: replaceFirstNotOf;
+        public:     using ReplaceOfCollectionClient :: replaceLastNotOf;
+        public:     using ReplaceOfCollectionClient :: replaceAllNotOf;
 
-        public: using ReplaceOfInitializerListClient :: replaceOf;
-        public: using ReplaceOfInitializerListClient :: replaceFirstOf;
-        public: using ReplaceOfInitializerListClient :: replaceLastOf;
-        public: using ReplaceOfInitializerListClient :: replaceAllOf;
-        public: using ReplaceOfInitializerListClient :: replaceNotOf;
-        public: using ReplaceOfInitializerListClient :: replaceFirstNotOf;
-        public: using ReplaceOfInitializerListClient :: replaceLastNotOf;
-        public: using ReplaceOfInitializerListClient :: replaceAllNotOf;
+        public:     using ReplaceOfInitializerListClient :: replaceOf;
+        public:     using ReplaceOfInitializerListClient :: replaceFirstOf;
+        public:     using ReplaceOfInitializerListClient :: replaceLastOf;
+        public:     using ReplaceOfInitializerListClient :: replaceAllOf;
+        public:     using ReplaceOfInitializerListClient :: replaceNotOf;
+        public:     using ReplaceOfInitializerListClient :: replaceFirstNotOf;
+        public:     using ReplaceOfInitializerListClient :: replaceLastNotOf;
+        public:     using ReplaceOfInitializerListClient :: replaceAllNotOf;
 
-        public: using ReplaceByClient :: replaceThat;
-        public: using ReplaceByClient :: replaceFirstThat;
-        public: using ReplaceByClient :: replaceLastThat;
-        public: using ReplaceByClient :: replaceAllThat;
-        public: using ReplaceByClient :: replaceThatBy;
-        public: using ReplaceByClient :: replaceFirstThatBy;
-        public: using ReplaceByClient :: replaceLastThatBy;
-        public: using ReplaceByClient :: replaceAllThatBy;
+        public:     using ReplaceByClient :: replaceThat;
+        public:     using ReplaceByClient :: replaceFirstThat;
+        public:     using ReplaceByClient :: replaceLastThat;
+        public:     using ReplaceByClient :: replaceAllThat;
+        public:     using ReplaceByClient :: replaceThatBy;
+        public:     using ReplaceByClient :: replaceFirstThatBy;
+        public:     using ReplaceByClient :: replaceLastThatBy;
+        public:     using ReplaceByClient :: replaceAllThatBy;
 
-        public: using IndicesClient :: indicesOf;
-        public: using IndicesClient :: firstIndexOf;
-        public: using IndicesClient :: lastIndexOf;
-        public: using IndicesClient :: allIndicesOf;
+        public:     using IndicesClient :: indicesOf;
+        public:     using IndicesClient :: firstIndexOf;
+        public:     using IndicesClient :: lastIndexOf;
+        public:     using IndicesClient :: allIndicesOf;
 
-        public: using IndicesOfCollectionClient :: indicesOfFrom;
-        public: using IndicesOfCollectionClient :: firstIndexOfFrom;
-        public: using IndicesOfCollectionClient :: lastIndexOfFrom;
-        public: using IndicesOfCollectionClient :: allIndicesOfFrom;
-        public: using IndicesOfCollectionClient :: indicesOfNotFrom;
-        public: using IndicesOfCollectionClient :: firstIndexOfNotFrom;
-        public: using IndicesOfCollectionClient :: lastIndexOfNotFrom;
-        public: using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+        public:     using IndicesOfCollectionClient :: indicesOfFrom;
+        public:     using IndicesOfCollectionClient :: firstIndexOfFrom;
+        public:     using IndicesOfCollectionClient :: lastIndexOfFrom;
+        public:     using IndicesOfCollectionClient :: allIndicesOfFrom;
+        public:     using IndicesOfCollectionClient :: indicesOfNotFrom;
+        public:     using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+        public:     using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+        public:     using IndicesOfCollectionClient :: allIndicesOfNotFrom;
 
-        public: using IndicesOfInitializerListClient :: indicesOfFrom;
-        public: using IndicesOfInitializerListClient :: firstIndexOfFrom;
-        public: using IndicesOfInitializerListClient :: lastIndexOfFrom;
-        public: using IndicesOfInitializerListClient :: allIndicesOfFrom;
-        public: using IndicesOfInitializerListClient :: indicesOfNotFrom;
-        public: using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
-        public: using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
-        public: using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+        public:     using IndicesOfInitializerListClient :: indicesOfFrom;
+        public:     using IndicesOfInitializerListClient :: firstIndexOfFrom;
+        public:     using IndicesOfInitializerListClient :: lastIndexOfFrom;
+        public:     using IndicesOfInitializerListClient :: allIndicesOfFrom;
+        public:     using IndicesOfInitializerListClient :: indicesOfNotFrom;
+        public:     using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
+        public:     using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
+        public:     using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
 
-        public: using IndicesByClient :: indicesOfThat;
-        public: using IndicesByClient :: firstIndexOfThat;
-        public: using IndicesByClient :: lastIndexOfThat;
-        public: using IndicesByClient :: allIndicesOfThat;
+        public:     using IndicesByClient :: indicesOfThat;
+        public:     using IndicesByClient :: firstIndexOfThat;
+        public:     using IndicesByClient :: lastIndexOfThat;
+        public:     using IndicesByClient :: allIndicesOfThat;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -269,4 +269,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "list/impl/List.hpp"
 
-#endif // __CDS_EX_LIST_HPP__
+#endif /* __CDS_EX_LIST_HPP__ */

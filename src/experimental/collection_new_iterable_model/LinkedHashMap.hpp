@@ -1,9 +1,9 @@
-//
-// Created by loghin on 27/07/22.
-//
+/*
+ * Created by loghin on 27/07/22.
+ */
 
 #ifndef __CDS_EX_LINKED_HASH_MAP_HPP__
-#define __CDS_EX_LINKED_HASH_MAP_HPP__
+#define __CDS_EX_LINKED_HASH_MAP_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include <CDS/experimental/Map>
 
@@ -22,7 +22,6 @@
 #include "shared/hashTable/HashTable.hpp"
 
 #include "shared/collectionInternalCommunication/server/MapServer.hpp"
-#include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
 
 
@@ -32,6 +31,5 @@
 
 #include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/MapServerDispatcher.hpp"
-#include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
-#endif // __CDS_EX_LINKED_HASH_MAP_HPP__
+#endif /* __CDS_EX_LINKED_HASH_MAP_HPP__ */

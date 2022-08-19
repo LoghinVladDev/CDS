@@ -1,21 +1,21 @@
-//
-// Created by loghin on 08/07/22.
-//
+/*
+ * Created by loghin on 08/07/22.
+ */
 
 #ifndef __CDS_LIST_CONSTRUCTS_HPP__
-#define __CDS_LIST_CONSTRUCTS_HPP__
+#define __CDS_LIST_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class List;
 
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
-                using __ListDelegateForwardIterableClient = // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateForwardIterableClient = /* NOLINT(bugprone-reserved-identifier) */
                         __DelegateForwardIterablePrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -23,8 +23,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                using __ListDelegateBackwardIterableClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateBackwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __DelegateBackwardIterablePrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -32,8 +32,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __ListDelegateForwardConstIterableClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateForwardConstIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __DelegateForwardConstIterablePrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -41,8 +41,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __ListDelegateBackwardConstIterableClient =   // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateBackwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __DelegateBackwardConstIterablePrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -50,8 +50,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                using __ListBoundaryInsertionClient =   // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListBoundaryInsertionClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __BoundaryInsertionPrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -59,48 +59,48 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                using __ListIteratorRelativeInsertionClient =   // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIteratorRelativeInsertionClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __AbstractIteratorRelativeInsertionPrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
-                using __ListConstIteratorRelativeInsertionClient =  // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListConstIteratorRelativeInsertionClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                using __ListIndexedOperationsClient =   // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndexedOperationsClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __IndexedOperationsPrimitiveClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                using __ListSortClient =            // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+                using __ListSortClient =            /* NOLINT(bugprone-reserved-identifier) */
                         __SortCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                using __ListReplaceClient =         // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceClient =         /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                using __ListReplaceOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceOfCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -109,8 +109,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                using __ListReplaceOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceOfCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -119,24 +119,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                using __ListReplaceByClient =       // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceByClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceByCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                using __ListIndicesClient =         // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesClient =         /* NOLINT(bugprone-reserved-identifier) */
                         __IndicesCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
                         >;
 
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                using __ListIndicesOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
                         __IndicesOfCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -145,8 +145,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                using __ListIndicesOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __IndicesOfCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType,
@@ -155,8 +155,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                using __ListIndicesByClient =       // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesByClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __IndicesByCompositeClient <
                                 cds :: experimental :: List < __ElementType >,
                                 __ElementType
@@ -167,4 +167,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_LIST_CONSTRUCTS_HPP__
+#endif /* __CDS_LIST_CONSTRUCTS_HPP__ */

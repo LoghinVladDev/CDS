@@ -53,37 +53,79 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __IteratorType,                                                                                                                /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                                                           /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )            ( __ElementType const *, bool * )                       -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newFrontFunction )              ()                                                      -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBackFunction )               ()                                                      -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newFrontArrayFunction )         ( Size, __ElementType ** )                              -> void,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBackArrayFunction )          ( Size, __ElementType ** )                              -> void,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBeforeFunction )             ( __IteratorType const & )                              -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBeforeConstFunction )        ( __ConstIteratorType const & )                         -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAfterFunction )              ( __IteratorType const & )                              -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAfterConstFunction )         ( __ConstIteratorType const & )                         -> __ElementType *, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBeforeArrayFunction )        ( __IteratorType const &, Size, __ElementType ** )      -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newBeforeArrayConstFunction )   ( __ConstIteratorType const &, Size, __ElementType ** ) -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAfterArrayFunction )         ( __IteratorType const &, Size, __ElementType ** )      -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __ConstIteratorType const &, Size, __ElementType ** ) -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeFunction )                ( __IteratorType const & )                              -> bool,            /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __ConstIteratorType const & )                         -> bool             /* NOLINT(bugprone-reserved-identifier) */
-                > class __ListServerDispatcher :                                                                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                                                              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractIteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReverseIteratorType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstReverseIteratorType,                                                                                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __beginFunction )                 ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __endFunction )                   ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )                ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )                  ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __rbeginFunction )                ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __rendFunction )                  ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __crbeginFunction )               ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __crendFunction )                 ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )            ( __ElementType const *, bool * )                                       -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newFrontFunction )              ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBackFunction )               ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newFrontArrayFunction )         ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBackArrayFunction )          ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBeforeFunction )             ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBeforeConstFunction )        ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAfterFunction )              ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAfterConstFunction )         ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBeforeArrayFunction )        ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newBeforeArrayConstFunction )   ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                > class __ListServerDispatcher :                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
                         public __MutableCollectionServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
                                 __ElementType,
+                                __AbstractIteratorType,
+                                __AbstractConstIteratorType,
                                 __IteratorType,
                                 __ConstIteratorType,
+                                __beginFunction,
+                                __endFunction,
+                                __cbeginFunction,
+                                __cendFunction,
                                 __newAddressFunction,
                                 __removeFunction,
                                 __removeConstFunction
                         > {
+
+                protected:
+                    __CDS_NoDiscard auto __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __rend () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard auto __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rbeginLocal () noexcept -> __ReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rendLocal () noexcept -> __ReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __crbeginLocal () const noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __crendLocal () const noexcept -> __ConstReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -148,7 +190,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newBefore ( /* NOLINT(bugprone-reserved-identifier) */
-                            __IteratorType const * pIterator
+                            __AbstractIteratorType const * pIterator
                     ) noexcept -> __ElementType *;
 
                 protected:
@@ -162,7 +204,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newBeforeConst ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ConstIteratorType const * pIterator
+                            __AbstractConstIteratorType const * pIterator
                     ) noexcept -> __ElementType *;
 
                 protected:
@@ -176,7 +218,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newAfter ( /* NOLINT(bugprone-reserved-identifier) */
-                            __IteratorType const * pIterator
+                            __AbstractIteratorType const * pIterator
                     ) noexcept -> __ElementType *;
 
                 protected:
@@ -190,7 +232,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newAfterConst ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ConstIteratorType const * pIterator
+                            __AbstractConstIteratorType const * pIterator
                     ) noexcept -> __ElementType *;
 
                 protected:
@@ -205,9 +247,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newBeforeArray ( /* NOLINT(bugprone-reserved-identifier) */
-                            __IteratorType  const * pIterator,
-                            Size                    count,
-                            __ElementType        ** ppElements
+                            __AbstractIteratorType  const * pIterator,
+                            Size                            count,
+                            __ElementType                ** ppElements
                     ) noexcept -> bool;
 
                 protected:
@@ -222,9 +264,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ConstIteratorType const * pIterator,
-                            Size                        count,
-                            __ElementType            ** ppElements
+                            __AbstractConstIteratorType const * pIterator,
+                            Size                                count,
+                            __ElementType                    ** ppElements
                     ) noexcept -> bool;
 
                 protected:
@@ -239,9 +281,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newAfterArray ( /* NOLINT(bugprone-reserved-identifier) */
-                            __IteratorType const * pIterator,
-                            Size                   count,
-                            __ElementType       ** ppElements
+                            __AbstractIteratorType  const * pIterator,
+                            Size                            count,
+                            __ElementType                ** ppElements
                     ) noexcept -> bool;
 
                 protected:
@@ -256,9 +298,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @protected
                      */
                     auto __newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ConstIteratorType const * pIterator,
-                            Size                        count,
-                            __ElementType            ** ppElements
+                            __AbstractConstIteratorType const * pIterator,
+                            Size                                count,
+                            __ElementType                    ** ppElements
                     ) noexcept -> bool;
                 };
 

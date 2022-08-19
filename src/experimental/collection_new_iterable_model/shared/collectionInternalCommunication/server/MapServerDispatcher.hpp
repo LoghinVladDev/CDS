@@ -43,24 +43,36 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                          /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __KeyType,                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __IteratorType,                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )   -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeFunction )        ( __IteratorType const & )          -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __ConstIteratorType const & )     -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __findFunction )          ( __KeyType const & )               -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __findConstFunction )     ( __KeyType const & ) const         -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
-                > class __MapServerDispatcher :                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractIteratorType,                                                                                        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,                                                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __beginFunction )         ()                                          -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __endFunction )           ()                                          -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeFunction )        ( __AbstractIteratorType const & )          -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __findFunction )          ( __KeyType const & )                       -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __findConstFunction )     ( __KeyType const & )               const   -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
+                > class __MapServerDispatcher :                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
                         public __MutableCollectionServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
                                 __ElementType,
+                                __AbstractIteratorType,
+                                __AbstractConstIteratorType,
                                 __IteratorType,
                                 __ConstIteratorType,
+                                __beginFunction,
+                                __endFunction,
+                                __cbeginFunction,
+                                __cendFunction,
                                 __newAddressFunction,
                                 __removeFunction,
                                 __removeConstFunction
