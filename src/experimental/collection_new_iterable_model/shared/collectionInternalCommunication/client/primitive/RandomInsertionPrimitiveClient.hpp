@@ -80,7 +80,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __RemainingTypes      && ... remainingValues
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -90,7 +90,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -100,7 +100,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType && element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -110,7 +110,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -120,31 +120,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType && element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -155,13 +155,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( false ) -> void;
 
 
-                protected:
+                public:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -171,14 +171,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             std :: initializer_list < __ElementType > const & list
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,
@@ -219,7 +219,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __RemainingTypes      && ... remainingValues
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -229,7 +229,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -239,7 +239,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType && element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -249,7 +249,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -259,31 +259,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType && element
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( false ) -> ElementReference;
 
-                protected:
+                public:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -294,13 +294,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( false ) -> void;
 
 
-                protected:
+                public:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -310,14 +310,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             std :: initializer_list < __ElementType > const & list
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
                     ) noexcept ( false ) -> void;
 
-                protected:
+                public:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,

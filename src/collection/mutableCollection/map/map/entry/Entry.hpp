@@ -77,34 +77,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard constexpr auto hash () const noexcept -> Size;
 
             public:
-                constexpr auto key () const noexcept -> KeyType const &;
+                __CDS_NoDiscard constexpr auto key () const noexcept -> KeyType const &;
 
             public:
-                constexpr auto value () const noexcept -> ValueType const &;
+                __CDS_NoDiscard constexpr auto value () const noexcept -> ValueType const &;
 
             public:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
 
             public:
-                __CDS_Deprecated constexpr auto first () const noexcept -> KeyType const &;
+                __CDS_Deprecated __CDS_NoDiscard constexpr auto first () const noexcept -> KeyType const &;
 
             public:
-                __CDS_Deprecated constexpr auto second () const noexcept -> ValueType const &;
+                __CDS_Deprecated __CDS_NoDiscard constexpr auto second () const noexcept -> ValueType const &;
 
             public:
-                __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> ValueType &;
+                __CDS_Deprecated __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> ValueType &;
 
             public:
-                __CDS_Deprecated constexpr auto getFirst () const noexcept -> KeyType const &;
+                __CDS_Deprecated __CDS_NoDiscard constexpr auto getFirst () const noexcept -> KeyType const &;
 
             public:
-                __CDS_Deprecated constexpr auto getSecond () const noexcept -> ValueType const &;
+                __CDS_Deprecated __CDS_NoDiscard constexpr auto getSecond () const noexcept -> ValueType const &;
 
             public:
-                __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto getSecond () noexcept -> ValueType &;
+                __CDS_Deprecated __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getSecond () noexcept -> ValueType &;
 
             public:
                 __CDS_NoDiscard auto toString () const noexcept -> String;
+
+            public:
+                template < typename __TKeyType, typename __TValueType >
+                friend auto operator << (
+                        std :: ostream                                & out,
+                        __MapEntry < __TKeyType, __TValueType > const & object
+                ) noexcept -> std::ostream &;
             };
 
         }

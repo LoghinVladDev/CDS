@@ -128,44 +128,44 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __FromIterableType const & from
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     auto removeOf (
                             Size                        count,
                             __FromIterableType  const & from
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     auto removeFirstOf (
                             __FromIterableType const & from
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     auto removeLastOf (
                             __FromIterableType const & from
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     auto removeAllOf (
                             __FromIterableType const & from
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     auto removeNotOf (
                             Size                        count,
                             __FromIterableType  const & from
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     auto removeFirstNotOf (
                             __FromIterableType const & from
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     auto removeLastNotOf (
                             __FromIterableType const & from
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     auto removeAllNotOf (
                             __FromIterableType const & from
                     ) noexcept -> Size;

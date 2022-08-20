@@ -78,6 +78,18 @@ namespace cds {
         }
     };
 
+    template < typename __Type, typename __StandardHasher > // NOLINT(bugprone-reserved-identifier)
+    class WrapperHasher {
+
+    public:
+        __CDS_NoDiscard constexpr auto operator () (
+                __Type const & value
+        ) const noexcept ( noexcept ( __StandardHasher :: hash ( value ) ) ) -> Size {
+
+            return __StandardHasher :: hash ( value );
+        }
+    };
+
 }
 
 #if __CDS_cpplang_Concepts_available == true

@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -30,7 +30,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept -> Size;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -41,7 +41,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -52,7 +52,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType      && with
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -63,7 +63,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
@@ -74,7 +74,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType      && with
                     ) noexcept -> bool;
 
-                protected:
+                public:
                     template <
                             typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <

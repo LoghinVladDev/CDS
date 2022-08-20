@@ -25,7 +25,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     __ForwardDelegateWrapperIterator < __ElementType >
                             >;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto find (
                             __KeyType const & key
                     ) noexcept -> Iterator;
@@ -41,7 +41,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     using Iterator = __IteratorType;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto find (
                             __KeyType const & key
                     ) noexcept -> Iterator;

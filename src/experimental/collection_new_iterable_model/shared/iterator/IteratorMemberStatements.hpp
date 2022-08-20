@@ -1,15 +1,15 @@
 /*
- * Created by loghin on 6/26/22.
+ * Created by loghin on 17/08/22.
  */
 
-#ifndef __CDS_SHARED_ITERATOR_STATEMENTS_HPP__
-#define __CDS_SHARED_ITERATOR_STATEMENTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_HPP__
+#define __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
-
+                
                 /**
                  * @brief Function used to apply an action over each element of an iterable range. This is the action = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
@@ -26,22 +26,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Action,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,
+                        typename __Action,
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Action,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         > = 0
-                > constexpr auto __forEach (        /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType const & begin,
-                        __IteratorType const & end,
-                        __Action       const & action
-                ) noexcept ( noexcept ( action ( * begin ) ) ) -> void;
+                > constexpr auto __forEach (
+                        __IteratorType  const & begin,
+                        __IteratorType  const & end,
+                        __Action        const & action
+                ) noexcept ( noexcept ( ( ( * begin ).* action ) () ) ) -> void;
 
                 /**
-                 * @brief Function used to check if the iterable range contains exactly 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if the iterable range contains exactly 'count' elements that are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be a callable compatible with the 'bool ( Decay < ElementType > )' function signature or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -61,7 +61,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -71,10 +71,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if the iterable range contains at least 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if the iterable range contains at least 'count' elements that are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -94,7 +94,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -104,10 +104,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if the iterable range contains at most 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if the iterable range contains at most 'count' elements that are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -127,7 +127,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -137,10 +137,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if the iterable range contains more than 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if the iterable range contains more than 'count' elements that are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -160,7 +160,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -170,10 +170,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if the iterable range contains less than 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if the iterable range contains less than 'count' elements that are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -193,7 +193,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -203,10 +203,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end,
                         Size                   count,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to acquire the number of elements that are validated by a given predicate in a given iterable range. This is the predicate = callable object variant
+                 * @brief Function used to acquire the number of elements that are validated by a given predicate in a given iterable range. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -225,7 +225,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -234,10 +234,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> Size;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> Size;
 
                 /**
-                 * @brief Function used to check if any of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if any of the iterable range's elements are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -256,7 +256,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -265,10 +265,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if all of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if all of the iterable range's elements are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -287,7 +287,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -296,10 +296,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
                 /**
-                 * @brief Function used to check if none of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
+                 * @brief Function used to check if none of the iterable range's elements are validated by a given predicate. This is the predicate = member function variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
                  * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
@@ -318,7 +318,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __IteratorType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __Predicate,               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMemberFunctionPointer <
+                                cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
@@ -327,11 +327,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
-                ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
+                ) noexcept ( noexcept ( ( ( * begin ).* predicate ) () ) ) -> bool;
 
             }
         }
     }
 }
 
-#endif /* __CDS_SHARED_ITERATOR_STATEMENTS_HPP__ */
+#endif /* __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_HPP__ */

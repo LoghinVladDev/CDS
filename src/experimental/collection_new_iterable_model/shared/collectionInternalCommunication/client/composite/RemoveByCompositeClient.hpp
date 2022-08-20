@@ -18,28 +18,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     using ElementType = __ElementType const;
 
-                protected:
+                public:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeIf (
+                    auto removeThat (
                             Size                count,
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-                protected:
+                public:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeFirstIf (
+                    auto removeFirstThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeLastIf (
+                    auto removeLastThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-                    auto removeAllIf (
+                    auto removeAllThat (
                             __Predicate const & predicate
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
                 };

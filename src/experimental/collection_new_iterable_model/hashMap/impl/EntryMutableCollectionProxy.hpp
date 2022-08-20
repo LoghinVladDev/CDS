@@ -80,13 +80,55 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
                 typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap <
+        > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: EntryMutableCollectionProxy :: begin () noexcept -> Iterator {
+        > :: EntryMutableCollectionProxy :: __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-            return this->template map < HashMapBase > ()->begin();
+            return this->template map < HashMapBase > ()->__begin();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
+
+            return this->template map < HashMapBase > ()->__end();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+
+            return this->template map < HashMapBase > ()->__cbegin();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+
+            return this->template map < HashMapBase > ()->__cend();
         }
 
 
@@ -98,9 +140,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: EntryMutableCollectionProxy :: end () noexcept -> Iterator {
+        > :: EntryMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
 
-            return this->template map < HashMapBase > ()->end();
+            return this->template map < HashMapBase > ()->__beginLocal();
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
+
+            return this->template map < HashMapBase > ()->__endLocal();
         }
 
 
@@ -112,9 +168,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: EntryMutableCollectionProxy :: begin () const noexcept -> ConstIterator {
+        > :: EntryMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
 
-            return this->template map < HashMapBase > ()->begin();
+            return this->template map < HashMapBase > ()->__cbeginLocal();
         }
 
 
@@ -126,37 +182,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __KeyType,
                 __ValueType,
                 __Hasher
-        > :: EntryMutableCollectionProxy :: end () const noexcept -> ConstIterator {
+        > :: EntryMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
 
-            return this->template map < HashMapBase > ()->end();
-        }
-
-
-        template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashMap <
-                __KeyType,
-                __ValueType,
-                __Hasher
-        > :: EntryMutableCollectionProxy :: cbegin () const noexcept -> ConstIterator {
-
-            return this->template map < HashMapBase > ()->cbegin();
-        }
-
-
-        template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
-                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
-        > constexpr auto HashMap <
-                __KeyType,
-                __ValueType,
-                __Hasher
-        > :: EntryMutableCollectionProxy :: cend () const noexcept -> ConstIterator {
-
-            return this->template map < HashMapBase > ()->cend();
+            return this->template map < HashMapBase > ()->__cendLocal();
         }
 
 

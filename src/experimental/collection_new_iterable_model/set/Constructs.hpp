@@ -1,16 +1,16 @@
-//
-// Created by uic70278 on 7/23/2022.
-//
+/*
+ * Created by loghin on 7/23/2022.
+ */
 
 #ifndef __CDS_EX_SET_CONSTRUCTS_HPP__
-#define __CDS_EX_SET_CONSTRUCTS_HPP__
+#define __CDS_EX_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
 
         namespace meta {
 
-            template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto isValidSetElement () noexcept -> bool {
 
                 return
@@ -21,21 +21,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template <
-                typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
                 > = 0
         > class Set;
 
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: experimental :: meta :: isValidSetElement < __ElementType > ()
-                        > __enabler = 0         // NOLINT(bugprone-reserved-identifier)
-                > using __SetFindUniqueClient = // NOLINT(bugprone-reserved-identifier)
+                        > __enabler = 0         /* NOLINT(bugprone-reserved-identifier) */
+                > using __SetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
                         __FindUniqueImmutablePrimitiveClient <
                                 cds :: experimental :: Set < __ElementType, __enabler >,
                                 __ElementType,
@@ -48,4 +48,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_SET_CONSTRUCTS_HPP__
+#endif /* __CDS_EX_SET_CONSTRUCTS_HPP__ */

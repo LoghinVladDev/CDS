@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template < typename __ComparatorFunction = decltype ( & predicates :: lessThan < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto sort (
                             __ComparatorFunction const & comparatorFunction = & predicates :: lessThan < ElementType >

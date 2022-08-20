@@ -1,16 +1,16 @@
-//
-// Created by loghin on 14/08/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_EX_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__
-#define __CDS_EX_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__
+#define __CDS_EX_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > class Map <
                 __KeyType,
                 __ValueType
@@ -21,8 +21,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using ProxyBase             = Map < __KeyType, __ValueType > :: AbstractMapProxy;
         protected:  using MutableCollectionBase = MutableCollection < EntryType >;
 
-        protected:  using typename MutableCollectionBase :: __GenericHandler;         // NOLINT(bugprone-reserved-identifier)
-        protected:  using typename MutableCollectionBase :: __GenericConstHandler;    // NOLINT(bugprone-reserved-identifier)
+        protected:  using typename MutableCollectionBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier) */
+        protected:  using typename MutableCollectionBase :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
             __CDS_Explicit constexpr AbstractEntryMutableCollectionProxy (
@@ -63,4 +63,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__
+#endif /* __CDS_EX_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ */

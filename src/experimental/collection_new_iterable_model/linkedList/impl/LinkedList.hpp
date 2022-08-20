@@ -1,14 +1,14 @@
-//
-// Created by loghin on 17/07/22.
-//
+/*
+ * Created by loghin on 17/07/22.
+ */
 
 #ifndef __CDS_EX_LINKED_LIST_IMPL_HPP__
-#define __CDS_EX_LINKED_LIST_IMPL_HPP__
+#define __CDS_EX_LINKED_LIST_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: __cicch_obtainGenericHandler (
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) noexcept -> __GenericHandler {
@@ -17,7 +17,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: __cicch_obtainGenericConstHandler (
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler {
@@ -26,13 +26,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr LinkedList < __ElementType > :: LinkedList () noexcept = default;
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -44,7 +44,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr LinkedList < __ElementType > :: LinkedList (
                 LinkedList && list
         ) noexcept :
@@ -53,10 +53,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -72,9 +72,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -89,9 +89,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __OtherElementType,    // NOLINT(bugprone-reserved-identifier)
+                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                 >
@@ -106,16 +106,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         LinkedList < __ElementType > :: ~LinkedList () noexcept {
 
             this->__dll_clear ();
         }
 
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __TElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __TElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 >
@@ -132,7 +132,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
                 LinkedList && list
         ) noexcept -> LinkedList & {
@@ -146,9 +146,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         template <
-                typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
+                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                 >
@@ -166,119 +166,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: begin () noexcept -> Iterator {
-
-            return this->__dll_begin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: end () noexcept -> Iterator {
-
-            return this->__dll_end();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: begin () const noexcept -> ConstIterator {
-
-            return this->__dll_cbegin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: end () const noexcept -> ConstIterator {
-
-            return this->__dll_cend();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: cbegin () const noexcept -> ConstIterator {
-
-            return this->__dll_cbegin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: cend () const noexcept -> ConstIterator {
-
-            return this->__dll_cend();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: rbegin () noexcept -> ReverseIterator {
-
-            return this->__dll_rbegin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: rend () noexcept -> ReverseIterator {
-
-            return this->__dll_rend();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: rbegin () const noexcept -> ConstReverseIterator {
-
-            return this->__dll_crbegin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: rend () const noexcept -> ConstReverseIterator {
-
-            return this->__dll_crend();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: crbegin () const noexcept -> ConstReverseIterator {
-
-            return this->__dll_crbegin();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto LinkedList < __ElementType > :: crend () const noexcept -> ConstReverseIterator {
-
-            return this->__dll_crend();
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto LinkedList < __ElementType > :: clear () noexcept -> void {
 
             this->__dll_clear ();
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: size () const noexcept -> Size {
 
             return this->__dll_size ();
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto LinkedList < __ElementType > :: popFront () noexcept -> void {
 
             this->__dll_removeFront ();
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto LinkedList < __ElementType > :: popBack () noexcept -> void {
 
             this->__dll_removeBack ();
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: front () noexcept (false) -> ElementType & {
 
             if ( this->empty() ) {
@@ -289,7 +205,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: front () const noexcept (false) -> ElementType const & {
 
             if ( this->empty() ) {
@@ -300,7 +216,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: back () noexcept (false) -> ElementType & {
 
             if ( this->empty() ) {
@@ -311,7 +227,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: back () const noexcept (false) -> ElementType const & {
 
             if ( this->empty() ) {
@@ -322,7 +238,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: get (
                 Index index
         ) noexcept (false) -> ElementType & {
@@ -335,7 +251,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: get (
                 Index index
         ) const noexcept (false) -> ElementType const & {
@@ -348,7 +264,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto LinkedList < __ElementType > :: removeAt (
                 Index index
         ) noexcept -> bool {
@@ -364,4 +280,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_LINKED_LIST_IMPL_HPP__
+#endif /* __CDS_EX_LINKED_LIST_IMPL_HPP__ */

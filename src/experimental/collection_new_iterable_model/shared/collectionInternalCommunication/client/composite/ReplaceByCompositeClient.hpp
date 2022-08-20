@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -31,7 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -43,7 +43,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -55,7 +55,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType      && with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -67,7 +67,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -79,7 +79,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType      && with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,                       // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -91,7 +91,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType const & with
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,   // NOLINT(bugprone-reserved-identifier)
                             typename __Supplier     // NOLINT(bugprone-reserved-identifier)
@@ -101,7 +101,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Supplier  const & supplier
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,   // NOLINT(bugprone-reserved-identifier)
                             typename __Supplier     // NOLINT(bugprone-reserved-identifier)
@@ -110,7 +110,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Supplier  const & supplier
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,   // NOLINT(bugprone-reserved-identifier)
                             typename __Supplier     // NOLINT(bugprone-reserved-identifier)
@@ -119,7 +119,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __Supplier  const & supplier
                     ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-                protected:
+                public:
                     template <
                             typename __Predicate,   // NOLINT(bugprone-reserved-identifier)
                             typename __Supplier     // NOLINT(bugprone-reserved-identifier)

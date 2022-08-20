@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __RemoveByCompositeClient <
                         __IterableType,
                         __ElementType
-                > :: removeIf (
+                > :: removeThat (
                         Size count,
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size {
@@ -63,7 +63,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __RemoveByCompositeClient <
                         __IterableType,
                         __ElementType
-                > :: removeFirstIf (
+                > :: removeFirstThat (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -93,7 +93,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __RemoveByCompositeClient <
                         __IterableType,
                         __ElementType
-                > :: removeLastIf (
+                > :: removeLastThat (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -126,7 +126,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __RemoveByCompositeClient <
                         __IterableType,
                         __ElementType
-                > :: removeAllIf (
+                > :: removeAllThat (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size {
 

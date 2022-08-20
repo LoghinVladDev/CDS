@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementType = __ElementType;
 
-                protected:
+                public:
                     template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto indicesOf (
                             Size                        count,
@@ -26,31 +26,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ElementType         const & element
                     ) const noexcept -> __CollectionType &;
 
-                protected:
+                public:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto indicesOf (
                             Size                count,
                             ElementType const & element
                     ) const noexcept -> __CollectionType < Index >;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto firstIndexOf (
                             ElementType const & element
                     ) const noexcept -> Index;
 
-                protected:
+                public:
                     __CDS_NoDiscard auto lastIndexOf (
                             ElementType const & element
                     ) const noexcept -> Index;
 
-                protected:
+                public:
                     template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOf (
                             __CollectionType          & storeIn,
                             ElementType         const & element
                     ) const noexcept -> __CollectionType &;
 
-                protected:
+                public:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto allIndicesOf (
                             ElementType const & element

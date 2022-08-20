@@ -181,7 +181,41 @@ int main () {
 //    cds :: experimental :: HashMap < int, int > * pM;
 //
 //    pM->remove(pM->begin());
+    cds :: experimental :: Array < cds :: String > strArr = { "Ana", "are", "mere" };
 
+    cds :: experimental :: __hidden :: __impl :: __forEach (
+            strArr.cbegin(),
+            strArr.cend(),
+            & cds :: String :: length
+    );
+
+    cds :: experimental :: __hidden :: __impl :: __forEach (
+            strArr.begin(),
+            strArr.end(),
+            [] ( cds :: String & e ) { e = "ana"; }
+    );
+
+//    cds :: experimental :: __hidden :: __impl :: __some (
+//            strArr.begin(),
+//            strArr.end(),
+//            2,
+//            & cds :: String :: empty
+//    );
+
+    strArr.forEach ( & cds :: String :: clear );
+
+    std :: cout << strArr << '\n';
+
+    cds :: experimental :: HashMap < cds :: String, cds :: String > hm12312;
+    hm12312.emplace ( "Ana", "name" );
+    hm12312.emplace ( "are", "verb" );
+    hm12312.emplace ("mere", "noun");
+
+    std :: cout << hm12312.hash () << '\n'
+        << ( ( ( ( cds :: hash ("are") ^ cds :: hash ( "verb" ) ) * 31 ) + ( cds :: hash ( "Ana" ) ^ cds :: hash ( "name" ) ) ) *
+        31 + ( cds :: hash ( "mere" ) ^ cds :: hash  ("noun") )) << '\n';
+
+    auto v123 = cds :: hash ( "Ana" );
 
     cds :: Function < int (int) > fact = [& fact](int n) -> int {
         if ( n == 1 ) {
@@ -410,20 +444,20 @@ int main () {
     pColl->insertAllOf(otherAsList);
     pColl->insertAllOf(otherArray);
 
-    pColl->removeIf (
+    pColl->removeThat (
             3,
             [](int){return true;}
     );
 
-    pColl->removeFirstIf (
+    pColl->removeFirstThat (
             [](int){return true;}
     );
 
-    pColl->removeLastIf (
+    pColl->removeLastThat (
             [](int){return true;}
     );
 
-    pColl->removeAllIf (
+    pColl->removeAllThat (
             [](int){return true;}
     );
 
@@ -461,12 +495,12 @@ int main () {
     (void)pColl->containsAnyOf ( * pColl );
     (void)pColl->containsAllOf ( * pColl );
     (void)pColl->containsAnyNotOf ( * pColl );
-    (void)pColl->containsAllNotOf ( * pColl );
+    (void)pColl->containsNoneOf ( * pColl );
 
     (void)pColl->containsAnyOf ( { 1, 2, 3 } );
     (void)pColl->containsAllOf ( { 1, 2, 3 } );
     (void)pColl->containsAnyNotOf ( { 1, 2, 3 } );
-    (void)pColl->containsAllNotOf ( { 1, 2, 3 } );
+    (void)pColl->containsNoneOf ( { 1, 2, 3 } );
 
     Collection < Collection < int > :: ConstIterator > * pItColl;
     (void) pColl->findThat(3, *pItColl, [](int){return true;});
@@ -533,20 +567,20 @@ int main () {
     pMutColl->insertAllOf(otherAsList);
     pMutColl->insertAllOf(otherAsList.begin(), otherAsList.end());
 
-    pMutColl->removeIf (
+    pMutColl->removeThat (
             3,
             [](int){return true;}
     );
 
-    pMutColl->removeFirstIf (
+    pMutColl->removeFirstThat (
             [](int){return true;}
     );
 
-    pMutColl->removeLastIf (
+    pMutColl->removeLastThat (
             [](int){return true;}
     );
 
-    pMutColl->removeAllIf (
+    pMutColl->removeAllThat (
             [](int){return true;}
     );
 
@@ -584,12 +618,12 @@ int main () {
     (void)pMutColl->containsAnyOf ( * pMutColl );
     (void)pMutColl->containsAllOf ( * pMutColl );
     (void)pMutColl->containsAnyNotOf ( * pMutColl );
-    (void)pMutColl->containsAllNotOf ( * pMutColl );
+    (void)pMutColl->containsNoneOf ( * pMutColl );
 
     (void)pMutColl->containsAnyOf ( { 1, 2, 3 } );
     (void)pMutColl->containsAllOf ( { 1, 2, 3 } );
     (void)pMutColl->containsAnyNotOf ( { 1, 2, 3 } );
-    (void)pMutColl->containsAllNotOf ( { 1, 2, 3 } );
+    (void)pMutColl->containsNoneOf ( { 1, 2, 3 } );
 
     (void) pMutColl->findThat(3, *pItColl, [](int){return true;});
     (void) pMutColl->findFirstThat([](int){return true;});
