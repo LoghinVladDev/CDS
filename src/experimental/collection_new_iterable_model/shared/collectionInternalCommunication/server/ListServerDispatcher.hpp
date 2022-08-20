@@ -26,8 +26,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ServerType                     is the type of the server interface type (i.e. Array)
                  * @tparam __ServiceType                    is the type of the implementation service (i.e. shared/__Array)
                  * @tparam __ElementType                    is the enclosed element (i.e. int in Array \< int \>)
+                 * @tparam __AbstractIteratorType           is the abstract iterator type used by the remove, insert before/after functions. Can be same as iterator type, if accepting only iterator
+                 * @tparam __AbstractConstIteratorType      is the abstract const iterator type used by the remove const, insert before/after const functions. Can be same as const iterator type, if accepting only const iterator
                  * @tparam __IteratorType                   is the iterator type returned by begin & end (i.e. __a_Iterator for shared/__Array)
                  * @tparam __ConstIteratorType              is the const iterator type returned by begin & end (i.e. __a_ConstIterator for shared/__Array)
+                 * @tparam __ReverseIteratorType            is the reverse iterator type returned by rbegin & rend (i.e. __a_ReverseIterator for shared/__Array)
+                 * @tparam __ConstReverseIteratorType       is the const reverse iterator type returned by rbegin & rend (i.e. __a_ConstReverseIterator for shared/__Array)
+                 * @tparam __beginFunction                  is the function of the implementation used to obtain a begin iterator (i.e. shared/__Array :: __a_begin)
+                 * @tparam __beginFunction                  is the function of the implementation used to obtain an end iterator (i.e. shared/__Array :: __a_end)
+                 * @tparam __cbeginFunction                 is the function of the implementation used to obtain a begin const iterator (i.e. shared/__Array :: __a_cbegin)
+                 * @tparam __cendFunction                   is the function of the implementation used to obtain an end const iterator (i.e. shared/__Array :: __a_cbegin)
+                 * @tparam __rbeginFunction                 is the function of the implementation used to obtain a reverse begin iterator (i.e. shared/__Array :: __a_rbegin)
+                 * @tparam __rendFunction                   is the function of the implementation used to obtain an reverse end iterator (i.e. shared/__Array :: __a_rend)
+                 * @tparam __crbeginFunction                is the function of the implementation used to obtain a reverse begin const iterator (i.e. shared/__Array :: __a_crbegin)
+                 * @tparam __crendFunction                  is the function of the implementation used to obtain an reverse end const iterator (i.e. shared/__Array :: __a_crbegin)
                  * @tparam __newAddressFunction             is the function of the implementation used to obtain a new element address (i.e. shared/__Array :: __a_newAddress)
                  * @tparam __newFrontFunction               is the function of the implementation used to obtain a new element address at the front of the list (i.e. shared/__Array :: __a_newFront)
                  * @tparam __newBackFunction                is the function of the implementation used to obtain a new element address at the end of the list (i.e. shared/__Array :: __a_newBack)
@@ -104,27 +116,91 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         > {
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __rbeginFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __rendFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __rend () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __crbeginFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __crendFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __rbeginFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rbeginLocal () noexcept -> __ReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __rendFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rendLocal () noexcept -> __ReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __crbeginFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard constexpr auto __crbeginLocal () const noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __crendFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard constexpr auto __crendLocal () const noexcept -> __ConstReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:

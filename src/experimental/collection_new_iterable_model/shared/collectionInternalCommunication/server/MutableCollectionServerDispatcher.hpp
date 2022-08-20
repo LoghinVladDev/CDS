@@ -69,15 +69,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         > {
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __beginFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __endFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __beginFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __endFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:

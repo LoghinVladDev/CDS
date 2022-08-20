@@ -21,12 +21,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      as an interface to its' implementation class. This dispatcher interface contains the function
                  *      required only for the Collection used handlers.
                  *
-                 * @tparam __ServerType             is the type of the server interface type (i.e. Array)
-                 * @tparam __ServiceType            is the type of the implementation service (i.e. shared/__Array)
-                 * @tparam __ElementType            is the enclosed element (i.e. int in Array \< int \>)
-                 * @tparam __ConstIteratorType      is the const iterator type returned by begin & end (i.e. __a_ConstIterator for shared/__Array)
-                 * @tparam __newAddressFunction     is the function of the implementation used to obtain a new element address (i.e. shared/__Array :: __a_newAddress)
-                 * @tparam __removeConstFunction    is the function of the implementation used to remove a const iterator (i.e. shared/__Array :: __a_removeConstIterator)
+                 * @tparam __ServerType                 is the type of the server interface type (i.e. Array)
+                 * @tparam __ServiceType                is the type of the implementation service (i.e. shared/__Array)
+                 * @tparam __ElementType                is the enclosed element (i.e. int in Array \< int \>)
+                 * @tparam __AbstractConstIteratorType  is the abstract const iterator type used by the remove const function. Can be same as const iterator type, if accepting only const iterator
+                 * @tparam __ConstIteratorType          is the const iterator type returned by begin & end (i.e. __a_ConstIterator for shared/__Array)
+                 * @tparam __cbeginFunction             is the function of the implementation used to obtain a begin const iterator (i.e. shared/__Array :: __a_cbegin)
+                 * @tparam __cendFunction               is the function of the implementation used to obtain an end const iterator (i.e. shared/__Array :: __a_cbegin)
+                 * @tparam __newAddressFunction         is the function of the implementation used to obtain a new element address (i.e. shared/__Array :: __a_newAddress)
+                 * @tparam __removeConstFunction        is the function of the implementation used to remove a const iterator (i.e. shared/__Array :: __a_removeConstIterator)
                  *
                  * @test All Tests involving Collections apply
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
@@ -47,15 +50,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > class __CollectionServerDispatcher {                                                                                          /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __cbeginFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __cbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __cendFunction to construct a new delegate iterator using the received iterator
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+                     * @protected
+                     */
                     __CDS_NoDiscard auto __cend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __cbeginFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> __ConstIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __cendFunction to return the received iterator. Used by local clients
+                     * @exceptsafe
+                     * @return __ConstIteratorType = the const iterator returned by the function
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
                     __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> __ConstIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:

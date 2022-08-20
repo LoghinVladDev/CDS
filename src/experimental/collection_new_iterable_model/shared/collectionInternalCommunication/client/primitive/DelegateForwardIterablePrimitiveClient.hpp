@@ -10,14 +10,30 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
+                /**
+                 * @class pre-declaration of Bi-Directional Abstract Iterator Wrapper, to be used in Conditional
+                 */
                 template < typename >
                 class __BidirectionalDelegateWrapperIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
 
+                /**
+                 * @class pre-declaration of Uni-Directional Abstract Iterator Wrapper, to be used in Conditional
+                 */
                 template < typename >
                 class __ForwardDelegateWrapperIterator; /* NOLINT(bugprone-reserved-identifier) */
 
 
+                /**
+                 * @class Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ElementType is the type of elements contained into the Object
+                 * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
                 template <
                         typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier) */
                         typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
@@ -25,10 +41,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > class __DelegateForwardIterablePrimitiveClient {  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    /**
+                     * @typedef internal alias representing the __ElementType template parameter
+                     * @protected
+                     */
                     using __dfic_ElementType    = /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType;
 
                 public:
+                    /**
+                     * @typedef alias for chosen Wrapper Iterator, to be used in implementor class to represent the Iterator type.
+                     * @public
+                     */
                     using Iterator              = /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: Conditional <
                                     __bidirectional,
@@ -37,25 +61,66 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             >;
 
                 public:
+                    /**
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
+                     * @exceptsafe
+                     * @return Iterator = Wrapper for the received forward, mutable, begin iterator
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @public
+                     */
                     __CDS_NoDiscard auto begin () noexcept -> Iterator;
 
                 public:
+                    /**
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
+                     * @exceptsafe
+                     * @return Iterator = Wrapper for the received forward, mutable, end iterator
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @public
+                     */
                     __CDS_NoDiscard auto end () noexcept -> Iterator;
                 };
 
 
+                /**
+                 * @class Interface for creating Local Forward Iterator requests.
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __IteratorType is the type of the iterator returned by the begin / end functions
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
                 template <
                         typename __ReceiverType,                        /* NOLINT(bugprone-reserved-identifier) */
                         typename __IteratorType                         /* NOLINT(bugprone-reserved-identifier) */
                 > class __LocalDelegateForwardIterablePrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
+                    /**
+                     * @typedef alias for chosen iterator.
+                     * @public
+                     */
                     using Iterator = __IteratorType;
 
                 public:
+                    /**
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
+                     * @exceptsafe
+                     * @return Iterator = begin iterator
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @public
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator;
 
                 public:
+                    /**
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
+                     * @exceptsafe
+                     * @return Iterator = end iterator
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @public
+                     */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator;
                 };
 
