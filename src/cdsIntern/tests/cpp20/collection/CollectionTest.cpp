@@ -9,6 +9,96 @@
 #include <CDS/experimental/HashSet>
 #include <CDS/experimental/HashMap>
 
+/* CollectionTestGroup-RemoveAbsIt-Cpp20 : CTG-00350-RAIT-CPP20. */
+template <
+        typename __MemberType
+> auto collectionTestGroupRemoveAbstractIterator (
+        cds :: experimental :: Collection < __MemberType > & collection,
+        Test                                               * pTestLib,
+        cds :: experimental :: Collection < __MemberType > const & equivAfter1,
+        cds :: experimental :: Collection < __MemberType > const & equivAfter2,
+        cds :: experimental :: Collection < __MemberType > const & equivAfter3,
+//        cds :: experimental :: Collection < __MemberType > const & equivAfter3,                                   N/A with Collection
+//        typename cds :: experimental :: Collection < __MemberType > :: ConstIterator const & toRemoveBeforeFront,
+        cds :: experimental :: Collection < __MemberType > const & equivAfter5,
+        cds :: experimental :: Collection < __MemberType > const & equivAfter6
+) -> bool {
+
+    pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
+
+    /* CollectionTestCase-RemoveAbsIt-removeAtFront-CPP20 : CTC-00351-RAIT-removeAtFront-CPP20 */
+    auto       toRemoveAtFront = collection.begin();
+    auto const resultToRemoveAtFront = collection.remove( toRemoveAtFront );
+    auto const expectedResultToRemoveAtFront = true;
+    pTestLib->log ( "object after 'removeAtFront' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter1.toString().cStr() );
+    if ( resultToRemoveAtFront != expectedResultToRemoveAtFront || ! collection.equals ( equivAfter1 ) ) {
+        pTestLib->logError( "'CTC-00351-RAIT-removeAtFront-CPP20' failed" );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00351-RAIT-removeAtFront-CPP20' OK" );
+    }
+
+    /* CollectionTestCase-RemoveAbsIt-removeInBounds-CPP20 : CTC-00352-RAIT-removeInBounds-CPP20 */
+    auto       toRemoveInBounds = collection.begin();
+    for ( uint32 i = 0; i * 2 < collection.size(); ++ i ) {
+        ++ toRemoveInBounds;
+    }
+
+    auto const resultToRemoveAtInBounds = collection.remove( toRemoveInBounds );
+    auto const expectedResultToRemoveAtInBounds = true;
+    pTestLib->log ( "object after 'removeInBounds' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter2.toString().cStr() );
+    if ( resultToRemoveAtInBounds != expectedResultToRemoveAtInBounds || ! collection.equals ( equivAfter2 ) ) {
+        pTestLib->logError( "'CTC-00352-RAIT-removeInBounds-CPP20' failed" );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00352-RAIT-removeInBounds-CPP20' OK" );
+    }
+
+    /* CollectionTestCase-RemoveAbsIt-removeAtEnd-CPP20 : CTC-00353-RAIT-removeAtEnd-CPP20 */
+    auto       toRemoveAtEnd = collection.begin();
+    for ( uint32 i = 0; i + 1 < collection.size(); ++ i ) {
+        ++ toRemoveAtEnd;
+    }
+
+    auto const resultToRemoveAtEnd = collection.remove( toRemoveAtEnd );
+    auto const expectedResultToRemoveAtEnd = true;
+    pTestLib->log ( "object after 'removeAtEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter3.toString().cStr() );
+    if ( resultToRemoveAtEnd != expectedResultToRemoveAtEnd || ! collection.equals ( equivAfter3 ) ) {
+        pTestLib->logError( "'CTC-00353-RAIT-removeAtEnd-CPP20' failed" );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00353-RAIT-removeAtEnd-CPP20' OK" );
+    }
+
+    /* CollectionTestCase-RemoveAbsIt-removeBeforeFront-CPP20 : CTC-00354-RAIT-removeBeforeFront-CPP20 : N/A */
+
+    /* CollectionTestCase-RemoveAbsIt-removeAfterEnd-CPP20 : CTC-00355-RAIT-removeAfterEnd-CPP20 */
+    auto       toRemoveAfterBack = collection.end();
+    auto const resultToRemoveAfterEnd = collection.remove( toRemoveAfterBack );
+    auto const expectedResultToRemoveAfterEnd = false;
+    pTestLib->log ( "object after 'removeAfterEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
+    if ( resultToRemoveAfterEnd != expectedResultToRemoveAfterEnd || ! collection.equals ( equivAfter5 ) ) {
+        pTestLib->logError( "'CTC-00355-RAIT-removeAfterEnd-CPP20' failed" );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00355-RAIT-removeAfterEnd-CPP20' OK" );
+    }
+
+    /* CollectionTestCase-RemoveAbsIt-removeFromOther-CPP20 : CTC-00355-RAIT-removeFromOther-CPP20 */
+    auto toRemoveFromSimilar = equivAfter2.begin();
+    auto const resultToRemoveFromSimilar = collection.remove( toRemoveFromSimilar );
+    auto const expectedResultToRemoveFromSimilar = false;
+    pTestLib->log ( "object after 'removeFromOther' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
+    if ( resultToRemoveFromSimilar != expectedResultToRemoveFromSimilar || ! collection.equals ( equivAfter5 ) ) {
+        pTestLib->logError( "'CTC-00356-RAIT-removeFromOther-CPP20' failed" );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00356-RAIT-removeFromOther-CPP20' OK" );
+    }
+
+    return true;
+}
+
 /* CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20. Tests CTC-00003 to CTC-00016 */
 template <
         typename __MemberType // NOLINT(bugprone-reserved-identifier)
@@ -5584,6 +5674,190 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* moreCommon= */       moreCommonList,
                 /* allCommon= */        allCommonList,
                 /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntArray", [this, & allOk]{
+
+        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < int > & underTestColl = underTest;
+
+        cds :: experimental :: Array < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Array < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: Array < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: Array < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: Array < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntLinkedList", [this, & allOk]{
+
+        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < int > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedList < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: LinkedList < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: LinkedList < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedList < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedList < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntHashSet", [this, & allOk]{
+
+        cds :: experimental :: HashSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < int > & underTestColl = underTest;
+
+        cds :: experimental :: HashSet < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: HashSet < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: HashSet < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: HashSet < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: HashSet < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntToIntHashMap", [this, & allOk]{
+
+        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: Collection < MapEntry < int, int > > & underTestColl = underTest;
+
+        cds :: experimental :: HashMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: HashMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: HashMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: HashMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: HashMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringArray", [this, & allOk]{
+
+        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < String > & underTestColl = underTest;
+
+        cds :: experimental :: Array < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Array < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: Array < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: Array < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: Array < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringLinkedList", [this, & allOk]{
+
+        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < String > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedList < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: LinkedList < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: LinkedList < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedList < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedList < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringHashSet", [this, & allOk]{
+
+        cds :: experimental :: HashSet < String > underTest = { 4, 5, 6, 7, 8, 9, 1, 2, 3 }; /// by hash order
+        cds :: experimental :: Collection < String > & underTestColl = underTest;
+
+        cds :: experimental :: HashSet < String > afterFrontRemove = { 5, 6, 7, 8, 9, 1, 2, 3 };
+        cds :: experimental :: HashSet < String > afterMidRemove = { 5, 6, 7, 8, 1, 2, 3 };
+        cds :: experimental :: HashSet < String > afterBackRemove = { 5, 6, 7, 8, 1, 2 };
+        cds :: experimental :: HashSet < String > afterAfterBackRemove = { 5, 6, 7, 8, 1, 2 };
+        cds :: experimental :: HashSet < String > afterOtherRemove = { 5, 6, 7, 8, 1, 2 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringToStringHashMap", [this, & allOk]{
+
+        cds :: experimental :: HashMap < String, String > underTest = { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        cds :: experimental :: Collection < MapEntry < String, String > > & underTestColl = underTest;
+
+        cds :: experimental :: HashMap < String, String > afterFrontRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3},  };
+        cds :: experimental :: HashMap < String, String > afterMidRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2}, {3, 3} };
+        cds :: experimental :: HashMap < String, String > afterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+        cds :: experimental :: HashMap < String, String > afterAfterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+        cds :: experimental :: HashMap < String, String > afterOtherRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
         );
     });
 

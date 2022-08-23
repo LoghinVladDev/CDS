@@ -20,6 +20,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractConstIterator const & iterator
                 ) noexcept -> bool {
 
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) ) {
+                        return false;
+                    }
+
                     return (
                             reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
@@ -61,6 +65,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             );
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        if ( ! pIterators [ index ].of ( reinterpret_cast < __ReceiverType const * > ( this ) ) ) {
+                            continue;
+                        }
+
                         if ( ( reinterpret_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate->iterator() ) ) {
                             removedCount ++;
                         }

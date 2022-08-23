@@ -936,6 +936,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ht_Iterator const & iterator
                 ) noexcept -> bool {
 
+                    if (
+                            iterator._bucketIndex >= iterator._bucketCount ||
+                            iterator._pListArray == nullptr ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode
+                    ) {
+
+                        return false;
+                    }
+
                     return this->__ht_remove (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode,
@@ -963,6 +972,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > :: __ht_removeIteratorConst (
                         __ht_ConstIterator const & iterator
                 ) noexcept -> bool {
+
+                    if (
+                            iterator._bucketIndex >= iterator._bucketCount ||
+                            iterator._pListArray == nullptr ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode
+                    ) {
+
+                        return false;
+                    }
 
                     return this->__ht_remove (
                             iterator._pPreviousNode,
