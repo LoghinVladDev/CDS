@@ -25,7 +25,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 /**
-                 * @class Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
+                 * @interface Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
                  * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false

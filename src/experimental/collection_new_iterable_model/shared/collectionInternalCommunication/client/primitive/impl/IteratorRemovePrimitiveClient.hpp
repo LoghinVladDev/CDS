@@ -1,18 +1,18 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
-#ifndef __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__
+#ifndef __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ 
+#define __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -20,10 +20,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractIterator const & iterator
                 ) noexcept -> bool {
 
+                    /* Since iterator is abstract, it is compatible with Collection Ownership -> has 'of' function. Check for ownership. If not owned, removal unsuccessful */
                     if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) ) {
                         return false;
                     }
 
+                    /* Acquire the member function to call from client and call it with extracted delegate as parameter, return value received from the call */
                     return (
                             reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
@@ -42,8 +44,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -52,7 +54,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Size                     iteratorCount
                 ) noexcept -> Size {
 
+                    /* keep count of the number of successful removals */
                     Size removedCount   = 0ULL;
+
+                    /* acquire the function pointer of the remove function */
                     auto pfnRemove      =
                             reinterpret_cast <
                                     bool ( __ReceiverType :: * ) (
@@ -64,12 +69,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             );
 
+                    /* parse received iterator array */
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
+                        /* Since iterator is abstract, it is compatible with Collection Ownership -> has 'of' function. Check for ownership. If not owned, move on to the next */
                         if ( ! pIterators [ index ].of ( reinterpret_cast < __ReceiverType const * > ( this ) ) ) {
                             continue;
                         }
 
+                        /* call member function with extracted delegate as parameter. If removal successful, increase counter */
                         if ( ( reinterpret_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate->iterator() ) ) {
                             removedCount ++;
                         }
@@ -80,9 +88,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -91,14 +99,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Iterator const & iterator
                 ) noexcept -> bool {
 
+                    /* local client, directly call the dispatcher-generated function for const removal */
                     return reinterpret_cast < __ReceiverType * > ( this )->__remove ( & iterator );
                 }
 
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -108,10 +117,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Size             iteratorCount
                 ) noexcept -> Size {
 
+                    /* keep count of the number of successful removals */
                     Size removedCount   = 0ULL;
+
+                    /* acquire the function pointer of the remove function. Local client -> acquire dispatcher-generated function */
                     auto pfnRemove      = & __ReceiverType :: __remove;
 
+                    /* parse received iterator array */
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        /* call member function. If removal successful, increase counter */
                         if ( ( reinterpret_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( & pIterators [ index ] ) ) {
                             removedCount ++;
                         }
@@ -125,4 +140,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ */
