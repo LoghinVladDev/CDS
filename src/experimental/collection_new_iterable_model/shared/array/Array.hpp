@@ -55,12 +55,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     constexpr __Array () noexcept;
 
                 protected:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyConstructible < __TElementType > ()
-                            > = 0
-                    > __Array ( /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
+                    __Array ( /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
                             __Array const & array
                     ) noexcept;
 

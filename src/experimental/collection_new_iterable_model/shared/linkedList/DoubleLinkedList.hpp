@@ -58,12 +58,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     constexpr __DoubleLinkedList () noexcept; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    template <
-                            typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyConstructible < __TElementType > ()
-                            > = 0
-                    > __DoubleLinkedList (                              /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
+                    __DoubleLinkedList (                              /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
                             __DoubleLinkedList const & list
                     ) noexcept;
 

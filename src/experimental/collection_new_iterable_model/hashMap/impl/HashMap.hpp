@@ -144,11 +144,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline HashMap <
                 __KeyType,
                 __ValueType,
@@ -159,7 +154,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ),
-                Implementation ( map ) {
+                Implementation (
+                        map,
+                        & cds :: experimental :: __hidden :: __impl :: __hashMapCopyConstructor < __KeyType, __ValueType >
+                ) {
 
         }
 
@@ -380,11 +378,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
@@ -397,9 +390,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this-> template __ht_copy <
+            this-> __ht_copy (
+                    map,
                     & cds :: experimental :: __hidden :: __impl :: __hashMapCopyConstructor < __KeyType, __ValueType >
-            > ( map );
+            );
 
             return * this;
         }

@@ -180,12 +180,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr HashSet () noexcept;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > HashSet ( /* NOLINT(google-explicit-constructor) */
+            HashSet ( /* NOLINT(google-explicit-constructor) */
                     HashSet const & set
             ) noexcept;
 
@@ -265,12 +260,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ~HashSet () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     HashSet const & set
             ) noexcept -> HashSet &;
 

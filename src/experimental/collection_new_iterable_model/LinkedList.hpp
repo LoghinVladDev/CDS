@@ -363,12 +363,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr LinkedList () noexcept;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > LinkedList ( /* NOLINT(google-explicit-constructor) */
+            LinkedList ( /* NOLINT(google-explicit-constructor) */
                     LinkedList const & list
             ) noexcept;
 
@@ -413,12 +408,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ~LinkedList () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     LinkedList const & list
             ) noexcept -> LinkedList &;
 

@@ -31,11 +31,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > template <
-                        typename                                        __TElementType, /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TElementType > ()
-                        >
                 > __CDS_OptimalInline __Array <
                         __ElementType,
                         __equals
@@ -1163,7 +1158,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( this->_pData == nullptr ) {
                         this->__a_init();
                     } else {
-                        this->__a_clear();
+                        this->__a_clear(false);
                     }
 
                     this->__a_copyCleared ( array );
@@ -1205,7 +1200,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     this->_pData->_pBack                = this->_pData->_pBuffer + requiredSize;
 
                     for ( Size index = 0ULL; index < requiredSize; ++ index ) {
-                        new ( this->_pData->_pFront + index ) __ElementType ( array._pData->_pFront + index );
+                        new ( this->_pData->_pFront + index ) __ElementType ( * array._pData->_pFront + index );
                     }
                 }
 

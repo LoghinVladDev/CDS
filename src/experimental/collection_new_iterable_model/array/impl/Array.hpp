@@ -31,12 +31,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline Array < __ElementType > :: Array (
+        __CDS_OptimalInline Array < __ElementType > :: Array (
                 Array const & array
         ) noexcept :
                 Implementation ( array ) {
@@ -146,12 +141,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline auto Array < __ElementType > :: operator = (
+        __CDS_OptimalInline auto Array < __ElementType > :: operator = (
                 Array const & array
         ) noexcept -> Array & {
 

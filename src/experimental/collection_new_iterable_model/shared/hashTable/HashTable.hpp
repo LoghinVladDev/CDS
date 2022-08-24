@@ -85,9 +85,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > __CDS_Implicit __HashTable ( /* NOLINT(google-explicit-constructor) */
-                            __HashTable const & hashTable
+                            typename __CopyFunction /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_Implicit __HashTable (  /* NOLINT(google-explicit-constructor) */
+                            __HashTable     const & hashTable,
+                            __CopyFunction  const & copyFunction
                     ) noexcept;
 
                 protected:
@@ -209,16 +210,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __ht_copy (                                                          /* NOLINT(bugprone-reserved-identifier) */
-                            __HashTable const & table
+                            typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier) */
+                            __HashTable     const & table,
+                            __CopyFunction  const & copyFunction
                     ) noexcept -> void;
 
                 protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __ht_copyCleared (                                                   /* NOLINT(bugprone-reserved-identifier) */
-                            __HashTable const & table
+                            typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ht_copyCleared (           /* NOLINT(bugprone-reserved-identifier) */
+                            __HashTable     const & table,
+                            __CopyFunction  const & copyFunction
                     ) noexcept -> void;
 
                 protected:

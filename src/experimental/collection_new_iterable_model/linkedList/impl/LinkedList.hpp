@@ -31,12 +31,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline LinkedList < __ElementType > :: LinkedList (
+        __CDS_OptimalInline LinkedList < __ElementType > :: LinkedList (
                 LinkedList const & list
         ) noexcept :
                 Implementation ( list ) {
@@ -114,12 +109,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
                 LinkedList const & list
         ) noexcept -> LinkedList & {
 

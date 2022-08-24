@@ -49,11 +49,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > template <
-                        typename __TElementType,                                    /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TElementType > ()
-                        >
                 > __CDS_OptimalInline __DoubleLinkedList <
                         __ElementType,
                         __equals
@@ -1116,6 +1111,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         }
 
                         this->_pBack = pNewNode;
+                        pOtherHead = pOtherHead->_pNext;
                     }
 
                     this->_size = list._size;

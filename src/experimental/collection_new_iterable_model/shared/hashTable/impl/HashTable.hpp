@@ -112,7 +112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline __HashTable <
                         __ElementType,
                         __KeyType,
@@ -122,10 +122,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyComparator,
                         __nodeDestructor
                 > :: __HashTable (
-                        __HashTable const & hashTable
+                        __HashTable     const & hashTable,
+                        __CopyFunction  const & copyFunction
                 ) noexcept {
 
-                    this->__ht_copyCleared < __copy > ( hashTable );
+                    this->__ht_copyCleared ( hashTable, copyFunction );
                 }
 
 
@@ -999,7 +1000,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
                         __KeyType,
@@ -1009,7 +1010,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyComparator,
                         __nodeDestructor
                 > :: __ht_copy (
-                        __HashTable const & table
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
                 ) noexcept -> void {
 
                     if ( this == & table ) {
@@ -1017,7 +1019,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     this->__ht_clear();
-                    this->__ht_copyCleared < __copy > ( table );
+                    this->__ht_copyCleared ( table, copyFunction );
                 }
 
 
@@ -1030,7 +1032,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
                 > auto __HashTable <
                         __ElementType,
                         __KeyType,
@@ -1040,7 +1042,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyComparator,
                         __nodeDestructor
                 > :: __ht_copyCleared (
-                        __HashTable const & table
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
                 ) noexcept -> void {
 
                     if ( table.__ht_empty() ) {
@@ -1061,7 +1064,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                             auto pNewNode       = this->__ht_allocateNode ();
                             pNewNode->_pNext    = nullptr;
-                            __copy ( pNewNode->_data, pTableHead->_data );
+                            copyFunction ( pNewNode->_data, pTableHead->_data );
 
                             pTableHead = pTableHead->_pNext;
 

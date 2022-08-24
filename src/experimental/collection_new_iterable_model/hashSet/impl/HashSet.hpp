@@ -48,11 +48,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline HashSet <
                 __ElementType,
                 __Hasher
@@ -60,9 +55,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 HashSet const & set
         ) noexcept {
 
-            this-> template __ht_copyCleared <
+            this->__ht_copyCleared (
+                    set,
                     & cds :: experimental :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
-            > ( set );
+            );
         }
 
 
@@ -235,11 +231,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline auto HashSet <
                 __ElementType,
                 __Hasher
@@ -251,9 +242,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this-> template __ht_copy <
+            this->__ht_copy (
+                    set,
                     & cds :: experimental :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
-            > ( set );
+            );
 
             return * this;
         }

@@ -365,12 +365,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr Array () noexcept;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > Array ( /* NOLINT(google-explicit-constructor) */
+            Array ( /* NOLINT(google-explicit-constructor) */
                     Array const & array
             ) noexcept;
 
@@ -436,12 +431,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ~Array () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     Array const & array
             ) noexcept -> Array &;
 

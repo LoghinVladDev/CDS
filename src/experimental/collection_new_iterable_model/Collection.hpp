@@ -474,8 +474,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using ContainsOfInitializerListClient :: containsNoneOf;
 
-
-        public: using ConstIteratorRemoveClient :: remove;
+        public:
+            /**
+             * @inherit remove ( ConstIterator ) call, inherited from ConstIteratorPrimitiveClient interface
+             * @test Suite: CTS-00001, Group: CTG-00350-RAIT, Test Cases: {
+             *      CTC-00351-RAIT-removeAtFront,
+             *      CTC-00352-RAIT-removeInBounds,
+             *      CTC-00353-RAIT-removeAtEnd,
+             *      CTC-00355-RAIT-removeBeforeFront,
+             *      CTC-00356-RAIT-removeFromOther
+             * }
+             * @public
+             */
+            using ConstIteratorRemoveClient :: remove;
 
         public: using RemoveByClient :: removeThat;
         public: using RemoveByClient :: removeFirstThat;

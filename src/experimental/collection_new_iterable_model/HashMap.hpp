@@ -277,12 +277,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr HashMap () noexcept;
 
         public:
-            template <
-                    typename __TElementType = ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > HashMap ( /* NOLINT(google-explicit-constructor) */
+            HashMap ( /* NOLINT(google-explicit-constructor) */
                     HashMap const & map
             ) noexcept;
 
@@ -369,12 +364,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ~HashMap () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     HashMap const & map
             ) noexcept -> HashMap &;
 
