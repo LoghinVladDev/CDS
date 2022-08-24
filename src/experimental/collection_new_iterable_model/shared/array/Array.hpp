@@ -219,6 +219,38 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     /**
+                     * @brief Function used to remove multiple elements at a given number of iterators
+                     * @param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to iterators
+                     * @param [in] iteratorArrayCount : Size = number of iterators in the given array
+                     * @exceptsafe
+                     * @return Size = number of removed elements
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    auto __a_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                            AbstractAddressIterator < __ElementType >   const * const * ppIterators,
+                            Size                                                        iteratorArrayCount
+                    ) noexcept -> Size;
+
+                protected:
+                    /**
+                     * @brief Function used to remove multiple elements at a given number of const iterators
+                     * @param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to const iterators
+                     * @param [in] iteratorArrayCount : Size = number of iterators in the given array
+                     * @exceptsafe
+                     * @return Size = number of removed elements
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    auto __a_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                            AbstractAddressIterator < __ElementType const > const * const * ppIterators,
+                            Size                                                            iteratorArrayCount
+                    ) noexcept -> Size;
+
+                protected:
+                    /**
                      * @brief Function used to acquire an address to the element located at given index
                      * @param [in] index : Index = index of the element to acquire the address of
                      * @exceptsafe
@@ -768,8 +800,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 & __Array < __ElementType, __equals > :: __a_newAfterArrayConst,
                                 & __Array < __ElementType, __equals > :: __a_removeIterator,
                                 & __Array < __ElementType, __equals > :: __a_removeConstIterator,
-                                nullptr,
-                                nullptr
+                                & __Array < __ElementType, __equals > :: __a_removeIteratorArray,
+                                & __Array < __ElementType, __equals > :: __a_removeConstIteratorArray
                         > {};
 
             }

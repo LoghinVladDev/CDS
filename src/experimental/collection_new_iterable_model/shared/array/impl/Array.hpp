@@ -1081,6 +1081,160 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_removeIteratorArray (
+                        AbstractAddressIterator < __ElementType >   const * const * ppIterators,
+                        Size                                                        iteratorArrayCount
+                ) noexcept -> Size {
+
+                    auto const size = this->__a_size();
+                    if ( size == 0ULL ) {
+                        return 0ULL;
+                    }
+
+                    if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
+                        return this->__a_removeIterator ( * ppIterators [ 0ULL ] );
+                    }
+
+                    Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
+                        this->_pData->_frontCapacity        = 0ULL;
+                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, size );
+                        this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                        this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
+                        newFrontOffset                      = 0ULL;
+                    }
+
+                    auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                            this->_pData->_frontCapacity + this->_pData->_backCapacity
+                    );
+
+                    auto pNewFront  = pNewBuffer + newFrontOffset;
+                    auto pNewBack   = pNewFront;
+
+                    while ( this->_pData->_pFront != this->_pData->_pBack ) {
+
+                        auto matchFound = false;
+                        for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
+
+                            if ( ppIterators [ index ] == nullptr ) {
+                                continue;
+                            }
+
+                            if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
+                                this->_pData->_pFront->~__ElementType ();
+                                matchFound = true;
+                                break;
+                            }
+                        }
+
+                        if ( ! matchFound ) {
+                            (void) std :: memcpy (
+                                    reinterpret_cast < void * > ( pNewBack ++ ),
+                                    reinterpret_cast < void const * > ( this->_pData->_pFront ),
+                                    sizeof ( __ElementType )
+                            );
+                        }
+
+                        ++ this->_pData->_pFront;
+                    }
+
+                    this->_pData->_pFront   = pNewFront;
+                    this->_pData->_pBack    = pNewBack;
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                            cds :: exchange (
+                                    this->_pData->_pBuffer,
+                                    pNewBuffer
+                            )
+                    );
+
+                    return size - ( this->_pData->_pBack - this->_pData->_pFront );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_removeConstIteratorArray (
+                        AbstractAddressIterator < __ElementType const > const * const * ppIterators,
+                        Size                                                            iteratorArrayCount
+                ) noexcept -> Size {
+
+                    auto const size = this->__a_size();
+                    if ( size == 0ULL ) {
+                        return 0ULL;
+                    }
+
+                    if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
+                        return this->__a_removeConstIterator ( * ppIterators [ 0ULL ] );
+                    }
+
+                    Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
+                        this->_pData->_frontCapacity        = 0ULL;
+                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, size );
+                        this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                        this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
+                        newFrontOffset                      = 0ULL;
+                    }
+
+                    auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                            this->_pData->_frontCapacity + this->_pData->_backCapacity
+                    );
+
+                    auto pNewFront  = pNewBuffer + newFrontOffset;
+                    auto pNewBack   = pNewFront;
+
+                    while ( this->_pData->_pFront != this->_pData->_pBack ) {
+
+                        auto matchFound = false;
+                        for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
+
+                            if ( ppIterators [ index ] == nullptr ) {
+                                continue;
+                            }
+
+                            if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
+                                this->_pData->_pFront->~__ElementType ();
+                                matchFound = true;
+                                break;
+                            }
+                        }
+
+                        if ( ! matchFound ) {
+                            (void) std :: memcpy (
+                                    reinterpret_cast < void * > ( pNewBack ++ ),
+                                    reinterpret_cast < void const * > ( this->_pData->_pFront ),
+                                    sizeof ( __ElementType )
+                            );
+                        }
+
+                        ++ this->_pData->_pFront;
+                    }
+
+                    this->_pData->_pFront   = pNewFront;
+                    this->_pData->_pBack    = pNewBack;
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                            cds :: exchange (
+                                    this->_pData->_pBuffer,
+                                    pNewBuffer
+                            )
+                    );
+
+                    return size - ( this->_pData->_pBack - this->_pData->_pFront );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
