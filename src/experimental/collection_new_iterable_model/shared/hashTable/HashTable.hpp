@@ -209,6 +209,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept -> bool;
 
                 protected:
+                    auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier) */
+                            __ht_Iterator   const * const * ppIterators,
+                            Size                            iteratorArrayCount
+                    ) noexcept -> Size;
+
+                protected:
+                    auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier) */
+                            __ht_ConstIterator  const * const * ppIterators,
+                            Size                                iteratorArrayCount
+                    ) noexcept -> Size;
+
+                protected:
                     template <
                             typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
                     > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier) */
@@ -336,7 +348,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyComparator,
                                         __nodeDestructor
                                 > :: __ht_removeIteratorConst,
-                                nullptr,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
+                                > :: __ht_removeConstIteratorArray,
                                 & __HashTable <
                                         __ElementType,
                                         __KeyType,
@@ -453,8 +473,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyComparator,
                                         __nodeDestructor
                                 > :: __ht_removeIteratorConst,
-                                nullptr,
-                                nullptr,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
+                                > :: __ht_removeIteratorArray,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
+                                > :: __ht_removeConstIteratorArray,
                                 & __HashTable <
                                         __ElementType,
                                         __KeyType,

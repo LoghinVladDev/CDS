@@ -1095,7 +1095,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
-                        return this->__a_removeIterator ( * ppIterators [ 0ULL ] );
+                        return this->__a_removeIterator ( * ppIterators [ 0ULL ] ) ? 1ULL : 0ULL;
                     }
 
                     Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
@@ -1172,7 +1172,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
-                        return this->__a_removeConstIterator ( * ppIterators [ 0ULL ] );
+                        return this->__a_removeConstIterator ( * ppIterators [ 0ULL ] ) ? 1ULL : 0ULL;
                     }
 
                     Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;

@@ -293,6 +293,60 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
+                > :: __dll_removeIteratorArray (
+                        AbstractBidirectionalNodeIterator < __ElementType > const * const * ppIterators,
+                        Size                                                                iteratorArrayCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
+
+                        if ( ppIterators [ index ] == nullptr ) {
+                            continue;
+                        }
+
+                        if ( this->__dll_removeIterator ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
+                    }
+
+                    return removedCount;
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_removeConstIteratorArray (
+                        AbstractBidirectionalNodeConstIterator < __ElementType >    const * const * ppIterators,
+                        Size                                                                        iteratorArrayCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
+
+                        if ( ppIterators [ index ] == nullptr ) {
+                            continue;
+                        }
+
+                        if ( this->__dll_removeConstIterator ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
+                    }
+
+                    return removedCount;
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
                 > :: __dll_removeAt (
                         Index index
                 ) noexcept -> void {

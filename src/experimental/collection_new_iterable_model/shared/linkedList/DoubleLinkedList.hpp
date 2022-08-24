@@ -95,19 +95,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __dll_removeBack () noexcept -> void;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __dll_removeIterator (     /* NOLINT(bugprone-reserved-identifier) */
-                            AbstractBidirectionalNodeIterator < __ElementType > const & iterator
-                    ) noexcept -> bool;
-
-                protected:
                     auto __dll_removeAt (   /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) noexcept -> void;
 
                 protected:
+                    auto __dll_removeIterator (     /* NOLINT(bugprone-reserved-identifier) */
+                            AbstractBidirectionalNodeIterator < __ElementType > const & iterator
+                    ) noexcept -> bool;
+
+                protected:
                     auto __dll_removeConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                             AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
+
+                protected:
+                    auto __dll_removeIteratorArray (     /* NOLINT(bugprone-reserved-identifier) */
+                            AbstractBidirectionalNodeIterator < __ElementType > const * const * ppIterators,
+                            Size                                                                iteratorArrayCount
+                    ) noexcept -> Size;
+
+                protected:
+                    auto __dll_removeConstIteratorArray (    /* NOLINT(bugprone-reserved-identifier) */
+                            AbstractBidirectionalNodeConstIterator < __ElementType >    const * const * ppIterators,
+                            Size                                                                        iteratorArrayCount
+                    ) noexcept -> Size;
 
                 protected:
                     __CDS_NoDiscard auto __dll_get (    /* NOLINT(bugprone-reserved-identifier) */
@@ -315,8 +327,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_newAfterArrayConst,
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeIterator,
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeConstIterator,
-                                nullptr,
-                                nullptr
+                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeIteratorArray,
+                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeConstIteratorArray
                         > {};
 
             }
