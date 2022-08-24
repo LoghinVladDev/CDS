@@ -38,6 +38,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __Array const & array
                 ) noexcept {
 
+                    /* use internal function to copy array data, since new array is cleared */
                     this->__a_copy ( array );
                 }
 
@@ -53,7 +54,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept :
                         _pData ( cds :: exchange ( array._pData, nullptr ) ) {
 
-
+                    /* move directly array data */
                 }
 
 
@@ -67,14 +68,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         bool destroyBuffer
                 ) noexcept -> void {
 
+                    /* If no data / already clear, do nothing */
                     if ( this->_pData == nullptr ) {
                         return;
                     }
 
+                    /* clear the contents of the whole array */
                     while ( this->_pData->_pFront != this->_pData->_pBack ) {
                         ( this->_pData->_pFront ++ )->~__ElementType ();
                     }
 
+                    /* If destroying buffer, destroy buffer and data contents, otherwise, just reset buffer front and back */
                     if ( destroyBuffer ) {
 
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_pData->_pBuffer );
@@ -95,6 +99,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_size () const noexcept -> Size {
 
+                    /* if data empty, size is 0. Otherwise, distance from back to front */
                     return
                             this->_pData == nullptr ?
                             0ULL                    :
@@ -112,12 +117,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Index index
                 ) noexcept -> void {
 
+                    /* acquire size for later use */
                     auto const size = this->__a_size();
 
+                    /* if empty, do nothing */
                     if ( size == 0ULL ) {
                         return;
                     }
 
+                    /* if removal of front, delete front, advance front pointer, return
+                     * if removal of back, delete back, reverse back pointer, return */
                     if ( index == 0ULL ) {
 
                         ( this->_pData->_pFront ++ )->~__ElementType ();
@@ -128,15 +137,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return;
                     }
 
+                    /* otherwise, destroy element and decide which size is easier to shift ( fewer operations ) */
                     this->_pData->_pFront [ index ].~__ElementType ();
                     auto shiftLeftSide =
                             static_cast < Size > ( index ) <
                             this->__a_size() / 2ULL;
 
+                    /* find information regarding where to move, from where to move and how many elements */
                     ElementType * pDestination  = nullptr;
                     ElementType * pSource       = nullptr;
                     Size          count         = 0ULL;
 
+                    /* if shifting left, destination is after front. source is previous front. count is determined by given index
+                     * if shifting right, destination is front + index, source is one after destination, count is size - index */
                     if ( shiftLeftSide ) {
                         pDestination = ++ this->_pData->_pFront;
                         pSource      = pDestination - 1ULL;
@@ -149,6 +162,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         -- this->_pData->_pBack;
                     }
 
+                    /* execute the move of the elements */
                     (void) std :: memmove (
                             reinterpret_cast < void * > ( pDestination ),
                             reinterpret_cast < void const * > ( pSource ),
@@ -167,6 +181,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Index index
                 ) noexcept -> ElementType * {
 
+                    /* element requested is offset 'index' from 'front' */
                     return this->_pData->_pFront + index;
                 }
 
@@ -181,6 +196,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Index index
                 ) const noexcept -> ElementType const * {
 
+                    /* element requested is offset 'index' from 'front' */
                     return this->_pData->_pFront + index;
                 }
 
@@ -193,9 +209,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_init () noexcept -> void {
 
+                    /* acquire new memory for array container and clear it */
                     this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
                     (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
 
+                    /* set future capacities */
                     this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
                     this->_pData->_backNextCapacity     = __Array :: __a_minCapacity;
                 }
@@ -209,37 +227,46 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_newFront () noexcept -> ElementType * {
 
+                    /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
                         this->__a_init();
                     }
 
+                    /* if no space available in front, enlarge front */
                     if ( this->_pData->_pFront == this->_pData->_pBuffer ) {
 
+                        /* acquire next capacity */
                         this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
 
+                        /* acquire new buffer */
                         auto pNewBuffer                     = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
                                 this->_pData->_frontNextCapacity + this->_pData->_backCapacity
                         );
 
+                        /* store current size and compute new front in new buffer */
                         auto const size                     = this->__a_size();
                         auto const pNewFront                = pNewBuffer + this->_pData->_frontNextCapacity - this->_pData->_frontCapacity;
 
+                        /* copy data from old buffer to new */
                         (void) std :: memcpy (
                                 reinterpret_cast < void * > ( pNewFront ),
                                 reinterpret_cast < void const * > ( this->_pData->_pFront ),
                                 sizeof ( __ElementType ) * size
                         );
 
+                        /* set other values. back in new buffer, front and capacities */
                         this->_pData->_pBack                = pNewFront + size;
                         this->_pData->_pFront               = pNewFront;
                         this->_pData->_frontCapacity        = this->_pData->_frontNextCapacity;
                         this->_pData->_frontNextCapacity    = this->_pData->_frontNextCapacity * 2ULL;
 
+                        /* clear old buffer and store new one */
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
                                 cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
                         );
                     }
 
+                    /* update front to allow for one more element and return address of new space */
                     return -- this->_pData->_pFront;
                 }
 
@@ -255,8 +282,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         bool                * pNewElementCreated
                 ) noexcept -> ElementType * {
 
+                    /* pReferenceElement is unused */
                     (void) pReferenceElement;
 
+                    /* element always created. return address with newBack */
                     * pNewElementCreated = true;
                     return this->__a_newBack();
                 }
@@ -270,18 +299,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_newBack () noexcept -> ElementType * {
 
+                    /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
                         this->__a_init ();
                     }
 
+                    /* if back is at end of buffer => no space */
                     if ( this->_pData->_pBack == this->_pData->_pBuffer + this->_pData->_frontCapacity + this->_pData->_backCapacity ) {
+
+                        /* compute next capacity */
                         this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
 
+                        /* reallocate buffer to greater size */
                         auto const pNewBuffer           = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
                                 this->_pData->_frontCapacity + this->_pData->_backNextCapacity
                         );
 
+                        /* reallocation could create a new buffer, so reset front and back. Also update back capacity and next capacity, and buffer */
                         this->_pData->_pFront           = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
                         this->_pData->_pBack            = pNewBuffer + ( this->_pData->_pBack - this->_pData->_pBuffer );
                         this->_pData->_backCapacity     = this->_pData->_backNextCapacity;
@@ -289,6 +324,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         this->_pData->_pBuffer          = pNewBuffer;
                     }
 
+                    /* return address to back ( as it already contained uninitialized memory space ) and increase it */
                     return this->_pData->_pBack ++;
                 }
 
@@ -304,36 +340,46 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
+                    /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
                         this->__a_init();
                     }
 
+                    /* if no space available in front, enlarge front */
                     if ( this->_pData->_pBuffer + count > this->_pData->_pFront ) {
+
+                        /* acquire next capacity */
                         this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, count + this->_pData->_frontCapacity );
 
+                        /* acquire new buffer */
                         auto pNewBuffer                     = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
                                 this->_pData->_frontNextCapacity + this->_pData->_backCapacity
                         );
 
+                        /* store current size and compute new front in new buffer */
                         auto const size                     = this->__a_size();
                         auto const pNewFront                = pNewBuffer + ( this->_pData->_frontNextCapacity - this->_pData->_frontCapacity ) + ( this->_pData->_pFront - this->_pData->_pBuffer );
 
+                        /* copy data from old buffer to new */
                         (void) std :: memcpy (
                                 reinterpret_cast < void * > ( pNewFront ),
                                 reinterpret_cast < void const * > ( this->_pData->_pFront ),
                                 sizeof ( __ElementType ) * size
                         );
 
+                        /* set other values. back in new buffer, front and capacities */
                         this->_pData->_pFront               = pNewFront;
                         this->_pData->_pBack                = pNewFront + size;
                         this->_pData->_frontCapacity        = this->_pData->_frontNextCapacity;
                         this->_pData->_frontNextCapacity    = this->_pData->_frontNextCapacity * 2ULL;
 
+                        /* clear old buffer and store new one */
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
                                 cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
                         );
                     }
 
+                    /* for a given count of elements, decrease front pointer and store address value to be returned via parameter */
                     for ( Size index = 0ULL; index < count; ++ index ) {
                         ppElements [ count - index - 1ULL ] = -- this->_pData->_pFront;
                     }
@@ -351,18 +397,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
+                    /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
                         this->__a_init();
                     }
 
+                    /* if back + count is after end of buffer => no space */
                     if ( this->_pData->_pBack + count > this->_pData->_pBuffer + this->_pData->_frontCapacity + this->_pData->_backCapacity ) {
+
+                        /* compute next capacity */
                         this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, this->_pData->_backCapacity + count );
 
+                        /* reallocate buffer to greater size */
                         auto pNewBuffer                 = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
                                 this->_pData->_frontCapacity + this->_pData->_backNextCapacity
                         );
 
+                        /* reallocation could create a new buffer, so reset front and back. Also update back capacity and next capacity, and buffer */
                         this->_pData->_pFront           = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
                         this->_pData->_pBack            = pNewBuffer + ( this->_pData->_pBack - this->_pData->_pBuffer );
                         this->_pData->_backCapacity     = this->_pData->_backNextCapacity;
@@ -370,6 +422,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         this->_pData->_pBuffer          = pNewBuffer;
                     }
 
+                    /* for a given count of elements, store the address of back ( as already uninitialized ) and increase it */
                     for ( Size index = 0ULL; index < count; ++ index ) {
                         ppElements [ index ] = this->_pData->_pBack ++;
                     }
@@ -386,19 +439,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
                         return nullptr;
                     }
 
+                    /* if address is of the first element, return new front */
                     if ( pElement == this->_pData->_pFront ) {
                         return this->__a_newFront ();
                     }
 
+                    /* if address is after the last element, return new back */
                     if ( pElement == this->_pData->_pBack ) {
                         return this->__a_newBack ();
                     }
 
+                    /* otherwise, create a new element at the index of the address in the array */
                     return this->__a_newAt ( pElement - this->_pData->_pFront );
                 }
 
@@ -413,19 +472,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
                         return nullptr;
                     }
 
+                    /* if address is of the first element, return new front */
                     if ( pElement == this->_pData->_pFront ) {
                         return this->__a_newFront ();
                     }
 
+                    /* if address is after the last element, return new back */
                     if ( pElement == this->_pData->_pBack ) {
                         return this->__a_newBack ();
                     }
 
+                    /* otherwise, create a new element at the index of the address in the array */
                     return this->__a_newAt ( pElement - this->_pData->_pFront );
                 }
 
@@ -440,15 +505,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return nullptr;
                     }
 
+                    /* if address is of the last element, return new back */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
                         return this->__a_newBack ();
                     }
 
+                    /* otherwise, create a new element at the index of the address in the array */
                     return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
@@ -463,15 +533,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return nullptr;
                     }
 
+                    /* if address is of the last element, return new back */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
                         return this->__a_newBack ();
                     }
 
+                    /* otherwise, create a new element at the index of the address in the array */
                     return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
@@ -488,24 +563,33 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
                         return false;
                     }
 
                     if ( pElement == this->_pData->_pFront ) {
+
+                        /* if address is of the first element, return new front array */
                         this->__a_newFrontArray (
                                 count,
                                 ppElements
                         );
 
                     } else if ( pElement == this->_pData->_pBack ) {
+
+                        /* if address is after the last element, return new back */
                         this->__a_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
+
+                        /* otherwise, create a new element array of elements at the index of the address in the array */
                         this->__a_newArrayAt (
                                 pElement - this->_pData->_pFront,
                                 count,
@@ -530,24 +614,33 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
                         return false;
                     }
 
                     if ( pElement == this->_pData->_pFront ) {
+
+                        /* if address is of the first element, return new front array */
                         this->__a_newFrontArray (
                                 count,
                                 ppElements
                         );
 
                     } else if ( pElement == this->_pData->_pBack ) {
+
+                        /* if address is after the last element, return new back */
                         this->__a_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
+
+                        /* otherwise, create a new element array of elements at the index of the address in the array */
                         this->__a_newArrayAt (
                                 pElement - this->_pData->_pFront,
                                 count,
@@ -571,18 +664,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return false;
                     }
 
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
+
+                        /* if address is of the last element, return new back array */
                         this->__a_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
+
+                        /* otherwise, create a new element array of elements at the index of the address in the array */
                         this->__a_newArrayAt (
                                 pElement - this->_pData->_pFront + 1ULL,
                                 count,
@@ -606,18 +706,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool {
 
+                    /* acquire address indicated by the iterator */
                     auto pElement = & iterator [0ULL];
+
+                    /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return false;
                     }
 
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
+
+                        /* if address is of the last element, return new back array */
                         this->__a_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
+
+                        /* otherwise, create a new element array of elements at the index of the address in the array */
                         this->__a_newArrayAt (
                                 pElement - this->_pData->_pFront + 1ULL,
                                 count,
@@ -1183,10 +1290,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto const requiredSize = array.__a_size();
                     if ( this->_pData->_frontCapacity + this->_pData->_backCapacity < requiredSize ) {
 
-                        this->_pData->_backCapacity = requiredSize;
+                        this->_pData->_backCapacity = cds :: maxOf ( requiredSize, __Array :: __a_minCapacity );
                         this->_pData->_pBuffer      = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
-                                requiredSize
+                                this->_pData->_backCapacity
                         );
                     } else {
 
