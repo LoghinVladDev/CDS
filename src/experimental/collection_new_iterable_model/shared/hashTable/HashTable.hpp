@@ -336,6 +336,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyComparator,
                                         __nodeDestructor
                                 > :: __ht_removeIteratorConst,
+                                nullptr,
                                 & __HashTable <
                                         __ElementType,
                                         __KeyType,
@@ -452,6 +453,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyComparator,
                                         __nodeDestructor
                                 > :: __ht_removeIteratorConst,
+                                nullptr,
+                                nullptr,
                                 & __HashTable <
                                         __ElementType,
                                         __KeyType,

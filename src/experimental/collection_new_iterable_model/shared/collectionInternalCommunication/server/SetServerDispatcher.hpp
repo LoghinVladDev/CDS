@@ -32,6 +32,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __cendFunction               is the function of the implementation used to obtain an end const iterator (i.e. shared/__Array :: __a_cbegin)
                  * @tparam __newAddressFunction         is the function of the implementation used to obtain a new element address (i.e. shared/__Array :: __a_newAddress)
                  * @tparam __removeConstFunction        is the function of the implementation used to remove a const iterator (i.e. shared/__Array :: __a_removeConstIterator)
+                 * @tparam __removeConstArrayFunction   is the function of the implementation used to remove multiple const iterators (i.e. shared/__Array :: __a_removeConstIteratorArray)
                  * @tparam __findConstFunction          is the function of the implementation used to find an element and return a ConstIterator (i.e. shared/__HashTable :: __ht_findConst)
                  *
                  * @extends __CollectionServerDispatcher
@@ -43,17 +44,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __findConstFunction )     ( __ElementType const & )           const   -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
-                > class __SetServerDispatcher :                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                                          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __findConstFunction )         ( __ElementType const & )                               const   -> __ConstIteratorType  /* NOLINT(bugprone-reserved-identifier) */
+                > class __SetServerDispatcher :                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
                         public __CollectionServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
@@ -63,7 +65,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __cbeginFunction,
                                 __cendFunction,
                                 __newAddressFunction,
-                                __removeConstFunction
+                                __removeConstFunction,
+                                __removeConstArrayFunction
                         > {
 
                 protected:

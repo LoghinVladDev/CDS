@@ -95,7 +95,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __dll_removeBack () noexcept -> void;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __dll_remove (                     /* NOLINT(bugprone-reserved-identifier) */
+                    auto __dll_removeIterator (     /* NOLINT(bugprone-reserved-identifier) */
                             AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
@@ -105,7 +105,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept -> void;
 
                 protected:
-                    auto __dll_remove (                     /* NOLINT(bugprone-reserved-identifier) */
+                    auto __dll_removeConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                             AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
@@ -313,8 +313,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_newBeforeArrayConst,
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_newAfterArray,
                                 & __DoubleLinkedList < __ElementType, __equals > :: __dll_newAfterArrayConst,
-                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_remove,
-                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_remove
+                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeIterator,
+                                & __DoubleLinkedList < __ElementType, __equals > :: __dll_removeConstIterator,
+                                nullptr,
+                                nullptr
                         > {};
 
             }

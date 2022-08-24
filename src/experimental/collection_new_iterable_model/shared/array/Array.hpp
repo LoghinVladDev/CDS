@@ -767,7 +767,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 & __Array < __ElementType, __equals > :: __a_newAfterArray,
                                 & __Array < __ElementType, __equals > :: __a_newAfterArrayConst,
                                 & __Array < __ElementType, __equals > :: __a_removeIterator,
-                                & __Array < __ElementType, __equals > :: __a_removeConstIterator
+                                & __Array < __ElementType, __equals > :: __a_removeConstIterator,
+                                nullptr,
+                                nullptr
                         > {};
 
             }

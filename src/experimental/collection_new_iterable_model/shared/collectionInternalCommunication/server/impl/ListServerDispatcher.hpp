@@ -44,7 +44,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -77,7 +79,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     /* call the template received member function and wrap iterator in a new delegate */
@@ -119,7 +123,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -152,7 +158,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __rend () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     /* call the template received member function and wrap iterator in a new delegate */
@@ -194,7 +202,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -227,7 +237,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     /* call the template received member function and wrap iterator in a new delegate */
@@ -269,7 +281,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -302,7 +316,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     /* call the template received member function and wrap iterator in a new delegate */
@@ -344,7 +360,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_cpplang_NonConstConstexprMemberFunction auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -377,7 +395,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __rbeginLocal () noexcept -> __ReverseIteratorType {
 
                     /* call the template received member function */
@@ -417,7 +437,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_cpplang_NonConstConstexprMemberFunction auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -450,7 +472,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __rendLocal () noexcept -> __ReverseIteratorType {
 
                     /* call the template received member function */
@@ -490,7 +514,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > constexpr auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -523,7 +549,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __crbeginLocal () const noexcept -> __ConstReverseIteratorType {
 
                     /* call the template received member function */
@@ -563,7 +591,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > constexpr auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -596,7 +626,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __crendLocal () const noexcept -> __ConstReverseIteratorType {
 
                     /* call the template received member function */
@@ -636,7 +668,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -669,7 +703,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newFront () noexcept -> __ElementType * {
 
                     /* call the template received member function */
@@ -709,7 +745,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -742,7 +780,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBack () noexcept -> __ElementType * {
 
                     /* call the template received member function */
@@ -782,7 +822,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -815,7 +857,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newFrontArray (
                         Size                count,
                         __ElementType    ** ppElements
@@ -861,7 +905,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -894,7 +940,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBackArray (
                         Size                count,
                         __ElementType    ** ppElements
@@ -940,7 +988,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -973,7 +1023,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBefore (
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> __ElementType * {
@@ -1017,7 +1069,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1050,7 +1104,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBeforeConst (
                         __AbstractConstIteratorType const * pIterator
                 ) noexcept -> __ElementType * {
@@ -1094,7 +1150,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1127,7 +1185,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newAfter (
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> __ElementType * {
@@ -1171,7 +1231,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1204,7 +1266,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newAfterConst (
                         __AbstractConstIteratorType const * pIterator
                 ) noexcept -> __ElementType * {
@@ -1248,7 +1312,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1281,7 +1347,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBeforeArray (
                         __AbstractIteratorType  const * pIterator,
                         Size                            count,
@@ -1329,7 +1397,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1362,7 +1432,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newBeforeArrayConst (
                         __AbstractConstIteratorType const * pIterator,
                         Size                                count,
@@ -1410,7 +1482,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1443,7 +1517,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newAfterArray (
                         __AbstractIteratorType  const * pIterator,
                         Size                            count,
@@ -1491,7 +1567,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __ListServerDispatcher <
                         __ServerType,
                         __ServiceType,
@@ -1524,7 +1602,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __newAfterArrayFunction,
                         __newAfterArrayConstFunction,
                         __removeFunction,
-                        __removeConstFunction
+                        __removeConstFunction,
+                        __removeArrayFunction,
+                        __removeConstArrayFunction
                 > :: __newAfterArrayConst (
                         __AbstractConstIteratorType const * pIterator,
                         Size                                count,

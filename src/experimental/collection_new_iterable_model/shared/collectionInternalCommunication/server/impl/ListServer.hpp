@@ -28,6 +28,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rend ),                   /* __cirt_rend                          - expected part of List     */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),                 /* __cirt_remove                        - expected part of List     */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),            /* __cirt_removeConst                   - expected part of List     */
+                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),            /* __cirt_removeArray                   - expected part of List     */
+                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),       /* __cirt_removeConstArray              - expected part of List     */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),             /* __cirt_newAddress                    - expected part of List     */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newFront ),               /* __cirt_newFrontAddress               - expected part of List     */
                         reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBack ),                /* __cirt_newBackAddress                - expected part of List     */
@@ -64,6 +66,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crend ),     /* __cirt_rend                          - expected part of List     */
                         nullptr,                                                                        /* __cirt_remove                        - not expected part of List */
                         nullptr,                                                                        /* __cirt_removeConst                   - not expected part of List */
+                        nullptr,                                                                        /* __cirt_removeArray                   - not expected part of List */
+                        nullptr,                                                                        /* __cirt_removeConstArray              - not expected part of List */
                         nullptr,                                                                        /* __cirt_newAddress                    - not expected part of List */
                         nullptr,                                                                        /* __cirt_newFrontAddress               - not expected part of List */
                         nullptr,                                                                        /* __cirt_newBackAddress                - not expected part of List */

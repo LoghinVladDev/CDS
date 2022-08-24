@@ -55,6 +55,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __newAfterArrayConstFunction     is the function of the implementation used to populate an array with new addresses after a const iterator (i.e. shared/__Array :: __a_newAfterArrayConst)
                  * @tparam __removeFunction                 is the function of the implementation used to remove an iterator (i.e. shared/__Array :: __a_removeIterator)
                  * @tparam __removeConstFunction            is the function of the implementation used to remove a const iterator (i.e. shared/__Array :: __a_removeConstIterator)
+                 * @tparam __removeArrayFunction            is the function of the implementation used to remove multiple iterators (i.e. shared/__Array :: __a_removeIteratorArray)
+                 * @tparam __removeConstArrayFunction       is the function of the implementation used to remove multiple const iterators (i.e. shared/__Array :: __a_removeConstIteratorArray)
                  *
                  * @extends __MutableCollectionServerDispatcher
                  *
@@ -96,7 +98,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool                         /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
                 > class __ListServerDispatcher :                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
                         public __MutableCollectionServerDispatcher <
                                 __ServerType,
@@ -112,7 +116,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __cendFunction,
                                 __newAddressFunction,
                                 __removeFunction,
-                                __removeConstFunction
+                                __removeConstFunction,
+                                __removeArrayFunction,
+                                __removeConstArrayFunction
                         > {
 
                 protected:

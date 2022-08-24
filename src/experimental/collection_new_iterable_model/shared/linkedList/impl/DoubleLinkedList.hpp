@@ -225,7 +225,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_remove (
+                > :: __dll_removeIterator (
                         AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
@@ -259,7 +259,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_remove (
+                > :: __dll_removeConstIterator (
                         AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
