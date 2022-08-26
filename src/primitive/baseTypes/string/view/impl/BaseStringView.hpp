@@ -2333,7 +2333,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 Size offset = 0;
                 for ( auto minLength = minOf ( this->_length, string._length ); offset < minLength; ++ offset ) {
-                    if ( this->_pData [ this->_length - offset ] != string._pData [ string._length - offset ] ) {
+                    if ( this->_pData [ this->_length - offset - 1ULL ] != string._pData [ string._length - offset - 1ULL ] ) {
                         return false;
                     }
                 }
