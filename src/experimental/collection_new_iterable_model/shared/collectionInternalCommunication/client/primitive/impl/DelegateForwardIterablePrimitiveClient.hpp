@@ -20,13 +20,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: begin () noexcept -> Iterator {
 
+                    using __ReceiverBeginHandlerType    = __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ();
+                    auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
+
                     return Iterator (
-                            reinterpret_cast < __ReceiverType * > ( this ), (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ()
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverBeginHandlerType > (
+                                            pReceiver->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_begin
                                             )
                                     )
@@ -45,13 +45,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: end () noexcept -> Iterator {
 
+                    using __ReceiverEndHandlerType  = __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ();
+                    auto const pReceiver            = reinterpret_cast < __ReceiverType * > ( this );
+
                     return Iterator (
-                            reinterpret_cast < __ReceiverType * > ( this ), (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ()
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverEndHandlerType > (
+                                            pReceiver->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_end
                                             )
                                     )

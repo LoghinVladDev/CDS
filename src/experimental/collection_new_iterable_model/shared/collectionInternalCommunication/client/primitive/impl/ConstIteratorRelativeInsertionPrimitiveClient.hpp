@@ -1,22 +1,22 @@
-//
-// Created by loghin on 6/28/22.
-//
+/*
+ * Created by loghin on 6/28/22.
+ */
 
 #ifndef __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
+#define __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include "../../../../iterator/IteratorDistance.hpp"
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -36,10 +36,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -59,10 +59,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -82,10 +82,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -105,10 +105,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -117,25 +117,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewBeforeConstHandlerType   = __ElementType * ( __ReceiverType :: * ) ( __GenericIterator );
+                    auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    auto pNewLocation =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __ElementType * ( __ReceiverType :: * ) (
-                                                    __GenericIterator
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newBeforeAddressConst
-                                            )
+                    auto const pNewLocation = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newBeforeAddressConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator()
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator()
+                    );
 
                     if ( pNewLocation == nullptr ) {
                         return false;
@@ -150,10 +147,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -162,25 +159,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewAfterConstHandlerType    = __ElementType * ( __ReceiverType :: * ) ( __GenericIterator );
+                    auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    auto const pNewLocation =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __ElementType * ( __ReceiverType :: * ) (
-                                                    __GenericIterator
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newAfterAddressConst
-                                            )
+                    auto const pNewLocation = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newAfterAddressConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator()
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator()
+                    );
 
                     if ( pNewLocation == nullptr ) {
                         return false;
@@ -195,10 +189,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes        /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -207,32 +201,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewBeforeConstArrayHandlerType  = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                    auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    Size  const parameterCount = sizeof ... ( __ArgumentTypes );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = sizeof ... ( __ArgumentTypes );
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
-                                    reinterpret_cast <
-                                            bool ( __ReceiverType :: * ) (
-                                                    __GenericIterator,
-                                                    Size,
-                                                    __ElementType **
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                            )
+                    auto const allocationStatus = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator(),
-                                    parameterCount,
-                                    ppElements
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator(),
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
@@ -247,10 +236,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes        /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -259,32 +248,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewAfterConstArrayHandlerType   = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                    auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    Size  const parameterCount = sizeof ... ( __ArgumentTypes );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = sizeof ... ( __ArgumentTypes );
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
-                                    reinterpret_cast <
-                                            bool ( __ReceiverType :: * ) (
-                                                    __GenericIterator,
-                                                    Size,
-                                                    __ElementType **
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                            )
+                    auto const allocationStatus = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator(),
-                                    parameterCount,
-                                    ppElements
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator(),
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
@@ -299,10 +283,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -320,10 +304,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -338,16 +322,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return this->insertAllOfBefore (
                             iterator,
                             list.begin(),
-                            list.end()
+                            list.end(),
+                            list.size()
                     );
                 }
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -365,10 +350,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -383,51 +368,48 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return this->insertAllOfAfter (
                             iterator,
                             list.begin(),
-                            list.end()
+                            list.end(),
+                            list.size()
                     );
                 }
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
                 > :: insertAllOfBefore (
                         AbstractConstIterator   const & iterator,
                         __IteratorType          const & begin,
-                        __IteratorType          const & end
+                        __IteratorType          const & end,
+                        Size                            count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewBeforeConstArrayHandlerType  = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                    auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
-                                    reinterpret_cast <
-                                            bool ( __ReceiverType :: * ) (
-                                                    __GenericIterator,
-                                                    Size,
-                                                    __ElementType **
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                            )
+                    auto const allocationStatus = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator(),
-                                    parameterCount,
-                                    ppElements
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator(),
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         Size index = 0ULL;
@@ -442,45 +424,41 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
                 > :: insertAllOfAfter (
                         AbstractConstIterator   const & iterator,
                         __IteratorType          const & begin,
-                        __IteratorType          const & end
+                        __IteratorType          const & end,
+                        Size                            count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    using __ReceiverNewAfterConstArrayHandlerType   = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                    auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+
+                    if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
                         return false;
                     }
 
-                    Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            (
-                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
-                                    reinterpret_cast <
-                                            bool ( __ReceiverType :: * ) (
-                                                    __GenericIterator,
-                                                    Size,
-                                                    __ElementType **
-                                            )
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                    __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                            )
+                    auto const allocationStatus = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
                                     )
-                            ) (
-                                    iterator._pDelegate->iterator(),
-                                    parameterCount,
-                                    ppElements
-                            );
+                            )
+                    ) (
+                            iterator._pDelegate->iterator(),
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         Size index = 0ULL;
@@ -495,11 +473,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -520,11 +498,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -545,11 +523,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -570,11 +548,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -595,11 +573,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -609,7 +587,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
@@ -627,11 +605,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType     /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -641,7 +619,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
@@ -659,11 +637,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes        /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -673,19 +651,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes       && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
-                    Size  const parameterCount = sizeof ... ( __ArgumentTypes );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = sizeof ... ( __ArgumentTypes );
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
-                                    & iterator,
-                                    parameterCount,
-                                    ppElements
-                            );
+                    auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                            & iterator,
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
@@ -700,11 +677,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes        /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -714,19 +691,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes       && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
-                    Size  const parameterCount = sizeof ... ( __ArgumentTypes );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = sizeof ... ( __ArgumentTypes );
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
-                                    & iterator,
-                                    parameterCount,
-                                    ppElements
-                            );
+                    auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                            & iterator,
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
@@ -741,11 +717,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -764,11 +740,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -784,17 +760,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return this->insertAllOfBefore (
                             iterator,
                             list.begin(),
-                            list.end()
+                            list.end(),
+                            list.size()
                     );
                 }
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -813,11 +790,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -833,17 +810,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return this->insertAllOfAfter (
                             iterator,
                             list.begin(),
-                            list.end()
+                            list.end(),
+                            list.size()
                     );
                 }
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __LocalClientIteratorType  // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LocalClientIteratorType  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -851,22 +829,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOfBefore (
                         ConstIterator   const & iterator,
                         __IteratorType  const & begin,
-                        __IteratorType  const & end
+                        __IteratorType  const & end,
+                        Size                    count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
-                    Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
-                                    & iterator,
-                                    parameterCount,
-                                    ppElements
-                            );
+                    auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                            & iterator,
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         Size index = 0ULL;
@@ -881,11 +859,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __LocalClientIteratorType  // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LocalClientIteratorType  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -893,22 +871,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOfAfter (
                         ConstIterator   const & iterator,
                         __IteratorType  const & begin,
-                        __IteratorType  const & end
+                        __IteratorType  const & end,
+                        Size                    count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( iterator == reinterpret_cast < __ReceiverType const * > ( this )->cend () ) {
+                    if ( ! static_cast < bool > ( iterator ) ) {
                         return false;
                     }
 
-                    Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
-                    auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+                    Size  const parameterCount  = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto const allocationStatus =
-                            reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
-                                    & iterator,
-                                    parameterCount,
-                                    ppElements
-                            );
+                    auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                            & iterator,
+                            parameterCount,
+                            ppElements
+                    );
 
                     if ( allocationStatus ) {
                         Size index = 0ULL;
@@ -926,4 +904,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__ */

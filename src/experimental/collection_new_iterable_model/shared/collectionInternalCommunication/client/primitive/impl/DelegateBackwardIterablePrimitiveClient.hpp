@@ -20,13 +20,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: rbegin () noexcept -> ReverseIterator {
 
+                    using __ReceiverRBeginHandlerType   = __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ();
+                    auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
+
                     return ReverseIterator (
-                            reinterpret_cast < __ReceiverType * > ( this ), (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ()
-                                    > (
-                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverRBeginHandlerType > (
+                                            pReceiver->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_rbegin
                                             )
                                     )
@@ -45,12 +45,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: rend () noexcept -> ReverseIterator {
 
+                    using __ReceiverREndHandlerType = __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ();
+                    auto const pReceiver            = reinterpret_cast < __ReceiverType * > ( this );
+
                     return ReverseIterator (
-                            reinterpret_cast < __ReceiverType * > ( this ), (
-                                    reinterpret_cast < __ReceiverType * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ()
-                                    > (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverREndHandlerType > (
                                             reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_rend
                                             )
@@ -63,7 +63,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReverseIteratorType  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __LocalDelegateBackwardIterablePrimitiveClient <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __LocalDelegateBackwardIterablePrimitiveClient <
                         __ReceiverType,
                         __ReverseIteratorType
                 > :: rbegin () noexcept -> ReverseIterator {
@@ -75,7 +75,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReverseIteratorType  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __LocalDelegateBackwardIterablePrimitiveClient <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __LocalDelegateBackwardIterablePrimitiveClient <
                         __ReceiverType,
                         __ReverseIteratorType
                 > :: rend () noexcept -> ReverseIterator {
