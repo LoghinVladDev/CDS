@@ -211,13 +211,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier) */
                             __ht_Iterator   const * const * ppIterators,
-                            Size                            iteratorArrayCount
+                            Size                            iteratorCount
                     ) noexcept -> Size;
 
                 protected:
                     auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier) */
                             __ht_ConstIterator  const * const * ppIterators,
-                            Size                                iteratorArrayCount
+                            Size                                iteratorCount
                     ) noexcept -> Size;
 
                 protected:

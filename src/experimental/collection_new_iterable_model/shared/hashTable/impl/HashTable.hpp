@@ -1009,15 +1009,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __ht_removeIteratorArray (
                         __ht_Iterator   const * const * ppIterators,
-                        Size                            iteratorArrayCount
+                        Size                            iteratorCount
                 ) noexcept -> Size {
 
                     Size removedCount = 0ULL;
-                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                        if ( ppIterators [ index ] == nullptr ) {
-                            continue;
-                        }
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                         if ( this->__ht_removeIterator ( * ppIterators [ index ] ) ) {
                             ++ removedCount;
@@ -1046,15 +1042,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __ht_removeConstIteratorArray (
                         __ht_ConstIterator  const * const * ppIterators,
-                        Size                                iteratorArrayCount
+                        Size                                iteratorCount
                 ) noexcept -> Size {
 
                     Size removedCount = 0ULL;
-                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                        if ( ppIterators [ index ] == nullptr ) {
-                            continue;
-                        }
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                         if ( this->__ht_removeIteratorConst ( * ppIterators [ index ] ) ) {
                             ++ removedCount;

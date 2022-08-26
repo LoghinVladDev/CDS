@@ -295,15 +295,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __dll_removeIteratorArray (
                         AbstractBidirectionalNodeIterator < __ElementType > const * const * ppIterators,
-                        Size                                                                iteratorArrayCount
+                        Size                                                                iteratorCount
                 ) noexcept -> Size {
 
                     Size removedCount = 0ULL;
-                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                        if ( ppIterators [ index ] == nullptr ) {
-                            continue;
-                        }
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                         if ( this->__dll_removeIterator ( * ppIterators [ index ] ) ) {
                             ++ removedCount;
@@ -322,15 +318,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __dll_removeConstIteratorArray (
                         AbstractBidirectionalNodeConstIterator < __ElementType >    const * const * ppIterators,
-                        Size                                                                        iteratorArrayCount
+                        Size                                                                        iteratorCount
                 ) noexcept -> Size {
 
                     Size removedCount = 0ULL;
-                    for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                        if ( ppIterators [ index ] == nullptr ) {
-                            continue;
-                        }
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                         if ( this->__dll_removeConstIterator ( * ppIterators [ index ] ) ) {
                             ++ removedCount;

@@ -1086,19 +1086,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_removeIteratorArray (
                         AbstractAddressIterator < __ElementType >   const * const * ppIterators,
-                        Size                                                        iteratorArrayCount
+                        Size                                                        iteratorCount
                 ) noexcept -> Size {
 
-                    auto const size = this->__a_size();
-                    if ( size == 0ULL ) {
-                        return 0ULL;
-                    }
-
-                    if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
-                        return this->__a_removeIterator ( * ppIterators [ 0ULL ] ) ? 1ULL : 0ULL;
-                    }
-
-                    Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+                    auto const  size = this->__a_size();
+                    Size        newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
 
                     if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
                         this->_pData->_frontCapacity        = 0ULL;
@@ -1118,11 +1110,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     while ( this->_pData->_pFront != this->_pData->_pBack ) {
 
                         auto matchFound = false;
-                        for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                            if ( ppIterators [ index ] == nullptr ) {
-                                continue;
-                            }
+                        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                             if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
                                 this->_pData->_pFront->~__ElementType ();
@@ -1163,19 +1151,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __equals
                 > :: __a_removeConstIteratorArray (
                         AbstractAddressIterator < __ElementType const > const * const * ppIterators,
-                        Size                                                            iteratorArrayCount
+                        Size                                                            iteratorCount
                 ) noexcept -> Size {
 
-                    auto const size = this->__a_size();
-                    if ( size == 0ULL ) {
-                        return 0ULL;
-                    }
-
-                    if ( iteratorArrayCount == 1ULL && ppIterators [ 0ULL ] != nullptr ) {
-                        return this->__a_removeConstIterator ( * ppIterators [ 0ULL ] ) ? 1ULL : 0ULL;
-                    }
-
-                    Size newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+                    auto const  size = this->__a_size();
+                    Size        newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
 
                     if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
                         this->_pData->_frontCapacity        = 0ULL;
@@ -1195,11 +1175,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     while ( this->_pData->_pFront != this->_pData->_pBack ) {
 
                         auto matchFound = false;
-                        for ( Size index = 0ULL; index < iteratorArrayCount; ++ index ) {
-
-                            if ( ppIterators [ index ] == nullptr ) {
-                                continue;
-                            }
+                        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
 
                             if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
                                 this->_pData->_pFront->~__ElementType ();

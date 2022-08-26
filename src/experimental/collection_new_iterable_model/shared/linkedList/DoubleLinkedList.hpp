@@ -112,13 +112,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     auto __dll_removeIteratorArray (     /* NOLINT(bugprone-reserved-identifier) */
                             AbstractBidirectionalNodeIterator < __ElementType > const * const * ppIterators,
-                            Size                                                                iteratorArrayCount
+                            Size                                                                iteratorCount
                     ) noexcept -> Size;
 
                 protected:
                     auto __dll_removeConstIteratorArray (    /* NOLINT(bugprone-reserved-identifier) */
                             AbstractBidirectionalNodeConstIterator < __ElementType >    const * const * ppIterators,
-                            Size                                                                        iteratorArrayCount
+                            Size                                                                        iteratorCount
                     ) noexcept -> Size;
 
                 protected:

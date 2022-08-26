@@ -230,7 +230,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      */
                     auto __a_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType >   const * const * ppIterators,
-                            Size                                                        iteratorArrayCount
+                            Size                                                        iteratorCount
                     ) noexcept -> Size;
 
                 protected:
@@ -246,7 +246,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      */
                     auto __a_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const * const * ppIterators,
-                            Size                                                            iteratorArrayCount
+                            Size                                                            iteratorCount
                     ) noexcept -> Size;
 
                 protected:
