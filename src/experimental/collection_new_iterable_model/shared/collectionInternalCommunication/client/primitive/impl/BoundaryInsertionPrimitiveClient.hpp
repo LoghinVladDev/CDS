@@ -325,7 +325,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: pushFrontAllOf (
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+
+                    this->pushFrontAllOf (
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -371,7 +399,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: pushBackAllOf (
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
+
+                    this->pushBackAllOf (
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -769,7 +825,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: pushFrontAllOf (
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+
+                    this->pushFrontAllOf (
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -815,7 +899,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                         typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: pushBackAllOf (
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+
+                    this->pushBackAllOf (
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,

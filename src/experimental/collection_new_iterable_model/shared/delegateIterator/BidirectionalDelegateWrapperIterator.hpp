@@ -28,7 +28,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 class __BidirectionalDelegateWrapperIterator :  /* NOLINT(bugprone-reserved-identifier) */
                         public __AbstractDelegateWrapperIterator < __ElementType >,
-                        public meta :: BidirectionalIterator {
+                        public cds :: experimental :: meta :: BidirectionalIterator {
 
                 protected:
                     /**

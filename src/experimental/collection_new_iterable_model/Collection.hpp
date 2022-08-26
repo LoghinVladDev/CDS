@@ -488,10 +488,59 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using ConstIteratorRemoveClient :: remove;
 
-        public: using RemoveByClient :: removeThat;
-        public: using RemoveByClient :: removeFirstThat;
-        public: using RemoveByClient :: removeLastThat;
-        public: using RemoveByClient :: removeAllThat;
+        public:
+            /**
+             * @inherit removeThat ( maxCount, Predicate ) call, inherited from RemoveByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+             *      CTC-00401-RB-removeThatMatchesNone,
+             *      CTC-00402-RB-removeThatMatchesOne,
+             *      CTC-00403-RB-removeThatMatchesMoreLessThanLimit,
+             *      CTC-00404-RB-removeThatMatchesMoreExact,
+             *      CTC-00405-RB-removeThatMatchesMoreThanLimit,
+             *      CTC-00406-RB-removeThatMatchesAll,
+             * }
+             * @public
+             */
+            using RemoveByClient :: removeThat;
+
+        public:
+            /**
+             * @inherit removeFirstThat ( Predicate ) call, inherited from RemoveByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+             *      CTC-00407-RB-removeFirstThatMatchesNone,
+             *      CTC-00408-RB-removeFirstThatMatchesOne,
+             *      CTC-00409-RB-removeFirstThatMatchesMore,
+             *      CTC-00410-RB-removeFirstThatMatchesAll,
+             * }
+             * @public
+             */
+            using RemoveByClient :: removeFirstThat;
+
+        public:
+            /**
+             * @inherit removeLastThat ( Predicate ) call, inherited from RemoveByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+             *      CTC-00411-RB-removeLastThatMatchesNone,
+             *      CTC-00412-RB-removeLastThatMatchesOne,
+             *      CTC-00413-RB-removeLastThatMatchesMore,
+             *      CTC-00414-RB-removeLastThatMatchesAll,
+             * }
+             * @public
+             */
+            using RemoveByClient :: removeLastThat;
+
+        public:
+            /**
+             * @inherit removeAllThat ( Predicate ) call, inherited from RemoveByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+             *      CTC-00415-RB-removeAllThatMatchesNone,
+             *      CTC-00416-RB-removeAllThatMatchesOne,
+             *      CTC-00417-RB-removeAllThatMatchesMore,
+             *      CTC-00418-RB-removeAllThatMatchesAll,
+             * }
+             * @public
+             */
+            using RemoveByClient :: removeAllThat;
 
         public: using RemoveOfCollectionClient :: removeOf;
         public: using RemoveOfCollectionClient :: removeFirstOf;

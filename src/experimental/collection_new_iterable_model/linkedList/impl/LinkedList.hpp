@@ -57,12 +57,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 >
         > __CDS_OptimalInline LinkedList < __ElementType > :: LinkedList (
                 __IteratorType const & begin,
-                __IteratorType const & end
+                __IteratorType const & end,
+                Size                   count
         ) noexcept {
 
             this->pushBackAllOf (
                     begin,
-                    end
+                    end,
+                    count
             );
         }
 
@@ -78,26 +80,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 LinkedList (
                         initializerList.begin(),
-                        initializerList.end()
+                        initializerList.end(),
+                        initializerList.size()
                 ) {
 
         }
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline LinkedList < __ElementType > :: LinkedList (
-                Collection < __OtherElementType > const & collection
-        ) noexcept :
-                LinkedList (
-                        collection.begin(),
-                        collection.end()
-                ) {
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline LinkedList < __ElementType > :: LinkedList (
+                __IterableType const & iterable
+        ) noexcept {
 
+            this->pushBackAllOf ( iterable );
         }
 
 
@@ -137,21 +133,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
-                Collection < __OtherElementType > const & collection
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
+                std :: initializer_list < __ElementType > const & initializerList
         ) noexcept -> LinkedList & {
 
-            if ( this == & collection ) {
+            this->clear();
+            this->pushBackAllOf ( initializerList );
+            return * this;
+        }
+
+
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: operator = (
+                __IterableType const & iterable
+        ) noexcept -> LinkedList & {
+
+            if ( this == & iterable ) {
                 return * this;
             }
 
             this->clear();
-            this->pushBackAllOf ( collection );
+            this->pushBackAllOf ( iterable );
             return * this;
         }
 

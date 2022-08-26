@@ -381,7 +381,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     > = 0
             > LinkedList (
                     __IteratorType const & begin,
-                    __IteratorType const & end
+                    __IteratorType const & end,
+                    Size                   count = 0ULL
             ) noexcept;
 
         public:
@@ -395,13 +396,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > __CDS_Explicit LinkedList (
-                    Collection < __OtherElementType > const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_Explicit LinkedList (
+                    __IterableType const & iterable
             ) noexcept;
 
         public:
@@ -418,13 +415,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> LinkedList &;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > auto operator = (
-                    Collection < __OtherElementType > const & collection
+            auto operator = (
+                    std :: initializer_list < __ElementType > const & initializerList
+            ) noexcept -> LinkedList &;
+
+        public:
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            auto operator = (
+                    __IterableType const & iterable
             ) noexcept -> LinkedList &;
 
         public:

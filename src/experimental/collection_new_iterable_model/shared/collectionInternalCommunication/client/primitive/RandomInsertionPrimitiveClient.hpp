@@ -10,6 +10,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
+                namespace meta {
+
+                    template < typename __IterableType, typename = void >           /* NOLINT(bugprone-reserved-identifier) */
+                    struct __IterableSizeAvailable : cds :: meta :: FalseType {};   /* NOLINT(bugprone-reserved-identifier) */
+
+                    template < typename __IterableType >                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    struct __IterableSizeAvailable < __IterableType, cds :: meta :: Void < decltype ( cds :: meta :: addressOf < __IterableType > ()->size() ) > > : cds :: meta :: TrueType {};    /* NOLINT(bugprone-reserved-identifier) */
+
+                }
+
                 template <
                         typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                         typename __FirstConstructedArgument /* NOLINT(bugprone-reserved-identifier) */

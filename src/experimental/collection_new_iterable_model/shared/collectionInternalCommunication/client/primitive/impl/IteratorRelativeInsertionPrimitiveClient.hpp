@@ -286,7 +286,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType
+                > :: insertAllOfBefore (
+                        AbstractIterator    const & iterator,
+                        __IterableType      const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
+
+                    return this->insertAllOfBefore (
+                            iterator,
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -332,7 +360,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
                         typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType
+                > :: insertAllOfAfter (
+                        AbstractIterator    const & iterator,
+                        __IterableType      const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
+
+                    return this->insertAllOfAfter (
+                            iterator,
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType
@@ -721,7 +777,37 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __IteratorType
+                > :: insertAllOfBefore (
+                        Iterator        const & iterator,
+                        __IterableType  const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
+
+                    return this->insertAllOfBefore (
+                            iterator,
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -771,7 +857,37 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
+                > __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __IteratorType
+                > :: insertAllOfAfter (
+                        Iterator        const & iterator,
+                        __IterableType  const & iterable
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
+
+                    return this->insertAllOfAfter (
+                            iterator,
+                            iterable.begin(),
+                            iterable.end(),
+                            iterable.size()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType         /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                        >
                 > __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,

@@ -99,7 +99,7 @@ template <
     return true;
 }
 
-/* CollectionTestGroup-RemoveBy-Cpp20 : CTG-00400-RB-CPP20. */
+/* CollectionTestGroup-RemoveBy-Cpp20 : CTG-00400-RB-CPP20. CTC-00401-RB to CTC-00418-RB */
 template <
         typename __Original,
         typename __MemberType,

@@ -127,8 +127,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto pushFrontAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
@@ -143,8 +157,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto pushBackAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
@@ -293,8 +321,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto pushFrontAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
@@ -309,8 +351,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto pushBackAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 

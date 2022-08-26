@@ -95,8 +95,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto insertAllOfBefore (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfBefore (
+                            AbstractConstIterator   const & iterator,
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfBefore (
                             AbstractConstIterator   const & iterator,
                             __IterableType          const & iterable
                     ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
@@ -113,8 +128,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto insertAllOfAfter (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfAfter (
+                            AbstractConstIterator   const & iterator,
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfAfter (
                             AbstractConstIterator   const & iterator,
                             __IterableType          const & iterable
                     ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
@@ -235,8 +265,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto insertAllOfBefore (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfBefore (
+                            ConstIterator   const & iterator,
+                            __IterableType  const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfBefore (
                             ConstIterator   const & iterator,
                             __IterableType  const & iterable
                     ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
@@ -253,8 +298,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 public:
-                    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                    auto insertAllOfAfter (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfAfter (
+                            ConstIterator           const & iterator,
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
+
+                public:
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto insertAllOfAfter (
                             ConstIterator           const & iterator,
                             __IterableType          const & iterable
                     ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;

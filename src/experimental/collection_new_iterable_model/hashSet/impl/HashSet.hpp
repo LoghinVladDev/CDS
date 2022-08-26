@@ -90,9 +90,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __Hasher
         > :: HashSet (
                 __IteratorType const & begin,
-                __IteratorType const & end
+                __IteratorType const & end,
+                Size                   count
         ) noexcept {
 
+            (void) count;
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }
@@ -114,10 +116,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > :: HashSet (
                 __Hasher        const & hasher,
                 __IteratorType  const & begin,
-                __IteratorType  const & end
+                __IteratorType  const & end,
+                Size                    count
         ) noexcept :
                 Implementation ( hasher ) {
 
+            (void) count;
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 this->insert ( iterator );
             }
@@ -140,7 +144,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 HashSet (
                         initializerList.begin (),
-                        initializerList.end ()
+                        initializerList.end (),
+                        initializerList.size()
                 ) {
 
         }
@@ -164,53 +169,46 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 HashSet (
                         hasher,
                         initializerList.begin (),
-                        initializerList.end ()
+                        initializerList.end (),
+                        initializerList.size()
                 ) {
 
         }
 
 
         template <
-                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline HashSet <
+                typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline HashSet <
                 __ElementType,
                 __Hasher
         > :: HashSet (
-                Collection < __OtherElementType > const & collection
+                __IterableType const & iterable
         ) noexcept :
                 HashSet (
-                        collection.begin (),
-                        collection.end ()
+                        iterable.begin (),
+                        iterable.end ()
                 ) {
 
         }
 
 
         template <
-                typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline HashSet <
+                typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline HashSet <
                 __ElementType,
                 __Hasher
         > :: HashSet (
-                __Hasher                            const & hasher,
-                Collection < __OtherElementType >   const & collection
+                __Hasher        const & hasher,
+                __IterableType  const & iterable
         ) noexcept :
                 HashSet (
                         hasher,
-                        collection.begin (),
-                        collection.end ()
+                        iterable.begin (),
+                        iterable.end ()
                 ) {
 
         }
@@ -273,24 +271,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
         > __CDS_OptimalInline auto HashSet <
                 __ElementType,
                 __Hasher
         > :: operator = (
-                Collection < __OtherElementType > const & collection
+                std :: initializer_list < __ElementType > const & initializerList
         ) noexcept -> HashSet & {
 
-            if ( this == & collection ) {
+            this->__ht_clear ();
+            for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+                (void) this->insert ( * iterator );
+            }
+
+            return * this;
+        }
+
+
+        template <
+                typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator = (
+                __IterableType const & iterable
+        ) noexcept -> HashSet & {
+
+            if ( this == & iterable ) {
                 return * this;
             }
 
             this->__ht_clear ();
-            for ( auto iterator = collection.begin(); iterator != collection.end(); ++ iterator ) {
+            for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }
 
