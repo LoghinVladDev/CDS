@@ -1437,7 +1437,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     this->_pData->_pBack                = this->_pData->_pBuffer + requiredSize;
 
                     for ( Size index = 0ULL; index < requiredSize; ++ index ) {
-                        new ( this->_pData->_pFront + index ) __ElementType ( * array._pData->_pFront + index );
+                        new ( this->_pData->_pFront + index ) __ElementType ( * ( array._pData->_pFront + index ) );
                     }
                 }
 

@@ -6276,6 +6276,150 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hm ( int, int )
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringArray", [this, & allOk]{
+
+        cds :: experimental :: Array < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+        auto copy = originalArray;
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](String const & x) { return x == "ddd"; },
+                /* matchingOne = */                                     [](String const & x) { return x == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](String const & x) { return x.startsWith ("bb") && ! x.endsWith ("a"); },
+                /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
+                /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_a ( String, "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_a ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_a ( String, "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_a ( String, "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_a ( String, "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_a ( String, "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_a ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_a ( String )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringLinkedList", [this, & allOk]{
+
+        cds :: experimental :: LinkedList < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+        auto copy = originalArray;
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](String const & x) { return x == "ddd"; },
+                /* matchingOne = */                                     [](String const & x) { return x == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](String const & x) { return x.startsWith ("bb") && ! x.endsWith ("a"); },
+                /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
+                /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_ll ( String, "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_ll ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_ll ( String, "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_ll ( String, "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_ll ( String, "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_ll ( String, "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_ll ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_ll ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_ll ( String )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringHashSet", [this, & allOk]{
+
+        cds :: experimental :: HashSet < String > originalArray = { "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" };
+        auto copy = originalArray;
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](String const & x) { return x == "ddd"; },
+                /* matchingOne = */                                     [](String const & x) { return x == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](String const & x) { return x.startsWith ("bb") && ! x.endsWith ("a"); },
+                /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
+                /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "cca" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "cca" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "cca" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_hs ( String, "ccc", "aaa", "aac", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_hs ( String, "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "cca" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_hs ( String, "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "cca" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "cca" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "cca" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_hs ( String, "ccb", "ccc", "aaa", "aab", "aac", "cca" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_hs ( String )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringToStringHashMap", [this, & allOk]{
+
+        cds :: experimental :: HashMap < String, String > originalArray = { {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} };
+        auto copy = originalArray;
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](MapEntry < String, String > const & x) { return x.key() == "ddd"; },
+                /* matchingOne = */                                     [](MapEntry < String, String > const & x) { return x.key() == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb") && ! x.key().endsWith ("a"); },
+                /* matchingMore = */                                    [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb") || x.key().endsWith ("b"); },
+                /* matchingAll = */                                     [](MapEntry < String, String > const & x) { return ! x.key().empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"cca", "cca"} ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"cca", "cca"} ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_hm ( String, String, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aac", "aac"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_hm ( String, String, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_hm ( String, String, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"} ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"cca", "cca"} ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_hm ( String, String )
+        );
+    });
 
     return allOk;
 }
