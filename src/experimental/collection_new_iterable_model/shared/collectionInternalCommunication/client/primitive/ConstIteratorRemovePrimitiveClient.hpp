@@ -98,7 +98,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     /**
-                     * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array
+                     * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
                      * @param pIterators : AbstractConstIterator cptr = Address to an array of constant Abstract Const Iterator values
                      * @param iteratorCount : Size = number of values enclosed in the array given at pIterators
                      * @exceptsafe
@@ -167,7 +167,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     /**
-                     * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array
+                     * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
                      * @param pIterators : ConstIterator cptr = Address to an array of constant Const Iterator values
                      * @param iteratorCount : Size = number of values enclosed in the array given at pIterators
                      * @exceptsafe

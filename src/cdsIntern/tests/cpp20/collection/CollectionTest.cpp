@@ -1201,6 +1201,129 @@ template <
     return status;
 }
 
+/* CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20. */
+template <
+        typename __OtherIterableType,
+        typename __IterableType,
+        typename __ElementType
+> auto collectionTestGroupItemRemoveOf (
+        Test                      * pTestLib,
+        cds :: String       const & groupVariant,
+        __IterableType      const & iterableUnderTest,
+        Size ( cds :: experimental :: Collection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
+        Size                        limit,
+        __OtherIterableType const & noneCommon,
+        __OtherIterableType const & oneCommon,
+        __OtherIterableType const & moreLessThanLimitCommon,
+        __OtherIterableType const & moreCommon,
+        __OtherIterableType const & moreMoreThanLimitCommon,
+        __OtherIterableType const & allCommon,
+        __OtherIterableType const & allAndMoreCommon,
+        Size                        expectedResultFromNone,
+        __OtherIterableType const & expectedCollectionFromNone,
+        Size                        expectedResultFromOne,
+        __OtherIterableType const & expectedCollectionFromOne,
+        Size                        expectedResultFromMoreLessThanLimit,
+        __OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
+        Size                        expectedResultFromMore,
+        __OtherIterableType const & expectedCollectionFromMore,
+        Size                        expectedResultFromMoreMoreThanLimit,
+        __OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
+        Size                        expectedResultFromAll,
+        __OtherIterableType const & expectedCollectionFromAll,
+        Size                        expectedResultFromAllAndMore,
+        __OtherIterableType const & expectedCollectionFromAllAndMore
+) {
+
+    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+
+    /* CollectionTestCase-RemoveOf-removeOfNoneCommon-CPP20 : CTC-00451-RO-removeOfNoneCommon-CPP20 */
+    auto       copyRO451            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO451 = copyRO451;
+    auto       removedCountRB451    = ( collectionRO451.* removePfnVariant ) ( limit, noneCommon );
+    pTestLib->log ( "object after 'removeOf with none common' : '%s'. expected : '%s'", collectionRO451.toString().cStr(), expectedCollectionFromNone.toString().cStr() );
+    if ( removedCountRB451 != expectedResultFromNone || ! collectionRO451.equals ( expectedCollectionFromNone ) ) {
+        pTestLib->logError( "'CTC-00451-RO-removeOfNoneCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00451-RO-removeOfNoneCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfOneCommon-CPP20 : CTC-00452-RO-removeOfOneCommon-CPP20 */
+    auto       copyRO452            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO452 = copyRO452;
+    auto       removedCountRB452    = ( collectionRO452.* removePfnVariant ) ( limit, oneCommon );
+    pTestLib->log ( "object after 'removeOf with one common' : '%s'. expected : '%s'", collectionRO452.toString().cStr(), expectedCollectionFromOne.toString().cStr() );
+    if ( removedCountRB452 != expectedResultFromOne || ! collectionRO452.equals ( expectedCollectionFromOne ) ) {
+        pTestLib->logError( "'CTC-00452-RO-removeOfOneCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00452-RO-removeOfOneCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfMoreLessThanLimitCommon-CPP20 : CTC-00453-RO-removeOfMoreLessThanLimitCommon-CPP20 */
+    auto       copyRO453            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO453 = copyRO453;
+    auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
+    pTestLib->log ( "object after 'removeOf with more less than limit common' : '%s'. expected : '%s'", collectionRO453.toString().cStr(), expectedCollectionFromMoreLessThanLimit.toString().cStr() );
+    if ( removedCountRB453 != expectedResultFromMoreLessThanLimit || ! collectionRO453.equals ( expectedCollectionFromMoreLessThanLimit ) ) {
+        pTestLib->logError( "'CTC-00453-RO-removeOfMoreLessThanLimitCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00453-RO-removeOfMoreLessThanLimitCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfMoreCommon-CPP20 : CTC-00454-RO-removeOfMoreCommon-CPP20 */
+    auto       copyRO454            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO454 = copyRO454;
+    auto       removedCountRB454    = ( collectionRO454.* removePfnVariant ) ( limit, moreCommon );
+    pTestLib->log ( "object after 'removeOf with more common' : '%s'. expected : '%s'", collectionRO454.toString().cStr(), expectedCollectionFromMore.toString().cStr() );
+    if ( removedCountRB454 != expectedResultFromMore || ! collectionRO454.equals ( expectedCollectionFromMore ) ) {
+        pTestLib->logError( "'CTC-00454-RO-removeOfMoreCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00454-RO-removeOfMoreCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfMoreMoreThanLimitCommon-CPP20 : CTC-00455-RO-removeOfMoreMoreThanLimitCommon-CPP20 */
+    auto       copyRO455            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO455 = copyRO455;
+    auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
+    pTestLib->log ( "object after 'removeOf with more than limit common' : '%s'. expected : '%s'", collectionRO455.toString().cStr(), expectedCollectionFromMoreMoreThanLimit.toString().cStr() );
+    if ( removedCountRB455 != expectedResultFromMoreMoreThanLimit || ! collectionRO455.equals ( expectedCollectionFromMoreMoreThanLimit ) ) {
+        pTestLib->logError( "'CTC-00455-RO-removeOfMoreMoreThanLimitCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00455-RO-removeOfMoreMoreThanLimitCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfAllCommon-CPP20 : CTC-00456-RO-removeOfAllCommon-CPP20 */
+    auto       copyRO456            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO456 = copyRO456;
+    auto       removedCountRB456    = ( collectionRO456.* removePfnVariant ) ( limit, allCommon );
+    pTestLib->log ( "object after 'removeOf with all common' : '%s'. expected : '%s'", collectionRO456.toString().cStr(), expectedCollectionFromAll.toString().cStr() );
+    if ( removedCountRB456 != expectedResultFromAll || ! collectionRO456.equals ( expectedCollectionFromAll ) ) {
+        pTestLib->logError( "'CTC-00456-RO-removeOfAllCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00456-RO-removeOfAllCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeOfAllAndMoreCommon-CPP20 : CTC-00457-RO-removeOfAllAndMoreCommon-CPP20 */
+    auto       copyRO457            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO457 = copyRO457;
+    auto       removedCountRB457    = ( collectionRO457.* removePfnVariant ) ( limit, allAndMoreCommon );
+    pTestLib->log ( "object after 'removeOf with all and more common' : '%s'. expected : '%s'", collectionRO457.toString().cStr(), expectedCollectionFromAllAndMore.toString().cStr() );
+    if ( removedCountRB457 != expectedResultFromAllAndMore || ! collectionRO457.equals ( expectedCollectionFromAllAndMore ) ) {
+        pTestLib->logError( "'CTC-00457-RO-removeOfAllAndMoreCommon-%s-CPP20' failed", groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00457-RO-removeOfAllAndMoreCommon-%s-CPP20' OK", groupVariant.cStr() );
+    }
+
+    return true;
+}
+
 /* CollectionTestSuite-CPP20 : CTS-00001-CPP20 */
 auto CollectionTest :: execute () noexcept -> bool {
     bool allOk = true;
@@ -6428,17 +6551,20 @@ auto CollectionTest :: execute () noexcept -> bool {
         auto copyForRemoveFirstThat = strArray;
         auto copyForRemoveLastThat  = strArray;
         auto copyForRemoveAllThat   = strArray;
+        cds :: experimental :: Array < String > copyForRemoveAllThatCoverage   = {"word1", "word2", "", "word3", "word4", "word5"};
 
         cds :: experimental :: Collection < String > & cRT  = copyForRemoveThat;
         cds :: experimental :: Collection < String > & cRFT = copyForRemoveFirstThat;
         cds :: experimental :: Collection < String > & cRLT = copyForRemoveLastThat;
         cds :: experimental :: Collection < String > & cRAT = copyForRemoveAllThat;
+        cds :: experimental :: Collection < String > & cRATCoverage = copyForRemoveAllThatCoverage;
         Size removeThatLimit = 5;
 
         cds :: experimental :: Array < String > expectedAfterRemoveThat         = { "word1", "word2", "word3", "word4", "", "", "word5", "" };
         cds :: experimental :: Array < String > expectedAfterRemoveFirstThat    = { "word1", "word2", "", "word3", "", "word4", "", "", "","", "word5", "" };
         cds :: experimental :: Array < String > expectedAfterRemoveLastThat     = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5" };
         cds :: experimental :: Array < String > expectedAfterRemoveAllThat      = { "word1", "word2", "word3", "word4", "word5" };
+        cds :: experimental :: Array < String > expectedAfterRemoveAllThatCoverage = { "word1", "word2", "word3", "word4", "word5" };
 
         Size removeThatExpected = 5;
         bool removeFirstThatExpected = true;
@@ -6481,6 +6607,60 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00422-RB-memberRemoveAllThat-CPP20' OK" );
         }
 
+        /* CollectionTestCase-RemoveBy-memberRemoveThatCoverage-CPP20 : CTC-00423-RB-memberRemoveThatCoverage-CPP20 */
+        Size removeAllThatCovRes = cRATCoverage.removeAllThat ( & String :: empty );
+        if ( 1U != removeAllThatCovRes || ! cRATCoverage.equals ( expectedAfterRemoveAllThatCoverage ) ) {
+            this->logError ( "'CTC-00423-RB-memberRemoveThatCoverage-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00423-RB-memberRemoveThatCoverage-CPP20' OK" );
+        }
+
+        cds :: experimental :: Collection < String > & extraForNegCoverage = expectedAfterRemoveAllThatCoverage;
+
+        (void) extraForNegCoverage.removeThat (5, & String :: empty);
+        (void) extraForNegCoverage.removeFirstThat (& String :: empty);
+        (void) extraForNegCoverage.removeLastThat (& String :: empty);
+        (void) extraForNegCoverage.removeAllThat (& String :: empty);
+
+        (void) extraForNegCoverage.insert ("");
+        (void) extraForNegCoverage.removeThat (5, & String :: empty);
+
+    });
+
+
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntArray", [this, & allOk]{
+
+        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                this,
+                "Collection",
+                underTest,
+                & cds :: experimental :: Collection < int > :: removeOf,
+                3U,
+                make_a(int, 10, 11, 12, 13),
+                make_a(int, 16, 6, 11, 12, 13),
+                make_a(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                make_a(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                make_a(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                make_a(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                make_a(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                0U,
+                make_a(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                1U,
+                make_a(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                2U,
+                make_a(int, 1, 2, 4, 6, 7, 8, 9 ),
+                3U,
+                make_a(int, 1, 2, 4, 6, 8, 9 ),
+                3U,
+                make_a(int, 1, 4, 6, 7, 8, 9 ),
+                3U,
+                make_a(int, 4, 5, 6, 7, 8, 9 ),
+                3U,
+                make_a(int, 4, 5, 6, 7, 8, 9 )
+        );
     });
 
     return allOk;

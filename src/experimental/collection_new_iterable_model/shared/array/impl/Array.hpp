@@ -1089,57 +1089,95 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                                                        iteratorCount
                 ) noexcept -> Size {
 
-                    auto const  size = this->__a_size();
-                    Size        newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+                    auto const  currentSize     = this->__a_size();
+                    auto const  requiredSize    = currentSize - iteratorCount;
+                    Size        iteratorIndex   = 0ULL;
 
-                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __Array :: __a_minCapacity ) ) {
                         this->_pData->_frontCapacity        = 0ULL;
-                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, size );
+                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, requiredSize );
                         this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
                         this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
-                        newFrontOffset                      = 0ULL;
-                    }
 
-                    auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
-                            this->_pData->_frontCapacity + this->_pData->_backCapacity
-                    );
+                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
 
-                    auto pNewFront  = pNewBuffer + newFrontOffset;
-                    auto pNewBack   = pNewFront;
+                        auto pNewFront  = pNewBuffer;
+                        auto pNewBack   = pNewFront;
 
-                    while ( this->_pData->_pFront != this->_pData->_pBack ) {
+                        while ( this->_pData->_pFront != this->_pData->_pBack && iteratorIndex < iteratorCount ) {
 
-                        auto matchFound = false;
-                        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-
-                            if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
-                                this->_pData->_pFront->~__ElementType ();
-                                matchFound = true;
-                                break;
+                            if ( & ( * ( * ppIterators [ iteratorIndex ] ) ) == this->_pData->_pFront ) {
+                                this->_pData->_pFront->~__ElementType();
+                                ++ iteratorIndex;
+                            } else {
+                                (void) std :: memcpy (
+                                        reinterpret_cast < void * > ( pNewBack ++ ),
+                                        reinterpret_cast < void const * > ( this->_pData->_pFront ),
+                                        sizeof ( __ElementType )
+                                );
                             }
+
+                            ++ this->_pData->_pFront;
                         }
 
-                        if ( ! matchFound ) {
+                        if ( this->_pData->_pFront != this->_pData->_pBack ) {
+
+                            auto const remaining = this->_pData->_pBack - this->_pData->_pFront;
                             (void) std :: memcpy (
-                                    reinterpret_cast < void * > ( pNewBack ++ ),
+                                    reinterpret_cast < void * > ( pNewBack ),
                                     reinterpret_cast < void const * > ( this->_pData->_pFront ),
-                                    sizeof ( __ElementType )
+                                    sizeof ( __ElementType ) * ( remaining )
                             );
+
+                            pNewBack += remaining;
                         }
 
-                        ++ this->_pData->_pFront;
+                        this->_pData->_pFront   = pNewFront;
+                        this->_pData->_pBack    = pNewBack;
+                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                                cds :: exchange (
+                                        this->_pData->_pBuffer,
+                                        pNewBuffer
+                                )
+                        );
+
+                        return currentSize - requiredSize;
                     }
 
-                    this->_pData->_pFront   = pNewFront;
-                    this->_pData->_pBack    = pNewBack;
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
-                            cds :: exchange (
-                                    this->_pData->_pBuffer,
-                                    pNewBuffer
-                            )
-                    );
+                    while ( iteratorIndex < iteratorCount && this->_pData->_pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                        ( this->_pData->_pFront ++ )->~__ElementType ();
+                        ++ iteratorIndex;
+                    }
 
-                    return size - ( this->_pData->_pBack - this->_pData->_pFront );
+                    auto const  frontRemoved    = iteratorIndex;
+                    auto        pFront          = this->_pData->_pFront;
+                    auto        pCopyFront      = this->_pData->_pFront;
+
+                    if ( iteratorIndex < iteratorCount ) {
+                        while ( pFront != this->_pData->_pBack ) {
+
+                            if ( iteratorIndex < iteratorCount && pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                                ( pFront )->~__ElementType ();
+                                ++ iteratorIndex;
+                            } else if ( pFront != pCopyFront ) {
+                                (void) std :: memcpy (
+                                        reinterpret_cast < void * > ( pCopyFront ++ ),
+                                        reinterpret_cast < void const * > ( pFront ),
+                                        sizeof ( __ElementType )
+                                );
+                            } else {
+                                pCopyFront ++;
+                            }
+
+                            ++ pFront;
+                        }
+                    }
+
+                    auto const removed = pFront - pCopyFront;
+                    this->_pData->_pBack -= removed;
+                    return removed + frontRemoved;
                 }
 
 
@@ -1154,57 +1192,95 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                                                            iteratorCount
                 ) noexcept -> Size {
 
-                    auto const  size = this->__a_size();
-                    Size        newFrontOffset = this->_pData->_pFront - this->_pData->_pBuffer;
+                    auto const  currentSize     = this->__a_size();
+                    auto const  requiredSize    = currentSize - iteratorCount;
+                    Size        iteratorIndex   = 0ULL;
 
-                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity >= size * 2ULL ) {
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __Array :: __a_minCapacity ) ) {
                         this->_pData->_frontCapacity        = 0ULL;
-                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, size );
+                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, requiredSize );
                         this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
                         this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
-                        newFrontOffset                      = 0ULL;
-                    }
 
-                    auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
-                            this->_pData->_frontCapacity + this->_pData->_backCapacity
-                    );
+                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
 
-                    auto pNewFront  = pNewBuffer + newFrontOffset;
-                    auto pNewBack   = pNewFront;
+                        auto pNewFront  = pNewBuffer;
+                        auto pNewBack   = pNewFront;
 
-                    while ( this->_pData->_pFront != this->_pData->_pBack ) {
+                        while ( this->_pData->_pFront != this->_pData->_pBack && iteratorIndex < iteratorCount ) {
 
-                        auto matchFound = false;
-                        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-
-                            if ( & ( * ( * ppIterators [ index ] ) ) == this->_pData->_pFront ) {
-                                this->_pData->_pFront->~__ElementType ();
-                                matchFound = true;
-                                break;
+                            if ( & ( * ( * ppIterators [ iteratorIndex ] ) ) == this->_pData->_pFront ) {
+                                this->_pData->_pFront->~__ElementType();
+                                ++ iteratorIndex;
+                            } else {
+                                (void) std :: memcpy (
+                                        reinterpret_cast < void * > ( pNewBack ++ ),
+                                        reinterpret_cast < void const * > ( this->_pData->_pFront ),
+                                        sizeof ( __ElementType )
+                                );
                             }
+
+                            ++ this->_pData->_pFront;
                         }
 
-                        if ( ! matchFound ) {
+                        if ( this->_pData->_pFront != this->_pData->_pBack ) {
+
+                            auto const remaining = this->_pData->_pBack - this->_pData->_pFront;
                             (void) std :: memcpy (
-                                    reinterpret_cast < void * > ( pNewBack ++ ),
+                                    reinterpret_cast < void * > ( pNewBack ),
                                     reinterpret_cast < void const * > ( this->_pData->_pFront ),
-                                    sizeof ( __ElementType )
+                                    sizeof ( __ElementType ) * ( remaining )
                             );
+
+                            pNewBack += remaining;
                         }
 
-                        ++ this->_pData->_pFront;
+                        this->_pData->_pFront   = pNewFront;
+                        this->_pData->_pBack    = pNewBack;
+                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                                cds :: exchange (
+                                        this->_pData->_pBuffer,
+                                        pNewBuffer
+                                )
+                        );
+
+                        return currentSize - requiredSize;
                     }
 
-                    this->_pData->_pFront   = pNewFront;
-                    this->_pData->_pBack    = pNewBack;
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
-                            cds :: exchange (
-                                    this->_pData->_pBuffer,
-                                    pNewBuffer
-                            )
-                    );
+                    while ( iteratorIndex < iteratorCount && this->_pData->_pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                        ( this->_pData->_pFront ++ )->~__ElementType ();
+                        ++ iteratorIndex;
+                    }
 
-                    return size - ( this->_pData->_pBack - this->_pData->_pFront );
+                    auto const  frontRemoved    = iteratorIndex;
+                    auto        pFront          = this->_pData->_pFront;
+                    auto        pCopyFront      = this->_pData->_pFront;
+
+                    if ( iteratorIndex < iteratorCount ) {
+                        while ( pFront != this->_pData->_pBack ) {
+
+                            if ( iteratorIndex < iteratorCount && pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                                ( pFront )->~__ElementType ();
+                                ++ iteratorIndex;
+                            } else if ( pFront != pCopyFront ) {
+                                (void) std :: memcpy (
+                                        reinterpret_cast < void * > ( pCopyFront ++ ),
+                                        reinterpret_cast < void const * > ( pFront ),
+                                        sizeof ( __ElementType )
+                                );
+                            } else {
+                                pCopyFront ++;
+                            }
+
+                            ++ pFront;
+                        }
+                    }
+
+                    auto const removed = pFront - pCopyFront;
+                    this->_pData->_pBack -= removed;
+                    return removed + frontRemoved;
                 }
 
 
