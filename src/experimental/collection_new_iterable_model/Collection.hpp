@@ -498,6 +498,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              *      CTC-00404-RB-removeThatMatchesMoreExact,
              *      CTC-00405-RB-removeThatMatchesMoreThanLimit,
              *      CTC-00406-RB-removeThatMatchesAll,
+             *      CTC-00419-RB-memberRemoveThat
              * }
              * @public
              */
@@ -511,6 +512,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              *      CTC-00408-RB-removeFirstThatMatchesOne,
              *      CTC-00409-RB-removeFirstThatMatchesMore,
              *      CTC-00410-RB-removeFirstThatMatchesAll,
+             *      CTC-00420-RB-memberRemoveFirstThat
              * }
              * @public
              */
@@ -524,6 +526,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              *      CTC-00412-RB-removeLastThatMatchesOne,
              *      CTC-00413-RB-removeLastThatMatchesMore,
              *      CTC-00414-RB-removeLastThatMatchesAll,
+             *      CTC-00421-RB-memberRemoveLastThat
              * }
              * @public
              */
@@ -537,6 +540,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              *      CTC-00416-RB-removeAllThatMatchesOne,
              *      CTC-00417-RB-removeAllThatMatchesMore,
              *      CTC-00418-RB-removeAllThatMatchesAll,
+             *      CTC-00422-RB-memberRemoveAllThat
              * }
              * @public
              */

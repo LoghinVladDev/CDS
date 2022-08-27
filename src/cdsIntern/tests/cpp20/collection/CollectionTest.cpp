@@ -6420,6 +6420,68 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hm ( String, String )
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringArrayMemberFunction", [this, & allOk]{
+
+        cds :: experimental :: Array < String > strArray = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5", "" };
+
+        auto copyForRemoveThat      = strArray;
+        auto copyForRemoveFirstThat = strArray;
+        auto copyForRemoveLastThat  = strArray;
+        auto copyForRemoveAllThat   = strArray;
+
+        cds :: experimental :: Collection < String > & cRT  = copyForRemoveThat;
+        cds :: experimental :: Collection < String > & cRFT = copyForRemoveFirstThat;
+        cds :: experimental :: Collection < String > & cRLT = copyForRemoveLastThat;
+        cds :: experimental :: Collection < String > & cRAT = copyForRemoveAllThat;
+        Size removeThatLimit = 5;
+
+        cds :: experimental :: Array < String > expectedAfterRemoveThat         = { "word1", "word2", "word3", "word4", "", "", "word5", "" };
+        cds :: experimental :: Array < String > expectedAfterRemoveFirstThat    = { "word1", "word2", "", "word3", "", "word4", "", "", "","", "word5", "" };
+        cds :: experimental :: Array < String > expectedAfterRemoveLastThat     = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5" };
+        cds :: experimental :: Array < String > expectedAfterRemoveAllThat      = { "word1", "word2", "word3", "word4", "word5" };
+
+        Size removeThatExpected = 5;
+        bool removeFirstThatExpected = true;
+        bool removeLastThatExpected = true;
+        Size removeAllThatExpected = 8;
+
+        /* CollectionTestCase-RemoveBy-memberRemoveThat-CPP20 : CTC-00419-RB-memberRemoveThat-CPP20 */
+        Size removeThatRes = cRT.removeThat ( removeThatLimit, & String :: empty );
+        if ( removeThatExpected != removeThatRes || ! cRT.equals ( expectedAfterRemoveThat ) ) {
+            this->logError ( "'CTC-00419-RB-memberRemoveThat-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00419-RB-memberRemoveThat-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-RemoveBy-memberRemoveFirstThat-CPP20 : CTC-00420-RB-memberRemoveFirstThat-CPP20 */
+        bool removeFirstThatRes = cRFT.removeFirstThat ( & String :: empty );
+        if ( removeFirstThatExpected != removeFirstThatRes || ! cRFT.equals ( expectedAfterRemoveFirstThat ) ) {
+            this->logError ( "'CTC-00420-RB-memberRemoveFirstThat-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00420-RB-memberRemoveFirstThat-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-RemoveBy-memberRemoveLastThat-CPP20 : CTC-00421-RB-memberRemoveLastThat-CPP20 */
+        bool removeLastThatRes = cRLT.removeLastThat ( & String :: empty );
+        if ( removeLastThatExpected != removeLastThatRes || ! cRLT.equals ( expectedAfterRemoveLastThat ) ) {
+            this->logError ( "'CTC-00421-RB-memberRemoveLastThat-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00421-RB-memberRemoveLastThat-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-RemoveBy-memberRemoveAllThat-CPP20 : CTC-00422-RB-memberRemoveAllThat-CPP20 */
+        Size removeAllThatRes = cRAT.removeAllThat ( & String :: empty );
+        if ( removeAllThatExpected != removeAllThatRes || ! cRAT.equals ( expectedAfterRemoveAllThat ) ) {
+            this->logError ( "'CTC-00422-RB-memberRemoveAllThat-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00422-RB-memberRemoveAllThat-CPP20' OK" );
+        }
+
+    });
 
     return allOk;
 }

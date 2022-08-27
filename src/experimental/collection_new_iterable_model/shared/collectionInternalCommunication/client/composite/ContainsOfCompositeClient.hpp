@@ -11,8 +11,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 /**
-                 * @class Interface for calling containsOf statements - contains + AnyOf / AnyNotOf / AllOf / NoneOf, with a generic parameter type ( Collection, initializer_list, etc. )
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism
+                 * @interface Interface for calling containsOf statements - contains + AnyOf / AnyNotOf / AllOf / NoneOf, with a generic parameter type ( Collection, initializer_list, etc. )
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * Implementor required to also be derived from the Collection abstract class, or provide an
+                 * equivalent 'contains' base function, as provided by the Collection class
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __FromIterableType is the type of the parameter given to containsOf functions
                  * @tparam __contains is the function used in containsAnyNotOf to check for inclusion of element from caller to parameter
@@ -118,7 +120,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @typedef Variant of the ContainsOfCompositeClient, only alias due to it being a composite client
                  * -> will use primitive local clients, making it a local client
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * Implementor required to also be derived from the Collection abstract class, or provide an
+                 * equivalent 'contains' base function, as provided by the Collection class
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __FromIterableType is the type of the parameter given to containsOf functions
                  * @tparam __contains is the function used in containsAnyNotOf to check for inclusion of element from caller to parameter

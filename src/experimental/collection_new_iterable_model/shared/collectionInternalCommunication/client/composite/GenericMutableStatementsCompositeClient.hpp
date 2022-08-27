@@ -15,7 +15,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 /**
                  * @class Interface for calling functional statements ( actions & predicates as parameters ) on an mutable iterable type ( has 'begin' and 'end' )
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to implement a variant of DelegateForwardIterablePrimitiveClient,
+                 * or provide a set of equivalent member functions provided by said client
                  * @tparam __ElementType is the type of elements contained into the Object
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -304,7 +306,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @typedef Variant of the GenericMutableStatementsCompositeClient, only alias due to it being a composite client
                  * -> will use primitive local clients, making it a local client
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to implement a variant of DelegateForwardIterablePrimitiveClient,
+                 * or provide a set of equivalent member functions provided by said client
                  * @tparam __ElementType is the type of elements contained into the Object
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA

@@ -26,7 +26,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 /**
                  * @interface Interface for creating Abstract Iterator requests and creating Wrapper Iterators for received Iterators
-                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to be derived from either the Collection abstract class or
+                 * a class extending the __CollectionInternalCommunicationChannel class, or provide equivalent member
+                 * function implementations provided by the __CollectionInternalCommunicationChannel class
+                 * Note : This Client will request the const member functions identified with:
+                 *      __cirt_begin
+                 *      __cirt_end
+                 *
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false
                  *
@@ -108,7 +115,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 /**
                  * @class Interface for creating Local Forward Const Iterator requests.
-                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to implement an appropriate dispatcher ( __CollectionServerDispatcher or lower in hierarchy ),
+                 * or provide an equivalent __cbeginLocal and __cendLocal member function set to the one provided
+                 * by the dispatcher
                  * @tparam __ConstIteratorType is the type of the iterator returned by the begin / end / cbegin / cend functions
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA

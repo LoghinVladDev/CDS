@@ -20,7 +20,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @interface Interface for creating Abstract Iterator remove requests.
                  *
-                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to be derived from either the Collection abstract class or
+                 * a class extending the __CollectionInternalCommunicationChannel class, or provide equivalent member
+                 * function implementations provided by the __CollectionInternalCommunicationChannel class
+                 * Note : This Client will request the member functions identified with:
+                 *      __cirt_remove
+                 *      __cirt_removeArray
+                 *
                  * @tparam __ElementType is the type of elements enclosed in the object
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -85,7 +92,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @interface Interface for creating Local Iterator remove requests. ( not through channel, through function )
                  *
-                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism
+                 * @tparam __ReceiverType is the type of implementor class, used for static polymorphism.
+                 * Implementor is also required to implement an appropriate dispatcher ( __CollectionServerDispatcher or lower in hierarchy ),
+                 * or provide an equivalent __remove and __removeArray member function set to the one provided
+                 * by the dispatcher
                  * @tparam __ElementType is the type of elements enclosed in the object
                  * @tparam __IteratorType is the iterator type to be expected as parameter to the functions
                  *
