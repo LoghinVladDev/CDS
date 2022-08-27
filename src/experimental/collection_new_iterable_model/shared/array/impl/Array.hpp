@@ -1155,24 +1155,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto        pFront          = this->_pData->_pFront;
                     auto        pCopyFront      = this->_pData->_pFront;
 
-                    if ( iteratorIndex < iteratorCount ) {
-                        while ( pFront != this->_pData->_pBack ) {
+                    while ( pFront != this->_pData->_pBack && iteratorIndex < iteratorCount ) {
 
-                            if ( iteratorIndex < iteratorCount && pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
-                                ( pFront )->~__ElementType ();
-                                ++ iteratorIndex;
-                            } else if ( pFront != pCopyFront ) {
-                                (void) std :: memcpy (
-                                        reinterpret_cast < void * > ( pCopyFront ++ ),
-                                        reinterpret_cast < void const * > ( pFront ),
-                                        sizeof ( __ElementType )
-                                );
-                            } else {
-                                pCopyFront ++;
-                            }
-
-                            ++ pFront;
+                        if ( pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                            ( pFront )->~__ElementType ();
+                            ++ iteratorIndex;
+                        } else if ( pFront != pCopyFront ) {
+                            (void) std :: memcpy (
+                                    reinterpret_cast < void * > ( pCopyFront ++ ),
+                                    reinterpret_cast < void const * > ( pFront ),
+                                    sizeof ( __ElementType )
+                            );
+                        } else {
+                            pCopyFront ++;
                         }
+
+                        ++ pFront;
+                    }
+
+                    if ( pFront != this->_pData->_pBack ) {
+                        auto const remaining = this->_pData->_pBack - pFront;
+                        (void) std :: memmove (
+                                reinterpret_cast < void * > ( pCopyFront ),
+                                reinterpret_cast < void const * > ( pFront ),
+                                sizeof ( __ElementType ) * remaining
+                        );
                     }
 
                     auto const removed = pFront - pCopyFront;
@@ -1258,24 +1265,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto        pFront          = this->_pData->_pFront;
                     auto        pCopyFront      = this->_pData->_pFront;
 
-                    if ( iteratorIndex < iteratorCount ) {
-                        while ( pFront != this->_pData->_pBack ) {
+                    while ( pFront != this->_pData->_pBack && iteratorIndex < iteratorCount ) {
 
-                            if ( iteratorIndex < iteratorCount && pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
-                                ( pFront )->~__ElementType ();
-                                ++ iteratorIndex;
-                            } else if ( pFront != pCopyFront ) {
-                                (void) std :: memcpy (
-                                        reinterpret_cast < void * > ( pCopyFront ++ ),
-                                        reinterpret_cast < void const * > ( pFront ),
-                                        sizeof ( __ElementType )
-                                );
-                            } else {
-                                pCopyFront ++;
-                            }
-
-                            ++ pFront;
+                        if ( pFront == & ( * ( * ppIterators [ iteratorIndex ] ) ) ) {
+                            ( pFront )->~__ElementType ();
+                            ++ iteratorIndex;
+                        } else if ( pFront != pCopyFront ) {
+                            (void) std :: memcpy (
+                                    reinterpret_cast < void * > ( pCopyFront ++ ),
+                                    reinterpret_cast < void const * > ( pFront ),
+                                    sizeof ( __ElementType )
+                            );
+                        } else {
+                            pCopyFront ++;
                         }
+
+                        ++ pFront;
+                    }
+
+                    if ( pFront != this->_pData->_pBack ) {
+                        auto const remaining = this->_pData->_pBack - pFront;
+                        (void) std :: memmove (
+                                reinterpret_cast < void * > ( pCopyFront ),
+                                reinterpret_cast < void const * > ( pFront ),
+                                sizeof ( __ElementType ) * remaining
+                        );
                     }
 
                     auto const removed = pFront - pCopyFront;
