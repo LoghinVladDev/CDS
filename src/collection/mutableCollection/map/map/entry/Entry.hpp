@@ -3,12 +3,12 @@
 //
 
 #ifndef __CDS_MAP_ENTRY_HPP__
-#define __CDS_MAP_ENTRY_HPP__
+#define __CDS_MAP_ENTRY_HPP__ // NOLINT(bugprone-reserved-identifier)
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl {
+        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
             template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
             class __MapEntry { // NOLINT(bugprone-reserved-identifier)
@@ -107,7 +107,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard auto toString () const noexcept -> String;
 
             public:
-                template < typename __TKeyType, typename __TValueType >
+                __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;
+
+            public:
+                template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
                 friend auto operator << (
                         std :: ostream                                & out,
                         __MapEntry < __TKeyType, __TValueType > const & object

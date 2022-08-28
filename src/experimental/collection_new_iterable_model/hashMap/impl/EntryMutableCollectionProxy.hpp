@@ -219,6 +219,46 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->template map < HashMapBase > ()->__removeConst ( iterator );
         }
 
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __removeArray (
+                Iterator    const * const * ppIterators,
+                Size                        iteratorArrayCount
+        ) noexcept -> Size {
+
+            return this->template map < HashMapBase > ()->__removeArray (
+                    ppIterators,
+                    iteratorArrayCount
+            );
+        }
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __removeConstArray (
+                ConstIterator   const * const * ppIterators,
+                Size                            iteratorArrayCount
+        ) noexcept -> Size {
+
+            return this->template map < HashMapBase > ()->__removeConstArray (
+                    ppIterators,
+                    iteratorArrayCount
+            );
+        }
+
     }
 }
 

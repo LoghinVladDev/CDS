@@ -144,11 +144,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline HashMap <
                 __KeyType,
                 __ValueType,
@@ -159,7 +154,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ),
-                Implementation ( map ) {
+                Implementation (
+                        map,
+                        & cds :: experimental :: __hidden :: __impl :: __hashMapCopyConstructor < __KeyType, __ValueType >
+                ) {
 
         }
 
@@ -218,12 +216,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __Hasher
         > :: HashMap (
                 __IteratorType const & begin,
-                __IteratorType const & end
+                __IteratorType const & end,
+                Size                   count
         ) noexcept :
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ) {
 
+            (void) count;
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 (void) this->insert ( * iterator );
             }
@@ -247,13 +247,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > :: HashMap (
                 __Hasher        const & hasher,
                 __IteratorType  const & begin,
-                __IteratorType  const & end
+                __IteratorType  const & end,
+                Size                    count
         ) noexcept :
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ),
                 Implementation ( hasher ) {
 
+            (void) count;
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 (void) this->insert ( * iterator );
             }
@@ -278,7 +280,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 HashMap (
                         initializerList.begin(),
-                        initializerList.end()
+                        initializerList.end(),
+                        initializerList.size()
                 ) {
 
         }
@@ -304,7 +307,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 HashMap (
                         hasher,
                         initializerList.begin(),
-                        initializerList.end()
+                        initializerList.end(),
+                        initializerList.size()
                 ) {
 
         }
@@ -314,22 +318,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,        /* NOLINT(bugprone-reserved-identifier) */
-                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                >
-        > __CDS_OptimalInline HashMap <
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline HashMap <
                 __KeyType,
                 __ValueType,
                 __Hasher
         > :: HashMap (
-                Collection < __OtherElementType > const & collection
+                __IterableType const & iterable
         ) noexcept :
                 HashMap (
-                        collection.begin(),
-                        collection.end()
+                        iterable.begin(),
+                        iterable.end()
                 ) {
 
         }
@@ -339,24 +338,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,        /* NOLINT(bugprone-reserved-identifier) */
-                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                >
-        > __CDS_OptimalInline HashMap <
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline HashMap <
                 __KeyType,
                 __ValueType,
                 __Hasher
         > :: HashMap (
-                __Hasher                            const & hasher,
-                Collection < __OtherElementType >   const & collection
+                __Hasher        const & hasher,
+                __IterableType  const & iterable
         ) noexcept :
                 HashMap (
                         hasher,
-                        collection.begin(),
-                        collection.end()
+                        iterable.begin(),
+                        iterable.end()
                 ) {
 
         }
@@ -380,11 +374,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
         > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
@@ -397,9 +386,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this-> template __ht_copy <
+            this-> __ht_copy (
+                    map,
                     & cds :: experimental :: __hidden :: __impl :: __hashMapCopyConstructor < __KeyType, __ValueType >
-            > ( map );
+            );
 
             return * this;
         }
@@ -427,29 +417,45 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template <
-                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-        > template <
-                typename __TElementType,        /* NOLINT(bugprone-reserved-identifier) */
-                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                >
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
                 __Hasher
         > :: operator = (
-                Collection < __OtherElementType > const & collection
+                std :: initializer_list < EntryType > const & initializerList
         ) noexcept -> HashMap & {
 
-            if ( this == & collection ) {
+            this->__ht_clear ();
+            for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+                (void) this->insert ( * iterator );
+            }
+
+            return * this;
+        }
+
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: operator = (
+                __IterableType const & iterable
+        ) noexcept -> HashMap & {
+
+            if ( this == & iterable ) {
                 return * this;
             }
 
             this->__ht_clear ();
-            for ( auto iterator = collection.begin(); iterator != collection.end(); ++ iterator ) {
+            for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }
 

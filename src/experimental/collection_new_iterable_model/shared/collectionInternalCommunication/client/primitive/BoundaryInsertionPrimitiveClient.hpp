@@ -1,20 +1,20 @@
-//
-// Created by loghin on 6/28/22.
-//
+/*
+ * Created by loghin on 6/28/22.
+ */
 
 #ifndef __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__
+#define __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType                   // NOLINT(bugprone-reserved-identifier)
-                > class __BoundaryInsertionPrimitiveClient {    // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType                   /* NOLINT(bugprone-reserved-identifier) */
+                > class __BoundaryInsertionPrimitiveClient {    /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using ElementType       = __ElementType;
@@ -24,7 +24,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -34,7 +34,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -44,7 +44,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -54,7 +54,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -64,7 +64,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -74,7 +74,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -84,7 +84,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -94,7 +94,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -103,38 +103,52 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplaceFront (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplaceBack (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushFrontAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushBackAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
-                    auto pushFrontAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -143,14 +157,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
-                    auto pushBackAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -159,26 +187,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
+                    template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushFrontAllOf (
                             __IteratorType const & begin,
-                            __IteratorType const & end
+                            __IteratorType const & end,
+                            Size                   count = 0ULL
                     ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
                 public:
-                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
+                    template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushBackAllOf (
                             __IteratorType const & begin,
-                            __IteratorType const & end
+                            __IteratorType const & end,
+                            Size                   count = 0ULL
                     ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
                 };
 
 
                 template <
-                        typename __ReceiverType,                    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType                       // NOLINT(bugprone-reserved-identifier)
-                > class __LocalBoundaryInsertionPrimitiveClient {   // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType                       /* NOLINT(bugprone-reserved-identifier) */
+                > class __LocalBoundaryInsertionPrimitiveClient {   /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using ElementType       = __ElementType;
@@ -188,7 +218,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -198,7 +228,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -208,7 +238,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -218,7 +248,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -228,7 +258,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -238,7 +268,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -248,7 +278,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -258,7 +288,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveConstructible < __TElementType > ()
                             > = 0
@@ -267,38 +297,52 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplaceFront (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplaceBack (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 public:
-                    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushFrontAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushBackAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 public:
-                    template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
-                    auto pushFrontAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushFrontAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -307,14 +351,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
-                    auto pushBackAllOf (
+                    template <
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
                             __IterableType const & iterable
                     ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: meta :: EnableIf <
+                                    ! meta :: __IterableSizeAvailable < __IterableType > :: value
+                            > = 0
+                    > auto pushBackAllOf (
+                            __IterableType const & iterable
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
+
+                public:
+                    template <
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -323,17 +381,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 public:
-                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
+                    template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushFrontAllOf (
                             __IteratorType const & begin,
-                            __IteratorType const & end
+                            __IteratorType const & end,
+                            Size                   count = 0ULL
                     ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
                 public:
-                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
+                    template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto pushBackAllOf (
                             __IteratorType const & begin,
-                            __IteratorType const & end
+                            __IteratorType const & end,
+                            Size                   count = 0ULL
                     ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
                 };
 
@@ -342,4 +402,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__
+#endif /* __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ */

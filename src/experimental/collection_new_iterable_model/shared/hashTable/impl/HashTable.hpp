@@ -112,7 +112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline __HashTable <
                         __ElementType,
                         __KeyType,
@@ -122,10 +122,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyComparator,
                         __nodeDestructor
                 > :: __HashTable (
-                        __HashTable const & hashTable
+                        __HashTable     const & hashTable,
+                        __CopyFunction  const & copyFunction
                 ) noexcept {
 
-                    this->__ht_copyCleared < __copy > ( hashTable );
+                    this->__ht_copyCleared ( hashTable, copyFunction );
                 }
 
 
@@ -936,6 +937,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ht_Iterator const & iterator
                 ) noexcept -> bool {
 
+                    if (
+                            iterator._bucketIndex >= iterator._bucketCount ||
+                            iterator._pListArray == nullptr ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode
+                    ) {
+
+                        return false;
+                    }
+
                     return this->__ht_remove (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode,
@@ -964,6 +974,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ht_ConstIterator const & iterator
                 ) noexcept -> bool {
 
+                    if (
+                            iterator._bucketIndex >= iterator._bucketCount ||
+                            iterator._pListArray == nullptr ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode
+                    ) {
+
+                        return false;
+                    }
+
                     return this->__ht_remove (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode,
@@ -980,8 +999,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
-                > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
                         __KeyType,
@@ -990,16 +1007,53 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
-                > :: __ht_copy (
-                        __HashTable const & table
-                ) noexcept -> void {
+                > :: __ht_removeIteratorArray (
+                        __ht_Iterator   const * const * ppIterators,
+                        Size                            iteratorCount
+                ) noexcept -> Size {
 
-                    if ( this == & table ) {
-                        return;
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        if ( this->__ht_removeIterator ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
                     }
 
-                    this->__ht_clear();
-                    this->__ht_copyCleared < __copy > ( table );
+                    return removedCount;
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_removeConstIteratorArray (
+                        __ht_ConstIterator  const * const * ppIterators,
+                        Size                                iteratorCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        if ( this->__ht_removeIteratorConst ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
+                    }
+
+                    return removedCount;
                 }
 
 
@@ -1012,7 +1066,39 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        cds :: utility :: CopyConstructorFunction < __ElementType > __copy                      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
+                > :: __ht_copy (
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
+                ) noexcept -> void {
+
+                    if ( this == & table ) {
+                        return;
+                    }
+
+                    this->__ht_clear();
+                    this->__ht_copyCleared ( table, copyFunction );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename                                                            __CopyFunction      /* NOLINT(bugprone-reserved-identifier) */
                 > auto __HashTable <
                         __ElementType,
                         __KeyType,
@@ -1022,7 +1108,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyComparator,
                         __nodeDestructor
                 > :: __ht_copyCleared (
-                        __HashTable const & table
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
                 ) noexcept -> void {
 
                     if ( table.__ht_empty() ) {
@@ -1043,7 +1130,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                             auto pNewNode       = this->__ht_allocateNode ();
                             pNewNode->_pNext    = nullptr;
-                            __copy ( pNewNode->_data, pTableHead->_data );
+                            copyFunction ( pNewNode->_data, pTableHead->_data );
 
                             pTableHead = pTableHead->_pNext;
 

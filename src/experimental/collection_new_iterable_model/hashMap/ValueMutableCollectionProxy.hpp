@@ -545,6 +545,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             auto __removeConst (    /* NOLINT(bugprone-reserved-identifier) */
                     ConstIterator const * iterator
             ) noexcept -> bool;
+
+        public:
+            auto __removeArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    Iterator    const * const * ppIterators,
+                    Size                        iteratorArrayCount
+            ) noexcept -> Size;
+
+        public:
+            auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier) */
+                    ConstIterator   const * const * ppIterators,
+                    Size                            iteratorArrayCount
+            ) noexcept -> Size;
         };
 
     }

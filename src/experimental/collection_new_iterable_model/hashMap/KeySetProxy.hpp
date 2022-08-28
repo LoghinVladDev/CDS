@@ -423,6 +423,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> bool;
 
         protected:
+            auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier) */
+                    ConstIterator   const * const * ppIterators,
+                    Size                            iteratorArraySize
+            ) noexcept -> Size;
+
+        protected:
             auto __findConst (    /* NOLINT(bugprone-reserved-identifier) */
                     __KeyType const & key
             ) const noexcept -> ConstIterator;

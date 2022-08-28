@@ -1,21 +1,21 @@
-//
-// Created by loghin on 09/08/22.
-//
+/*
+ * Created by loghin on 09/08/22.
+ */
 
 #ifndef __CDS_SHARED_DELEGATE_FIND_UNIQUE_IMMUTABLE_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_DELEGATE_FIND_UNIQUE_IMMUTABLE_PRIMITIVE_CLIENT_HPP__
+#define __CDS_SHARED_DELEGATE_FIND_UNIQUE_IMMUTABLE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __KeyType,                     // NOLINT(bugprone-reserved-identifier)
-                        bool     __bidirectional                // NOLINT(bugprone-reserved-identifier)
-                > class __FindUniqueImmutablePrimitiveClient {    // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        bool     __bidirectional                /* NOLINT(bugprone-reserved-identifier) */
+                > class __FindUniqueImmutablePrimitiveClient {  /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     using ConstIterator =
@@ -33,10 +33,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,                    // NOLINT(bugprone-reserved-identifier)
-                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
-                        typename __IteratorType                     // NOLINT(bugprone-reserved-identifier)
-                > class __LocalFindUniqueImmutablePrimitiveClient {   // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType                     /* NOLINT(bugprone-reserved-identifier) */
+                > class __LocalFindUniqueImmutablePrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     using ConstIterator = __IteratorType;
@@ -52,4 +52,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_DELEGATE_FIND_UNIQUE_IMMUTABLE_PRIMITIVE_CLIENT_HPP__
+#endif /* __CDS_SHARED_DELEGATE_FIND_UNIQUE_IMMUTABLE_PRIMITIVE_CLIENT_HPP__ */

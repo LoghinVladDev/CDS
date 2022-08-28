@@ -49,11 +49,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > template <
-                        typename __TElementType,                                    /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TElementType > ()
-                        >
                 > __CDS_OptimalInline __DoubleLinkedList <
                         __ElementType,
                         __equals
@@ -230,7 +225,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_remove (
+                > :: __dll_removeIterator (
                         AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
@@ -264,7 +259,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_remove (
+                > :: __dll_removeConstIterator (
                         AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
@@ -289,6 +284,52 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     -- this->_size;
 
                     return true;
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_removeIteratorArray (
+                        AbstractBidirectionalNodeIterator < __ElementType > const * const * ppIterators,
+                        Size                                                                iteratorCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        if ( this->__dll_removeIterator ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
+                    }
+
+                    return removedCount;
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_removeConstIteratorArray (
+                        AbstractBidirectionalNodeConstIterator < __ElementType >    const * const * ppIterators,
+                        Size                                                                        iteratorCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+
+                        if ( this->__dll_removeConstIterator ( * ppIterators [ index ] ) ) {
+                            ++ removedCount;
+                        }
+                    }
+
+                    return removedCount;
                 }
 
 
@@ -1116,6 +1157,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         }
 
                         this->_pBack = pNewNode;
+                        pOtherHead = pOtherHead->_pNext;
                     }
 
                     this->_size = list._size;

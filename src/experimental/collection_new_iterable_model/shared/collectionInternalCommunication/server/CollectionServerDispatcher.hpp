@@ -30,6 +30,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __cendFunction               is the function of the implementation used to obtain an end const iterator (i.e. shared/__Array :: __a_cbegin)
                  * @tparam __newAddressFunction         is the function of the implementation used to obtain a new element address (i.e. shared/__Array :: __a_newAddress)
                  * @tparam __removeConstFunction        is the function of the implementation used to remove a const iterator (i.e. shared/__Array :: __a_removeConstIterator)
+                 * @tparam __removeConstArrayFunction   is the function of the implementation used to remove multiple const iterators (i.e. shared/__Array :: __a_removeConstIteratorArray)
                  *
                  * @test All Tests involving Collections apply
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
@@ -38,16 +39,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __ServerType,                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ServiceType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType,                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __AbstractConstIteratorType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ConstIteratorType,                                                                                           /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __cbeginFunction )        ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __cendFunction )          ()                                  const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )           -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )     -> bool                 /* NOLINT(bugprone-reserved-identifier) */
-                > class __CollectionServerDispatcher {                                                                                          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServerType,                                                                                                                          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ServiceType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AbstractConstIteratorType,                                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ConstIteratorType,                                                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size                 /* NOLINT(bugprone-reserved-identifier) */
+                > class __CollectionServerDispatcher {                                                                                                                  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -112,7 +114,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __removeConstFunction, and is used by the server
-                     * @param pIterator : __ConstIteratorType cptr = Address to an Immutable Constant Iterator to be removed
+                     * @param pIterator : __AbstractConstIteratorType cptr = Address to an Immutable Constant Iterator to be removed
                      * @exceptsafe
                      * @return bool = true if iterator was removed, false otherwise
                      *
@@ -122,6 +124,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __removeConst ( /* NOLINT(bugprone-reserved-identifier) */
                             __AbstractConstIteratorType const * pIterator
                     ) noexcept -> bool;
+
+                protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __removeConstArrayFunction, and is used by the server
+                     * @param ppIterators : __AbstractConstIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Constant Iterators to be removed
+                     * @param iteratorArrayCount : Size = number of iterator addresses contained in the array
+                     * @exceptsafe
+                     * @return Size = number of iterators to be removed
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    auto __removeConstArray ( /* NOLINT(bugprone-reserved-identifier) */
+                            __AbstractConstIteratorType const * const * ppIterators,
+                            Size                                        iteratorArrayCount
+                    ) noexcept -> Size;
                 };
 
             }

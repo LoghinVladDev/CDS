@@ -1,19 +1,19 @@
-//
-// Created by loghin on 6/28/22.
-//
+/*
+ * Created by loghin on 6/28/22.
+ */
 
 #ifndef __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
+#define __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __AccumulatorType, // NOLINT(bugprone-reserved-identifier)
-                        typename __LastType         // NOLINT(bugprone-reserved-identifier)
-                > inline auto __expansiveInsert (   // NOLINT(bugprone-reserved-identifier)
+                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
+                > inline auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier) */
                         __AccumulatorType   * pAccumulator,
                         __LastType         && lastValue
                 ) noexcept ( false ) -> void {
@@ -23,10 +23,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename     __AccumulatorType, // NOLINT(bugprone-reserved-identifier)
-                        typename     __FirstType,       // NOLINT(bugprone-reserved-identifier)
-                        typename ... __RemainingTypes   // NOLINT(bugprone-reserved-identifier)
-                > inline auto __expansiveInsert (       // NOLINT(bugprone-reserved-identifier)
+                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
+                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
+                > inline auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier) */
                         __AccumulatorType      *     pAccumulator,
                         __FirstType           &&     firstValue,
                         __RemainingTypes      && ... remainingValues
@@ -41,11 +41,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -57,17 +57,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
-                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
-                    bool newElementCreated;
-                    auto pElementLocation = (
-                                reinterpret_cast < __ReceiverType * > ( this )->*
-                                reinterpret_cast <
-                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
-                                                __ConstructibleElementType const *,
-                                                bool                             *
-                                        )
-                                > (
-                                        reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                    using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+
+                    auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                    bool        newElementCreated;
+                    auto const  pElementLocation        = (
+                                pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
+                                        pReceiver->__cicch_obtainGenericHandler (
                                                 __CollectionInternalRequestType :: __cirt_newAddress
                                         )
                                 )
@@ -87,11 +84,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -103,17 +100,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
-                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
-                    bool newElementCreated;
-                    auto pElementLocation = (
-                            reinterpret_cast < __ReceiverType * > ( this )->*
-                            reinterpret_cast <
-                                    __ConstructibleElementType * ( __ReceiverType :: * ) (
-                                            __ConstructibleElementType const *,
-                                            bool                             *
-                                    )
-                            > (
-                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                    using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+
+                    auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                    bool        newElementCreated;
+                    auto  const pElementLocation        = (
+                            pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
+                                    pReceiver->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newAddress
                                     )
                             )
@@ -133,11 +127,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -154,11 +148,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -175,11 +169,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -188,24 +182,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference {
 
-                    using __ConstructibleElementType = cds :: meta :: RemoveConst < __ElementType >; // NOLINT(bugprone-reserved-identifier)
+                    using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
-                    bool newElementCreated;
-
                     try {
-                        auto pElementLocation = (
-                                reinterpret_cast < __ReceiverType * > ( this )->*
-                                reinterpret_cast <
-                                        __ConstructibleElementType * ( __ReceiverType :: * ) (
-                                                __ConstructibleElementType const *,
-                                                bool                             *
-                                        )
-                                > (
-                                        reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+
+                        auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                        bool        newElementCreated;
+                        auto  const pElementLocation        = (
+                                pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
+                                        pReceiver->__cicch_obtainGenericHandler (
                                                 __CollectionInternalRequestType :: __cirt_newAddress
                                         )
                                 )
@@ -217,7 +208,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         if ( ! newElementCreated ) {
                             referenceElementContainer.destruct();
                         } else {
-                            std::memcpy (
+                            (void) std :: memcpy (
                                     pElementLocation,
                                     & referenceElementContainer._data[0],
                                     sizeof ( __ElementType )
@@ -233,11 +224,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -254,11 +245,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -275,11 +266,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -296,11 +287,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -320,11 +311,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -341,11 +332,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -365,11 +356,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -380,17 +371,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( false ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        this->insert ( * iterator );
+                        (void) this->insert ( * iterator );
                     }
                 }
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -408,11 +399,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -441,11 +432,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -474,11 +465,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -495,11 +486,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType       /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
@@ -516,11 +507,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __EmplaceArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -545,7 +536,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         if ( ! newElementCreated ) {
                             referenceElementContainer.destruct();
                         } else {
-                            std::memcpy (
+                            (void) std :: memcpy (
                                     pElementLocation,
                                     & referenceElementContainer._data[0],
                                     sizeof ( __ElementType )
@@ -561,11 +552,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -582,11 +573,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename ... __ArgumentTypes // NOLINT(bugprone-reserved-identifier)
+                        typename ... __ArgumentTypes /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -603,11 +594,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -624,11 +615,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -648,11 +639,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IterableType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -669,11 +660,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,            /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
@@ -693,11 +684,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -708,17 +699,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( false ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        this->insert ( * iterator );
+                        (void) this->insert ( * iterator );
                     }
                 }
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType             /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
@@ -739,4 +730,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_IMPL_HPP__ */

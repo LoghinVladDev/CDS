@@ -50,15 +50,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: cbegin () const noexcept -> ConstIterator {
 
+                    using __ReceiverBeginHandlerType    = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const;
+                    auto const pReceiver                = reinterpret_cast < __ReceiverType const * > ( this );
+
                     /* Construct a ConstIterator with the current collection and the result from calling the received server member function of type __cirt_begin.
                      * Member function is acquired from the Collection Communcation Channel */
                     return ConstIterator (
-                            reinterpret_cast < __ReceiverType const * > ( this ), (
-                                    reinterpret_cast < __ReceiverType const * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
-                                    > (
-                                            reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverBeginHandlerType > (
+                                            pReceiver->__cicch_obtainGenericConstHandler (
                                                     __CollectionInternalRequestType :: __cirt_begin
                                             )
                                     )
@@ -77,15 +77,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __bidirectional
                 > :: cend () const noexcept -> ConstIterator {
 
+                    using __ReceiverEndHandlerType  = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const;
+                    auto const pReceiver            = reinterpret_cast < __ReceiverType const * > ( this );
+
                     /* Construct a ConstIterator with the current collection and the result from calling the received server member function of type __cirt_end.
                      * Member function is acquired from the Collection Communcation Channel */
                     return ConstIterator (
-                            reinterpret_cast < __ReceiverType const * > ( this ), (
-                                    reinterpret_cast < __ReceiverType const * > ( this )->*
-                                    reinterpret_cast <
-                                            __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
-                                    > (
-                                            reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                            pReceiver, (
+                                    pReceiver ->* reinterpret_cast < __ReceiverEndHandlerType > (
+                                            pReceiver->__cicch_obtainGenericConstHandler (
                                                     __CollectionInternalRequestType :: __cirt_end
                                             )
                                     )

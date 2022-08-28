@@ -176,7 +176,42 @@ void timingTest (int n) {
 
 #include <CDS/Function>
 
+class Test {public:
+    void log (...) {}
+    void logOK (...) {}
+    void logError (...) {}
+};
+
+class B123 {
+public:
+    B123 () = delete;
+    B123 (B123 const &) = delete;
+    B123 (B123 &&) = delete;
+};
+
 int main () {
+
+    cds :: experimental :: Array < B123 > adasdawdaw;
+
+    cds :: experimental :: Array < int > arr = {1, 2, 3, 4};
+    cds :: experimental :: Array < int > otherArra = { 5, 6, 7, 8 };
+
+    arr = {1, 2, 3};
+
+    arr.pushBackAllOf ( otherArra );
+
+    std :: cout << arr << '\n';
+
+    return 0;
+
+//    cds :: experimental :: Array < int > arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+//    auto copy = arr;
+//    cds :: experimental :: Collection < int > & c242 = copy;
+//    c242.removeThat (2, [](int e){return e >= 4 && e <= 6;});
+//
+//    std :: cout << arr << '\n';
+
+    return 0;
 
 //    cds :: experimental :: HashMap < int, int > * pM;
 //

@@ -85,9 +85,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > __CDS_Implicit __HashTable ( /* NOLINT(google-explicit-constructor) */
-                            __HashTable const & hashTable
+                            typename __CopyFunction /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_Implicit __HashTable (  /* NOLINT(google-explicit-constructor) */
+                            __HashTable     const & hashTable,
+                            __CopyFunction  const & copyFunction
                     ) noexcept;
 
                 protected:
@@ -208,17 +209,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept -> bool;
 
                 protected:
+                    auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier) */
+                            __ht_Iterator   const * const * ppIterators,
+                            Size                            iteratorCount
+                    ) noexcept -> Size;
+
+                protected:
+                    auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier) */
+                            __ht_ConstIterator  const * const * ppIterators,
+                            Size                                iteratorCount
+                    ) noexcept -> Size;
+
+                protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __ht_copy (                                                          /* NOLINT(bugprone-reserved-identifier) */
-                            __HashTable const & table
+                            typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier) */
+                            __HashTable     const & table,
+                            __CopyFunction  const & copyFunction
                     ) noexcept -> void;
 
                 protected:
                     template <
-                            cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __ht_copyCleared (                                                   /* NOLINT(bugprone-reserved-identifier) */
-                            __HashTable const & table
+                            typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ht_copyCleared (           /* NOLINT(bugprone-reserved-identifier) */
+                            __HashTable     const & table,
+                            __CopyFunction  const & copyFunction
                     ) noexcept -> void;
 
                 protected:
@@ -341,6 +356,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyExtractor,
                                         __keyComparator,
                                         __nodeDestructor
+                                > :: __ht_removeConstIteratorArray,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
                                 > :: __ht_findIteratorConst
                         > {};
 
@@ -449,6 +473,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __keyComparator,
                                         __nodeDestructor
                                 > :: __ht_removeIteratorConst,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
+                                > :: __ht_removeIteratorArray,
+                                & __HashTable <
+                                        __ElementType,
+                                        __KeyType,
+                                        __KeyHasher,
+                                        __RehashPolicy,
+                                        __keyExtractor,
+                                        __keyComparator,
+                                        __nodeDestructor
+                                > :: __ht_removeConstIteratorArray,
                                 & __HashTable <
                                         __ElementType,
                                         __KeyType,

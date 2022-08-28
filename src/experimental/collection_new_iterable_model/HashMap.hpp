@@ -277,12 +277,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr HashMap () noexcept;
 
         public:
-            template <
-                    typename __TElementType = ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > HashMap ( /* NOLINT(google-explicit-constructor) */
+            HashMap ( /* NOLINT(google-explicit-constructor) */
                     HashMap const & map
             ) noexcept;
 
@@ -305,7 +300,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     > = 0
             > HashMap (
                     __IteratorType const & begin,
-                    __IteratorType const & end
+                    __IteratorType const & end,
+                    Size                   count = 0ULL
             ) noexcept;
 
         public:
@@ -318,7 +314,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             > HashMap (
                     __Hasher        const & hasher,
                     __IteratorType  const & begin,
-                    __IteratorType  const & end
+                    __IteratorType  const & end,
+                    Size                    count = 0ULL
             ) noexcept;
 
         public:
@@ -343,38 +340,23 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
-            template <
-                    typename __TElementType = ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __OtherElementType,            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                    > = 0
-            > __CDS_Explicit HashMap (
-                    Collection < __OtherElementType > const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_Explicit HashMap (
+                    __IterableType  const & iterable
             ) noexcept;
 
         public:
-            template <
-                    typename __TElementType = ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __OtherElementType,            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                    > = 0
-            > HashMap (
-                    __Hasher                            const & hasher,
-                    Collection < __OtherElementType >   const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            HashMap (
+                    __Hasher        const & hasher,
+                    __IterableType  const & iterable
             ) noexcept;
 
         public:
             ~HashMap () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     HashMap const & map
             ) noexcept -> HashMap &;
 
@@ -384,14 +366,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> HashMap &;
 
         public:
-            template <
-                    typename __TElementType = ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __OtherElementType,            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __TElementType > ()
-                    > = 0
-            > auto operator = (
-                    Collection < __OtherElementType > const & collection
+            auto operator = (
+                    std :: initializer_list < EntryType > const & initializerList
+            ) noexcept -> HashMap &;
+
+        public:
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            auto operator = (
+                    __IterableType const & iterable
             ) noexcept -> HashMap &;
 
         public:

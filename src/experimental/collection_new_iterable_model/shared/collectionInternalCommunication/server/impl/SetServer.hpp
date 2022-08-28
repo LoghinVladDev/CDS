@@ -22,27 +22,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier) */
                         static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
                 ] = {
-                        nullptr,                                                                        /* __cirt_begin                         - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_end                           - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_rbegin                        - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_rend                          - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_remove                        - not expected part of Set  */
-                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),    /* __cirt_removeConst                   - expected part of Set      */
-                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),     /* __cirt_newAddress                    - expected part of Set      */
-                        nullptr,                                                                        /* __cirt_newFrontAddress               - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBackAddress                - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newFrontAddressArray          - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBackAddressArray           - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBeforeAddress              - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBeforeAddressConst         - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newAfterAddress               - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newAfterAddressConst          - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBeforeAddressArray         - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newBeforeAddressArrayConst    - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newAfterAddressArray          - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_newAfterAddressArrayConst     - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_find                          - not expected part of Set  */
-                        nullptr,                                                                        /* __cirt_findConst                     - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_begin                         - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_end                           - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_rbegin                        - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_rend                          - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_remove                        - not expected part of Set  */
+                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),        /* __cirt_removeConst                   - expected part of Set      */
+                        nullptr,                                                                            /* __cirt_removeArray                   - not expected part of Set  */
+                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),   /* __cirt_removeConstArray              - expected part of Set      */
+                        reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),         /* __cirt_newAddress                    - expected part of Set      */
+                        nullptr,                                                                            /* __cirt_newFrontAddress               - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBackAddress                - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newFrontAddressArray          - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBackAddressArray           - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBeforeAddress              - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBeforeAddressConst         - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newAfterAddress               - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newAfterAddressConst          - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBeforeAddressArray         - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newBeforeAddressArrayConst    - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newAfterAddressArray          - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_newAfterAddressArrayConst     - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_find                          - not expected part of Set  */
+                        nullptr,                                                                            /* __cirt_findConst                     - not expected part of Set  */
                 };
 
 
@@ -64,6 +66,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         nullptr,                                                                        /* __cirt_rend                          - not expected part of Set  */
                         nullptr,                                                                        /* __cirt_remove                        - not expected part of Set  */
                         nullptr,                                                                        /* __cirt_removeConst                   - not expected part of Set  */
+                        nullptr,                                                                        /* __cirt_removeArray                   - not expected part of Set  */
+                        nullptr,                                                                        /* __cirt_removeConstArray              - not expected part of Set  */
                         nullptr,                                                                        /* __cirt_newAddress                    - not expected part of Set  */
                         nullptr,                                                                        /* __cirt_newFrontAddress               - not expected part of Set  */
                         nullptr,                                                                        /* __cirt_newBackAddress                - not expected part of Set  */

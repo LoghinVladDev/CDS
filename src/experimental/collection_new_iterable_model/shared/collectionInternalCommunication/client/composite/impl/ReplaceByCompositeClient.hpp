@@ -1,14 +1,14 @@
-//
-// Created by loghin on 6/30/2022.
-//
+/*
+ * Created by loghin on 6/30/2022.
+ */
 
 #ifndef __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__
 #define __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)

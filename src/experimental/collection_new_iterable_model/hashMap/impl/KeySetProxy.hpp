@@ -151,6 +151,42 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType,
                 __Hasher
+        > :: KeySetProxy :: __removeConstArray (
+                ConstIterator   const * const * ppIterators,
+                Size                            iteratorArrayCount
+        ) noexcept -> Size {
+
+            auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
+                    typename cds :: experimental :: __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator const *
+            > ( iteratorArrayCount );
+
+            for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
+
+                if ( ppIterators [ iteratorIndex ] != nullptr ) {
+                    ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
+                } else {
+                    ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
+                }
+            }
+
+            auto const removedIteratorCount = this->template map < HashMapBase > ()->__removeConstArray (
+                    ppWrappedIteratorArray,
+                    iteratorArrayCount
+            );
+
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
+            return removedIteratorCount;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
         > :: KeySetProxy :: __findConst (
                 __KeyType const & key
         ) const noexcept -> ConstIterator {

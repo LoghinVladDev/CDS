@@ -365,12 +365,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr Array () noexcept;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > Array ( /* NOLINT(google-explicit-constructor) */
+            Array ( /* NOLINT(google-explicit-constructor) */
                     Array const & array
             ) noexcept;
 
@@ -388,7 +383,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     > = 0
             > Array (
                     __IteratorType const & begin,
-                    __IteratorType const & end
+                    __IteratorType const & end,
+                    Size                   count = 0ULL
             ) noexcept;
 
         public:
@@ -423,25 +419,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > __CDS_Explicit Array (
-                    Collection < __OtherElementType > const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_Explicit Array (
+                    __IterableType const & iterable
             ) noexcept;
 
         public:
             ~Array () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     Array const & array
             ) noexcept -> Array &;
 
@@ -451,13 +438,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> Array &;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > auto operator = (
-                    Collection < __OtherElementType > const & collection
+            auto operator = (
+                    std :: initializer_list < __ElementType > const & initializerList
+            ) noexcept -> Array &;
+
+        public:
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            auto operator = (
+                    __IterableType const & iterable
             ) noexcept -> Array &;
 
         public:
@@ -470,7 +458,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     Size size
             ) noexcept -> void;
 
-
         public:
             template <
                     typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
@@ -480,7 +467,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             > auto resize (
                     Size size
             ) noexcept -> void;
-
 
         public:
             template <

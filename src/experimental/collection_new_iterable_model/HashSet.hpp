@@ -180,12 +180,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr HashSet () noexcept;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > HashSet ( /* NOLINT(google-explicit-constructor) */
+            HashSet ( /* NOLINT(google-explicit-constructor) */
                     HashSet const & set
             ) noexcept;
 
@@ -203,7 +198,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     > = 0
             > HashSet (
                     __IteratorType const & begin,
-                    __IteratorType const & end
+                    __IteratorType const & end,
+                    Size                   count = 0ULL
             ) noexcept;
 
         public:
@@ -216,7 +212,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             > HashSet (
                     __Hasher        const & hasher,
                     __IteratorType  const & begin,
-                    __IteratorType  const & end
+                    __IteratorType  const & end,
+                    Size                    count = 0ULL
             ) noexcept;
 
         public:
@@ -241,36 +238,23 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > __CDS_Explicit HashSet (
-                    Collection < __OtherElementType > const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_Explicit HashSet (
+                    __IterableType  const & iterable
             ) noexcept;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > HashSet (
-                    __Hasher                            const & hasher,
-                    Collection < __OtherElementType >   const & collection
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            HashSet (
+                    __Hasher        const & hasher,
+                    __IterableType  const & iterable
             ) noexcept;
 
         public:
             ~HashSet () noexcept override;
 
         public:
-            template <
-                    typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto operator = (
+            auto operator = (
                     HashSet const & set
             ) noexcept -> HashSet &;
 
@@ -280,13 +264,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> HashSet &;
 
         public:
-            template <
-                    typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                    > = 0
-            > auto operator = (
-                    Collection < __OtherElementType > const & collection
+            auto operator = (
+                    std :: initializer_list < __ElementType > const & initializerList
+            ) noexcept -> HashSet &;
+
+        public:
+            template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+            auto operator = (
+                    __IterableType const & iterable
             ) noexcept -> HashSet &;
 
         public:

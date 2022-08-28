@@ -31,12 +31,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline Array < __ElementType > :: Array (
+        __CDS_OptimalInline Array < __ElementType > :: Array (
                 Array const & array
         ) noexcept :
                 Implementation ( array ) {
@@ -62,12 +57,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 >
         > __CDS_OptimalInline Array < __ElementType > :: Array (
                 __IteratorType const & begin,
-                __IteratorType const & end
+                __IteratorType const & end,
+                Size                   count
         ) noexcept {
 
             this->pushBackAllOf (
                     begin,
-                    end
+                    end,
+                    count
             );
         }
 
@@ -83,7 +80,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 Array (
                         initializerList.begin(),
-                        initializerList.end()
+                        initializerList.end(),
+                        initializerList.size()
                 ) {
 
         }
@@ -122,19 +120,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __OtherElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline Array < __ElementType > :: Array (
-                Collection < __OtherElementType > const & collection
-        ) noexcept :
-                Array (
-                        collection.begin(),
-                        collection.end()
-                ) {
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline Array < __ElementType > :: Array (
+                __IterableType const & iterable
+        ) noexcept {
 
+            this->pushBackAllOf ( iterable );
         }
 
 
@@ -146,12 +137,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __TElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                >
-        > __CDS_OptimalInline auto Array < __ElementType > :: operator = (
+        __CDS_OptimalInline auto Array < __ElementType > :: operator = (
                 Array const & array
         ) noexcept -> Array & {
 
@@ -179,21 +165,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        template <
-                typename __OtherElementType, /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
-                >
-        > __CDS_OptimalInline auto Array < __ElementType > :: operator = (
-                Collection < __OtherElementType > const & collection
+        __CDS_OptimalInline auto Array < __ElementType > :: operator = (
+                std :: initializer_list < __ElementType > const & initializerList
         ) noexcept -> Array & {
 
-            if ( this == & collection ) {
+            this->clear ();
+            this->pushBackAllOf ( initializerList );
+            return * this;
+        }
+
+
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto Array < __ElementType > :: operator = (
+                __IterableType const & iterable
+        ) noexcept -> Array & {
+
+            if ( this == & iterable ) {
                 return * this;
             }
 
             this->clear();
-            this->pushBackAllOf ( collection );
+            this->pushBackAllOf ( iterable );
             return * this;
         }
 

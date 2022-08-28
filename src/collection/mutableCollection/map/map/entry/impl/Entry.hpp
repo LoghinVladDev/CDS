@@ -40,6 +40,13 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
+            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            __CDS_OptimalInline __MapEntry < __KeyType, __ValueType > :: operator String () const noexcept {
+
+                return this->toString();
+            }
+
+
             template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
             template <
                     typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
