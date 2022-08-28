@@ -107,6 +107,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard auto toString () const noexcept -> String;
 
             public:
+                __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;
+
+            public:
                 template < typename __TKeyType, typename __TValueType >
                 friend auto operator << (
                         std :: ostream                                & out,

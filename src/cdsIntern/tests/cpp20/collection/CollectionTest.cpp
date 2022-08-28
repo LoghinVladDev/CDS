@@ -11,10 +11,10 @@
 
 /* CollectionTestGroup-RemoveAbsIt-Cpp20 : CTG-00350-RAIT-CPP20. CTC-00351-RAIT to CTC-00356-RAIT */
 template <
-        typename __MemberType
+        typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupRemoveAbstractIterator (
-        cds :: experimental :: Collection < __MemberType > & collection,
-        Test                                               * pTestLib,
+        cds :: experimental :: Collection < __MemberType >       & collection,
+        Test                                                     * pTestLib,
         cds :: experimental :: Collection < __MemberType > const & equivAfter1,
         cds :: experimental :: Collection < __MemberType > const & equivAfter2,
         cds :: experimental :: Collection < __MemberType > const & equivAfter3,
@@ -89,7 +89,7 @@ template <
     auto const resultToRemoveFromSimilar = collection.remove( toRemoveFromSimilar );
     auto const expectedResultToRemoveFromSimilar = false;
     pTestLib->log ( "object after 'removeFromOther' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
-    if ( resultToRemoveFromSimilar != expectedResultToRemoveFromSimilar || ! collection.equals ( equivAfter5 ) ) {
+    if ( resultToRemoveFromSimilar != expectedResultToRemoveFromSimilar || ! collection.equals ( equivAfter6 ) ) {
         pTestLib->logError( "'CTC-00356-RAIT-removeFromOther-CPP20' failed" );
         return false;
     } else {
@@ -101,17 +101,17 @@ template <
 
 /* CollectionTestGroup-RemoveBy-Cpp20 : CTG-00400-RB-CPP20. CTC-00401-RB to CTC-00418-RB */
 template <
-        typename __Original,
-        typename __MemberType,
-        typename __MatchingNonePredicateType,
-        typename __MatchingOnePredicateType,
-        typename __MatchingMoreLTLPredicateType,
-        typename __MatchingMorePredicateType,
-        typename __MatchingMoreMTLPredicateType,
-        typename __MatchingAllPredicateType
+        typename __Original,                        /* NOLINT(bugprone-reserved-identifier) */
+        typename __MemberType,                      /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingNonePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingOnePredicateType,        /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingMoreLTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingMorePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingMoreMTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
+        typename __MatchingAllPredicateType         /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupRemoveBy (
         __Original const & original,
-        Test                                               * pTestLib,
+        Test                                                     * pTestLib,
         Size                                                       removeThatLimit,
         Size                                                       removeThatResultWhenLessThanLimit,
         __MatchingNonePredicateType                        const & matchingNone,
@@ -381,7 +381,7 @@ template <
 
 /* CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20. Tests CTC-00003 to CTC-00016 */
 template <
-        typename __MemberType // NOLINT(bugprone-reserved-identifier)
+        typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupMemberFunctions (
         cds :: experimental :: Collection < __MemberType >        & collection,
         Test                                                      * pTestLib,
@@ -607,9 +607,9 @@ template <
 }
 
 template <
-        typename __T,
-        typename __ItType,
-        typename __LastArg
+        typename __T,       /* NOLINT(bugprone-reserved-identifier) */
+        typename __ItType,  /* NOLINT(bugprone-reserved-identifier) */
+        typename __LastArg  /* NOLINT(bugprone-reserved-identifier) */
 > auto fwdCheckIterator (
         __ItType const & cur,
         __ItType const & end,
@@ -629,10 +629,10 @@ template <
 }
 
 template <
-        typename __T,
-        typename __ItType,
-        typename __CurrArg,
-        typename ... __RemainingArgs
+        typename __T,                   /* NOLINT(bugprone-reserved-identifier) */
+        typename __ItType,              /* NOLINT(bugprone-reserved-identifier) */
+        typename __CurrArg,             /* NOLINT(bugprone-reserved-identifier) */
+        typename ... __RemainingArgs    /* NOLINT(bugprone-reserved-identifier) */
 > auto fwdCheckIterator (
         __ItType const & cur,
         __ItType const & end,
@@ -652,83 +652,10 @@ template <
     return fwdCheckIterator < __T > ( ++ next, end, remE ... );
 }
 
-
-/// INVALID, REUSE IN DERIVED TESTS - ARRAY, ETC.
-///* CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20. Tests CTC-00051 to CTC-00056 */
-//template <
-//        typename __MemberType,                              // NOLINT(bugprone-reserved-identifier)
-//        typename __CollectionType,                          // NOLINT(bugprone-reserved-identifier)
-//        typename ... __OrderedValues                        // NOLINT(bugprone-reserved-identifier)
-//> auto collectionTestGroupDelegateForwardConstIterableClientImports (
-//        Test                  *     pTestLib,
-//        __OrderedValues const & ... orderedValues
-//) -> bool {
-//
-//    __CollectionType collection;
-//    collection.insertAll ( orderedValues ... );
-//
-//
-//    pTestLib->log ( "Object under test, to be iterated : '%s'", collection.toString().cStr() );
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-range-CPP20 : CTC-00051-IT-range-CPP20 */
-//    pTestLib->log ( "Standard iteration : " );
-//    for ( auto e : collection ) {
-//        std :: stringstream oss;
-//        cds :: streamPrint ( oss, e );
-//        pTestLib->log ( "'%s'", cds :: String ( oss.str() ).toString().cStr() );
-//    }
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-begin_endIteration-CPP20 : CTC-00052-IT-begin_end-CPP20 */
-//    auto stdIterResult = fwdCheckIterator < __MemberType > ( collection.begin(), collection.end(), orderedValues ... );
-//    if ( ! stdIterResult ) {
-//        pTestLib->logError( "'CTC-00052-IT-begin_end-CPP20' failed" );
-//        return false;
-//    } else {
-//        pTestLib->logOK ( "'CTC-00052-IT-begin_end-CPP20' OK" );
-//    }
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-cbegin_cendIteration-CPP20 : CTC-00053-IT-cbegin_cend-CPP20 */
-//    auto stdCIterResult = fwdCheckIterator < __MemberType > ( collection.cbegin(), collection.cend(), orderedValues ... );
-//    if ( ! stdCIterResult ) {
-//        pTestLib->logError( "'CTC-00053-IT-cbegin_cend-CPP20' failed" );
-//        return false;
-//    } else {
-//        pTestLib->logOK ( "'CTC-00053-IT-cbegin_cend-CPP20' OK" );
-//    }
-//
-//    collection.clear();
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-emptybegin_end-CPP20 : CTC-00054-IT-e_begin_end-CPP20 */
-//    for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-//        pTestLib->logError( "'CTC-00054-IT-e_begin_end-CPP20' failed" );
-//        return false;
-//    }
-//
-//    pTestLib->logOK ( "'CTC-00054-IT-e_begin_end-CPP20' OK" );
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-emptycbegin_cend-CPP20 : CTC-00055-IT-e_cbegin_cend-CPP20 */
-//    for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-//        pTestLib->logError( "'CTC-00055-IT-e_cbegin_cend-CPP20' failed" );
-//        return false;
-//    }
-//
-//    pTestLib->logOK ( "'CTC-00055-IT-e_cbegin_cend-CPP20' OK" );
-//
-//    /* CollectionTestCase-DelegateForwardConstIterableClientImports-e_emptyRange-CPP20 : CTC-00056-IT-e_emptyRange-CPP20 */
-//    for ( auto e : collection ) {
-//        pTestLib->logError( "'CTC-00056-IT-e_emptyRange-CPP20' failed" );
-//        return false;
-//    }
-//
-//    pTestLib->logOK ( "'CTC-00056-IT-e_emptyRange-CPP20' OK" );
-//
-//    return true;
-//}
-
 /* CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20. Tests CTC-00051 to CTC-00056 */
 template <
-        typename __MemberType,                              // NOLINT(bugprone-reserved-identifier)
-        typename ... __OrderedValues                        // NOLINT(bugprone-reserved-identifier)
+        typename __MemberType,                              /* NOLINT(bugprone-reserved-identifier) */
+        typename ... __OrderedValues                        /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupDelegateForwardConstIterableClientImports (
         experimental :: Collection < __MemberType > & collection,
         Test                  *     pTestLib,
@@ -739,7 +666,7 @@ template <
 
     /* CollectionTestCase-DelegateForwardConstIterableClientImports-range-CPP20 : CTC-00051-IT-range-CPP20 */
     pTestLib->log ( "Standard iteration : " );
-    for ( auto e : collection ) {
+    for ( auto const & e : collection ) {
         std :: stringstream oss;
         cds :: streamPrint ( oss, e );
         pTestLib->log ( "'%s'", cds :: String ( oss.str() ).toString().cStr() );
@@ -782,7 +709,7 @@ template <
     pTestLib->logOK ( "'CTC-00055-IT-e_cbegin_cend-CPP20' OK" );
 
     /* CollectionTestCase-DelegateForwardConstIterableClientImports-e_emptyRange-CPP20 : CTC-00056-IT-e_emptyRange-CPP20 */
-    for ( auto e : collection ) {
+    for ( auto const & e : collection ) {
         pTestLib->logError( "'CTC-00056-IT-e_emptyRange-CPP20' failed" );
         return false;
     }
@@ -793,9 +720,9 @@ template <
 }
 
 template <
-        typename __PredicateReturnType,
-        typename __MemberType,
-        typename __Predicate
+        typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
+        typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
+        typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestCasePredicateHandle (
         StringLiteral testCaseName,
         experimental :: Collection < __MemberType > const & collection,
@@ -816,9 +743,9 @@ template <
 }
 
 template <
-        typename __PredicateReturnType,
-        typename __MemberType,
-        typename __Predicate
+        typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
+        typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
+        typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestCasePredicateCountedHandle (
         StringLiteral testCaseName,
         experimental :: Collection < __MemberType > const & collection,
@@ -840,9 +767,9 @@ template <
 }
 
 template <
-        typename __ElementType,
-        typename __OtherIterableType,
-        typename __EqualsFunction
+        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __EqualsFunction       /* NOLINT(bugprone-reserved-identifier) */
 > auto composePredicate (
         __OtherIterableType const & other,
         __EqualsFunction    const & equals,
@@ -861,9 +788,9 @@ template <
 }
 
 template <
-        typename __OtherIterableType,
-        typename __ElementType,
-        typename __PredicateType
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+        typename __PredicateType        /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestCaseContainsWithEquivalent (
         StringLiteral                                           caseName,
         experimental :: Collection < __ElementType >    const & collection,
@@ -888,8 +815,8 @@ template <
 
 /* CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20. Tests CTC-00301-CO to CTC-30320-CO [-Collection/-InitializerList Groups] */
 template <
-        typename __OtherIterableType,
-        typename __ElementType
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupContainsGroupByEquivalent (
         StringLiteral                                        groupName,
         experimental :: Collection < __ElementType > const & collection,
@@ -1201,11 +1128,11 @@ template <
     return status;
 }
 
-template < typename T, typename = void > struct _HasToString : meta :: FalseType {};
-template < typename T > struct _HasToString < T, meta :: Void < decltype ( meta :: addressOf < T > ()->toString () ) > > : meta :: TrueType {};
+template < typename T, typename = void > struct _HasToString : meta :: FalseType {};    /* NOLINT(bugprone-reserved-identifier) */
+template < typename T > struct _HasToString < T, meta :: Void < decltype ( meta :: addressOf < T > ()->toString () ) > > : meta :: TrueType {}; /* NOLINT(bugprone-reserved-identifier) */
 
-template < typename T, typename = void > struct _HasEquals : meta :: FalseType {};
-template < typename T > struct _HasEquals < T, meta :: Void < decltype ( meta :: addressOf < T > ()->equals ( meta :: referenceOf < Object const > () ) ) > > : meta :: TrueType {};
+template < typename T, typename = void > struct _HasEquals : meta :: FalseType {};  /* NOLINT(bugprone-reserved-identifier) */
+template < typename T > struct _HasEquals < T, meta :: Void < decltype ( meta :: addressOf < T > ()->equals ( meta :: referenceOf < Object const > () ) ) > > : meta :: TrueType {};    /* NOLINT(bugprone-reserved-identifier) */
 
 template <
         typename T,
@@ -1227,6 +1154,7 @@ template <
     String s = "[ ";
     for ( auto & e : v ) {
         s += e;
+        s += ", ";
     }
 
     return s.removeSuffix (", ") + " ]";
@@ -1247,8 +1175,10 @@ template <
         meta :: EnableIf < ! _HasEquals < T > :: value || ! _HasEquals < V > :: value > = 0
 > auto equals (T const & t, V const & v) -> bool {
 
-    auto lIt = t.begin(), le = t.end();
-    auto rIt = v.begin(), re = v.end();
+    auto lIt = t.begin();
+    auto le = t.end();
+    auto rIt = v.begin();
+    auto re = v.end();
     for (
          ;   lIt != le && rIt != re; ++ lIt, ++ rIt
     )
@@ -1258,11 +1188,11 @@ template <
     return true;
 }
 
-/* CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20. CTC-00481-RO to CTC-490-RO. */
+/* CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20. CTC-00481-RO to CTC-00490-RO. */
 template <
-        typename __OtherIterableType,
-        typename __IterableType,
-        typename __ElementType
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupItemRemoveAllOf (
         Test                      * pTestLib,
         cds :: String       const & groupVariant,
@@ -1357,11 +1287,120 @@ template <
     return true;
 }
 
+/* CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20. CTC-00501-RO to CTC-00520-RO. */
+template <
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+> auto collectionTestGroupItemRemoveFirstLastOf (
+        Test                      * pTestLib,
+        cds :: String       const & groupVariant,
+        StringLiteral               subvariant,
+        Size                        subvariantOffset,
+        __IterableType      const & iterableUnderTest,
+        bool ( cds :: experimental :: Collection < __ElementType > :: * removeFirstLastPfnVariant ) ( __OtherIterableType const & ),
+        __OtherIterableType const & noneCommon,
+        __OtherIterableType const & oneCommon,
+        __OtherIterableType const & moreCommon,
+        __OtherIterableType const & allCommon,
+        __OtherIterableType const & allAndMoreCommon,
+        bool                        expectedResultFromNone,
+        __OtherIterableType const & expectedCollectionFromNone,
+        bool                        expectedResultFromOne,
+        __OtherIterableType const & expectedCollectionFromOne,
+        bool                        expectedResultFromMore,
+        __OtherIterableType const & expectedCollectionFromMore,
+        bool                        expectedResultFromAll,
+        __OtherIterableType const & expectedCollectionFromAll,
+        bool                        expectedResultFromAllAndMore,
+        __OtherIterableType const & expectedCollectionFromAllAndMore
+) {
+
+    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+
+    /* CollectionTestCase-RemoveOf-removeFirstOfNoneCommon-CPP20 : CTC-00501-RO-removeFirstOfNoneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastOfNoneCommon-CPP20 : CTC-00506-RO-removeLastOfNoneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeFirstNotOfNoneCommon-CPP20 : CTC-00511-RO-removeFirstNotOfNoneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastNotOfNoneCommon-CPP20 : CTC-00516-RO-removeLastNotOfNoneCommon-CPP20 */
+    auto       copyRO501            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO501 = copyRO501;
+    auto       removedCountRB501    = ( collectionRO501.* removeFirstLastPfnVariant ) ( noneCommon );
+    pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO501.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
+    if ( removedCountRB501 != expectedResultFromNone || ! equals ( collectionRO501, expectedCollectionFromNone ) ) {
+        pTestLib->logError( "'CTC-00%d-RO-%sNoneCommon-%s-CPP20' failed", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00%d-RO-%sNoneCommon-%s-CPP20' OK", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeFirstOfOneCommon-CPP20 : CTC-00502-RO-removeFirstOfOneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastOfOneCommon-CPP20 : CTC-00507-RO-removeLastOfOneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeFirstNotOfOneCommon-CPP20 : CTC-00512-RO-removeFirstNotOfOneCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastNotOfOneCommon-CPP20 : CTC-00517-RO-removeLastNotOfOneCommon-CPP20 */
+    auto       copyRO502            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO502 = copyRO502;
+    auto       removedCountRB502    = ( collectionRO502.* removeFirstLastPfnVariant ) ( oneCommon );
+    pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO502.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
+    if ( removedCountRB502 != expectedResultFromOne || ! equals ( collectionRO502, expectedCollectionFromOne ) ) {
+        pTestLib->logError( "'CTC-00%d-RO-%sOneCommon-%s-CPP20' failed", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00%d-RO-%sOneCommon-%s-CPP20' OK", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeFirstOfMoreCommon-CPP20 : CTC-00503-RO-removeFirstOfMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastOfMoreCommon-CPP20 : CTC-00508-RO-removeLastOfMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeFirstNotOfMoreCommon-CPP20 : CTC-00513-RO-removeFirstNotOfMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastNotOfMoreCommon-CPP20 : CTC-00518-RO-removeLastNotOfMoreCommon-CPP20 */
+    auto       copyRO503            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO503 = copyRO503;
+    auto       removedCountRB503    = ( collectionRO503.* removeFirstLastPfnVariant ) ( moreCommon );
+    pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO503.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
+    if ( removedCountRB503 != expectedResultFromMore || ! equals ( collectionRO503, expectedCollectionFromMore ) ) {
+        pTestLib->logError( "'CTC-00%d-RO-%sMoreCommon-%s-CPP20' failed", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00%d-RO-%sMoreCommon-%s-CPP20' OK", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeFirstOfAllCommon-CPP20 : CTC-00504-RO-removeFirstOfAllCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastOfAllCommon-CPP20 : CTC-00509-RO-removeLastOfAllCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeFirstNotOfAllCommon-CPP20 : CTC-00514-RO-removeFirstNotOfAllCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastNotOfAllCommon-CPP20 : CTC-00519-RO-removeLastNotOfAllCommon-CPP20 */
+    auto       copyRO504            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO504 = copyRO504;
+    auto       removedCountRB504    = ( collectionRO504.* removeFirstLastPfnVariant ) ( allCommon );
+    pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO504.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
+    if ( removedCountRB504 != expectedResultFromAll || ! equals ( collectionRO504, expectedCollectionFromAll ) ) {
+        pTestLib->logError( "'CTC-00%d-RO-%sAllCommon-%s-CPP20' failed", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00%d-RO-%sAllCommon-%s-CPP20' OK", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
+
+    /* CollectionTestCase-RemoveOf-removeFirstOfAllAndMoreCommon-CPP20 : CTC-00505-RO-removeFirstOfAllAndMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastOfAllAndMoreCommon-CPP20 : CTC-00510-RO-removeLastOfAllAndMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeFirstNotOfAllAndMoreCommon-CPP20 : CTC-00515-RO-removeFirstNotOfAllAndMoreCommon-CPP20 */
+    /* CollectionTestCase-RemoveOf-removeLastNotOfAllAndMoreCommon-CPP20 : CTC-00520-RO-removeLastNotOfAllAndMoreCommon-CPP20 */
+    auto       copyRO505            = iterableUnderTest;
+    cds :: experimental :: Collection < __ElementType > & collectionRO505 = copyRO505;
+    auto       removedCountRB505    = ( collectionRO505.* removeFirstLastPfnVariant ) ( allAndMoreCommon );
+    pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO505.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
+    if ( removedCountRB505 != expectedResultFromAllAndMore || ! equals ( collectionRO505, expectedCollectionFromAllAndMore ) ) {
+        pTestLib->logError( "'CTC-00%d-RO-%sAllAndMoreCommon-%s-CPP20' failed", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'CTC-00%d-RO-%sAllAndMoreCommon-%s-CPP20' OK", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
+
+    return true;
+}
+
 /* CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20. CTC-00451-RO to CTC-00464-RO */
 template <
-        typename __OtherIterableType,
-        typename __IterableType,
-        typename __ElementType
+        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupItemRemoveOf (
         Test                      * pTestLib,
         cds :: String       const & groupVariant,
@@ -1942,7 +1981,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -1953,7 +1992,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -1964,7 +2003,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -1975,7 +2014,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -1986,7 +2025,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -1997,7 +2036,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2008,7 +2047,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2019,7 +2058,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2030,7 +2069,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2041,7 +2080,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2052,7 +2091,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2063,7 +2102,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2399,7 +2438,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2410,7 +2449,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2421,7 +2460,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2432,7 +2471,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2443,7 +2482,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2454,7 +2493,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2465,7 +2504,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2476,7 +2515,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2487,7 +2526,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2498,7 +2537,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2509,7 +2548,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2520,7 +2559,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2856,7 +2895,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2867,7 +2906,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2878,7 +2917,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2889,7 +2928,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: any,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2900,7 +2939,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2911,7 +2950,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2922,7 +2961,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2933,7 +2972,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: all,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2944,7 +2983,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -2955,7 +2994,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2966,7 +3005,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -2977,7 +3016,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < int > :: none,
-                /* predicate */     [] (int e) -> bool { return e % 2 == 0; },
+                /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3313,7 +3352,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3324,7 +3363,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3335,7 +3374,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3346,7 +3385,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3357,7 +3396,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3368,7 +3407,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3379,7 +3418,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3390,7 +3429,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3401,7 +3440,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3412,7 +3451,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3423,7 +3462,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3434,7 +3473,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3445,7 +3484,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
@@ -3456,7 +3495,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 1; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
@@ -3467,7 +3506,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* expectedRes. */  2
         );
 
@@ -3478,7 +3517,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key() >= 2; },
+                /* predicate */     [] (auto e) { return e.key() >= 2; },
                 /* expectedRes. */  4
         );
 
@@ -3490,7 +3529,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
-                /* predicate */     [comparedTo] (auto e) -> bool { return e.key() > comparedTo; },
+                /* predicate */     [comparedTo] (auto e) { return e.key() > comparedTo; },
                 /* expectedRes. */  2
         );
 
@@ -3501,7 +3540,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
@@ -3513,7 +3552,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -3525,7 +3564,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -3537,7 +3576,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -3549,7 +3588,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -3561,7 +3600,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
@@ -3573,7 +3612,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -3585,7 +3624,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -3597,7 +3636,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -3609,7 +3648,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
@@ -3621,7 +3660,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -3633,7 +3672,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -3645,7 +3684,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -3657,7 +3696,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -3669,7 +3708,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -3681,7 +3720,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -3693,7 +3732,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -3705,7 +3744,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key() < 3; },
+                /* predicate */     [] (auto e) { return e.key() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
@@ -3717,7 +3756,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -3729,7 +3768,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -3741,7 +3780,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key() % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -3770,7 +3809,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3781,7 +3820,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3792,7 +3831,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3803,7 +3842,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3814,7 +3853,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3825,7 +3864,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3836,7 +3875,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3847,7 +3886,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3858,7 +3897,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -3869,7 +3908,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3880,7 +3919,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3891,7 +3930,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -3902,7 +3941,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
@@ -3913,7 +3952,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 1; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
@@ -3924,7 +3963,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* expectedRes. */  2
         );
 
@@ -3935,7 +3974,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() >= 2; },
+                /* predicate */     [] (String const & e) { return e.length() >= 2; },
                 /* expectedRes. */  4
         );
 
@@ -3947,7 +3986,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [comparedTo] (String const & e) -> bool { return e.length() < comparedTo; },
+                /* predicate */     [comparedTo] (String const & e) { return e.length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
@@ -3958,7 +3997,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
@@ -3970,7 +4009,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -3982,7 +4021,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -3994,7 +4033,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4006,7 +4045,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -4018,7 +4057,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
@@ -4030,7 +4069,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -4042,7 +4081,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -4054,7 +4093,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4066,7 +4105,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
@@ -4078,7 +4117,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -4090,7 +4129,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4102,7 +4141,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4114,7 +4153,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -4126,7 +4165,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -4138,7 +4177,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4150,7 +4189,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4162,7 +4201,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
@@ -4174,7 +4213,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4186,7 +4225,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4198,7 +4237,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4227,7 +4266,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4238,7 +4277,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4249,7 +4288,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4260,7 +4299,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4271,7 +4310,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4282,7 +4321,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4293,7 +4332,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4304,7 +4343,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4315,7 +4354,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4326,7 +4365,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4337,7 +4376,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4348,7 +4387,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4359,7 +4398,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
@@ -4370,7 +4409,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 1; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
@@ -4381,7 +4420,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* expectedRes. */  2
         );
 
@@ -4392,7 +4431,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() >= 2; },
+                /* predicate */     [] (String const & e) { return e.length() >= 2; },
                 /* expectedRes. */  4
         );
 
@@ -4404,7 +4443,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [comparedTo] (String const & e) -> bool { return e.length() < comparedTo; },
+                /* predicate */     [comparedTo] (String const & e) { return e.length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
@@ -4415,7 +4454,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
@@ -4427,7 +4466,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -4439,7 +4478,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -4451,7 +4490,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4463,7 +4502,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -4475,7 +4514,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
@@ -4487,7 +4526,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -4499,7 +4538,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -4511,7 +4550,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4523,7 +4562,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
@@ -4535,7 +4574,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -4547,7 +4586,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4559,7 +4598,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4571,7 +4610,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -4583,7 +4622,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -4595,7 +4634,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4607,7 +4646,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4619,7 +4658,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
@@ -4631,7 +4670,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -4643,7 +4682,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4655,7 +4694,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4684,7 +4723,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4695,7 +4734,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4706,7 +4745,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4717,7 +4756,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: any,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4728,7 +4767,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4739,7 +4778,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4750,7 +4789,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4761,7 +4800,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: all,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4772,7 +4811,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -4783,7 +4822,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4794,7 +4833,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4805,7 +4844,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: none,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -4816,7 +4855,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 0; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
@@ -4827,7 +4866,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() % 2 == 1; },
+                /* predicate */     [] (String const & e) { return e.length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
@@ -4838,7 +4877,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* expectedRes. */  2
         );
 
@@ -4849,7 +4888,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [] (String const & e) -> bool { return e.length() >= 2; },
+                /* predicate */     [] (String const & e) { return e.length() >= 2; },
                 /* expectedRes. */  4
         );
 
@@ -4861,7 +4900,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: count,
-                /* predicate */     [comparedTo] (String const & e) -> bool { return e.length() < comparedTo; },
+                /* predicate */     [comparedTo] (String const & e) { return e.length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
@@ -4872,7 +4911,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
@@ -4884,7 +4923,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -4896,7 +4935,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -4908,7 +4947,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -4920,7 +4959,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: fewerThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -4932,7 +4971,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
@@ -4944,7 +4983,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -4956,7 +4995,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -4968,7 +5007,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -4980,7 +5019,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: moreThan,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
@@ -4992,7 +5031,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -5004,7 +5043,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5016,7 +5055,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -5028,7 +5067,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atMost,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -5040,7 +5079,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -5052,7 +5091,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5064,7 +5103,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -5076,7 +5115,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: atLeast,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
@@ -5088,7 +5127,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5100,7 +5139,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -5112,7 +5151,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < String > :: some,
-                /* predicate */     [] (String const & e) -> bool { return e.length() < 3; },
+                /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -5141,7 +5180,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5152,7 +5191,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -5163,7 +5202,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -5174,7 +5213,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -5185,7 +5224,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5196,7 +5235,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5207,7 +5246,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5218,7 +5257,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -5229,7 +5268,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
@@ -5240,7 +5279,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5251,7 +5290,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5262,7 +5301,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
@@ -5273,7 +5312,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
@@ -5284,7 +5323,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 1; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
@@ -5295,7 +5334,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* expectedRes. */  2
         );
 
@@ -5306,7 +5345,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() >= 2; },
+                /* predicate */     [] (auto e) { return e.key().length() >= 2; },
                 /* expectedRes. */  4
         );
 
@@ -5318,7 +5357,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
-                /* predicate */     [comparedTo] (auto e) -> bool { return e.key().length() < comparedTo; },
+                /* predicate */     [comparedTo] (auto e) { return e.key().length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
@@ -5329,7 +5368,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
@@ -5341,7 +5380,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -5353,7 +5392,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -5365,7 +5404,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -5377,7 +5416,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -5389,7 +5428,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
@@ -5401,7 +5440,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -5413,7 +5452,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
@@ -5425,7 +5464,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -5437,7 +5476,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
@@ -5449,7 +5488,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
@@ -5461,7 +5500,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5473,7 +5512,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -5485,7 +5524,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
@@ -5497,7 +5536,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
@@ -5509,7 +5548,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5521,7 +5560,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -5533,7 +5572,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() < 3; },
+                /* predicate */     [] (auto e) { return e.key().length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
@@ -5545,7 +5584,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
@@ -5557,7 +5596,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
@@ -5569,7 +5608,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
                 /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
-                /* predicate */     [] (auto e) -> bool { return e.key().length() % 2 == 0; },
+                /* predicate */     [] (auto e) { return e.key().length() % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
@@ -6424,7 +6463,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntArray", [this, & allOk]{
 
         cds :: experimental :: Array < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6460,7 +6499,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntLinkedList", [this, & allOk]{
 
         cds :: experimental :: LinkedList < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6496,7 +6535,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntHashSet", [this, & allOk]{
 
         cds :: experimental :: HashSet < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6532,7 +6571,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntToIntHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6568,7 +6607,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringArray", [this, & allOk]{
 
         cds :: experimental :: Array < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6604,7 +6643,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringLinkedList", [this, & allOk]{
 
         cds :: experimental :: LinkedList < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6640,7 +6679,6 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringHashSet", [this, & allOk]{
 
         cds :: experimental :: HashSet < String > originalArray = { "ccb", "ccc", "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca" };
-        auto copy = originalArray;
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6676,7 +6714,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringToStringHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < String, String > originalArray = { {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} };
-        auto copy = originalArray;
+
 
         allOk = allOk && collectionTestGroupRemoveBy (
                 /* original= */                                         originalArray,
@@ -6799,115 +6837,3386 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
-                this,
-                "Collection",
-                "removeOf",
-                0,
-                underTest,
-                & cds :: experimental :: Collection < int > :: removeOf,
-                3U,
-                make_a(int, 10, 11, 12, 13),
-                make_a(int, 16, 6, 11, 12, 13),
-                make_a(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
-                make_a(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                make_a(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                make_a(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                make_a(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                0U,
-                make_a(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                1U,
-                make_a(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
-                2U,
-                make_a(int, 1, 2, 4, 6, 7, 8, 9 ),
-                3U,
-                make_a(int, 1, 2, 4, 6, 8, 9 ),
-                3U,
-                make_a(int, 1, 4, 6, 7, 8, 9 ),
-                3U,
-                make_a(int, 4, 5, 6, 7, 8, 9 ),
-                3U,
-                make_a(int, 4, 5, 6, 7, 8, 9 )
-        );
+#define make(t, ...) make_a(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
-                this,
-                "InitializerList",
-                "removeOf",
-                0,
-                underTest,
-                & cds :: experimental :: Collection < int > :: removeOf,
-                3U,
-                { 10, 11, 12, 13},
-                { 16, 6, 11, 12, 13},
-                { 20, 123, 5, 1230, 435, 3, 1235, 9534},
-                { 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                { 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                { 9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                { 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                0U,
-                { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                1U,
-                { 1, 2, 3, 4, 5, 7, 8, 9 },
-                2U,
-                { 1, 2, 4, 6, 7, 8, 9 },
-                3U,
-                { 1, 2, 4, 6, 8, 9 },
-                3U,
-                { 1, 4, 6, 7, 8, 9 },
-                3U,
-                { 4, 5, 6, 7, 8, 9 },
-                3U,
-                { 4, 5, 6, 7, 8, }
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
-                this,
-                "Collection",
-                "removeAllOf",
-                0,
-                underTest,
-                & cds :: experimental :: Collection < int > :: removeAllOf,
-                make_a(int, 10, 11, 12, 13),
-                make_a(int, 16, 6, 11, 12, 13),
-                make_a(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                make_a(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                make_a(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                0U,
-                make_a(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                1U,
-                make_a(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
-                3U,
-                make_a(int, 1, 2, 4, 6, 8, 9 ),
-                9U,
-                make_a(int ),
-                9U,
-                make_a(int )
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
-                this,
-                "InitializerList",
-                "removeAllOf",
-                0,
-                underTest,
-                & cds :: experimental :: Collection < int > :: removeAllOf,
-                { 10, 11, 12, 13},
-                { 16, 6, 11, 12, 13},
-                { 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                { 9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                { 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                0U,
-                { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                1U,
-                { 1, 2, 3, 4, 5, 7, 8, 9 },
-                3U,
-                { 1, 2, 4, 6, 8, 9 },
-                9U,
-                {},
-                9U,
-                {}
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
         );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntLinkedList", [this, & allOk]{
+
+        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+#define make(t, ...) make_ll(t, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntHashSet", [this, & allOk]{
+
+        cds :: experimental :: HashSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+#define make(t, ...) make_hs(t, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < int > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, 10, 11, 12, 13),
+                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < int > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < int >, decltype (underTest), int > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < int > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, 10, 11, 12, 13),
+                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntToIntHashMap", [this, & allOk]{
+
+        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+#define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int, int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int, int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, int, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, int, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+#define make(k, v, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int, int),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int, int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, int, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, int, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringArray", [this, & allOk]{
+
+        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+#define make(t, ...) make_a(t, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringLinkedList", [this, & allOk]{
+
+        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+#define make(t, ...) make_ll(t, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 1, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 2, 3, 5, 7, 8, 9 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringHashSet", [this, & allOk]{
+
+        cds :: experimental :: HashSet < String > underTest = { 4, 5, 6, 7, 8, 9, 1, 2, 3 };
+
+        /* due to hash table rules, oredring might be odd */
+#define make(t, ...) make_hs(t, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 1, 3, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 3, 4, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 6, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 5, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 5, 7, 9, 1, 2, 3 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 5, 7, 9, 1, 2, 3 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 3, 5, 7 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 4, 5, 6, 7, 8, 9, 1, 3),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        );
+
+#undef make
+#define make(t, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, 4, 5, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 4, 6, 7, 8, 9, 1, 2 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 4, 6, 8, 9, 1, 2 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 4, 6, 8, 9, 1, 3 ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, 7, 8, 9, 1 ,2, 3 ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 7, 8, 9, 1, 2, 3 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, 4, 5, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, 4, 6, 8, 9, 1, 2 ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 4, 5, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 4, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 5, 6, 7, 8, 9, 1, 2, 3 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 4, 5, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2 ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2 ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, 4, 5, 6, 7, 8, 9, 1, 2 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < String > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, 10, 11, 12, 13),
+                /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make(String, 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make(String, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, 6, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, 5, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, 5, 7, 9, 1, 2, 3 ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, 5, 7, 9, 1, 2, 3 ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < String > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, 6 ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, 5, 7, 3 ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < String >, decltype (underTest), String > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < String > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, 10, 11, 12, 13),
+                /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, 4, 5, 6, 7, 8, 9, 1, 2 ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, 4, 5, 6, 7, 8, 9, 1, 3),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 ),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, 4, 5, 6, 7, 8, 9, 1, 2, 3 )
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringToStringHashMap", [this, & allOk]{
+
+        cds :: experimental :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+#define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {1, 1}, {3, 3}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String, String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, String, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, String, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String, String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, String, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, String, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {3, 3}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+#define make(k, v, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, String, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {3, 3} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, String, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, String, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, String, {4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String, String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, String, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, String, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String, String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, String, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, String, {5, 5}, {7, 7}, {3, 3} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {3, 3}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} ),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} )
+        );
+
+#undef make
     });
 
     return allOk;
