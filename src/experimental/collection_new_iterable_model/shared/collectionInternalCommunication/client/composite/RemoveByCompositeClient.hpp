@@ -14,9 +14,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @interface Interface for calling removeThat statements - removeThat / removeFirstThat / removeLastThat / removeAllThat.
                  * These use the predicate given as a parameter to identify the elements via iterator to be removed
                  * ( hence the name - 'remove' the elements 'that' yield true to the given predicate )
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism. <br/>
                  * Implementor is also required to implement a variant of ConstIteratorRemoveClient,
-                 * or an equivalent set of member functions 'cbegin' and 'cend' provided by the client variant.
+                 * or provide an equivalent set of member functions 'remove' and 'removeAll' provided by the client variant. <br/>
+                 * Implementor is also required to implement a variant of DelegateForwardConstIterbleClient,
+                 * or provide an equivalent set of member functions to 'cbegin' and 'cend' provided by the client variant. <br/>
                  * Implementor is also required to either be derived from the Collection abstract class
                  * or provide an equivalent implementation of the member function 'size', representing the
                  * number of elements in the iterable, and the distance between 'cbegin' and 'cend'
@@ -262,9 +264,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @typedef Variant of RemoveByCompositeClient, only alias due to it being a composite client
                  * -> will use primitive local clients, making it a local client
-                 * @tparam __IterableType is the type of implementor class, used for static polymorphism.
+                 * @tparam __IterableType is the type of implementor class, used for static polymorphism. <br/>
                  * Implementor is also required to implement a variant of ConstIteratorRemoveClient,
-                 * or an equivalent set of member functions 'cbegin' and 'cend' provided by the client variant.
+                 * or provide an equivalent set of member functions 'remove' and 'removeAll' provided by the client variant. <br/>
+                 * Implementor is also required to implement a variant of DelegateForwardConstIterbleClient,
+                 * or provide an equivalent set of member functions to 'cbegin' and 'cend' provided by the client variant. <br/>
                  * Implementor is also required to either be derived from the Collection abstract class
                  * or provide an equivalent implementation of the member function 'size', representing the
                  * number of elements in the iterable, and the distance between 'cbegin' and 'cend'

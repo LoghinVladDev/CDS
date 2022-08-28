@@ -546,23 +546,237 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using RemoveByClient :: removeAllThat;
 
-        public: using RemoveOfCollectionClient :: removeOf;
-        public: using RemoveOfCollectionClient :: removeFirstOf;
-        public: using RemoveOfCollectionClient :: removeLastOf;
-        public: using RemoveOfCollectionClient :: removeAllOf;
-        public: using RemoveOfCollectionClient :: removeNotOf;
-        public: using RemoveOfCollectionClient :: removeFirstNotOf;
-        public: using RemoveOfCollectionClient :: removeLastNotOf;
-        public: using RemoveOfCollectionClient :: removeAllNotOf;
+        public:
+            /**
+             * @inherit removeOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00451-RO-removeOfNoneCommon [-Collection Group],
+             *      CTC-00452-RO-removeOfOneCommon [-Collection Group],
+             *      CTC-00453-RO-removeOfMoreLessThanLimitCommon [-Collection Group],
+             *      CTC-00454-RO-removeOfMoreCommon [-Collection Group],
+             *      CTC-00455-RO-removeOfMoreMoreThanLimitCommon [-Collection Group],
+             *      CTC-00456-RO-removeOfAllCommon [-Collection Group],
+             *      CTC-00457-RO-removeOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeOf;
 
-        public: using RemoveOfInitializerListClient :: removeOf;
-        public: using RemoveOfInitializerListClient :: removeFirstOf;
-        public: using RemoveOfInitializerListClient :: removeLastOf;
-        public: using RemoveOfInitializerListClient :: removeAllOf;
-        public: using RemoveOfInitializerListClient :: removeNotOf;
-        public: using RemoveOfInitializerListClient :: removeFirstNotOf;
-        public: using RemoveOfInitializerListClient :: removeLastNotOf;
-        public: using RemoveOfInitializerListClient :: removeAllNotOf;
+        public:
+            /**
+             * @inherit removeFirstOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00501-RO-removeFirstOfNoneCommon [-Collection Group],
+             *      CTC-00502-RO-removeFirstOfOneCommon [-Collection Group],
+             *      CTC-00503-RO-removeFirstOfMoreCommon [-Collection Group],
+             *      CTC-00504-RO-removeFirstOfAllCommon [-Collection Group],
+             *      CTC-00505-RO-removeFirstOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeFirstOf;
+
+        public:
+            /**
+             * @inherit removeLastOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00506-RO-removeLastOfNoneCommon [-Collection Group],
+             *      CTC-00507-RO-removeLastOfOneCommon [-Collection Group],
+             *      CTC-00508-RO-removeLastOfMoreCommon [-Collection Group],
+             *      CTC-00509-RO-removeLastOfAllCommon [-Collection Group],
+             *      CTC-00510-RO-removeLastOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeLastOf;
+
+        public:
+            /**
+             * @inherit removeAllOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00481-RO-removeAllOfNoneCommon [-Collection Group],
+             *      CTC-00482-RO-removeAllOfOneCommon [-Collection Group],
+             *      CTC-00483-RO-removeAllOfMoreCommon [-Collection Group],
+             *      CTC-00484-RO-removeAllOfAllCommon [-Collection Group],
+             *      CTC-00485-RO-removeAllOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeAllOf;
+
+        public:
+            /**
+             * @inherit removeNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00458-RO-removeNotOfNoneCommon [-Collection Group],
+             *      CTC-00459-RO-removeNotOfOneCommon [-Collection Group],
+             *      CTC-00460-RO-removeNotOfMoreLessThanLimitCommon [-Collection Group],
+             *      CTC-00461-RO-removeNotOfMoreCommon [-Collection Group],
+             *      CTC-00462-RO-removeNotOfMoreMoreThanLimitCommon [-Collection Group],
+             *      CTC-00463-RO-removeNotOfAllCommon [-Collection Group],
+             *      CTC-00464-RO-removeNotOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeNotOf;
+
+        public:
+            /**
+             * @inherit removeFirstNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00511-RO-removeFirstNotOfNoneCommon [-Collection Group],
+             *      CTC-00512-RO-removeFirstNotOfOneCommon [-Collection Group],
+             *      CTC-00513-RO-removeFirstNotOfMoreCommon [-Collection Group],
+             *      CTC-00514-RO-removeFirstNotOfAllCommon [-Collection Group],
+             *      CTC-00515-RO-removeFirstNotOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeFirstNotOf;
+
+        public:
+            /**
+             * @inherit removeLastNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00516-RO-removeLastNotOfNoneCommon [-Collection Group],
+             *      CTC-00517-RO-removeLastNotOfOneCommon [-Collection Group],
+             *      CTC-00518-RO-removeLastNotOfMoreCommon [-Collection Group],
+             *      CTC-00519-RO-removeLastNotOfAllCommon [-Collection Group],
+             *      CTC-00520-RO-removeLastNotOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeLastNotOf;
+
+        public:
+            /**
+             * @inherit removeAllNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00486-RO-removeAllNotOfNoneCommon [-Collection Group],
+             *      CTC-00487-RO-removeAllNotOfOneCommon [-Collection Group],
+             *      CTC-00488-RO-removeAllNotOfMoreCommon [-Collection Group],
+             *      CTC-00489-RO-removeAllNotOfAllCommon [-Collection Group],
+             *      CTC-00490-RO-removeAllNotOfAllAndMoreCommon [-Collection Group]
+             * }
+             * @public
+             */
+            using RemoveOfCollectionClient :: removeAllNotOf;
+
+        public:
+            /**
+             * @inherit removeOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00451-RO-removeOfNoneCommon [-InitializerList Group],
+             *      CTC-00452-RO-removeOfOneCommon [-InitializerList Group],
+             *      CTC-00453-RO-removeOfMoreLessThanLimitCommon [-InitializerList Group],
+             *      CTC-00454-RO-removeOfMoreCommon [-InitializerList Group],
+             *      CTC-00455-RO-removeOfMoreMoreThanLimitCommon [-InitializerList Group],
+             *      CTC-00456-RO-removeOfAllCommon [-InitializerList Group],
+             *      CTC-00457-RO-removeOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeOf;
+
+        public:
+            /**
+             * @inherit removeFirstOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00501-RO-removeFirstOfNoneCommon [-InitializerList Group],
+             *      CTC-00502-RO-removeFirstOfOneCommon [-InitializerList Group],
+             *      CTC-00503-RO-removeFirstOfMoreCommon [-InitializerList Group],
+             *      CTC-00504-RO-removeFirstOfAllCommon [-InitializerList Group],
+             *      CTC-00505-RO-removeFirstOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeFirstOf;
+
+        public:
+            /**
+             * @inherit removeLastOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00506-RO-removeLastOfNoneCommon [-InitializerList Group],
+             *      CTC-00507-RO-removeLastOfOneCommon [-InitializerList Group],
+             *      CTC-00508-RO-removeLastOfMoreCommon [-InitializerList Group],
+             *      CTC-00509-RO-removeLastOfAllCommon [-InitializerList Group],
+             *      CTC-00510-RO-removeLastOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeLastOf;
+
+        public:
+            /**
+             * @inherit removeAllOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00481-RO-removeAllOfNoneCommon [-InitializerList Group],
+             *      CTC-00482-RO-removeAllOfOneCommon [-InitializerList Group],
+             *      CTC-00483-RO-removeAllOfMoreCommon [-InitializerList Group],
+             *      CTC-00484-RO-removeAllOfAllCommon [-InitializerList Group],
+             *      CTC-00485-RO-removeAllOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeAllOf;
+
+        public:
+            /**
+             * @inherit removeNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00458-RO-removeNotOfNoneCommon [-InitializerList Group],
+             *      CTC-00459-RO-removeNotOfOneCommon [-InitializerList Group],
+             *      CTC-00460-RO-removeNotOfMoreLessThanLimitCommon [-InitializerList Group],
+             *      CTC-00461-RO-removeNotOfMoreCommon [-InitializerList Group],
+             *      CTC-00462-RO-removeNotOfMoreMoreThanLimitCommon [-InitializerList Group],
+             *      CTC-00463-RO-removeNotOfAllCommon [-InitializerList Group],
+             *      CTC-00464-RO-removeNotOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeNotOf;
+
+        public:
+            /**
+             * @inherit removeFirstNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00511-RO-removeFirstNotOfNoneCommon [-InitializerList Group],
+             *      CTC-00512-RO-removeFirstNotOfOneCommon [-InitializerList Group],
+             *      CTC-00513-RO-removeFirstNotOfMoreCommon [-InitializerList Group],
+             *      CTC-00514-RO-removeFirstNotOfAllCommon [-InitializerList Group],
+             *      CTC-00515-RO-removeFirstNotOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeFirstNotOf;
+
+        public:
+            /**
+             * @inherit removeLastNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00516-RO-removeLastNotOfNoneCommon [-InitializerList Group],
+             *      CTC-00517-RO-removeLastNotOfOneCommon [-InitializerList Group],
+             *      CTC-00518-RO-removeLastNotOfMoreCommon [-InitializerList Group],
+             *      CTC-00519-RO-removeLastNotOfAllCommon [-InitializerList Group],
+             *      CTC-00520-RO-removeLastNotOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeLastNotOf;
+
+        public:
+            /**
+             * @inherit removeAllNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+             *      CTC-00486-RO-removeAllNotOfNoneCommon [-InitializerList Group],
+             *      CTC-00487-RO-removeAllNotOfOneCommon [-InitializerList Group],
+             *      CTC-00488-RO-removeAllNotOfMoreCommon [-InitializerList Group],
+             *      CTC-00489-RO-removeAllNotOfAllCommon [-InitializerList Group],
+             *      CTC-00490-RO-removeAllNotOfAllAndMoreCommon [-InitializerList Group]
+             * }
+             * @public
+             */
+            using RemoveOfInitializerListClient :: removeAllNotOf;
 
         public: using FindByClient :: findThat;
         public: using FindByClient :: findFirstThat;
