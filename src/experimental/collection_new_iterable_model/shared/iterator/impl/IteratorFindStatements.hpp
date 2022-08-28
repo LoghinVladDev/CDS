@@ -28,14 +28,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate                         const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __CollectionType < __IteratorType > & {
 
-                    Size found = 0ULL;
-                    for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
+                    /* parse the range until the end or until the limit has been reached */
+                    for ( auto iterator = begin; iterator != end && count != 0ULL; ++ iterator ) {
+
+                        /* if the predicate validates the current element, store the iterator */
                         if ( predicate ( * iterator ) ) {
-                            ++ found;
+                            -- count;
                             (void) storeIn.insert ( iterator );
                         }
                     }
 
+                    /* return reference to the received storeIn collection */
                     return storeIn;
                 }
 
@@ -55,12 +58,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate                         const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __IteratorType {
 
+                    /* parse the range until the end */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if the predicate validates the current element, return the iterator */
                         if ( predicate ( * iterator ) ) {
                             return iterator;
                         }
                     }
 
+                    /* if the range parse has ended, no element found, return end of range */
                     return end;
                 }
 
@@ -80,13 +87,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate                         const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __IteratorType {
 
+                    /* create an iterator to store the last valid element iterator. Initialize with end in case of no element found */
                     auto lastFound = end;
+
+                    /* parse the range to the end */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if the predicate validates the current element, store the iterator */
                         if ( predicate ( * iterator ) ) {
                             lastFound = iterator;
                         }
                     }
 
+                    /* return the stored iterator */
                     return lastFound;
                 }
 
@@ -108,12 +121,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate                         const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __CollectionType < __IteratorType > & {
 
+                    /* parse the range to the end */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if the predicate validates the current element, store the iterator */
                         if ( predicate ( * iterator ) ) {
                             (void) storeIn.insert ( iterator );
                         }
                     }
 
+                    /* return reference to the received storeIn collection */
                     return storeIn;
                 }
 

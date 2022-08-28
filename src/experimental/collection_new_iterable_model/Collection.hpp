@@ -778,10 +778,89 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using RemoveOfInitializerListClient :: removeAllNotOf;
 
-        public: using FindByClient :: findThat;
-        public: using FindByClient :: findFirstThat;
-        public: using FindByClient :: findLastThat;
-        public: using FindByClient :: findAllThat;
+        public:
+            /**
+             * @inherit findThat ( Predicate ) call, inherited from FindByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+             *      CTC-00601-FT-findThatStoreInMatchingNone,
+             *      CTC-00602-FT-findThatStoreInMatchingOne,
+             *      CTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit,
+             *      CTC-00604-FT-findThatStoreInMatchingMore,
+             *      CTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit,
+             *      CTC-00606-FT-findThatStoreInMatchingAll,
+             *      CTC-00607-FT-findThatStoreInMatchingAllAndMore,
+             *      CTC-00608-FT-findThatReturnedMatchingNone,
+             *      CTC-00609-FT-findThatReturnedMatchingOne,
+             *      CTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit,
+             *      CTC-00611-FT-findThatReturnedMatchingMore,
+             *      CTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit,
+             *      CTC-00613-FT-findThatReturnedMatchingAll,
+             *      CTC-00614-FT-findThatReturnedMatchingAllAndMore
+             * }
+             * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+             *      CTC-00651-FTMF-findThatStoreInMemberFunction,
+             *      CTC-00652-FTMF-findThatReturnedMemberFunction
+             * }
+             * @public
+             */
+            using FindByClient :: findThat;
+
+        public:
+            /**
+             * @inherit findFirstThat ( Predicate ) call, inherited from FindByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+             *      CTC-00615-FT-findFirstThatMatchingNone,
+             *      CTC-00616-FT-findFirstThatMatchingOne,
+             *      CTC-00617-FT-findFirstThatMatchingMore,
+             *      CTC-00618-FT-findFirstThatMatchingAll,
+             *      CTC-00619-FT-findFirstThatMatchingAllAndMore
+             * }
+             * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+             *      CTC-00653-FTMF-findFirstThatMemberFunction
+             * }
+             * @public
+             */
+            using FindByClient :: findFirstThat;
+
+        public:
+            /**
+             * @inherit findLastThat ( Predicate ) call, inherited from FindByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+             *      CTC-00620-FT-findLastThatMatchingNone,
+             *      CTC-00621-FT-findLastThatMatchingOne,
+             *      CTC-00622-FT-findLastThatMatchingMore,
+             *      CTC-00623-FT-findLastThatMatchingAll,
+             *      CTC-00624-FT-findLastThatMatchingAllAndMore
+             * }
+             * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+             *      CTC-00654-FTMF-findLastThatMemberFunction
+             * }
+             * @public
+             */
+            using FindByClient :: findLastThat;
+
+        public:
+            /**
+             * @inherit findAllThat ( Predicate ) call, inherited from FindByClient interface
+             * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+             *      CTC-00625-FT-findAllThatStoreInMatchingNone,
+             *      CTC-00626-FT-findAllThatStoreInMatchingOne,
+             *      CTC-00627-FT-findAllThatStoreInMatchingMore,
+             *      CTC-00628-FT-findAllThatStoreInMatchingAll,
+             *      CTC-00629-FT-findAllThatStoreInMatchingAllAndMore,
+             *      CTC-00630-FT-findAllThatReturnedMatchingNone,
+             *      CTC-00631-FT-findAllThatReturnedMatchingOne,
+             *      CTC-00632-FT-findAllThatReturnedMatchingMore,
+             *      CTC-00633-FT-findAllThatReturnedMatchingAll,
+             *      CTC-00634-FT-findAllThatReturnedMatchingAllAndMore
+             * }
+             * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+             *      CTC-00655-FTMF-findAllThatStoreInMemberFunction,
+             *      CTC-00656-FTMF-findAllThatReturnedMemberFunction
+             * }
+             * @public
+             */
+            using FindByClient :: findAllThat;
 
         public: using FindOfCollectionClient :: findOf;
         public: using FindOfCollectionClient :: findFirstOf;

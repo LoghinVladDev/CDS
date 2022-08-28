@@ -33,6 +33,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > & {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -65,6 +66,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     __CollectionType < ConstIterator > foundIterators;
                     return __findThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
@@ -94,6 +96,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> ConstIterator {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findFirstThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -120,6 +123,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> ConstIterator {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findLastThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -149,6 +153,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > & {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findAllThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -178,6 +183,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     __CollectionType < ConstIterator > foundIterators;
                     return __findAllThat (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),

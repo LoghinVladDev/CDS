@@ -35,7 +35,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @typedef Private definition for __ElementType template parameter  
                      * @private
-                     * */
+                     */
                     using ElementType = __ElementType;
 
                 public:

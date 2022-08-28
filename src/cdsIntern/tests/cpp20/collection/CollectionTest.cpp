@@ -11321,6 +11321,80 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedFindAllThatAllAndMore= */            { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} }
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-FindThatMemberFunction-CPP20 : CTG-00650-FTMF-CPP20 : StringArray", [this, & allOk] {
+
+        /* CollectionTestGroup-FindThatMemberFunction-CPP20 : CTG-00650-FTMF-CPP20 : CTC-00651-FTMF to CTC-00656-FTMF */
+
+        cds :: experimental :: Array < String > arr = { "word1", "", "word2", "", "word3", "word4", "", "word5" };
+        cds :: experimental :: Collection < String > const & underTest = arr;
+        using ConstIterator = cds :: experimental :: Collection < String > :: ConstIterator;
+
+        /* CollectionTestCase-FindThatMemberFunction-findThatStoreInMemberFunction-CPP20 : CTC-00651-FTMF-findThatStoreInMemberFunction-CPP20 */
+        cds :: experimental :: Array < ConstIterator > storeIn651;
+        underTest.findThat ( 2, storeIn651, & String :: empty );
+
+        if ( storeIn651.size() != 2 || * ( ++ storeIn651[0] ) != "word2" || * ( ++ storeIn651[1] ) != "word3" ) {
+            this->logError( "'CTC-00651-FTMF-findThatStoreInMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00651-FTMF-findThatStoreInMemberFunction-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-FindThatMemberFunction-findThatReturnedMemberFunction-CPP20 : CTC-00652-FTMF-findThatReturnedMemberFunction-CPP20 */
+        cds :: experimental :: Array < ConstIterator > storeIn652;
+        storeIn652 = underTest.findThat < cds :: experimental :: Array > ( 2, & String :: empty );
+
+        if ( storeIn652.size() != 2 || * ( ++ storeIn652[0] ) != "word2" || * ( ++ storeIn652[1] ) != "word3" ) {
+            this->logError( "'CTC-00652-FTMF-findThatReturnedMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00652-FTMF-findThatReturnedMemberFunction-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-FindThatMemberFunction-findFirstThatMemberFunction-CPP20 : CTC-00653-FTMF-findFirstThatMemberFunction-CPP20 */
+        ConstIterator res653;
+        res653 = underTest.findFirstThat ( & String :: empty );
+
+        if ( ! res653.valid() || * ( ++ res653 ) != "word2" ) {
+            this->logError( "'CTC-00653-FTMF-findFirstThatMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00653-FTMF-findFirstThatMemberFunction-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-FindThatMemberFunction-findLastThatMemberFunction-CPP20 : CTC-00654-FTMF-findLastThatMemberFunction-CPP20 */
+        ConstIterator res654;
+        res654 = underTest.findLastThat ( & String :: empty );
+
+        if ( ! res654.valid() || * ( ++ res654 ) != "word5" ) {
+            this->logError( "'CTC-00654-FTMF-findLastThatMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00654-FTMF-findLastThatMemberFunction-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-FindThatMemberFunction-findAllThatStoreInMemberFunction-CPP20 : CTC-00655-FTMF-findAllThatStoreInMemberFunction-CPP20 */
+        cds :: experimental :: Array < ConstIterator > storeIn655;
+        underTest.findAllThat ( storeIn655, & String :: empty );
+
+        if ( storeIn655.size() != 3 || * ( ++ storeIn655[0] ) != "word2" || * ( ++ storeIn655[1] ) != "word3" || * ( ++ storeIn655 [2] ) != "word5" ) {
+            this->logError( "'CTC-00655-FTMF-findAllThatStoreInMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00655-FTMF-findAllThatStoreInMemberFunction-CPP20' OK" );
+        }
+
+        /* CollectionTestCase-FindThatMemberFunction-findAllThatReturnedMemberFunction-CPP20 : CTC-00656-FTMF-findAllThatReturnedMemberFunction-CPP20 */
+        cds :: experimental :: Array < ConstIterator > storeIn656;
+        storeIn656 = underTest.findAllThat < cds :: experimental :: Array > ( & String :: empty );
+
+        if ( storeIn656.size() != 3 || * ( ++ storeIn656[0] ) != "word2" || * ( ++ storeIn656[1] ) != "word3" || * ( ++ storeIn656 [2] ) != "word5" ) {
+            this->logError( "'CTC-00656-FTMF-findAllThatReturnedMemberFunction-CPP20' failed" );
+            return;
+        } else {
+            this->logOK ( "'CTC-00656-FTMF-findAllThatReturnedMemberFunction-CPP20' OK" );
+        }
+    });
 
     return allOk;
 }
