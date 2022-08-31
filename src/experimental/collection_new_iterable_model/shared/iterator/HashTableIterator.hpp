@@ -134,8 +134,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
-             * @param bucketCount : Size = the size of the address list of buckets
+             * @param [in] pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
+             * @param [in] bucketCount : Size = the size of the address list of buckets
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -149,11 +149,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
-             * @param bucketCount : Size = the size of the address list of buckets
-             * @param pCurrentNode : DataNode ptr = the address of the initial current Node
-             * @param pPreviousNode : DataNode ptr = the address of the initial previous Node
-             * @param bucketIndex : Size = index of the initial bucket Index
+             * @param [in] pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
+             * @param [in] bucketCount : Size = the size of the address list of buckets
+             * @param [in] pCurrentNode : DataNode ptr = the address of the initial current Node
+             * @param [in] pPreviousNode : DataNode ptr = the address of the initial previous Node
+             * @param [in] bucketIndex : Size = index of the initial bucket Index
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -170,7 +170,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : HashTableIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : HashTableIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -183,7 +183,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : HashTableIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : HashTableIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -196,7 +196,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : HashTableIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : HashTableIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return HashTableIterator ref = Reference to the modified iterator
              *
@@ -210,7 +210,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : HashTableIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : HashTableIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return HashTableIterator ref = Reference to the modified iterator
              *
@@ -323,7 +323,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -337,7 +337,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -462,8 +462,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
-             * @param bucketCount : Size = the size of the address list of buckets
+             * @param [in] pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
+             * @param [in] bucketCount : Size = the size of the address list of buckets
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -477,11 +477,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
-             * @param bucketCount : Size = the size of the address list of buckets
-             * @param pCurrentNode : DataNode cptr = the address of the initial immutable current Node
-             * @param pPreviousNode : DataNode cptr = the address of the initial immutable previous Node
-             * @param bucketIndex : Size = index of the initial bucket Index
+             * @param [in] pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
+             * @param [in] bucketCount : Size = the size of the address list of buckets
+             * @param [in] pCurrentNode : DataNode cptr = the address of the initial immutable current Node
+             * @param [in] pPreviousNode : DataNode cptr = the address of the initial immutable previous Node
+             * @param [in] bucketIndex : Size = index of the initial bucket Index
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -498,7 +498,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : HashTableConstIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : HashTableConstIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -511,7 +511,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : HashTableConstIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : HashTableConstIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -524,7 +524,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : HashTableConstIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : HashTableConstIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return HashTableConstIterator ref = Reference to the modified iterator
              *
@@ -538,7 +538,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : HashTableConstIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : HashTableConstIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return HashTableConstIterator ref = Reference to the modified iterator
              *
@@ -651,7 +651,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -665,7 +665,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *

@@ -12,6 +12,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
             /**
              * @interface Model Structure representing a non-standard iterator model
+             * @test Not Applicable.
              * @public
              **/
             struct Iterator {};
@@ -19,6 +20,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @interface Model Structure representing a Forward-Iterable Iterator. Can advance begin-to-end
              * @extends Iterator
+             * @test Not Applicable.
              * @public
              */
             struct ForwardIterator : Iterator {};
@@ -26,6 +28,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @interface Model Structure representing a Bidirectional-Iterable Iterator. Can advance begin-to-end and end-to-begin
              * @extends ForwardIterator
+             * @test Not Applicable.
              * @public
              */
             struct BidirectionalIterator : ForwardIterator {};
@@ -33,6 +36,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @interface Model Structure representing a Random-Access-Iterable Iterator. Can advance begin-to-end, end-to-begin, and jump positions more than one step at a time.
              * @extends BidirectionalIterator
+             * @test Not Applicable.
              * @public
              */
             struct RandomAccessIterator : BidirectionalIterator {};

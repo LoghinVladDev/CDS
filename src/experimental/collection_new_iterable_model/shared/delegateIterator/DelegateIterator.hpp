@@ -92,7 +92,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Initialization Constructor, constexpr
-                     * @param iterator : IteratorType cref = Constant Reference to an iterator value to be wrapped
+                     * @param [in] iterator : IteratorType cref = Constant Reference to an iterator value to be wrapped
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -106,7 +106,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Initialization Constructor, constexpr
-                     * @param iterator : IteratorType mref = Move Reference to an iterator value to be wrapped
+                     * @param [in, out] iterator : IteratorType mref = Move Reference to an iterator value to be wrapped
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -120,7 +120,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Copy Constructor, constexpr
-                     * @param iterator : __DelegateIterator cref = Constant Reference to an iterator to copy the wrapped iterator from
+                     * @param [in] iterator : __DelegateIterator cref = Constant Reference to an iterator to copy the wrapped iterator from
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -134,7 +134,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Move Constructor, constexpr
-                     * @param iterator : __DelegateIterator mref = Move Reference to an iterator to move the wrapped iterator from
+                     * @param [in, out] iterator : __DelegateIterator mref = Move Reference to an iterator to move the wrapped iterator from
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -201,7 +201,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to advance the iterator in a given direction
-                     * @param direction : __IteratorAdvanceDirection = the direction to advance the iterator into
+                     * @param [in] direction : __IteratorAdvanceDirection = the direction to advance the iterator into
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -215,7 +215,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to compare the iterator with a given iterator
-                     * @param iterator : __AbstractDelegateIterator cref = Constant Reference to another iterator
+                     * @param [in] iterator : __AbstractDelegateIterator cref = Constant Reference to another iterator
                      * @exceptsafe
                      * @return bool = true if iterators are equal, false otherwise
                      *

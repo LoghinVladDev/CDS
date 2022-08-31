@@ -234,8 +234,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newFrontArrayFunction, and is used by the server
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -249,8 +249,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newBackArrayFunction, and is used by the server
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -264,7 +264,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newBeforeFunction, and is used by the server
-                     * @param pIterator : __IteratorType cptr = Address to an Immutable iterator
+                     * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
                      * @exceptsafe
                      * @return __ElementType ptr = Address to the newly created element
                      *
@@ -278,7 +278,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newBeforeConstFunction, and is used by the server
-                     * @param pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
+                     * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
                      * @exceptsafe
                      * @return __ElementType ptr = Address to the newly created element
                      *
@@ -292,7 +292,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newAfterFunction, and is used by the server
-                     * @param pIterator : __IteratorType cptr = Address to an Immutable iterator
+                     * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
                      * @exceptsafe
                      * @return __ElementType ptr = Address to the newly created element
                      *
@@ -306,7 +306,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newAfterConstFunction, and is used by the server
-                     * @param pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
+                     * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
                      * @exceptsafe
                      * @return __ElementType ptr = Address to the newly created element
                      *
@@ -320,9 +320,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newBeforeArrayFunction, and is used by the server
-                     * @param pIterator : __IteratorType cptr = Address to an Immutable iterator
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in, out] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -337,9 +337,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newBeforeArrayConstFunction, and is used by the server
-                     * @param pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in, out] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -354,9 +354,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newAfterArrayFunction, and is used by the server
-                     * @param pIterator : __IteratorType cptr = Address to an Immutable iterator
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in, out] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -371,9 +371,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newAfterArrayConstFunction, and is used by the server
-                     * @param pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
-                     * @param count : Size = number of elements to allocate
-                     * @param ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
+                     * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
+                     * @param [in] count : Size = number of elements to allocate
+                     * @param [in, out] ppElements : __ElementType ptr ptr = Address to the array of addresses to populate
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA

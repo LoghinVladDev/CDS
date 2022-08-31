@@ -34,7 +34,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to check if the caller iterable contains any element that matches any element from the given parameter iterable
-                     * @param from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
+                     * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
                      * @exceptsafe
                      * @return bool = true if property is fulfilled, false otherwise
                      *
@@ -55,7 +55,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to check if the caller iterable contains any element that does not match any element from the given parameter iterable
-                     * @param from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
+                     * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
                      * @exceptsafe
                      * @return bool = true if property is fulfilled, false otherwise
                      *
@@ -76,7 +76,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to check if all of the elements in the given parameter iterable match an element in the caller iterable
-                     * @param from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
+                     * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
                      * @exceptsafe
                      * @return bool = true if property is fulfilled, false otherwise
                      *
@@ -97,7 +97,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to check if the caller collection contains no element that matches any element from the given parameter iterable
-                     * @param from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
+                     * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
                      * @exceptsafe
                      * @return bool = true if property is fulfilled, false otherwise
                      *

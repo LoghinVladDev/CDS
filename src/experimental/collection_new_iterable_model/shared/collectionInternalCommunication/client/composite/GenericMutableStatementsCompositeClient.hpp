@@ -43,7 +43,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to apply an action over each element of the iterable
                      * @tparam __Action the type of the action given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
-                     * @param action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function
+                     * @param [in] action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function
                      * @exceptsafe if __Action callable / member function is exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -65,8 +65,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if the iterable contains exactly 'count' elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be a callable compatible with the 'bool ( Decay < ElementType > )' function signature or a member function compatible with the signature 'bool () const'
-                     * @param count : Size = number of elements required to match
-                     * @param predicate : __Predicate cref = Constant Reference to callable / member function object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
+                     * @param [in] count : Size = number of elements required to match
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable / member function object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
                      *      If no predicate is given, 'some' must yield the same value as 'caller.size() == count'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated == count, false otherwise
@@ -93,8 +93,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if the iterable contains at least 'count' elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param count : Size = minimum number of elements required to match
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] count : Size = minimum number of elements required to match
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'atLeast' must yield the same value as 'caller.size() >= count'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated >= count, false otherwise
@@ -121,8 +121,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if the iterable contains at most 'count' elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param count : Size = maximum number of elements required to match
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] count : Size = maximum number of elements required to match
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'atMost' must yield the same value as 'caller.size() <= count'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated <= count, false otherwise
@@ -149,8 +149,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if the iterable contains more than 'count' elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param count : Size = minimum number of elements required to match
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] count : Size = minimum number of elements required to match
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'moreThan' must yield the same value as 'caller.size() > count'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated > count, false otherwise
@@ -177,8 +177,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if the collection contains less than 'count' elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param count : Size = maximum number of elements required to match
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] count : Size = maximum number of elements required to match
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'fewerThan' must yield the same value as 'caller.size() < count'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated < count, false otherwise
@@ -205,7 +205,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to acquire the number of elements that are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'count' must yield the same value as 'caller.size()'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return Size = number of elements that are validated by the given predicate
@@ -230,7 +230,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if any of the collection's elements are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'any' must yield the same value as 'caller.size() > 0'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if at least one element is validated by the given predicate, false otherwise
@@ -255,7 +255,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if all of the collection's elements are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'all' must return 'true'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if all of the collection's elements are validated by the given predicate, false otherwise
@@ -280,7 +280,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to check if none of the collection's elements are validated by a given predicate
                      * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                     * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                     * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                      *      If no predicate is given, 'none' must yield the same value as 'caller.empty()'
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if none of the collection's elements are validated by the given predicate, false otherwise
