@@ -7,16 +7,6 @@
 
 
 /// TODO : do not include these here, include in class using RedBlackTree
-#include "../../../../shared/Node.hpp"
-#include "../../../../shared/memory/PrimitiveAllocation.hpp"
-#include "../../../../std-types.h"
-#include <CDS/Comparator>
-#include <CDS/Extractor>
-#include <CDS/Destructor>
-#include <CDS/Compiler>
-#include <CDS/CopyConstructor>
-#include <CDS/Options>
-#include "../iterator/RedBlackTreeIterator.h"
 
 namespace cds {                     // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -71,13 +61,23 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 > class __RedBlackTree {                     // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    using RBTreeNode                    =           __RedBlackTreeNode < __ElementType >;
+                    using RBTreeNode                           =           __RedBlackTreeNode < __ElementType >;
 
                 public:
-                    using __rbt_Iterator                =           RedBlackTreeIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
+                    using __rbt_Iterator                       =           RedBlackTreeForwardIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    using __rbt_ConstIterator           =           RedBlackTreeConstIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier)
+                    using __rbt_ConstIterator                  =           RedBlackTreeForwardConstIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __rbt_ReverseIterator                =           RedBlackTreeBackwardIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __rbt_ReverseConstIterator           =           RedBlackTreeBackwardConstIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    template < typename __ServerType >      // NOLINT(bugprone-reserved-identifier)
+                    class __SetDispatcher;                  // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     Size            _size   { 0ULL };
@@ -197,8 +197,16 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
 
                 protected:
                     auto __rbt_removeIterator (                                                             // NOLINT(bugprone-reserved-identifier)
-                            __rbt_ConstIterator const & iterator
+                            AbstractTreeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
+
+                protected:
+                    auto __rbt_removeConstIteratorArray (                                                   // NOLINT(bugprone-reserved-identifier)
+                            AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
+                            Size                                iteratorCount
+                    ) noexcept -> Size;
+
+
 
                 protected:
                     auto __rbt_clear () noexcept -> void;                                                   // NOLINT(bugprone-reserved-identifier)
@@ -230,13 +238,16 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                             __RedBlackTree && tree
                     ) noexcept -> void;
 
-
                 protected:
                     auto __rbt_new (                                                                        // NOLINT(bugprone-reserved-identifier)
                             __ElementType const * pReferenceElement,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;
 
+                protected:
+                    auto __rbt_findIteratorConst (                                  // NOLINT(bugprone-reserved-identifier)
+                            __KeyType const & key
+                    ) const noexcept -> __rbt_ConstIterator;
 
                 protected:
                     auto __rbt_begin () noexcept -> __rbt_Iterator;                 // NOLINT(bugprone-reserved-identifier)
@@ -245,10 +256,10 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     auto __rbt_end () noexcept -> __rbt_Iterator;                   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_rbegin () noexcept -> __rbt_Iterator;                // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_rbegin () noexcept -> __rbt_ReverseIterator;                // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_rend () noexcept -> __rbt_Iterator;                  // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_rend () noexcept -> __rbt_ReverseIterator;                  // NOLINT(bugprone-reserved-identifier)
 
 
                 protected:
@@ -258,10 +269,10 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     auto __rbt_cend () const noexcept -> __rbt_ConstIterator;       // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_crbegin () const noexcept -> __rbt_ConstIterator;    // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_crend () const noexcept -> __rbt_ConstIterator;      // NOLINT(bugprone-reserved-identifier)
+                    auto __rbt_crend () const noexcept -> __rbt_ReverseConstIterator;      // NOLINT(bugprone-reserved-identifier)
 
                     };
             }
@@ -272,3 +283,113 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
 #include "impl/RedBlackTree.hpp"
 
 #endif // __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
+
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+
+#if defined ( __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_EX_SHARED_RED_BLACK_TREE_HPP__)
+#define __CDS_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+
+            template <
+                        typename                                                            __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
+            > template <
+                    typename                                                                __ServerType
+            > class __RedBlackTree <
+                    __ElementType,
+                    __KeyType,
+                    __keyExtractor,
+                    __keyLowerComparator,
+                    __keyEqualsComparator,
+                    __nodeDestructor
+            > :: __SetDispatcher :
+                    public __TreeSetServerDispatcher <
+                            __ServerType,
+                            __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            >,
+                            __ElementType,
+                            AbstractTreeConstIterator < __ElementType >,
+                            RedBlackTreeForwardConstIterator < __ElementType >,
+                            RedBlackTreeBackwardConstIterator < __ElementType >,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_cbegin,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_cend,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_crbegin,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_crend,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_new,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_removeIterator,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_removeConstIteratorArray,
+                            & __RedBlackTree <
+                                    __ElementType,
+                                    __KeyType,
+                                    __keyExtractor,
+                                    __keyLowerComparator,
+                                    __keyEqualsComparator,
+                                    __nodeDestructor
+                            > :: __rbt_findIteratorConst
+                    > {};
+#endif
+            }
+        }
+    }
+}

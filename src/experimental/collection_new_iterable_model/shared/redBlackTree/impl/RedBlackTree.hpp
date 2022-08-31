@@ -594,7 +594,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_removeIterator (
-                    __rbt_ConstIterator const & iterator
+                    AbstractTreeConstIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
                     auto pToBeRemoved = const_cast < RBTreeNode * > ( iterator._pCurrentNode );
@@ -604,6 +604,35 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     }
 
                     return this->__rbt_removeAt ( pToBeRemoved );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_removeConstIteratorArray (
+                        AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
+                        Size                                iteratorCount
+                ) noexcept -> Size {
+
+                    Size removeCount = 0ULL;
+                    for ( auto index = 0ULL; index < iteratorCount; ++ index ) {
+                        if ( this->__rbt_removeIterator ( * iteratorArray [ index ] ) )
+                            ++ removeCount;
+                    }
+
+                    return removeCount;
                 }
 
 
@@ -634,6 +663,45 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     this->_size = 0ULL;
 
                     _remove_recursively ( this->_pRoot );
+                }
+
+
+                template <
+                        typename                                                            __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename                                                            __KeyType,                 // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           // NOLINT(bugprone-reserved-identifier)
+                > auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_findIteratorConst (
+                        __KeyType const & key
+                ) const noexcept -> __rbt_ConstIterator {
+
+                    if ( this->__rbt_empty() ) {
+                        return __rbt_ConstIterator();
+                    }
+
+                    auto pSearch = this->_pRoot;
+                    while ( pSearch != __endNode < __ElementType > () ) {
+                        if ( __keyEqualsComparator ( __keyExtractor ( pSearch->_data ), key ) ) {
+                            return ( __rbt_ConstIterator ( this->_pRoot, pSearch ) );
+                        }
+
+                        if ( __keyLowerComparator ( __keyExtractor ( pSearch->_data ), key ) ) {
+                            pSearch = pSearch->_pLeft;
+                        } else {
+                            pSearch = pSearch->_pRight;
+                        }
+                    }
+
+                    return __rbt_ConstIterator();
                 }
 
 
@@ -872,10 +940,10 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_rbegin () noexcept -> __rbt_Iterator {
+                > :: __rbt_rbegin () noexcept -> __rbt_ReverseIterator {
 
                     if ( this->_pRoot == nullptr ) {
-                        return __rbt_Iterator ( nullptr, nullptr );
+                        return __rbt_ReverseIterator ( nullptr, nullptr );
                     }
 
                     RBTreeNode * prEnd = this->_pRoot;
@@ -883,7 +951,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         prEnd = prEnd->_pRight;
                     }
 
-                    return __rbt_Iterator ( this->_pRoot, prEnd );
+                    return __rbt_ReverseIterator ( this->_pRoot, prEnd );
                 }
 
 
@@ -901,9 +969,9 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_rend () noexcept -> __rbt_Iterator {
+                > :: __rbt_rend () noexcept -> __rbt_ReverseIterator {
 
-                    return __rbt_Iterator ( this->_pRoot, nullptr );
+                    return __rbt_ReverseIterator ( this->_pRoot, nullptr );
                 }
 
 
@@ -970,10 +1038,10 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_crbegin () const noexcept -> __rbt_ConstIterator {
+                > :: __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator {
 
                     if ( this->_pRoot == nullptr ) {
-                        return __rbt_ConstIterator ( nullptr, nullptr );
+                        return __rbt_ReverseConstIterator ( nullptr, nullptr );
                     }
 
                     RBTreeNode * pcrBegin = this->_pRoot;
@@ -981,7 +1049,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         pcrBegin = pcrBegin->_pRight;
                     }
 
-                    return __rbt_ConstIterator ( this->_pRoot, pcrBegin );
+                    return __rbt_ReverseConstIterator ( this->_pRoot, pcrBegin );
                 }
 
 
@@ -999,9 +1067,9 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_crend () const noexcept -> __rbt_ConstIterator {
+                > :: __rbt_crend () const noexcept -> __rbt_ReverseConstIterator {
 
-                    return __rbt_Iterator ( this->_pRoot, nullptr );
+                    return __rbt_ReverseConstIterator ( this->_pRoot, nullptr );
                 }
             }
         }
