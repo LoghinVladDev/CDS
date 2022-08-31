@@ -1,23 +1,23 @@
-//
-// Created by loghin on 6/26/22.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__
+#define __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -47,13 +47,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -81,11 +81,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -110,11 +110,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -139,13 +139,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -173,13 +173,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -204,13 +204,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -240,13 +240,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -274,11 +274,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -303,11 +303,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -332,13 +332,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -366,13 +366,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __IteratorType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        template < typename ... > class                             __CollectionType    // NOLINT(bugprone-reserved-identifier)
+                        template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
@@ -401,4 +401,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__ */

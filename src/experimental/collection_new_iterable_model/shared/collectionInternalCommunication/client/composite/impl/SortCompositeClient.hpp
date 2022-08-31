@@ -1,22 +1,22 @@
-//
-// Created by loghin on 6/30/2022.
-//
+/*
+ * Created by loghin on 6/30/2022.
+ */
 
 #ifndef __CDS_SHARED_SORT_COMPOSITE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_SORT_COMPOSITE_CLIENT_IMPL_HPP__
+#define __CDS_SHARED_SORT_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ElementType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __ElementType > () &&
                                 cds :: meta :: isMoveAssignable < __ElementType > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType & left,
                         __ElementType & right
                 ) noexcept -> void {
@@ -28,12 +28,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ElementType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMoveConstructible < __ElementType > () &&
                                 ! cds :: meta :: isMoveAssignable < __ElementType > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType & left,
                         __ElementType & right
                 ) noexcept -> void {
@@ -45,9 +45,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IteratorType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ComparatorFunction   // NOLINT(bugprone-reserved-identifier)
-                > auto __quickSortPartition (                    // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ComparatorFunction   /* NOLINT(bugprone-reserved-identifier) */
+                > auto __quickSortPartition (                    /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType          const & begin,
                         Index                           beginIndex,
                         __IteratorType          const & end,
@@ -104,9 +104,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IteratorType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ComparatorFunction   // NOLINT(bugprone-reserved-identifier)
-                > auto __quickSort (                    // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ComparatorFunction   /* NOLINT(bugprone-reserved-identifier) */
+                > auto __quickSort (                    /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType          const & begin,
                         Index                           beginIndex,
                         __IteratorType          const & end,
@@ -153,10 +153,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType          // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename __ComparatorFunction   // NOLINT(bugprone-reserved-identifier)
+                        typename __ComparatorFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > auto __SortCompositeClient <
                         __ReceiverType,
                         __ElementType
@@ -182,4 +182,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_SORT_COMPOSITE_CLIENT_IMPL_HPP__
+#endif /* __CDS_SHARED_SORT_COMPOSITE_CLIENT_IMPL_HPP__ */

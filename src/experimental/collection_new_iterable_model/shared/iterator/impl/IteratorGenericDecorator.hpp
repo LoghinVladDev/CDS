@@ -1,17 +1,17 @@
-//
-// Created by loghin on 14/08/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__
-#define __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__
+#define __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -20,9 +20,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -36,9 +36,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -52,9 +52,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -68,9 +68,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -84,9 +84,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -98,9 +98,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -112,9 +112,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -128,9 +128,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -144,9 +144,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -159,9 +159,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -175,9 +175,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -189,9 +189,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -203,9 +203,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardIteratorGenericDecorator <
                 __DecoratedIteratorType,
                 __ValueAtType,
@@ -218,4 +218,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__
+#endif /* __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__ */

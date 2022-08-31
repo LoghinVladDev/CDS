@@ -1,26 +1,26 @@
-//
-// Created by loghin on 6/30/2022.
-//
+/*
+ * Created by loghin on 6/30/2022.
+ */
 
 #ifndef __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__
+#define __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
-                > class __ReplaceCompositeClient {              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
+                > class __ReplaceCompositeClient {              /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using ElementType = __ElementType;
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyAssignable < __TElementType > ()
                             > = 0
@@ -32,7 +32,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyAssignable < __TElementType > ()
                             > = 0
@@ -43,7 +43,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveAssignable < __TElementType > ()
                             > = 0
@@ -54,7 +54,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyAssignable < __TElementType > ()
                             > = 0
@@ -65,7 +65,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isMoveAssignable < __TElementType > ()
                             > = 0
@@ -76,7 +76,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyAssignable < __TElementType > ()
                             > = 0
@@ -88,9 +88,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
-                > using __LocalReplaceCompositeClient =     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
+                > using __LocalReplaceCompositeClient =     /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceCompositeClient <
                                 __ReceiverType,
                                 __ElementType
@@ -101,4 +101,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__
+#endif /* __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ */
