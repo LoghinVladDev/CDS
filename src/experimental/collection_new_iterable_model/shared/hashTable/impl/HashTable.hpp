@@ -376,12 +376,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __ht_new (
                         __ElementType const * pReferenceElement,
-                        bool                * pIsNew
+                        bool                * pNewElementCreated
                 ) noexcept -> __ElementType * {
 
                     return this->__ht_get (
                             __keyExtractor ( * pReferenceElement ),
-                            pIsNew
+                            pNewElementCreated
                     );
                 }
 
@@ -535,7 +535,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __KeyType const & key
                 ) const noexcept -> __ElementType const * {
 
-                    return this->__ht_get ( key );
+                    return this->__ht_getConst ( key );
                 }
 
 
@@ -1313,7 +1313,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         cds :: utility :: ComparisonFunction < __ElementType >              __comparator        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __HashTable <
+                > __CDS_cpplang_ConstexprConditioned auto __HashTable <
                         __ElementType,
                         __KeyType,
                         __KeyHasher,

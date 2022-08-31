@@ -1783,6 +1783,56 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     this->_pData = cds :: exchange ( array._pData, nullptr );
                 }
 
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_equals (
+                        __Array const & array
+                ) const noexcept -> bool {
+
+                    /* self comparison, memory data can be used directly to check the case of null arrays */
+                    if ( this->_pData == array._pData ) {
+                        return true;
+                    }
+
+                    /* if only one is not initialized, not equal */
+                    if ( this->_pData == nullptr || array._pData == nullptr ) {
+                        return false;
+                    }
+
+                    auto const thisSize     = this->__a_size();
+                    auto const otherSize    = array.__a_size();
+
+                    /* different sizes => not equal */
+                    if ( thisSize != otherSize ) {
+                        return false;
+                    }
+
+                    /* otherwise, start parsing */
+                    auto const thisFront    = this->_pData->_pFront;
+                    auto const otherFront   = array._pData->_pFront;
+
+                    /* equal in size, so only use this array's end as parse limit */
+                    while ( thisFront != this->_pData->_pBack ) {
+
+                        /* if any element is not equal to the other, not equal */
+                        if ( ! __equals ( * thisFront, * otherFront ) ) {
+                            return false;
+                        }
+
+                        /* otherwise, go ahead in both arrays */
+                        ++ thisFront;
+                        ++ otherFront;
+                    }
+
+                    /* parse ended and no return => all elements are equal */
+                    return true;
+                }
+
             }
         }
     }

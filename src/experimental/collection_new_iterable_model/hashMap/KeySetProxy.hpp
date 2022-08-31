@@ -405,17 +405,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     KeySetProxy &&
             ) noexcept -> KeySetProxy & = delete;
 
-        public:
-            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
+        private:
+            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
+        private:
+            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator;
+        private:
+            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator;
+        private:
+            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
             auto __removeConst (    /* NOLINT(bugprone-reserved-identifier) */

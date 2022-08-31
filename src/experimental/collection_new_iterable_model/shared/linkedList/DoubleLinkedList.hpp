@@ -282,6 +282,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
                             __DoubleLinkedList && list
                     ) noexcept -> void;
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __dll_equals (  /* NOLINT(bugprone-reserved-identifier) */
+                            __DoubleLinkedList const & list
+                    ) const noexcept -> bool;
                 };
 
 

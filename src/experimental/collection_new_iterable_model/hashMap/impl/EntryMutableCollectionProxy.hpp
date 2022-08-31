@@ -60,6 +60,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
                 typename __Hasher       // NOLINT(bugprone-reserved-identifier)
+        > __CDS_cpplang_ConstexprDestructor HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: ~EntryMutableCollectionProxy () noexcept = default;
+
+
+        template <
+                typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,   // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher       // NOLINT(bugprone-reserved-identifier)
         > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
@@ -257,6 +268,54 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ppIterators,
                     iteratorArrayCount
             );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: __equals (
+                EntryMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            return this->template map < HashMapBase > ()->__ht_equals ( * set.template map < HashMapBase > () );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: operator == (
+                EntryMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            return this->__equals ( set );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: EntryMutableCollectionProxy :: operator != (
+                EntryMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            return ! this->__equals ( set );
         }
 
     }

@@ -1179,6 +1179,41 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     this->_size     = cds :: exchange ( list._size, 0ULL );
                 }
 
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_equals (
+                        __DoubleLinkedList const & list
+                ) const noexcept -> bool {
+
+                    if ( this->_pFront == list._pFront ) {
+                        return true;
+                    }
+
+                    if ( this->_pFront == nullptr || list._pFront == nullptr || this->_size != list._size ) {
+                        return false;
+                    }
+
+                    auto thisFront  = this->_pFront;
+                    auto otherFront = list._pFront;
+
+                    while ( thisFront != nullptr ) {
+
+                        if ( ! __equals ( thisFront->_data, otherFront->_data ) ) {
+                            return false;
+                        }
+
+                        thisFront   = thisFront->_pNext;
+                        otherFront  = otherFront->_pNext;
+                    }
+
+                    return true;
+                }
+
             }
         }
     }

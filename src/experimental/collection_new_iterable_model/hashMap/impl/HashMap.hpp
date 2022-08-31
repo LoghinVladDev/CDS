@@ -506,6 +506,46 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return this->__ht_remove ( key );
         }
 
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprConditioned auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: operator == (
+                HashMap const & map
+        ) const noexcept -> bool {
+
+            if ( this == & map ) {
+                return true;
+            }
+
+            return this-> template __ht_equals < & __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > > ( map );
+        }
+
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprConditioned auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: operator != (
+                HashMap const & map
+        ) const noexcept -> bool {
+
+            if ( this == & map ) {
+                return false;
+            }
+
+            return ! this-> template __ht_equals < & __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > > ( map );
+        }
+
     }
 }
 

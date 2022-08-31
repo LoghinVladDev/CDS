@@ -275,6 +275,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> HashSet &;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                    HashSet const & set
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                    HashSet const & set
+            ) const noexcept -> bool;
+
+        public:
             auto clear () noexcept -> void override;
 
         public:

@@ -449,6 +449,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> Array &;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
             auto reserve (
                     Size size
             ) noexcept -> void;

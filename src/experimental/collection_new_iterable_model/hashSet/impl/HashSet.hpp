@@ -348,6 +348,42 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return this->__ht_remove ( element );
         }
 
+
+        template <
+                typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprConditioned auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator == (
+                HashSet const & set
+        ) const noexcept -> bool {
+
+            if ( this == & set ) {
+                return true;
+            }
+
+            return this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        }
+
+
+        template <
+                typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprConditioned auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: operator != (
+                HashSet const & set
+        ) const noexcept -> bool {
+
+            if ( this == & set ) {
+                return false;
+            }
+
+            return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        }
+
     }
 }
 
