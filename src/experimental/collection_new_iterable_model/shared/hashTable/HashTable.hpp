@@ -379,7 +379,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 private:
                     /**
                      * @brief Function used to rehash the hash table - increase the bucket buffer and relocate all newly misplaced nodes ( since remainder class value will increase )
-                     * @param [in] bucketCount : Size = number of current buckets, before rehash
+                     * @param [in] bucketCount : Size = next number of buckets determined by the rehash policy
                      * @param [in] hashValueOfNewNode : Size = the hash value of the node that was inserted prior to rehash trigger.
                      * @param [in] pNewEmptyNode : __NodeType cptr = Address to the immutable new, uninitialized node. Used to identify said node, as it is not to be directly hashed.
                      * The hashValueOfNewNode value should be used
