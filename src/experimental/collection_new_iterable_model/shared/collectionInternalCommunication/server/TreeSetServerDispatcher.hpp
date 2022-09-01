@@ -43,13 +43,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         > {
 
                         protected:
-                            auto __crbegin () const noexcept -> __ReverseConstIteratorType;
 
-                            auto __crend () const noexcept -> __ReverseConstIteratorType;
+                            auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        // NOLINT(bugprone-reserved-identifier)
 
-                            auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;
-
-                            auto __crendLocal () const noexcept -> __ReverseConstIteratorType;
+                            auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          // NOLINT(bugprone-reserved-identifier)
 
                         };
             }

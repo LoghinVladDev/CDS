@@ -79,7 +79,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         RBTreeNode * pRemoved
                 ) noexcept -> void {
 
-                    __nodeDestruct ( pRemoved->_data );
+                    __nodeDestructor ( pRemoved->_data );
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( pRemoved );
                 }
 
@@ -188,7 +188,10 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 ) noexcept -> void {
 
                     while ( __isRed ( pPivot->_pParent ) ) {
-                        __identifyAndApplyRotationOnInsert < __isLeftChild ( pPivot ) > ( pPivot );
+                        if ( __isLeftChild ( pPivot ) )
+                            __identifyAndApplyRotationOnInsert < true > ( pPivot );
+                        else
+                            __identifyAndApplyRotationOnInsert < false > ( pPivot );
                     }
 
                     this->_pRoot->_colour = RBTreeNode :: BLACK;
@@ -246,9 +249,12 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 > :: __rbt_deleteReBalance (
                         RBTreeNode * pPivot
                 ) -> void {
-
+                //TODO ask about   __identifyAndApplyRotationOnDelete < __isLeftChild ( pPivot ) > ( pPivot );
                     while ( pPivot != this->_pRoot && !__isRed (pPivot ) ) {
-                        __identifyAndApplyRotationOnDelete < __isLeftChild ( pPivot ) > ( pPivot );
+                        if ( __isLeftChild ( pPivot ) )
+                            __identifyAndApplyRotationOnDelete < true > ( pPivot );
+                        else
+                            __identifyAndApplyRotationOnDelete < false > ( pPivot );
                     }
                 }
 
@@ -287,7 +293,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         pPivot = pPivot->_pParent->_pParent;
                     } else {
 
-                        if ( __ifS1 ( pPivot ) ) {
+                        if ( __ifScenario1 ( pPivot ) ) {
                             pPivot = pPivot->_pParent;
                             ( this->*__rotateS1 )( pPivot );
                         }
@@ -396,11 +402,11 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 > :: __rbt_get (
                         __KeyType const &   key,
                         bool            *   pIsNew
-                ) noexcept -> __ElementType & {
+                ) noexcept -> __ElementType * {
 
                     if ( this->__rbt_empty() ) {
                         this->_pRoot = __rbt_allocateNode();
-                        return & this->_data;
+                        return & this->_pRoot->_data;
                     }
 
                     RBTreeNode * pAux = this->_pRoot;

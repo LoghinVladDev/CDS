@@ -58,6 +58,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/iterator/impl/RedBlackTreeIterator.hpp"
 
+#include "shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
+
 #include "treeSet/impl/TreeSet.hpp"
 
 #endif //__CDS_EX_TREE_SET_HPP__

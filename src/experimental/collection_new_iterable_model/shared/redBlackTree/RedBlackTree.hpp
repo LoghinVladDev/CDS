@@ -46,9 +46,11 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 }
 
                 template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > * > nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __endNode () noexcept -> __RedBlackTreeNode < __ElementType > * {       // NOLINT(bugprone-reserved-identifier)
-                    static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > > const nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
-                    return & nullNodeMemory.data();
+                    return & ( * nullNodeMemory < __ElementType > .data() );
                 }
 
                 template <
@@ -178,7 +180,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     auto __rbt_get (                                                // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key,
                             bool * pIsNew
-                    ) noexcept -> __ElementType &;
+                    ) noexcept -> __ElementType *;
 
                 protected:
                     auto __rbt_get (                                                                        // NOLINT(bugprone-reserved-identifier)

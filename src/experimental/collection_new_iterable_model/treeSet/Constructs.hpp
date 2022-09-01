@@ -70,6 +70,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 __ElementType
                         >;
 
+
+                template < typename __ElementType >
             }
         }
     }

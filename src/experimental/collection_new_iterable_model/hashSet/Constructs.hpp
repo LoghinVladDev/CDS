@@ -105,7 +105,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
                 > using __HashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIteratorRemovePrimitiveClient <
+                        __LocalConstIteratorRemovePrimitiveClient <
                                 cds :: experimental :: HashSet <
                                         __ElementType,
                                         __Hasher

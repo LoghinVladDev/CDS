@@ -35,7 +35,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 __ElementType const & element
         ) noexcept -> bool {
 
-            this->__rbt_remove ( element );
+            return this->__rbt_remove ( element );
         }
     }
 }
