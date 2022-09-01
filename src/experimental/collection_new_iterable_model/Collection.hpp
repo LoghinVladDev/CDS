@@ -862,23 +862,285 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using FindByClient :: findAllThat;
 
-        public: using FindOfCollectionClient :: findOf;
-        public: using FindOfCollectionClient :: findFirstOf;
-        public: using FindOfCollectionClient :: findLastOf;
-        public: using FindOfCollectionClient :: findAllOf;
-        public: using FindOfCollectionClient :: findNotOf;
-        public: using FindOfCollectionClient :: findFirstNotOf;
-        public: using FindOfCollectionClient :: findLastNotOf;
-        public: using FindOfCollectionClient :: findAllNotOf;
+        public:
+            /**
+             * @inherit findOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00701-FO-findOfStoreInMatchingNone [-Collection Group],
+             *      CTC-00702-FO-findOfStoreInMatchingOne [-Collection Group],
+             *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-Collection Group],
+             *      CTC-00704-FO-findOfStoreInMatchingMore [-Collection Group],
+             *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
+             *      CTC-00706-FO-findOfStoreInMatchingAll [-Collection Group],
+             *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-Collection Group],
+             *      CTC-00708-FO-findOfReturnedMatchingNone [-Collection Group],
+             *      CTC-00709-FO-findOfReturnedMatchingOne [-Collection Group],
+             *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-Collection Group],
+             *      CTC-00711-FO-findOfReturnedMatchingMore [-Collection Group],
+             *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
+             *      CTC-00713-FO-findOfReturnedMatchingAll [-Collection Group],
+             *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findOf;
 
-        public: using FindOfInitializerListClient :: findOf;
-        public: using FindOfInitializerListClient :: findFirstOf;
-        public: using FindOfInitializerListClient :: findLastOf;
-        public: using FindOfInitializerListClient :: findAllOf;
-        public: using FindOfInitializerListClient :: findNotOf;
-        public: using FindOfInitializerListClient :: findFirstNotOf;
-        public: using FindOfInitializerListClient :: findLastNotOf;
-        public: using FindOfInitializerListClient :: findAllNotOf;
+        public:
+            /**
+             * @inherit findFirstOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00715-FO-findFirstOfMatchingNone [-Collection Group],
+             *      CTC-00716-FO-findFirstOfMatchingOne [-Collection Group],
+             *      CTC-00717-FO-findFirstOfMatchingMore [-Collection Group],
+             *      CTC-00718-FO-findFirstOfMatchingAll [-Collection Group],
+             *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findFirstOf;
+
+        public:
+            /**
+             * @inherit findLastOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00720-FO-findLastOfMatchingNone [-Collection Group],
+             *      CTC-00721-FO-findLastOfMatchingOne [-Collection Group],
+             *      CTC-00722-FO-findLastOfMatchingMore [-Collection Group],
+             *      CTC-00723-FO-findLastOfMatchingAll [-Collection Group],
+             *      CTC-00724-FO-findLastOfMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findLastOf;
+
+        public:
+            /**
+             * @inherit findAllOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00725-FO-findAllOfStoreInMatchingNone [-Collection Group],
+             *      CTC-00726-FO-findAllOfStoreInMatchingOne [-Collection Group],
+             *      CTC-00727-FO-findAllOfStoreInMatchingMore [-Collection Group],
+             *      CTC-00728-FO-findAllOfStoreInMatchingAll [-Collection Group],
+             *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-Collection Group],
+             *      CTC-00730-FO-findAllOfReturnedMatchingNone [-Collection Group],
+             *      CTC-00731-FO-findAllOfReturnedMatchingOne [-Collection Group],
+             *      CTC-00732-FO-findAllOfReturnedMatchingMore [-Collection Group],
+             *      CTC-00733-FO-findAllOfReturnedMatchingAll [-Collection Group],
+             *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findAllOf;
+
+        public:
+            /**
+             * @inherit findNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00735-FO-findNotOfStoreInMatchingNone [-Collection Group],
+             *      CTC-00736-FO-findNotOfStoreInMatchingOne [-Collection Group],
+             *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-Collection Group],
+             *      CTC-00738-FO-findNotOfStoreInMatchingMore [-Collection Group],
+             *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
+             *      CTC-00740-FO-findNotOfStoreInMatchingAll [-Collection Group],
+             *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-Collection Group],
+             *      CTC-00742-FO-findNotOfReturnedMatchingNone [-Collection Group],
+             *      CTC-00743-FO-findNotOfReturnedMatchingOne [-Collection Group],
+             *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-Collection Group],
+             *      CTC-00745-FO-findNotOfReturnedMatchingMore [-Collection Group],
+             *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
+             *      CTC-00747-FO-findNotOfReturnedMatchingAll [-Collection Group],
+             *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findNotOf;
+
+        public:
+            /**
+             * @inherit findFirstNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00749-FO-findFirstNotOfMatchingNone [-Collection Group],
+             *      CTC-00750-FO-findFirstNotOfMatchingOne [-Collection Group],
+             *      CTC-00751-FO-findFirstNotOfMatchingMore [-Collection Group],
+             *      CTC-00752-FO-findFirstNotOfMatchingAll [-Collection Group],
+             *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findFirstNotOf;
+
+        public:
+            /**
+             * @inherit findLastNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00754-FO-findLastNotOfMatchingNone [-Collection Group],
+             *      CTC-00755-FO-findLastNotOfMatchingOne [-Collection Group],
+             *      CTC-00756-FO-findLastNotOfMatchingMore [-Collection Group],
+             *      CTC-00757-FO-findLastNotOfMatchingAll [-Collection Group],
+             *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findLastNotOf;
+
+        public:
+            /**
+             * @inherit findAllNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-Collection Group],
+             *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-Collection Group],
+             *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-Collection Group],
+             *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-Collection Group],
+             *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-Collection Group],
+             *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-Collection Group],
+             *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-Collection Group],
+             *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-Collection Group],
+             *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-Collection Group],
+             *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-Collection Group]
+             * }
+             * @public
+             */
+            using FindOfCollectionClient :: findAllNotOf;
+
+        public:
+            /**
+             * @inherit findOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00701-FO-findOfStoreInMatchingNone [-InitializerList Group],
+             *      CTC-00702-FO-findOfStoreInMatchingOne [-InitializerList Group],
+             *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
+             *      CTC-00704-FO-findOfStoreInMatchingMore [-InitializerList Group],
+             *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
+             *      CTC-00706-FO-findOfStoreInMatchingAll [-InitializerList Group],
+             *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-InitializerList Group],
+             *      CTC-00708-FO-findOfReturnedMatchingNone [-InitializerList Group],
+             *      CTC-00709-FO-findOfReturnedMatchingOne [-InitializerList Group],
+             *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
+             *      CTC-00711-FO-findOfReturnedMatchingMore [-InitializerList Group],
+             *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
+             *      CTC-00713-FO-findOfReturnedMatchingAll [-InitializerList Group],
+             *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findOf;
+
+        public:
+            /**
+             * @inherit findFirstOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00715-FO-findFirstOfMatchingNone [-InitializerList Group],
+             *      CTC-00716-FO-findFirstOfMatchingOne [-InitializerList Group],
+             *      CTC-00717-FO-findFirstOfMatchingMore [-InitializerList Group],
+             *      CTC-00718-FO-findFirstOfMatchingAll [-InitializerList Group],
+             *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findFirstOf;
+
+        public:
+            /**
+             * @inherit findLastOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00720-FO-findLastOfMatchingNone [-InitializerList Group],
+             *      CTC-00721-FO-findLastOfMatchingOne [-InitializerList Group],
+             *      CTC-00722-FO-findLastOfMatchingMore [-InitializerList Group],
+             *      CTC-00723-FO-findLastOfMatchingAll [-InitializerList Group],
+             *      CTC-00724-FO-findLastOfMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findLastOf;
+
+        public:
+            /**
+             * @inherit findAllOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00725-FO-findAllOfStoreInMatchingNone [-InitializerList Group],
+             *      CTC-00726-FO-findAllOfStoreInMatchingOne [-InitializerList Group],
+             *      CTC-00727-FO-findAllOfStoreInMatchingMore [-InitializerList Group],
+             *      CTC-00728-FO-findAllOfStoreInMatchingAll [-InitializerList Group],
+             *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-InitializerList Group],
+             *      CTC-00730-FO-findAllOfReturnedMatchingNone [-InitializerList Group],
+             *      CTC-00731-FO-findAllOfReturnedMatchingOne [-InitializerList Group],
+             *      CTC-00732-FO-findAllOfReturnedMatchingMore [-InitializerList Group],
+             *      CTC-00733-FO-findAllOfReturnedMatchingAll [-InitializerList Group],
+             *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findAllOf;
+
+        public:
+            /**
+             * @inherit findNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00735-FO-findNotOfStoreInMatchingNone [-InitializerList Group],
+             *      CTC-00736-FO-findNotOfStoreInMatchingOne [-InitializerList Group],
+             *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
+             *      CTC-00738-FO-findNotOfStoreInMatchingMore [-InitializerList Group],
+             *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
+             *      CTC-00740-FO-findNotOfStoreInMatchingAll [-InitializerList Group],
+             *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-InitializerList Group],
+             *      CTC-00742-FO-findNotOfReturnedMatchingNone [-InitializerList Group],
+             *      CTC-00743-FO-findNotOfReturnedMatchingOne [-InitializerList Group],
+             *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
+             *      CTC-00745-FO-findNotOfReturnedMatchingMore [-InitializerList Group],
+             *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
+             *      CTC-00747-FO-findNotOfReturnedMatchingAll [-InitializerList Group],
+             *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findNotOf;
+
+        public:
+            /**
+             * @inherit findFirstNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00749-FO-findFirstNotOfMatchingNone [-InitializerList Group],
+             *      CTC-00750-FO-findFirstNotOfMatchingOne [-InitializerList Group],
+             *      CTC-00751-FO-findFirstNotOfMatchingMore [-InitializerList Group],
+             *      CTC-00752-FO-findFirstNotOfMatchingAll [-InitializerList Group],
+             *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findFirstNotOf;
+
+        public:
+            /**
+             * @inherit findLastNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00754-FO-findLastNotOfMatchingNone [-InitializerList Group],
+             *      CTC-00755-FO-findLastNotOfMatchingOne [-InitializerList Group],
+             *      CTC-00756-FO-findLastNotOfMatchingMore [-InitializerList Group],
+             *      CTC-00757-FO-findLastNotOfMatchingAll [-InitializerList Group],
+             *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findLastNotOf;
+
+        public:
+            /**
+             * @inherit findAllNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+             * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+             *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-InitializerList Group],
+             *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-InitializerList Group],
+             *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-InitializerList Group],
+             *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-InitializerList Group],
+             *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-InitializerList Group],
+             *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-InitializerList Group],
+             *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-InitializerList Group],
+             *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-InitializerList Group],
+             *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-InitializerList Group],
+             *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-InitializerList Group]
+             * }
+             * @public
+             */
+            using FindOfInitializerListClient :: findAllNotOf;
 
         public: using RandomInsertionClient :: add;
         public: using RandomInsertionClient :: addAll;

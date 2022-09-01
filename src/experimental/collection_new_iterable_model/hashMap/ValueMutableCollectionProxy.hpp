@@ -120,7 +120,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ValueType,
                                 __HashMapValueProxyIterator < __KeyType, __ValueType, __Hasher >,
                                 cds :: experimental :: Collection < __ValueType >,
-                                & __collectionContains < __ValueType >
+                                & __collectionContains < __ValueType >,
+                                & __collectionNotContains < __ValueType >
                         >;
 
 
@@ -135,7 +136,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ValueType,
                                 __HashMapValueProxyConstIterator < __KeyType, __ValueType, __Hasher >,
                                 cds :: experimental :: Collection < __ValueType >,
-                                & __collectionContains < __ValueType >
+                                & __collectionContains < __ValueType >,
+                                & __collectionNotContains < __ValueType >
                         >;
 
 
@@ -150,7 +152,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ValueType,
                                 __HashMapValueProxyIterator < __KeyType, __ValueType, __Hasher >,
                                 std :: initializer_list < __ValueType >,
-                                & __initializerListContains < __ValueType, & cds :: meta :: equals < __ValueType > >
+                                & __initializerListContains < __ValueType, & cds :: meta :: equals < __ValueType > >,
+                                & __initializerListNotContains < __ValueType, & cds :: meta :: equals < __ValueType > >
                         >;
 
 
@@ -165,7 +168,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ValueType,
                                 __HashMapValueProxyConstIterator < __KeyType, __ValueType, __Hasher >,
                                 std :: initializer_list < __ValueType >,
-                                & __initializerListContains < __ValueType, & cds :: meta :: equals < __ValueType > >
+                                & __initializerListContains < __ValueType, & cds :: meta :: equals < __ValueType > >,
+                                & __initializerListNotContains < __ValueType, & cds :: meta :: equals < __ValueType > >
                         >;
 
 

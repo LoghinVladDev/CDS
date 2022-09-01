@@ -21,11 +21,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @param [in] element : __ElementType cref = Constant Reference to a value of the required type to be found in the given collection
                  * @exceptsafe
                  * @return bool = true if collection contains given element, false otherwise
+                 * @test Not Applicable
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 __CDS_OptimalInline auto __collectionContains ( /* NOLINT(bugprone-reserved-identifier) */
+                            cds :: experimental :: Collection < __ElementType > const & collection,
+                            __ElementType                                       const & element
+                ) noexcept -> bool;
+
+                /**
+                 * @brief Function passed to client to check if a given collection element does not contain a received value element
+                 * @tparam __ElementType the type of the value given and of the values enclosed in the collection
+                 * @param [in] collection : Collection cref = Constant Reference to a collection containing elements of required type
+                 * @param [in] element : __ElementType cref = Constant Reference to a value of the required type to be found in the given collection
+                 * @exceptsafe
+                 * @return bool = true if collection does not contain the given element, false otherwise
+                 * @test Not Applicable
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
+                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_OptimalInline auto __collectionNotContains (  /* NOLINT(bugprone-reserved-identifier) */
                             cds :: experimental :: Collection < __ElementType > const & collection,
                             __ElementType                                       const & element
                 ) noexcept -> bool;
@@ -39,6 +57,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @param [in] element : __ElementType cref = Constant Reference to a value of the required type to be found in the given initializer list
                  * @exceptsafe
                  * @return bool = true if initializer list contains given element, false otherwise
+                 * @test Not Applicable
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -46,6 +65,27 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __initializerListContains (              /* NOLINT(bugprone-reserved-identifier) */
+                            std :: initializer_list < __ElementType >   const & list,
+                            __ElementType                               const & element
+                ) noexcept -> bool;
+
+
+                /**
+                 * @brief Function passed to client to check if a given std :: initializer_list element does not contain a received value element
+                 * @tparam __ElementType the type of the value given and of the values enclosed in the initializer list
+                 * @tparam __function the function used to compare equality, since std :: initializer_list does not have .contains, and must be iterated and its elements compared to detect inclusion
+                 * @param [in] list : std :: initializer_list cref = Constant Reference to an initializer list containing elements of required type
+                 * @param [in] element : __ElementType cref = Constant Reference to a value of the required type to be found in the given initializer list
+                 * @exceptsafe
+                 * @return bool = true if initializer list does not contain given element, false otherwise
+                 * @test Not Applicable
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __initializerListNotContains (           /* NOLINT(bugprone-reserved-identifier) */
                             std :: initializer_list < __ElementType >   const & list,
                             __ElementType                               const & element
                 ) noexcept -> bool;
@@ -154,7 +194,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 typename __CollectionDelegateForwardConstIterableClient < __ElementType > :: ConstIterator,
                                 cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
+                                & __collectionContains < __ElementType >,
+                                & __collectionNotContains < __ElementType >
                         >;
 
 
@@ -171,7 +212,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 typename __CollectionDelegateForwardConstIterableClient < __ElementType > :: ConstIterator,
                                 std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
+                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 

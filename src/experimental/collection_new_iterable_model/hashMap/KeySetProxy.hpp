@@ -92,7 +92,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __KeyType,
                                 __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >,
                                 cds :: experimental :: Collection < __KeyType >,
-                                & __collectionContains < __KeyType >
+                                & __collectionContains < __KeyType >,
+                                & __collectionNotContains < __KeyType >
                         >;
 
 
@@ -107,7 +108,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __KeyType,
                                 __HashMapKeyProxyConstIterator < __KeyType, __ValueType, __Hasher >,
                                 std :: initializer_list < __KeyType >,
-                                & __initializerListContains < __KeyType, & cds :: meta :: equals < __KeyType > >
+                                & __initializerListContains < __KeyType, & cds :: meta :: equals < __KeyType > >,
+                                & __initializerListNotContains < __KeyType, & cds :: meta :: equals < __KeyType > >
                         >;
 
 

@@ -1529,10 +1529,10 @@ template <
 }
 
 template <
-        typename __ElementType,
-        template < typename ... > class __CollectionType,
-        typename __ValidatorPredicate,
-        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: ConstIterator
+        typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __CollectionType,                                                       /* NOLINT(bugprone-reserved-identifier) */
+        typename __ValidatorPredicate,                                                                          /* NOLINT(bugprone-reserved-identifier) */
+        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: ConstIterator /* NOLINT(bugprone-reserved-identifier) */
 > auto iteratorListEqualityCheck (
         __ValidatorPredicate                const & validator,
         __CollectionType < __IteratorType > const & iteratorCollection,
@@ -1558,9 +1558,9 @@ template <
 }
 
 template <
-        typename __ElementType,
-        template < typename ... > class __CollectionType,
-        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: ConstIterator
+        typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __CollectionType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: ConstIterator /* NOLINT(bugprone-reserved-identifier) */
 > auto iteratorListEqualityCheckNoPred (
         __CollectionType < __IteratorType > const & iteratorCollection,
         __CollectionType < __ElementType >  const & elementCollection
@@ -1586,15 +1586,15 @@ template <
 
 /* CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20. CTC-00601-FT to CTC-00634-FT */
 template <
-        typename __ElementType,
-        typename __NonePredicate,
-        typename __OnePredicate,
-        typename __MorePredicateLessThanLimit,
-        typename __MorePredicate,
-        typename __MorePredicateMoreThanLimit,
-        typename __AllPredicate,
-        typename __AllAndMorePredicate,
-        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array
+        typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+        typename __NonePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
+        typename __OnePredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
+        typename __MorePredicateLessThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
+        typename __MorePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
+        typename __MorePredicateMoreThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
+        typename __AllPredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
+        typename __AllAndMorePredicate,                                                         /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array   /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupFindThat (
         Test                                                      * pTestLib,
         cds :: experimental :: Collection < __ElementType > const & underTest,
@@ -2168,11 +2168,11 @@ template <
     return true;
 }
 
-/* CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20. CTC-00701-FO to CTC-007xx-FO */
+/* CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20. CTC-00701-FO to CTC-00768-FO */
 template <
-        typename __IterableType,
-        typename __ElementType,
-        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array
+        typename __IterableType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+        typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array   /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupFindOf (
         Test                                                      * pTestLib,
         StringLiteral                                               variant,

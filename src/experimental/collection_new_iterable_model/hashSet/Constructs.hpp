@@ -127,7 +127,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 HashTableConstIterator < __ElementType >,
                                 cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
+                                & __collectionContains < __ElementType >,
+                                & __collectionNotContains < __ElementType >
                         >;
 
 
@@ -143,7 +144,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 HashTableConstIterator < __ElementType >,
                                 std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
+                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 

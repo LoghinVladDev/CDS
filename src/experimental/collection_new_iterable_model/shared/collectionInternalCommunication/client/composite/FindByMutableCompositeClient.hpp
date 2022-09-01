@@ -13,7 +13,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 /**
-                 * @class Interface for calling functional find statements ( predicates as parameters, henceforth the 'find' elements 'that' are validated by a predicate )
+                 * @interface Interface for calling functional find statements ( predicates as parameters, henceforth the 'find' elements 'that' are validated by a predicate )
                  * on an mutable iterable type ( has 'begin' and 'end' )
                  * @tparam __IterableType is the type of implementor class, used for static polymorphism.
                  * Implementor is also required to implement a variant of DelegateForwardIterablePrimitiveClient,

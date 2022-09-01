@@ -24,45 +24,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType                      const & from
                 ) noexcept -> __CollectionType < __IteratorType > & {
 
-                    Size found = 0ULL;
-                    for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
+                    /* parse the range until the end, or until the given limit is reached */
+                    for ( auto iterator = begin; iterator != end && count != 0U; ++ iterator ) {
+
+                        /* if element at iterator is also found in given 'from' iterable */
                         if ( __containsFunction ( from, * iterator ) ) {
-                            ++ found;
+
+                            /* decrease the limit and store the iterator */
+                            -- count;
                             (void) storeIn.insert ( iterator );
                         }
                     }
 
+                    /* return reference to updated collection */
                     return storeIn;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findOf (                                                         /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        Size                                        count,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > {
-
-                    __CollectionType < __IteratorType > foundIterators;
-                    return __findOf <
-                            __ElementType,
-                            __IteratorType,
-                            __IterableType,
-                            __CollectionType,
-                            __containsFunction
-                    > (
-                            begin,
-                            end,
-                            count,
-                            foundIterators,
-                            from
-                    );
                 }
 
 
@@ -77,12 +52,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType                      const & from
                 ) noexcept -> __IteratorType {
 
+                    /* parse the range */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if element at iterator is also found in given 'from' iterable */
                         if ( __containsFunction ( from, * iterator ) ) {
+
+                            /* return the iterator */
                             return iterator;
                         }
                     }
 
+                    /* otherwise, no iterator with element located in given iterable, return 'end' */
                     return end;
                 }
 
@@ -98,13 +79,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType                      const & from
                 ) noexcept -> __IteratorType {
 
+                    /* create a local iterator to return the last match into. Initialize with 'end' in case of none found */
                     auto lastFound = end;
+
+                    /* parse the range */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if element at iterator is also found in given 'from' iterable */
                         if ( __containsFunction ( from, * iterator ) ) {
+
+                            /* store the iterator locally */
                             lastFound = iterator;
                         }
                     }
 
+                    /* return the last match */
                     return lastFound;
                 }
 
@@ -122,191 +111,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType                      const & from
                 ) noexcept -> __CollectionType < __IteratorType > & {
 
+                    /* parse the range */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                        /* if element at iterator is also found in given 'from' iterable */
                         if ( __containsFunction ( from, * iterator ) ) {
+
+                            /* store the iterator */
                             (void) storeIn.insert ( iterator );
                         }
                     }
 
+                    /* return reference to updated collection */
                     return storeIn;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findAllOf (                                                      /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > {
-
-                    __CollectionType < __IteratorType > foundIterators;
-                    return __findAllOf <
-                            __ElementType,
-                            __IteratorType,
-                            __IterableType,
-                            __CollectionType,
-                            __containsFunction
-                    > (
-                            begin,
-                            end,
-                            foundIterators,
-                            from
-                    );
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findNotOf (                                                      /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        Size                                        count,
-                        __CollectionType < __IteratorType >       & storeIn,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > & {
-
-                    Size found = 0ULL;
-                    for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
-                        if ( ! __containsFunction ( from, * iterator ) ) {
-                            ++ found;
-                            (void) storeIn.insert ( iterator );
-                        }
-                    }
-
-                    return storeIn;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findNotOf (                                                      /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        Size                                        count,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > {
-
-                    __CollectionType < __IteratorType > foundIterators;
-                    return __findNotOf <
-                            __ElementType,
-                            __IteratorType,
-                            __IterableType,
-                            __CollectionType,
-                            __containsFunction
-                    > (
-                            begin,
-                            end,
-                            count,
-                            foundIterators,
-                            from
-                    );
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findFirstNotOf (                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        __IterableType                      const & from
-                ) noexcept -> __IteratorType {
-
-                    for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( ! __containsFunction ( from, * iterator ) ) {
-                            return iterator;
-                        }
-                    }
-
-                    return end;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findLastNotOf (                                                  /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        __IterableType                      const & from
-                ) noexcept -> __IteratorType {
-
-                    auto lastFound = end;
-                    for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( ! __containsFunction ( from, * iterator ) ) {
-                            lastFound = iterator;
-                        }
-                    }
-
-                    return lastFound;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findAllNotOf (                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        __CollectionType < __IteratorType >       & storeIn,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > & {
-
-                    for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        if ( ! __containsFunction ( from, * iterator ) ) {
-                            (void) storeIn.insert ( iterator );
-                        }
-                    }
-
-                    return storeIn;
-                }
-
-
-                template <
-                        typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findAllNotOf (                                                   /* NOLINT(bugprone-reserved-identifier) */
-                        __IteratorType                      const & begin,
-                        __IteratorType                      const & end,
-                        __IterableType                      const & from
-                ) noexcept -> __CollectionType < __IteratorType > {
-
-                    __CollectionType < __IteratorType > foundIterators;
-                    return __findAllNotOf <
-                            __ElementType,
-                            __IteratorType,
-                            __IterableType,
-                            __CollectionType,
-                            __containsFunction
-                    > (
-                            begin,
-                            end,
-                            foundIterators,
-                            from
-                    );
                 }
 
             }

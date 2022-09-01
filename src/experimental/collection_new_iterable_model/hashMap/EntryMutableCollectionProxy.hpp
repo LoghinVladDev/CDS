@@ -103,7 +103,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 typename __HashMap :: EntryType,
                                 typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator,
                                 cds :: experimental :: Collection < typename __HashMap :: EntryType >,
-                                & __collectionContains < typename __HashMap :: EntryType >
+                                & __collectionContains < typename __HashMap :: EntryType >,
+                                & __collectionNotContains < typename __HashMap :: EntryType >
                         >;
 
 
@@ -124,7 +125,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 typename __HashMap :: EntryType,
                                 typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator,
                                 cds :: experimental :: Collection < typename __HashMap :: EntryType >,
-                                & __collectionContains < typename __HashMap :: EntryType >
+                                & __collectionContains < typename __HashMap :: EntryType >,
+                                & __collectionNotContains < typename __HashMap :: EntryType >
                         >;
 
 
@@ -145,7 +147,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 typename __HashMap :: EntryType,
                                 typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator,
                                 std :: initializer_list < typename __HashMap :: EntryType >,
-                                & __initializerListContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >
+                                & __initializerListContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >,
+                                & __initializerListNotContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >
                         >;
 
 
@@ -166,7 +169,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 typename __HashMap :: EntryType,
                                 typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator,
                                 std :: initializer_list < typename __HashMap :: EntryType >,
-                                & __initializerListContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >
+                                & __initializerListContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >,
+                                & __initializerListNotContains < typename __HashMap :: EntryType, & cds :: meta :: equals < typename __HashMap :: EntryType > >
                         >;
 
 

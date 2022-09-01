@@ -47,7 +47,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 typename __MutableCollectionDelegateForwardIterableClient < __ElementType > :: Iterator,
                                 cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
+                                & __collectionContains < __ElementType >,
+                                & __collectionNotContains < __ElementType >
                         >;
 
 
@@ -58,7 +59,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 typename __MutableCollectionDelegateForwardIterableClient < __ElementType > :: Iterator,
                                 std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
+                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 

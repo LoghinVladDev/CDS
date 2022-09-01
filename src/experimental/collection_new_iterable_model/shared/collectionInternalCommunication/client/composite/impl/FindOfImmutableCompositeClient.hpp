@@ -11,11 +11,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -23,13 +24,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findOf (
                         Size                                        count,
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > & {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findOf <
                             __ElementType,
                             ConstIterator,
@@ -47,11 +50,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -59,12 +63,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findOf (
-                        Size                                        count,
-                        __FromIterableType                  const & from
+                        Size                        count,
+                        __FromIterableType  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    __CollectionType < ConstIterator > foundIterators;
                     return __findOf <
                             __ElementType,
                             ConstIterator,
@@ -75,27 +82,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
                             count,
+                            foundIterators,
                             from
                     );
                 }
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findFirstOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> ConstIterator {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findFirstOf <
                             __ElementType,
                             ConstIterator,
@@ -110,21 +121,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findLastOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> ConstIterator {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findLastOf <
                             __ElementType,
                             ConstIterator,
@@ -139,11 +153,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -151,12 +166,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findAllOf (
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > & {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
                     return __findAllOf <
                             __ElementType,
                             ConstIterator,
@@ -173,11 +190,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -185,11 +203,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findAllOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> __CollectionType < ConstIterator > {
 
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    __CollectionType < ConstIterator > foundIterators;
                     return __findAllOf <
                             __ElementType,
                             ConstIterator,
@@ -199,16 +220,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
+                            foundIterators,
                             from
                     );
                 }
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -216,19 +239,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findNotOf (
                         Size                                        count,
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > & {
 
-                    return __findNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    return __findOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
                             __CollectionType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -240,11 +265,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -252,48 +278,55 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findNotOf (
-                        Size                                        count,
-                        __FromIterableType                  const & from
+                        Size                        count,
+                        __FromIterableType  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > {
 
-                    return __findNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    __CollectionType < ConstIterator > foundIterators;
+                    return __findOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
                             __CollectionType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
                             count,
+                            foundIterators,
                             from
                     );
                 }
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findFirstNotOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> ConstIterator {
 
-                    return __findFirstNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    return __findFirstOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -303,26 +336,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
                         __IterableType,
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findLastNotOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> ConstIterator {
 
-                    return __findLastNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    return __findLastOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -332,11 +368,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -344,18 +381,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findAllNotOf (
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > & {
 
-                    return __findAllNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    return __findAllOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
                             __CollectionType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
@@ -366,11 +405,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
+                        __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         template < typename ... > class                             __CollectionType    /* NOLINT(bugprone-reserved-identifier) */
                 > __CDS_OptimalInline auto __FindOfImmutableCompositeClient <
@@ -378,20 +418,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType,
                         __IteratorType,
                         __FromIterableType,
-                        __containsFunction
+                        __containsFunction,
+                        __notContainsFunction
                 > :: findAllNotOf (
-                        __FromIterableType                  const & from
+                        __FromIterableType const & from
                 ) const noexcept -> __CollectionType < ConstIterator > {
 
-                    return __findAllNotOf <
+                    /* Call base, global implementation. Abstracts the 'is object const' requirement */
+                    __CollectionType < ConstIterator > foundIterators;
+                    return __findAllOf <
                             __ElementType,
                             ConstIterator,
                             __FromIterableType,
                             __CollectionType,
-                            __containsFunction
+                            __notContainsFunction
                     > (
                             reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                             reinterpret_cast < __IterableType const * > ( this )->cend(),
+                            foundIterators,
                             from
                     );
                 }
