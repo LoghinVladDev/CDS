@@ -14,7 +14,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 /**
-                 * @class Interface for calling functional statements ( actions & predicates as parameters ) on an mutable iterable type ( has 'begin' and 'end' )
+                 * @interface Interface for calling functional statements ( actions & predicates as parameters ) on an mutable iterable type ( has 'begin' and 'end' )
                  * @tparam __IterableType is the type of implementor class, used for static polymorphism.
                  * Implementor is also required to implement a variant of DelegateForwardIterablePrimitiveClient,
                  * or provide a set of equivalent member functions provided by said client
