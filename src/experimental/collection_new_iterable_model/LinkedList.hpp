@@ -426,6 +426,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> LinkedList &;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                    LinkedList const & list
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                    LinkedList const & list
+            ) const noexcept -> bool;
+
+        public:
             auto clear () noexcept -> void override;
 
         public:

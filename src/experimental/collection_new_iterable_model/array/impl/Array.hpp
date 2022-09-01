@@ -192,6 +192,32 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto Array < __ElementType > :: operator == (
+                Array const & array
+        ) const noexcept -> bool {
+
+            if ( this == & array ) {
+                return true;
+            }
+
+            return this->__a_equals ( array );
+        }
+
+
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto Array < __ElementType > :: operator != (
+                Array const & array
+        ) const noexcept -> bool {
+
+            if ( this == & array ) {
+                return false;
+            }
+
+            return ! this->__a_equals ( array );
+        }
+
+
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         __CDS_OptimalInline auto Array < __ElementType > :: reserve (
                 Size size
         ) noexcept -> void {

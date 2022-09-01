@@ -45,8 +45,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the elements that yield true to the given predicate, until a removal limit has been reached
                      * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
                      * @exceptsafe if predicate ( element ) is exceptsafe
                      * @return Size = number of elements that were removed. If the limit has been reached, the function will return the exact value of 'count'
                      *
@@ -78,8 +78,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the elements that yield true to the given predicate member function, until a removal limit has been reached
                      * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
                      * @exceptsafe if element.predicate () is exceptsafe
                      * @return Size = number of elements that were removed. If the limit has been reached, the function will return the exact value of 'count'
                      *
@@ -104,7 +104,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the first element that yields true to the given predicate
                      * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
-                     * @param predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
                      * @exceptsafe if predicate ( element ) is exceptsafe
                      * @return bool = true if an element has been removed, false otherwise
                      *
@@ -133,7 +133,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the first element that yields true to the given predicate member function
                      * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
-                     * @param predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
                      * @exceptsafe if element.predicate () is exceptsafe
                      * @return bool = true if an element has been removed, false otherwise
                      *
@@ -157,7 +157,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the last element that yields true to the given predicate
                      * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
-                     * @param predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
                      * @exceptsafe if predicate ( element ) is exceptsafe
                      * @return bool = true if an element has been removed, false otherwise
                      *
@@ -186,7 +186,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller the last element that yields true to the given predicate member function
                      * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
-                     * @param predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
                      * @exceptsafe if element.predicate () is exceptsafe
                      * @return bool = true if an element has been removed, false otherwise
                      *
@@ -210,7 +210,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller all the elements that yield true to the given predicate
                      * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
-                     * @param predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate callable to validate the elements with
                      * @exceptsafe if predicate ( element ) is exceptsafe
                      * @return Size = number of elements removed from the iterable
                      *
@@ -239,7 +239,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to remove from the caller all the element that yield true to the given predicate member function
                      * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
-                     * @param predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
+                     * @param [in] predicate : Predicate cref = Constant Reference to a predicate member function to validate the elements with
                      * @exceptsafe if element.predicate () is exceptsafe
                      * @return Size = number of elements removed from the iterable
                      *

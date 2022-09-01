@@ -55,7 +55,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pElement : Address = address of the element the iterator is indicating at
+             * @param [in] pElement : Address = address of the element the iterator is indicating at
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -68,7 +68,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : AbstractAddressIterator cref = Constant Reference to the iterator to acquire the address from
+             * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to acquire the address from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -81,7 +81,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : AbstractAddressIterator mref = Move Reference to the iterator to move the address from
+             * @param [in, out] iterator : AbstractAddressIterator mref = Move Reference to the iterator to move the address from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -105,7 +105,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Function used to copy the address stored in the given iterator
-             * @param iterator : AbstractAddressIterator cref = Constant Reference to the iterator to copy the address of
+             * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to copy the address of
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -118,7 +118,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Function used to move the address stored in the given iterator
-             * @param iterator : AbstractAddressIterator mref = Move Reference to the iterator to move the address of
+             * @param [in, out] iterator : AbstractAddressIterator mref = Move Reference to the iterator to move the address of
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -153,7 +153,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : AbstractAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are equal, false otherwise
              *
@@ -167,7 +167,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : AbstractAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are not equal, false otherwise
              *
@@ -181,7 +181,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Difference Operator. Acquires the number of elements between two iterators
-             * @param iterator : AbstractAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return Size = distance, positive, element count between the two iterators
              *
@@ -196,7 +196,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Index Operator. Acquires the value from a given offset of the address of the iterator
              * @tparam __NumericType is the type of the numeric value given as parameter
-             * @param index : __NumericType = the offset value to acquire the value from the iterator
+             * @param [in] index : __NumericType = the offset value to acquire the value from the iterator
              * @exceptsafe
              * @return ElementType ref = Reference to the element at the given offset from this iterator
              *
@@ -260,7 +260,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pElement : Address = address of the element the iterator is indicating at
+             * @param [in] pElement : Address = address of the element the iterator is indicating at
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -273,7 +273,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -286,7 +286,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : ForwardAddressIterator mref = Move Reference to the iterator to move the address from
+             * @param [in, out] iterator : ForwardAddressIterator mref = Move Reference to the iterator to move the address from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -299,7 +299,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
              * @exceptsafe
              * @return ForwardAddressIterator ref = Reference to the modified iterator
              *
@@ -313,7 +313,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : ForwardAddressIterator mref = Move Reference to an iterator to move the address value from
+             * @param [in, out] iterator : ForwardAddressIterator mref = Move Reference to an iterator to move the address value from
              * @exceptsafe
              * @return ForwardAddressIterator ref = Reference to the modified iterator
              *
@@ -327,7 +327,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are equal, false otherwise
              *
@@ -341,7 +341,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are not equal, false otherwise
              *
@@ -400,7 +400,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value
              * @tparam __NumericType is the type of the numeric value given
-             * @param value : __NumericType = number of positions to advance
+             * @param [in] value : __NumericType = number of positions to advance
              * @exceptsafe
              * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
              *
@@ -417,8 +417,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator
              * @tparam __FElementType is the type of the element enclosed at the iterator value
              * @tparam __NumericType is the type of the numeric value given
-             * @param value : __NumericType = number of positions to advance
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
+             * @param [in] value : __NumericType = number of positions to advance
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
              * @exceptsafe
              * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
              *
@@ -435,7 +435,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Difference Operator. Acquires the iterator offset negatively with a number of positions from the original iterator
              * @tparam __NumericType is the type of the numeric value
-             * @param value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
+             * @param [in] value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
              * @exceptsafe
              * @return BackwardAddressIterator = Iterator at 'value' positions backward from the original iterator
              *
@@ -450,7 +450,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Difference Operator. Acquires the number of elements between two iterators
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return Size = distance, positive, element count between the two iterators
              *
@@ -464,7 +464,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is ahead of the given iterator, absolute position - higher address
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a higher address than the parameter iterator, false otherwise
              *
@@ -478,7 +478,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is behind the given iterator, absolute position - lower address
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a lower address than the parameter iterator, false otherwise
              *
@@ -492,7 +492,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is ahead of or at the given iterator, absolute position - higher or equal address
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a higher or equal address than the parameter iterator, false otherwise
              *
@@ -506,7 +506,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is behind or at the given iterator, absolute position - lower or equal address
-             * @param iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a lower or equal address than the parameter iterator, false otherwise
              *
@@ -522,8 +522,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator
          * @tparam __FElementType is the type of the element enclosed at the iterator value
          * @tparam __NumericType is the type of the numeric value given
-         * @param value : __NumericType = number of positions to advance
-         * @param iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
+         * @param [in] value : __NumericType = number of positions to advance
+         * @param [in] iterator : ForwardAddressIterator cref = Constant Reference to the iterator to start from
          * @exceptsafe
          * @return ForwardAddressIterator = Iterator at 'value' positions from the original iterator
          *
@@ -576,7 +576,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pElement : Address = address of the element the iterator is indicating at
+             * @param [in] pElement : Address = address of the element the iterator is indicating at
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -589,7 +589,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -602,7 +602,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : BackwardAddressIterator mref = Move Reference to the iterator to move the address from
+             * @param [in, out] iterator : BackwardAddressIterator mref = Move Reference to the iterator to move the address from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -615,7 +615,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to an iterator to copy the address value from
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
@@ -629,7 +629,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : BackwardAddressIterator mref = Move Reference to an iterator to move the address value from
+             * @param [in, out] iterator : BackwardAddressIterator mref = Move Reference to an iterator to move the address value from
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
@@ -643,7 +643,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are equal, false otherwise
              *
@@ -657,7 +657,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if addresses are not equal, false otherwise
              *
@@ -716,7 +716,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value ( positive offset = backward advance - iterator is reverse )
              * @tparam __NumericType is the type of the numeric value given
-             * @param value : __NumericType = number of positions to advance
+             * @param [in] value : __NumericType = number of positions to advance
              * @exceptsafe
              * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
              *
@@ -733,8 +733,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator ( positive offset = backward advance - iterator is reverse )
              * @tparam __FElementType is the type of the element enclosed at the iterator value
              * @tparam __NumericType is the type of the numeric value given
-             * @param value : __NumericType = number of positions to advance
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
+             * @param [in] value : __NumericType = number of positions to advance
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
              * @exceptsafe
              * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
              *
@@ -751,7 +751,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Difference Operator. Acquires the iterator offset negatively with a number of positions from the original iterator
              * @tparam __NumericType is the type of the numeric value
-             * @param value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
+             * @param [in] value : __NumericType = offset value to subtract from the current iterator value in order to obtain the new iterator
              * @exceptsafe
              * @return BackwardAddressIterator = Iterator at 'value' positions backward ( forward, since reverse ) from the original iterator
              *
@@ -766,7 +766,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Difference Operator. Acquires the number of elements between two iterators
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return Size = distance, positive, element count between the two iterators
              *
@@ -780,7 +780,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is ahead of the given iterator, absolute position - lower address
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a lower address than the parameter iterator, false otherwise
              *
@@ -794,7 +794,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is behind the given iterator, absolute position - higher address
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a higher address than the parameter iterator, false otherwise
              *
@@ -808,7 +808,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is ahead of or at the given iterator, absolute position - lower or equal address
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a lower or equal address than the parameter iterator, false otherwise
              *
@@ -822,7 +822,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Greater Than Operator. Checks if the current iterator is behind or at the given iterator, absolute position - higher or equal address
-             * @param iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
+             * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to another iterator to acquire the distance to
              * @exceptsafe
              * @return bool = true if current iterator has a higher or equal address than the parameter iterator, false otherwise
              *
@@ -839,8 +839,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator ( reverse positioning due to reverse iterator )
          * @tparam __FElementType is the type of the element enclosed at the iterator value
          * @tparam __NumericType is the type of the numeric value given
-         * @param value : __NumericType = number of positions to advance
-         * @param iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
+         * @param [in] value : __NumericType = number of positions to advance
+         * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to the iterator to start from
          * @exceptsafe
          * @return BackwardAddressIterator = Iterator at 'value' positions from the original iterator
          *

@@ -1,37 +1,37 @@
-//
-// Created by loghin on 14/08/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__
-#define __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__
+#define __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __DecoratedIteratorType,                               // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueAtType                                          // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __valueAtHint (    // NOLINT(bugprone-reserved-identifier)
+                        typename __DecoratedIteratorType,                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueAtType                                          /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __valueAtHint (    /* NOLINT(bugprone-reserved-identifier) */
                         __DecoratedIteratorType const & baseIterator
                 ) noexcept -> __ValueAtType &;
 
 
                 template <
-                        typename __DecoratedIteratorType,   // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueAtType              // NOLINT(bugprone-reserved-identifier)
-                > using __ValueAtFunction =                 // NOLINT(bugprone-reserved-identifier)
+                        typename __DecoratedIteratorType,   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueAtType              /* NOLINT(bugprone-reserved-identifier) */
+                > using __ValueAtFunction =                 /* NOLINT(bugprone-reserved-identifier) */
                         decltype ( & __valueAtHint < __DecoratedIteratorType, __ValueAtType > );
 
             }
         }
 
         template <
-                typename                                                                            __DecoratedIteratorType,    // NOLINT(bugprone-reserved-identifier)
-                typename                                                                            __ValueAtType,              // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   // NOLINT(bugprone-reserved-identifier)
+                typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier) */
+                __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier) */
         > class ForwardIteratorGenericDecorator : public meta :: ForwardIterator {
 
         private:
@@ -95,4 +95,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__
+#endif /* __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__ */

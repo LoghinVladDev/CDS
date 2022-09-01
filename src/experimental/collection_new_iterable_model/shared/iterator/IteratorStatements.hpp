@@ -14,9 +14,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to apply an action over each element of an iterable range. This is the action = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Action is the type of the action given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter, if callable, or as an object caller, if member function
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter, if callable, or as an object caller, if member function
                  * @exceptsafe if __Action callable / member function is exceptsafe
                  *
                  * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
@@ -44,10 +44,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if the iterable range contains exactly 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be a callable compatible with the 'bool ( Decay < ElementType > )' function signature or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param count : Size = number of elements required to match
-                 * @param predicate : __Predicate cref = Constant Reference to callable / member function object, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] count : Size = number of elements required to match
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable / member function object, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if number of elements validated == count, false otherwise
                  *
@@ -77,10 +77,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if the iterable range contains at least 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param count : Size = minimum number of elements required to match
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] count : Size = minimum number of elements required to match
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if number of elements validated >= count, false otherwise
                  *
@@ -110,10 +110,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if the iterable range contains at most 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param count : Size = maximum number of elements required to match
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] count : Size = maximum number of elements required to match
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if number of elements validated <= count, false otherwise
                  *
@@ -143,10 +143,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if the iterable range contains more than 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param count : Size = minimum number of elements required to match
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] count : Size = minimum number of elements required to match
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if number of elements validated > count, false otherwise
                  *
@@ -176,10 +176,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if the iterable range contains less than 'count' elements that are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param count : Size = maximum number of elements required to match
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] count : Size = maximum number of elements required to match
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if number of elements validated < count, false otherwise
                  *
@@ -209,9 +209,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to acquire the number of elements that are validated by a given predicate in a given iterable range. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return Size = number of elements that are validated by the given predicate
                  *
@@ -240,9 +240,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if any of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if at least one element is validated by the given predicate, false otherwise
                  *
@@ -271,9 +271,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if all of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if all of the iterable's elements are validated by the given predicate, false otherwise
                  *
@@ -302,9 +302,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to check if none of the iterable range's elements are validated by a given predicate. This is the predicate = callable object variant
                  * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
-                 * @param begin : __IteratorType cref = Constant Reference to the begin iterator of the range
-                 * @param end : __IteratorType cref = Constant Reference to the end iterator of the range
-                 * @param predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+                 * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                 * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                 * @param [in] predicate : __Predicate cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter. If no predicate is given, it will default to a predicate that will validate every value
                  * @exceptsafe if Predicate is exceptsafe
                  * @return bool = true if none of the iterable's elements are validated by the given predicate, false otherwise
                  *

@@ -42,8 +42,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will remove begin for count times, unless count >= size, when it will just call clear.
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return Size = number of elements that were removed. If the limit has been reached, the function will return the exact value of 'count'.
                      *
@@ -59,9 +59,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeFirstOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will remove begin once.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
-                     * @return bool = true if removal successful, false otherwise. Will return 'true' if iterable is not empty
+                     * @return bool = true if removal successful, false otherwise. Will yield 'true' if iterable is not empty
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @private
@@ -74,9 +74,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeLastOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will remove last element once.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
-                     * @return bool = true if removal successful, false otherwise. Will return 'true' if iterable is not empty
+                     * @return bool = true if removal successful, false otherwise. Will yield 'true' if iterable is not empty
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @private
@@ -89,7 +89,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeAllOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will clear the collection and return the size before clear
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return Size = number of removed elements ( equivalent to this->size() before remove )
                      *
@@ -104,8 +104,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will do nothing.
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return Size = always 0
                      *
@@ -121,7 +121,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeFirstNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will do nothing.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return bool = always 'false'
                      *
@@ -136,7 +136,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeLastNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will do nothing.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return bool = always 'false'
                      *
@@ -151,7 +151,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used in removeAllNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                      * Will do nothing.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in. In this call, 'from' must be 'this'
                      * @exceptsafe
                      * @return Size = always 0
                      *
@@ -165,8 +165,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the elements in the caller that are found in the given iterable parameter, until a removal limit has been reached, at which point the function will stop
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in.
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in.
                      * @exceptsafe
                      * @return Size = number of elements that were removed. If the limit has been reached, the function will return the exact value of 'count'.
                      *
@@ -189,7 +189,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the first element in the caller that is found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the first element found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the first element found in.
                      * @exceptsafe
                      * @return bool = true if an element was found and removed, false otherwise
                      *
@@ -209,7 +209,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the last element in the caller that is found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the last element found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the last element found in.
                      * @exceptsafe
                      * @return bool = true if an element was found and removed, false otherwise
                      *
@@ -229,7 +229,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove all the elements in the caller that are found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in.
                      * @exceptsafe
                      * @return Size = the number of elements removed from the caller iterable
                      *
@@ -249,8 +249,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the elements in the caller that not are found in the given iterable parameter, until a removal limit has been reached, at which point the function will stop
-                     * @param count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements not found in.
+                     * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements not found in.
                      * @exceptsafe
                      * @return Size = number of elements that were removed. If the limit has been reached, the function will return the exact value of 'count'.
                      *
@@ -273,7 +273,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the first element in the caller that is not found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the first element not found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the first element not found in.
                      * @exceptsafe
                      * @return bool = true if an element was found and removed, false otherwise
                      *
@@ -293,7 +293,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove the last element in the caller that is not found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the last element not found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the last element not found in.
                      * @exceptsafe
                      * @return bool = true if an element was found and removed, false otherwise
                      *
@@ -313,7 +313,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to remove all the elements in the caller that are not found in the given iterable parameter.
-                     * @param from : __FromIterableType cref = Constant Reference to the iterable to remove the elements not found in.
+                     * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements not found in.
                      * @exceptsafe
                      * @return Size = the number of elements removed from the caller iterable
                      *

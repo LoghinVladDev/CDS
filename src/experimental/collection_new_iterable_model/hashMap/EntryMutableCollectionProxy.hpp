@@ -582,56 +582,94 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
+            EntryMutableCollectionProxy (
+                    EntryMutableCollectionProxy const &
+            ) noexcept = delete;
+
+        public:
+            EntryMutableCollectionProxy (
+                    EntryMutableCollectionProxy &&
+            ) noexcept = delete;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~EntryMutableCollectionProxy() noexcept override;
+
+        public:
+            auto operator = (
+                    EntryMutableCollectionProxy const &
+            ) noexcept -> EntryMutableCollectionProxy & = delete;
+
+        public:
+            auto operator = (
+                    EntryMutableCollectionProxy &&
+            ) noexcept -> EntryMutableCollectionProxy & = delete;
+
+        protected:
             auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
                     EntryType const * pReferenceElement,
                     bool            * pIsNew
             ) noexcept -> EntryType *;
 
-        public:
-            __CDS_NoDiscard auto __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > *;
+        private:
+            __CDS_NoDiscard auto __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard auto __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > *;
+        private:
+            __CDS_NoDiscard auto __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > *;
+        private:
+            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > *;
+        private:
+            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > *; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> Iterator;
+        private:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> Iterator;
+        private:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator;
+        private:
+            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
-            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator;
+        private:
+            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
-        public:
+        protected:
             auto __remove ( /* NOLINT(bugprone-reserved-identifier) */
                     Iterator const * iterator
             ) noexcept -> bool;
 
-        public:
+        protected:
             auto __removeConst (    /* NOLINT(bugprone-reserved-identifier) */
                     ConstIterator const * iterator
             ) noexcept -> bool;
 
-        public:
+        protected:
             auto __removeArray ( /* NOLINT(bugprone-reserved-identifier) */
                     Iterator    const * const * ppIterators,
                     Size                        iteratorArrayCount
             ) noexcept -> Size;
 
-        public:
+        protected:
             auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier) */
                     ConstIterator   const * const * ppIterators,
                     Size                            iteratorArrayCount
             ) noexcept -> Size;
+
+        private:
+            __CDS_NoDiscard auto __equals ( /* NOLINT(bugprone-reserved-identifier) */
+                    EntryMutableCollectionProxy const & set
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator == (
+                    EntryMutableCollectionProxy const & set
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    EntryMutableCollectionProxy const & set
+            ) const noexcept -> bool;
         };
 
     }

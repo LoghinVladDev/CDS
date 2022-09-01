@@ -732,7 +732,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @protected
+                     * @private
                      */
                     template <
                             typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
@@ -750,11 +750,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @protected
+                     * @private
                      */
                     __CDS_cpplang_NonConstConstexprMemberFunction auto __a_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
                             __Array && array
                     ) noexcept -> void;
+
+                protected:
+                    /**
+                     * @brief Function used to compare the current array to a given array
+                     * @param [in] array : __Array cref = Constant Reference to an array to compare the current one to
+                     * @exceptsafe
+                     * @return bool = true if arrays contain equal content, false otherwise
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __a_equals (  /* NOLINT(bugprone-reserved-identifier) */
+                            __Array const & array
+                    ) const noexcept -> bool;
                 };
 
 

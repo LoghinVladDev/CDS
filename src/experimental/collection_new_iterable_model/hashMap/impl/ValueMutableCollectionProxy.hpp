@@ -60,6 +60,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprDestructor HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: ValueMutableCollectionProxy :: ~ValueMutableCollectionProxy () noexcept = default;
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_OptimalInline auto HashMap <
                 __KeyType,
                 __ValueType,
@@ -277,6 +288,75 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
             cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
             return removedIteratorCount;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: ValueMutableCollectionProxy :: __equals (
+                ValueMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            if ( this == & set ) {
+                return true;
+            }
+
+            if ( this->size() != set.size() ) {
+                return false;
+            }
+
+            for (
+                    auto
+                            leftIt  = this->begin(),    rightIt     = set.begin(),
+                            leftEnd = this->end(),      rightEnd    = set.end();
+
+                    leftIt != leftEnd;
+                    ++ leftIt, ++ rightIt
+            ) {
+                if ( ! cds :: meta :: equals ( * leftIt, * rightIt ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: ValueMutableCollectionProxy :: operator == (
+                ValueMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            return this->__equals ( set );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: ValueMutableCollectionProxy :: operator != (
+                ValueMutableCollectionProxy const & set
+        ) const noexcept -> bool {
+
+            return ! this->__equals ( set );
         }
 
     }

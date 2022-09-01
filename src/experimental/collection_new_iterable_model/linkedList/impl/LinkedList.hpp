@@ -270,6 +270,32 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return true;
         }
 
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto LinkedList < __ElementType > :: operator == (
+                LinkedList const & list
+        ) const noexcept -> bool {
+
+            if ( & list == this ) {
+                return true;
+            }
+
+            return this->__dll_equals ( list );
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto LinkedList < __ElementType > :: operator != (
+                LinkedList const & list
+        ) const noexcept -> bool {
+
+            if ( & list == this ) {
+                return false;
+            }
+
+            return ! this->__dll_equals ( list );
+        }
+
     }
 }
 

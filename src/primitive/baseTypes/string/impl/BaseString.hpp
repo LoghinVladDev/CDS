@@ -1119,7 +1119,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
-                if ( this->length() > 1 && this->_pData [0] == character ) {
+                if ( this->length() > 1 && this->_pBuffer [0] == character ) {
                     return true;
                 }
 

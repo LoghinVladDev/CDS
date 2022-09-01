@@ -122,7 +122,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __removeFunction, and is used by the server
-                     * @param pIterator : __IteratorType cptr = Address to an Immutable Iterator to be removed
+                     * @param [in] pIterator : __IteratorType cptr = Address to an Immutable Iterator to be removed
                      * @exceptsafe
                      * @return bool = true if iterator was removed, false otherwise
                      *
@@ -136,8 +136,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __removeArrayFunction, and is used by the server
-                     * @param ppIterators : __AbstractIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Iterators to be removed
-                     * @param iteratorArrayCount : Size = number of iterator addresses contained in the array
+                     * @param [in] ppIterators : __AbstractIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Iterators to be removed
+                     * @param [in] iteratorArrayCount : Size = number of iterator addresses contained in the array
                      * @exceptsafe
                      * @return Size = number of iterators to be removed
                      *

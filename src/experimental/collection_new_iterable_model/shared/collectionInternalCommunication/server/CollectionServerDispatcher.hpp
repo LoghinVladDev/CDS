@@ -98,8 +98,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __newAddressFunction, and is used by the server
-                     * @param pReferenceElement : __ElementType cptr = Address to an Immutable element to be used as a reference for insertion ( i.e. Set duplicate avoidance )
-                     * @param pNewElementCreated : bool ptr = Address to a boolean variable to be set to 'true' if a new address was returned, 'false' otherwise
+                     * @param [in] pReferenceElement : __ElementType cptr = Address to an Immutable element to be used as a reference for insertion ( i.e. Set duplicate avoidance )
+                     * @param [in, out] pNewElementCreated : bool ptr = Address to a boolean variable to be set to 'true' if a new address was returned, 'false' otherwise
                      * @exceptsafe
                      * @return __ElementType ptr = An address to an element, to a new one or to an existing one
                      *
@@ -114,7 +114,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __removeConstFunction, and is used by the server
-                     * @param pIterator : __AbstractConstIteratorType cptr = Address to an Immutable Constant Iterator to be removed
+                     * @param [in] pIterator : __AbstractConstIteratorType cptr = Address to an Immutable Constant Iterator to be removed
                      * @exceptsafe
                      * @return bool = true if iterator was removed, false otherwise
                      *
@@ -128,8 +128,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __removeConstArrayFunction, and is used by the server
-                     * @param ppIterators : __AbstractConstIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Constant Iterators to be removed
-                     * @param iteratorArrayCount : Size = number of iterator addresses contained in the array
+                     * @param [in] ppIterators : __AbstractConstIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Constant Iterators to be removed
+                     * @param [in] iteratorArrayCount : Size = number of iterator addresses contained in the array
                      * @exceptsafe
                      * @return Size = number of iterators to be removed
                      *

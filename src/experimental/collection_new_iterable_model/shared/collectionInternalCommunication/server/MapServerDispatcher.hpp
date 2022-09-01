@@ -93,7 +93,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server
-                     * @param element : __ElementType cref = Constant Reference to an element to look for
+                     * @param [in] element : __ElementType cref = Constant Reference to an element to look for
                      * @exceptsafe
                      * @return __IteratorType = An iterator indicating to the element given as a parameter
                      *
@@ -107,7 +107,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server
-                     * @param element : __ElementType cref = Constant Reference to an element to look for
+                     * @param [in] element : __ElementType cref = Constant Reference to an element to look for
                      * @exceptsafe
                      * @return __ConstIteratorType = An iterator indicating to the element given as a parameter
                      *

@@ -78,7 +78,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to create a request to remove an element indicated to by the given iterator
-                     * @param iterator : AbstractConstIterator cref = Constant Reference to the iterator to be removed
+                     * @param [in] iterator : AbstractConstIterator cref = Constant Reference to the iterator to be removed
                      * @exceptsafe
                      * @return bool = true if removal was successful, false otherwise
                      *
@@ -99,8 +99,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
-                     * @param pIterators : AbstractConstIterator cptr = Address to an array of constant Abstract Const Iterator values
-                     * @param iteratorCount : Size = number of values enclosed in the array given at pIterators
+                     * @param [in] pIterators : AbstractConstIterator cptr = Address to an array of constant Abstract Const Iterator values
+                     * @param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators
                      * @exceptsafe
                      * @return Size = number of elements that were removed successfully
                      *
@@ -153,7 +153,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     /**
                      * @brief Function used to create a request to remove an element indicated to by the given iterator
-                     * @param iterator : ConstIterator cref = Constant Reference to the iterator to be removed
+                     * @param [in] iterator : ConstIterator cref = Constant Reference to the iterator to be removed
                      * @exceptsafe
                      * @return bool = true if removal was successful, false otherwise
                      *
@@ -168,8 +168,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     /**
                      * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
-                     * @param pIterators : ConstIterator cptr = Address to an array of constant Const Iterator values
-                     * @param iteratorCount : Size = number of values enclosed in the array given at pIterators
+                     * @param [in] pIterators : ConstIterator cptr = Address to an array of constant Const Iterator values
+                     * @param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators
                      * @exceptsafe
                      * @return Size = number of elements that were removed successfully
                      *

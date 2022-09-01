@@ -108,8 +108,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
-             * @param pCurrentNode : DataNode ptr = address of the node containing the current value
+             * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -123,7 +123,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : UnidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -136,7 +136,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : UnidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : UnidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -149,7 +149,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : UnidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return UnidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -163,7 +163,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : UnidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : UnidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return UnidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -199,7 +199,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -213,7 +213,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -325,8 +325,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
-             * @param pCurrentNode : DataNode cptr = address of the immutable node containing the current value
+             * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode cptr = address of the immutable node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -340,7 +340,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : UnidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -353,7 +353,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -366,7 +366,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : UnidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return UnidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -380,7 +380,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : UnidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return UnidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -416,7 +416,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -430,7 +430,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -541,8 +541,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
-             * @param pCurrentNode : DataNode ptr = address of the node containing the current value
+             * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -556,7 +556,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -569,7 +569,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : AbstractBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : AbstractBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -604,7 +604,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -618,7 +618,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -707,8 +707,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
-             * @param pCurrentNode : DataNode cptr = address of the immutable node containing the current value
+             * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode cptr = address of the immutable node containing the current value
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -722,7 +722,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -735,7 +735,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -770,7 +770,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -784,7 +784,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -847,8 +847,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
-             * @param pCurrentNode : DataNode ptr = address of the node containing the current value
+             * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -862,7 +862,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -875,7 +875,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : ForwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : ForwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -888,7 +888,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return ForwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -902,7 +902,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : ForwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : ForwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return ForwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -916,7 +916,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -930,7 +930,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -1026,8 +1026,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
-             * @param pCurrentNode : DataNode cptr = address of the immutable node containing the current value
+             * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode cptr = address of the immutable node containing the current value
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -1041,7 +1041,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -1054,7 +1054,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
@@ -1067,7 +1067,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return ForwardBidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -1081,7 +1081,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return ForwardBidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -1095,7 +1095,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -1109,7 +1109,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -1205,8 +1205,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
-             * @param pCurrentNode : DataNode ptr = address of the node containing the current value
+             * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1220,7 +1220,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1233,7 +1233,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : BackwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : BackwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1246,7 +1246,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return BackwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -1260,7 +1260,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : BackwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : BackwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return BackwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
@@ -1274,7 +1274,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -1288,7 +1288,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
@@ -1384,8 +1384,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Initialization Constructor, constexpr
-             * @param pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
-             * @param pCurrentNode : DataNode cptr = address of the immutable node containing the current value
+             * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
+             * @param [in] pCurrentNode : DataNode cptr = address of the immutable node containing the current value
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1399,7 +1399,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Constructor, constexpr
-             * @param iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
+             * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1412,7 +1412,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Constructor, constexpr
-             * @param iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
+             * @param [in, out] iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
              * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -1425,7 +1425,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Copy Operator, constexpr
-             * @param iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
+             * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
              * @exceptsafe
              * @return BackwardBidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -1439,7 +1439,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Move Operator, constexpr
-             * @param iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
+             * @param [in, out] iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
              * @exceptsafe
              * @return BackwardBidirectionalNodeConstIterator ref = Reference to the modified iterator
              *
@@ -1453,7 +1453,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Equality Comparison Operator
-             * @param iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
@@ -1467,7 +1467,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             /**
              * @brief Inequality Comparison Operator
-             * @param iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
+             * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
