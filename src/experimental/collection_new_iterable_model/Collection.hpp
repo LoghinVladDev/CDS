@@ -1142,13 +1142,77 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using FindOfInitializerListClient :: findAllNotOf;
 
-        public: using RandomInsertionClient :: add;
-        public: using RandomInsertionClient :: addAll;
-        public: using RandomInsertionClient :: addAllOf;
-        public: using RandomInsertionClient :: insert;
-        public: using RandomInsertionClient :: insertAll;
-        public: using RandomInsertionClient :: insertAllOf;
-        public: using RandomInsertionClient :: emplace;
+        public:
+            /**
+             * @inherit add ( copy / move ) call, inherited from RandomInsertionClient interface
+             * @deprecated 'Collection :: add' has been deprecated. Use 'Collection :: insert' instead
+             * @test Not Applicable
+             * @public
+             */
+            using RandomInsertionClient :: add;
+
+        public:
+            /**
+             * @inherit addAll ( pack ) call, inherited from RandomInsertionClient interface
+             * @deprecated 'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead
+             * @test Not Applicable
+             * @public
+             */
+            using RandomInsertionClient :: addAll;
+
+        public:
+            /**
+             * @inherit addAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
+             * @deprecated 'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead
+             * @test Not Applicable
+             * @public
+             */
+            using RandomInsertionClient :: addAllOf;
+
+        public:
+            /**
+             * @inherit insert ( copy / move ) call, inherited from RandomInsertionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+             *      CTC-00801-RI-insertByCopy,
+             *      CTC-00802-RI-insertByMove
+             * }
+             * @public
+             */
+            using RandomInsertionClient :: insert;
+
+        public:
+            /**
+             * @inherit insertAll ( pack ) call, inherited from RandomInsertionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+             *      CTC-00804-RI-insertByPack
+             * }
+             * @public
+             */
+            using RandomInsertionClient :: insertAll;
+
+        public:
+            /**
+             * @inherit insertAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+             *      CTC-00805-RI-insertByInsertAllIterable,
+             *      CTC-00806-RI-insertByInsertAllList,
+             *      CTC-00807-RI-insertByRange1,
+             *      CTC-00808-RI-insertByRange2,
+             *      CTC-00809-RI-insertByRange3
+             * }
+             * @public
+             */
+            using RandomInsertionClient :: insertAllOf;
+
+        public:
+            /**
+             * @inherit emplace ( forwarded arguments ) call, inherited from RandomInsertionClient interface
+             * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+             *      CTC-00803-RI-insertByEmplace
+             * }
+             * @public
+             */
+            using RandomInsertionClient :: emplace;
 
 
         public:
