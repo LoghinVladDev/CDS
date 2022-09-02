@@ -4,6 +4,7 @@
 
 #include "Test.h"
 
+#include <CDS/Pair>
 using namespace cds;
 
 Test::TerminalColor Test::TerminalColor::clear(DISABLE_INVERSE_COLOR | DISABLE_UNDERLINE | DISABLE_BOLD | RESET );

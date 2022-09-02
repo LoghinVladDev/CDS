@@ -25,8 +25,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __hashSetCopyConstructor (       /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetCopyConstructor ( /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType       & destination,
                         __ElementType const & source
                 ) noexcept -> void {
@@ -35,8 +35,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __hashSetDestructor (      /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetDestructor (  /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType & element
                 ) noexcept -> void {
 
@@ -52,7 +52,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ElementType,
                                 __ElementType,
                                 __Hasher,
-                                cds :: __hidden :: __impl :: __PrimeRehashPolicy,
+                                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
                                 & __hashSetKeyExtractor < __ElementType >,
                                 & cds :: meta :: equals < __ElementType >,
                                 & __hashSetDestructor < __ElementType >

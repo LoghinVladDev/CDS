@@ -915,7 +915,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
                         __ElementType,
                         __equals
                 > :: __dll_begin () noexcept -> __dll_Iterator {
@@ -930,7 +930,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
                         __ElementType,
                         __equals
                 > :: __dll_end () noexcept -> __dll_Iterator {
@@ -1005,7 +1005,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
                         __ElementType,
                         __equals
                 > :: __dll_rbegin () noexcept -> __dll_ReverseIterator {
@@ -1020,7 +1020,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
                         __ElementType,
                         __equals
                 > :: __dll_rend () noexcept -> __dll_ReverseIterator {

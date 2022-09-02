@@ -41,7 +41,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         > = 0
-                > constexpr auto __findThat (                               /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __findThat (      /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         Size                                        count,
@@ -67,15 +67,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,                                            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate,                                               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         > = 0
-                > __CDS_NoDiscard constexpr auto __findFirstThat (  /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __findFirstThat ( /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __Predicate                         const & predicate
@@ -99,15 +99,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @internal library-private
                  */
                 template <
-                        typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IteratorType,                                            /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate,                                               /* NOLINT(bugprone-reserved-identifier) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         > = 0
-                > __CDS_NoDiscard constexpr auto __findLastThat (   /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __findLastThat (  /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __Predicate                         const & predicate
@@ -143,7 +143,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                                 > ()
                         > = 0
-                > constexpr auto __findAllThat (                            /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __findAllThat (   /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __CollectionType < __IteratorType >       & storeIn,

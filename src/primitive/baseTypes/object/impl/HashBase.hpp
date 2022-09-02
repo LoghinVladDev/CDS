@@ -34,7 +34,7 @@ namespace cds {
     template <>
     struct Hash < StringLiteral > {
 
-        __CDS_NoDiscard constexpr static auto hash ( StringLiteral object ) noexcept -> Size {
+        __CDS_NoDiscard __CDS_OptimalInline static auto hash ( StringLiteral object ) noexcept -> Size {
 
             return StringView ( object ).hash();
         }

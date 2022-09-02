@@ -209,7 +209,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
-                    constexpr __HashTable (
+                    __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
                             __HashTable && hashTable
                     ) noexcept;
 

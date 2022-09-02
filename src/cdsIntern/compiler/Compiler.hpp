@@ -91,8 +91,6 @@
 #define __CDS_cpplang_DynamicCastConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConstructorNonEmptyBody constexpr /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
-
 namespace cds {
 
     template < typename T, typename U = T >
@@ -120,8 +118,6 @@ namespace cds {
 
 #define __CDS_cpplang_DynamicCastConstexpr __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConstructorNonEmptyBody __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
-
-#define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
@@ -220,6 +216,8 @@ namespace cds {
 #undef __CDS_cpplang_core_version_name
 #define __CDS_cpplang_core_version_name "cpp-20" /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
+
 #else
 
 #define __CDS_cpplang_ConstexprDynamicAllocation __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
@@ -234,6 +232,8 @@ namespace cds {
 
 #define __CDS_Explicit explicit /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Implicit /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 

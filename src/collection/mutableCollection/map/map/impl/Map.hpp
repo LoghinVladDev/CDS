@@ -72,7 +72,7 @@ namespace cds {
 
 
     template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: ~Map () noexcept = default;
+    __CDS_cpplang_ConstexprDestructor Map < __KeyType, __ValueType > :: ~Map () noexcept = default;
 
 
     template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)

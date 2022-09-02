@@ -27,7 +27,7 @@ namespace cds {
     class FunctionCopyConstructor {
 
     public:
-        constexpr auto operator () (
+        __CDS_cpplang_ConstexprNonLiteralReturn auto operator () (
                 __Type       & destination,
                 __Type const & source
         ) const noexcept ( noexcept ( __copyConstructor ( destination, source ) ) ) -> void {

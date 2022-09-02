@@ -181,7 +181,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     template <
                             typename __TWrappedIteratorType = __WrappedIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf < meta :: __WrappedIteratorBidirectional < __TWrappedIteratorType > :: value > = 0
-                    > constexpr auto __advanceBackwards () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprNonLiteralReturn auto __advanceBackwards () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     /**
@@ -196,7 +196,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     template <
                             typename __TWrappedIteratorType = __WrappedIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf < ! meta :: __WrappedIteratorBidirectional < __TWrappedIteratorType > :: value > = 0
-                    > constexpr auto __advanceBackwards () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprNonLiteralReturn auto __advanceBackwards () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**

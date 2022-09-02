@@ -20,14 +20,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     using Type = __Type;
 
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-                    constexpr auto construct (
+                    __CDS_cpplang_ConstexprNonLiteralReturn auto construct (
                             __ArgumentTypes && ... arguments
                     ) noexcept -> void {
 
                         new ( this->_data ) __Type ( std :: forward < __ArgumentTypes > ( arguments ) ... );
                     }
 
-                    constexpr auto destruct () noexcept -> void {
+                    __CDS_cpplang_ConstexprNonLiteralReturn auto destruct () noexcept -> void {
 
                         reinterpret_cast < __Type * > ( this->_data )->~__Type ();
                     }

@@ -63,7 +63,7 @@ namespace cds {
         }
 
         this->_pDelegate    = std :: move ( iterator._pDelegate );
-        this->_pCollection  = std :: exchange ( iterator._pCollection, nullptr );
+        this->_pCollection  = cds :: exchange ( iterator._pCollection, nullptr );
         return * this;
     }
 

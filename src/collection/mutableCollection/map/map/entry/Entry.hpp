@@ -69,7 +69,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 );
 
             public:
-                __CDS_NoDiscard constexpr auto operator == (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                        __MapEntry const & entry
+                ) const noexcept -> bool;
+
+            public:
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                         __MapEntry const & entry
                 ) const noexcept -> bool;
 

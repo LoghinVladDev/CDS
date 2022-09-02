@@ -280,7 +280,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> ForwardAddressIterator < __FElementType > {
 
             /* Forward Iterator - positive offset from given iterator address */
-            return ForwardAddressIterator ( iterator._currentAddress + value );
+            return ForwardAddressIterator < __FElementType > ( iterator._currentAddress + value );
         }
 
 
@@ -490,7 +490,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> BackwardAddressIterator < __FElementType > {
 
             /* Backward Iterator - negative offset from given iterator address */
-            return BackwardAddressIterator ( iterator._currentAddress - value );
+            return BackwardAddressIterator < __FElementType > ( iterator._currentAddress - value );
         }
 
 

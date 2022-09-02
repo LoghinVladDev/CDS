@@ -29,9 +29,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType                /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __hashMapCopyConstructor ( /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                                /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapCopyConstructor (   /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType       & destinationDataNode,
                         typename Map < __KeyType, __ValueType > :: EntryType const & sourceDataNode
                 ) noexcept -> void {
@@ -41,9 +41,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __hashMapDestructor (  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                            /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDestructor (    /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType & entry
                 ) noexcept -> void {
 
@@ -75,7 +75,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 typename Map < __KeyType, __ValueType > :: EntryType,
                                 __KeyType,
                                 __Hasher,
-                                cds :: __hidden :: __impl :: __PrimeRehashPolicy,
+                                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
                                 & __hashMapKeyExtractor < __KeyType, __ValueType >,
                                 & cds :: meta :: equals < __KeyType >,
                                 & __hashMapDestructor < __KeyType, __ValueType >

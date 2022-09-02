@@ -9,7 +9,7 @@
 #include <CDS/experimental/HashSet>
 #include <CDS/experimental/HashMap>
 
-/* CollectionTestGroup-RemoveAbsIt-Cpp20 : CTG-00350-RAIT-CPP20. CTC-00351-RAIT to CTC-00356-RAIT */
+/* CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20. CTC-00351-RAIT to CTC-00356-RAIT */
 template <
         typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
 > auto collectionTestGroupRemoveAbstractIterator (
@@ -99,7 +99,7 @@ template <
     return true;
 }
 
-/* CollectionTestGroup-RemoveBy-Cpp20 : CTG-00400-RB-CPP20. CTC-00401-RB to CTC-00418-RB */
+/* CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20. CTC-00401-RB to CTC-00418-RB */
 template <
         typename __Original,                        /* NOLINT(bugprone-reserved-identifier) */
         typename __MemberType,                      /* NOLINT(bugprone-reserved-identifier) */

@@ -209,8 +209,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             referenceElementContainer.destruct();
                         } else {
                             (void) std :: memcpy (
-                                    pElementLocation,
-                                    & referenceElementContainer._data[0],
+                                    reinterpret_cast < void * > ( pElementLocation ),
+                                    reinterpret_cast < void const * > ( & referenceElementContainer._data[0] ),
                                     sizeof ( __ElementType )
                             );
                         }

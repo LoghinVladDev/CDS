@@ -305,7 +305,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        constexpr HashTableConstIterator < __ElementType > :: HashTableConstIterator (
+        __CDS_cpplang_ConstexprConditioned HashTableConstIterator < __ElementType > :: HashTableConstIterator (
                 DataNode    const * const * pListArray,
                 Size                        bucketCount,
                 DataNode            const * pCurrentNode,

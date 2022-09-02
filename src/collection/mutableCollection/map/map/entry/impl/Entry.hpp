@@ -10,7 +10,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
         namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
             template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
-            constexpr auto __MapEntry < __KeyType, __ValueType > :: operator == (
+            __CDS_cpplang_ConstexprConditioned auto __MapEntry < __KeyType, __ValueType > :: operator == (
                     __MapEntry const & entry
             ) const noexcept -> bool {
 
@@ -21,6 +21,20 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 return
                         cds :: meta :: equals ( this->_key, entry._key ) &&
                         cds :: meta :: equals ( this->_value, entry._value );
+            }
+
+            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto __MapEntry < __KeyType, __ValueType > :: operator != (
+                    __MapEntry const & entry
+            ) const noexcept -> bool {
+
+                if ( this == & entry ) {
+                    return false;
+                }
+
+                return
+                        ! cds :: meta :: equals ( this->_key, entry._key ) ||
+                        ! cds :: meta :: equals ( this->_value, entry._value );
             }
 
 

@@ -259,7 +259,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_get ( /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) noexcept -> ElementType *;
 

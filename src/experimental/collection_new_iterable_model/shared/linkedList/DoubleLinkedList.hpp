@@ -218,10 +218,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept -> bool;
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_begin () noexcept -> __dll_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_begin () noexcept -> __dll_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_end () noexcept -> __dll_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_end () noexcept -> __dll_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     __CDS_NoDiscard constexpr auto __dll_begin () const noexcept -> __dll_ConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
@@ -236,10 +236,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard constexpr auto __dll_cend () const noexcept -> __dll_ConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_rbegin () noexcept -> __dll_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_rbegin () noexcept -> __dll_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __dll_rend () noexcept -> __dll_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_rend () noexcept -> __dll_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     __CDS_NoDiscard constexpr auto __dll_rbegin () const noexcept -> __dll_ConstReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */

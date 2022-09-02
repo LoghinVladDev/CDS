@@ -65,7 +65,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
                         template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findOf (                                                         /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __findOf (                                /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         Size                                        count,
@@ -106,7 +106,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
                         typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_NoDiscard constexpr auto __findFirstOf (                                    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __findFirstOf (           /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -146,7 +146,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
                         typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_NoDiscard constexpr auto __findLastOf (                                     /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __findLastOf (            /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -198,7 +198,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
                         template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __findAllOf (                                                      /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __findAllOf (                             /* NOLINT(bugprone-reserved-identifier) */
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __CollectionType < __IteratorType >       & storeIn,

@@ -12,7 +12,7 @@ namespace cds {
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-                constexpr auto __destructHint ( __Type & ) noexcept -> void;
+                constexpr auto __destructHint ( __Type & ) -> void;
 
             }
         }
@@ -27,7 +27,7 @@ namespace cds {
     class FunctionDestructor {
 
     public:
-        constexpr auto operator () (
+        __CDS_cpplang_ConstexprNonLiteralReturn auto operator () (
                 __Type & value
         ) const noexcept ( noexcept ( __destructor ( value ) ) ) -> void {
 

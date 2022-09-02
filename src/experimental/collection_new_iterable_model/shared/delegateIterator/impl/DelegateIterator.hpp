@@ -78,7 +78,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 meta :: __WrappedIteratorBidirectional < __TWrappedIteratorType > :: value
                         >
-                > constexpr auto __DelegateIterator < __ElementType, __WrappedIteratorType > :: __advanceBackwards () noexcept -> void {
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __DelegateIterator < __ElementType, __WrappedIteratorType > :: __advanceBackwards () noexcept -> void {
 
                     /* since wrapped iterator is bidirectional, -- is possible */
                     -- this->_wrappedIterator;
@@ -88,7 +88,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier) */
                         typename __WrappedIteratorType                                              /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DelegateIterator <
+                > __CDS_cpplang_ConstexprOverride auto __DelegateIterator <
                         __ElementType,
                         __WrappedIteratorType
                 > :: iterator () const noexcept -> __GenericIterator {
@@ -106,7 +106,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __WrappedIteratorBidirectional < __TWrappedIteratorType > :: value
                         >
-                > constexpr auto __DelegateIterator < __ElementType, __WrappedIteratorType > :: __advanceBackwards () noexcept -> void {
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __DelegateIterator < __ElementType, __WrappedIteratorType > :: __advanceBackwards () noexcept -> void {
 
                     /* empty on purpose, as WrappedIteratorType does not have a '-- operator' definition */
                 }

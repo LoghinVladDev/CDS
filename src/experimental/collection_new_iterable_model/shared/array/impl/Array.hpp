@@ -174,7 +174,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
                         __ElementType,
                         __equals
                 > :: __a_get (

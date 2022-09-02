@@ -876,7 +876,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_DynamicCastConstexpr auto __BaseString < __CharType > :: equals (
+            __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: equals (
                     Object const & object
             ) const noexcept -> bool {
 
