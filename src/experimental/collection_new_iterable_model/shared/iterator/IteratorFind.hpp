@@ -56,6 +56,37 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
+                 *      MCTC-00701-FO-findOfStoreInMatchingNone,
+                 *      MCTC-00702-FO-findOfStoreInMatchingOne,
+                 *      MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit,
+                 *      MCTC-00704-FO-findOfStoreInMatchingMore,
+                 *      MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit,
+                 *      MCTC-00706-FO-findOfStoreInMatchingAll,
+                 *      MCTC-00707-FO-findOfStoreInMatchingAllAndMore,
+                 *      MCTC-00708-FO-findOfReturnedMatchingNone,
+                 *      MCTC-00709-FO-findOfReturnedMatchingOne,
+                 *      MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit,
+                 *      MCTC-00711-FO-findOfReturnedMatchingMore,
+                 *      MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit,
+                 *      MCTC-00713-FO-findOfReturnedMatchingAll,
+                 *      MCTC-00714-FO-findOfReturnedMatchingAllAndMore,
+                 *      MCTC-00735-FO-findNotOfStoreInMatchingNone,
+                 *      MCTC-00736-FO-findNotOfStoreInMatchingOne,
+                 *      MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit,
+                 *      MCTC-00738-FO-findNotOfStoreInMatchingMore,
+                 *      MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit,
+                 *      MCTC-00740-FO-findNotOfStoreInMatchingAll,
+                 *      MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore,
+                 *      MCTC-00742-FO-findNotOfReturnedMatchingNone,
+                 *      MCTC-00743-FO-findNotOfReturnedMatchingOne,
+                 *      MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit,
+                 *      MCTC-00745-FO-findNotOfReturnedMatchingMore,
+                 *      MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit,
+                 *      MCTC-00747-FO-findNotOfReturnedMatchingAll,
+                 *      MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -98,6 +129,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
+                 *      MCTC-00715-FO-findFirstOfMatchingNone,
+                 *      MCTC-00716-FO-findFirstOfMatchingOne,
+                 *      MCTC-00717-FO-findFirstOfMatchingMore,
+                 *      MCTC-00718-FO-findFirstOfMatchingAll,
+                 *      MCTC-00719-FO-findFirstOfMatchingAllAndMore,
+                 *      MCTC-00749-FO-findFirstNotOfMatchingNone,
+                 *      MCTC-00750-FO-findFirstNotOfMatchingOne,
+                 *      MCTC-00751-FO-findFirstNotOfMatchingMore,
+                 *      MCTC-00752-FO-findFirstNotOfMatchingAll,
+                 *      MCTC-00753-FO-findFirstNotOfMatchingAllAndMore
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -136,6 +180,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00756-FO-findLastNotOfMatchingMore,
                  *      CTC-00757-FO-findLastNotOfMatchingAll,
                  *      CTC-00758-FO-findLastNotOfMatchingAllAndMore
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
+                 *      MCTC-00720-FO-findLastOfMatchingNone,
+                 *      MCTC-00721-FO-findLastOfMatchingOne,
+                 *      MCTC-00722-FO-findLastOfMatchingMore,
+                 *      MCTC-00723-FO-findLastOfMatchingAll,
+                 *      MCTC-00724-FO-findLastOfMatchingAllAndMore,
+                 *      MCTC-00754-FO-findLastNotOfMatchingNone,
+                 *      MCTC-00755-FO-findLastNotOfMatchingOne,
+                 *      MCTC-00756-FO-findLastNotOfMatchingMore,
+                 *      MCTC-00757-FO-findLastNotOfMatchingAll,
+                 *      MCTC-00758-FO-findLastNotOfMatchingAllAndMore
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
@@ -187,6 +244,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00766-FO-findAllNotOfReturnedMatchingMore,
                  *      CTC-00767-FO-findAllNotOfReturnedMatchingAll,
                  *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
+                 *      MCTC-00725-FO-findAllOfStoreInMatchingNone,
+                 *      MCTC-00726-FO-findAllOfStoreInMatchingOne,
+                 *      MCTC-00727-FO-findAllOfStoreInMatchingMore,
+                 *      MCTC-00728-FO-findAllOfStoreInMatchingAll,
+                 *      MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore,
+                 *      MCTC-00730-FO-findAllOfReturnedMatchingNone,
+                 *      MCTC-00731-FO-findAllOfReturnedMatchingOne,
+                 *      MCTC-00732-FO-findAllOfReturnedMatchingMore,
+                 *      MCTC-00733-FO-findAllOfReturnedMatchingAll,
+                 *      MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore,
+                 *      MCTC-00759-FO-findAllNotOfStoreInMatchingNone,
+                 *      MCTC-00760-FO-findAllNotOfStoreInMatchingOne,
+                 *      MCTC-00761-FO-findAllNotOfStoreInMatchingMore,
+                 *      MCTC-00762-FO-findAllNotOfStoreInMatchingAll,
+                 *      MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore,
+                 *      MCTC-00764-FO-findAllNotOfReturnedMatchingNone,
+                 *      MCTC-00765-FO-findAllNotOfReturnedMatchingOne,
+                 *      MCTC-00766-FO-findAllNotOfReturnedMatchingMore,
+                 *      MCTC-00767-FO-findAllNotOfReturnedMatchingAll,
+                 *      MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl

@@ -19,6 +19,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __equals is the function used to compare two elements
                  *
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -122,6 +123,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     constexpr __Array () noexcept;
@@ -133,6 +135,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     __Array ( /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
@@ -146,6 +149,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     constexpr __Array (
@@ -159,6 +163,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     auto __a_clear ( /* NOLINT(bugprone-reserved-identifier) */
@@ -512,6 +517,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @private
                      */
                     auto __a_init () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
@@ -522,7 +528,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @excetpsafe
                      * @return __a_Iterator = Address Iterator to the first element
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_begin () noexcept -> __a_Iterator; /* NOLINT(bugprone-reserved-identifier) */
@@ -533,7 +539,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @excetpsafe
                      * @return __a_Iterator = Address Iterator to the space after the last element
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_end () noexcept -> __a_Iterator; /* NOLINT(bugprone-reserved-identifier) */

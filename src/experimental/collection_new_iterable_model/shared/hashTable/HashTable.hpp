@@ -30,6 +30,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * Called at destruction of a node, as an element can be composed of multiple objects ( i.e. MapEntry )
                  *
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -137,6 +138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     constexpr __HashTable() noexcept;
@@ -191,6 +193,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     template <
@@ -207,6 +210,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
@@ -219,6 +223,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
                     auto __ht_clear () noexcept -> void;    /* NOLINT(bugprone-reserved-identifier) */
@@ -262,7 +267,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @excetpsafe
                      * @return __ht_Iterator = Hash Table Iterator to the first element
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> __ht_Iterator; /* NOLINT(bugprone-reserved-identifier) */
@@ -273,7 +278,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @excetpsafe
                      * @return __ht_Iterator = Hash Table Iterator to the space after the last element
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> __ht_Iterator;   /* NOLINT(bugprone-reserved-identifier) */

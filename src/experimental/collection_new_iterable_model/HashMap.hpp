@@ -422,6 +422,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/hashTable/impl/HashTable.hpp"
 
+#include "shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/MapServerDispatcher.hpp"
 

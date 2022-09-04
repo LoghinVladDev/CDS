@@ -481,7 +481,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @tparam __ElementType is the type of the enclosed element.
          * @implements BidirectionalIterator
          *
-         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -491,8 +491,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Partial Pre-Declaration of __DoubleLinkedList, as it requires private values
              * @tparam __ElementType is the type of the node data stored in the hash table
-             *
-             * @test Suite: N/A, Group: N/A, Test Cases: N/A
+             * @test Not Applicable.
              * @namespace cds :: experimental :: __hidden :: __impl
              */
             template <
@@ -533,7 +532,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Default Constructor, constexpr
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractBidirectionalNodeIterator () noexcept;
@@ -545,7 +544,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             __CDS_Explicit constexpr AbstractBidirectionalNodeIterator (
@@ -559,7 +558,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractBidirectionalNodeIterator (
@@ -572,7 +571,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in, out] iterator : AbstractBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractBidirectionalNodeIterator (
@@ -585,7 +584,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return __ElementType ref = Reference to the element the address is indicating to
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
@@ -608,7 +607,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -622,7 +621,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -635,7 +634,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if current node is not null, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
@@ -647,7 +646,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @tparam __ElementType is the type of the enclosed element.
          * @implements BidirectionalIterator
          *
-         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -657,8 +656,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Partial Pre-Declaration of __DoubleLinkedList, as it requires private values
              * @tparam __ElementType is the type of the node data stored in the hash table
-             *
-             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Not Applicable.
              * @namespace cds :: experimental :: __hidden :: __impl
              */
             template <
@@ -814,7 +812,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @tparam __ElementType is the type of the enclosed element.
          * @extends AbstractBidirectionalNodeIterator
          *
-         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -839,7 +837,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Default Constructor, constexpr
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardBidirectionalNodeIterator () noexcept;
@@ -851,7 +849,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] pCurrentNode : DataNode ptr = address of the node containing the current value
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @pulbic
              */
             __CDS_Explicit constexpr ForwardBidirectionalNodeIterator (
@@ -865,7 +863,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardBidirectionalNodeIterator (
@@ -878,7 +876,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in, out] iterator : ForwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardBidirectionalNodeIterator (
@@ -892,7 +890,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return ForwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -906,7 +904,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return ForwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -920,7 +918,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, MGroup: CTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -934,7 +932,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -947,7 +945,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return ForwardBidirectionalNodeIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeIterator &;

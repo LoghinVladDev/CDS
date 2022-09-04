@@ -242,6 +242,9 @@ macro(test_set)
     test_suite(${ARGV0} primitive Tuple)
 
     test_suite(${ARGV0} collection Collection)
+
+    test_suite(${ARGV0} collection/mutableCollection MutableCollection)
+
     test_suite(${ARGV0} collection/unordered HashMap)
     test_suite(${ARGV0} collection/unordered Json)
 

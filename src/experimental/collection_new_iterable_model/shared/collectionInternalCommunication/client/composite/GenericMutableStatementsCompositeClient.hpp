@@ -20,9 +20,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * or provide a set of equivalent member functions provided by said client
                  * @tparam __ElementType is the type of elements contained into the Object
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                 * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                 * as __GenericImmutableStatementsCompositeClient, which is tested
+                 * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: All
                  * 
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -46,9 +45,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function
                      * @exceptsafe if __Action callable / member function is exceptsafe
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00139-FS-forEachCount }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00201-FSMF-forEach }
                      *
                      * @public
                      */
@@ -71,9 +69,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated == count, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00136-FS-someExact, MCTC-00137-FS-someLessFalse, MCTC-00138-someMoreFalse }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00202-FSMF-someEqual, MCTC-00203-FSMF-someLess, MCTC-00204-someMore }
                      *
                      * @public
                      */
@@ -99,9 +96,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated >= count, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00132-FS-atLeastTrue, MCTC-00133-FS-atLeastCloseTrue, MCTC-00134-atLeastCloseFalse, MCTC-00135-atLeastFalse }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00205-FSMF-atLeast, MCTC-00206-FSMF-atLeastLess, MCTC-00207-atLeastMore }
                      *
                      * @public
                      */
@@ -127,9 +123,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated <= count, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00128-FS-atMostTrue, MCTC-00129-FS-atMostCloseTrue, MCTC-00130-atMostCloseFalse, MCTC-00131-atMostFalse }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00208-FSMF-atMost, MCTC-00209-FSMF-atMostLess, MCTC-00210-atMostMore }
                      *
                      * @public
                      */
@@ -155,9 +150,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated > count, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00123-FS-moreThanTrue, MCTC-00124-FS-moreThanCloseTrue, MCTC-00125-moreThanCloseFalse, MCTC-00126-moreThanFalse, MCTC-00127-moreThanCompletelyFalse }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00211-FSMF-moreThan, MCTC-00212-FSMF-moreThanLess, MCTC-00213-moreThanMore }
                      *
                      * @public
                      */
@@ -183,9 +177,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if number of elements validated < count, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00118-FS-fewerThanTrue, MCTC-00119-FS-fewerThanCloseTrue, MCTC-00120-fewerThanCloseFalse, MCTC-00121-fewerThanFalse, MCTC-00122-fewerThanCompletelyFalse }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00214-FSMF-fewerThan, MCTC-00215-FSMF-fewerThanLess, MCTC-00216-fewerThanMore }
                      *
                      * @public
                      */
@@ -210,9 +203,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return Size = number of elements that are validated by the given predicate
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00113-FS-countProp1, MCTC-00114-FS-countProp2, MCTC-00115-countProp3, MCTC-00116-countProp4, MCTC-00117-countPropLbd }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00217-FSMF-countExact }
                      *
                      * @public
                      */
@@ -235,9 +227,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if at least one element is validated by the given predicate, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00101-FS-anyNone, MCTC-00102-FS-anyOne, MCTC-00103-anyMore, MCTC-00104-anyAll }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00218-FSMF-anyNone, MCTC-00219-FSMF-anyOne, MCTC-00220-anyMore, MCTC-00221-anyAll }
                      *
                      * @public
                      */
@@ -260,9 +251,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if all of the collection's elements are validated by the given predicate, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00105-FS-allNone, MCTC-00106-FS-allOne, MCTC-00107-allMore, MCTC-00108-allAll }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00222-FSMF-allNone, MCTC-00223-FSMF-allOne, MCTC-00224-allMore, MCTC-00225-allAll }
                      *
                      * @public
                      */
@@ -285,9 +275,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if Predicate is exceptsafe
                      * @return bool = true if none of the collection's elements are validated by the given predicate, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __GenericMutableStatementsCompositeClient uses the same base implementation functions
-                     * as __GenericImmutableStatementsCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00109-FS-noneNone, MCTC-00110-FS-noneOne, MCTC-00111-noneMore, MCTC-00112-noneAll }
+                     * @test Suite: MCTS-00001, Group: MCTG-00200-FSMF, Test Cases: { MCTC-00226-FSMF-noneNone, MCTC-00227-FSMF-noneOne, MCTC-00228-noneMore, MCTC-00229-noneAll }
                      *
                      * @public
                      */

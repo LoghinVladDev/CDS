@@ -103,7 +103,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return __ElementType ptr = An address to an element, to a new one or to an existing one
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: All
                      * @protected
                      */
                     auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
@@ -118,7 +118,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return bool = true if iterator was removed, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00350-RAIT, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: All
                      * @protected
                      */
                     auto __removeConst ( /* NOLINT(bugprone-reserved-identifier) */
@@ -133,7 +135,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = number of iterators to be removed
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: All
                      * @protected
                      */
                     auto __removeConstArray ( /* NOLINT(bugprone-reserved-identifier) */

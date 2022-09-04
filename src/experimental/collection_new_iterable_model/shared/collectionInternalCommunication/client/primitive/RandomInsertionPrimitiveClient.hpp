@@ -121,6 +121,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @excetpsafe if construction of element is exceptsafe and collection supports insertion
                  *
                  * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: { CTC-00804-RI-insertByPack }
+                 * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: { MCTC-00804-RI-insertByPack }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -147,6 +148,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @excetpsafe if construction of element is exceptsafe and collection supports insertion
                  *
                  * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: { CTC-00804-RI-insertByPack }
+                 * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: { MCTC-00804-RI-insertByPack }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -175,6 +177,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ReturnType is the type returned by the singular insertion functions
                  *
                  * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: All
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -238,6 +242,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00801-RI-insertByCopy
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00801-RI-insertByCopy
+                     * }
+                     *
                      * @public
                      */
                     template <
@@ -259,6 +267,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *
                      * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
                      *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00802-RI-insertByMove
                      * }
                      *
                      * @public
@@ -285,6 +297,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00801-RI-insertByCopy
                      * }
                      *
+                     * @test Suite: CTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00801-RI-insertByCopy
+                     * }
+                     *
                      * @public
                      */
                     template <
@@ -307,6 +323,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *
                      * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
                      *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00802-RI-insertByMove
                      * }
                      *
                      * @public
@@ -332,6 +352,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00803-RI-insertByEmplace
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00803-RI-insertByEmplace
+                     * }
+                     *
                      * @public
                      */
                     template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
@@ -348,6 +372,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *
                      * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
                      *      CTC-00804-RI-insertByPack
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00804-RI-insertByPack
                      * }
                      *
                      * @public
@@ -369,6 +397,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00804-RI-insertByPack
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00804-RI-insertByPack
+                     * }
+                     *
                      * @public
                      */
                     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
@@ -387,6 +419,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00805-RI-insertByInsertAllIterable
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
                      * @public
                      */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
@@ -403,6 +439,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *
                      * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
                      *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00805-RI-insertByInsertAllList
                      * }
                      *
                      * @public
@@ -429,6 +469,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00805-RI-insertByInsertAllIterable
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
                      * @public
                      */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
@@ -446,6 +490,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *
                      * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
                      *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00805-RI-insertByInsertAllList
                      * }
                      *
                      * @public
@@ -473,6 +521,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00809-RI-insertByRange3
                      * }
                      *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00807-RI-insertByRange1,
+                     *      MCTC-00808-RI-insertByRange2,
+                     *      MCTC-00809-RI-insertByRange3
+                     * }
+                     *
                      * @public
                      */
                     template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
@@ -494,6 +548,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00807-RI-insertByRange1,
                      *      CTC-00808-RI-insertByRange2,
                      *      CTC-00809-RI-insertByRange3
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
+                     *      MCTC-00807-RI-insertByRange1,
+                     *      MCTC-00808-RI-insertByRange2,
+                     *      MCTC-00809-RI-insertByRange3
                      * }
                      *
                      * @public
@@ -575,9 +635,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00801-RI-insertByCopy
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -598,9 +656,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00802-RI-insertByMove
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -622,9 +678,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00801-RI-insertByCopy
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -646,9 +700,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00802-RI-insertByMove
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -669,9 +721,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00803-RI-insertByEmplace
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -687,9 +737,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00804-RI-insertByPack
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -706,9 +754,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00804-RI-insertByPack
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -724,9 +770,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00805-RI-insertByInsertAllIterable
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -742,9 +786,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
                      * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00805-RI-insertByInsertAllList
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -766,9 +808,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00805-RI-insertByInsertAllIterable
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -785,9 +825,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
                      * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00805-RI-insertByInsertAllList
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -808,11 +846,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00807-RI-insertByRange1,
-                     *      CTC-00808-RI-insertByRange2,
-                     *      CTC-00809-RI-insertByRange3
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */
@@ -831,11 +865,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
                      *
-                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
-                     *      CTC-00807-RI-insertByRange1,
-                     *      CTC-00808-RI-insertByRange2,
-                     *      CTC-00809-RI-insertByRange3
-                     * }
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
                      * @public
                      */

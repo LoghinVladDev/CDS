@@ -40,6 +40,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00614-FT-findThatReturnedMatchingAllAndMore
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                 *      MCTC-00601-FT-findThatStoreInMatchingNone,
+                 *      MCTC-00602-FT-findThatStoreInMatchingOne,
+                 *      MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit,
+                 *      MCTC-00604-FT-findThatStoreInMatchingMore,
+                 *      MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit,
+                 *      MCTC-00606-FT-findThatStoreInMatchingAll,
+                 *      MCTC-00607-FT-findThatStoreInMatchingAllAndMore,
+                 *      MCTC-00608-FT-findThatReturnedMatchingNone,
+                 *      MCTC-00609-FT-findThatReturnedMatchingOne,
+                 *      MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit,
+                 *      MCTC-00611-FT-findThatReturnedMatchingMore,
+                 *      MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit,
+                 *      MCTC-00613-FT-findThatReturnedMatchingAll,
+                 *      MCTC-00614-FT-findThatReturnedMatchingAllAndMore
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -79,6 +96,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00619-FT-findFirstThatMatchingAllAndMore
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                 *      MCTC-00615-FT-findFirstThatMatchingNone,
+                 *      MCTC-00616-FT-findFirstThatMatchingOne,
+                 *      MCTC-00617-FT-findFirstThatMatchingMore,
+                 *      MCTC-00618-FT-findFirstThatMatchingAll,
+                 *      MCTC-00619-FT-findFirstThatMatchingAllAndMore
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -113,6 +138,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00622-FT-findLastThatMatchingMore,
                  *      CTC-00623-FT-findLastThatMatchingAll,
                  *      CTC-00624-FT-findLastThatMatchingAllAndMore
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                 *      MCTC-00620-FT-findLastThatMatchingNone,
+                 *      MCTC-00621-FT-findLastThatMatchingOne,
+                 *      MCTC-00622-FT-findLastThatMatchingMore,
+                 *      MCTC-00623-FT-findLastThatMatchingAll,
+                 *      MCTC-00624-FT-findLastThatMatchingAllAndMore
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
@@ -156,6 +189,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00632-FT-findAllThatReturnedMatchingMore,
                  *      CTC-00633-FT-findAllThatReturnedMatchingAll,
                  *      CTC-00634-FT-findAllThatReturnedMatchingAllAndMore
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                 *      MCTC-00625-FT-findAllThatStoreInMatchingNone,
+                 *      MCTC-00626-FT-findAllThatStoreInMatchingOne,
+                 *      MCTC-00627-FT-findAllThatStoreInMatchingMore,
+                 *      MCTC-00628-FT-findAllThatStoreInMatchingAll,
+                 *      MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore,
+                 *      MCTC-00630-FT-findAllThatReturnedMatchingNone,
+                 *      MCTC-00631-FT-findAllThatReturnedMatchingOne,
+                 *      MCTC-00632-FT-findAllThatReturnedMatchingMore,
+                 *      MCTC-00633-FT-findAllThatReturnedMatchingAll,
+                 *      MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl

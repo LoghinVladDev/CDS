@@ -23,9 +23,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @exceptsafe if __Predicate callable / member function is exceptsafe
                  * @return __CollectionType \< __IteratorType \> ref = Reference to the updated object given in the 'storeIn' parameter
                  *
-                 * @test Suite: CTS-00001, Group: CTG-00650-FTFT, Test Cases: {
+                 * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                  *      CTC-00651-FTMF-findThatStoreInMemberFunction,
                  *      CTC-00652-FTMF-findThatReturnedMemberFunction
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                 *      MCTC-00651-FTMF-findThatStoreInMemberFunction,
+                 *      MCTC-00652-FTMF-findThatReturnedMemberFunction
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
@@ -63,6 +68,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00653-FTMF-findFirstThatMemberFunction
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                 *      MCTC-00653-FTMF-findFirstThatMemberFunction
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -95,6 +104,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *      CTC-00654-FTMF-findLastThatMemberFunction
                  * }
                  *
+                 * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                 *      MCTC-00654-FTMF-findLastThatMemberFunction
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -125,9 +138,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @exceptsafe if __Predicate callable / member function is exceptsafe
                  * @return __CollectionType \< __IteratorType \> ref = Reference to the updated object given in the 'storeIn' parameter
                  *
-                 * @test Suite: CTS-00001, Group: CTG-00650-FTFT, Test Cases: {
+                 * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                  *      CTC-00655-FTMF-findAllThatStoreInMemberFunction,
                  *      CTC-00656-FTMF-findAllThatReturnedMemberFunction
+                 * }
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                 *      MCTC-00655-FTMF-findAllThatStoreInMemberFunction,
+                 *      MCTC-00656-FTMF-findAllThatReturnedMemberFunction
                  * }
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl

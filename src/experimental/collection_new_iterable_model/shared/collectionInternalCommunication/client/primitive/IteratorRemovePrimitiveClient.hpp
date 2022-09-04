@@ -30,7 +30,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @tparam __ElementType is the type of elements enclosed in the object
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @test Suite: MCTS-00001, Group: MCTG-00350-RAIT, Test Cases: All
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -62,7 +62,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return bool = true if removal was successful, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00350-RAIT, Test Cases: {
+                     *      MCTC-00351-RAIT-removeAtFront,
+                     *      MCTC-00352-RAIT-removeInBounds,
+                     *      MCTC-00353-RAIT-removeAtEnd,
+                     *      MCTC-00355-RAIT-removeBeforeFront,
+                     *      MCTC-00356-RAIT-removeFromOther
+                     * }
                      *
                      * @public
                      */
@@ -78,7 +84,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = number of elements that were removed successfully
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00400-RB, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                      *
                      * @protected Unused by implementor class, used by other clients. Do not inherit public
                      */

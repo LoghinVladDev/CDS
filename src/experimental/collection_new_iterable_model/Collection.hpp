@@ -33,7 +33,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         /**
-         * @class Abstract Object representing any Iterable Container of given elements of type
+         * @class Abstract Object representing any Iterable Container of given elements
          * @tparam __ElementType is the type of elements contained into Collection
          *
          * @extends [public]            __CollectionCommunicationChannel - Base class used to communicate requests from Abstract Collection to Derived Collections
@@ -229,7 +229,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @brief Destructor Constructor
+             * @brief Destructor
              * @exceptsafe
              * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
              * @public
@@ -292,7 +292,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit atLeast functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00132-FS-atLeastTrue, CTC-00133-FS-atLeastCloseTrue, CTC-00134-atLeastCloseFalse, CTC-00135-atLeastFalse }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00205-FSMF-atLeast, CTC-00206-FSMF-atLeastLess, CTC-00207-atLeastMore }
              * @public
@@ -301,7 +301,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit atMost functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00128-FS-atMostTrue, CTC-00129-FS-atMostCloseTrue, CTC-00130-atMostCloseFalse, CTC-00131-atMostFalse }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00208-FSMF-atMost, CTC-00209-FSMF-atMostLess, CTC-00210-atMostMore }
              * @public
@@ -310,7 +310,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit moreThan functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00123-FS-moreThanTrue, CTC-00124-FS-moreThanCloseTrue, CTC-00125-moreThanCloseFalse, CTC-00126-moreThanFalse, CTC-00127-moreThanCompletelyFalse }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00211-FSMF-moreThan, CTC-00212-FSMF-moreThanLess, CTC-00213-moreThanMore }
              * @public
@@ -319,7 +319,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit fewerThan functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00118-FS-fewerThanTrue, CTC-00119-FS-fewerThanCloseTrue, CTC-00120-fewerThanCloseFalse, CTC-00121-fewerThanFalse, CTC-00122-fewerThanCompletelyFalse }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00214-FSMF-fewerThan, CTC-00215-FSMF-fewerThanLess, CTC-00216-fewerThanMore }
              * @public
@@ -328,7 +328,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit count functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00113-FS-countProp1, CTC-00114-FS-countProp2, CTC-00115-countProp3, CTC-00116-countProp4, CTC-00117-countPropLbd }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00217-FSMF-countExact }
              * @public
@@ -337,7 +337,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit any functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00101-FS-anyNone, CTC-00102-FS-anyOne, CTC-00103-anyMore, CTC-00104-anyAll }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00218-FSMF-anyNone, CTC-00219-FSMF-anyOne, CTC-00220-anyMore, CTC-00221-anyAll }
              * @public
@@ -346,7 +346,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit all functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00105-FS-allNone, CTC-00106-FS-allOne, CTC-00107-allMore, CTC-00108-allAll }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00222-FSMF-allNone, CTC-00223-FSMF-allOne, CTC-00224-allMore, CTC-00225-allAll }
              * @public
@@ -355,7 +355,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
-             * @inherit some functional call, inherited from GenericStatementsClient interface
+             * @inherit none functional call, inherited from GenericStatementsClient interface
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00109-FS-noneNone, CTC-00110-FS-noneOne, CTC-00111-noneMore, CTC-00112-noneAll }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00226-FSMF-noneNone, CTC-00227-FSMF-noneOne, CTC-00228-noneMore, CTC-00229-noneAll }
              * @public

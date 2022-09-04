@@ -8,7 +8,11 @@
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
 
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        /**
+         * @brief Pre-declaration of the Collection class
+         * @namespace cds :: experimental
+         */
+        template < typename > /* NOLINT(bugprone-reserved-identifier) */
         class Collection;
 
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */

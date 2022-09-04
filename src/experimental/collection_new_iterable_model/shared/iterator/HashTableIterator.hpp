@@ -39,7 +39,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @tparam __ElementType is the type of the enclosed element.
          * @implements ForwardIterator
          *
-         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -55,8 +55,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @tparam __keyExtractor is the function used to extract the key value from a node element type
              * @tparam __keyComparator is the function used to compare equality for two keys
              * @tparam __nodeDestructor is the function used to clear a node's element type
-             *
-             * @test Suite: N/A, Group: N/A, Test Cases: N/A
+             * @test Not Applicable.
              * @namespace cds :: experimental :: __hidden :: __impl
              */
             template <
@@ -116,7 +115,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Function used to advance to the next node. If next node is end of bucket list, advance to next bucket
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @private
              */
             __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
@@ -126,7 +125,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Default Constructor, constexpr
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr HashTableIterator () noexcept;
@@ -138,7 +137,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] bucketCount : Size = the size of the address list of buckets
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @pulbic
              */
             __CDS_cpplang_ConstexprConditioned HashTableIterator (
@@ -156,7 +155,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] bucketIndex : Size = index of the initial bucket Index
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr HashTableIterator (
@@ -173,7 +172,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] iterator : HashTableIterator cref = Constant Reference to the iterator to acquire the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr HashTableIterator (
@@ -186,7 +185,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in, out] iterator : HashTableIterator mref = Move Reference to the iterator to move the values from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr HashTableIterator (
@@ -200,7 +199,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return HashTableIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -214,7 +213,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return HashTableIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -282,7 +281,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return HashTableIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableIterator &;
@@ -304,7 +303,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return __ElementType ref = Reference to the element the address is indicating to
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
@@ -327,7 +326,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = false if iterators are indicating at the same node, with same previous, true otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -341,7 +340,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if iterators are indicating at the same node, with same previous, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -354,7 +353,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if current node is not null, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, MTest Cases: All
              * @public
              */
             __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
@@ -383,8 +382,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @tparam __keyExtractor is the function used to extract the key value from a node element type
              * @tparam __keyComparator is the function used to compare equality for two keys
              * @tparam __nodeDestructor is the function used to clear a node's element type
-             *
-             * @test Suite: N/A, Group: N/A, Test Cases: N/A
+             * @test Not Applicable.
              * @namespace cds :: experimental :: __hidden :: __impl
              */
             template <
@@ -484,7 +482,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] bucketIndex : Size = index of the initial bucket Index
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_ConstexprConditioned HashTableConstIterator (

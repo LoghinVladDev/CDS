@@ -37,7 +37,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -72,7 +72,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
                      * @exceptsafe
                      * @return Iterator = Wrapper for the received forward, mutable, begin iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: {
+                     *      MCTC-00051-IT-range,
+                     *      MCTC-00052-IT-begin_end,
+                     *      MCTC-00054-IT-e_begin_end,
+                     *      MCTC-00056-IT-e_emptyRange,
+                     *      MCTC-00058-IT-mutabilityRange,
+                     *      MCTC-00059-IT-mutabilityIteration
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto begin () noexcept -> Iterator;
@@ -82,7 +91,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
                      * @exceptsafe
                      * @return Iterator = Wrapper for the received forward, mutable, end iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: {
+                     *      MCTC-00051-IT-range,
+                     *      MCTC-00052-IT-begin_end,
+                     *      MCTC-00054-IT-e_begin_end,
+                     *      MCTC-00056-IT-e_emptyRange,
+                     *      MCTC-00058-IT-mutabilityRange,
+                     *      MCTC-00059-IT-mutabilityIteration
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto end () noexcept -> Iterator;

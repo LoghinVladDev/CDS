@@ -104,7 +104,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = number of elements that were removed successfully
                      *
-                     * @test Suite: CTS-00001, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: All
                      *
                      * @protected Unused by implementor class, used by other clients. Do not inherit public
                      */

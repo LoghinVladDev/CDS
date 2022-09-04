@@ -21,9 +21,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __IteratorType is the type of iterator to be returned by the functions
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                 * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                 * as __FindByImmutableCompositeClient, which is tested
+                 * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: All
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -52,9 +51,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __CollectionType \< __IteratorType \> ref = Reference to the updated object given in the 'storeIn' parameter
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00601-FT-findThatStoreInMatchingNone,
+                     *      MCTC-00602-FT-findThatStoreInMatchingOne,
+                     *      MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit,
+                     *      MCTC-00604-FT-findThatStoreInMatchingMore,
+                     *      MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit,
+                     *      MCTC-00606-FT-findThatStoreInMatchingAll,
+                     *      MCTC-00607-FT-findThatStoreInMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00651-FTMF-findThatStoreInMemberFunction
+                     * }
                      *
                      * @public
                      */
@@ -83,9 +92,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __CollectionType \< __IteratorType \> = The new collection containing the found iterators
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00608-FT-findThatReturnedMatchingNone,
+                     *      MCTC-00609-FT-findThatReturnedMatchingOne,
+                     *      MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit,
+                     *      MCTC-00611-FT-findThatReturnedMatchingMore,
+                     *      MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit,
+                     *      MCTC-00613-FT-findThatReturnedMatchingAll,
+                     *      MCTC-00614-FT-findThatReturnedMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00652-FTMF-findThatReturnedMemberFunction
+                     * }
                      *
                      * @public
                      */
@@ -111,9 +130,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __IteratorType = The iterator of the found element, if applicable. If none found, 'cend' is returned
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00615-FT-findFirstThatMatchingNone,
+                     *      MCTC-00616-FT-findFirstThatMatchingOne,
+                     *      MCTC-00617-FT-findFirstThatMatchingMore,
+                     *      MCTC-00618-FT-findFirstThatMatchingAll,
+                     *      MCTC-00619-FT-findFirstThatMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00653-FTMF-findFirstThatMemberFunction
+                     * }
                      *
                      * @public
                      */
@@ -134,9 +161,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __IteratorType = The iterator of the found element, if applicable. If none found, 'cend' is returned
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00620-FT-findLastThatMatchingNone,
+                     *      MCTC-00621-FT-findLastThatMatchingOne,
+                     *      MCTC-00622-FT-findLastThatMatchingMore,
+                     *      MCTC-00623-FT-findLastThatMatchingAll,
+                     *      MCTC-00624-FT-findLastThatMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00654-FTMF-findLastThatMemberFunction
+                     * }
                      *
                      * @public
                      */
@@ -159,9 +194,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __CollectionType \< __IteratorType \> ref = Reference to the updated object given in the 'storeIn' parameter
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00625-FT-findAllThatStoreInMatchingNone,
+                     *      MCTC-00626-FT-findAllThatStoreInMatchingOne,
+                     *      MCTC-00627-FT-findAllThatStoreInMatchingMore,
+                     *      MCTC-00628-FT-findAllThatStoreInMatchingAll,
+                     *      MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00655-FTMF-findAllThatStoreInMemberFunction
+                     * }
                      *
                      * @public
                      */
@@ -187,9 +230,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe if __Predicate callable / member function is exceptsafe
                      * @return __CollectionType \< __IteratorType \> = The new collection containing the found iterators
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                     * @test Theoretically tested, as __FindByMutableCompositeClient uses the same base implementation functions
-                     * as __FindByImmutableCompositeClient, which is tested
+                     * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
+                     *      MCTC-00630-FT-findAllThatReturnedMatchingNone,
+                     *      MCTC-00631-FT-findAllThatReturnedMatchingOne,
+                     *      MCTC-00632-FT-findAllThatReturnedMatchingMore,
+                     *      MCTC-00633-FT-findAllThatReturnedMatchingAll,
+                     *      MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore
+                     * }
+                     *
+                     * @test Suite: MCTS-00001, Group: MCTG-00650-FTMF, Test Cases: {
+                     *      MCTC-00656-FTMF-findAllThatReturnedMemberFunction
+                     * }
                      *
                      * @public
                      */

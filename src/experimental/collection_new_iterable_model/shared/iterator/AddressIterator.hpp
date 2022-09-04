@@ -16,6 +16,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @implements RandomAccessIterator
          *
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -48,6 +49,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractAddressIterator () noexcept;
@@ -59,6 +61,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             __CDS_Explicit constexpr AbstractAddressIterator (
@@ -72,6 +75,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractAddressIterator (
@@ -85,6 +89,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             constexpr AbstractAddressIterator (
@@ -109,6 +114,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto copy (
@@ -122,6 +128,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @protected
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto move (
@@ -135,6 +142,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return __ElementType ref = Reference to the element the address is indicating to
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
@@ -158,6 +166,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return bool = true if addresses are equal, false otherwise
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -172,6 +181,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return bool = true if addresses are not equal, false otherwise
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -215,6 +225,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return bool = true if not null address, false otherwise
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_Explicit constexpr operator bool () const noexcept;
@@ -228,6 +239,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @extends AbstractAddressIterator
          *
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -253,6 +265,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardAddressIterator () noexcept;
@@ -264,6 +277,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_Explicit constexpr ForwardAddressIterator (
@@ -277,6 +291,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardAddressIterator (
@@ -290,6 +305,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             constexpr ForwardAddressIterator (
@@ -304,6 +320,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return ForwardAddressIterator ref = Reference to the modified iterator
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -318,6 +335,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return ForwardAddressIterator ref = Reference to the modified iterator
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -331,7 +349,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if addresses are equal, false otherwise
              *
-             * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -346,6 +364,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return bool = true if addresses are not equal, false otherwise
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -359,6 +378,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @return ForwardAddressIterator ref = Reference to the modified iterator
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+             * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardAddressIterator &;

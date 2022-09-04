@@ -31,25 +31,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_OptimalInline auto MutableCollection < __ElementType > :: toString () const noexcept -> String {
 
+            /* Default toString implementation, store 'MutableCollection at 0x....'. Use a stringstream for simplicity */
             std :: stringstream oss;
             oss << "MutableCollection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+
+            /* converted to std :: string, and to cds :: String afterwards */
             return oss.str();
-        }
-
-
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_OptimalInline auto MutableCollection < __ElementType > :: find (
-                ElementType const & element
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( this->__cf_equals ( element, * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
         }
 
     }

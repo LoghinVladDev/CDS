@@ -61,6 +61,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00606-FT-findThatStoreInMatchingAll,
                      *      CTC-00607-FT-findThatStoreInMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00651-FTMF-findThatStoreInMemberFunction
                      * }
@@ -101,6 +102,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00613-FT-findThatReturnedMatchingAll,
                      *      CTC-00614-FT-findThatReturnedMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00652-FTMF-findThatReturnedMemberFunction
                      * }
@@ -136,6 +138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00618-FT-findFirstThatMatchingAll,
                      *      CTC-00619-FT-findFirstThatMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00653-FTMF-findFirstThatMemberFunction
                      * }
@@ -166,6 +169,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00623-FT-findLastThatMatchingAll,
                      *      CTC-00624-FT-findLastThatMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00654-FTMF-findLastThatMemberFunction
                      * }
@@ -198,6 +202,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00628-FT-findAllThatStoreInMatchingAll,
                      *      CTC-00629-FT-findAllThatStoreInMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00655-FTMF-findAllThatStoreInMemberFunction
                      * }
@@ -233,6 +238,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *      CTC-00633-FT-findAllThatReturnedMatchingAll,
                      *      CTC-00634-FT-findAllThatReturnedMatchingAllAndMore
                      * }
+                     *
                      * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
                      *      CTC-00656-FTMF-findAllThatReturnedMemberFunction
                      * }

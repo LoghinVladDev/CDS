@@ -81,7 +81,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
@@ -92,7 +92,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
                     __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
@@ -126,7 +126,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return bool = true if iterator was removed, false otherwise
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00350-RAIT, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: MCTG-00400-RB, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                      * @protected
                      */
                     auto __remove ( /* NOLINT(bugprone-reserved-identifier) */
@@ -141,7 +143,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = number of iterators to be removed
                      *
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: MCTS-00001, Group: MCTG-00400-RB, Test Cases: All
+                     * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                      * @protected
                      */
                     auto __removeArray ( /* NOLINT(bugprone-reserved-identifier) */
