@@ -111,6 +111,58 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 /**
+                 * @brief Function used to insert multiple elements of a parameter pack into a given accumulator value
+                 *
+                 * @tparam __AccumulatorType is the type of value to insert the elements into
+                 * @tparam __LastType is the type of the last value inserted into the accumulator
+                 *
+                 * @param [out] pAccumulator : __AccumulatorType ptr = pointer to the accumulator to insert the last value into
+                 * @param [in] lastValue : __LastType fref = Forwarding Reference to the last value to be added
+                 * @excetpsafe if construction of element is exceptsafe and collection supports insertion
+                 *
+                 * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: { CTC-00804-RI-insertByPack }
+                 *
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
+                template <
+                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
+                > auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier) */
+                        __AccumulatorType   * pAccumulator,
+                        __LastType         && lastValue
+                ) noexcept ( false ) -> void;
+
+
+                /**
+                 * @brief Function used to insert multiple elements of a parameter pack into a given accumulator value
+                 *
+                 * @tparam __AccumulatorType is the type of value to insert the elements into
+                 * @tparam __FirstType is the type of the first value in the pack inserted into the accumulator
+                 * @tparam __RemainingTypes is the type pack of the remaining values in the original pack to be inserted into the accumulator
+                 *
+                 * @param [out] pAccumulator : __AccumulatorType ptr = pointer to the accumulator to insert the last value into
+                 * @param [in] firstValue : __FirstType fref = Forwarding Reference to the first value to be added
+                 * @param [in] remainingValues : __RemainingTypes fref ... = Pack of Forwarding References to the remaining values from the pack to be added in subsequent calls
+                 * @excetpsafe if construction of element is exceptsafe and collection supports insertion
+                 *
+                 * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: { CTC-00804-RI-insertByPack }
+                 *
+                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @internal library-private
+                 */
+                template <
+                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
+                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
+                > auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier) */
+                        __AccumulatorType      *     pAccumulator,
+                        __FirstType           &&     firstValue,
+                        __RemainingTypes      && ... remainingValues
+                ) noexcept ( false ) -> void;
+
+
+                /**
                  * @interface Interface for creating Random Insertion requests, inserting / emplacing elements without a specified location.
                  * @tparam __ReceiverType is the type of implementor class, used for static polymorphism.
                  * Implementor is required to either be derived from the Collection abstract class or a class
@@ -148,11 +200,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 private:
                     /**
-                     * @brief Function used to insert multiple elements of a parameter pack into a given accumulator value
-                     * @tparam __AccumulatorType is the type of value to insert the elements into
-                     * @tparam __LastType is the type last inserted into the accumulator
-                     * @param pAccumulator
-                     * @param lastValue
+                     * @brief Friend declaration of the function to allow usage of insert from caller object
+                     * @private
                      */
                     template <
                             typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
@@ -163,6 +212,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 private:
+                    /**
+                     * @brief Friend declaration of the function to allow usage of insert from caller object
+                     * @private
+                     */
                     template <
                             typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
                             typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
@@ -174,6 +227,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
+                     * @param [in] element : ElementType cref = Constant Reference to the element to be inserted in the object via copy
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00801-RI-insertByCopy
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -184,6 +250,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] element : ElementType mref = Move Reference to the element to be inserted in the object via move
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -194,6 +273,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
+                     * @brief Function used to create a request to insert an element into the receiver.
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
+                     * @param [in] element : ElementType cref = Constant Reference to the element to be inserted in the object via copy
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00801-RI-insertByCopy
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -204,6 +297,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] element : ElementType mref = Move Reference to the element to be inserted in the object via move
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -214,30 +321,92 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to emplace an element ( construct with given parameters ) into the receiver
+                     * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
+                     * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00803-RI-insertByEmplace
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
+                     * @tparam __ArgumentTypes is the type pack of the values to be inserted
+                     * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00804-RI-insertByPack
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAll' function deprecated, kept for support. replaced by 'insertAll', same functionality
+                     * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
+                     * @tparam __ArgumentTypes is the type pack of the values to be inserted
+                     * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00804-RI-insertByPack
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
+                     * @tparam __IterableType is the type of iterable given as parameter
+                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -249,12 +418,38 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
+                     * @tparam __IterableType is the type of iterable given as parameter
+                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -265,6 +460,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
+                     * @tparam __IteratorType is the type of given iterators
+                     * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                     * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00807-RI-insertByRange1,
+                     *      CTC-00808-RI-insertByRange2,
+                     *      CTC-00809-RI-insertByRange3
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAllOf (
                             __IteratorType const & begin,
@@ -272,6 +482,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
+                     * @tparam __IteratorType is the type of given iterators
+                     * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                     * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00807-RI-insertByRange1,
+                     *      CTC-00808-RI-insertByRange2,
+                     *      CTC-00809-RI-insertByRange3
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,
@@ -300,12 +526,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > class __LocalRandomInsertionPrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
+                    /**
+                     * @typedef alias for __ElementType template parameter
+                     * @private
+                     */
                     using ElementType       = __ElementType;
 
                 private:
+                    /**
+                     * @typedef alias for __ReturnType template parameter reference
+                     * @private
+                     */
                     using ElementReference  = __ReturnType &;
 
                 private:
+                    /**
+                     * @brief Friend declaration of the function to allow usage of insert from caller object
+                     * @private
+                     */
                     template <
                             typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
                             typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
@@ -315,6 +553,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 private:
+                    /**
+                     * @brief Friend declaration of the function to allow usage of insert from caller object
+                     * @private
+                     */
                     template <
                             typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
                             typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
@@ -326,6 +568,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
+                     * @param [in] element : ElementType cref = Constant Reference to the element to be inserted in the object via copy
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00801-RI-insertByCopy
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -336,6 +591,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] element : ElementType mref = Move Reference to the element to be inserted in the object via move
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -346,6 +614,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
+                     * @brief Function used to create a request to insert an element into the receiver.
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
+                     * @param [in] element : ElementType cref = Constant Reference to the element to be inserted in the object via copy
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00801-RI-insertByCopy
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -356,6 +638,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
+                     * @brief Function used to create a request to insert an element into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] element : ElementType mref = Move Reference to the element to be inserted in the object via move
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00802-RI-insertByMove
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -366,30 +662,92 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to create a request to emplace an element ( construct with given parameters ) into the receiver
+                     * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
+                     * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
+                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00803-RI-insertByEmplace
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto emplace (
                             __EmplaceArgumentTypes && ... parameters
                     ) noexcept ( false ) -> ElementReference;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
+                     * @tparam __ArgumentTypes is the type pack of the values to be inserted
+                     * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00804-RI-insertByPack
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAll' function deprecated, kept for support. replaced by 'insertAll', same functionality
+                     * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
+                     * @tparam __ArgumentTypes is the type pack of the values to be inserted
+                     * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00804-RI-insertByPack
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
                             __ArgumentTypes && ... values
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
+                     * @tparam __IterableType is the type of iterable given as parameter
+                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -401,12 +759,38 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
+                     * @tparam __IterableType is the type of iterable given as parameter
+                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllIterable
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterable
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
+                     * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to the initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe copy constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00805-RI-insertByInsertAllList
+                     * }
+                     *
+                     * @public
+                     */
                     template <
                             typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
@@ -417,6 +801,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
+                     * @tparam __IteratorType is the type of given iterators
+                     * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                     * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00807-RI-insertByRange1,
+                     *      CTC-00808-RI-insertByRange2,
+                     *      CTC-00809-RI-insertByRange3
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     auto insertAllOf (
                             __IteratorType const & begin,
@@ -424,6 +823,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept ( false ) -> void;
 
                 public:
+                    /**
+                     * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
+                     * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
+                     * @tparam __IteratorType is the type of given iterators
+                     * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
+                     * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
+                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     *
+                     * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+                     *      CTC-00807-RI-insertByRange1,
+                     *      CTC-00808-RI-insertByRange2,
+                     *      CTC-00809-RI-insertByRange3
+                     * }
+                     *
+                     * @public
+                     */
                     template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IteratorType const & begin,

@@ -18,6 +18,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __LastType         && lastValue
                 ) noexcept ( false ) -> void {
 
+                    /* being the last value, call insert in the caller accumulator */
                     (void) pAccumulator->insert ( std :: forward < __LastType > ( lastValue ) );
                 }
 
@@ -32,7 +33,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __RemainingTypes      && ... remainingValues
                 ) noexcept ( false ) -> void {
 
+                    /* call insert on the first value */
                     (void) pAccumulator->insert ( std :: forward < __FirstType > ( firstValue ) );
+
+                    /* recursively call the same function with the remaining values */
                     __expansiveInsert (
                             pAccumulator,
                             std :: forward < __RemainingTypes > ( remainingValues ) ...
@@ -57,11 +61,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* decay of the element type */
                     using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+
+                    /* called handle type */
                     using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
 
+                    /* receiver to call the request to */
                     auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+
+                    /* status if new element was created and construction is possible */
                     bool        newElementCreated;
+
+                    /* call receiver to acquire a new address from */
                     auto const  pElementLocation        = (
                                 pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
                                         pReceiver->__cicch_obtainGenericHandler (
@@ -73,10 +85,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             & newElementCreated
                     );
 
+                    /* if no new element was created, return reference to received location */
                     if ( ! newElementCreated ) {
                         return * pElementLocation;
                     }
 
+                    /* return reference to the received address element, after in-place copy construction */
                     return * new (
                             pElementLocation
                     ) __ElementType ( element );
@@ -100,11 +114,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* decay of the element type */
                     using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+
+                    /* called handle type */
                     using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
 
+                    /* receiver to call the request to */
                     auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+
+                    /* status if new element was created and construction is possible */
                     bool        newElementCreated;
+
+                    /* call receiver to acquire a new address from */
                     auto  const pElementLocation        = (
                             pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
                                     pReceiver->__cicch_obtainGenericHandler (
@@ -116,10 +138,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             & newElementCreated
                     );
 
+                    /* if no new element was created, return reference to received location */
                     if ( ! newElementCreated ) {
                         return * pElementLocation;
                     }
 
+                    /* return reference to the received address element, after in-place move construction */
                     return * new (
                             pElementLocation
                     ) __ElementType ( std :: move ( element ) );
@@ -143,6 +167,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* call insert due to deprecation */
                     return this->insert ( element );
                 }
 
@@ -164,6 +189,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* call insert due to deprecation */
                     return this->insert ( std :: move ( element ) );
                 }
 
@@ -182,18 +208,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* decay of the element type */
                     using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+
+                    /* called handle type */
                     using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
 
+                    /* prepare a memory container of the newly constructed element, to avoid destruction in out-of-stack contexts, without need
+                     * of dynamic allocation */
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
+
+                    /* emplace-construct new element */
                     referenceElementContainer.construct (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
+                    /* since resources are allocated ( constructor can allocate ) prior to a potential throw call, try */
                     try {
 
+                        /* receiver to call the request to */
                         auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+
+                        /* status if new element was created and construction is possible */
                         bool        newElementCreated;
+
+                        /* call receiver to acquire a new address from */
                         auto  const pElementLocation        = (
                                 pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
                                         pReceiver->__cicch_obtainGenericHandler (
@@ -206,17 +245,26 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         );
 
                         if ( ! newElementCreated ) {
+
+                            /* if no new element was created, destruct the created element */
                             referenceElementContainer.destruct();
+
                         } else {
+
+                            /* otherwise, copy created data to the received memory address */
                             (void) std :: memcpy (
                                     reinterpret_cast < void * > ( pElementLocation ),
                                     reinterpret_cast < void const * > ( & referenceElementContainer._data[0] ),
                                     sizeof ( __ElementType )
                             );
+
                         }
 
+                        /* either way, return reference to received address */
                         return * pElementLocation;
                     } catch (...) {
+
+                        /* in the case the call throws, destruct allocated data and throw the exception further in the stack */
                         referenceElementContainer.destruct();
                         throw;
                     }
@@ -237,6 +285,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void {
 
+                    /* call expansive insert with the received forwarding references on this object as the accumulator */
                     __expansiveInsert (
                             this,
                             std :: forward < __ArgumentTypes > ( values ) ...
@@ -258,6 +307,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void {
 
+                    /* call expansive insert with the received forwarding references on this object as the accumulator */
                     __expansiveInsert (
                             this,
                             std :: forward < __ArgumentTypes > ( values ) ...
@@ -279,6 +329,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -303,6 +354,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             list.begin(),
                             list.end()
@@ -324,6 +376,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -348,6 +401,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             list.begin(),
                             list.end()
@@ -370,6 +424,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end
                 ) noexcept ( false ) -> void {
 
+                    /* call insert with extracted iterator values */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) this->insert ( * iterator );
                     }
@@ -391,6 +446,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end
                 ) noexcept ( false ) -> void {
 
+                    /* call insertAllOf with received parameters */
                     return this->insertAllOf (
                             begin,
                             end
@@ -415,16 +471,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* status if new element was created and construction is possible */
                     bool newElementCreated;
+
+                    /* call receiver to acquire a new address from */
                     auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                             & element,
                             & newElementCreated
                     );
 
+                    /* if no new element was created, return reference to received location */
                     if ( ! newElementCreated ) {
                         return * pElementLocation;
                     }
 
+                    /* return reference to the received address element, after in-place copy construction */
                     return * new (
                             pElementLocation
                     ) __ElementType ( element );
@@ -448,16 +509,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* status if new element was created and construction is possible */
                     bool newElementCreated;
+
+                    /* call receiver to acquire a new address from */
                     auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                             & element,
                             & newElementCreated
                     );
 
+                    /* if no new element was created, return reference to received location */
                     if ( ! newElementCreated ) {
                         return * pElementLocation;
                     }
 
+                    /* return reference to the received address element, after in-place move construction */
                     return * new (
                             pElementLocation
                     ) __ElementType ( std :: move ( element ) );
@@ -481,6 +547,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* call insert due to deprecation */
                     return this->insert ( element );
                 }
 
@@ -502,6 +569,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* call insert due to deprecation */
                     return this->insert ( std :: move ( element ) );
                 }
 
@@ -520,31 +588,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference {
 
+                    /* prepare a memory container of the newly constructed element, to avoid destruction in out-of-stack contexts, without need
+                     * of dynamic allocation */
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
+
+                    /* emplace-construct new element */
                     referenceElementContainer.construct (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
-                    bool newElementCreated;
-
                     try {
-                        auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
+
+                        /* status if new element was created and construction is possible */
+                        bool        newElementCreated;
+
+                        /* call receiver to acquire a new address from */
+                        auto  const pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                                 & referenceElementContainer.data(),
                                 & newElementCreated
                         );
 
                         if ( ! newElementCreated ) {
+
+                            /* if no new element was created, destruct the created element */
                             referenceElementContainer.destruct();
+
                         } else {
+
+                            /* otherwise, copy created data to the received memory address */
                             (void) std :: memcpy (
                                     pElementLocation,
                                     & referenceElementContainer._data[0],
                                     sizeof ( __ElementType )
                             );
+
                         }
 
+                        /* either way, return reference to received address */
                         return * pElementLocation;
                     } catch (...) {
+
+                        /* in the case the call throws, destruct allocated data and throw the exception further in the stack */
                         referenceElementContainer.destruct();
                         throw;
                     }
@@ -565,6 +649,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void {
 
+                    /* call expansive insert with the received forwarding references on this object as the accumulator */
                     __expansiveInsert (
                             this,
                             std :: forward < __ArgumentTypes > ( values ) ...
@@ -586,6 +671,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void {
 
+                    /* call expansive insert with the received forwarding references on this object as the accumulator */
                     __expansiveInsert (
                             this,
                             std :: forward < __ArgumentTypes > ( values ) ...
@@ -607,6 +693,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -631,6 +718,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             list.begin(),
                             list.end()
@@ -652,6 +740,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -676,6 +765,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void {
 
+                    /* call insert all of with extracted iterators */
                     this->insertAllOf (
                             list.begin(),
                             list.end()
@@ -698,6 +788,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end
                 ) noexcept ( false ) -> void {
 
+                    /* call insert with extracted iterator values */
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) this->insert ( * iterator );
                     }
@@ -719,6 +810,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const & end
                 ) noexcept ( false ) -> void {
 
+                    /* call insertAllOf with received parameters */
                     return this->insertAllOf (
                             begin,
                             end
