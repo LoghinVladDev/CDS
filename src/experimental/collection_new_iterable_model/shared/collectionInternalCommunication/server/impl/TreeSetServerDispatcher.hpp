@@ -5,6 +5,8 @@
 #ifndef __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__
 #define __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__
 
+#include "SetServerDispatcher.hpp"
+
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -43,7 +45,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __findConstFunction
                 > :: __crbeginLocal () const noexcept -> __ReverseConstIteratorType {
 
-                    return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crbeginFunction );
+                    return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crbeginFunction ) ();
                 }
 
 

@@ -460,7 +460,7 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                         __nodeDestructor
                 > :: __rbt_get (
                         __KeyType const & key
-                ) const noexcept -> __ElementType const & {
+                ) const noexcept -> __ElementType const * {
 
                     if ( this->__rbt_empty() )
                         return nullptr;

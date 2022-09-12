@@ -6,8 +6,6 @@
 #define __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
 
 
-/// TODO : do not include these here, include in class using RedBlackTree
-
 namespace cds {                     // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
         namespace __hidden {        // NOLINT(bugprone-reserved-identifier)
@@ -46,11 +44,11 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 }
 
                 template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > * > nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
+                static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > > nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
 
                 template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __endNode () noexcept -> __RedBlackTreeNode < __ElementType > * {       // NOLINT(bugprone-reserved-identifier)
-                    return & ( * nullNodeMemory < __ElementType > .data() );
+                    return & nullNodeMemory < __ElementType > .data();
                 }
 
                 template <
@@ -66,10 +64,16 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     using RBTreeNode                           =           __RedBlackTreeNode < __ElementType >;
 
                 public:
-                    using __rbt_Iterator                       =           RedBlackTreeForwardIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
+                    using __rbt_AbstractIterator               =           AbstractTreeIterator < __ElementType >;                    // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    using __rbt_ConstIterator                  =           RedBlackTreeForwardConstIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier)
+                    using __rbt_AbstractConstIterator          =           AbstractTreeConstIterator < __ElementType >;                    // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __rbt_Iterator                       =           RedBlackTreeForwardIterator < __ElementType >;             // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __rbt_ConstIterator                  =           RedBlackTreeForwardConstIterator < __ElementType >;        // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     using __rbt_ReverseIterator                =           RedBlackTreeBackwardIterator < __ElementType >;            // NOLINT(bugprone-reserved-identifier)
@@ -115,20 +119,20 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                             typename __ClassType = __RedBlackTree,                        // NOLINT(bugprone-reserved-identifier)
                             __NodeType * ( *__locateAuxiliary )( __NodeType * ) =         // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
-                            & __getRightNode < __ElementType >      :
-                            & __getLeftNode < __ElementType >,
+                                & __getRightNode < __ElementType >      :
+                                & __getLeftNode < __ElementType >,
                             bool ( *__ifScenario1 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
-                            &__isRightChild < __ElementType >       :
-                            &__isLeftChild < __ElementType >,
+                                &__isRightChild < __ElementType >       :
+                                &__isLeftChild < __ElementType >,
                             void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
-                            & __ClassType :: __rbt_leftRotate       :
-                            & __ClassType :: __rbt_rightRotate,
+                                & __ClassType :: __rbt_leftRotate       :
+                                & __ClassType :: __rbt_rightRotate,
                             void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =       // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                        ?
-                            & __ClassType :: __rbt_rightRotate      :
-                            & __ClassType :: __rbt_leftRotate
+                                & __ClassType :: __rbt_rightRotate      :
+                                & __ClassType :: __rbt_leftRotate
                     > auto __identifyAndApplyRotationOnInsert (                           // NOLINT(bugprone-reserved-identifier)
                             RBTreeNode * pPivot
                     ) noexcept -> void;
@@ -141,24 +145,24 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                             typename __ClassType = __RedBlackTree,                                      // NOLINT(bugprone-reserved-identifier)
                             __NodeType * ( *__locateAuxiliary )( __NodeType * ) =                       // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
-                            & __getRightNode < __ElementType >    :
-                            & __getLeftNode < __ElementType >,                                          // NOLINT(bugprone-reserved-identifier)
+                                & __getRightNode < __ElementType >    :
+                                & __getLeftNode < __ElementType >,                                          // NOLINT(bugprone-reserved-identifier)
                             __NodeType * ( *__locateReversedAuxiliary )( __NodeType * ) =               // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
-                            & __getRightNode < __ElementType >    :
-                            & __getLeftNode < __ElementType >,
+                                & __getRightNode < __ElementType >    :
+                                & __getLeftNode < __ElementType >,
                             bool ( *__ifScenario1 )( __NodeType * ) =                                   // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
-                            &__isRightChild < __ElementType >     :
-                            &__isLeftChild < __ElementType >,
+                                &__isRightChild < __ElementType >     :
+                                &__isLeftChild < __ElementType >,
                             void ( __ClassType :: *  __rotateS1 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
-                            & __ClassType :: __rbt_leftRotate     :
-                            & __ClassType :: __rbt_rightRotate,
+                                & __ClassType :: __rbt_leftRotate     :
+                                & __ClassType :: __rbt_rightRotate,
                             void ( __ClassType :: *  __rotateS2 )( __NodeType * ) =                     // NOLINT(bugprone-reserved-identifier)
                             rotationDecision                      ?
-                            & __ClassType :: __rbt_rightRotate    :
-                            & __ClassType :: __rbt_leftRotate
+                                & __ClassType :: __rbt_rightRotate    :
+                                & __ClassType :: __rbt_leftRotate
                     > auto __identifyAndApplyRotationOnDelete (                                         // NOLINT(bugprone-reserved-identifier)
                             RBTreeNode * pPivot
                     ) noexcept -> void;
@@ -177,15 +181,15 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     __CDS_NoDiscard auto __rbt_empty () const -> bool;                                           // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_get (                                                // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_get (                                                // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;
 
                 protected:
-                    auto __rbt_get (                                                                        // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_get (                                                                        // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
-                    ) const noexcept -> __ElementType const &;
+                    ) const noexcept -> __ElementType const *;
 
                 private:
                     auto __rbt_removeAt (                                                                   // NOLINT(bugprone-reserved-identifier)
@@ -252,37 +256,35 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                     ) const noexcept -> __rbt_ConstIterator;
 
                 protected:
-                    auto __rbt_begin () noexcept -> __rbt_Iterator;                 // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_begin () noexcept -> __rbt_Iterator;                 // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_end () noexcept -> __rbt_Iterator;                   // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_end () noexcept -> __rbt_Iterator;                   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_rbegin () noexcept -> __rbt_ReverseIterator;                // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_rbegin () noexcept -> __rbt_ReverseIterator;                // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_rend () noexcept -> __rbt_ReverseIterator;                  // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_rend () noexcept -> __rbt_ReverseIterator;                  // NOLINT(bugprone-reserved-identifier)
 
 
                 protected:
-                    auto __rbt_cbegin () const noexcept -> __rbt_ConstIterator;     // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_cbegin () const noexcept -> __rbt_ConstIterator;     // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_cend () const noexcept -> __rbt_ConstIterator;       // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_cend () const noexcept -> __rbt_ConstIterator;       // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator;    // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    auto __rbt_crend () const noexcept -> __rbt_ReverseConstIterator;      // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __rbt_crend () const noexcept -> __rbt_ReverseConstIterator;      // NOLINT(bugprone-reserved-identifier)
 
                     };
             }
         }
     }
 }
-
-#include "impl/RedBlackTree.hpp"
 
 #endif // __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
 
@@ -302,7 +304,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
             > template <
-                    typename                                                                __ServerType
+                    typename                                                                __ServerType               /* NOLINT(bugprone-reserved-identifier) */
             > class __RedBlackTree <
                     __ElementType,
                     __KeyType,

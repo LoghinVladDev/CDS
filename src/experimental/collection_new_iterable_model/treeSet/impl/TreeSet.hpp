@@ -9,6 +9,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
 
+        template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __cicch_obtainGenericHandler (    // NOLINT(bugprone-reserved-identifier)`
+                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        ) noexcept -> __GenericHandler {
+
+            return this->__ss_handlers() [ static_cast < uint32 > ( requestType ) ];
+        }
+
+        template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __cicch_obtainGenericConstHandler (    // NOLINT(bugprone-reserved-identifier)`
+                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        ) const noexcept -> __GenericConstHandler {
+
+            return this->__ss_constHandlers() [ static_cast < uint32 > ( requestType ) ];
+        }
+
         template < typename __ElementType >                             // NOLINT(bugprone-reserved-identifier)
         TreeSet < __ElementType > :: TreeSet () noexcept = default;
 
@@ -24,13 +40,45 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             );
         }
 
+
         template < typename __ElementType >                             // NOLINT(bugprone-reserved-identifier)
+        TreeSet < __ElementType > :: TreeSet (
+                TreeSet && set
+        ) noexcept {
+
+            this->__rbt_moveCleared (
+                    set
+                    );
+        }
+
+
+        template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
+        auto TreeSet < __ElementType > :: contains (
+                __ElementType const & element
+        ) const noexcept -> bool {
+
+            if ( this -> __rbt_get ( element ) != nullptr )
+                return true;
+
+            return false;
+        }
+
+
+        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        constexpr auto TreeSet < __ElementType > :: size ()  const noexcept -> Size {
+
+            return this->__rbt_size();
+        }
+
+
+        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
         auto TreeSet < __ElementType > :: clear () noexcept -> void {
 
             this->__rbt_clear();
         }
 
-        template < typename __ElementType >                             // NOLINT(bugprone-reserved-identifier)
+
+        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
         auto TreeSet < __ElementType > :: remove (
                 __ElementType const & element
         ) noexcept -> bool {

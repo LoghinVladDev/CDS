@@ -27,10 +27,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             template <
                     typename __TElementType,                                                                // NOLINT(bugprone-reserved-identifier)
                     typename __KeyType,                                                                     // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,           // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,          // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor                // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,       // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >,           // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: ComparisonFunction < __TElementType >,          // NOLINT(bugprone-reserved-identifier)
+                    cds :: utility :: DestructorFunction < __TElementType >                // NOLINT(bugprone-reserved-identifier)
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     // NOLINT(bugprone-reserved-identifier)
 
 
@@ -44,21 +44,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 RBTreeNode *         _pCurrentNode  { nullptr };
 
             protected:
-                AbstractTreeIterator() noexcept;
+                AbstractTreeIterator () noexcept;
 
             protected:
-                AbstractTreeIterator(
+                AbstractTreeIterator (
                         RBTreeNode * pRoot,
                         RBTreeNode * pCurrentNode
                 ) noexcept;
 
             protected:
-                AbstractTreeIterator(
+                AbstractTreeIterator (
                         AbstractTreeIterator const & iterator
                 ) noexcept;
 
             protected:
-                AbstractTreeIterator(
+                AbstractTreeIterator (
                         AbstractTreeIterator && iterator
                 ) noexcept;
 
@@ -84,10 +84,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_Explicit operator bool () const noexcept;
 
             protected:
-                auto successor () noexcept -> AbstractTreeIterator &;
+                auto advance () noexcept -> void;
 
             protected:
-                auto predecessor () noexcept -> AbstractTreeIterator &;
+                auto reverse () noexcept -> void;
         };
 
 
@@ -113,21 +113,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             RBTreeNode const *         _pCurrentNode  { nullptr };
 
         protected:
-            AbstractTreeConstIterator() noexcept;
+            AbstractTreeConstIterator () noexcept;
 
         protected:
-            AbstractTreeConstIterator(
+            AbstractTreeConstIterator (
                     RBTreeNode const * pRoot,
                     RBTreeNode const * pCurrentNode
             ) noexcept;
 
         protected:
-            AbstractTreeConstIterator(
+            AbstractTreeConstIterator (
                     AbstractTreeConstIterator const & iterator
             ) noexcept;
 
         protected:
-            AbstractTreeConstIterator(
+            AbstractTreeConstIterator (
                     AbstractTreeConstIterator && iterator
             ) noexcept;
 
@@ -153,10 +153,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             __CDS_Explicit operator bool () const noexcept;
 
         protected:
-            auto successor () noexcept -> AbstractTreeConstIterator &;
+            auto advance () noexcept -> void;
 
         protected:
-            auto predecessor () noexcept -> AbstractTreeConstIterator &;
+            auto reverse () noexcept -> void;
         };
         
 
