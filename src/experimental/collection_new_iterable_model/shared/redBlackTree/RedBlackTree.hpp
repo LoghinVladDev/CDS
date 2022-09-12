@@ -5,6 +5,7 @@
 #ifndef __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
 #define __CDS_EX_SHARED_RED_BLACK_TREE_HPP__
 
+#include "RedBlackTreeUtils.hpp"
 
 namespace cds {                     // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -41,14 +42,6 @@ namespace cds {                     // NOLINT(modernize-concat-nested-namespaces
                 template < typename __ElementType >                                                 // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline static auto __isRed ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool {    // NOLINT(bugprone-reserved-identifier)
                     return pNode->_colour == __RedBlackTreeNode < __ElementType > :: RED;
-                }
-
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                static cds :: __hidden :: __impl :: __allocation :: __RawContainer < __RedBlackTreeNode < __ElementType > > nullNodeMemory;       // NOLINT(bugprone-reserved-identifier)
-
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                __CDS_OptimalInline auto __endNode () noexcept -> __RedBlackTreeNode < __ElementType > * {       // NOLINT(bugprone-reserved-identifier)
-                    return & nullNodeMemory < __ElementType > .data();
                 }
 
                 template <

@@ -23,6 +23,8 @@
 
 #include "shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
+#include "shared/delegateIterator/DelegateIterator.hpp"
+
 #include "shared/collectionInternalCommunication/server/SetServer.hpp"
 
 #include "treeSet/Constructs.hpp"
@@ -69,7 +71,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             protected: using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType >;
             protected: using RemoveByClient                         = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType >;
             protected: using GenericStatementsClient                = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType >;
+
             protected: friend Server;
+
+            private: friend RandomInsertionClient;
+            private: friend ConstIteratorRemoveClient;
+            private: friend DelegateForwardConstIterableClient;
 
             protected: using typename SetBase :: __GenericHandler;              // NOLINT(bugprone-reserved-identifier)
             protected: using typename SetBase :: __GenericConstHandler;         // NOLINT(bugprone-reserved-identifier)
@@ -203,11 +210,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             public:
                 auto remove (
                         __ElementType const & element
-                ) noexcept -> bool;
+                ) noexcept -> bool override;
         };
     }
 }
 #include "shared/redBlackTree/impl/RedBlackTree.hpp"
+
+#include "shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "shared/iterator/impl/RedBlackTreeIterator.hpp"
 
