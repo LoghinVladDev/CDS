@@ -153,7 +153,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      */
                     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier) */
                             __CollectionInternalRequestType requestType
-                    ) noexcept -> __GenericHandler;
+                    ) noexcept -> __GenericHandler = 0;
 
                 protected:
                     /**
@@ -166,7 +166,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      */
                     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto __cicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier) */
                             __CollectionInternalRequestType requestType
-                    ) const noexcept -> __GenericConstHandler;
+                    ) const noexcept -> __GenericConstHandler = 0;
 
                 public:
                     /**

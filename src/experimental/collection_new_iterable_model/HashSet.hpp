@@ -296,6 +296,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> bool override;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
+                    __ElementType const & element
+            ) const noexcept -> bool override;
+
+        public:
             __CDS_NoDiscard auto sequence () & noexcept -> Sequence < HashSet < __ElementType, __Hasher > >;
 
         public:

@@ -609,6 +609,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> EntryMutableCollectionProxy & = delete;
 
         protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains ( /* NOLINT(bugprone-reserved-identifier) */
+                    EntryType const & entry
+            ) const noexcept -> bool override;
+
+        protected:
             auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
                     EntryType const * pReferenceElement,
                     bool            * pIsNew

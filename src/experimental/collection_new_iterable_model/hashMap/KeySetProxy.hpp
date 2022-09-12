@@ -407,6 +407,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     KeySetProxy &&
             ) noexcept -> KeySetProxy & = delete;
 
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
+                    __KeyType const & key
+            ) const noexcept -> bool override;
+
         private:
             __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier) */
 

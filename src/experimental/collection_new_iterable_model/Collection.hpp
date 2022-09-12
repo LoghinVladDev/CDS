@@ -1223,7 +1223,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00004-MF-size, CTC-00010-MF-clear }
              * @public
              */
-            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size = 0;
 
         public:
             /**

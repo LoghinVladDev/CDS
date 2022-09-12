@@ -87,14 +87,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: size () const noexcept -> Size {
-
-            /* by default, return 0. No pure virtual implementation due to MinGW bug with cpp-14 constexpr */
-            return 0ULL;
-        }
-
-
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
             /* A collection is empty if the size is equal to 0 */

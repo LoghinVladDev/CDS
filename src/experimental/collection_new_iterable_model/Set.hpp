@@ -57,6 +57,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             virtual auto remove (
                     __ElementType const & element
             ) noexcept -> bool = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
+                    __ElementType const & element
+            ) const noexcept -> bool override = 0;
         };
 
     }

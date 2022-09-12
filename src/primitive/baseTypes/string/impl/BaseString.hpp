@@ -3268,7 +3268,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType character
             ) const noexcept -> bool {
 
-                return ! this->empty() && this->_pData [ 0 ] == character;
+                return ! this->empty() && this->_pBuffer [ 0 ] == character;
             }
 
 
@@ -3298,7 +3298,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType character
             ) const noexcept -> bool {
 
-                return ! this->empty() && this->_pData [ this->_length - 1ULL ] == character;
+                return ! this->empty() && this->_pBuffer [ this->_length - 1ULL ] == character;
             }
 
 

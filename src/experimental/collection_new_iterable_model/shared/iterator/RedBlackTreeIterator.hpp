@@ -1,37 +1,38 @@
-//
-// Created by stefan on 16.08.2022.
-//
+/*
+ * Created by stefan on 16.08.2022.
+ */
 
 #ifndef __CDS_EX_SHARED_RED_BLACK_TREE_ITERATOR_HPP__
-#define __CDS_EX_SHARED_RED_BLACK_TREE_ITERATOR_HPP__
+#define __CDS_EX_SHARED_RED_BLACK_TREE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
                 template <
-                        typename __TElementType,                                                                // NOLINT(bugprone-reserved-identifier)
-                        typename __KeyType,                                                                     // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,       // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,           // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,          // NOLINT(bugprone-reserved-identifier)
-                        cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor                // NOLINT(bugprone-reserved-identifier)
-                > class __RedBlackTree;                                                                         // NOLINT(bugprone-reserved-identifier)
+                        typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
+                > class __RedBlackTree;                                                                         /* NOLINT(bugprone-reserved-identifier) */
+
             }
         }
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
         class AbstractTreeIterator : public meta :: BidirectionalIterator {
             template <
-                    typename __TElementType,                                                                // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                     // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType >,           // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType >,          // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType >                // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     /* NOLINT(bugprone-reserved-identifier) */
 
 
             protected:
@@ -91,16 +92,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         };
 
 
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
         class AbstractTreeConstIterator : public meta :: BidirectionalIterator {
             template <
-                    typename __TElementType,                                                                // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                     // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,           // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,          // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor                // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     /* NOLINT(bugprone-reserved-identifier) */
 
 
         protected:
@@ -160,16 +161,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         };
         
 
-        template < typename __ElementType >                                                             // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
         class RedBlackTreeForwardIterator : public AbstractTreeIterator < __ElementType > {
             template <
-                    typename __TElementType,                                                            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                 // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,   // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,      // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor            // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
             private:
                 using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
@@ -218,16 +219,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         };
 
 
-        template < typename __ElementType >                                                       // NOLINT(bugprone-reserved-identifier)
-        class RedBlackTreeForwardConstIterator : public AbstractTreeConstIterator < __ElementType > {    // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
+        class RedBlackTreeForwardConstIterator : public AbstractTreeConstIterator < __ElementType > {   /* NOLINT(bugprone-reserved-identifier) */
             template <
-                    typename __TElementType,                                                            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                 // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,   // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,      // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor            // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
             using typename AbstractTreeConstIterator < __ElementType > :: RBTreeNode;
@@ -278,16 +279,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
 
-        template < typename __ElementType >                                                             // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
         class RedBlackTreeBackwardIterator : public AbstractTreeIterator < __ElementType > {
             template <
-                    typename __TElementType,                                                            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                 // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,   // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,      // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor            // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
             using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
@@ -336,16 +337,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         };
 
 
-        template < typename __ElementType >                                                       // NOLINT(bugprone-reserved-identifier)
-        class RedBlackTreeBackwardConstIterator : public AbstractTreeConstIterator < __ElementType > {    // NOLINT(bugprone-reserved-identifier)
+        template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
+        class RedBlackTreeBackwardConstIterator : public AbstractTreeConstIterator < __ElementType > {  /* NOLINT(bugprone-reserved-identifier) */
             template <
-                    typename __TElementType,                                                            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                                                                 // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType > __keyExtractor,   // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyLowerComparator,       // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: ComparisonFunction < __TElementType > __keyEqualsComparator,      // NOLINT(bugprone-reserved-identifier)
-                    cds :: utility :: DestructorFunction < __TElementType > __nodeDestructor            // NOLINT(bugprone-reserved-identifier)
-            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
+            > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
             using typename AbstractTreeConstIterator < __ElementType > :: RBTreeNode;
@@ -394,4 +395,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif //__CDS_EX_SHARED_RED_BLACK_TREE_ITERATOR_HPP__
+#endif /* __CDS_EX_SHARED_RED_BLACK_TREE_ITERATOR_HPP__ */

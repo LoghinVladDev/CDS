@@ -110,6 +110,21 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             virtual auto remove (
                     __KeyType const & key
             ) noexcept -> bool = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
+                    EntryType const & entry
+            ) const noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto containsKey (
+                    __KeyType const & key
+            ) const noexcept -> bool = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto containsValue (
+                    __ValueType const & value
+            ) const noexcept -> bool = 0;
         };
 
     }

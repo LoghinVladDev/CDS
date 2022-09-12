@@ -350,6 +350,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template <
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto HashSet <
+                __ElementType,
+                __Hasher
+        > :: contains (
+                __ElementType const & element
+        ) const noexcept -> bool {
+
+            return this->__ht_getConst ( element ) != nullptr;
+        }
+
+
+        template <
                 typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprConditioned auto HashSet <

@@ -398,6 +398,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> bool override;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto containsKey (
+                    __KeyType const & key
+            ) const noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto containsValue (
+                    __ValueType const & value
+            ) const noexcept -> bool override;
+
+        public:
             __CDS_NoDiscard auto sequence () & noexcept -> Sequence < HashMap < __KeyType, __ValueType, __Hasher > >;
 
         public:

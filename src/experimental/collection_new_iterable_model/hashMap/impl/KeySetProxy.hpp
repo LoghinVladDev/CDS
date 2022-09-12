@@ -71,6 +71,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: KeySetProxy :: contains (
+                __KeyType const & key
+        ) const noexcept -> bool {
+
+            return this->template map < HashMapBase > ()->containsKey ( key );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > constexpr auto HashMap <
                 __KeyType,
                 __ValueType,

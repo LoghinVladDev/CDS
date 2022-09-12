@@ -154,6 +154,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return asString;
         }
 
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto Map <
+                __KeyType,
+                __ValueType
+        > :: contains (
+                EntryType const & entry
+        ) const noexcept -> bool {
+
+            return this->containsKey ( entry.key() );
+        }
+
     }
 }
 

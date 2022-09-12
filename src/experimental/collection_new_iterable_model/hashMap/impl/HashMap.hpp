@@ -546,6 +546,44 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return ! this-> template __ht_equals < & __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > > ( map );
         }
 
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: containsKey (
+                __KeyType const & key
+        ) const noexcept -> bool {
+
+            return this->__ht_getConst ( key ) != nullptr;
+        }
+
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: containsValue (
+                __ValueType const & value
+        ) const noexcept -> bool {
+
+            for ( auto iterator = this->__ht_cbegin (), end = this->__ht_cend (); iterator != end; ++ iterator ) {
+                if ( cds :: meta :: equals ( ( * iterator ).value(), value ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
     }
 }
 

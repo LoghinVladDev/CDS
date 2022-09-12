@@ -1,15 +1,15 @@
-//
-// Created by loghin on 6/16/22.
-//
+/*
+ * Created by loghin on 6/16/22.
+ */
 
 #ifndef __CDS_MAP_ENTRY_IMPL_HPP__
-#define __CDS_MAP_ENTRY_IMPL_HPP__
+#define __CDS_MAP_ENTRY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
-    namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
             __CDS_cpplang_ConstexprConditioned auto __MapEntry < __KeyType, __ValueType > :: operator == (
                     __MapEntry const & entry
             ) const noexcept -> bool {
@@ -23,7 +23,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: equals ( this->_value, entry._value );
             }
 
-            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
             __CDS_cpplang_ConstexprConditioned auto __MapEntry < __KeyType, __ValueType > :: operator != (
                     __MapEntry const & entry
             ) const noexcept -> bool {
@@ -38,14 +38,14 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: hash () const noexcept -> Size {
 
                 return cds :: hash ( this->_key ) ^ cds :: hash ( this->_value );
             }
 
 
-            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
             __CDS_OptimalInline auto __MapEntry < __KeyType, __ValueType > :: toString () const noexcept -> String {
 
                 std :: stringstream oss;
@@ -54,22 +54,15 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __KeyType, typename __ValueType >   // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
             __CDS_OptimalInline __MapEntry < __KeyType, __ValueType > :: operator String () const noexcept {
 
                 return this->toString();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-            template <
-                    typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
-                    typename __TValueType,  // NOLINT(bugprone-reserved-identifier)
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TKeyType > () &&
-                            cds :: meta :: isCopyConstructible < __TValueType > ()
-                    >
-            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
+            constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry const & entry
             ) noexcept (
                     noexcept ( KeyType ( entry._key ) ) &&
@@ -81,15 +74,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-            template <
-                    typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
-                    typename __TValueType,  // NOLINT(bugprone-reserved-identifier)
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isMoveConstructible < __TKeyType > () &&
-                            cds :: meta :: isMoveConstructible < __TValueType > ()
-                    >
-            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
+            constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry && entry
             ) noexcept (
                     noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
@@ -101,8 +87,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __TKeyType      && key,
                     __TValueType    && value
@@ -116,70 +102,70 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: key () const noexcept -> KeyType const & {
 
                 return this->_key;
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: value () const noexcept -> ValueType const & {
 
                 return this->_value;
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: value () noexcept -> ValueType & {
 
                 return this->_value;
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: first () const noexcept -> KeyType const & {
 
                 return this->key();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: second () const noexcept -> ValueType const & {
 
                 return this->value();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: second () noexcept -> ValueType & {
 
                 return this->value();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: getFirst () const noexcept -> KeyType const & {
 
                 return this->key();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr auto __MapEntry < __KeyType, __ValueType > :: getSecond () const noexcept -> ValueType const & {
 
                 return this->value();
             }
 
 
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: getSecond () noexcept -> ValueType & {
 
                 return this->value();
             }
 
 
-            template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */
             __CDS_OptimalInline auto operator << (
                     std :: ostream                                & out,
                     __MapEntry < __TKeyType, __TValueType > const & object
@@ -192,8 +178,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 
     template <
-            typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-            typename __ValueType    // NOLINT(bugprone-reserved-identifier)
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
     > struct Hash < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
 
         __CDS_NoDiscard constexpr static auto hash (
@@ -205,4 +191,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     };
 }
 
-#endif // __CDS_MAP_ENTRY_IMPL_HPP__
+#endif /* __CDS_MAP_ENTRY_IMPL_HPP__ */

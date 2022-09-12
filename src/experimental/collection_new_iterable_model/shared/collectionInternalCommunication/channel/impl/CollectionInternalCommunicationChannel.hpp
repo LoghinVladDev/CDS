@@ -18,36 +18,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType
                 > :: ~__CollectionInternalCommunicationChannel () noexcept = default;
 
-
-                template <
-                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
-                > auto __CDS_cpplang_VirtualConstexpr __CollectionInternalCommunicationChannel <
-                        __ReceiverType,
-                        __ElementType
-                > :: __cicch_obtainGenericHandler (
-                        __CollectionInternalRequestType requestType
-                ) noexcept -> __GenericHandler {
-
-                    /* Since intended to be used as pure virtual, default implementation yields null handler array */
-                    return nullptr;
-                }
-
-
-                template <
-                        typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
-                > auto __CDS_cpplang_VirtualConstexpr __CollectionInternalCommunicationChannel <
-                        __ReceiverType,
-                        __ElementType
-                > :: __cicch_obtainGenericConstHandler (
-                        __CollectionInternalRequestType requestType
-                ) const noexcept -> __GenericConstHandler {
-
-                    /* Since intended to be used as pure virtual, default implementation yields null handler array */
-                    return nullptr;
-                }
-
             }
         }
     }

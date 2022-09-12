@@ -1,17 +1,16 @@
-//
-// Created by loghin on 6/15/22.
-//
+/*
+ * Created by loghin on 6/15/22.
+ */
 
 #ifndef __CDS_MAP_ENTRY_HPP__
-#define __CDS_MAP_ENTRY_HPP__ // NOLINT(bugprone-reserved-identifier)
+#define __CDS_MAP_ENTRY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-    namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
-
-            template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-            class __MapEntry { // NOLINT(bugprone-reserved-identifier)
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier) */
+            class __MapEntry {                                      /* NOLINT(bugprone-reserved-identifier) */
 
             public:
                 using KeyType   = __KeyType;
@@ -29,14 +28,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 constexpr __MapEntry () noexcept = delete;
 
             public:
-                template <
-                        typename __TKeyType = KeyType,      // NOLINT(bugprone-reserved-identifier)
-                        typename __TValueType = ValueType,  // NOLINT(bugprone-reserved-identifier)
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TKeyType > () &&
-                                cds :: meta :: isCopyConstructible < __TValueType > ()
-                        > = 0
-                > __CDS_Implicit constexpr __MapEntry ( // NOLINT(google-explicit-constructor)
+                __CDS_Implicit constexpr __MapEntry ( /* NOLINT(google-explicit-constructor) */
                         __MapEntry const & entry
                 ) noexcept (
                         noexcept ( KeyType ( entry._key ) ) &&
@@ -44,14 +36,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 );
 
             public:
-                template <
-                        typename __TKeyType = KeyType,      // NOLINT(bugprone-reserved-identifier)
-                        typename __TValueType = ValueType,  // NOLINT(bugprone-reserved-identifier)
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isMoveConstructible < __TKeyType > () &&
-                                cds :: meta :: isMoveConstructible < __TValueType > ()
-                        > = 0
-                > __CDS_Implicit constexpr __MapEntry ( // NOLINT(google-explicit-constructor)
+                __CDS_Implicit constexpr __MapEntry ( /* NOLINT(google-explicit-constructor) */
                         __MapEntry && entry
                 ) noexcept (
                         noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
@@ -59,7 +44,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 );
 
             public:
-                template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */
                 constexpr __MapEntry (
                         __TKeyType      && key,
                         __TValueType    && value
@@ -115,7 +100,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;
 
             public:
-                template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */
                 friend auto operator << (
                         std :: ostream                                & out,
                         __MapEntry < __TKeyType, __TValueType > const & object
@@ -126,4 +111,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_MAP_ENTRY_HPP__
+#endif /* __CDS_MAP_ENTRY_HPP__ */
