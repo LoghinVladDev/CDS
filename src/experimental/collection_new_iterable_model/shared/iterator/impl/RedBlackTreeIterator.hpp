@@ -91,7 +91,7 @@ namespace cds {                         // NOLINT(modernize-concat-nested-namesp
 
             if ( this->_pCurrentNode->_pRight != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
-                while ( this->_pCurrentNode->_pLeft != __endNode < __ElementType > () ) {
+                while ( this->_pCurrentNode->_pLeft != endNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 }
                 return;
@@ -122,7 +122,7 @@ namespace cds {                         // NOLINT(modernize-concat-nested-namesp
 
             if ( this->_pCurrentNode->_pLeft != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
-                while ( this->_pCurrentNode->_pRight != __endNode < __ElementType > () ) {
+                while ( this->_pCurrentNode->_pRight != endNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 }
                 return;
@@ -230,7 +230,7 @@ namespace cds {                         // NOLINT(modernize-concat-nested-namesp
 
             if ( this->_pCurrentNode->_pRight != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
-                while ( this->_pCurrentNode->_pLeft != __endNode < __ElementType > () ) {
+                while ( this->_pCurrentNode->_pLeft != endNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 }
                 return;
@@ -261,7 +261,7 @@ namespace cds {                         // NOLINT(modernize-concat-nested-namesp
 
             if ( this->_pCurrentNode->_pLeft != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
-                while ( this->_pCurrentNode->_pRight != __endNode < __ElementType > () ) {
+                while ( this->_pCurrentNode->_pRight != endNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 }
                 return;
