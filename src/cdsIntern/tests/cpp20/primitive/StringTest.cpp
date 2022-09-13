@@ -18,6 +18,10 @@ using namespace cds;
 #undef max
 #endif
 
+#include <CDS/Integer>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+
 
 auto StringTest::execute() noexcept -> bool {
 
