@@ -12,7 +12,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
                 using __ArrayImplementation =               /* NOLINT(bugprone-reserved-identifier) */
-                        __Array <
+                        __ArrayBase <
                                 __ElementType,
                                 & cds :: meta :: equals < __ElementType >
                         >;
@@ -307,7 +307,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ArrayDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __LocalDelegateForwardIterablePrimitiveClient <
                                 cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __a_Iterator
+                                typename __ArrayImplementation < __ElementType > :: __ab_Iterator
                         >;
 
 
@@ -315,7 +315,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ArrayDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __LocalDelegateForwardConstIterablePrimitiveClient <
                                 cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __a_ConstIterator
+                                typename __ArrayImplementation < __ElementType > :: __ab_ConstIterator
                         >;
 
 
@@ -323,7 +323,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ArrayDelegateBackwardIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __LocalDelegateBackwardIterablePrimitiveClient <
                                 cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __a_ReverseIterator
+                                typename __ArrayImplementation < __ElementType > :: __ab_ReverseIterator
                         >;
 
 
@@ -331,7 +331,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ArrayDelegateBackwardConstIterableClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __LocalDelegateBackwardConstIterablePrimitiveClient <
                                 cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __a_ConstReverseIterator
+                                typename __ArrayImplementation < __ElementType > :: __ab_ConstReverseIterator
                         >;
 
             }

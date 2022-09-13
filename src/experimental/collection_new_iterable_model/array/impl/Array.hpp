@@ -97,7 +97,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size size
         ) noexcept {
 
-            this->__a_resize ( size );
+            this->__ab_resize ( size );
         }
 
 
@@ -112,7 +112,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __ElementType   const & defaultValue
         ) noexcept {
 
-            this->__a_resize (
+            this->__ab_resize (
                     size,
                     defaultValue
             );
@@ -132,7 +132,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         Array < __ElementType > :: ~Array () noexcept {
 
-            this->__a_clear ( true );
+            this->__ab_clear ( true );
         }
 
 
@@ -145,7 +145,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this->__a_copy ( array );
+            this->__ab_copy ( array );
             return * this;
         }
 
@@ -159,7 +159,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this->__a_move ( std :: move ( array ) );
+            this->__ab_move ( std :: move ( array ) );
             return * this;
         }
 
@@ -200,7 +200,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return true;
             }
 
-            return this->__a_equals ( array );
+            return this->__ab_equals ( array );
         }
 
 
@@ -213,7 +213,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return false;
             }
 
-            return ! this->__a_equals ( array );
+            return ! this->__ab_equals ( array );
         }
 
 
@@ -222,7 +222,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size size
         ) noexcept -> void {
 
-            this->__a_reserve ( size );
+            this->__ab_reserve ( size );
         }
 
 
@@ -231,7 +231,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size size
         ) noexcept -> void {
 
-            this->__a_shrink ( size );
+            this->__ab_shrink ( size );
         }
 
 
@@ -245,7 +245,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size size
         ) noexcept -> void {
 
-            this->__a_resize ( size );
+            this->__ab_resize ( size );
         }
 
 
@@ -260,7 +260,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __ElementType   const & defaultValue
         ) noexcept -> void {
 
-            this->__a_resize (
+            this->__ab_resize (
                     size,
                     defaultValue
             );
@@ -270,28 +270,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto Array < __ElementType > :: clear () noexcept -> void {
 
-            this->__a_clear ( false );
+            this->__ab_clear ( false );
         }
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: size () const noexcept -> Size {
 
-            return this->__a_size ();
+            return this->__ab_size ();
         }
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto Array < __ElementType > :: popFront () noexcept -> void {
 
-            this->__a_remove (0);
+            this->__ab_remove (0);
         }
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         auto Array < __ElementType > :: popBack () noexcept -> void {
 
-            this->__a_remove ( this->__a_size () - 1ULL );
+            this->__ab_remove ( this->__ab_size () - 1ULL );
         }
 
 
@@ -302,7 +302,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return * this->__a_get ( 0 );
+            return * this->__ab_get ( 0 );
         }
 
 
@@ -313,7 +313,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return * this->__a_get ( 0 );
+            return * this->__ab_get ( 0 );
         }
 
 
@@ -324,7 +324,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return * this->__a_get ( this->__a_size () - 1ULL );
+            return * this->__ab_get ( this->__ab_size () - 1ULL );
         }
 
 
@@ -335,7 +335,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return * this->__a_get ( this->__a_size () - 1ULL );
+            return * this->__ab_get ( this->__ab_size () - 1ULL );
         }
 
 
@@ -348,7 +348,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( index, 0 );
             }
 
-            return * this->__a_get ( this->circularAdjustedIndex ( index ) );
+            return * this->__ab_get ( this->circularAdjustedIndex ( index ) );
         }
 
 
@@ -361,7 +361,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw OutOfBoundsException ( index, 0 );
             }
 
-            return * this->__a_get ( this->circularAdjustedIndex ( index ) );
+            return * this->__ab_get ( this->circularAdjustedIndex ( index ) );
         }
 
 
@@ -374,7 +374,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return false;
             }
 
-            this->__a_remove ( this->circularAdjustedIndex ( index ) );
+            this->__ab_remove ( this->circularAdjustedIndex ( index ) );
             return true;
         }
 
@@ -382,14 +382,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr auto Array < __ElementType > :: data () const noexcept -> __ElementType const * {
 
-            return this->__a_data();
+            return this->__ab_data();
         }
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto Array < __ElementType > :: data () noexcept -> __ElementType * {
 
-            return this->__a_data();
+            return this->__ab_data();
         }
 
     }

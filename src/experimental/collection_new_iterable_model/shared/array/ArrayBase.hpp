@@ -2,8 +2,8 @@
  * Created by loghin on 7/5/22.
  */
 
-#ifndef __CDS_SHARED_ARRAY_HPP__
-#define __CDS_SHARED_ARRAY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ARRAY_BASE_HPP__
+#define __CDS_SHARED_ARRAY_BASE_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -27,7 +27,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > class __Array {                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > class __ArrayBase {                                                   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -42,35 +42,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @static
                      * @private
                      */
-                    static Size const __a_minCapacity = 32ULL; /* NOLINT(bugprone-reserved-identifier) */
+                    static Size const __ab_minCapacity = 32ULL; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**
                      * @typedef Alias for forward mutable iterator
                      * @public
                      */
-                    using __a_Iterator                      = ForwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ab_Iterator                      = ForwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**
                      * @typedef Alias for forward immutable iterator
                      * @public
                      */
-                    using __a_ConstIterator                 = ForwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ab_ConstIterator                 = ForwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**
                      * @typedef Alias for backward mutable iterator
                      * @public
                      */
-                    using __a_ReverseIterator               = BackwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ab_ReverseIterator               = BackwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**
                      * @typedef Alias for backward immutable iterator
                      * @public
                      */
-                    using __a_ConstReverseIterator          = BackwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
+                    using __ab_ConstReverseIterator          = BackwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     /**
@@ -126,34 +126,34 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
-                    constexpr __Array () noexcept;
+                    constexpr __ArrayBase () noexcept;
 
                 protected:
                     /**
                      * @brief Copy Constructor
-                     * @param [in] array : __Array cref = Constant Reference to an Array to copy the data from
+                     * @param [in] array : __ArrayBase cref = Constant Reference to an Array to copy the data from
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
                      * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
-                    __Array ( /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
-                            __Array const & array
+                    __ArrayBase ( /* NOLINT(bugprone-reserved-identifier,google-explicit-constructor) */
+                            __ArrayBase const & array
                     ) noexcept;
 
                 protected:
                     /**
                      * @brief Move Constructor, constexpr
-                     * @param [in, out] array : __Array mref = Move Reference to an array to release and acquire the data from
+                     * @param [in, out] array : __ArrayBase mref = Move Reference to an array to release and acquire the data from
                      * @exceptsafe
                      *
                      * @test Suite: CTS-00001, Group: All, Test Cases: All
                      * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
-                    constexpr __Array (
-                            __Array && array
+                    constexpr __ArrayBase (
+                            __ArrayBase && array
                     ) noexcept;
 
                 protected:
@@ -166,7 +166,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @protected
                      */
-                    auto __a_clear ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_clear ( /* NOLINT(bugprone-reserved-identifier) */
                             bool destroyBuffer
                     ) noexcept -> void;
 
@@ -179,7 +179,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -190,7 +190,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_remove ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_remove ( /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) noexcept -> void;
 
@@ -204,7 +204,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
@@ -218,7 +218,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_removeConstIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_removeConstIterator ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const & iterator
                     ) noexcept -> bool;
 
@@ -233,7 +233,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType >   const * const * ppIterators,
                             Size                                                        iteratorCount
                     ) noexcept -> Size;
@@ -249,7 +249,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const * const * ppIterators,
                             Size                                                            iteratorCount
                     ) noexcept -> Size;
@@ -264,7 +264,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_get ( /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) noexcept -> ElementType *;
 
@@ -278,7 +278,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_get ( /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) const noexcept -> ElementType const *;
 
@@ -291,7 +291,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard auto __a_newFront () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard auto __ab_newFront () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -302,7 +302,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard auto __a_newBack () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard auto __ab_newBack () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -315,7 +315,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newFrontArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newFrontArray ( /* NOLINT(bugprone-reserved-identifier) */
                             Size                count,
                             __ElementType    ** ppElements
                     ) noexcept -> void;
@@ -331,7 +331,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newBackArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newBackArray ( /* NOLINT(bugprone-reserved-identifier) */
                             Size                count,
                             __ElementType    ** ppElements
                     ) noexcept -> void;
@@ -347,7 +347,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newAddress ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newAddress ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const * pReferenceElement,
                             bool                * pNewElementCreated
                     ) noexcept -> ElementType *;
@@ -362,7 +362,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard auto __a_newAt ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard auto __ab_newAt ( /* NOLINT(bugprone-reserved-identifier) */
                             Index index
                     ) noexcept -> ElementType *;
 
@@ -377,7 +377,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newArrayAt ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newArrayAt ( /* NOLINT(bugprone-reserved-identifier) */
                             Index               index,
                             Size                count,
                             __ElementType    ** ppElements
@@ -393,7 +393,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newBefore ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newBefore ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType > const & iterator
                     ) noexcept -> __ElementType *;
 
@@ -407,7 +407,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newBeforeConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newBeforeConst ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const & iterator
                     ) noexcept -> __ElementType *;
 
@@ -421,7 +421,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newAfter ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newAfter ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType > const & iterator
                     ) noexcept -> __ElementType *;
 
@@ -435,7 +435,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newAfterConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newAfterConst ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const & iterator
                     ) noexcept -> __ElementType *;
 
@@ -451,7 +451,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newBeforeArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newBeforeArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType >   const & iterator,
                             Size                                                count,
                             __ElementType                                    ** ppElements
@@ -469,7 +469,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const & iterator,
                             Size                                                    count,
                             __ElementType                                        ** ppElements
@@ -487,7 +487,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newAfterArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newAfterArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType >   const & iterator,
                             Size                                                count,
                             __ElementType                                    ** ppElements
@@ -505,7 +505,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractAddressIterator < __ElementType const > const & iterator,
                             Size                                                    count,
                             __ElementType                                        ** ppElements
@@ -520,95 +520,95 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: MCTS-00001, Group: All, Test Cases: All
                      * @private
                      */
-                    auto __a_init () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_init () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire a mutable forward iterator referencing the first element
                      * @excetpsafe
-                     * @return __a_Iterator = Address Iterator to the first element
+                     * @return __ab_Iterator = Address Iterator to the first element
                      *
                      * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_begin () noexcept -> __a_Iterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_begin () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire a mutable forward iterator referencing the space after the last element
                      * @excetpsafe
-                     * @return __a_Iterator = Address Iterator to the space after the last element
+                     * @return __ab_Iterator = Address Iterator to the space after the last element
                      *
                      * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_end () noexcept -> __a_Iterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_end () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire an immutable forward iterator referencing the first element
                      * @excetpsafe
-                     * @return __a_ConstIterator = Address Const Iterator to the first element
+                     * @return __ab_ConstIterator = Address Const Iterator to the first element
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_cbegin () const noexcept -> __a_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_cbegin () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire an immutable forward iterator referencing the space after the last element
                      * @excetpsafe
-                     * @return __a_ConstIterator = Address Const Iterator to the space after the last element
+                     * @return __ab_ConstIterator = Address Const Iterator to the space after the last element
                      *
                      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_cend () const noexcept -> __a_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_cend () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire a mutable backward iterator referencing the last element
                      * @excetpsafe
-                     * @return __a_ReverseIterator = Address Iterator to the last element
+                     * @return __ab_ReverseIterator = Address Iterator to the last element
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_rbegin () noexcept -> __a_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rbegin () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire a mutable backward iterator referencing the space before the first element
                      * @excetpsafe
-                     * @return __a_ReverseIterator = Address Iterator to the space before the first element
+                     * @return __ab_ReverseIterator = Address Iterator to the space before the first element
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_rend () noexcept -> __a_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rend () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire an immutable backward iterator referencing the last element
                      * @excetpsafe
-                     * @return __a_ConstReverseIterator = Address Const Iterator to the last element
+                     * @return __ab_ConstReverseIterator = Address Const Iterator to the last element
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_crbegin () const noexcept -> __a_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_crbegin () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
                      * @brief Function used to acquire an immutable backward iterator referencing the space before the first element
                      * @excetpsafe
-                     * @return __a_ConstReverseIterator = Address Const Iterator to the space before the first element
+                     * @return __ab_ConstReverseIterator = Address Const Iterator to the space before the first element
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_crend () const noexcept -> __a_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_crend () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -619,7 +619,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard constexpr auto __a_data () const noexcept -> __ElementType const *; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __ab_data () const noexcept -> __ElementType const *; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -630,7 +630,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_data () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_data () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     /**
@@ -647,7 +647,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isDefaultConstructible < __TElementType > ()
                             > = 0
-                    > auto __a_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
                             Size size
                     ) noexcept -> void;
 
@@ -667,7 +667,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __a_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
                             Size                    size,
                             __ElementType   const & defaultValue
                     ) noexcept -> void;
@@ -681,7 +681,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_shrink (                                 /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_shrink (                                 /* NOLINT(bugprone-reserved-identifier) */
                             Size size
                     ) noexcept -> void;
 
@@ -694,7 +694,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_reserve (                                /* NOLINT(bugprone-reserved-identifier) */
+                    auto __ab_reserve (                                /* NOLINT(bugprone-reserved-identifier) */
                             Size size
                     ) noexcept -> void;
 
@@ -702,7 +702,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /**
                      * @brief Function used to clear the current contents and copy the data from a received array.
                      * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is copy constructible
-                     * @param [in] array : __Array cref = Constant Reference to an array to copy the data from
+                     * @param [in] array : __ArrayBase cref = Constant Reference to an array to copy the data from
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -713,28 +713,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __a_copy (                                   /* NOLINT(bugprone-reserved-identifier) */
-                            __Array const & array
+                    > auto __ab_copy (                                   /* NOLINT(bugprone-reserved-identifier) */
+                            __ArrayBase const & array
                     ) noexcept -> void;
 
                 protected:
                     /**
                      * @brief Function used to clear the current contents and move the data from a received array.
-                     * @param [in, out] array : __Array mref = Move Reference to an array to acquire and release the data from
+                     * @param [in, out] array : __ArrayBase mref = Move Reference to an array to acquire and release the data from
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __a_move ( /* NOLINT(bugprone-reserved-identifier) */
-                            __Array && array
+                    auto __ab_move ( /* NOLINT(bugprone-reserved-identifier) */
+                            __ArrayBase && array
                     ) noexcept -> void;
 
                 private:
                     /**
                      * @brief Function used to copy the data from a received array. It will NOT clear the array prior to copying
                      * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is copy constructible
-                     * @param [in] array : __Array cref = Constant Reference to an array to copy the data from
+                     * @param [in] array : __ArrayBase cref = Constant Reference to an array to copy the data from
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -745,35 +745,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __a_copyCleared (                            /* NOLINT(bugprone-reserved-identifier) */
-                            __Array const & array
+                    > auto __ab_copyCleared (                            /* NOLINT(bugprone-reserved-identifier) */
+                            __ArrayBase const & array
                     ) noexcept -> void;
 
                 private:
                     /**
                      * @brief Function used to move the data from a received array. It will NOT clear the array prior to copying
-                     * @param [in, out] array : __Array mref = Move Reference to an array to acquire and release the data from
+                     * @param [in, out] array : __ArrayBase mref = Move Reference to an array to acquire and release the data from
                      * @exceptsafe
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @private
                      */
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto __a_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
-                            __Array && array
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
+                            __ArrayBase && array
                     ) noexcept -> void;
 
                 protected:
                     /**
                      * @brief Function used to compare the current array to a given array
-                     * @param [in] array : __Array cref = Constant Reference to an array to compare the current one to
+                     * @param [in] array : __ArrayBase cref = Constant Reference to an array to compare the current one to
                      * @exceptsafe
                      * @return bool = true if arrays contain equal content, false otherwise
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __a_equals (  /* NOLINT(bugprone-reserved-identifier) */
-                            __Array const & array
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ab_equals (  /* NOLINT(bugprone-reserved-identifier) */
+                            __ArrayBase const & array
                     ) const noexcept -> bool;
                 };
 
@@ -783,13 +783,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType > __equals /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         typename __ServerType                                           /* NOLINT(bugprone-reserved-identifier) */
-                > class __Array <
+                > class __ArrayBase <
                         __ElementType,
                         __equals
                 > :: __Dispatcher :
                         public __ListServerDispatcher <
                                 __ServerType,
-                                __Array < __ElementType, __equals >,
+                                __ArrayBase < __ElementType, __equals >,
                                 __ElementType,
                                 AbstractAddressIterator < __ElementType >,
                                 AbstractAddressIterator < __ElementType const >,
@@ -797,31 +797,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 ForwardAddressIterator < __ElementType const >,
                                 BackwardAddressIterator < __ElementType >,
                                 BackwardAddressIterator < __ElementType const >,
-                                & __Array < __ElementType, __equals > :: __a_begin,
-                                & __Array < __ElementType, __equals > :: __a_end,
-                                & __Array < __ElementType, __equals > :: __a_cbegin,
-                                & __Array < __ElementType, __equals > :: __a_cend,
-                                & __Array < __ElementType, __equals > :: __a_rbegin,
-                                & __Array < __ElementType, __equals > :: __a_rend,
-                                & __Array < __ElementType, __equals > :: __a_crbegin,
-                                & __Array < __ElementType, __equals > :: __a_crend,
-                                & __Array < __ElementType, __equals > :: __a_newAddress,
-                                & __Array < __ElementType, __equals > :: __a_newFront,
-                                & __Array < __ElementType, __equals > :: __a_newBack,
-                                & __Array < __ElementType, __equals > :: __a_newFrontArray,
-                                & __Array < __ElementType, __equals > :: __a_newBackArray,
-                                & __Array < __ElementType, __equals > :: __a_newBefore,
-                                & __Array < __ElementType, __equals > :: __a_newBeforeConst,
-                                & __Array < __ElementType, __equals > :: __a_newAfter,
-                                & __Array < __ElementType, __equals > :: __a_newAfterConst,
-                                & __Array < __ElementType, __equals > :: __a_newBeforeArray,
-                                & __Array < __ElementType, __equals > :: __a_newBeforeArrayConst,
-                                & __Array < __ElementType, __equals > :: __a_newAfterArray,
-                                & __Array < __ElementType, __equals > :: __a_newAfterArrayConst,
-                                & __Array < __ElementType, __equals > :: __a_removeIterator,
-                                & __Array < __ElementType, __equals > :: __a_removeConstIterator,
-                                & __Array < __ElementType, __equals > :: __a_removeIteratorArray,
-                                & __Array < __ElementType, __equals > :: __a_removeConstIteratorArray
+                                & __ArrayBase < __ElementType, __equals > :: __ab_begin,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_end,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_cbegin,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_cend,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_rbegin,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_rend,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_crbegin,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_crend,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newAddress,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newFront,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBack,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newFrontArray,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBackArray,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBefore,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBeforeConst,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newAfter,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newAfterConst,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBeforeArray,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newBeforeArrayConst,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newAfterArray,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_newAfterArrayConst,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_removeIterator,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_removeConstIterator,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_removeIteratorArray,
+                                & __ArrayBase < __ElementType, __equals > :: __ab_removeConstIteratorArray
                         > {};
 
             }
@@ -829,4 +829,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_SHARED_ARRAY_HPP__ */
+#endif /* __CDS_SHARED_ARRAY_BASE_HPP__ */

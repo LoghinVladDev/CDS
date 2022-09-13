@@ -13,7 +13,7 @@
 
 #include "shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
 
-#include "shared/array/Array.hpp"
+#include "shared/array/ArrayBase.hpp"
 
 #include "shared/delegateIterator/AbstractDelegateIterator.hpp"
 #include "shared/delegateIterator/DelegateIterator.hpp"
@@ -552,7 +552,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "array/impl/Array.hpp"
 
-#include "shared/array/impl/Array.hpp"
+#include "shared/array/impl/ArrayBase.hpp"
 
 #include "shared/iterator/impl/AddressIterator.hpp"
 

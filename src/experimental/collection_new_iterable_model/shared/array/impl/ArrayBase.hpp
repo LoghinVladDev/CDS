@@ -2,8 +2,8 @@
  * Created by loghin on 7/5/22.
  */
 
-#ifndef __CDS_SHARED_ARRAY_IMPL_HPP__
-#define __CDS_SHARED_ARRAY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ARRAY_BASE_IMPL_HPP__
+#define __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -13,44 +13,44 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > Size const __Array <
+                > Size const __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_minCapacity;
+                > :: __ab_minCapacity;
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr __Array <
+                > constexpr __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __Array () noexcept = default;
+                > :: __ArrayBase () noexcept = default;
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline __Array <
+                > __CDS_OptimalInline __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __Array (
-                        __Array const & array
+                > :: __ArrayBase (
+                        __ArrayBase const & array
                 ) noexcept {
 
                     /* use internal function to copy array data, since new array is cleared */
-                    this->__a_copy ( array );
+                    this->__ab_copy ( array );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr __Array <
+                > constexpr __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __Array (
-                        __Array && array
+                > :: __ArrayBase (
+                        __ArrayBase && array
                 ) noexcept :
                         _pData ( cds :: exchange ( array._pData, nullptr ) ) {
 
@@ -61,10 +61,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_clear (
+                > :: __ab_clear (
                         bool destroyBuffer
                 ) noexcept -> void {
 
@@ -94,10 +94,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_size () const noexcept -> Size {
+                > :: __ab_size () const noexcept -> Size {
 
                     /* if data empty, size is 0. Otherwise, distance from back to front */
                     return
@@ -110,15 +110,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_remove (
+                > :: __ab_remove (
                         Index index
                 ) noexcept -> void {
 
                     /* acquire size for later use */
-                    auto const size = this->__a_size();
+                    auto const size = this->__ab_size();
 
                     /* if empty, do nothing */
                     if ( size == 0ULL ) {
@@ -141,7 +141,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     this->_pData->_pFront [ index ].~__ElementType ();
                     auto shiftLeftSide =
                             static_cast < Size > ( index ) <
-                            this->__a_size() / 2ULL;
+                            this->__ab_size() / 2ULL;
 
                     /* find information regarding where to move, from where to move and how many elements */
                     ElementType * pDestination  = nullptr;
@@ -174,10 +174,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_get (
+                > :: __ab_get (
                         Index index
                 ) noexcept -> ElementType * {
 
@@ -189,10 +189,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_get (
+                > :: __ab_get (
                         Index index
                 ) const noexcept -> ElementType const * {
 
@@ -204,39 +204,39 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_init () noexcept -> void {
+                > :: __ab_init () noexcept -> void {
 
                     /* acquire new memory for array container and clear it */
                     this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
                     (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
 
                     /* set future capacities */
-                    this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
-                    this->_pData->_backNextCapacity     = __Array :: __a_minCapacity;
+                    this->_pData->_frontNextCapacity    = __ArrayBase :: __ab_minCapacity;
+                    this->_pData->_backNextCapacity     = __ArrayBase :: __ab_minCapacity;
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newFront () noexcept -> ElementType * {
+                > :: __ab_newFront () noexcept -> ElementType * {
 
                     /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     }
 
                     /* if no space available in front, enlarge front */
                     if ( this->_pData->_pFront == this->_pData->_pBuffer ) {
 
                         /* acquire next capacity */
-                        this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, __ArrayBase :: __ab_minCapacity );
 
                         /* acquire new buffer */
                         auto pNewBuffer                     = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
@@ -244,7 +244,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         );
 
                         /* store current size and compute new front in new buffer */
-                        auto const size                     = this->__a_size();
+                        auto const size                     = this->__ab_size();
                         auto const pNewFront                = pNewBuffer + this->_pData->_frontNextCapacity - this->_pData->_frontCapacity;
 
                         /* copy data from old buffer to new */
@@ -274,10 +274,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAddress (
+                > :: __ab_newAddress (
                         __ElementType const * pReferenceElement,
                         bool                * pNewElementCreated
                 ) noexcept -> ElementType * {
@@ -287,28 +287,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* element always created. return address with newBack */
                     * pNewElementCreated = true;
-                    return this->__a_newBack();
+                    return this->__ab_newBack();
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBack () noexcept -> ElementType * {
+                > :: __ab_newBack () noexcept -> ElementType * {
 
                     /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init ();
+                        this->__ab_init ();
                     }
 
                     /* if back is at end of buffer => no space */
                     if ( this->_pData->_pBack == this->_pData->_pBuffer + this->_pData->_frontCapacity + this->_pData->_backCapacity ) {
 
                         /* compute next capacity */
-                        this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, __ArrayBase :: __ab_minCapacity );
 
                         /* reallocate buffer to greater size */
                         auto const pNewBuffer           = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
@@ -332,17 +332,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newFrontArray (
+                > :: __ab_newFrontArray (
                         Size                count,
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
                     /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     }
 
                     /* if no space available in front, enlarge front */
@@ -357,7 +357,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         );
 
                         /* store current size and compute new front in new buffer */
-                        auto const size                     = this->__a_size();
+                        auto const size                     = this->__ab_size();
                         auto const pNewFront                = pNewBuffer + ( this->_pData->_frontNextCapacity - this->_pData->_frontCapacity ) + ( this->_pData->_pFront - this->_pData->_pBuffer );
 
                         /* copy data from old buffer to new */
@@ -389,17 +389,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBackArray (
+                > :: __ab_newBackArray (
                         Size                count,
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
                     /* if empty, initialize */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     }
 
                     /* if back + count is after end of buffer => no space */
@@ -432,10 +432,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBefore (
+                > :: __ab_newBefore (
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
@@ -449,26 +449,26 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* if address is of the first element, return new front */
                     if ( pElement == this->_pData->_pFront ) {
-                        return this->__a_newFront ();
+                        return this->__ab_newFront ();
                     }
 
                     /* if address is after the last element, return new back */
                     if ( pElement == this->_pData->_pBack ) {
-                        return this->__a_newBack ();
+                        return this->__ab_newBack ();
                     }
 
                     /* otherwise, create a new element at the index of the address in the array */
-                    return this->__a_newAt ( pElement - this->_pData->_pFront );
+                    return this->__ab_newAt ( pElement - this->_pData->_pFront );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBeforeConst (
+                > :: __ab_newBeforeConst (
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
@@ -482,26 +482,26 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* if address is of the first element, return new front */
                     if ( pElement == this->_pData->_pFront ) {
-                        return this->__a_newFront ();
+                        return this->__ab_newFront ();
                     }
 
                     /* if address is after the last element, return new back */
                     if ( pElement == this->_pData->_pBack ) {
-                        return this->__a_newBack ();
+                        return this->__ab_newBack ();
                     }
 
                     /* otherwise, create a new element at the index of the address in the array */
-                    return this->__a_newAt ( pElement - this->_pData->_pFront );
+                    return this->__ab_newAt ( pElement - this->_pData->_pFront );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAfter (
+                > :: __ab_newAfter (
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
@@ -515,21 +515,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* if address is of the last element, return new back */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
-                        return this->__a_newBack ();
+                        return this->__ab_newBack ();
                     }
 
                     /* otherwise, create a new element at the index of the address in the array */
-                    return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
+                    return this->__ab_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAfterConst (
+                > :: __ab_newAfterConst (
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
@@ -543,21 +543,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* if address is of the last element, return new back */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
-                        return this->__a_newBack ();
+                        return this->__ab_newBack ();
                     }
 
                     /* otherwise, create a new element at the index of the address in the array */
-                    return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
+                    return this->__ab_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBeforeArray (
+                > :: __ab_newBeforeArray (
                         AbstractAddressIterator < __ElementType >   const & iterator,
                         Size                                                count,
                         __ElementType                                    ** ppElements
@@ -574,7 +574,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( pElement == this->_pData->_pFront ) {
 
                         /* if address is of the first element, return new front array */
-                        this->__a_newFrontArray (
+                        this->__ab_newFrontArray (
                                 count,
                                 ppElements
                         );
@@ -582,7 +582,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else if ( pElement == this->_pData->_pBack ) {
 
                         /* if address is after the last element, return new back */
-                        this->__a_newBackArray (
+                        this->__ab_newBackArray (
                                 count,
                                 ppElements
                         );
@@ -590,7 +590,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else {
 
                         /* otherwise, create a new element array of elements at the index of the address in the array */
-                        this->__a_newArrayAt (
+                        this->__ab_newArrayAt (
                                 pElement - this->_pData->_pFront,
                                 count,
                                 ppElements
@@ -605,10 +605,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newBeforeArrayConst (
+                > :: __ab_newBeforeArrayConst (
                         AbstractAddressIterator < __ElementType const > const & iterator,
                         Size                                                    count,
                         __ElementType                                        ** ppElements
@@ -625,7 +625,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( pElement == this->_pData->_pFront ) {
 
                         /* if address is of the first element, return new front array */
-                        this->__a_newFrontArray (
+                        this->__ab_newFrontArray (
                                 count,
                                 ppElements
                         );
@@ -633,7 +633,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else if ( pElement == this->_pData->_pBack ) {
 
                         /* if address is after the last element, return new back */
-                        this->__a_newBackArray (
+                        this->__ab_newBackArray (
                                 count,
                                 ppElements
                         );
@@ -641,7 +641,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else {
 
                         /* otherwise, create a new element array of elements at the index of the address in the array */
-                        this->__a_newArrayAt (
+                        this->__ab_newArrayAt (
                                 pElement - this->_pData->_pFront,
                                 count,
                                 ppElements
@@ -655,10 +655,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAfterArray (
+                > :: __ab_newAfterArray (
                         AbstractAddressIterator < __ElementType >   const & iterator,
                         Size                                                count,
                         __ElementType                                    ** ppElements
@@ -675,7 +675,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
 
                         /* if address is of the last element, return new back array */
-                        this->__a_newBackArray (
+                        this->__ab_newBackArray (
                                 count,
                                 ppElements
                         );
@@ -683,7 +683,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else {
 
                         /* otherwise, create a new element array of elements at the index of the address in the array */
-                        this->__a_newArrayAt (
+                        this->__ab_newArrayAt (
                                 pElement - this->_pData->_pFront + 1ULL,
                                 count,
                                 ppElements
@@ -697,10 +697,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAfterArrayConst (
+                > :: __ab_newAfterArrayConst (
                         AbstractAddressIterator < __ElementType const > const & iterator,
                         Size                                                    count,
                         __ElementType                                        ** ppElements
@@ -717,7 +717,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( pElement + 1ULL == this->_pData->_pBack ) {
 
                         /* if address is of the last element, return new back array */
-                        this->__a_newBackArray (
+                        this->__ab_newBackArray (
                                 count,
                                 ppElements
                         );
@@ -725,7 +725,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     } else {
 
                         /* otherwise, create a new element array of elements at the index of the address in the array */
-                        this->__a_newArrayAt (
+                        this->__ab_newArrayAt (
                                 pElement - this->_pData->_pFront + 1ULL,
                                 count,
                                 ppElements
@@ -740,10 +740,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newAt (
+                > :: __ab_newAt (
                         Index index
                 ) noexcept -> __ElementType * {
 
@@ -754,7 +754,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* needed to decide : the shift direction of current elements ( less move operations ), current capacity, current size */
                     auto const fullCapacity     = this->_pData->_frontCapacity + this->_pData->_backCapacity;
-                    auto const size             = this->__a_size();
+                    auto const size             = this->__ab_size();
 
                     /* decision to shift is always right, based on lower argument */
                     auto const shouldShiftLeft  = static_cast < Size > ( index ) < size;
@@ -823,10 +823,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_newArrayAt (
+                > :: __ab_newArrayAt (
                         Index index,
                         Size count,
                         __ElementType ** ppElements
@@ -839,7 +839,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* needed to decide : the shift direction of current elements ( less move operations ), current capacity, current size */
                     auto const fullCapacity     = this->_pData->_frontCapacity + this->_pData->_backCapacity;
-                    auto const size             = this->__a_size();
+                    auto const size             = this->__ab_size();
 
                     /* decision to shift is always right, based on lower argument */
                     auto const shouldShiftLeft  = static_cast < Size > ( index ) < size;
@@ -959,13 +959,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_begin () noexcept -> __a_Iterator {
+                > :: __ab_begin () noexcept -> __ab_Iterator {
 
                     /* forward begin iterator is at front, if applicable. nullptr otherwise */
-                    return __a_Iterator (
+                    return __ab_Iterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pFront
@@ -976,13 +976,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_end () noexcept -> __a_Iterator {
+                > :: __ab_end () noexcept -> __ab_Iterator {
 
                     /* forward end iterator is after back, if applicable. nullptr otherwise */
-                    return __a_Iterator (
+                    return __ab_Iterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pBack
@@ -993,13 +993,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_cbegin () const noexcept -> __a_ConstIterator {
+                > :: __ab_cbegin () const noexcept -> __ab_ConstIterator {
 
                     /* forward begin iterator is at front, if applicable. nullptr otherwise */
-                    return __a_ConstIterator (
+                    return __ab_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pFront
@@ -1010,13 +1010,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_cend () const noexcept -> __a_ConstIterator {
+                > :: __ab_cend () const noexcept -> __ab_ConstIterator {
 
                     /* forward end iterator is after back, if applicable. nullptr otherwise */
-                    return __a_ConstIterator (
+                    return __ab_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pBack
@@ -1027,13 +1027,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_rbegin () noexcept -> __a_ReverseIterator {
+                > :: __ab_rbegin () noexcept -> __ab_ReverseIterator {
 
                     /* backward begin iterator is at back, if applicable. nullptr otherwise */
-                    return __a_ReverseIterator (
+                    return __ab_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pBack - 1ULL
@@ -1044,13 +1044,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_rend () noexcept -> __a_ReverseIterator {
+                > :: __ab_rend () noexcept -> __ab_ReverseIterator {
 
                     /* backward end iterator is before front, if applicable. nullptr otherwise */
-                    return __a_ReverseIterator (
+                    return __ab_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pFront - 1ULL
@@ -1061,13 +1061,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_crbegin () const noexcept -> __a_ConstReverseIterator {
+                > :: __ab_crbegin () const noexcept -> __ab_ConstReverseIterator {
 
                     /* backward begin iterator is at back, if applicable. nullptr otherwise */
-                    return __a_ConstReverseIterator (
+                    return __ab_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pBack - 1ULL
@@ -1078,13 +1078,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_crend () const noexcept -> __a_ConstReverseIterator {
+                > :: __ab_crend () const noexcept -> __ab_ConstReverseIterator {
 
                     /* backward end iterator is before front, if applicable. nullptr otherwise */
-                    return __a_ConstReverseIterator (
+                    return __ab_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pFront - 1ULL
@@ -1095,10 +1095,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_removeIterator (
+                > :: __ab_removeIterator (
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
@@ -1112,7 +1112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* remove at index, acquired from element address - front address */
-                    this->__a_remove ( static_cast < Index > ( pElement - this->_pData->_pFront ) );
+                    this->__ab_remove ( static_cast < Index > ( pElement - this->_pData->_pFront ) );
                     /* successful at this point */
                     return true;
                 }
@@ -1121,10 +1121,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_removeConstIterator (
+                > :: __ab_removeConstIterator (
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> bool {
 
@@ -1138,7 +1138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* remove at index, acquired from element address - front address */
-                    this->__a_remove ( static_cast < Index > ( pElement - this->_pData->_pFront ) );
+                    this->__ab_remove ( static_cast < Index > ( pElement - this->_pData->_pFront ) );
                     /* successful at this point */
                     return true;
                 }
@@ -1147,10 +1147,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_removeIteratorArray (
+                > :: __ab_removeIteratorArray (
                         AbstractAddressIterator < __ElementType >   const * const * ppIterators,
                         Size                                                        iteratorCount
                 ) noexcept -> Size {
@@ -1162,17 +1162,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * */
 
                     /* first test scenario 1, compute required size */
-                    auto const  currentSize     = this->__a_size();
+                    auto const  currentSize     = this->__ab_size();
                     auto const  requiredSize    = currentSize - iteratorCount;
                     Size        iteratorIndex   = 0ULL;
 
                     /* if scenario 1 applicable */
-                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __Array :: __a_minCapacity ) ) {
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __ArrayBase :: __ab_minCapacity ) ) {
 
                         /* start with a buffer with no front capacity, only back, based on max ( min size, required )  */
                         this->_pData->_frontCapacity        = 0ULL;
-                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, requiredSize );
-                        this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                        this->_pData->_backCapacity         = cds :: maxOf ( __ArrayBase :: __ab_minCapacity, requiredSize );
+                        this->_pData->_frontNextCapacity    = __ArrayBase :: __ab_minCapacity;
                         this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
 
                         /* allocate a new smaller buffer */
@@ -1308,10 +1308,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_removeConstIteratorArray (
+                > :: __ab_removeConstIteratorArray (
                         AbstractAddressIterator < __ElementType const > const * const * ppIterators,
                         Size                                                            iteratorCount
                 ) noexcept -> Size {
@@ -1323,17 +1323,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * */
 
                     /* first test scenario 1, compute required size */
-                    auto const  currentSize     = this->__a_size();
+                    auto const  currentSize     = this->__ab_size();
                     auto const  requiredSize    = currentSize - iteratorCount;
                     Size        iteratorIndex   = 0ULL;
 
                     /* if scenario 1 applicable */
-                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __Array :: __a_minCapacity ) ) {
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity > cds :: maxOf ( requiredSize * 2ULL, __ArrayBase :: __ab_minCapacity ) ) {
 
                         /* start with a buffer with no front capacity, only back, based on max ( min size, required )  */
                         this->_pData->_frontCapacity        = 0ULL;
-                        this->_pData->_backCapacity         = cds :: maxOf ( __Array :: __a_minCapacity, requiredSize );
-                        this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                        this->_pData->_backCapacity         = cds :: maxOf ( __ArrayBase :: __ab_minCapacity, requiredSize );
+                        this->_pData->_frontNextCapacity    = __ArrayBase :: __ab_minCapacity;
                         this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
 
                         /* allocate a new smaller buffer */
@@ -1469,10 +1469,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __Array <
+                > constexpr auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_data () const noexcept -> __ElementType const * {
+                > :: __ab_data () const noexcept -> __ElementType const * {
 
                     /* when applicable, return the address to the front of the buffer. Otherwise, nullptr as there is no data */
                     return
@@ -1485,10 +1485,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_data () noexcept -> __ElementType * {
+                > :: __ab_data () noexcept -> __ElementType * {
 
                     /* when applicable, return the address to the front of the buffer. Otherwise, nullptr as there is no data */
                     return
@@ -1506,20 +1506,20 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isDefaultConstructible < __TElementType > ()
                         >
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_resize (
+                > :: __ab_resize (
                         Size size
                 ) noexcept -> void {
 
                     /* if no data exists, initialize allocation data */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     }
 
                     /* acquire current size */
-                    auto const currentSize = this->__a_size();
+                    auto const currentSize = this->__ab_size();
 
                     /* clear elements found after the new end, if applicable ( new size < actual size ) */
                     for ( Size index = size; index < currentSize; ++ index ) {
@@ -1564,21 +1564,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_resize (
+                > :: __ab_resize (
                         Size                    size,
                         __ElementType   const & defaultValue
                 ) noexcept -> void {
 
                     /* if no data exists, initialize allocation data */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     }
 
                     /* acquire current size */
-                    auto const currentSize = this->__a_size();
+                    auto const currentSize = this->__ab_size();
 
                     /* clear elements found after the new end, if applicable ( new size < actual size ) */
                     for ( Size index = size; index < currentSize; ++ index ) {
@@ -1618,10 +1618,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_shrink (
+                > :: __ab_shrink (
                         Size size
                 ) noexcept -> void {
 
@@ -1645,17 +1645,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_reserve (
+                > :: __ab_reserve (
                         Size size
                 ) noexcept -> void {
 
                     if ( this->_pData == nullptr ) {
 
                         /* if nothing exists already, initialize */
-                        this->__a_init();
+                        this->__ab_init();
                     } else if ( this->_pData->_backCapacity > size ) {
 
                         /* if buffer can already contain required element count and was previously initialized ( buffer exists ), do nothing */
@@ -1685,22 +1685,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_copy (
-                        __Array const & array
+                > :: __ab_copy (
+                        __ArrayBase const & array
                 ) noexcept -> void {
 
                     /* if no memory data exists, initialize. Otherwise, clear only buffer data */
                     if ( this->_pData == nullptr ) {
-                        this->__a_init();
+                        this->__ab_init();
                     } else {
-                        this->__a_clear(false);
+                        this->__ab_clear(false);
                     }
 
                     /* use copy without clear requirement, since cleanup was already done above */
-                    this->__a_copyCleared ( array );
+                    this->__ab_copyCleared ( array );
                 }
 
 
@@ -1712,21 +1712,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > auto __Array <
+                > auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_copyCleared (
-                        __Array const & array
+                > :: __ab_copyCleared (
+                        __ArrayBase const & array
                 ) noexcept -> void {
 
                     /* acquire given array size */
-                    auto const requiredSize = array.__a_size();
+                    auto const requiredSize = array.__ab_size();
 
                     /* if elements do not fit */
                     if ( this->_pData->_frontCapacity + this->_pData->_backCapacity < requiredSize ) {
 
                         /* reallocate, as front space will not be created in copy */
-                        this->_pData->_backCapacity = cds :: maxOf ( requiredSize, __Array :: __a_minCapacity );
+                        this->_pData->_backCapacity = cds :: maxOf ( requiredSize, __ArrayBase :: __ab_minCapacity );
                         this->_pData->_pBuffer      = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
                                 this->_pData->_backCapacity
@@ -1740,7 +1740,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /* update memory parameters */
                     this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
                     this->_pData->_frontCapacity        = 0ULL;
-                    this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                    this->_pData->_frontNextCapacity    = __ArrayBase :: __ab_minCapacity;
                     this->_pData->_pFront               = this->_pData->_pBuffer;
                     this->_pData->_pBack                = this->_pData->_pBuffer + requiredSize;
 
@@ -1754,29 +1754,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_OptimalInline auto __Array <
+                > __CDS_OptimalInline auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_move (
-                        __Array && array
+                > :: __ab_move (
+                        __ArrayBase && array
                 ) noexcept -> void {
 
                     /* clear whole memory contents, including memory data */
-                    this->__a_clear ( true );
+                    this->__ab_clear ( true );
 
                     /* use move cleared */
-                    this->__a_moveCleared ( std :: move ( array ) );
+                    this->__ab_moveCleared ( std :: move ( array ) );
                 }
 
 
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_moveCleared (
-                        __Array && array
+                > :: __ab_moveCleared (
+                        __ArrayBase && array
                 ) noexcept -> void {
 
                     /* acquire memory data of given array. */
@@ -1787,11 +1787,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
                         utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __Array <
+                > __CDS_cpplang_ConstexprConditioned auto __ArrayBase <
                         __ElementType,
                         __equals
-                > :: __a_equals (
-                        __Array const & array
+                > :: __ab_equals (
+                        __ArrayBase const & array
                 ) const noexcept -> bool {
 
                     /* self comparison, memory data can be used directly to check the case of null arrays */
@@ -1804,8 +1804,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return false;
                     }
 
-                    auto const thisSize     = this->__a_size();
-                    auto const otherSize    = array.__a_size();
+                    auto const thisSize     = this->__ab_size();
+                    auto const otherSize    = array.__ab_size();
 
                     /* different sizes => not equal */
                     if ( thisSize != otherSize ) {
@@ -1838,4 +1838,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_SHARED_ARRAY_IMPL_HPP__ */
+#endif /* __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ */
