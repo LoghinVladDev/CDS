@@ -20,6 +20,9 @@
 
 #include "shared/collectionInternalCommunication/server/SetServerDispatcher.hpp"
 
+#include "shared/delegateIterator/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/DelegateIterator.hpp"
+
 #include "shared/hashTable/HashTable.hpp"
 
 #include "shared/collectionInternalCommunication/server/SetServer.hpp"
@@ -81,6 +84,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         private:    friend RandomInsertionClient;
         private:    friend IteratorRemoveClient;
         private:    friend DelegateForwardConstIterableClient;
+        private:    friend FindUniqueClient;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier) */
@@ -322,6 +326,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
+
+#include "shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "hashSet/impl/HashSet.hpp"
 #include "hashSet/impl/CTAD.hpp"

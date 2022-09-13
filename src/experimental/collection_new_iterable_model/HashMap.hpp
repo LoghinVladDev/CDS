@@ -21,6 +21,9 @@
 
 #include "shared/collectionInternalCommunication/server/MapServerDispatcher.hpp"
 
+#include "shared/delegateIterator/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/DelegateIterator.hpp"
+
 #include "shared/hashTable/HashTable.hpp"
 
 #include "shared/collectionInternalCommunication/server/SetServer.hpp"
@@ -429,6 +432,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/iterator/impl/HashTableIterator.hpp"
 #include "shared/iterator/impl/IteratorGenericDecorator.hpp"
+
+#include "shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "shared/hashTable/impl/HashTable.hpp"
 

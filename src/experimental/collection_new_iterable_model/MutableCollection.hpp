@@ -157,7 +157,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             /**
              * @brief Move Constructor
-             * @param [in] collection : MutableCollection mref = Move Reference to a mutable collection to copy data from
+             * @param [in] collection : MutableCollection mref = Move Reference to a mutable collection to acquire and release the data from
              * @exceptsafe
              * @test Suite: MCTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
              * @protected

@@ -107,6 +107,7 @@ template <
 > auto mutableCollectionTestGroupDelegateForwardIterableClientImports (
         experimental :: MutableCollection < __MemberType > & collection,
         Test                  *     pTestLib,
+        bool                        mutabilityTestExecute,
         __MemberType    const &     mutabilityTestValue,
         __MemberType    const &     mutabilityTestValue2,
         __OrderedValues const & ... orderedValues
@@ -140,30 +141,31 @@ template <
         pTestLib->logOK ( "'MCTC-00053-IT-begin_end-CPP14' OK" );
     }
 
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityRange-CPP14 : MCTC-00058-IT-mutabilityRange-CPP14 */
-    for ( auto & e : collection ) {
-        e = mutabilityTestValue;
-    }
+    if ( mutabilityTestExecute ) {
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityRange-CPP14 : MCTC-00058-IT-mutabilityRange-CPP14 */
+        for ( auto & e : collection ) {
+            e = mutabilityTestValue;
+        }
 
-    if ( collection.any ( [& mutabilityTestValue](__MemberType const & e) { return e != mutabilityTestValue; } ) ) {
-        pTestLib->logError ( "'MCTC-00058-IT-mutabilityRange-CPP14' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00058-IT-mutabilityRange-CPP14' OK" );
-    };
+        if ( collection.any ( [& mutabilityTestValue](__MemberType const & e) { return e != mutabilityTestValue; } ) ) {
+            pTestLib->logError ( "'MCTC-00058-IT-mutabilityRange-CPP14' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00058-IT-mutabilityRange-CPP14' OK" );
+        };
 
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityIteration-CPP14 : MCTC-00059-IT-mutabilityIteration-CPP14 */
-    for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-        * it = mutabilityTestValue2;
-    }
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityIteration-CPP14 : MCTC-00059-IT-mutabilityIteration-CPP14 */
+        for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
+            * it = mutabilityTestValue2;
+        }
 
-    if ( collection.any ( [& mutabilityTestValue2](__MemberType const & e) { return e != mutabilityTestValue2; } ) ) {
+        if ( collection.any ( [& mutabilityTestValue2](__MemberType const & e) { return e != mutabilityTestValue2; } ) ) {
         pTestLib->logError ( "'MCTC-00059-IT-mutabilityIteration-CPP14' failed" );
         return false;
     } else {
         pTestLib->logOK ( "'MCTC-00059-IT-mutabilityIteration-CPP14' OK" );
     };
-
+    }
 
     collection.clear();
 
@@ -3053,6 +3055,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < int > (
                 objUnderTest,
                 this,
+                true,
                 20, 40,
                 3, 4, 5, 6, 7
         );
@@ -3067,6 +3070,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < int > (
                 objUnderTest,
                 this,
+                true,
                 20, 40,
                 3, 4, 5, 6, 7
         );
@@ -3081,6 +3085,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < MapEntry < int, int > > (
                 objUnderTest,
                 this,
+                false,
                 MapEntry < int, int > { 20, 30 },
                 MapEntry < int, int > { 40, 60 },
                 MapEntry < int, int > { 3, 4 },
@@ -3100,6 +3105,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < String > (
                 objUnderTest,
                 this,
+                true,
                 "Ion", "Gigel",
                 "Ana", "are", "mere"
         );
@@ -3114,6 +3120,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < String > (
                 objUnderTest,
                 this,
+                true,
                 "Ion", "Gigel",
                 "Ana", "are", "mere"
         );
@@ -3128,6 +3135,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < MapEntry < String, String > > (
                 objUnderTest,
                 this,
+                false,
                 MapEntry < String, String > { "Gigel", "name" },
                 MapEntry < String, String > { "them", "pronoun" },
                 MapEntry < String, String > { "are", "verb" },

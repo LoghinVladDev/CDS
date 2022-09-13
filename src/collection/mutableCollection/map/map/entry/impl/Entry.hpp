@@ -87,6 +87,38 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
+            template < typename __KeyType, typename __ValueType >
+            __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: operator = (
+                    __MapEntry const & entry
+            ) noexcept (
+                    noexcept ( cds :: meta :: referenceOf < __ValueType > () = entry._value )
+            ) -> __MapEntry & {
+
+                if ( this == & entry ) {
+                    return * this;
+                }
+
+                this->_value = entry._value;
+                return * this;
+            }
+
+
+            template < typename __KeyType, typename __ValueType >
+            __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: operator = (
+                    __MapEntry && entry
+            ) noexcept (
+                    noexcept ( cds :: meta :: referenceOf < __ValueType > () = std :: move ( entry._value ) )
+            ) -> __MapEntry & {
+
+                if ( this == & entry ) {
+                    return * this;
+                }
+
+                this->_value = std :: move ( entry._value );
+                return * this;
+            }
+
+
             template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (

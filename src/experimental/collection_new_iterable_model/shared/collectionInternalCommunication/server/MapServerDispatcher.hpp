@@ -92,7 +92,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     /**
-                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to construct a new delegate iterator using the received iterator
+                     * @param [in] element : __ElementType cref = Constant Reference to an element to look for
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    auto __find ( /* NOLINT(bugprone-reserved-identifier) */
+                            __KeyType const & key
+                    ) noexcept -> __AbstractDelegateIterator < __ElementType > *;
+
+                protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to construct a new delegate iterator using the received iterator
+                     * @param [in] element : __ElementType cref = Constant Reference to an element to look for
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @protected
+                     */
+                    auto __findConst ( /* NOLINT(bugprone-reserved-identifier) */
+                            __KeyType const & key
+                    ) const noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+
+                protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to return the received iterator. Used by local clients
                      * @param [in] element : __ElementType cref = Constant Reference to an element to look for
                      * @exceptsafe
                      * @return __IteratorType = An iterator indicating to the element given as a parameter
@@ -100,13 +128,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __find ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __findLocal ( /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key
                     ) noexcept -> __IteratorType;
 
                 protected:
                     /**
-                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to return the received iterator. Used by local clients
                      * @param [in] element : __ElementType cref = Constant Reference to an element to look for
                      * @exceptsafe
                      * @return __ConstIteratorType = An iterator indicating to the element given as a parameter
@@ -114,7 +142,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __findConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key
                     ) const noexcept -> __ConstIteratorType;
                 };

@@ -32,6 +32,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 CollectionBase ( set ) {
 
+            /* call base copy constructor */
         }
 
 
@@ -48,6 +49,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 CollectionBase ( std :: move ( set ) ) {
 
+            /* call base move constructor */
         }
 
 
@@ -72,23 +74,29 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __enabler
         > :: toString () const noexcept -> String {
 
+            /* Set toString representation is curly-brackets enclosed list */
+            /* if empty, return empty list */
             if ( this->empty() ) {
                 return {"{}"};
             }
 
+            /* use a StringStream to output the contents for maximum compatibility. Start with open bracket */
             std::stringstream out;
             out << "{ ";
 
+            /* iterate through Set and append iterator value to Stream */
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-
                 cds :: meta :: print ( out, * iterator ) << ", ";
             }
 
+            /* transform to std string */
             auto asString = out.str();
 
+            /* replace ", " with " }" */
             asString [ asString.length() - 2U ] = ' ';
             asString [ asString.length() - 1U ] = '}';
 
+            /* return std :: string to be reused as cds :: String */
             return asString;
         }
 

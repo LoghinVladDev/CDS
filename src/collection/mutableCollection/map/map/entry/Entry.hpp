@@ -28,7 +28,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 constexpr __MapEntry () noexcept = delete;
 
             public:
-                __CDS_Implicit constexpr __MapEntry ( /* NOLINT(google-explicit-constructor) */
+                constexpr __MapEntry (
                         __MapEntry const & entry
                 ) noexcept (
                         noexcept ( KeyType ( entry._key ) ) &&
@@ -36,12 +36,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 );
 
             public:
-                __CDS_Implicit constexpr __MapEntry ( /* NOLINT(google-explicit-constructor) */
+                constexpr __MapEntry (
                         __MapEntry && entry
                 ) noexcept (
                         noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
                         noexcept ( ValueType ( std :: move ( entry._value ) ) )
                 );
+
+            public:
+                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                        __MapEntry const & entry
+                ) noexcept (
+                        noexcept ( cds :: meta :: referenceOf < __ValueType > () = entry._value )
+                ) -> __MapEntry &;
+
+            public:
+                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                        __MapEntry && entry
+                ) noexcept (
+                        noexcept ( cds :: meta :: referenceOf < __ValueType > () = std :: move ( entry._value ) )
+                ) -> __MapEntry &;
 
             public:
                 template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier) */

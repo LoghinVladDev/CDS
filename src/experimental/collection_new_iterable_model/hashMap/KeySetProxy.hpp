@@ -438,6 +438,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             auto __findConst (    /* NOLINT(bugprone-reserved-identifier) */
                     __KeyType const & key
+            ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
+
+        protected:
+            auto __findConstLocal (    /* NOLINT(bugprone-reserved-identifier) */
+                    __KeyType const & key
             ) const noexcept -> ConstIterator;
 
         private:

@@ -30,6 +30,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @test All Tests involving Collections apply
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: STS-00001, Group: All, Test Cases: All
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private

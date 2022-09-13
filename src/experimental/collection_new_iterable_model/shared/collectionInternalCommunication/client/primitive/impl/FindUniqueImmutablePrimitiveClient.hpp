@@ -24,9 +24,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __KeyType const & key
                 ) const noexcept -> ConstIterator {
 
-                    using __ReceiverFindConstHandlerType    = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const;
+                    /* explicit type of the handler received from the client */
+                    using __ReceiverFindConstHandlerType    = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) ( __KeyType const & ) const;
+                    /* object as the receiver type */
                     auto const pReceiver                    = reinterpret_cast < __ReceiverType const * > ( this );
 
+                    /* create a wrapper const iterator with the received delegate iterator from __cirt_findConst */
                     return ConstIterator (
                             pReceiver, (
                                     pReceiver ->* reinterpret_cast < __ReceiverFindConstHandlerType > (
@@ -51,7 +54,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __KeyType const & key
                 ) const noexcept -> ConstIterator {
 
-                    return reinterpret_cast < __ReceiverType const * > ( this )->__findConst ( key );
+                    /* directly call the __findConstLocal function */
+                    return reinterpret_cast < __ReceiverType const * > ( this )->__findConstLocal ( key );
                 }
 
             }

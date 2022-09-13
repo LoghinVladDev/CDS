@@ -135,7 +135,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 public:
                     /**
-                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __crbeginLocal function
                      * @exceptsafe
                      * @return ConstReverseIterator = begin const iterator
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -145,7 +145,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 public:
                     /**
-                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rend request
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using the __crendLocal function
                      * @exceptsafe
                      * @return ConstReverseIterator = end const iterator
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -155,7 +155,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 public:
                     /**
-                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
+                     * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __crbeginLocal function
                      * @exceptsafe
                      * @return ConstReverseIterator = begin const iterator
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -165,7 +165,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 public:
                     /**
-                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rend request
+                     * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using the __crendLocal function
                      * @exceptsafe
                      * @return ConstReverseIterator = end const iterator
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA

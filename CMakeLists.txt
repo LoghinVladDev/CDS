@@ -228,25 +228,10 @@ macro(test_set)
             ${CPP${ARGV0}_TEST_DEFAULT_SRC}
     )
 
-    test_suite(${ARGV0} primitive Boolean)
-    test_suite(${ARGV0} primitive Double)
-    test_suite(${ARGV0} primitive Float)
-    test_suite(${ARGV0} primitive Integer)
-    test_suite(${ARGV0} primitive Long)
-    test_suite(${ARGV0} primitive Optional)
-    test_suite(${ARGV0} primitive Pair)
-    test_suite(${ARGV0} primitive Pointer)
-    test_suite(${ARGV0} primitive Reference)
     test_suite(${ARGV0} primitive String)
-    test_suite(${ARGV0} primitive Sequence)
-    test_suite(${ARGV0} primitive Tuple)
-
     test_suite(${ARGV0} collection Collection)
-
     test_suite(${ARGV0} collection/mutableCollection MutableCollection)
-
-    test_suite(${ARGV0} collection/unordered HashMap)
-    test_suite(${ARGV0} collection/unordered Json)
+    test_suite(${ARGV0} collection/set Set)
 
     add_executable(
             cpp${ARGV0}_test_all

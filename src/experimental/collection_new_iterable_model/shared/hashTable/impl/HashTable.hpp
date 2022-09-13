@@ -916,6 +916,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* acquire bucket. if key matches the front node key, remove front */
                     auto & bucket = this->__ht_bucket ( this->_hasher ( key ) );
+                    if ( bucket == nullptr ) {
+                        return false;
+                    }
+
                     if ( __keyComparator ( __keyExtractor ( bucket->_data ), key ) ) {
 
                         pToRemove   = bucket;
@@ -1355,6 +1359,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /* acquire bucket index directly, used by iterator */
                     Size bucketIndex = this->_hasher ( key ) % this->_bucketCount;
 
+                    if ( bucketIndex >= this->_bucketCount ) {
+                        return this->__ht_end();
+                    }
+
                     /* store the previous and current values used in initialization */
                     __NodeType * pPrevious  = nullptr;
                     __NodeType * pCurrent   = this->_pBucketArray [ bucketIndex ];
@@ -1412,6 +1420,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* acquire bucket index directly, used by iterator */
                     Size bucketIndex = this->_hasher ( key ) % this->_bucketCount;
+
+                    if ( bucketIndex >= this->_bucketCount ) {
+                        return this->__ht_cend();
+                    }
 
                     /* store the previous and current values used in initialization */
                     __NodeType const * pPrevious  = nullptr;

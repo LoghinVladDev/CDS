@@ -205,9 +205,27 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __Hasher
         > :: KeySetProxy :: __findConst (
                 __KeyType const & key
+        ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
+
+            return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __KeyType const, ConstIterator > > (
+                    ConstIterator ( this->template map < HashMapBase > ()->__findConstLocal ( key ) )
+            );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto HashMap <
+                __KeyType,
+                __ValueType,
+                __Hasher
+        > :: KeySetProxy :: __findConstLocal (
+                __KeyType const & key
         ) const noexcept -> ConstIterator {
 
-            return ConstIterator ( this->template map < HashMapBase > ()->__findConst ( key ) );
+            return ConstIterator ( this->template map < HashMapBase > ()->__findConstLocal ( key ) );
         }
 
 

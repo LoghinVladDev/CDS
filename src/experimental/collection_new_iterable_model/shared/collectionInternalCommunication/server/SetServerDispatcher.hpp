@@ -39,6 +39,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @test All Tests involving Collections apply
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: STS-00001, Group: STS-00050-FU, Test Cases: All
                  *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
@@ -71,7 +72,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     /**
-                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to construct a new delegate iterator using the received iterator
+                     * @param [in] element : __ElementType cref = Constant Reference to an element to look for
+                     * @exceptsafe
+                     * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
+                     *
+                     * @test Suite: STS-00001, Group: STS-00050-FU, Test Cases: All
+                     * @protected
+                     */
+                    auto __findConst ( /* NOLINT(bugprone-reserved-identifier) */
+                            __ElementType const & element
+                    ) const noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+
+                protected:
+                    /**
+                     * @brief Function provided by the dispatcher interface calling the received __findConstFunction, and is used by the server to return the received iterator. Used by local clients
                      * @param [in] element : __ElementType cref = Constant Reference to an element to look for
                      * @exceptsafe
                      * @return __ConstIteratorType = An iterator indicating to the element given as a parameter
@@ -79,7 +94,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      * @protected
                      */
-                    auto __findConst ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const & element
                     ) const noexcept -> __ConstIteratorType;
                 };
