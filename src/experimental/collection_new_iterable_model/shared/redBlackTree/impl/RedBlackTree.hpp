@@ -5,6 +5,8 @@
 #ifndef __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__
 #define __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
+#include <queue>
+
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, modernize-concat-nested-namespaces) */
@@ -71,7 +73,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyLowerComparator,
                         __keyEqualsComparator,
                         __nodeDestructor
-                > :: __rbt_allocateNode () const noexcept -> RBTreeNode * {
+                > :: __rbt_allocateNode () noexcept -> RBTreeNode * {
 
                     RBTreeNode * pNode  = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < RBTreeNode > ();
                     pNode->_colour      = __RedBlackTreeNode < __ElementType > :: RED;
@@ -98,8 +100,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         RBTreeNode * pRemoved
                 ) noexcept -> void {
 
-                    /** TODO : can be made static */
                     __nodeDestructor ( pRemoved->_data );
+
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( pRemoved );
                 }
 
@@ -127,13 +129,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode * pAux = pPivot->_pRight;
                     pPivot->_pRight = pAux->_pLeft;
 
-                    if ( pAux->_pLeft != __endNode < __ElementType > () ) {
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    if ( pAux->_pLeft != endNode ) {
                         pAux->_pLeft->_pParent = pPivot;
                     }
 
                     pAux->_pParent = pPivot->_pParent;
 
-                    if ( pPivot->_pParent == __endNode < __ElementType > () ) {
+                    if ( pPivot->_pParent == endNode ) {
                         this->_pRoot = pAux;
                     } else if ( __isLeftChild ( pPivot ) ) {
                         pPivot->_pParent->_pLeft = pAux;
@@ -167,13 +171,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode * pAux = pPivot->_pLeft;
                     pPivot->_pLeft = pAux->_pRight;
 
-                    if ( pAux->_pRight != __endNode < __ElementType > () ) {
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    if ( pAux->_pRight != endNode ) {
                         pAux->_pLeft = pPivot;
                     }
 
                     pAux->_pParent = pPivot->_pParent;
 
-                    if ( pPivot->_pParent == __endNode < __ElementType > () ) {
+                    if ( pPivot->_pParent == endNode ) {
                         this->_pRoot = pAux;
                     } else if ( __isLeftChild ( pPivot ) ) {
                         pPivot->_pParent->_pLeft = pAux;
@@ -263,15 +269,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > :: __rbt_deleteReBalance (
                         RBTreeNode * pPivot
                 ) -> void {
-
-                    /**
-                     * TODO: Check
-                     * While the node pointed at by pPivot can change color, sibling and parent, is it valid to assume that the node itself will change?
-                     * do __identifyAndApplyRotationOnDelete < true > and __identifyAndApplyRotationOnDelete < false > modify the root as well?
-                     * do these modify the tree structure completely while storing the pPivot node in a different 'branch' of the tree?
-                     *
-                     * if yes, please discard this comment
-                     */
 
                     while ( pPivot != this->_pRoot && !__isRed ( pPivot ) ) {
                         if ( __isLeftChild ( pPivot ) ) {
@@ -431,7 +428,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     if ( this->__rbt_empty() ) {
 
-                        this->_pRoot = __rbt_allocateNode();
+                        this->_pRoot = __RedBlackTree :: __rbt_allocateNode();
                         this->_pRoot->_colour = RBTreeNode :: BLACK;
 
                         ++ this->_size;
@@ -442,7 +439,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode * pAux = this->_pRoot;
                     RBTreeNode * pNewPos;
 
-                    while ( pAux != __endNode < __ElementType > () ) {
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pAux != endNode ) {
                         pNewPos = pAux;
 
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pAux->_data ) ) ) {
@@ -457,7 +456,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         }
                     }
 
-                    RBTreeNode * pNewNode = __rbt_allocateNode();
+                    RBTreeNode * pNewNode = __RedBlackTree :: __rbt_allocateNode();
                     pNewNode->_pParent = pNewPos;
 
                     if ( __keyLowerComparator ( key, __keyExtractor ( pNewPos->_data ) ) ) {
@@ -498,7 +497,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     RBTreeNode * pSearch = this->_pRoot;
 
-                    while ( pSearch != __endNode < __ElementType > () ) {
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pSearch != endNode ) {
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pSearch->_data ) ) ) {
                             return & pSearch->_data;
                         }
@@ -532,19 +533,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         RBTreeNode * pToBeRemoved
                 ) noexcept -> bool {
 
-                    bool isOriginallyBlack = __isRed ( pToBeRemoved );
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    bool isOriginallyBlack = ! __isRed ( pToBeRemoved );
                     RBTreeNode * pBalancePivot;
 
-                    if ( pToBeRemoved->_pLeft == __endNode < __ElementType > () ) {
+                    if ( pToBeRemoved->_pLeft == endNode ) {
                         pBalancePivot = pToBeRemoved->_pRight;
                         this->__rbt_transplant ( pToBeRemoved, pToBeRemoved->_pRight );
-                    } else if ( pToBeRemoved->_pRight == __endNode < __ElementType >  () ) {
+                    } else if ( pToBeRemoved->_pRight == endNode ) {
                             pBalancePivot = pToBeRemoved->_pLeft;
                             this->__rbt_transplant ( pToBeRemoved, pToBeRemoved->_pLeft );
                     } else {
                         RBTreeNode * pDeletedPlaceholder = pToBeRemoved->_pRight;
 
-                        while ( pDeletedPlaceholder->_pLeft != __endNode < __ElementType >  () )
+                        while ( pDeletedPlaceholder->_pLeft != endNode )
                             pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
 
                         isOriginallyBlack = ! __isRed ( pDeletedPlaceholder );
@@ -564,7 +567,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         pDeletedPlaceholder->_colour = pToBeRemoved->_colour;
                     }
 
-                    this->__rbt_freeNode ( pToBeRemoved );
+                    __RedBlackTree :: __rbt_freeNode ( pToBeRemoved );
 
                     if ( isOriginallyBlack ) {
                         this->__rbt_deleteReBalance ( pBalancePivot );
@@ -600,7 +603,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     RBTreeNode * pToBeRemoved = this->_pRoot;
 
-                    while ( pToBeRemoved != __endNode < __ElementType > () ) {
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pToBeRemoved != endNode ) {
 
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pToBeRemoved->_data ) ) ) {
                             this->__rbt_removeAt ( pToBeRemoved );
@@ -694,21 +699,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     /** TODO:
                      * while I appreciate the very nice and smart use of a recursive lambda, and that my cds :: Function didn't crash it or generate
                      * memory errors, please, create a member static function for this. Each call adds more overhead than a normal function would */
-                    cds :: Function < void ( RBTreeNode * ) > _remove_recursively = [&] ( RBTreeNode * _pCurrNode ) {
-                        if ( _pCurrNode->_pLeft != __endNode < __ElementType > () ) {
-                            _remove_recursively ( _pCurrNode->_pLeft );
-                        }
 
-                        if ( _pCurrNode->_pRight != __endNode < __ElementType > () ) {
-                            _remove_recursively ( _pCurrNode->_pRight );
-                        }
+                    if ( this->__rbt_empty() )
+                        return;
 
-                        this->__rbt_freeNode ( _pCurrNode );
-                    };
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    RBTreeNode * pCurrentNode = this->_pRoot;
+
+                    while ( pCurrentNode != endNode ) {
+
+                        if ( pCurrentNode->_pLeft != endNode )
+                            pCurrentNode = pCurrentNode->_pLeft;
+                        else
+                            if ( pCurrentNode->_pRight != endNode )
+                                pCurrentNode = pCurrentNode->_pRight;
+                            else {
+                                RBTreeNode * pToBeDeleted = pCurrentNode;
+                                pCurrentNode = pCurrentNode->_pParent;
+
+                                if ( __isLeftChild ( pToBeDeleted ) )
+                                    pCurrentNode->_pLeft = __endNode < __ElementType > ();
+                                else
+                                    pCurrentNode->_pRight = __endNode < __ElementType > ();
+
+                                __RedBlackTree :: __rbt_freeNode ( pToBeDeleted );
+                            }
+                    }
 
                     this->_size = 0ULL;
-
-                    _remove_recursively ( this->_pRoot );
                 }
 
 
@@ -735,7 +754,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     auto pSearch = this->_pRoot;
-                    while ( pSearch != __endNode < __ElementType > () ) {
+
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pSearch != endNode ) {
                         if ( __keyEqualsComparator ( __keyExtractor ( pSearch->_data ), key ) ) {
                             return ( __rbt_ConstIterator ( this->_pRoot, pSearch ) );
                         }
@@ -796,7 +818,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     this->__rbt_clear();
-                    this->template __rbt_copyCleared < __copy > ( tree );
+                    this->__rbt_copyCleared < __copy > ( tree );
                 }
 
 
@@ -835,26 +857,36 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      *    - either use recursion when size < threshold, and a Queue when past it.
                      *    - ( given that Queue exists, but does not build, leave this here, or implement it. Not the interface object, the base type ( i.e. like __SingleLinkedList, __HashTable, etc. ) )
                      * */
-                    cds :: Function < void ( RBTreeNode *, RBTreeNode * ) > copyNodeRecursively = [ &copyNodeRecursively , this] (
-                            RBTreeNode * pDestination,
-                            RBTreeNode * pSource
-                    ) -> void {
 
-                        __copy ( pDestination->_data, pSource->_data );
 
-                        if ( pSource->_pLeft != __endNode < __ElementType > () ) {
-                            pDestination->_pLeft = this->__rbt_allocateNode();
-                            copyNodeRecursively ( pDestination->_pLeft, pSource->_pLeft );
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    RBTreeNode * pSource = tree._pRoot;
+                    RBTreeNode * pDestination = this->_pRoot = __RedBlackTree :: __rbt_allocateNode();
+                    while ( pSource != endNode ) {
+
+                        if ( pSource->_pLeft != endNode && pDestination->_pLeft == endNode ) {
+                            pSource = pSource->_pLeft;
+                            pDestination->_pLeft = __RedBlackTree :: __rbt_allocateNode();
+                            pDestination->_pLeft->_pParent = pDestination;
+                            pDestination = pDestination->_pLeft;
                         }
+                        else
+                            if ( pSource->_pRight != endNode && pDestination->_pRight == endNode ) {
+                                pSource = pSource->_pRight;
+                                pDestination->_pRight = __RedBlackTree :: __rbt_allocateNode();
+                                pDestination->_pRight->_pParent = pDestination;
+                                pDestination = pDestination->_pRight;
+                            }
+                            else {
+                                __copy ( pDestination->_data, pSource->_data );
+                                pDestination->_colour = pSource->_colour;
+                                pDestination = pDestination->_pParent;
+                                pSource = pSource->_pParent;
+                            }
+                    }
 
-                        if ( pSource->_pRight != __endNode < __ElementType > () ) {
-                            pDestination->_pRight = this->__rbt_allocateNode();
-                            copyNodeRecursively ( pDestination->_pRight, pSource->_pRight );
-                        }
-                    };
-
-                    this->_pRoot = this->__rbt_allocateNode();
-                    copyNodeRecursively ( this->_pRoot, tree._pRoot );
+                    this->_size = tree._size;
                 }
 
 
@@ -955,7 +987,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     RBTreeNode * pBegin = this->_pRoot;
-                    while ( pBegin->_pLeft != __endNode < __ElementType > () ) {
+
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pBegin->_pLeft != endNode ) {
                         pBegin = pBegin->_pLeft;
                     }
 
@@ -1004,7 +1039,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     RBTreeNode * prEnd = this->_pRoot;
-                    while ( prEnd->_pRight != __endNode < __ElementType > () ) {
+
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( prEnd->_pRight != endNode ) {
                         prEnd = prEnd->_pRight;
                     }
 
@@ -1053,7 +1091,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     RBTreeNode * pcBegin = this->_pRoot;
-                    while ( pcBegin->_pLeft != __endNode < __ElementType > () ) {
+
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pcBegin->_pLeft != endNode ) {
                         pcBegin = pcBegin->_pLeft;
                     }
 
@@ -1102,7 +1143,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     RBTreeNode * pcrBegin = this->_pRoot;
-                    while ( pcrBegin->_pRight != __endNode < __ElementType > () ) {
+
+                    auto const endNode = __endNode < __ElementType > ();
+
+                    while ( pcrBegin->_pRight != endNode ) {
                         pcrBegin = pcrBegin->_pRight;
                     }
 

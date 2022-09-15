@@ -78,6 +78,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             private:    friend RandomInsertionClient;
             private:    friend ConstIteratorRemoveClient;
             private:    friend DelegateForwardConstIterableClient;
+            private:    friend DelegateBackwardConstIterableClient;
 
             protected:  using typename SetBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
             protected:  using typename SetBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
@@ -193,9 +194,46 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept;
 
             public:
-                constexpr TreeSet (
+                TreeSet (
                         TreeSet && set
                 ) noexcept;
+
+            public:
+                template <
+                        typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        > = 0
+                > TreeSet (
+                        __IteratorType const & begin,
+                        __IteratorType const & end,
+                        Size                   count = 0ULL
+                ) noexcept;
+
+            public:
+                template <
+                        typename __TElementType = __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: meta :: EnableIf <                    /* NOLINT(bugprone-reserved-identifier) */
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+                > TreeSet (
+                        std :: initializer_list < __ElementType > const & initializerList
+                ) noexcept;
+
+            public:
+                ~TreeSet () noexcept override;
+
+            public:
+                auto operator = (
+                        TreeSet const & set
+                ) noexcept -> TreeSet &;
+
+
+            public:
+                auto operator = (
+                        TreeSet && set
+                ) noexcept -> TreeSet &;
 
             protected:
                 __CDS_NoDiscard auto contains (

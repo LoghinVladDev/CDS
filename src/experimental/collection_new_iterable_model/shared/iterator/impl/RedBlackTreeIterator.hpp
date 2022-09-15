@@ -88,6 +88,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto AbstractTreeIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
             auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+
             if ( this->_pCurrentNode->_pRight != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 while ( this->_pCurrentNode->_pLeft != endNode ) {
@@ -119,6 +120,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto AbstractTreeIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
             auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+
             if ( this->_pCurrentNode->_pLeft != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 while ( this->_pCurrentNode->_pRight != endNode ) {
@@ -226,6 +228,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto AbstractTreeConstIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
             auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+
             if ( this->_pCurrentNode->_pRight != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 while ( this->_pCurrentNode->_pLeft != endNode ) {
@@ -256,6 +259,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto AbstractTreeConstIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
             auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+
             if ( this->_pCurrentNode->_pLeft != endNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 while ( this->_pCurrentNode->_pRight != endNode ) {
@@ -559,7 +563,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto RedBlackTreeBackwardIterator < __ElementType > :: operator ++ (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
-            this = this->reverse();
+            this->reverse();
             return * this;
         }
 
@@ -577,7 +581,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto RedBlackTreeBackwardIterator < __ElementType > :: operator -- (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
-            this = this->advance();
+            this->advance();
             return * this;
         }
 
@@ -662,7 +666,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator ++ (   /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
-            this = this->reverse();
+            this->reverse();
             return * this;
         }
 
@@ -680,7 +684,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator -- (   /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
-            this = this->advance();
+            this->advance();
             return * this;
         }
 

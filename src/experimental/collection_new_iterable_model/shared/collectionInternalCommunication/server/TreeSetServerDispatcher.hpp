@@ -45,7 +45,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         protected:
                             auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        /* NOLINT(bugprone-reserved-identifier) */
 
-
                         protected:
                             auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          /* NOLINT(bugprone-reserved-identifier) */
 

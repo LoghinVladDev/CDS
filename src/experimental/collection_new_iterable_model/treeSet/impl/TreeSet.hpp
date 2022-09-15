@@ -33,19 +33,81 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 TreeSet const & set
         ) noexcept {
 
-            this->__rbt_copyCleared (
-                    set,
-                    & __hidden :: __impl :: __treeSetCopyConstructor < __ElementType >
-            );
+            this-> template __rbt_copyCleared < & __hidden :: __impl :: __treeSetCopyConstructor < __ElementType > > ( set );
         }
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        constexpr TreeSet < __ElementType > :: TreeSet (
+        TreeSet < __ElementType > :: TreeSet (
                 TreeSet && set
         ) noexcept :
                 Implementation ( std :: move ( set ) ) {
 
+        }
+
+
+        template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
+        template <
+                typename __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > TreeSet < __ElementType > :: TreeSet (
+                __IteratorType const & begin,
+                __IteratorType const & end,
+                Size                   count
+        ) noexcept {
+
+            for ( auto iterator = begin; iterator != end; ++ iterator) {
+                this->insert ( * iterator );
+            }
+        }
+
+
+        template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
+        template <
+                typename __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isCopyConstructible < __TElementType > ()
+                >
+        > TreeSet < __ElementType > :: TreeSet (
+                std :: initializer_list < __ElementType > const & initializerList
+        ) noexcept :
+            TreeSet (
+                    initializerList.begin(),
+                    initializerList.end()
+            ) {
+
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        TreeSet < __ElementType > :: ~TreeSet () noexcept {
+
+            this->__rbt_clear();
+        };
+
+
+        template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+        auto TreeSet < __ElementType > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
+                TreeSet const & set
+        ) noexcept -> TreeSet & {
+
+            this->__rbt_copy <
+                    & __hidden :: __impl :: __treeSetCopyConstructor < __ElementType >
+            > ( set );
+            return * this;
+        }
+
+
+        template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+        auto TreeSet < __ElementType > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
+                TreeSet && set
+        ) noexcept -> TreeSet & {
+
+            this->__rbt_move ( set );
+            return * this;
         }
 
 
@@ -54,7 +116,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __ElementType const & element
         ) const noexcept -> bool {
 
-            return this -> __rbt_get ( element ) != nullptr;
+            return this->__rbt_get ( element ) != nullptr;
         }
 
 

@@ -81,7 +81,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __findConstFunction
                 > :: __crendLocal () const noexcept -> __ReverseConstIteratorType {
 
-                    return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crendFunction );
+                    return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crendFunction ) ();
                 }
 
             }

@@ -4,9 +4,8 @@
 
 int main () {
 
-    cds :: experimental :: TreeSet < int > t;
-    t.insertAll(1,2,3,4,5);
-    t.remove ( 4 );
-    std :: cout << t << '\n';
+    cds :: experimental :: TreeSet < int > t { 1, 2, 3, 4, 5};
+    cds :: experimental :: TreeSet < int > x ( t );
+    t.clear();
     return 0;
 }

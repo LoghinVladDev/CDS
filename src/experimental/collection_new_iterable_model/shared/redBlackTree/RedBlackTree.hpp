@@ -87,10 +87,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 private:
-                    __CDS_NoDiscard auto __rbt_allocateNode () const noexcept -> RBTreeNode *;          /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static auto __rbt_allocateNode () noexcept -> RBTreeNode *;          /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_freeNode ( RBTreeNode * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
+                    static auto __rbt_freeNode ( RBTreeNode * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     auto __rbt_leftRotate ( RBTreeNode * pPivot ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
