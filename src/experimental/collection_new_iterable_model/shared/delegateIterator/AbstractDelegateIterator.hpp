@@ -77,7 +77,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Validity Function. Checks if delegate is valid for the base derived collection. Called by Wrapper
                      * @exceptsafe
                      * @return bool = true if iterator is valid, false otherwise
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool = 0;

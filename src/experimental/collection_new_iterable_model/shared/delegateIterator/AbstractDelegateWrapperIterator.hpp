@@ -117,7 +117,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] pObject : Object cptr = Address to an Immutable Object
                      * @exceptsafe
                      * @return bool = true if iterator was created from the given object, false otherwise
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00350-RAIT, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: All
+                     * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: All
                      * @public
                      */
                     __CDS_NoDiscard constexpr auto of (
@@ -155,7 +157,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Validity Function. Checks if an iterator has an abstract wrapped iterator and it is in bounds.
                      * @exceptsafe
                      * @return bool = true if iterator is valid, false otherwise
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                      * @public
                      */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool;
