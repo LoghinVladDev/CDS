@@ -3764,6 +3764,44 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < cds :: String > stringTreeSetObjectUnderTest;
+        stringTreeSetObjectUnderTest     = { "Ana", "are", "mere" };
+
+        auto expectedToString       = "{ Ana, are, mere }";
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = "Ana";
+        auto expectedToBeNotFound   = "ana";
+        auto expectedHash           = (
+                                              cds :: hash ( "Ana" ) * 31 + cds :: hash ( "are" )
+                                      ) * 31 + cds :: hash ( "mere" );
+
+        auto equalSameType          = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "mere" };
+        auto equalDifferentType     = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "mere" };
+        auto notEqualSameType       = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualDifferentType  = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: String > (
+                stringTreeSetObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringToStringHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < cds :: String, cds :: String > stringStringHashMapObjectUnderTest;
