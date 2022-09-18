@@ -231,6 +231,7 @@ macro(test_set)
     test_suite(${ARGV0} primitive String)
     test_suite(${ARGV0} collection Collection)
     test_suite(${ARGV0} collection/mutableCollection MutableCollection)
+    test_suite(${ARGV0} collection/mutableCollection/list List)
     test_suite(${ARGV0} collection/set Set)
 
     add_executable(

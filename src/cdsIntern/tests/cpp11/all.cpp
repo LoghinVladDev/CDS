@@ -5,6 +5,7 @@
 #include "primitive/StringTest.h"
 #include "collection/CollectionTest.h"
 #include "collection/mutableCollection/MutableCollectionTest.h"
+#include "collection/mutableCollection/list/ListTest.h"
 #include "collection/set/SetTest.h"
 
 #include <CDS/Array>
@@ -22,7 +23,8 @@ int main () {
             Pair < SharedPointer < Test >, String > { new StringTest (),  "StringTest" },
             Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
             Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
-            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" }
+            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
+            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" }
     };
 
     for ( auto & t : tests ) {
