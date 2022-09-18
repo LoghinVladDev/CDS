@@ -5372,6 +5372,463 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP20' OK" );
         }
     });
+    /* IntTreeSet */            this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : IntTreeSet", [& allOk, this] {
+
+        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs101 = { 1, 3, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00101-FS-anyNone-CPP20",
+                /* objUnderTest */  fs101,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: any,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP20 : CTC-00102-FS-anyOne-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs102 = { 1, 4, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00102-FS-anyOne-CPP20",
+                /* objUnderTest */  fs102,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: any,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs103 = { 1, 4, 5, 6, 8 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00103-FS-anyMore-CPP20",
+                /* objUnderTest */  fs103,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: any,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs104 = { 2, 4, 6, 8, 10 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00104-FS-anyAll-CPP20",
+                /* objUnderTest */  fs104,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: any,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs105 = { 1, 3, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00105-FS-allNone-CPP20",
+                /* objUnderTest */  fs105,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: all,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs106 = { 1, 4, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00106-FS-allOne-CPP20",
+                /* objUnderTest */  fs106,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: all,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs107 = { 1, 4, 5, 6, 8 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00107-FS-allMore-CPP20",
+                /* objUnderTest */  fs107,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: all,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs108 = { 2, 4, 6, 8, 10 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00108-FS-allAll-CPP20",
+                /* objUnderTest */  fs108,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: all,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs109 = { 1, 3, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00109-FS-noneNone-CPP20",
+                /* objUnderTest */  fs109,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: none,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs110 = { 1, 4, 5, 7, 9 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00110-FS-noneOne-CPP20",
+                /* objUnderTest */  fs110,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: none,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs111 = { 1, 4, 5, 6, 8 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00111-FS-noneMore-CPP20",
+                /* objUnderTest */  fs111,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: none,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs112 = { 2, 4, 6, 8, 10 };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00112-FS-noneAll-CPP20",
+                /* objUnderTest */  fs112,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: none,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs113 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00113-FS-countProp1-CPP20",
+                /* objUnderTest */  fs113,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: count,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs114 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00114-FS-countProp2-CPP20",
+                /* objUnderTest */  fs114,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: count,
+                /* predicate */     [] (int e) { return e % 2 == 1; },
+                /* expectedRes. */  3
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs115 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00115-FS-countProp3-CPP20",
+                /* objUnderTest */  fs115,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: count,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs116 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00116-FS-countProp4-CPP20",
+                /* objUnderTest */  fs116,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: count,
+                /* predicate */     [] (int e) { return e >= 2; },
+                /* expectedRes. */  4
+        );
+
+        int comparedTo = 3;
+        /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs117 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
+                /* objUnderTest */  fs117,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: count,
+                /* predicate */     [comparedTo] (int e) { return e > comparedTo; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs118 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
+                /* objUnderTest */  fs118,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: fewerThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       4,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs119 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
+                /* objUnderTest */  fs119,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: fewerThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs120 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
+                /* objUnderTest */  fs120,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: fewerThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs121 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
+                /* objUnderTest */  fs121,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: fewerThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs122 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
+                /* objUnderTest */  fs122,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: fewerThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs123 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
+                /* objUnderTest */  fs123,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: moreThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       0,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs124 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
+                /* objUnderTest */  fs124,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: moreThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs125 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
+                /* objUnderTest */  fs125,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: moreThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs126 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
+                /* objUnderTest */  fs126,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: moreThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs127 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
+                /* objUnderTest */  fs127,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: moreThan,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       20,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs128 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
+                /* objUnderTest */  fs128,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atMost,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs129 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
+                /* objUnderTest */  fs129,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atMost,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs130 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
+                /* objUnderTest */  fs130,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atMost,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs131 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
+                /* objUnderTest */  fs131,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atMost,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs132 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
+                /* objUnderTest */  fs132,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atLeast,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs133 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
+                /* objUnderTest */  fs133,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atLeast,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs134 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
+                /* objUnderTest */  fs134,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atLeast,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs135 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
+                /* objUnderTest */  fs135,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: atLeast,
+                /* predicate */     [] (int e) { return e < 3; },
+                /* desired */       4,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs136 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00136-FS-someExact-CPP20",
+                /* objUnderTest */  fs136,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: some,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs137 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
+                /* objUnderTest */  fs137,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: some,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs138 = { 1, 2, 3, 4, 5 };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
+                /* objUnderTest */  fs138,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < int > :: some,
+                /* predicate */     [] (int e) { return e % 2 == 0; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : IntTreeSet */
+        cds :: experimental :: TreeSet < int > fs139 = { 1, 2, 3, 4, 5 };
+        experimental :: Collection < int > const & collection = fs139;
+        Size count = 0;
+        auto action = [& count] ( int e ) { if ( e % 2 == 0 ) { ++ count; } };
+        Size expected = 2;
+
+        collection.forEach (action);
+        if ( count != expected ) {
+            this->logError ( "'CTC-00139-FS-forEachCount-CPP20' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00139-FS-forEachCount-CPP20' OK" );
+        }
+    });
     /* IntToIntHashMap */       this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : IntToIntHashMap", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : IntToIntHashMap */
