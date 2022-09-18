@@ -79,7 +79,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 EntryType const & entry
         ) const noexcept -> bool {
 
-            return this->template map < HashMapBase > ()->containsKey ( entry.key() );
+            return this->map()->containsKey ( entry.key() );
         }
 
 

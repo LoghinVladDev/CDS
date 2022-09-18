@@ -14,9 +14,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __DecoratedIteratorType,                               /* NOLINT(bugprone-reserved-identifier) */
                         typename __ValueAtType                                          /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __valueAtHint (    /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __valueAtHint (                                        /* NOLINT(bugprone-reserved-identifier) */
                         __DecoratedIteratorType const & baseIterator
-                ) noexcept -> __ValueAtType &;
+                ) noexcept -> __ValueAtType & {
+
+                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
+                     * a used function, when it is only declared for SFINAE purposes. It will still return
+                     * a value acquired from an undefined function to avoid usage in compiled code. */
+                    return cds :: meta :: referenceOf < __ValueAtType > ();
+                }
 
 
                 template <

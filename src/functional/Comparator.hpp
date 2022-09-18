@@ -24,7 +24,7 @@ namespace cds {
     namespace utility {
 
         template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-        using ComparisonFunction = decltype ( & predicates :: lessThan < __Type > );
+        using ComparisonFunction = decltype ( & cds :: meta :: equals < __Type, __Type > );
 
     }
 
