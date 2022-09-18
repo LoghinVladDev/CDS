@@ -3951,6 +3951,19 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : StringTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < String > objUnderTest = {"Ana", "are", "mere"};
+        auto status = collectionTestGroupDelegateForwardConstIterableClientImports < String > (
+                objUnderTest,
+                this,
+                "Ana", "are", "mere"
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : StringToStringHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < String, String > objUnderTest = {{"are","verb"}, {"Ana","name"}, {"mere","noun"}};
