@@ -403,7 +403,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_empty () const -> bool {
 
-                    return this->_pRoot == nullptr;
+                    return this->_size == 0;
                 }
 
 
@@ -709,21 +709,31 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     while ( pCurrentNode != endNode ) {
 
-                        if ( pCurrentNode->_pLeft != endNode )
+                        if ( pCurrentNode->_pLeft != endNode ) {
                             pCurrentNode = pCurrentNode->_pLeft;
-                        else
-                            if ( pCurrentNode->_pRight != endNode )
+                        }
+                        else {
+                            if ( pCurrentNode->_pRight != endNode ) {
                                 pCurrentNode = pCurrentNode->_pRight;
+                            }
                             else {
-                                RBTreeNode * pToBeDeleted = pCurrentNode;
-                                pCurrentNode = pCurrentNode->_pParent;
+                                    RBTreeNode * pToBeDeleted = pCurrentNode;
+                                    pCurrentNode = pCurrentNode->_pParent;
 
-                                if ( __isLeftChild ( pToBeDeleted ) )
-                                    pCurrentNode->_pLeft = __endNode < __ElementType > ();
-                                else
-                                    pCurrentNode->_pRight = __endNode < __ElementType > ();
+                                    if ( pToBeDeleted != this->_pRoot) {
+                                        if ( __isLeftChild ( pToBeDeleted ) ) {
+                                            pCurrentNode->_pLeft = __endNode < __ElementType > ();
+                                        }
+                                        else {
+                                            pCurrentNode->_pRight = __endNode < __ElementType > ();
+                                        }
+                                    }
+                                    else {
 
-                                __RedBlackTree :: __rbt_freeNode ( pToBeDeleted );
+                                    }
+
+                                    __RedBlackTree :: __rbt_freeNode ( pToBeDeleted );
+                                }
                             }
                     }
 
@@ -982,7 +992,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_begin () noexcept -> __rbt_Iterator {
 
-                    if ( this->_pRoot == nullptr ) {
+                    if ( this->__rbt_empty() ) {
                         return __rbt_Iterator ( nullptr, nullptr );
                     }
 
@@ -1034,7 +1044,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_rbegin () noexcept -> __rbt_ReverseIterator {
 
-                    if ( this->_pRoot == nullptr ) {
+                    if ( this->__rbt_empty() ) {
                         return __rbt_ReverseIterator ( nullptr, nullptr );
                     }
 
@@ -1086,7 +1096,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_cbegin () const noexcept -> __rbt_ConstIterator {
 
-                    if ( this->_pRoot == nullptr ) {
+                    if ( this->__rbt_empty() ) {
                         return __rbt_ConstIterator ( nullptr, nullptr );
                     }
 
@@ -1138,7 +1148,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator {
 
-                    if ( this->_pRoot == nullptr ) {
+                    if ( this->__rbt_empty() ) {
                         return __rbt_ReverseConstIterator ( nullptr, nullptr );
                     }
 

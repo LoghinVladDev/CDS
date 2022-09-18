@@ -8,6 +8,7 @@
 #include <CDS/experimental/LinkedList>
 #include <CDS/experimental/HashSet>
 #include <CDS/experimental/HashMap>
+#include <CDS/experimental/TreeSet>
 
 /* CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20. CTC-00351-RAIT to CTC-00356-RAIT */
 template <
@@ -3555,6 +3556,44 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         auto status = collectionTestGroupMemberFunctions (
                 intHashSetObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : IntTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < int > intTreeSetObjectUnderTest;
+        intTreeSetObjectUnderTest = { 1, 2, 3, 4, 5 };
+
+        auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
+        auto expectedSize           = 5;
+        auto expectedToBeFound      = 2;
+        auto expectedToBeNotFound   = 7;
+        auto expectedHash           = ((((
+                                                 cds :: hash ( 1 ) * 31 + cds :: hash ( 2 )
+                                         ) * 31 + cds :: hash ( 3 )) * 31 + cds :: hash ( 4 ) ) * 31 + cds :: hash ( 5 ));
+
+        auto equalSameType          = cds :: experimental :: TreeSet < int > { 1, 2, 3, 4, 5 };
+        auto equalDifferentType     = cds :: experimental :: TreeSet < int > { 1, 2, 3, 4, 5 };
+        auto notEqualSameType       = cds :: experimental :: TreeSet < int > { 1, 2, 3, 5 };
+        auto notEqualDifferentType  = cds :: experimental :: TreeSet < int > { 1, 2, 3, 5 };
+        auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
+
+        auto status = collectionTestGroupMemberFunctions (
+                intTreeSetObjectUnderTest,
                 this,
                 expectedToString,
                 expectedSize,

@@ -106,7 +106,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 TreeSet && set
         ) noexcept -> TreeSet & {
 
-            this->__rbt_move ( set );
+            this->__rbt_move ( std :: move ( set ) );
             return * this;
         }
 
