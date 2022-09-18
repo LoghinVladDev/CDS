@@ -3882,6 +3882,19 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : IntTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < int > objUnderTest = {3, 4, 5, 6, 7};
+        auto status = collectionTestGroupDelegateForwardConstIterableClientImports < int > (
+                objUnderTest,
+                this,
+                3, 4, 5, 6, 7
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : IntToIntHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
