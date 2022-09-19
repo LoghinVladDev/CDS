@@ -129,7 +129,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                             & __ClassType :: __rbt_rightRotate  :
                                             & __ClassType :: __rbt_leftRotate
                     > auto __identifyAndApplyRotationOnInsert (                           /* NOLINT(bugprone-reserved-identifier) */
-                            RBTreeNode * pPivot
+                            RBTreeNode * & pPivot
                     ) noexcept -> void;
 
 
@@ -159,7 +159,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                             & __ClassType :: __rbt_rightRotate  :
                                             & __ClassType :: __rbt_leftRotate
                     > auto __identifyAndApplyRotationOnDelete (                                         /* NOLINT(bugprone-reserved-identifier) */
-                            RBTreeNode * pPivot
+                            RBTreeNode * & pPivot
                     ) noexcept -> void;
 
                 protected:

@@ -302,7 +302,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __identifyAndApplyRotationOnInsert (
-                        RBTreeNode * pPivot
+                        RBTreeNode * & pPivot
                 ) noexcept -> void {
 
                     RBTreeNode * pAux = __locateAuxiliary ( pPivot->_pParent->_pParent );
@@ -350,7 +350,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __identifyAndApplyRotationOnDelete (
-                        RBTreeNode * pPivot
+                        RBTreeNode * & pPivot
                 ) noexcept -> void {
 
                     RBTreeNode * pAux = __locateAuxiliary ( pPivot->_pParent );
