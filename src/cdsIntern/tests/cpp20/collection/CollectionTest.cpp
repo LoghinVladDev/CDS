@@ -9007,7 +9007,28 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommon= */        allCommon,
                 /* allCommonAndMore= */ allCommonAndMore
         );
+    });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntTreeSet", [& allOk, this] {
 
+        cds :: experimental :: TreeSet < int > intTreeSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: TreeSet < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: TreeSet < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: TreeSet < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: TreeSet < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: TreeSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < int > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intTreeSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
         std :: initializer_list < int > noneCommonList = { 6, 7, 8, 9, 10 };
         std :: initializer_list < int > oneCommonList = { 6, 2, 8, 9, 10 };
         std :: initializer_list < int > moreCommonList = { 6, 2, 8, 4, 5 };
@@ -9017,7 +9038,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         /* CTC-00301-C0-InitializerList-CPP20 */
         allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < int > > (
                 /* groupName= */        "InitializerList",
-                /* collection= */       intHashSet,
+                /* collection= */       intTreeSet,
                 /* pTestLib= */         this,
                 /* noneCommon= */       noneCommonList,
                 /* oneCommon= */        oneCommonList,
