@@ -17080,6 +17080,40 @@ auto CollectionTest :: execute () noexcept -> bool {
                100, 200, 300, 400
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RandomInsertion-CPP20 : CTG-00800-RI-CPP20 : IntTreeSet", [this, & allOk] {
+
+        int byCopy = 5;
+        int byMove = 8;
+
+        cds :: experimental :: Array < int > range1Definer = { 10, 20, 30, 40 };
+        cds :: Range range2Definer ( 10, 15 );
+        std :: vector < int > range3Definer { 20, 21, 22, 23, 24, 25 };
+
+        allOk = allOk && collectionTestGroupRandomInsertion <
+                cds :: experimental :: TreeSet < int >,
+                int
+        > (
+                this,
+                byCopy,
+                std :: move ( byMove ),
+                2, 3, 4,
+                make_a (int, 1, 2, 3, 4, 5),
+                { 5, 6, 7, 8, 9 },
+                range1Definer.begin(), range1Definer.end(),
+                range2Definer.begin(), range2Definer.end(),
+                range3Definer.begin(), range3Definer.end(),
+                make_ts (int, 5),
+                make_ts (int, 8),
+                make_ts (int, 2, 3, 4),
+                make_ts (int, 100, 200, 300, 400),
+                make_ts (int, 1, 2, 3, 4, 5),
+                make_ts (int, 5, 6, 7, 8, 9),
+                make_ts (int, 10, 20, 30, 40),
+                make_ts (int, 10, 11, 12, 13, 14),
+                make_ts (int, 20, 21, 22, 23, 24, 25),
+                100, 200, 300, 400
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RandomInsertion-CPP20 : CTG-00800-RI-CPP20 : IntToIntHashMap", [this, & allOk] {
 
         MapEntry < int, int > byCopy = {5, 87};
