@@ -5,8 +5,6 @@
 #ifndef __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__
 #define __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include <queue>
-
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, modernize-concat-nested-namespaces) */
@@ -270,13 +268,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         RBTreeNode * pPivot
                 ) -> void {
 
-                    while ( pPivot != this->_pRoot && !__isRed ( pPivot ) ) {
+                    while ( pPivot != this->_pRoot && __isBlack ( pPivot ) ) {
                         if ( __isLeftChild ( pPivot ) ) {
                             __identifyAndApplyRotationOnDelete < true > ( pPivot );
                         } else {
                             __identifyAndApplyRotationOnDelete < false > ( pPivot );
                         }
                     }
+
+                    pPivot->_colour = RBTreeNode :: BLACK;
                 }
 
                 template <
@@ -363,13 +363,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         pAux = __locateAuxiliary ( pPivot->_pParent );
                     }
 
-                    if ( !__isRed ( pAux->_pLeft ) && !__isRed ( pAux->_pRight ) ) {
+                    if ( __isBlack ( pAux->_pLeft ) && __isBlack ( pAux->_pRight ) ) {
 
                         pAux->_colour = RBTreeNode :: RED;
                         pPivot = pPivot->_pParent;
                     } else {
 
-                        if ( !__isRed ( __locateAuxiliary ( pAux ) ) ) {
+                        if ( __isBlack ( __locateAuxiliary ( pAux ) ) ) {
 
                             __locateReversedAuxiliary ( pAux )->_colour = RBTreeNode :: BLACK;
                             pAux->_colour = RBTreeNode :: RED;
@@ -384,7 +384,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         pPivot = this->_pRoot;
                     }
 
-                    pPivot->_colour = RBTreeNode :: BLACK;
                 }
 
                 template <
@@ -535,7 +534,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     auto const endNode = __endNode < __ElementType > ();
 
-                    bool isOriginallyBlack = ! __isRed ( pToBeRemoved );
+                    bool isOriginallyBlack = __isBlack ( pToBeRemoved );
                     RBTreeNode * pBalancePivot;
 
                     if ( pToBeRemoved->_pLeft == endNode ) {
@@ -550,7 +549,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         while ( pDeletedPlaceholder->_pLeft != endNode )
                             pDeletedPlaceholder = pDeletedPlaceholder->_pLeft;
 
-                        isOriginallyBlack = ! __isRed ( pDeletedPlaceholder );
+                        isOriginallyBlack = __isBlack ( pDeletedPlaceholder );
                         pBalancePivot = pDeletedPlaceholder->_pRight;
 
                         if ( pDeletedPlaceholder->_pParent == pToBeRemoved ) {
@@ -722,14 +721,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                                     if ( pToBeDeleted != this->_pRoot) {
                                         if ( __isLeftChild ( pToBeDeleted ) ) {
-                                            pCurrentNode->_pLeft = __endNode < __ElementType > ();
+                                            pCurrentNode->_pLeft = endNode;
                                         }
                                         else {
-                                            pCurrentNode->_pRight = __endNode < __ElementType > ();
+                                            pCurrentNode->_pRight = endNode;
                                         }
-                                    }
-                                    else {
-
                                     }
 
                                     __RedBlackTree :: __rbt_freeNode ( pToBeDeleted );

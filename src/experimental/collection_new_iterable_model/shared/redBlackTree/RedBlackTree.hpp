@@ -46,6 +46,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_OptimalInline static auto __isBlack ( __RedBlackTreeNode < __ElementType > * pNode ) noexcept -> bool { /* NOLINT(bugprone-reserved-identifier) */
+                    return pNode->_colour == __RedBlackTreeNode < __ElementType > :: BLACK;
+                }
+
+
                 template <
                         typename                                                            __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
                         typename                                                            __KeyType,              /* NOLINT(bugprone-reserved-identifier) */
@@ -85,6 +91,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 private:
                     RBTreeNode    * _pRoot  { nullptr };
 
+                private:
+                    auto __rbt_isBalanced () noexcept -> bool;
 
                 private:
                     __CDS_NoDiscard static auto __rbt_allocateNode () noexcept -> RBTreeNode *;          /* NOLINT(bugprone-reserved-identifier) */

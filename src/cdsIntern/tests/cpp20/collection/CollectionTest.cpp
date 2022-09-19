@@ -9794,6 +9794,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hs ( String )
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringTreeSet", [this, & allOk]{
+
+        cds :: experimental :: TreeSet < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](String const & x) { return x == "ddd"; },
+                /* matchingOne = */                                     [](String const & x) { return x == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](String const & x) { return x.startsWith ("bb") && ! x.endsWith ("a"); },
+                /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
+                /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_ts ( String, "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_ts ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_ts ( String, "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_ts ( String, "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_ts ( String, "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_ts ( String, "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_ts ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_ts ( String )
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringToStringHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < String, String > originalArray = { {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} };
