@@ -222,6 +222,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept;
 
             public:
+                template < typename __IterableType >                /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_Explicit TreeSet (                                           /* NOLINT(bugprone-reserved-identifier) */
+                        __IterableType const & iterable
+                ) noexcept;
+
+            public:
                 ~TreeSet () noexcept override;
 
             public:

@@ -172,7 +172,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto const endNode = __endNode < __ElementType > ();
 
                     if ( pAux->_pRight != endNode ) {
-                        pAux->_pLeft = pPivot;
+                        pAux->_pRight->_pParent = pPivot;
                     }
 
                     pAux->_pParent = pPivot->_pParent;
@@ -208,7 +208,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> void {
 
                     while ( __isRed ( pPivot->_pParent ) ) {
-                        if ( __isLeftChild ( pPivot ) ) {
+                        if ( __isLeftChild ( pPivot->_pParent ) ) {
                             __identifyAndApplyRotationOnInsert < true > ( pPivot );
                         } else {
                             __identifyAndApplyRotationOnInsert < false > ( pPivot );
@@ -311,7 +311,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         pPivot->_pParent->_colour = RBTreeNode :: BLACK;
                         pAux->_colour = RBTreeNode :: BLACK;
                         pPivot->_pParent->_pParent->_colour = RBTreeNode :: RED;
-                        pPivot = pPivot->_pParent->_pParent; /** TODO: unused value */
+                        pPivot = pPivot->_pParent->_pParent;
                     } else {
 
                         if ( __ifScenario1 ( pPivot ) ) {

@@ -82,6 +82,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         }
 
 
+        template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __IterableType >     /* NOLINT(bugprone-reserved-identifier) */
+        TreeSet < __ElementType > :: TreeSet (
+                __IterableType const & iterable
+        ) noexcept :
+            TreeSet (
+                    iterable.begin(),
+                    iterable.end()
+            ) {
+
+        }
+
+
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         TreeSet < __ElementType > :: ~TreeSet () noexcept {
 
