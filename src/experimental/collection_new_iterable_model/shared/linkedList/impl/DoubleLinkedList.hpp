@@ -948,36 +948,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > constexpr auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_begin () const noexcept -> __dll_ConstIterator {
-
-                    return __dll_ConstIterator (
-                            nullptr,
-                            this->_pFront
-                    );
-                }
-
-
-                template <
-                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
-                        __ElementType,
-                        __equals
-                > :: __dll_end () const noexcept -> __dll_ConstIterator {
-
-                    return __dll_ConstIterator (
-                            this->_pBack,
-                            nullptr
-                    );
-                }
-
-
-                template <
-                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
-                        __ElementType,
-                        __equals
                 > :: __dll_cbegin () const noexcept -> __dll_ConstIterator {
 
                     return __dll_ConstIterator (
@@ -1026,36 +996,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 > :: __dll_rend () noexcept -> __dll_ReverseIterator {
 
                     return __dll_ReverseIterator (
-                            this->_pFront,
-                            nullptr
-                    );
-                }
-
-
-                template <
-                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
-                        __ElementType,
-                        __equals
-                > :: __dll_rbegin () const noexcept -> __dll_ConstReverseIterator {
-
-                    return __dll_ConstReverseIterator (
-                            nullptr,
-                            this->_pBack
-                    );
-                }
-
-
-                template <
-                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __DoubleLinkedList <
-                        __ElementType,
-                        __equals
-                > :: __dll_rend () const noexcept -> __dll_ConstReverseIterator {
-
-                    return __dll_ConstReverseIterator (
                             this->_pFront,
                             nullptr
                     );

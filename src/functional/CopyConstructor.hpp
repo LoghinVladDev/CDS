@@ -12,7 +12,7 @@ namespace cds {
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template < typename __Type >                                                        /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __copyConstructHint ( __Type &, __Type const & ) noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __copyConstructHint ( __Type &, __Type const & ) noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                      * a used function, when it is only declared for SFINAE purposes. It will still return
