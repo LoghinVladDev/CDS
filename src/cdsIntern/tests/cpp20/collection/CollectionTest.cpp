@@ -9457,6 +9457,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 afterOtherRemove
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringTreeSet", [this, & allOk]{
+
+        cds :: experimental :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < String > & underTestColl = underTest;
+
+        cds :: experimental :: TreeSet < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: TreeSet < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: TreeSet < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: TreeSet < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: TreeSet < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringToStringHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < String, String > underTest = { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
