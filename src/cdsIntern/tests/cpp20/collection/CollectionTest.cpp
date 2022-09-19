@@ -9207,6 +9207,46 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < String > StringTreeSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: TreeSet < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: TreeSet < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: TreeSet < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: TreeSet < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: TreeSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < String > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringTreeSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < String > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < String > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < String > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < String > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < String > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP20 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < String > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringTreeSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringToIntHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < String, String > StringToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
