@@ -9503,6 +9503,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 #define make_a(type, ...) cds :: experimental :: Array < type > { __VA_ARGS__ }
 #define make_ll(type, ...) cds :: experimental :: LinkedList < type > { __VA_ARGS__ }
 #define make_hs(type, ...) cds :: experimental :: HashSet < type > { __VA_ARGS__ }
+#define make_ts(type, ...) cds :: experimental :: TreeSet < type > { __VA_ARGS__ }
 #define make_hm(ktype, vtype, ...) cds :: experimental :: HashMap < ktype, vtype > { __VA_ARGS__ }
 #define make_il(...) { __VA_ARGS__ }
 
@@ -9612,6 +9613,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesOne = */               make_hs ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
                 /* equivAfterRemoveAllThatMatchesMore = */              make_hs ( int, 1, 2, 3, 7, 8, 9 ),
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hs ( int )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntTreeSet", [this, & allOk]{
+
+        cds :: experimental :: TreeSet < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](int x) { return x > 100; },
+                /* matchingOne = */                                     [](int x) { return x == 3; },
+                /* matchingMoreLessThanLimit = */                       [](int x) { return x >= 4 && x <= 5; },
+                /* matchingMore = */                                    [](int x) { return x >= 4 && x <= 6; },
+                /* matchingMoreMoreThanLimit = */                       [](int x) { return x >= 4 && x <= 7; },
+                /* matchingAll = */                                     [](int x) { return x >= 1 && x <= 9; },
+                /* equivAfterRemoveThatMatchesNone = */                 make_ts ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_ts ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_ts ( int, 1, 2, 3, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_ts ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_ts ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_ts ( int, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_ts ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_ts ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_ts ( int, 1, 2, 3, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_ts ( int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_ts ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_ts ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_ts ( int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_ts ( int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_ts ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_ts ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_ts ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_ts ( int )
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntToIntHashMap", [this, & allOk]{
