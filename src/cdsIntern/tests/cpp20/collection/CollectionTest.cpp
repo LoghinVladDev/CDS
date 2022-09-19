@@ -14369,6 +14369,67 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedFindAllThatAllAndMore= */            { 1, 2, 3, 4, 5, 6, 7, 8, 9 }
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : IntTreeSet", [this, & allOk] {
+
+        cds :: experimental :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && collectionTestGroupFindThat (
+                /* pTestLib= */                                 this,
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     []( int x ){ return x == 10000; },
+                /* one= */                                      []( int x ){ return x == 4; },
+                /* moreLessThanLimit= */                        []( int x ){ return x >= 3 && x <= 5; },
+                /* more= */                                     []( int x ){ return x >= 2 && x <= 6; },
+                /* moreMoreThanLimit= */                        []( int x ){ return x >= 1 && x <= 3 || x >= 5 && x <= 8; },
+                /* all= */                                      []( int x ){ return x >= 1 && x <= 9; },
+                /* allAndMore= */                               []( int x ){ return x >= -50 && x <= 100; },
+                /* expectedSizeFindThatNone= */                 0U,
+                /* expectedFindThatNone= */                     {},
+                /* expectedSizeFindThatOne= */                  1U,
+                /* expectedFindThatOne= */                      { 4U },
+                /* expectedSizeFindThatMoreLessThanLimit= */    3U,
+                /* expectedFindThatMoreLessThanLimit= */        { 3, 4, 5 },
+                /* expectedSizeFindThatMore= */                 5U,
+                /* expectedFindThatMore= */                     { 2, 3, 4, 5, 6 },
+                /* expectedSizeFindThatMoreMoreThanLimit= */    5U,
+                /* expectedFindThatMoreMoreThanLimit= */        { 1, 2, 3, 5, 6 },
+                /* expectedSizeFindThatAll= */                  5U,
+                /* expectedFindThatAll= */                      { 1, 2, 3, 4, 5 },
+                /* expectedSizeFindThatAllAndMore= */           5U,
+                /* expectedFindThatAllAndMore= */               { 1, 2, 3, 4, 5 },
+                /* expectedResultFindFirstThatNone= */          false,
+                /* expectedFindFirstThatNone= */                -1,
+                /* expectedResultFindFirstThatOne= */           true,
+                /* expectedFindFirstThatOne= */                 4,
+                /* expectedResultFindFirstThatMore= */          true,
+                /* expectedFindFirstThatMore= */                2,
+                /* expectedResultFindFirstThatAll= */           true,
+                /* expectedFindFirstThatAll= */                 1,
+                /* expectedResultFindFirstThatAllAndMore= */    true,
+                /* expectedFindFirstThatAllAndMore= */          1,
+                /* expectedResultFindLastThatNone= */           false,
+                /* expectedFindLastThatNone= */                 -1,
+                /* expectedResultFindLastThatOne= */            true,
+                /* expectedFindLastThatOne= */                  4,
+                /* expectedResultFindLastThatMore= */           true,
+                /* expectedFindLastThatMore= */                 6,
+                /* expectedResultFindLastThatAll= */            true,
+                /* expectedFindLastThatAll= */                  9,
+                /* expectedResultFindLastThatAllAndMore= */     true,
+                /* expectedFindLastThatAllAndMore= */           9,
+                /* expectedSizeFindAllThatNone= */              0U,
+                /* expectedFindAllThatNone= */                  {},
+                /* expectedSizeFindAllThatOne= */               1U,
+                /* expectedFindAllThatOne= */                   { 4 },
+                /* expectedSizeFindAllThatMore= */              5U,
+                /* expectedFindAllThatMore= */                  { 2, 3, 4, 5, 6 },
+                /* expectedSizeFindAllThatAll= */               9U,
+                /* expectedFindAllThatAll= */                   { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                /* expectedSizeFindAllThatAllAndMore= */        9U,
+                /* expectedFindAllThatAllAndMore= */            { 1, 2, 3, 4, 5, 6, 7, 8, 9 }
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : IntToIntHashMap", [this, & allOk] {
 
         cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
