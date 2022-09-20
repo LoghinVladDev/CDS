@@ -87,11 +87,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier) */
         auto AbstractTreeIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
-            auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+            auto const pEndNode = & __hidden :: __impl :: __RedBlackTreeEndNodeContainer < __ElementType > :: __endNode.data();
 
-            if ( this->_pCurrentNode->_pRight != endNode ) {
+            if ( this->_pCurrentNode->_pRight != pEndNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
-                while ( this->_pCurrentNode->_pLeft != endNode ) {
+                while ( this->_pCurrentNode->_pLeft != pEndNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 }
 
@@ -119,11 +119,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType >                                           /* NOLINT(bugprone-reserved-identifier) */
         auto AbstractTreeIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
-            auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+            auto const pEndNode = & __hidden :: __impl :: __RedBlackTreeEndNodeContainer < __ElementType > :: __endNode.data();
 
-            if ( this->_pCurrentNode->_pLeft != endNode ) {
+            if ( this->_pCurrentNode->_pLeft != pEndNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
-                while ( this->_pCurrentNode->_pRight != endNode ) {
+                while ( this->_pCurrentNode->_pRight != pEndNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 }
 
@@ -227,11 +227,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType >                                                  /* NOLINT(bugprone-reserved-identifier) */
         auto AbstractTreeConstIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
-            auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+            auto const pEndNode = & __hidden :: __impl :: __RedBlackTreeEndNodeContainer < __ElementType > :: __endNode.data();
 
-            if ( this->_pCurrentNode->_pRight != endNode ) {
+            if ( this->_pCurrentNode->_pRight != pEndNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
-                while ( this->_pCurrentNode->_pLeft != endNode ) {
+                while ( this->_pCurrentNode->_pLeft != pEndNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pLeft;
                 }
 
@@ -258,11 +258,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType >                                                /* NOLINT(bugprone-reserved-identifier) */
         auto AbstractTreeConstIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
-            auto const endNode = __hidden :: __impl :: __endNode < __ElementType > ();
+            auto const pEndNode = & __hidden :: __impl :: __RedBlackTreeEndNodeContainer < __ElementType > :: __endNode.data();
 
-            if ( this->_pCurrentNode->_pLeft != endNode ) {
+            if ( this->_pCurrentNode->_pLeft != pEndNode ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
-                while ( this->_pCurrentNode->_pRight != endNode ) {
+                while ( this->_pCurrentNode->_pRight != pEndNode ) {
                     this->_pCurrentNode = this->_pCurrentNode->_pRight;
                 }
 

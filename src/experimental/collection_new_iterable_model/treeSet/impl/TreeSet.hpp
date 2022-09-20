@@ -107,7 +107,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 TreeSet const & set
         ) noexcept -> TreeSet & {
 
-            this->__rbt_copy <
+            this->template __rbt_copy <
                     & __hidden :: __impl :: __treeSetCopyConstructor < __ElementType >
             > ( set );
             return * this;
