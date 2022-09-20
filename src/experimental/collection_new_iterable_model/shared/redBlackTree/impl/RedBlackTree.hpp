@@ -122,8 +122,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         RBTreeNode * pPivot
                 ) noexcept -> void {
 
-                    /** TODO: This and __rbtRightRotate are never used, why? */
-
                     RBTreeNode * pAux = pPivot->_pRight;
                     pPivot->_pRight = pAux->_pLeft;
 
@@ -695,10 +693,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_clear () noexcept -> void {
 
-                    /** TODO:
-                     * while I appreciate the very nice and smart use of a recursive lambda, and that my cds :: Function didn't crash it or generate
-                     * memory errors, please, create a member static function for this. Each call adds more overhead than a normal function would */
-
                     if ( this->__rbt_empty() )
                         return;
 
@@ -851,19 +845,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     if ( tree.__rbt_empty() ) {
                         return;
                     }
-
-                    /** TODO :
-                     * same as above argument, for delete
-                     *
-                     * Also, while stack recurse copy is nice, consider the following ( also applicable for delete )
-                     *    size ( stack memory ) << size ( heap memory ). size ( thread stack memory ) << size ( stack memory ).
-                     *    in the context of a multithreaded-program, using a large RB might crash it. Consider:
-                     *
-                     *    - either always use a Queue object
-                     *    - either use recursion when size < threshold, and a Queue when past it.
-                     *    - ( given that Queue exists, but does not build, leave this here, or implement it. Not the interface object, the base type ( i.e. like __SingleLinkedList, __HashTable, etc. ) )
-                     * */
-
 
                     auto const endNode = __endNode < __ElementType > ();
 
@@ -1184,3 +1165,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 }
 
 #endif /* __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__ */
+#pragma clang diagnostic pop

@@ -92,9 +92,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode    * _pRoot  { nullptr };
 
                 private:
-                    auto __rbt_isBalanced () noexcept -> bool;
-
-                private:
                     __CDS_NoDiscard static auto __rbt_allocateNode () noexcept -> RBTreeNode *;          /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
