@@ -1165,4 +1165,3 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 }
 
 #endif /* __CDS_EX_SHARED_RED_BLACK_TREE_IMPL_HPP__ */
-#pragma clang diagnostic pop

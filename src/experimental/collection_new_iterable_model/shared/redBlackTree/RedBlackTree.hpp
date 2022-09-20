@@ -149,8 +149,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                             & __getLeftNode < __ElementType >,
                             __NodeType * ( *__locateReversedAuxiliary )( __NodeType * ) =               /* NOLINT(bugprone-reserved-identifier) */
                                     rotationDecision                            ?
-                                            & __getRightNode < __ElementType >  :
-                                            & __getLeftNode < __ElementType >,
+                                            & __getLeftNode < __ElementType >  :
+                                            & __getRightNode < __ElementType >,
                             bool ( *__ifScenario1 )( __NodeType * ) =                                   /* NOLINT(bugprone-reserved-identifier) */
                                     rotationDecision                            ?
                                             &__isRightChild < __ElementType >   :
