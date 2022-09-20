@@ -134,7 +134,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto TreeSet < __ElementType > :: size ()  const noexcept -> Size {
+        __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: size ()  const noexcept -> Size {
 
             return this->__rbt_size();
         }
