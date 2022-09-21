@@ -10,14 +10,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                struct __RedBlackTreeEndNodeContainer { /* NOLINT(bugprone-reserved-identifier) */
-
-                public:
-                    static cds :: __hidden :: __impl :: __allocation :: __RawContainer <
-                            cds :: __hidden :: __impl :: __RedBlackTreeNode < __ElementType >
-                    > __endNode;    /* NOLINT(bugprone-reserved-identifier) */
-                };
 
                 template <
                         typename                                                            __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
@@ -65,10 +57,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     friend class AbstractTreeConstIterator;
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_isLeftChild ( __rbt_NodeType const * pNode ) const noexcept -> bool;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
+                            __rbt_NodeType const * pNode,
+                            __rbt_NodeType const * pNodeParent
+                    ) const noexcept -> bool;
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_isRightChild ( __rbt_NodeType const * pNode ) const noexcept -> bool;  /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_isRightChild (     /* NOLINT(bugprone-reserved-identifier) */
+                            __rbt_NodeType const * pNode,
+                            __rbt_NodeType const * pNodeParent
+                    ) const noexcept -> bool;
 
                 private:
                     __CDS_NoDiscard constexpr auto __rbt_getLeftNode ( __rbt_NodeType * pNode ) const noexcept -> __rbt_NodeType *;     /* NOLINT(bugprone-reserved-identifier) */
@@ -81,9 +79,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 private:
                     __CDS_NoDiscard constexpr static auto __rbt_isNodeRed ( __rbt_NodeType const * pNode ) noexcept -> bool;     /* NOLINT(bugprone-reserved-identifier) */
-
-                private:
-                    __CDS_NoDiscard static auto __rbt_endNode () noexcept -> __rbt_NodeType *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     Size                _size   { 0ULL };
@@ -109,7 +104,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __rbt_transplant ( __rbt_NodeType * pRemoved, __rbt_NodeType * pMovedIn ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_deleteReBalance ( __rbt_NodeType * pPivot ) -> void;         /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_deleteReBalance (        /* NOLINT(bugprone-reserved-identifier) */
+                            __rbt_NodeType * pPivot,
+                            __rbt_NodeType * pPivotParent
+                    ) noexcept -> void;
 
                 private:
                     using __rbt_AuxiliaryLocatorFunction    = decltype ( & __RedBlackTree :: __rbt_getLeftNode );   /* NOLINT(bugprone-reserved-identifier) */
@@ -141,7 +139,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifTrue,                   /* NOLINT(bugprone-reserved-identifier) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifFalse                   /* NOLINT(bugprone-reserved-identifier) */
                     > auto __rbt_identifyAndApplyRotationOnDelete (                                                 /* NOLINT(bugprone-reserved-identifier) */
-                            __rbt_NodeType * & pPivot
+                            __rbt_NodeType * & pPivot,
+                            __rbt_NodeType *   pPivotParent
                     ) noexcept -> void;
 
                 protected:
