@@ -84,14 +84,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ListSortClient =            /* NOLINT(bugprone-reserved-identifier) */
-                        __SortCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
                 using __ListReplaceClient =         /* NOLINT(bugprone-reserved-identifier) */
                         __ReplaceCompositeClient <
                                 cds :: experimental :: List < __ElementType >,

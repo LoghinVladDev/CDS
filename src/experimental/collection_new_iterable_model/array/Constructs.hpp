@@ -196,14 +196,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArraySortClient =           /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalSortCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
                 using __ArrayReplaceClient =           /* NOLINT(bugprone-reserved-identifier) */
                         __LocalReplaceCompositeClient <
                                 cds :: experimental :: Array < __ElementType >,

@@ -9,6 +9,7 @@
 
 #include "array/Predeclaration.hpp"
 
+#include "shared/iterator/IteratorSort.hpp"
 #include "shared/iterator/AddressIterator.hpp"
 
 #include "shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
@@ -48,7 +49,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 public __hidden :: __impl :: __ArrayRemoveByClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayGenericStatementsClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayGenericConstStatementsClient < __ElementType >,
-                public __hidden :: __impl :: __ArraySortClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayReplaceClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >,
@@ -88,7 +88,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  using RemoveByClient                        = __hidden :: __impl :: __ArrayRemoveByClient < __ElementType >;
         protected:  using GenericStatementsClient               = __hidden :: __impl :: __ArrayGenericStatementsClient < __ElementType >;
         protected:  using GenericConstStatementsClient          = __hidden :: __impl :: __ArrayGenericConstStatementsClient < __ElementType >;
-        protected:  using SortClient                            = __hidden :: __impl :: __ArraySortClient < __ElementType >;
         protected:  using ReplaceClient                         = __hidden :: __impl :: __ArrayReplaceClient < __ElementType >;
         protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >;
         protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >;
@@ -282,8 +281,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using GenericConstStatementsClient :: any;
         public:     using GenericConstStatementsClient :: all;
         public:     using GenericConstStatementsClient :: none;
-
-        public:     using SortClient :: sort;
 
         public:     using ReplaceClient :: replace;
         public:     using ReplaceClient :: replaceFirst;
@@ -534,6 +531,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> __ElementType *;
 
+        protected:
+            auto sort (
+                    cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator
+            ) noexcept -> void override;
+
+        public:
+            template <
+                    typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier) */
+            > auto sort (
+                    __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
+            ) noexcept -> void;
+
         public:
             __CDS_NoDiscard auto sequence () & noexcept -> Sequence < Array < __ElementType > >;
 
@@ -554,6 +563,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/array/impl/ArrayBase.hpp"
 
+#include "shared/iterator/impl/IteratorSort.hpp"
 #include "shared/iterator/impl/AddressIterator.hpp"
 
 #include "shared/delegateIterator/impl/AbstractDelegateIterator.hpp"

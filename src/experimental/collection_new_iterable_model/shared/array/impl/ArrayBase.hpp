@@ -1833,6 +1833,30 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     return true;
                 }
 
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __Comparator
+                > auto __ArrayBase <
+                        __ElementType,
+                        __equals
+                > :: __ab_sort (
+                        __Comparator const & comparator
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr ) {
+                        return;
+                    }
+
+                    cds :: experimental :: introSort (
+                            this->_pData->_pFront,
+                            this->_pData->_pBack,
+                            comparator
+                    );
+                }
+
             }
         }
     }

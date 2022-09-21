@@ -204,7 +204,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __RandomAccessIteratorType  const & begin,
                             __RandomAccessIteratorType  const & end,
                             __Comparator                const & comparator
-                    ) {
+                    ) noexcept -> void {
 
                         auto parent = begin + ( ( end - begin - 2 ) / 2 );
                         while ( parent >= begin ) {
@@ -222,7 +222,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __RandomAccessIteratorType  const & begin,
                             __RandomAccessIteratorType          last,
                             __Comparator                const & comparator
-                    ) {
+                    ) noexcept -> void {
 
                         while ( last >= begin ) {
 

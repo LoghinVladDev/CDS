@@ -46,7 +46,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 public __hidden :: __impl :: __LinkedListRemoveByClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListGenericStatementsClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListGenericConstStatementsClient < __ElementType >,
-                public __hidden :: __impl :: __LinkedListSortClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListReplaceClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >,
                 public __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >,
@@ -86,7 +85,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  using RemoveByClient                        = __hidden :: __impl :: __LinkedListRemoveByClient < __ElementType >;
         protected:  using GenericStatementsClient               = __hidden :: __impl :: __LinkedListGenericStatementsClient < __ElementType >;
         protected:  using GenericConstStatementsClient          = __hidden :: __impl :: __LinkedListGenericConstStatementsClient < __ElementType >;
-        protected:  using SortClient                            = __hidden :: __impl :: __LinkedListSortClient < __ElementType >;
         protected:  using ReplaceClient                         = __hidden :: __impl :: __LinkedListReplaceClient < __ElementType >;
         protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >;
         protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >;
@@ -291,8 +289,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using ContainsOfInitializerListClient :: containsAllOf;
         public:     using ContainsOfInitializerListClient :: containsNoneOf;
 
-        public:     using SortClient :: sort;
-
         public:     using ReplaceClient :: replace;
         public:     using ReplaceClient :: replaceFirst;
         public:     using ReplaceClient :: replaceLast;
@@ -473,6 +469,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             auto removeAt (
                     Index index
             ) noexcept -> bool override;
+
+        protected:
+            auto sort (
+                    cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator
+            ) noexcept -> void override;
+
+        public:
+            template <
+                    typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier) */
+            > auto sort (
+                    __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
+            ) noexcept -> void;
 
         public:
             __CDS_NoDiscard auto sequence () & noexcept -> Sequence < LinkedList < __ElementType > >;

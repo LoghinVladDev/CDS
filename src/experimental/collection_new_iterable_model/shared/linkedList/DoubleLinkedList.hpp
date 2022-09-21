@@ -275,6 +275,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __dll_equals (  /* NOLINT(bugprone-reserved-identifier) */
                             __DoubleLinkedList const & list
                     ) const noexcept -> bool;
+
+                protected:
+                    template <
+                            typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )
+                    > auto __dll_sort (
+                            __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
+                    ) noexcept -> void;
                 };
 
 

@@ -5,6 +5,7 @@
 #ifndef __CDS_EX_LIST_HPP__
 #define __CDS_EX_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
+#include <CDS/Function>
 #include <CDS/experimental/MutableCollection>
 
 #include "shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
@@ -16,7 +17,6 @@
 #include "shared/collectionInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/SortCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
@@ -40,7 +40,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 public __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >,
                 public __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >,
                 public __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >,
-                public __hidden :: __impl :: __ListSortClient < __ElementType >,
                 public __hidden :: __impl :: __ListReplaceClient < __ElementType >,
                 public __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >,
                 public __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >,
@@ -59,7 +58,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
         protected:  using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
         protected:  using IndexedOperationsClient               = __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
-        protected:  using SortClient                            = __hidden :: __impl :: __ListSortClient < __ElementType >;
         protected:  using ReplaceClient                         = __hidden :: __impl :: __ListReplaceClient < __ElementType >;
         protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
         protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
@@ -139,8 +137,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using IndexedOperationsClient :: sub;
         public:     using IndexedOperationsClient :: operator[];
         public:     using IndexedOperationsClient :: removeAt;
-
-        public:     using SortClient :: sort;
 
         public:     using ReplaceClient :: replace;
         public:     using ReplaceClient :: replaceFirst;
@@ -237,6 +233,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept ( false ) -> ElementType const & = 0;
 
         public:
+            virtual auto sort (
+                    cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator = & cds :: predicates :: lessThan < __ElementType >
+            ) noexcept -> void = 0;
+
+        public:
             virtual auto removeAt (
                     Index index
             ) noexcept -> bool = 0;
@@ -259,7 +260,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 #include "shared/collectionInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/impl/SortCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"

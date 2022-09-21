@@ -775,6 +775,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ab_equals (  /* NOLINT(bugprone-reserved-identifier) */
                             __ArrayBase const & array
                     ) const noexcept -> bool;
+
+                protected:
+                    template <
+                            typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )
+                    > auto __ab_sort (
+                            __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
+                    ) noexcept -> void;
+
                 };
 
 

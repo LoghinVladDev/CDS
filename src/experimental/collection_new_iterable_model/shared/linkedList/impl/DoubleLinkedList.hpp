@@ -1154,6 +1154,147 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     return true;
                 }
 
+
+                namespace __mergeSortHelpers {  /* NOLINT(bugprone-reserved-identifier) */
+
+                    template <
+                            typename __ElementType
+                    > __CDS_OptimalInline auto __bidirectionalNodeMergeSortMidNode (
+                            cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType > * pHead
+                    ) noexcept -> cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType > * {
+
+                        auto pMid = pHead;
+                        pHead = pHead->_pNext;
+                        while ( pHead != nullptr ) {
+                            pHead = pHead->_pNext;
+                            if ( pHead != nullptr ) {
+                                pHead   = pHead->_pNext;
+                                pMid    = pMid->_pNext;
+                            }
+                        }
+
+                        return pMid;
+                    }
+
+
+                    template <
+                            typename __ElementType,
+                            typename __Comparator
+                    > __CDS_OptimalInline auto __bidirectionalNodeMergeSortMergeSortedLists (
+                            cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >        * pLeft,
+                            cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >        * pRight,
+                            __Comparator                                                        const & comparator
+                    ) noexcept -> cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType > * {
+
+                        if ( pLeft == nullptr ) {
+                            return pRight;
+                        }
+
+                        if ( pRight == nullptr ) {
+                            return pLeft;
+                        }
+
+                        decltype ( pLeft ) pFinalFront  = nullptr;
+                        decltype ( pLeft ) pFinalBack;
+                        decltype ( pLeft ) pToAdd;
+                        while ( pLeft != nullptr && pRight != nullptr ) {
+
+                            if ( comparator ( pLeft->_data, pRight->_data ) ) {
+                                pToAdd  = pLeft;
+                                pLeft   = pLeft->_pNext;
+                            } else {
+                                pToAdd  = pRight;
+                                pRight  = pRight->_pNext;
+                            }
+
+                            if ( pFinalFront == nullptr ) {
+
+                                pFinalFront         = pToAdd;
+                                pFinalBack          = pToAdd;
+                                pToAdd->_pNext      = nullptr;
+                                pToAdd->_pPrevious  = nullptr;
+                            } else {
+
+                                pFinalBack->_pNext  = pToAdd;
+                                pToAdd->_pPrevious  = pFinalBack;
+                                pFinalBack          = pToAdd;
+                            }
+                        }
+
+                        while ( pLeft != nullptr ) {
+
+                            pToAdd              = pLeft;
+                            pLeft               = pLeft->_pNext;
+                            pFinalBack->_pNext  = pToAdd;
+                            pToAdd->_pPrevious  = pFinalBack;
+                            pFinalBack          = pToAdd;
+                        }
+
+                        while ( pRight != nullptr ) {
+
+                            pToAdd              = pRight;
+                            pRight              = pRight->_pNext;
+                            pFinalBack->_pNext  = pToAdd;
+                            pToAdd->_pPrevious  = pFinalBack;
+                            pFinalBack          = pToAdd;
+                        }
+
+                        pFinalBack->_pNext = nullptr;
+                        return pFinalFront;
+                    }
+
+
+                    template <
+                            typename __ElementType,
+                            typename __Comparator
+                    > auto __bidirectionalNodeMergeSort (
+                            cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >        * pHead,
+                            __Comparator                                                        const & comparator
+                    ) noexcept -> cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType > * {
+
+                        if ( pHead == nullptr || pHead->_pNext == nullptr ) {
+                            return pHead;
+                        }
+
+                        auto pMid       = __bidirectionalNodeMergeSortMidNode ( pHead );
+                        auto pSplit     = pMid->_pNext;
+                        pMid->_pNext    = nullptr;
+
+                        return __bidirectionalNodeMergeSortMergeSortedLists (
+                                __bidirectionalNodeMergeSort < __ElementType > ( pHead, comparator ),
+                                __bidirectionalNodeMergeSort < __ElementType > ( pSplit, comparator ),
+                                comparator
+                        );
+                    }
+
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __Comparator
+                > __CDS_OptimalInline auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_sort (
+                        __Comparator const & comparator
+                ) noexcept -> void {
+
+                    this->_pFront = __mergeSortHelpers :: __bidirectionalNodeMergeSort (
+                            this->_pFront,
+                            comparator
+                    );
+
+                    auto pHead      = this->_pFront;
+                    this->_pBack    = nullptr;
+                    while ( pHead != nullptr ) {
+                        this->_pBack    = pHead;
+                        pHead           = pHead->_pNext;
+                    }
+                }
+
             }
         }
     }

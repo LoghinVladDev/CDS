@@ -392,6 +392,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return this->__ab_data();
         }
 
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto Array < __ElementType > :: sort (
+                cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator
+        ) noexcept -> void {
+
+            return this->template sort < decltype ( comparator ) > ( comparator );
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __Comparator >  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_OptimalInline auto Array < __ElementType > :: sort (
+                __Comparator const & comparator
+        ) noexcept -> void {
+
+            return this->__ab_sort ( comparator );
+        }
+
     }
 }
 

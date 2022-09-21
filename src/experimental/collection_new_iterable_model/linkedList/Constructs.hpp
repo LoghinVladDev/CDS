@@ -196,14 +196,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __LinkedListSortClient =           /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalSortCompositeClient <
-                                cds :: experimental :: LinkedList < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
                 using __LinkedListReplaceClient =           /* NOLINT(bugprone-reserved-identifier) */
                         __LocalReplaceCompositeClient <
                                 cds :: experimental :: LinkedList < __ElementType >,
