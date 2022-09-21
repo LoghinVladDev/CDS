@@ -57,28 +57,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     friend class AbstractTreeConstIterator;
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType const * pNode,
                             __rbt_NodeType const * pNodeParent
-                    ) const noexcept -> bool;
+                    ) noexcept -> bool;
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_isRightChild (     /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_isRightChild (     /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType const * pNode,
                             __rbt_NodeType const * pNodeParent
-                    ) const noexcept -> bool;
+                    ) noexcept -> bool;
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_getLeftNode ( __rbt_NodeType * pNode ) const noexcept -> __rbt_NodeType *;     /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_getLeftNode ( __rbt_NodeType * pNode ) noexcept -> __rbt_NodeType *;     /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    __CDS_NoDiscard constexpr auto __rbt_getRightNode ( __rbt_NodeType * pNode ) const noexcept -> __rbt_NodeType *;    /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_getRightNode ( __rbt_NodeType * pNode ) noexcept -> __rbt_NodeType *;    /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    __CDS_NoDiscard constexpr static auto __rbt_isNodeBlack ( __rbt_NodeType const * pNode ) noexcept -> bool;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_isNodeBlack ( __rbt_NodeType const * pNode ) noexcept -> bool;   /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    __CDS_NoDiscard constexpr static auto __rbt_isNodeRed ( __rbt_NodeType const * pNode ) noexcept -> bool;     /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static constexpr auto __rbt_isNodeRed ( __rbt_NodeType const * pNode ) noexcept -> bool;     /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     Size                _size   { 0ULL };
