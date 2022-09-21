@@ -6,10 +6,23 @@
 #include <CDS/experimental/LinkedList>
 #include "src/experimental/collection_new_iterable_model/shared/iterator/IteratorSort.hpp"
 #include "src/experimental/collection_new_iterable_model/shared/iterator/impl/IteratorSort.hpp"
-
+#include <chrono>
+#include <list>
+#include <vector>
 template < typename T >
 T f () {
     return T();
+}
+
+template < typename F >
+auto timed ( cds :: String const & message, F const & block ) {
+
+    auto start = std :: chrono :: high_resolution_clock :: now ();
+    block ();
+    auto end = std :: chrono :: high_resolution_clock :: now ();
+    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+
+    std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 
 int main () {
@@ -62,6 +75,28 @@ int main () {
     al2.sort(cds :: predicates :: greaterThan < int >);
     std :: cout << ll2 << '\n';
     std :: cout.flush();
+
+    srand(time(nullptr));
+    int limit = 1'000'000;
+    timed("cds array sort", [limit]{
+        Array < int > a;
+
+        for ( int i = 0; i < limit; ++ i ) {
+            a.pushBack(rand());
+        }
+
+        a.sort();
+    });
+
+    timed("cds list-based sort", [limit]{
+        Array < int > a;
+
+        for ( int i = 0; i < limit; ++ i ) {
+            a.pushBack(rand());
+        }
+
+        ((List < int > &) a ).sort();
+    });
 
 
     return 0;

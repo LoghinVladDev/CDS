@@ -33,6 +33,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @implements [public]         __MutableCollectionFindByClient - Find By Functions for Predicates Client - findThat / findFirstThat / findLastThat / findAllThat
          * @implements [public]         __MutableCollectionGenericStatementsClient - Generic Mutable Functional Statements for Predicates - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
          *
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
          * @test Suite: MCTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
          * @namespace cds :: experimental
          * @public
@@ -58,7 +59,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         protected:
             /**
-             * @typedef protected alias for Collection \< __ElementType \> base extened class - providing immutable iterable properties
+             * @typedef protected alias for Collection \< __ElementType \> base extended class - providing immutable iterable properties
              * @protected
              */
             using CollectionBase                    = Collection < __ElementType >;

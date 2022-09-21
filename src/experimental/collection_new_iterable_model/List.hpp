@@ -29,6 +29,36 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
+        /**
+         * @class Abstract Object representing any List-Type Linear Iterable Container. Order of elements preserved.
+         * @tparam __ElementType is the type of elements contained in the List
+         *
+         * @extends [public]    MutableCollection - Base MutableCollection Class, inheriting properties of mutable/immutable forward iterable container-type
+         *
+         * @implements [public] __ListDelegateForwardIterableClient - Abstract Mutable Bidirectional Iterator Request Client - begin / end
+         * @implements [public] __ListDelegateBackwardIterableClient - Abstract Mutable Bidirectional Reverse Iterator Request Client - rbegin / rend
+         * @implements [public] __ListDelegateForwardConstIterableClient - Abstract Immutable Bidirectional Iterator Request Client - cbegin / cend
+         * @implements [public] __ListDelegateForwardConstIterableClient - Abstract Immutable Bidirectional Reverse Iterator Request Client - crbegin / crend
+         * @implements [public] __ListBoundaryInsertionClient - Insertion at List boundaries Client - pushFront / pushFrontAll / pushFrontAllOf / emplaceFront / pushBack / pushBackAll / pushBackAllOf / emplaceBack
+         * @implements [public] __ListIteratorRelativeInsertionClient - Insertion relative to given iterator position Client - insertBefore / insertAllBefore / insertAllOfBefore / emplaceBefore / insertAfter / insertAllAfter / insertAllOfAfter / emplaceAfter
+         * @implements [public] __ListConstIteratorRelativeInsertionClient - Insertion relative to given const iterator position Client - insertBefore / insertAllBefore / insertAllOfBefore / emplaceBefore / insertAfter / insertAllAfter / insertAllOfAfter / emplaceAfter
+         * @implements [public] __ListIndexedOperationsClient - List Operations using indices. operator[], sub < list >, sub ( list )
+         * @implements [public] __ListReplaceClient - Replace singular element values - replace / replaceFirst / replaceLast / replaceAll
+         * @implements [public] __ListReplaceOfCollectionClient - Replace Client for replacing values belonging to a given collection - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
+         * @implements [public] __ListReplaceOfInitializerListClient - Replace Client for replacing values belonging to a given initializer list - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
+         * @implements [public] __ListReplaceByClient - Replace Client for replacing values validated by a given predicate - replaceThat / replaceFirstThat / replaceLastThat / replaceAllThat
+         * @implements [public] __ListIndicesClient - Client used for identifying indices of a given element - indexOf / firstIndexOf / lastIndexOf / indicesOf
+         * @implements [public] __ListIndicesOfCollectionClient - Client used for identifying indices of the elements found in the given collection - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
+         * @implements [public] __ListIndicesOfInitializerListClient - Client used for identifying indices of the elements found in the given initializer list - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
+         * @implements [public] __ListIndicesByClient - Client used for identifying indices of the elements validated by a given predicate - indicesOfThat / indexOfFirstThat / indexOfLastThat / indicesOfAllThat
+         *
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @test Suite: MCTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @test Suite: LTS-00001, Group: All, Test Cases: All
+         *
+         * @namespace cds :: experimental
+         * @public
+         */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class List :
                 public MutableCollection < __ElementType >,
@@ -49,46 +79,195 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 public __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __ListIndicesByClient < __ElementType > {
 
-        public:     using ElementType                           = __ElementType;
-        protected:  using DelegateForwardIterableClient         = __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >;
-        protected:  using DelegateBackwardIterableClient        = __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >;
-        protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >;
-        protected:  using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >;
-        protected:  using BoundaryInsertionClient               = __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >;
-        protected:  using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
-        protected:  using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
-        protected:  using IndexedOperationsClient               = __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
-        protected:  using ReplaceClient                         = __hidden :: __impl :: __ListReplaceClient < __ElementType >;
-        protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
-        protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
-        protected:  using ReplaceByClient                       = __hidden :: __impl :: __ListReplaceByClient < __ElementType >;
-        protected:  using IndicesClient                         = __hidden :: __impl :: __ListIndicesClient < __ElementType >;
-        protected:  using IndicesOfCollectionClient             = __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
-        protected:  using IndicesOfInitializerListClient        = __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
-        protected:  using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
+        public:
+            /**
+             * @typedef public alias for __ElementType, the type of the contained elements,
+             * publicly accessible, useful in sfinae statements - decltype ( List ) :: ElementType
+             * @public
+             */
+            using ElementType                           = __ElementType;
 
-        protected:  using MutableCollectionBase = MutableCollection < __ElementType >;
+        protected:
+            /**
+             * @typedef protected alias for MutableCollection \< __ElementType \> base extended class - providing mutable iterable properties
+             * @protected
+             */
+            using MutableCollectionBase = MutableCollection < __ElementType >;
 
-        protected:  using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
-        protected:  using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
+        protected:
+            /**
+             * @typedef protected alias for __ListDelegateForwardIterableClient base interface - providing begin / end for Abstract Bidirectional Mutable Iterators
+             * @protected
+             */
+            using DelegateForwardIterableClient         = __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListDelegateBackwardIterableClient base interface - providing rbegin / rend for Abstract Bidirectional Mutable Reverse Iterators
+             * @protected
+             */
+            using DelegateBackwardIterableClient        = __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListDelegateForwardConstIterableClient base interface - providing cbegin / cend for Abstract Bidirectional Immutable Iterators
+             * @protected
+             */
+            using DelegateForwardConstIterableClient    = __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for DelegateBackwardConstIterableClient base interface - providing crbegin / crend for Abstract Bidirectional Immutable Reverse Iterators
+             * @protected
+             */
+            using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListBoundaryInsertionClient base interface - providing boundary insertion functions
+             * @protected
+             */
+            using BoundaryInsertionClient               = __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIteratorRelativeInsertionClient base interface - providing iterator relative insertion functions
+             * @protected
+             */
+            using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListConstIteratorRelativeInsertionClient base interface - providing const iterator relative insertion functions
+             * @protected
+             */
+            using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIndexedOperationsClient base interface - providing index based operations
+             * @protected
+             */
+            using IndexedOperationsClient               = __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListReplaceClient base interface - providing replace operations
+             * @protected
+             */
+            using ReplaceClient                         = __hidden :: __impl :: __ListReplaceClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListReplaceOfCollectionClient base interface - providing replace of collection operations
+             * @protected
+             */
+            using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListReplaceOfInitializerListClient base interface - providing replace of initializer list operations
+             * @protected
+             */
+            using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListReplaceByClient base interface - providing replace by predicate operations
+             * @protected
+             */
+            using ReplaceByClient                       = __hidden :: __impl :: __ListReplaceByClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIndicesClient base interface - providing index query operations
+             * @protected
+             */
+            using IndicesClient                         = __hidden :: __impl :: __ListIndicesClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIndicesOfCollectionClient base interface - providing indices of collection elements query operations
+             * @protected
+             */
+            using IndicesOfCollectionClient             = __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIndicesOfInitializerListClient base interface - providing indices of initializer list elements query operations
+             * @protected
+             */
+            using IndicesOfInitializerListClient        = __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef protected alias for __ListIndicesByClient base interface - providing indices of elements validated by predicate query operations
+             * @protected
+             */
+            using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
+
+        protected:
+            /**
+             * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
+             * @protected
+             */
+            using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+
+        protected:
+            /**
+             * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
+             * @protected
+             */
+            using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
 
         public:
+            /**
+             * @brief Public constant representing an invalid list index. Used by index functions to denote the absence of an element.
+             * @static
+             * @public
+             */
             static Index const invalidIndex = -1;
 
         protected:
+            /**
+             * @brief Default Constructor
+             * @exceptsafe
+             * @test Suite: STS-00001, Group: All, Test Cases: All
+             * @protected
+             */
             constexpr List () noexcept;
 
         protected:
+            /**
+             * @brief Copy Constructor
+             * @param [in] list : List cref = Constant Reference to a list to copy the data from
+             * @exceptsafe
+             * @test Suite: STS-00001, Group: All, Test Cases: All
+             * @protected
+             */
             constexpr List (
                     List const & list
             ) noexcept;
 
         protected:
+            /**
+             * @brief Move Constructor
+             * @param [in, out] list : List mref = Move Reference to a list to acquire and release the data from
+             * @exceptsafe
+             * @test Suite: STS-00001, Group: All, Test Cases: All
+             * @protected
+             */
             constexpr List (
                     List && list
             ) noexcept;
 
         protected:
+            /**
+             * @brief Destructor
+             * @exceptsafe
+             * @test Suite: STS-00001, Group: All, Test Cases: All
+             * @public
+             */
             __CDS_cpplang_ConstexprDestructor ~List () noexcept override;
 
         public:     using DelegateForwardIterableClient :: begin;
@@ -233,7 +412,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept ( false ) -> ElementType const & = 0;
 
         public:
-            virtual auto sort (
+            virtual auto sort ( /* NOLINT(google-default-arguments) */
                     cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator = & cds :: predicates :: lessThan < __ElementType >
             ) noexcept -> void = 0;
 
