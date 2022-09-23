@@ -314,7 +314,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using ConstIteratorRelativeInsertionClient :: emplaceAfter;
 
         public:     using IndexedOperationsClient :: sub;
-        public:     using IndexedOperationsClient :: operator[];
+
+        public:
+            /**
+             * @inherit operator [] for index operations.
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00107-MF-getOp,
+             *      LTC-00118-MF-getCircularRightOp,
+             *      LTC-00119-MF-getCircularLeftOp,
+             *      LTC-00120-MF-getOpThrow
+             * }
+             * @public
+             */
+            using IndexedOperationsClient :: operator[];
+
         public:     using IndexedOperationsClient :: removeAt;
 
         public:     using ReplaceClient :: replace;
@@ -378,50 +391,166 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using IndicesByClient :: allIndicesOfThat;
 
         public:
+            /**
+             * @brief String conversion function, used to obtain String representation of the List
+             * @exceptsafe
+             * @return String = string representation
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00101-MF-toString }
+             * @public
+             */
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
+            /**
+             * @brief Function used to clear the list, removing all elements from it
+             * @exceptsafe
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00102-MF-clear }
+             * @public
+             */
             auto clear () noexcept -> void override = 0;
 
         public:
+            /**
+             * @brief Function used to remove the first element from the list, if any is present.
+             * @exceptsafe
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00104-MF-popFront }
+             * @public
+             */
             virtual auto popFront () noexcept -> void = 0;
 
         public:
+            /**
+             * @brief Function used to remove the last element from the list, if any is present.
+             * @exceptsafe
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00106-MF-popBack }
+             * @public
+             */
             virtual auto popBack () noexcept -> void = 0;
 
         public:
+            /**
+             * @brief Function used to peek at the front of the list, acquiring a mutable reference to the first enclosed element
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType ref = Mutable Reference to the first element
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00103-MF-front, LTC-00110-MF-frontThrow }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () noexcept (false) -> ElementType & = 0;
 
         public:
+            /**
+             * @brief Function used to peek at the front of the list, acquiring an immutable reference to the first enclosed element
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType cref = Immutable Reference to the first element
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00103-MF-front, LTC-00110-MF-frontThrow }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () const noexcept (false) -> ElementType const & = 0;
 
         public:
+            /**
+             * @brief Function used to peek at the back of the list, acquiring a mutable reference to the last enclosed element
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType ref = Mutable Reference to the last element
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00105-MF-back, LTC-00111-MF-backThrow }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () noexcept (false) -> ElementType & = 0;
 
         public:
+            /**
+             * @brief Function used to peek at the last of the list, acquiring an immutable reference to the last enclosed element
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType cref = Immutable Reference to the last element
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00105-MF-back, LTC-00111-MF-backThrow }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () const noexcept (false) -> ElementType const & = 0;
 
         public:
+            /**
+             * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType ref = Mutable Reference to the element at the requested index
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00107-MF-get,
+             *      LTC-00108-MF-getCircularRight,
+             *      LTC-00109-MF-getCircularLeft,
+             *      LTC-00112-MF-getThrow
+             * }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
                     Index index
             ) noexcept ( false ) -> ElementType & = 0;
 
         public:
+            /**
+             * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
+             * @throws cds::OutOfBoundsException if list is empty
+             * @return __ElementType cref = Immutable Reference to the element at the requested index
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00107-MF-get,
+             *      LTC-00108-MF-getCircularRight,
+             *      LTC-00109-MF-getCircularLeft,
+             *      LTC-00112-MF-getThrow
+             * }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
                     Index index
             ) const noexcept ( false ) -> ElementType const & = 0;
 
         public:
+            /**
+             * @brief Function used to sort the elements with the requested ordering, given as parameter. Parameter must be a callable object ( function / lambda / functor ). Default ordering, if no parameter given, is ascending
+             * @param comparator : cds :: Function < bool ( ElementType, ElementType ) > cref = Constant Reference to wrapped callable
+             * @exceptsafe
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00121-MF-sortAscFn,
+             *      LTC-00122-MF-sortDescFn,
+             *      LTC-00123-MF-sortAscLambda,
+             *      LTC-00124-MF-sortDescLambda,
+             *      LTC-00125-MF-sortAscFunctor,
+             *      LTC-00126-MF-sortDescFunctor,
+             *      LTC-00127-MF-sortDefault
+             * }
+             * @public
+             */
             virtual auto sort ( /* NOLINT(google-default-arguments) */
                     cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator = & cds :: predicates :: lessThan < __ElementType >
             ) noexcept -> void = 0;
 
         public:
+            /**
+             * @brief Function used to remove an element from the list via given index
+             * @param index : Index = index of the element to be removed
+             * @exceptsafe
+             * @return bool = true if removal was done, false otherwise
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00113-MF-removeAtEmpty,
+             *      LTC-00114-MF-removeAtFront,
+             *      LTC-00115-MF-removeAtBack,
+             *      LTC-00116-MF-removeAt
+             * }
+             * @public
+             */
             virtual auto removeAt (
                     Index index
             ) noexcept -> bool = 0;
 
         protected:
+            /**
+             * @brief Function used to circularly adapt an index based on the current list bounds
+             * @param index : Index = requested index to bound
+             * @exceptsafe
+             * @return Index = bounded index
+             * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+             *      LTC-00108-MF-getCircularRight,
+             *      LTC-00109-MF-getCircularLeft
+             * }
+             * @public
+             */
             __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (
                     Index index
             ) const noexcept -> Index;

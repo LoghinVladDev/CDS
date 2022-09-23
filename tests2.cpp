@@ -9,6 +9,7 @@
 #include <chrono>
 #include <list>
 #include <vector>
+#include <functional>
 template < typename T >
 T f () {
     return T();

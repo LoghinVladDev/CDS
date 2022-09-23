@@ -347,6 +347,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return;
                     }
 
+                    if ( index == 0 ) {
+                        return this->__dll_removeFront();
+                    }
+
+                    if ( index == this->_size - 1ULL ) {
+                        return this->__dll_removeBack();
+                    }
+
                     Index current = 0;
                     auto pHead = this->_pFront;
                     __NodeType * pToRemove = nullptr;
