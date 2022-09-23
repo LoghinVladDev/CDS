@@ -86,25 +86,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __rbt_NodeType    * _pRoot  { nullptr };
 
                 private:
-                    __CDS_NoDiscard static auto __rbt_allocateNode () noexcept -> __rbt_NodeType *;          /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto __rbt_allocateNode () noexcept -> __rbt_NodeType *;          /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    static auto __rbt_freeNode ( __rbt_NodeType * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned static auto __rbt_freeNode ( __rbt_NodeType * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_leftRotate ( __rbt_NodeType * pPivot ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_leftRotate ( __rbt_NodeType * pPivot ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_rightRotate ( __rbt_NodeType * pPivot ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_rightRotate ( __rbt_NodeType * pPivot ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_insertReBalance ( __rbt_NodeType * pPivot ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_insertReBalance ( __rbt_NodeType * pPivot ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_transplant ( __rbt_NodeType * pRemoved, __rbt_NodeType * pMovedIn ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_transplant ( __rbt_NodeType * pRemoved, __rbt_NodeType * pMovedIn ) noexcept -> void;            /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    auto __rbt_deleteReBalance (        /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_deleteReBalance (        /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType * pPivot,
                             __rbt_NodeType * pPivotParent
                     ) noexcept -> void;
@@ -125,7 +125,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             typename __ClassType :: __rbt_RotationConditionalFunction   __scenarioConditional,  /* NOLINT(bugprone-reserved-identifier) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifTrue,               /* NOLINT(bugprone-reserved-identifier) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifFalse               /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __rbt_identifyAndApplyRotationOnInsert (                                             /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprConditioned auto __rbt_identifyAndApplyRotationOnInsert (                                             /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType * & pPivot
                     ) noexcept -> void;
 
@@ -138,7 +138,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             typename __ClassType :: __rbt_RotationConditionalFunction   __scenarioConditional,      /* NOLINT(bugprone-reserved-identifier) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifTrue,                   /* NOLINT(bugprone-reserved-identifier) */
                             typename __ClassType :: __rbt_RotationScenarioFunction      __ifFalse                   /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __rbt_identifyAndApplyRotationOnDelete (                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprConditioned auto __rbt_identifyAndApplyRotationOnDelete (                                                 /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType * & pPivot,
                             __rbt_NodeType *   pPivotParent
                     ) noexcept -> void;
@@ -159,107 +159,105 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept;
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_empty () const -> bool; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_empty () const -> bool; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key
                     ) const noexcept -> __ElementType const *;
 
                 private:
-                    auto __rbt_removeAt ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeAt ( /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType * pToBeRemoved
                     ) noexcept -> bool;
 
                 protected:
-                    auto __rbt_remove ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __CDS_cpplang_ConstexprConditioned __rbt_remove ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const & key
                     ) noexcept -> bool;
 
                 protected:
-                    auto __rbt_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractTreeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __rbt_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
                             Size                                iteratorCount
                     ) noexcept -> Size;
 
-
+                protected:
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_clear () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __rbt_clear () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
-
-                protected:
-                    __CDS_NoDiscard auto __rbt_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __rbt_copy (                                                         /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprConditioned auto __rbt_copy (                                                         /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree const & tree
                     ) noexcept -> void;
 
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > auto __rbt_copyCleared (                                                  /* NOLINT(bugprone-reserved-identifier) */
+                    > __CDS_cpplang_ConstexprConditioned auto __rbt_copyCleared (                                                  /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree const & tree
                     ) noexcept -> void;
 
                 protected:
-                    auto __rbt_move (               /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_move (               /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree && tree
                     ) noexcept -> void;
 
                 protected:
-                    auto __rbt_moveCleared (        /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_moveCleared (        /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree && tree
                     ) noexcept -> void;
 
                 protected:
-                    auto __rbt_new (                /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_new (                /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const * pReferenceElement,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;
 
                 protected:
-                    auto __rbt_findIteratorConst (  /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_cpplang_ConstexprConditioned auto __rbt_findIteratorConst (  /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key
                     ) const noexcept -> __rbt_ConstIterator;
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_begin () noexcept -> __rbt_Iterator;         /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_begin () noexcept -> __rbt_Iterator;         /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_end () noexcept -> __rbt_Iterator;           /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_end () noexcept -> __rbt_Iterator;           /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_rbegin () noexcept -> __rbt_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_rbegin () noexcept -> __rbt_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_rend () noexcept -> __rbt_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_rend () noexcept -> __rbt_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_cbegin () const noexcept -> __rbt_ConstIterator;         /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_cbegin () const noexcept -> __rbt_ConstIterator;         /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_cend () const noexcept -> __rbt_ConstIterator;           /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_cend () const noexcept -> __rbt_ConstIterator;           /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_crbegin () const noexcept -> __rbt_ReverseConstIterator; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard auto __rbt_crend () const noexcept -> __rbt_ReverseConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr auto __rbt_crend () const noexcept -> __rbt_ReverseConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 };
             }
