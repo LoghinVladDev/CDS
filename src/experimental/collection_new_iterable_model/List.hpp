@@ -298,21 +298,155 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             __CDS_cpplang_ConstexprDestructor ~List () noexcept override;
 
-        public:     using DelegateForwardIterableClient :: begin;
-        public:     using DelegateForwardIterableClient :: end;
+        public:
+            /**
+             * @inherit begin function inherited from DelegateForwardIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00201-IT-perValueCheck,
+             *      LTC-00205-IT-perValueBwdCheck,
+             *      LTC-00209-IT-itMutabilityRange,
+             *      LTC-00210-IT-itMutabilityStd
+             * }
+             * @public
+             */
+            using DelegateForwardIterableClient :: begin;
 
-        public:     using DelegateBackwardIterableClient :: rbegin;
-        public:     using DelegateBackwardIterableClient :: rend;
+        public:
+            /**
+             * @inherit end function inherited from DelegateForwardIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00201-IT-perValueCheck,
+             *      LTC-00205-IT-perValueBwdCheck,
+             *      LTC-00209-IT-itMutabilityRange,
+             *      LTC-00210-IT-itMutabilityStd
+             * }
+             * @public
+             */
+            using DelegateForwardIterableClient :: end;
 
-        public:     using DelegateForwardConstIterableClient :: begin;
-        public:     using DelegateForwardConstIterableClient :: end;
-        public:     using DelegateForwardConstIterableClient :: cbegin;
-        public:     using DelegateForwardConstIterableClient :: cend;
+        public:
+            /**
+             * @inherit reverse begin function inherited from DelegateBackwardIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
+             * @public
+             */
+            using DelegateBackwardIterableClient :: rbegin;
 
-        public:     using DelegateBackwardConstIterableClient :: rbegin;
-        public:     using DelegateBackwardConstIterableClient :: rend;
-        public:     using DelegateBackwardConstIterableClient :: crbegin;
-        public:     using DelegateBackwardConstIterableClient :: crend;
+        public:
+            /**
+             * @inherit reverse end function inherited from DelegateBackwardIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
+             * @public
+             */
+            using DelegateBackwardIterableClient :: rend;
+
+        public:
+            /**
+             * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00202-IT-perValueImmCheck,
+             *      LTC-00206-IT-perValueBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: begin;
+
+        public:
+            /**
+             * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00202-IT-perValueImmCheck,
+             *      LTC-00206-IT-perValueBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: end;
+
+        public:
+            /**
+             * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00202-IT-perValueImmCheck,
+             *      LTC-00206-IT-perValueBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: cbegin;
+
+        public:
+            /**
+             * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
+             * Will hide the variant inherited from MutableCollection, which is unidirectional
+             * and will use the bidirectional one provided by this inheritance
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00202-IT-perValueImmCheck,
+             *      LTC-00206-IT-perValueBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateForwardConstIterableClient :: cend;
+
+        public:
+            /**
+             * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateBackwardConstIterableClient :: rbegin;
+
+        public:
+            /**
+             * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateBackwardConstIterableClient :: rend;
+
+        public:
+            /**
+             * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateBackwardConstIterableClient :: crbegin;
+
+        public:
+            /**
+             * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
+             * @public
+             */
+            using DelegateBackwardConstIterableClient :: crend;
 
         public:     using BoundaryInsertionClient :: pushBack;
         public:     using BoundaryInsertionClient :: pushBackAll;

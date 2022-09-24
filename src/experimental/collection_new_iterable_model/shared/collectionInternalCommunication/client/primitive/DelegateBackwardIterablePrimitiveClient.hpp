@@ -37,7 +37,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                 *      LTC-00201-IT-perValueCheck,
+                 *      LTC-00203-IT-perValueRevCheck,
+                 *      LTC-00205-IT-perValueBwdCheck,
+                 *      LTC-00207-IT-perValueRevBwdCheck,
+                 *      LTC-00209-IT-itMutabilityRange,
+                 *      LTC-00210-IT-itMutabilityStd,
+                 *      LTC-00211-IT-itMutabilityStdRev
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -72,7 +81,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, mutable, begin iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00201-IT-perValueCheck,
+                     *      LTC-00203-IT-perValueRevCheck,
+                     *      LTC-00205-IT-perValueBwdCheck,
+                     *      LTC-00207-IT-perValueRevBwdCheck,
+                     *      LTC-00209-IT-itMutabilityRange,
+                     *      LTC-00210-IT-itMutabilityStd,
+                     *      LTC-00211-IT-itMutabilityStdRev
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto rbegin () noexcept -> ReverseIterator;
@@ -82,7 +101,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rend request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, mutable, end iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00201-IT-perValueCheck,
+                     *      LTC-00203-IT-perValueRevCheck,
+                     *      LTC-00205-IT-perValueBwdCheck,
+                     *      LTC-00207-IT-perValueRevBwdCheck,
+                     *      LTC-00209-IT-itMutabilityRange,
+                     *      LTC-00210-IT-itMutabilityStd,
+                     *      LTC-00211-IT-itMutabilityStdRev
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto rend () noexcept -> ReverseIterator;

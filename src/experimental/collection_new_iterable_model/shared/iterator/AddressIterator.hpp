@@ -563,7 +563,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
          * @extends AbstractAddressIterator
          *
-         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00203-IT-perValueRevCheck,
+         *      LTC-00204-IT-perValueRevImmCheck,
+         *      LTC-00207-IT-perValueRevBwdCheck,
+         *      LTC-00208-IT-perValueRevBwdImmCheck,
+         *      LTC-00211-IT-itMutabilityStdRev
+         * }
          * @namespace cds :: experimental
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -588,7 +594,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Default Constructor, constexpr
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             constexpr BackwardAddressIterator () noexcept;
@@ -599,7 +611,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] pElement : Address = address of the element the iterator is indicating at
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_Explicit constexpr BackwardAddressIterator (
@@ -612,7 +630,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in] iterator : BackwardAddressIterator cref = Constant Reference to the iterator to acquire the address from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             constexpr BackwardAddressIterator (
@@ -625,7 +649,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @param [in, out] iterator : BackwardAddressIterator mref = Move Reference to the iterator to move the address from
              * @exceptsafe
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             constexpr BackwardAddressIterator (
@@ -639,7 +669,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -653,7 +689,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
@@ -667,7 +709,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if addresses are equal, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_NoDiscard constexpr auto operator == (
@@ -681,7 +729,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if addresses are not equal, false otherwise
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_NoDiscard constexpr auto operator != (
@@ -694,7 +748,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardAddressIterator &;
@@ -705,7 +763,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator = A copy of the original iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00203-IT-perValueRevCheck,
+             *      LTC-00204-IT-perValueRevImmCheck,
+             *      LTC-00211-IT-itMutabilityStdRev
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardAddressIterator;
@@ -716,7 +778,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator ref = Reference to the modified iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardAddressIterator &;
@@ -727,7 +792,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return BackwardAddressIterator = A copy of the original iterator
              *
-             * @test Suite: TBA, Group: TBA, Test Cases: TBA
+             *
+             * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+             *      LTC-00207-IT-perValueRevBwdCheck,
+             *      LTC-00208-IT-perValueRevBwdImmCheck
+             * }
              * @public
              */
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardAddressIterator;

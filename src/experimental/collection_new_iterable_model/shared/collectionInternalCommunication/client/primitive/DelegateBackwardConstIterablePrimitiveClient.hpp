@@ -37,7 +37,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __ElementType is the type of elements contained into the Object
                  * @tparam __bidirectional is to be set 'true' if received Abstract Iterator is bi-directional. If uni-directional, set to false
                  *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                 *      LTC-00202-IT-perValueImmCheck,
+                 *      LTC-00204-IT-perValueRevImmCheck,
+                 *      LTC-00206-IT-perValueBwdImmCheck,
+                 *      LTC-00208-IT-perValueRevBwdImmCheck
+                 * }
+                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -72,7 +78,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, immutable, begin iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00202-IT-perValueImmCheck,
+                     *      LTC-00204-IT-perValueRevImmCheck,
+                     *      LTC-00206-IT-perValueBwdImmCheck,
+                     *      LTC-00208-IT-perValueRevBwdImmCheck
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto rbegin () const noexcept -> ConstReverseIterator;
@@ -82,7 +95,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rend request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, immutable, end iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00202-IT-perValueImmCheck,
+                     *      LTC-00204-IT-perValueRevImmCheck,
+                     *      LTC-00206-IT-perValueBwdImmCheck,
+                     *      LTC-00208-IT-perValueRevBwdImmCheck
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto rend () const noexcept -> ConstReverseIterator;
@@ -92,7 +112,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, immutable, begin iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00202-IT-perValueImmCheck,
+                     *      LTC-00204-IT-perValueRevImmCheck,
+                     *      LTC-00206-IT-perValueBwdImmCheck,
+                     *      LTC-00208-IT-perValueRevBwdImmCheck
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto crbegin () const noexcept -> ConstReverseIterator;
@@ -102,7 +129,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rend request
                      * @exceptsafe
                      * @return ConstReverseIterator = Wrapper for the received backward, immutable, end iterator
-                     * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                     *
+                     * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+                     *      LTC-00202-IT-perValueImmCheck,
+                     *      LTC-00204-IT-perValueRevImmCheck,
+                     *      LTC-00206-IT-perValueBwdImmCheck,
+                     *      LTC-00208-IT-perValueRevBwdImmCheck
+                     * }
+                     *
                      * @public
                      */
                     __CDS_NoDiscard auto crend () const noexcept -> ConstReverseIterator;

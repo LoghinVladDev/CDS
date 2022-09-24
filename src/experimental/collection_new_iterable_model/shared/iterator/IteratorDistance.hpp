@@ -15,7 +15,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                  * @tparam __IteratorType is the type of iterator
                  *
                  * @test: Not Applicable.
-                 *
                  * @namespace cds :: experimental :: __hidden :: __impl
                  * @internal library-private
                  */
@@ -29,6 +28,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = distance between the iterators
                      *
+                     * @test: Not Applicable.
                      * @public
                      */
                     static inline auto __compute (                          /* NOLINT(bugprone-reserved-identifier) */
@@ -72,6 +72,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @exceptsafe
                      * @return Size = distance between the iterators
                      *
+                     * @test: Not Applicable.
                      * @public
                      */
                     static inline auto __compute (                          /* NOLINT(bugprone-reserved-identifier) */

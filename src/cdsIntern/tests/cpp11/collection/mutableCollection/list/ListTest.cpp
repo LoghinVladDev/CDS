@@ -648,6 +648,42 @@ template <
         pTestLib->logOK ( "'LTC-00208-IT-perValueRevBwdImmCheck-CPP11' OK" );
     }
 
+
+    /* ListTestGroup-DelegateBidirectionalIterableClientImports-itMutabilityRange-CPP11 : LTC-00209-IT-itMutabilityRange-CPP11 */
+    for ( auto & e : lref ) {
+        e = mutabilityTestValue1;
+    }
+
+    if ( ! lref.all ( [& mutabilityTestValue1](__EnclosedType const & v) { return mutabilityTestValue1 == v; } ) ) {
+        pTestLib->logError( "'LTC-00209-IT-itMutabilityRange-CPP11' failed" );
+        return false;
+    }
+    pTestLib->logOK ( "'LTC-00209-IT-itMutabilityRange-CPP11' OK" );
+
+
+    /* ListTestGroup-DelegateBidirectionalIterableClientImports-itMutabilityStd-CPP11 : LTC-00210-IT-itMutabilityStd-CPP11 */
+    for ( auto it = lref.begin(); it != lref.end(); ++ it ) {
+        * it = mutabilityTestValue2;
+    }
+
+    if ( ! lref.all ( [& mutabilityTestValue2](__EnclosedType const & v) { return mutabilityTestValue2 == v; } ) ) {
+        pTestLib->logError( "'LTC-00210-IT-itMutabilityStd-CPP11' failed" );
+        return false;
+    }
+    pTestLib->logOK ( "'LTC-00210-IT-itMutabilityStd-CPP11' OK" );
+
+
+    /* ListTestGroup-DelegateBidirectionalIterableClientImports-itMutabilityStdRev-CPP11 : LTC-00211-IT-itMutabilityStdRev-CPP11 */
+    for ( auto it = lref.rbegin(); it != lref.rend(); ++ it ) {
+        * it = mutabilityTestValue1;
+    }
+
+    if ( ! lref.all ( [& mutabilityTestValue1](__EnclosedType const & v) { return mutabilityTestValue1 == v; } ) ) {
+        pTestLib->logError( "'LTC-00211-IT-itMutabilityStdRev-CPP11' failed" );
+        return false;
+    }
+    pTestLib->logOK ( "'LTC-00211-IT-itMutabilityStdRev-CPP11' OK" );
+
     return true;
 }
 
