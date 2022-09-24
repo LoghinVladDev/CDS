@@ -35,7 +35,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >,
                     FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >,
                     __Hasher,
-                    cds :: __hidden :: __impl :: __PrimeRehashPolicy,
+                    cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
                     FunctionDestructor <
                             __ElementType,
                             & __hidden :: __impl :: __hashSetDestructor < __ElementType >
@@ -73,7 +73,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     protected:
         using __HashTableRehashPolicy = // NOLINT(bugprone-reserved-identifier)
-                cds :: __hidden :: __impl :: __PrimeRehashPolicy;
+                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >;
 
     protected:
         using __HashTableFunctionDestructor =   // NOLINT(bugprone-reserved-identifier)

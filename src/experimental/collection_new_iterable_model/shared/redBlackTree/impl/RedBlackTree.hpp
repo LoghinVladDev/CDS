@@ -154,7 +154,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -178,7 +178,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -575,7 +575,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -655,7 +655,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return nullptr;
                     }
 
-                    auto        pSearch     = this->_pRoot;
+                    auto pSearch = this->_pRoot;
 
                     while ( pSearch != nullptr ) {
                         if ( __keyEqualsComparator ( key, __keyExtractor ( pSearch->_data ) ) ) {
@@ -680,7 +680,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -750,7 +750,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -792,7 +792,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -819,7 +819,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -848,7 +848,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -922,7 +922,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         cds :: utility :: CopyConstructorFunction < __ElementType > __copy                             /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -951,7 +951,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
                 > template <
                         cds :: utility :: CopyConstructorFunction < __ElementType > __copy                             /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -1002,7 +1002,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -1052,7 +1052,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                > __CDS_OptimalInline auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,

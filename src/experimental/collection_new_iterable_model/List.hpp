@@ -222,6 +222,34 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             /**
+             * @typedef imported protected alias for Iterator, representing a forward mutable iterator
+             * @public
+             */
+            using typename DelegateForwardIterableClient :: Iterator;
+
+        public:
+            /**
+             * @typedef imported protected alias for ConstIterator, representing a forward immutable iterator
+             * @public
+             */
+            using typename DelegateForwardConstIterableClient :: ConstIterator;
+
+        public:
+            /**
+             * @typedef imported protected alias for ReverseIterator, representing a backward mutable iterator
+             * @public
+             */
+            using typename DelegateBackwardIterableClient :: ReverseIterator;
+
+        public:
+            /**
+             * @typedef imported protected alias for ConstReverseIterator, representing a backward immutable iterator
+             * @public
+             */
+            using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
+
+        public:
+            /**
              * @brief Public constant representing an invalid list index. Used by index functions to denote the absence of an element.
              * @static
              * @public

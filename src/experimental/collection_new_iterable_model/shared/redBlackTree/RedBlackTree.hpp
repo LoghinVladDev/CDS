@@ -86,10 +86,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __rbt_NodeType    * _pRoot  { nullptr };
 
                 private:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto __rbt_allocateNode () noexcept -> __rbt_NodeType *;          /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard static auto __rbt_allocateNode () noexcept -> __rbt_NodeType *;          /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
-                    __CDS_cpplang_ConstexprConditioned static auto __rbt_freeNode ( __rbt_NodeType * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
+                    static auto __rbt_freeNode ( __rbt_NodeType * pRemoved ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     __CDS_cpplang_ConstexprConditioned auto __rbt_leftRotate ( __rbt_NodeType * pPivot ) noexcept -> void;         /* NOLINT(bugprone-reserved-identifier) */
@@ -162,7 +162,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard constexpr auto __rbt_empty () const -> bool; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard auto __rbt_get ( /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;
@@ -173,28 +173,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) const noexcept -> __ElementType const *;
 
                 private:
-                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeAt ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_removeAt ( /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType * pToBeRemoved
                     ) noexcept -> bool;
 
                 protected:
-                    auto __CDS_cpplang_ConstexprConditioned __rbt_remove ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_remove ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const & key
                     ) noexcept -> bool;
 
                 protected:
-                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractTreeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __CDS_cpplang_ConstexprConditioned __rbt_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
                             AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
                             Size                                iteratorCount
                     ) noexcept -> Size;
 
                 protected:
-                    __CDS_cpplang_ConstexprConditioned auto __rbt_clear () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_clear () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
                     __CDS_NoDiscard constexpr auto __rbt_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
@@ -202,19 +202,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > __CDS_cpplang_ConstexprConditioned auto __rbt_copy (                                                         /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __rbt_copy (                                                         /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree const & tree
                     ) noexcept -> void;
 
                 protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
-                    > __CDS_cpplang_ConstexprConditioned auto __rbt_copyCleared (                                                  /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __rbt_copyCleared (                                                  /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree const & tree
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_cpplang_ConstexprConditioned auto __rbt_move (               /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_move (               /* NOLINT(bugprone-reserved-identifier) */
                             __RedBlackTree && tree
                     ) noexcept -> void;
 
@@ -224,7 +224,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_cpplang_ConstexprConditioned auto __rbt_new (                /* NOLINT(bugprone-reserved-identifier) */
+                    auto __rbt_new (                /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const * pReferenceElement,
                             bool * pIsNew
                     ) noexcept -> __ElementType *;

@@ -25,6 +25,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
         class AbstractTreeIterator : public meta :: BidirectionalIterator {
+
+        private:
             template <
                     typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
@@ -35,60 +37,60 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     /* NOLINT(bugprone-reserved-identifier) */
 
 
-            protected:
-                using RBTreeNode = cds :: __hidden :: __impl :: __RedBlackTreeNode < __ElementType >;
+        protected:
+            using RBTreeNode = cds :: __hidden :: __impl :: __RedBlackTreeNode < __ElementType >;
 
-            private:
-                RBTreeNode *         _pRoot          { 0ULL };
+        private:
+            RBTreeNode *         _pRoot          { 0ULL };
 
-            private:
-                RBTreeNode *         _pCurrentNode  { nullptr };
+        private:
+            RBTreeNode *         _pCurrentNode  { nullptr };
 
-            protected:
-                AbstractTreeIterator () noexcept;
+        protected:
+            constexpr AbstractTreeIterator () noexcept;
 
-            protected:
-                AbstractTreeIterator (
-                        RBTreeNode * pRoot,
-                        RBTreeNode * pCurrentNode
-                ) noexcept;
+        protected:
+            constexpr AbstractTreeIterator (
+                    RBTreeNode * pRoot,
+                    RBTreeNode * pCurrentNode
+            ) noexcept;
 
-            protected:
-                AbstractTreeIterator (
-                        AbstractTreeIterator const & iterator
-                ) noexcept;
+        protected:
+            constexpr AbstractTreeIterator (
+                    AbstractTreeIterator const & iterator
+            ) noexcept;
 
-            protected:
-                AbstractTreeIterator (
-                        AbstractTreeIterator && iterator
-                ) noexcept;
+        protected:
+            constexpr AbstractTreeIterator (
+                    AbstractTreeIterator && iterator
+            ) noexcept;
 
-            protected:
+        protected:
 
-            public:
-                auto operator * () const noexcept -> __ElementType &;
+        public:
+            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
-            public:
-                auto operator -> () const noexcept -> __ElementType *;
+        public:
+            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
 
-            public:
-                auto operator == (
-                        AbstractTreeIterator const & iterator
-                ) const noexcept -> bool;
+        public:
+            __CDS_NoDiscard constexpr auto operator == (
+                    AbstractTreeIterator const & iterator
+            ) const noexcept -> bool;
 
-            public:
-                auto operator != (
-                        AbstractTreeIterator const & iterator
-                ) const noexcept -> bool;
+        public:
+            __CDS_NoDiscard constexpr auto operator != (
+                    AbstractTreeIterator const & iterator
+            ) const noexcept -> bool;
 
-            public:
-                __CDS_Explicit operator bool () const noexcept;
+        public:
+            __CDS_Explicit constexpr operator bool () const noexcept;
 
-            protected:
-                auto advance () noexcept -> void;
+        protected:
+            __CDS_cpplang_ConstexprConditioned auto advance () noexcept -> void;
 
-            protected:
-                auto reverse () noexcept -> void;
+        protected:
+            __CDS_cpplang_ConstexprConditioned auto reverse () noexcept -> void;
         };
 
 
@@ -114,44 +116,44 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             RBTreeNode const *         _pCurrentNode  { nullptr };
 
         protected:
-            AbstractTreeConstIterator () noexcept;
+            constexpr AbstractTreeConstIterator () noexcept;
 
         protected:
-            AbstractTreeConstIterator (
+            constexpr AbstractTreeConstIterator (
                     RBTreeNode const * pRoot,
                     RBTreeNode const * pCurrentNode
             ) noexcept;
 
         protected:
-            AbstractTreeConstIterator (
+            constexpr AbstractTreeConstIterator (
                     AbstractTreeConstIterator const & iterator
             ) noexcept;
 
         protected:
-            AbstractTreeConstIterator (
+            constexpr AbstractTreeConstIterator (
                     AbstractTreeConstIterator && iterator
             ) noexcept;
 
         protected:
 
         public:
-            auto operator * () const noexcept -> __ElementType const &;
+            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
         public:
-            auto operator -> () const noexcept -> __ElementType const *;
+            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
         public:
-            auto operator == (
+            __CDS_NoDiscard constexpr auto operator == (
                     AbstractTreeConstIterator const & iterator
             ) const noexcept -> bool;
 
         public:
-            auto operator != (
+            __CDS_NoDiscard constexpr auto operator != (
                     AbstractTreeConstIterator const & iterator
             ) const noexcept -> bool;
 
         public:
-            __CDS_Explicit operator bool () const noexcept;
+            __CDS_Explicit constexpr operator bool () const noexcept;
 
         protected:
             auto advance () noexcept -> void;
@@ -163,6 +165,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
         class RedBlackTreeForwardIterator : public AbstractTreeIterator < __ElementType > {
+
+        private:
             template <
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
@@ -172,49 +176,49 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
-            private:
-                using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
+        private:
+            using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
 
-            public:
-                RedBlackTreeForwardIterator () noexcept;
+        public:
+            constexpr RedBlackTreeForwardIterator () noexcept;
 
-            public:
-                RedBlackTreeForwardIterator (
-                        RBTreeNode * pRoot,
-                        RBTreeNode * pCurrentNode
-                ) noexcept;
+        public:
+            constexpr RedBlackTreeForwardIterator (
+                    RBTreeNode * pRoot,
+                    RBTreeNode * pCurrentNode
+            ) noexcept;
 
-            public:
-                RedBlackTreeForwardIterator (
-                        RedBlackTreeForwardIterator const & iterator
-                ) noexcept;
+        public:
+            constexpr RedBlackTreeForwardIterator (
+                    RedBlackTreeForwardIterator const & iterator
+            ) noexcept;
 
-            public:
-                RedBlackTreeForwardIterator (
-                        RedBlackTreeForwardIterator && iterator
-                ) noexcept;
+        public:
+            constexpr RedBlackTreeForwardIterator (
+                    RedBlackTreeForwardIterator && iterator
+            ) noexcept;
 
-            public:
-                auto operator = (
-                        RedBlackTreeForwardIterator const & iterator
-                ) noexcept -> RedBlackTreeForwardIterator &;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                    RedBlackTreeForwardIterator const & iterator
+            ) noexcept -> RedBlackTreeForwardIterator &;
 
-            public:
-                auto operator = (
-                        RedBlackTreeForwardIterator && iterator
-                ) noexcept -> RedBlackTreeForwardIterator &;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                    RedBlackTreeForwardIterator && iterator
+            ) noexcept -> RedBlackTreeForwardIterator &;
 
-            public:
-                auto operator ++ () noexcept -> RedBlackTreeForwardIterator &;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> RedBlackTreeForwardIterator &;
 
-            public:
-                auto operator ++ (int) noexcept -> RedBlackTreeForwardIterator;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> RedBlackTreeForwardIterator;
 
-            public:
-                auto operator -- () noexcept -> RedBlackTreeForwardIterator &;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> RedBlackTreeForwardIterator &;
 
-            public:
-                auto operator -- (int) noexcept -> RedBlackTreeForwardIterator;
+        public:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> RedBlackTreeForwardIterator;
 
         };
 

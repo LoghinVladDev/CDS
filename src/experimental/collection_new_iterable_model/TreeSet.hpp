@@ -189,7 +189,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 constexpr TreeSet () noexcept;
 
             public:
-                __CDS_cpplang_ConstexprConstructorNonEmptyBody TreeSet (
+                TreeSet (
                         TreeSet const & set
                 ) noexcept;
 
@@ -205,7 +205,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
-                > __CDS_cpplang_ConstexprConstructorNonEmptyBody TreeSet (
+                > TreeSet (
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count = 0ULL
@@ -217,13 +217,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         cds :: meta :: EnableIf <                    /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
-                > constexpr TreeSet (
+                > TreeSet (
                         std :: initializer_list < __ElementType > const & initializerList
                 ) noexcept;
 
             public:
                 template < typename __IterableType >                /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_Explicit constexpr TreeSet (                                           /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_Explicit TreeSet (                                           /* NOLINT(bugprone-reserved-identifier) */
                         __IterableType const & iterable
                 ) noexcept;
 
@@ -231,29 +231,29 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_cpplang_ConstexprDestructor ~TreeSet () noexcept override;
 
             public:
-              __CDS_cpplang_ConstexprConditioned auto operator = (
+                auto operator = (
                         TreeSet const & set
                 ) noexcept -> TreeSet &;
 
 
             public:
-                __CDS_cpplang_ConstexprConditioned auto operator = (
+                auto operator = (
                         TreeSet && set
                 ) noexcept -> TreeSet &;
 
             protected:
-                __CDS_NoDiscard constexpr auto contains (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
                         __ElementType const & element
                 ) const noexcept -> bool override;
 
             public:
-                __CDS_NoDiscard constexpr auto size () const noexcept -> Size override;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
             public:
-               __CDS_cpplang_ConstexprConditioned auto clear () noexcept -> void override;
+               auto clear () noexcept -> void override;
 
             public:
-              __CDS_cpplang_ConstexprConditioned auto remove (
+              auto remove (
                         __ElementType const & element
                 ) noexcept -> bool override;
         };
