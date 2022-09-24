@@ -686,21 +686,34 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType * {
 
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
                     if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
                         return nullptr;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ||
+                            reversed && iterator._pPreviousNode == this->_pFront && iterator._pCurrentNode == nullptr
+                    ) {
                         return this->__dll_newFront ();
                     }
 
-                    if ( iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ||
+                            reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == this->_pBack
+                    ) {
                         return this->__dll_newBack ();
                     }
 
-                    return this->__dll_newBetweenNodes (
+                    return ! reversed ? this->__dll_newBetweenNodes (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode
+                    ) : this->__dll_newBetweenNodes (
+                            iterator._pCurrentNode,
+                            iterator._pPreviousNode
                     );
                 }
 
@@ -715,21 +728,34 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType * {
 
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
                     if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
                         return nullptr;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ||
+                            reversed && iterator._pPreviousNode == this->_pFront && iterator._pCurrentNode == nullptr
+                    ) {
                         return this->__dll_newFront ();
                     }
 
-                    if ( iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ||
+                            reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == this->_pBack
+                    ) {
                         return this->__dll_newBack ();
                     }
 
-                    return this->__dll_newBetweenNodes (
+                    return ! reversed ? this->__dll_newBetweenNodes (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode
+                    ) : this->__dll_newBetweenNodes (
+                            iterator._pCurrentNode,
+                            iterator._pPreviousNode
                     );
                 }
 
@@ -744,17 +770,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType * {
 
-                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
+                    if (
+                            this->__dll_empty() ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
+                            ! reversed && iterator._pCurrentNode == nullptr ||
+                            reversed && iterator._pCurrentNode == nullptr
+                    ) {
                         return nullptr;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && this->_pBack == this->_pFront ) {
-                        return this->__dll_newBack ();
-                    }
-
                     return this->__dll_newBetweenNodes (
-                            iterator._pCurrentNode,
-                            iterator._pCurrentNode->_pNext
+                            reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
+                            reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext
                     );
                 }
 
@@ -769,17 +800,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType * {
 
-                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
+                    if (
+                            this->__dll_empty() ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
+                            ! reversed && iterator._pCurrentNode == nullptr ||
+                            reversed && iterator._pCurrentNode == nullptr
+                    ) {
                         return nullptr;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && this->_pBack == this->_pFront ) {
-                        return this->__dll_newBack ();
-                    }
-
                     return this->__dll_newBetweenNodes (
-                            iterator._pCurrentNode,
-                            iterator._pCurrentNode->_pNext
+                            reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
+                            reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext
                     );
                 }
 
@@ -796,26 +832,41 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                            ** ppElements
                 ) noexcept -> bool {
 
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
                     if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
                         return false;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ||
+                            reversed && iterator._pPreviousNode == this->_pFront && iterator._pCurrentNode == nullptr
+                    ) {
                         this->__dll_newFrontArray (
                                 count,
                                 ppElements
                         );
 
-                    } else if ( iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ) {
+                    } else if (
+                            ! reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ||
+                            reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == this->_pBack
+                    ) {
                         this->__dll_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
-                        this->__dll_newBetweenNodesArray (
+                        ! reversed ? this->__dll_newBetweenNodesArray (
                                 iterator._pPreviousNode,
                                 iterator._pCurrentNode,
+                                count,
+                                ppElements
+                        ) : this->__dll_newBetweenNodesArray (
+                                iterator._pCurrentNode,
+                                iterator._pPreviousNode,
                                 count,
                                 ppElements
                         );
@@ -837,26 +888,41 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                                    ** ppElements
                 ) noexcept -> bool {
 
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
                     if ( this->__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ) {
                         return false;
                     }
 
-                    if ( iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ) {
+                    if (
+                            ! reversed && iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ||
+                            reversed && iterator._pPreviousNode == this->_pFront && iterator._pCurrentNode == nullptr
+                    ) {
                         this->__dll_newFrontArray (
                                 count,
                                 ppElements
                         );
 
-                    } else if ( iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ) {
+                    } else if (
+                            ! reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ||
+                            reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == this->_pBack
+                    ) {
                         this->__dll_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
-                        this->__dll_newBetweenNodesArray (
+                        ! reversed ? this->__dll_newBetweenNodesArray (
                                 iterator._pPreviousNode,
                                 iterator._pCurrentNode,
+                                count,
+                                ppElements
+                        ) : this->__dll_newBetweenNodesArray (
+                                iterator._pCurrentNode,
+                                iterator._pPreviousNode,
                                 count,
                                 ppElements
                         );
@@ -878,13 +944,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                            ** ppElements
                 ) noexcept -> bool {
 
-                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr || iterator._pPreviousNode == nullptr ) {
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
+                    if (
+                            this->__dll_empty() ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
+                            ! reversed && iterator._pCurrentNode == nullptr ||
+                            reversed && iterator._pCurrentNode == nullptr
+                    ) {
                         return false;
                     }
 
                     this->__dll_newBetweenNodesArray (
-                            iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious,
+                            reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
+                            reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext,
                             count,
                             ppElements
                     );
@@ -905,13 +980,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                                    ** ppElements
                 ) noexcept -> bool {
 
-                    if ( this->__dll_empty() || iterator._pCurrentNode == nullptr || iterator._pPreviousNode == nullptr ) {
+                    auto const reversed =
+                            ( this->_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr ) ||
+                            ( iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode );
+
+                    if (
+                            this->__dll_empty() ||
+                            iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
+                            ! reversed && iterator._pCurrentNode == nullptr ||
+                            reversed && iterator._pCurrentNode == nullptr
+                    ) {
                         return false;
                     }
 
                     this->__dll_newBetweenNodesArray (
-                            iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious,
+                            reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
+                            reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext,
                             count,
                             ppElements
                     );

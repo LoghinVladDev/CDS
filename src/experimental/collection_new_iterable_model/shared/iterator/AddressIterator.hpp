@@ -10,6 +10,17 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+
+                template <
+                        typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >
+                > class __ArrayBase;                                            /* NOLINT(bugprone-reserved-identifier) */
+
+            }
+        }
+
         /**
          * @brief Abstract Address Iterator, iterating over continuous address ranges.
          * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
@@ -21,6 +32,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         class AbstractAddressIterator : public meta :: RandomAccessIterator {
+
+        private:
+            /** Friend class declaration for use of 'absoluteBase' function */
+            template <
+                    typename __TElementType,                                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __TElementType >
+            > friend class cds :: experimental :: __hidden :: __impl :: __ArrayBase;    /* NOLINT(bugprone-reserved-identifier) */
 
         public:
             /**
@@ -187,6 +205,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard constexpr auto operator != (
                     AbstractAddressIterator < __ElementType > const & iterator
             ) const noexcept -> bool;
+
+        protected:
+            /**
+             * @brief Function used to return the address before it from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto absoluteBefore () const noexcept -> Address = 0;
+
+        protected:
+            /**
+             * @brief Function used to return the address after from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto absoluteAfter () const noexcept -> Address = 0;
 
         public:
             /**
@@ -370,6 +410,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard constexpr auto operator != (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
+
+        private:
+            /**
+             * @brief Function used to return the address before from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteBefore () const noexcept -> Address override;
+
+        private:
+            /**
+             * @brief Function used to return the address after from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteAfter () const noexcept -> Address override;
 
         public:
             /**
@@ -741,6 +803,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard constexpr auto operator != (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
+
+        private:
+            /**
+             * @brief Function used to return the address before from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteBefore () const noexcept -> Address override;
+
+        private:
+            /**
+             * @brief Function used to return the address after from an absolute point of view, as if forward iterator.
+             * Used in insertion after/before functions
+             * @exceptsafe
+             * @return Address = Address to absolute memory
+             * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
+             * @private
+             */
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteAfter () const noexcept -> Address override;
 
         public:
             /**

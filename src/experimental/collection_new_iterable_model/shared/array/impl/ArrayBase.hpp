@@ -440,7 +440,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> ElementType * {
 
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement = iterator.absoluteBefore();
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
@@ -473,7 +473,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> ElementType * {
 
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement = iterator.absoluteBefore();
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
@@ -505,16 +505,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* Special case : after with ReverseIterators. Check if reverse, potential to retrieve out of bounds, but valid, representing front */
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement           = iterator.absoluteAfter();
+                    auto const isReverse    = pElement != iterator.current();
+
+                    /* If reverse, and at front, return new front */
+                    if ( isReverse && iterator.current() == this->_pData->_pFront ) {
+                        return this->__ab_newFront();
+                    }
 
                     /* if array is empty or address is out of bounds, no new element created */
-                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                    if (
+                            this->_pData == nullptr ||
+                            pElement < this->_pData->_pFront ||
+                            pElement >= this->_pData->_pBack ||
+                            isReverse && iterator.current() == this->_pData->_pBack
+                    ) {
                         return nullptr;
                     }
 
                     /* if address is of the last element, return new back */
-                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                    if ( ! isReverse && pElement + 1ULL == this->_pData->_pBack ) {
                         return this->__ab_newBack ();
                     }
 
@@ -533,8 +545,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
+                    /* Special case : after with ReverseIterators. Check if reverse, potential to retrieve out of bounds, but valid, representing front */
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement           = iterator.absoluteAfter();
+                    auto const isReverse    = pElement != iterator.current();
+
+                    /* If reverse, and at front, return new front */
+                    if ( isReverse && iterator.current() == this->_pData->_pFront ) {
+                        return this->__ab_newFront();
+                    }
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
@@ -542,7 +561,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* if address is of the last element, return new back */
-                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                    if ( ! isReverse && pElement + 1ULL == this->_pData->_pBack ) {
                         return this->__ab_newBack ();
                     }
 
@@ -564,7 +583,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> bool {
 
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement = iterator.absoluteBefore();
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
@@ -615,7 +634,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> bool {
 
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement = iterator.absoluteBefore();
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
@@ -664,15 +683,27 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool {
 
+                    /* Special case : after with ReverseIterators. Check if reverse, potential to retrieve out of bounds, but valid, representing front */
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement           = iterator.absoluteAfter();
+                    auto const isReverse    = pElement != iterator.current();
+
+                    /* If reverse, and at front, return new front */
+                    if ( isReverse && iterator.current() == this->_pData->_pFront ) {
+                        this->__ab_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
+                    }
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return false;
                     }
 
-                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                    if ( ! isReverse && pElement + 1ULL == this->_pData->_pBack ) {
 
                         /* if address is of the last element, return new back array */
                         this->__ab_newBackArray (
@@ -706,15 +737,27 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool {
 
+                    /* Special case : after with ReverseIterators. Check if reverse, potential to retrieve out of bounds, but valid, representing front */
                     /* acquire address indicated by the iterator */
-                    auto pElement = & iterator [0ULL];
+                    auto pElement           = iterator.absoluteAfter();
+                    auto const isReverse    = pElement != iterator.current();
+
+                    /* If reverse, and at front, return new front */
+                    if ( isReverse && iterator.current() == this->_pData->_pFront ) {
+                        this->__ab_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
+                    }
 
                     /* if array is empty or address is out of bounds, no new element created */
                     if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
                         return false;
                     }
 
-                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                    if ( ! isReverse && pElement + 1ULL == this->_pData->_pBack ) {
 
                         /* if address is of the last element, return new back array */
                         this->__ab_newBackArray (

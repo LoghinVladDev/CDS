@@ -78,7 +78,7 @@ int main () {
     std :: cout.flush();
 
     srand(time(nullptr));
-    int limit = 1'000'000;
+    int limit = 10000;
     timed("cds array sort", [limit]{
         Array < int > a;
 
@@ -100,6 +100,243 @@ int main () {
     });
 
     al1.remove(al1.begin());
+    al1.remove(al1.rbegin());
+
+    std :: cout << al1 << '\n';
+
+    std :: vector < int > v = {1,2 ,3 ,4, 5};
+
+
+    Array < int > testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( -- -- testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( -- testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( -- -- testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( -- testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ ++ ++ testArr.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( -- -- testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( -- testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertBefore ( ++ ++ ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( -- -- testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( -- testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testArr.insertAfter ( ++ ++ ++ ++ testArr.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testArr << '\n';
+    testArr = {1, 2, 3};
+
+
+    std :: cout << "--------------------LIST--------------------\n";
+    LinkedList < int > testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( -- -- testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( -- testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+//    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ ++ ++ testList.begin(), 4 ) << " "; // obvious sigsegv
+//    std :: cout << std :: dec << testList << '\n';
+//    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( -- -- testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( -- testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ ++ testList.begin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+//    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ ++ ++ testList.begin(), 4 ) << " "; // obvious sigsegv
+//    std :: cout << std :: dec << testList << '\n';
+//    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( -- -- testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( -- testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+//    std :: cout << std :: boolalpha << testList.insertBefore ( ++ ++ ++ ++ testList.rbegin(), 4 ) << " "; /// sigsegv
+//    std :: cout << std :: dec << testList << '\n';
+//    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( -- -- testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( -- testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ ++ testList.rbegin(), 4 ) << " ";
+    std :: cout << std :: dec << testList << '\n';
+    testList = {1, 2, 3};
+
+//    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ ++ ++ testList.rbegin(), 4 ) << " "; /// sigsegv
+//    std :: cout << std :: dec << testList << '\n';
+//    testList = {1, 2, 3};
 
     return 0;
 }

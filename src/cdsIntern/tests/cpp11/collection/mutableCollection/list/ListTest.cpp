@@ -707,7 +707,7 @@ template <
     return true;
 }
 
-/* ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11. Tests LTC-00301-BI to LTC-003xx-BI */
+/* ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11. Tests LTC-00301-BI to LTC-00322-BI */
 template <
         template < typename ... > class __TestedType,
         typename __EnclosedType,
@@ -958,6 +958,461 @@ template <
         return false;
     }
     pTestLib->logOK("'LTC-00322-IT-pushFrontValues-CPP11' OK");
+
+    return true;
+}
+
+
+/* ListTestGroup-RelativeInsertion-CPP11 : LTG-00400-RI-CPP11. Tests LTC-00401-RI to LTC-004xx-RI */
+template <
+        template < typename ... > class __TestedType,
+        typename __EnclosedType,
+        typename ... __Values
+> auto listTestGroupRelativeInsertion (
+        Test * pTestLib,
+        std :: initializer_list < __EnclosedType > const & initValues,
+        typename List < __EnclosedType > :: Iterator ( List < __EnclosedType > :: * pBeginFn ) (),
+        typename List < __EnclosedType > :: Iterator ( List < __EnclosedType > :: * pEndFn ) (),
+        typename List < __EnclosedType > :: ConstIterator ( List < __EnclosedType > :: * pBeginCFn ) () const,
+        typename List < __EnclosedType > :: ConstIterator ( List < __EnclosedType > :: * pEndCFn ) () const,
+        typename List < __EnclosedType > :: ReverseIterator ( List < __EnclosedType > :: * pRBeginFn ) (),
+        typename List < __EnclosedType > :: ReverseIterator ( List < __EnclosedType > :: * pREndFn ) (),
+        typename List < __EnclosedType > :: ConstReverseIterator ( List < __EnclosedType > :: * pRBeginCFn ) () const,
+        typename List < __EnclosedType > :: ConstReverseIterator ( List < __EnclosedType > :: * pREndCFn ) () const,
+        Size case1Offset,
+        Size case2Offset,
+        Size case3Offset,
+        Size case4Offset,
+        __EnclosedType const & singleValue1,
+        __EnclosedType const & singleValue2,
+        __EnclosedType const & singleValue3,
+        std :: initializer_list < __EnclosedType > const & multipleValues1,
+        std :: initializer_list < __EnclosedType > const & multipleValues2,
+        std :: initializer_list < __EnclosedType > const & multipleValues3,
+
+        std :: initializer_list < __EnclosedType > const & resSingle1Case1,
+        std :: initializer_list < __EnclosedType > const & resSingle1Case2,
+        std :: initializer_list < __EnclosedType > const & resSingle1Case3,
+        std :: initializer_list < __EnclosedType > const & resSingle1Case4,
+        std :: initializer_list < __EnclosedType > const & resSingle1RevCase1,
+        std :: initializer_list < __EnclosedType > const & resSingle1RevCase2,
+        std :: initializer_list < __EnclosedType > const & resSingle1RevCase3,
+        std :: initializer_list < __EnclosedType > const & resSingle1RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resSingle2Case1,
+        std :: initializer_list < __EnclosedType > const & resSingle2Case2,
+        std :: initializer_list < __EnclosedType > const & resSingle2Case3,
+        std :: initializer_list < __EnclosedType > const & resSingle2Case4,
+        std :: initializer_list < __EnclosedType > const & resSingle2RevCase1,
+        std :: initializer_list < __EnclosedType > const & resSingle2RevCase2,
+        std :: initializer_list < __EnclosedType > const & resSingle2RevCase3,
+        std :: initializer_list < __EnclosedType > const & resSingle2RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resSingle3Case1,
+        std :: initializer_list < __EnclosedType > const & resSingle3Case2,
+        std :: initializer_list < __EnclosedType > const & resSingle3Case3,
+        std :: initializer_list < __EnclosedType > const & resSingle3Case4,
+        std :: initializer_list < __EnclosedType > const & resSingle3RevCase1,
+        std :: initializer_list < __EnclosedType > const & resSingle3RevCase2,
+        std :: initializer_list < __EnclosedType > const & resSingle3RevCase3,
+        std :: initializer_list < __EnclosedType > const & resSingle3RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resMultiple1Case1,
+        std :: initializer_list < __EnclosedType > const & resMultiple1Case2,
+        std :: initializer_list < __EnclosedType > const & resMultiple1Case3,
+        std :: initializer_list < __EnclosedType > const & resMultiple1Case4,
+        std :: initializer_list < __EnclosedType > const & resMultiple1RevCase1,
+        std :: initializer_list < __EnclosedType > const & resMultiple1RevCase2,
+        std :: initializer_list < __EnclosedType > const & resMultiple1RevCase3,
+        std :: initializer_list < __EnclosedType > const & resMultiple1RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resMultiple2Case1,
+        std :: initializer_list < __EnclosedType > const & resMultiple2Case2,
+        std :: initializer_list < __EnclosedType > const & resMultiple2Case3,
+        std :: initializer_list < __EnclosedType > const & resMultiple2Case4,
+        std :: initializer_list < __EnclosedType > const & resMultiple2RevCase1,
+        std :: initializer_list < __EnclosedType > const & resMultiple2RevCase2,
+        std :: initializer_list < __EnclosedType > const & resMultiple2RevCase3,
+        std :: initializer_list < __EnclosedType > const & resMultiple2RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resMultiple3Case1,
+        std :: initializer_list < __EnclosedType > const & resMultiple3Case2,
+        std :: initializer_list < __EnclosedType > const & resMultiple3Case3,
+        std :: initializer_list < __EnclosedType > const & resMultiple3Case4,
+        std :: initializer_list < __EnclosedType > const & resMultiple3RevCase1,
+        std :: initializer_list < __EnclosedType > const & resMultiple3RevCase2,
+        std :: initializer_list < __EnclosedType > const & resMultiple3RevCase3,
+        std :: initializer_list < __EnclosedType > const & resMultiple3RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & resMultipleVCase1,
+        std :: initializer_list < __EnclosedType > const & resMultipleVCase2,
+        std :: initializer_list < __EnclosedType > const & resMultipleVCase3,
+        std :: initializer_list < __EnclosedType > const & resMultipleVCase4,
+        std :: initializer_list < __EnclosedType > const & resMultipleVRevCase1,
+        std :: initializer_list < __EnclosedType > const & resMultipleVRevCase2,
+        std :: initializer_list < __EnclosedType > const & resMultipleVRevCase3,
+        std :: initializer_list < __EnclosedType > const & resMultipleVRevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresSingle1Case1,
+        std :: initializer_list < __EnclosedType > const & aresSingle1Case2,
+        std :: initializer_list < __EnclosedType > const & aresSingle1Case3,
+        std :: initializer_list < __EnclosedType > const & aresSingle1Case4,
+        std :: initializer_list < __EnclosedType > const & aresSingle1RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresSingle1RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresSingle1RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresSingle1RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresSingle2Case1,
+        std :: initializer_list < __EnclosedType > const & aresSingle2Case2,
+        std :: initializer_list < __EnclosedType > const & aresSingle2Case3,
+        std :: initializer_list < __EnclosedType > const & aresSingle2Case4,
+        std :: initializer_list < __EnclosedType > const & aresSingle2RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresSingle2RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresSingle2RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresSingle2RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresSingle3Case1,
+        std :: initializer_list < __EnclosedType > const & aresSingle3Case2,
+        std :: initializer_list < __EnclosedType > const & aresSingle3Case3,
+        std :: initializer_list < __EnclosedType > const & aresSingle3Case4,
+        std :: initializer_list < __EnclosedType > const & aresSingle3RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresSingle3RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresSingle3RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresSingle3RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresMultiple1Case1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1Case2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1Case3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1Case4,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresMultiple2Case1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2Case2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2Case3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2Case4,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresMultiple3Case1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3Case2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3Case3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3Case4,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase1,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase2,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase3,
+        std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase4,
+
+        std :: initializer_list < __EnclosedType > const & aresMultipleVCase1,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVCase2,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVCase3,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVCase4,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase1,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase2,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase3,
+        std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase4,
+        __Values const & ... values
+) -> bool {
+
+    __TestedType < __EnclosedType > underTest = initValues;
+    List < __EnclosedType > & lref = underTest;
+
+#define resetData() underTest = initValues
+#define __b1 (lref .* pBeginFn)()
+#define __b2 (lref .* pBeginCFn)()
+#define __b3 (lref .* pRBeginFn)()
+#define __b4 (lref .* pRBeginCFn)()
+#define __e1 (lref .* pEndFn)()
+#define __e2 (lref .* pEndCFn)()
+#define __e3 (lref .* pREndFn)()
+#define __e4 (lref .* pREndCFn)()
+#define __b(c) __b ## c
+#define __e(c) __e ## c
+#define b(c) __b(c)
+#define e(c) __e(c)
+
+#define sInsCase(name, no, ic, c, oc, suc) \
+    resetData();                          \
+    auto it ## no = b(ic);                 \
+    for (int i = 0; i < case ## oc ## Offset; ++ i) \
+        ++ it ## no;  \
+    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, resSingle ## c ## Case ## oc ) ) { \
+        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-CPP11' failed" ); \
+        return false;                              \
+    }                                              \
+                                                   \
+    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-CPP11' OK" );
+
+#define sInsRevCase(name, no, ic, c, oc, suc) \
+    resetData();                          \
+    auto it ## no = b(ic);                 \
+    for (int i = 0; i < case ## oc ## Offset; ++ i) \
+        ++ it ## no;  \
+    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, resSingle ## c ## RevCase ## oc ) ) { \
+        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-CPP11' failed" ); \
+        return false;                              \
+    }                                              \
+                                                   \
+    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-CPP11' OK" );
+
+#define saInsCase(name, no, ic, c, oc, suc) \
+    resetData();                          \
+    auto it ## no = b(ic);                 \
+    for (int i = 0; i < case ## oc ## Offset; ++ i) \
+        ++ it ## no;  \
+    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, aresSingle ## c ## Case ## oc ) ) { \
+        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-CPP11' failed" ); \
+        return false;                              \
+    }                                              \
+                                                   \
+    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-CPP11' OK" );
+
+#define saInsRevCase(name, no, ic, c, oc, suc) \
+    resetData();                          \
+    auto it ## no = b(ic);                 \
+    for (int i = 0; i < case ## oc ## Offset; ++ i) \
+        ++ it ## no;  \
+    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, aresSingle ## c ## RevCase ## oc ) ) { \
+        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-CPP11' failed" ); \
+        return false;                              \
+    }                                              \
+                                                   \
+    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-CPP11' OK" );
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase1-CPP11 : LTC-00401-IT-insertBeforeItCase1SingleValue1OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 401, 1, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase2-CPP11 : LTC-00402-IT-insertBeforeItCase1SingleValue1OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 402, 1, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase3-CPP11 : LTC-00403-IT-insertBeforeItCase1SingleValue1OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 403, 1, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase4-CPP11 : LTC-00404-IT-insertBeforeItCase1SingleValue1OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 404, 1, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase1-CPP11 : LTC-00405-IT-insertBeforeItCase1SingleValue2OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 405, 1, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase2-CPP11 : LTC-00406-IT-insertBeforeItCase1SingleValue2OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 406, 1, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase3-CPP11 : LTC-00407-IT-insertBeforeItCase1SingleValue2OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 407, 1, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase4-CPP11 : LTC-00408-IT-insertBeforeItCase1SingleValue2OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 408, 1, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase1-CPP11 : LTC-00409-IT-insertBeforeItCase1SingleValue3OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 409, 1, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase2-CPP11 : LTC-00410-IT-insertBeforeItCase1SingleValue3OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 410, 1, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase3-CPP11 : LTC-00411-IT-insertBeforeItCase1SingleValue3OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 411, 1, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase4-CPP11 : LTC-00412-IT-insertBeforeItCase1SingleValue3OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 412, 1, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase1-CPP11 : LTC-00413-IT-insertBeforeItCase3SingleValue1OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 413, 3, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase2-CPP11 : LTC-00414-IT-insertBeforeItCase3SingleValue1OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 414, 3, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase3-CPP11 : LTC-00415-IT-insertBeforeItCase3SingleValue1OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 415, 3, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase4-CPP11 : LTC-00416-IT-insertBeforeItCase3SingleValue1OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 416, 3, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase1-CPP11 : LTC-00417-IT-insertBeforeItCase3SingleValue2OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 417, 3, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase2-CPP11 : LTC-00418-IT-insertBeforeItCase3SingleValue2OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 418, 3, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase3-CPP11 : LTC-00419-IT-insertBeforeItCase3SingleValue2OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 419, 3, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase4-CPP11 : LTC-00420-IT-insertBeforeItCase3SingleValue2OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 420, 3, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase1-CPP11 : LTC-00421-IT-insertBeforeItCase3SingleValue3OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 421, 3, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase2-CPP11 : LTC-00422-IT-insertBeforeItCase3SingleValue3OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 422, 3, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase3-CPP11 : LTC-00423-IT-insertBeforeItCase3SingleValue3OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 423, 3, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase4-CPP11 : LTC-00424-IT-insertBeforeItCase3SingleValue3OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 424, 3, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase1-CPP11 : LTC-00425-IT-insertBeforeItCase2SingleValue1OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 425, 2, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase2-CPP11 : LTC-00426-IT-insertBeforeItCase2SingleValue1OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 426, 2, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase3-CPP11 : LTC-00427-IT-insertBeforeItCase2SingleValue1OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 427, 2, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase4-CPP11 : LTC-00428-IT-insertBeforeItCase2SingleValue1OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 428, 2, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase1-CPP11 : LTC-00429-IT-insertBeforeItCase2SingleValue2OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 429, 2, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase2-CPP11 : LTC-00430-IT-insertBeforeItCase2SingleValue2OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 430, 2, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase3-CPP11 : LTC-00431-IT-insertBeforeItCase2SingleValue2OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 431, 2, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase4-CPP11 : LTC-00432-IT-insertBeforeItCase2SingleValue2OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 432, 2, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase1-CPP11 : LTC-00433-IT-insertBeforeItCase2SingleValue3OffsetCase1-CPP11 */
+    sInsCase ( insertBefore, 433, 2, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase2-CPP11 : LTC-00434-IT-insertBeforeItCase2SingleValue3OffsetCase2-CPP11 */
+    sInsCase ( insertBefore, 434, 2, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase3-CPP11 : LTC-00435-IT-insertBeforeItCase2SingleValue3OffsetCase3-CPP11 */
+    sInsCase ( insertBefore, 435, 2, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase4-CPP11 : LTC-00436-IT-insertBeforeItCase2SingleValue3OffsetCase4-CPP11 */
+    sInsCase ( insertBefore, 436, 2, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase1-CPP11 : LTC-00437-IT-insertBeforeItCase4SingleValue1OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 437, 4, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase2-CPP11 : LTC-00438-IT-insertBeforeItCase4SingleValue1OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 438, 4, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase3-CPP11 : LTC-00439-IT-insertBeforeItCase4SingleValue1OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 439, 4, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase4-CPP11 : LTC-00440-IT-insertBeforeItCase4SingleValue1OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 440, 4, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase1-CPP11 : LTC-00441-IT-insertBeforeItCase4SingleValue2OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 441, 4, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase2-CPP11 : LTC-00442-IT-insertBeforeItCase4SingleValue2OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 442, 4, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase3-CPP11 : LTC-00443-IT-insertBeforeItCase4SingleValue2OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 443, 4, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase4-CPP11 : LTC-00444-IT-insertBeforeItCase4SingleValue2OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 444, 4, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase1-CPP11 : LTC-00445-IT-insertBeforeItCase4SingleValue3OffsetCase1-CPP11 */
+    sInsRevCase ( insertBefore, 445, 4, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase2-CPP11 : LTC-00446-IT-insertBeforeItCase4SingleValue3OffsetCase2-CPP11 */
+    sInsRevCase ( insertBefore, 446, 4, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase3-CPP11 : LTC-00447-IT-insertBeforeItCase4SingleValue3OffsetCase3-CPP11 */
+    sInsRevCase ( insertBefore, 447, 4, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase4-CPP11 : LTC-00448-IT-insertBeforeItCase4SingleValue3OffsetCase4-CPP11 */
+    sInsRevCase ( insertBefore, 448, 4, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase1-CPP11 : LTC-00449-IT-insertAfterItCase1SingleValue1OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 449, 1, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase2-CPP11 : LTC-00450-IT-insertAfterItCase1SingleValue1OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 450, 1, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase3-CPP11 : LTC-00451-IT-insertAfterItCase1SingleValue1OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 451, 1, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase4-CPP11 : LTC-00452-IT-insertAfterItCase1SingleValue1OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 452, 1, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase1-CPP11 : LTC-00453-IT-insertAfterItCase1SingleValue2OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 453, 1, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase2-CPP11 : LTC-00454-IT-insertAfterItCase1SingleValue2OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 454, 1, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase3-CPP11 : LTC-00455-IT-insertAfterItCase1SingleValue2OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 455, 1, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase4-CPP11 : LTC-00456-IT-insertAfterItCase1SingleValue2OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 456, 1, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase1-CPP11 : LTC-00457-IT-insertAfterItCase1SingleValue3OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 457, 1, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase2-CPP11 : LTC-00458-IT-insertAfterItCase1SingleValue3OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 458, 1, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase3-CPP11 : LTC-00459-IT-insertAfterItCase1SingleValue3OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 459, 1, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase4-CPP11 : LTC-00460-IT-insertAfterItCase1SingleValue3OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 460, 1, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase1-CPP11 : LTC-00461-IT-insertAfterItCase3SingleValue1OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 461, 3, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase2-CPP11 : LTC-00462-IT-insertAfterItCase3SingleValue1OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 462, 3, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase3-CPP11 : LTC-00463-IT-insertAfterItCase3SingleValue1OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 463, 3, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase4-CPP11 : LTC-00464-IT-insertAfterItCase3SingleValue1OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 464, 3, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase1-CPP11 : LTC-00465-IT-insertAfterItCase3SingleValue2OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 465, 3, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase2-CPP11 : LTC-00466-IT-insertAfterItCase3SingleValue2OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 466, 3, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase3-CPP11 : LTC-00467-IT-insertAfterItCase3SingleValue2OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 467, 3, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase4-CPP11 : LTC-00468-IT-insertAfterItCase3SingleValue2OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 468, 3, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase1-CPP11 : LTC-00469-IT-insertAfterItCase3SingleValue3OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 469, 3, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase2-CPP11 : LTC-00470-IT-insertAfterItCase3SingleValue3OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 470, 3, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase3-CPP11 : LTC-00471-IT-insertAfterItCase3SingleValue3OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 471, 3, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase4-CPP11 : LTC-00472-IT-insertAfterItCase3SingleValue3OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 472, 3, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase1-CPP11 : LTC-00473-IT-insertAfterItCase2SingleValue1OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 473, 2, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase2-CPP11 : LTC-00474-IT-insertAfterItCase2SingleValue1OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 474, 2, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase3-CPP11 : LTC-00475-IT-insertAfterItCase2SingleValue1OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 475, 2, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase4-CPP11 : LTC-00476-IT-insertAfterItCase2SingleValue1OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 476, 2, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase1-CPP11 : LTC-00477-IT-insertAfterItCase2SingleValue2OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 477, 2, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase2-CPP11 : LTC-00478-IT-insertAfterItCase2SingleValue2OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 478, 2, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase3-CPP11 : LTC-00479-IT-insertAfterItCase2SingleValue2OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 479, 2, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase4-CPP11 : LTC-00480-IT-insertAfterItCase2SingleValue2OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 480, 2, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase1-CPP11 : LTC-00481-IT-insertAfterItCase2SingleValue3OffsetCase1-CPP11 */
+    saInsCase ( insertAfter, 481, 2, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase2-CPP11 : LTC-00482-IT-insertAfterItCase2SingleValue3OffsetCase2-CPP11 */
+    saInsCase ( insertAfter, 482, 2, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase3-CPP11 : LTC-00483-IT-insertAfterItCase2SingleValue3OffsetCase3-CPP11 */
+    saInsCase ( insertAfter, 483, 2, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase4-CPP11 : LTC-00484-IT-insertAfterItCase2SingleValue3OffsetCase4-CPP11 */
+    saInsCase ( insertAfter, 484, 2, 3, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase1-CPP11 : LTC-00485-IT-insertAfterItCase4SingleValue1OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 485, 4, 1, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase2-CPP11 : LTC-00486-IT-insertAfterItCase4SingleValue1OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 486, 4, 1, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase3-CPP11 : LTC-00487-IT-insertAfterItCase4SingleValue1OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 487, 4, 1, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase4-CPP11 : LTC-00488-IT-insertAfterItCase4SingleValue1OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 488, 4, 1, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase1-CPP11 : LTC-00489-IT-insertAfterItCase4SingleValue2OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 489, 4, 2, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase2-CPP11 : LTC-00490-IT-insertAfterItCase4SingleValue2OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 490, 4, 2, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase3-CPP11 : LTC-00491-IT-insertAfterItCase4SingleValue2OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 491, 4, 2, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase4-CPP11 : LTC-00492-IT-insertAfterItCase4SingleValue2OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 492, 4, 2, 4, false )
+
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase1-CPP11 : LTC-00493-IT-insertAfterItCase4SingleValue3OffsetCase1-CPP11 */
+    saInsRevCase ( insertAfter, 493, 4, 3, 1, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase2-CPP11 : LTC-00494-IT-insertAfterItCase4SingleValue3OffsetCase2-CPP11 */
+    saInsRevCase ( insertAfter, 494, 4, 3, 2, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase3-CPP11 : LTC-00495-IT-insertAfterItCase4SingleValue3OffsetCase3-CPP11 */
+    saInsRevCase ( insertAfter, 495, 4, 3, 3, true )
+    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase4-CPP11 : LTC-00496-IT-insertAfterItCase4SingleValue3OffsetCase4-CPP11 */
+    saInsRevCase ( insertAfter, 496, 4, 3, 4, false )
+
+
+#undef resetData
+#undef __b1
+#undef __b2
+#undef __b3
+#undef __b4
+#undef __e1
+#undef __e2
+#undef __e3
+#undef __e4
+#undef __b
+#undef __e
+#undef b
+#undef e
 
     return true;
 }
@@ -1278,6 +1733,160 @@ auto ListTest :: execute () noexcept -> bool {
             allOk = false;
         }
         this->logOK("'LTC-00324-IT-emplaceBack-CPP11' OK");
+    });
+
+
+    this->executeSubtest ( "ListTestGroup-RelativeInsertion-CPP11 : LTG-00400-RI-CPP11 : IntArray", [this, & allOk] {
+
+        allOk = allOk && listTestGroupRelativeInsertion <
+                Array,
+                int
+        > (
+                this,
+                { 1, 2, 3, 4, 5 },
+                & List < int > :: begin,
+                & List < int > :: end,
+                & List < int > :: cbegin,
+                & List < int > :: cend,
+                & List < int > :: rbegin,
+                & List < int > :: rend,
+                & List < int > :: crbegin,
+                & List < int > :: crend,
+                0,
+                2,
+                4,
+                6,
+                7, 9, 20,
+                { 1, 2, 3 }, { 20, 30, 40 }, { 100, 200, 300 },
+
+                { 7, 1, 2, 3, 4, 5 },
+                { 1, 2, 7, 3, 4, 5 },
+                { 1, 2, 3, 4, 7, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 7 },
+                { 1, 2, 3, 7, 4, 5 },
+                { 1, 7, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 9, 1, 2, 3, 4, 5 },
+                { 1, 2, 9, 3, 4, 5 },
+                { 1, 2, 3, 4, 9, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 9 },
+                { 1, 2, 3, 9, 4, 5 },
+                { 1, 9, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 20, 1, 2, 3, 4, 5 },
+                { 1, 2, 20, 3, 4, 5 },
+                { 1, 2, 3, 4, 20, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 20 },
+                { 1, 2, 3, 20, 4, 5 },
+                { 1, 20, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 1, 2, 3, 3, 4, 5 },
+                { 1, 2, 3, 4, 1, 2, 3, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3 },
+                { 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 1, 2, 3, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 20, 30, 40, 1, 2, 3, 4, 5 },
+                { 1, 2, 20, 30, 40, 3, 4, 5 },
+                { 1, 2, 3, 4, 20, 30, 40, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 20, 30, 40 },
+                { 1, 2, 3, 20, 30, 40, 4, 5 },
+                { 1, 20, 30, 40, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 100, 200, 300, 1, 2, 3, 4, 5 },
+                { 1, 2, 100, 200, 300, 3, 4, 5 },
+                { 1, 2, 3, 4, 100, 200, 300, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 100, 200, 300 },
+                { 1, 2, 3, 100, 200, 300, 4, 5 },
+                { 1, 100, 200, 300, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 7, 2, 3, 4, 5 },
+                { 1, 2, 3, 7, 4, 5 },
+                { 1, 2, 3, 4, 5, 7 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 7, 5 },
+                { 1, 2, 7, 3, 4, 5 },
+                { 7, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 9, 2, 3, 4, 5 },
+                { 1, 2, 3, 9, 4, 5 },
+                { 1, 2, 3, 4, 5, 9 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 9, 5 },
+                { 1, 2, 9, 3, 4, 5 },
+                { 9, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 20, 2, 3, 4, 5 },
+                { 1, 2, 3, 20, 4, 5 },
+                { 1, 2, 3, 4, 5, 20 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 20, 5 },
+                { 1, 2, 20, 3, 4, 5 },
+                { 20, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 1, 2, 3, 2, 3, 4, 5 },
+                { 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 1, 2, 3, 5 },
+                { 1, 2, 1, 2, 3, 3, 4, 5 },
+                { 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 20, 30, 40, 2, 3, 4, 5 },
+                { 1, 2, 3, 20, 30, 40, 4, 5 },
+                { 1, 2, 3, 4, 5, 20, 30, 40 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 20, 30, 40, 5 },
+                { 1, 2, 20, 30, 40, 3, 4, 5 },
+                { 20, 30, 40, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 100, 200, 300, 2, 3, 4, 5 },
+                { 1, 2, 3, 100, 200, 300, 4, 5 },
+                { 1, 2, 3, 4, 5, 100, 200, 300 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 100, 200, 300, 5 },
+                { 1, 2, 100, 200, 300, 3, 4, 5 },
+                { 100, 200, 300, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 },
+
+                1000, 2000, 3000, 4000
+        );
     });
 
     return allOk;

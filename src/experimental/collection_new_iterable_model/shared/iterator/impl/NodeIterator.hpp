@@ -148,7 +148,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr UnidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
 
             /* iterator is valid if current node is not null */
-            return this->_pCurrentNode != nullptr;
+            /* Special case in insert before. end value potentially valid */
+            return this->_pCurrentNode != nullptr || this->_pPreviousNode != nullptr;
         }
 
 
@@ -292,7 +293,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr UnidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
 
             /* iterator is valid if current node is not null */
-            return this->_pCurrentNode != nullptr;
+            /* Special case in insert before. end value potentially valid */
+            return this->_pCurrentNode != nullptr || this->_pPreviousNode != nullptr;
         }
 
 
@@ -377,8 +379,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         constexpr AbstractBidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
 
-            /* iterator is valid if current node is not null */
-            return this->_pCurrentNode != nullptr;
+            /* iterator is valid if current node is not null. */
+            /* Special case in insert before. end value potentially valid */
+            return this->_pCurrentNode != nullptr || this->_pPreviousNode != nullptr;
         }
 
 
@@ -464,7 +467,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
 
             /* iterator is valid if current node is not null */
-            return this->_pCurrentNode != nullptr;
+            /* Special case in insert before. end value potentially valid */
+            return this->_pCurrentNode != nullptr || this->_pPreviousNode != nullptr;
         }
 
 

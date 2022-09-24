@@ -225,6 +225,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprOverride auto ForwardAddressIterator < __ElementType > :: absoluteBefore () const noexcept -> Address {
+
+            /* Already forward, return current address */
+            return this->_currentAddress;
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprOverride auto ForwardAddressIterator < __ElementType > :: absoluteAfter () const noexcept -> Address {
+
+            /* Already forward, return current address */
+            return this->_currentAddress;
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardAddressIterator < __ElementType > :: operator ++ () noexcept -> ForwardAddressIterator & {
 
             /* Forward Iterator - advance forward */
@@ -431,6 +447,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
             /* iterators are not equal if addresses are not equal */
             return this->_currentAddress != iterator._currentAddress;
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprOverride auto BackwardAddressIterator < __ElementType > :: absoluteBefore () const noexcept -> Address {
+
+            /* is backward, shift one position to the right */
+            return this->_currentAddress + 1U;
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprOverride auto BackwardAddressIterator < __ElementType > :: absoluteAfter () const noexcept -> Address {
+
+            /* is backward, shift one position to the left */
+            return this->_currentAddress - 1U;
         }
 
 
