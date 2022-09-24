@@ -99,6 +99,7 @@ int main () {
         ((List < int > &) a ).sort();
     });
 
+    al1.remove(al1.begin());
 
     return 0;
 }

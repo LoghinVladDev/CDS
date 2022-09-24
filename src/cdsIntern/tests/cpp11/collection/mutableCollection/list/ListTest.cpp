@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <array>
+#include <CDS/Range>
 
 using namespace cds :: experimental;
 
@@ -688,6 +689,280 @@ template <
 }
 
 
+template <
+        typename T,
+        typename V
+> auto equals (T const & t, V const & v) -> bool {
+
+    auto lIt = t.begin();
+    auto le = t.end();
+    auto rIt = v.begin();
+    auto re = v.end();
+    for (
+            ;   lIt != le && rIt != re; ++ lIt, ++ rIt
+    )
+        if ( ! cds :: meta :: equals ( * lIt, * rIt ) )
+            return false;
+
+    return true;
+}
+
+/* ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11. Tests LTC-00301-BI to LTC-003xx-BI */
+template <
+        template < typename ... > class __TestedType,
+        typename __EnclosedType,
+        typename __ItType1,
+        typename __ItType2,
+        typename __ItType3,
+        typename ... __Values
+> auto listTestGroupBoundaryInsertion (
+        Test * pTestLib,
+        std :: initializer_list < __EnclosedType > const & initValues,
+        __EnclosedType const & pbFirst,
+        std :: initializer_list < __EnclosedType > const & equiv1,
+        __EnclosedType const & pbSecond,
+        std :: initializer_list < __EnclosedType > const & equiv2,
+        __EnclosedType const & pbThird,
+        std :: initializer_list < __EnclosedType > const & equiv3,
+        __EnclosedType pbFourth,
+        std :: initializer_list < __EnclosedType > const & equiv4,
+        __EnclosedType pbFifth,
+        std :: initializer_list < __EnclosedType > const & equiv5,
+        __EnclosedType const & pfFirst,
+        std :: initializer_list < __EnclosedType > const & equiv6,
+        __EnclosedType const & pfSecond,
+        std :: initializer_list < __EnclosedType > const & equiv7,
+        __EnclosedType const & pfThird,
+        std :: initializer_list < __EnclosedType > const & equiv8,
+        __EnclosedType pfFourth,
+        std :: initializer_list < __EnclosedType > const & equiv9,
+        __EnclosedType pfFifth,
+        std :: initializer_list < __EnclosedType > const & equiv10,
+        std :: initializer_list < __EnclosedType > const & pbValues,
+        std :: initializer_list < __EnclosedType > const & equiv11,
+        std :: initializer_list < __EnclosedType > const & equiv12,
+        std :: initializer_list < __EnclosedType > const & pfValues,
+        std :: initializer_list < __EnclosedType > const & equiv13,
+        std :: initializer_list < __EnclosedType > const & equiv14,
+        __ItType1 const & b1, __ItType1 const & e1,
+        std :: initializer_list < __EnclosedType > const & equiv15,
+        std :: initializer_list < __EnclosedType > const & equiv16,
+        __ItType2 const & b2, __ItType2 const & e2,
+        std :: initializer_list < __EnclosedType > const & equiv17,
+        std :: initializer_list < __EnclosedType > const & equiv18,
+        __ItType3 const & b3, __ItType3 const & e3,
+        std :: initializer_list < __EnclosedType > const & equiv19,
+        std :: initializer_list < __EnclosedType > const & equiv20,
+        std :: initializer_list < __EnclosedType > const & equiv21,
+        std :: initializer_list < __EnclosedType > const & equiv22,
+        __Values const & ... values
+) noexcept -> bool {
+
+    __TestedType < __EnclosedType > underTest = initValues;
+    List < __EnclosedType > & lref = underTest;
+
+    /* ListTestGroup-BoundaryInsertion-pushBackCopy1-CPP11 : LTC-00301-IT-pushBackCopy1-CPP11 */
+    lref.pushBack ( pbFirst );
+    if ( ! equals ( lref, equiv1 ) ) {
+        pTestLib->logError("'LTC-00301-IT-pushBackCopy1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00301-IT-pushBackCopy1-CPP11' OK");
+
+    /* ListTestGroup-BoundaryInsertion-pushBackCopy2-CPP11 : LTC-00302-IT-pushBackCopy2-CPP11 */
+    lref.pushBack ( pbSecond );
+    if ( ! equals ( lref, equiv2 ) ) {
+        pTestLib->logError("'LTC-00302-IT-pushBackCopy2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00302-IT-pushBackCopy2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackCopy3-CPP11 : LTC-00303-IT-pushBackCopy3-CPP11 */
+    lref.pushBack ( pbThird );
+    if ( ! equals ( lref, equiv3 ) ) {
+        pTestLib->logError("'LTC-00303-IT-pushBackCopy3-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00303-IT-pushBackCopy3-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackMove1-CPP11 : LTC-00304-IT-pushBackMove1-CPP11 */
+    lref.pushBack ( std :: move ( pbFourth ) );
+    if ( ! equals ( lref, equiv4 ) ) {
+        pTestLib->logError("'LTC-00304-IT-pushBackMove1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00304-IT-pushBackMove1-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackMove2-CPP11 : LTC-00305-IT-pushBackMove2-CPP11 */
+    lref.pushBack ( std :: move ( pbFifth ) );
+    if ( ! equals ( lref, equiv5 ) ) {
+        pTestLib->logError("'LTC-00305-IT-pushBackMove2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00305-IT-pushBackMove2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontCopy1-CPP11 : LTC-00306-IT-pushFrontCopy1-CPP11 */
+    lref.pushFront ( pfFirst );
+    if ( ! equals ( lref, equiv6 ) ) {
+        pTestLib->logError("'LTC-00306-IT-pushFrontCopy1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00306-IT-pushFrontCopy1-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontCopy2-CPP11 : LTC-00307-IT-pushFrontCopy2-CPP11 */
+    lref.pushFront ( pfSecond );
+    if ( ! equals ( lref, equiv7 ) ) {
+        pTestLib->logError("'LTC-00307-IT-pushFrontCopy2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00307-IT-pushFrontCopy2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontCopy3-CPP11 : LTC-00308-IT-pushFrontCopy3-CPP11 */
+    lref.pushFront ( pfThird );
+    if ( ! equals ( lref, equiv8 ) ) {
+        pTestLib->logError("'LTC-00308-IT-pushFrontCopy3-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00308-IT-pushFrontCopy3-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontMove1-CPP11 : LTC-00309-IT-pushFrontMove1-CPP11 */
+    lref.pushFront ( std :: move ( pfFourth ) );
+    if ( ! equals ( lref, equiv9 ) ) {
+        pTestLib->logError("'LTC-00309-IT-pushFrontMove1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00309-IT-pushFrontMove1-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontMove2-CPP11 : LTC-00310-IT-pushFrontMove2-CPP11 */
+    lref.pushFront ( std :: move ( pfFifth ) );
+    if ( ! equals ( lref, equiv10 ) ) {
+        pTestLib->logError("'LTC-00310-IT-pushFrontMove2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00310-IT-pushFrontMove2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackAllOfInitList-CPP11 : LTC-00311-IT-pushBackAllOfInitList-CPP11 */
+    lref.pushBackAllOf ( pbValues );
+    if ( ! equals ( lref, equiv11 ) ) {
+        pTestLib->logError("'LTC-00311-IT-pushBackAllOfInitList-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00311-IT-pushBackAllOfInitList-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackAllOfColl-CPP11 : LTC-00312-IT-pushBackAllOfColl-CPP11 */
+    __TestedType < __EnclosedType > v12 = pbValues;
+    lref.pushBackAllOf ( v12 );
+    if ( ! equals ( lref, equiv12 ) ) {
+        pTestLib->logError("'LTC-00312-IT-pushBackAllOfColl-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00312-IT-pushBackAllOfColl-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontAllOfInitList-CPP11 : LTC-00313-IT-pushFrontAllOfInitList-CPP11 */
+    lref.pushFrontAllOf ( pfValues );
+    if ( ! equals ( lref, equiv13 ) ) {
+        pTestLib->logError("'LTC-00313-IT-pushFrontAllOfInitList-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00313-IT-pushFrontAllOfInitList-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontAllOfColl-CPP11 : LTC-00314-IT-pushFrontAllOfColl-CPP11 */
+    __TestedType < __EnclosedType > v14 = pfValues;
+    lref.pushFrontAllOf ( v14 );
+    if ( ! equals ( lref, equiv14 ) ) {
+        pTestLib->logError("'LTC-00314-IT-pushFrontAllOfColl-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00314-IT-pushFrontAllOfColl-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackItRange1-CPP11 : LTC-00315-IT-pushBackItRange1-CPP11 */
+    lref.pushBackAllOf ( b1, e1 );
+    if ( ! equals ( lref, equiv15 ) ) {
+        pTestLib->logError("'LTC-00315-IT-pushBackItRange1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00315-IT-pushBackItRange1-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontItRange1-CPP11 : LTC-00316-IT-pushFrontItRange1-CPP11 */
+    lref.pushFrontAllOf ( b1, e1 );
+    if ( ! equals ( lref, equiv16 ) ) {
+        pTestLib->logError("'LTC-00316-IT-pushFrontItRange1-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00316-IT-pushFrontItRange1-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackItRange2-CPP11 : LTC-00317-IT-pushBackItRange2-CPP11 */
+    lref.pushBackAllOf ( b2, e2 );
+    if ( ! equals ( lref, equiv17 ) ) {
+        pTestLib->logError("'LTC-00317-IT-pushBackItRange2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00317-IT-pushBackItRange2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontItRange2-CPP11 : LTC-00318-IT-pushFrontItRange2-CPP11 */
+    lref.pushFrontAllOf ( b2, e2 );
+    if ( ! equals ( lref, equiv18 ) ) {
+        pTestLib->logError("'LTC-00318-IT-pushFrontItRange2-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00318-IT-pushFrontItRange2-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackItRange3-CPP11 : LTC-00319-IT-pushBackItRange3-CPP11 */
+    lref.pushBackAllOf ( b3, e3 );
+    if ( ! equals ( lref, equiv19 ) ) {
+        pTestLib->logError("'LTC-00319-IT-pushBackItRange3-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00319-IT-pushBackItRange3-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontItRange3-CPP11 : LTC-00320-IT-pushFrontItRange3-CPP11 */
+    lref.pushFrontAllOf ( b3, e3 );
+    if ( ! equals ( lref, equiv20 ) ) {
+        pTestLib->logError("'LTC-00320-IT-pushFrontItRange3-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00320-IT-pushFrontItRange3-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushBackValues-CPP11 : LTC-00321-IT-pushBackValues-CPP11 */
+    lref.pushBackAll ( values ... );
+    if ( ! equals ( lref, equiv21 ) ) {
+        pTestLib->logError("'LTC-00321-IT-pushBackValues-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00321-IT-pushBackValues-CPP11' OK");
+
+
+    /* ListTestGroup-BoundaryInsertion-pushFrontValues-CPP11 : LTC-00322-IT-pushFrontValues-CPP11 */
+    lref.pushFrontAll ( values ... );
+    if ( ! equals ( lref, equiv22 ) ) {
+        pTestLib->logError("'LTC-00322-IT-pushFrontValues-CPP11' failed");
+        return false;
+    }
+    pTestLib->logOK("'LTC-00322-IT-pushFrontValues-CPP11' OK");
+
+    return true;
+}
+
+
 /* ListTestSuite-CPP11 : LTS-00001-CPP11 */
 auto ListTest :: execute () noexcept -> bool {
     bool allOk = true;
@@ -805,6 +1080,204 @@ auto ListTest :: execute () noexcept -> bool {
                 & List < String > :: crend,
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
         );
+    });
+
+
+    this->executeSubtest ( "ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11 : IntArray", [this, & allOk] {
+
+        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
+        auto range2 = cds :: Range (5, 10);
+        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+
+        allOk = allOk && listTestGroupBoundaryInsertion <
+                Array,
+                int
+        > (
+                this,
+                { 1, 2, 3, 4, 5 },
+                6, { 1, 2, 3, 4, 5, 6 },
+                7, { 1, 2, 3, 4, 5, 6, 7 },
+                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
+                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                range1.begin(), range1.end(),
+                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                range2.begin(), range2.end(),
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                range3.begin(), range3.end(),
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                9, 8, 7, 6, 5
+        );
+    });
+    this->executeSubtest ( "ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11 : IntLinkedList", [this, & allOk] {
+
+        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
+        auto range2 = cds :: Range (5, 10);
+        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+
+        allOk = allOk && listTestGroupBoundaryInsertion <
+                LinkedList,
+                int
+        > (
+                this,
+                { 1, 2, 3, 4, 5 },
+                6, { 1, 2, 3, 4, 5, 6 },
+                7, { 1, 2, 3, 4, 5, 6, 7 },
+                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
+                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                range1.begin(), range1.end(),
+                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                range2.begin(), range2.end(),
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                range3.begin(), range3.end(),
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                9, 8, 7, 6, 5
+        );
+    });
+    this->executeSubtest ( "ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11 : StringArray", [this, & allOk] {
+
+        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
+        auto range2 = cds :: Range (5, 10);
+        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+
+        allOk = allOk && listTestGroupBoundaryInsertion <
+                Array,
+                String
+        > (
+                this,
+                { 1, 2, 3, 4, 5 },
+                6, { 1, 2, 3, 4, 5, 6 },
+                7, { 1, 2, 3, 4, 5, 6, 7 },
+                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
+                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                range1.begin(), range1.end(),
+                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                range2.begin(), range2.end(),
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                range3.begin(), range3.end(),
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                9, 8, 7, 6, 5
+        );
+
+        /* ListTestGroup-BoundaryInsertion-emplaceFront-CPP11 : LTC-00323-IT-emplaceFront-CPP11 */
+        Array < String > t;
+        List < String > & lref = t;
+
+        lref.emplaceFront ( 5, 'c' );
+        if ( ! equals ( lref, std::initializer_list<String>{"ccccc"} ) ) {
+            this->logError("'LTC-00323-IT-emplaceFront-CPP11' failed");
+            allOk = false;
+        }
+        this->logOK("'LTC-00323-IT-emplaceFront-CPP11' OK");
+
+        /* ListTestGroup-BoundaryInsertion-emplaceBack-CPP11 : LTC-00324-IT-emplaceBack-CPP11 */
+
+        lref.emplaceBack ( 6, 'd' );
+        if ( ! equals ( lref, std::initializer_list<String>{"ccccc", "dddddd"} ) ) {
+            this->logError("'LTC-00324-IT-emplaceBack-CPP11' failed");
+            allOk = false;
+        }
+        this->logOK("'LTC-00324-IT-emplaceBack-CPP11' OK");
+    });
+    this->executeSubtest ( "ListTestGroup-BoundaryInsertion-CPP11 : LTG-00300-BI-CPP11 : StringLinkedList", [this, & allOk] {
+
+        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
+        auto range2 = cds :: Range (5, 10);
+        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+
+        allOk = allOk && listTestGroupBoundaryInsertion <
+                LinkedList,
+                String
+        > (
+                this,
+                { 1, 2, 3, 4, 5 },
+                6, { 1, 2, 3, 4, 5, 6 },
+                7, { 1, 2, 3, 4, 5, 6, 7 },
+                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
+                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+                range1.begin(), range1.end(),
+                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+                range2.begin(), range2.end(),
+                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+                range3.begin(), range3.end(),
+                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+
+                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                9, 8, 7, 6, 5
+        );
+
+        /* ListTestGroup-BoundaryInsertion-emplaceFront-CPP11 : LTC-00323-IT-emplaceFront-CPP11 */
+        LinkedList < String > t;
+        List < String > & lref = t;
+
+        lref.emplaceFront ( 5, 'c' );
+        if ( ! equals ( lref, std::initializer_list<String>{"ccccc"} ) ) {
+            this->logError("'LTC-00323-IT-emplaceFront-CPP11' failed");
+            allOk = false;
+        }
+        this->logOK("'LTC-00323-IT-emplaceFront-CPP11' OK");
+
+        /* ListTestGroup-BoundaryInsertion-emplaceBack-CPP11 : LTC-00324-IT-emplaceBack-CPP11 */
+
+        lref.emplaceBack ( 6, 'd' );
+        if ( ! equals ( lref, std::initializer_list<String>{"ccccc", "dddddd"} ) ) {
+            this->logError("'LTC-00324-IT-emplaceBack-CPP11' failed");
+            allOk = false;
+        }
+        this->logOK("'LTC-00324-IT-emplaceBack-CPP11' OK");
     });
 
     return allOk;

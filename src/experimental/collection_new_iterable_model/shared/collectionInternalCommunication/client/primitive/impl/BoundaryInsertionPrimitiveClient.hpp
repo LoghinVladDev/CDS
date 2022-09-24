@@ -29,6 +29,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Invoke the copy constructor via front emplacement */
                     return this->emplaceFront ( element );
                 }
 
@@ -50,6 +51,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Invoke the move constructor via front emplacement */
                     return this->emplaceFront ( std :: move ( element ) );
                 }
 
@@ -71,6 +73,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Invoke the copy constructor via back emplacement */
                     return this->emplaceBack ( element );
                 }
 
@@ -92,6 +95,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Invoke the move constructor via back emplacement */
                     return this->emplaceBack ( std :: move ( element ) );
                 }
 
@@ -113,6 +117,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceFront ( element );
                 }
 
@@ -134,6 +139,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceFront ( std :: move ( element ) );
                 }
 
@@ -155,6 +161,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceBack ( element );
                 }
 
@@ -176,6 +183,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceBack ( std :: move ( element ) );
                 }
 
@@ -194,9 +202,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
+                    /* Handle type of the new front address function */
                     using __ReceiverNewFrontHandlerType = __ElementType * ( __ReceiverType :: * ) ();
+                    /* Caller object reinterpreted as receiver of the request */
                     auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
 
+                    /* Create the request for a new front address handler, call it and pass the received address, and
+                     * forward the received parameters to the emplacement new operator */
                     return * new (
                             (
                                     pReceiver ->* reinterpret_cast < __ReceiverNewFrontHandlerType > (
@@ -225,9 +237,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
+                    /* Handle type of the new back address function */
                     using __ReceiverNewBackHandlerType  = __ElementType * ( __ReceiverType :: * ) ();
+                    /* Caller object reinterpreted as receiver of the request */
                     auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
 
+                    /* Create the request for a new back address handler, call it and pass the received address, and
+                     * forward the received parameters to the emplacement new operator */
                     return * new (
                             (
                                     pReceiver ->* reinterpret_cast < __ReceiverNewBackHandlerType > (
@@ -256,11 +272,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
+                    /* Handle type of the new front address function */
                     using __ReceiverNewFrontArrayHandlerType    = void ( __ReceiverType :: * ) ( Size, __ElementType ** );
+                    /* Caller object reinterpreted as receiver of the request */
                     auto    const pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
+                    /* The number of received values is the numbers of elements to be created */
                     Size    const parameterCount                = sizeof ... ( __ArgumentTypes );
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements                    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Request and call handler for a new front address array with the created buffer */
                     (
                             pReceiver ->* reinterpret_cast < __ReceiverNewFrontArrayHandlerType > (
                                     pReceiver->__cicch_obtainGenericHandler (
@@ -272,11 +293,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             ppElements
                     );
 
+                    /* Forward initialization values to construct each received address with them */
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -295,11 +318,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
+                    /* Handle type of the new back address function */
                     using __ReceiverNewBackArrayHandlerType = void ( __ReceiverType :: * ) ( Size, __ElementType ** );
+                    /* Caller object reinterpreted as receiver of the request */
                     auto    const pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
+                    /* The number of received values is the numbers of elements to be created */
                     Size    const parameterCount            = sizeof ... ( __ArgumentTypes );
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements                = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Request and call handler for a new back address array with the created buffer */
                     (
                             pReceiver ->* reinterpret_cast < __ReceiverNewBackArrayHandlerType > (
                                     pReceiver->__cicch_obtainGenericHandler (
@@ -311,11 +339,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             ppElements
                     );
 
+                    /* Forward initialization values to construct each received address with them */
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -337,6 +367,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant with RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                     this->pushFrontAllOf (
                             iterable.begin(),
                             iterable.end(),
@@ -362,6 +393,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant without RandomAccessIterator - 'operator -'. Call pushFrontAllOf without size, letting
+                     * the function compute the distance between start and end */
                     this->pushFrontAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -386,6 +419,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
+                    /* initializer_list has RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                     this->pushFrontAllOf (
                             list.begin(),
                             list.end(),
@@ -411,6 +445,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant with RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                     this->pushBackAllOf (
                             iterable.begin(),
                             iterable.end(),
@@ -436,6 +471,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant without RandomAccessIterator - 'operator -'. Call pushBackAllOf without size, letting
+                     * the function compute the distance between start and end */
                     this->pushBackAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -460,6 +497,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
+                    /* initializer_list has RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                     this->pushBackAllOf (
                             list.begin(),
                             list.end(),
@@ -484,11 +522,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                   count
                 ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
+                    /* Handle type of the new front address function */
                     using __ReceiverNewFrontArrayHandlerType    = void ( __ReceiverType :: * ) ( Size, __ElementType ** );
+                    /* Caller object reinterpreted as receiver of the request */
                     auto    const pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
+                    /* The number of received values is the numbers of elements to be created. If 0, compute */
                     Size    const parameterCount                = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements                    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Request and call handler for a new front address array with the created buffer */
                     (
                             pReceiver ->* reinterpret_cast < __ReceiverNewFrontArrayHandlerType > (
                                     pReceiver->__cicch_obtainGenericHandler (
@@ -500,11 +543,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             ppElements
                     );
 
+                    /* Parse iterator range and call placement new operator at received memory with
+                     * each iterator's value */
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -525,11 +571,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                   count
                 ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
+                    /* Handle type of the new back address function */
                     using __ReceiverNewBackArrayHandlerType = void ( __ReceiverType :: * ) ( Size, __ElementType ** );
+                    /* Caller object reinterpreted as receiver of the request */
                     auto    const pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
+                    /* The number of received values is the numbers of elements to be created. If 0, compute */
                     Size    const parameterCount            = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements                = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Request and call handler for a new back address array with the created buffer */
                     (
                             pReceiver ->* reinterpret_cast < __ReceiverNewBackArrayHandlerType > (
                                     pReceiver->__cicch_obtainGenericHandler (
@@ -541,11 +592,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             ppElements
                     );
 
+                    /* Parse iterator range and call placement new operator at received memory with
+                     * each iterator's value */
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -567,6 +621,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Invoke the copy constructor via front emplacement */
                     return this->emplaceFront ( element );
                 }
 
@@ -588,6 +643,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Invoke the move constructor via front emplacement */
                     return this->emplaceFront ( std :: move ( element ) );
                 }
 
@@ -609,6 +665,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Invoke the copy constructor via back emplacement */
                     return this->emplaceBack ( element );
                 }
 
@@ -630,6 +687,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Invoke the move constructor via back emplacement */
                     return this->emplaceBack ( std :: move ( element ) );
                 }
 
@@ -651,6 +709,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceFront ( element );
                 }
 
@@ -672,6 +731,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceFront ( std :: move ( element ) );
                 }
 
@@ -693,6 +753,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceBack ( element );
                 }
 
@@ -714,6 +775,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
+                    /* Call non-deprecated, equivalent function */
                     return this->emplaceBack ( std :: move ( element ) );
                 }
 
@@ -732,6 +794,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
+                    /* call local dispatcher function to acquire a new front address, then construct element
+                     * with received parameters */
                     return * new ( reinterpret_cast < __ReceiverType * > ( this )->__newFront () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
@@ -752,6 +816,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
+                    /* call local dispatcher function to acquire a new back address, then construct element
+                     * with received parameters */
                     return * new ( reinterpret_cast < __ReceiverType * > ( this )->__newBack () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
@@ -772,19 +838,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
+                    /* The number of received values is the numbers of elements to be created */
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Call local dispatcher handle for a new front address array with the created buffer */
                     reinterpret_cast < __ReceiverType * > ( this )->__newFrontArray (
                             parameterCount,
                             ppElements
                     );
 
+                    /* Forward initialization values to construct each received address with them */
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -803,19 +874,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
+                    /* The number of received values is the numbers of elements to be created */
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Call local dispatcher handle for a new back address array with the created buffer */
                     reinterpret_cast < __ReceiverType * > ( this )->__newBackArray (
                             parameterCount,
                             ppElements
                     );
 
+                    /* Forward initialization values to construct each received address with them */
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -837,6 +913,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant with RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                     this->pushFrontAllOf (
                             iterable.begin(),
                             iterable.end(),
@@ -862,6 +939,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant without RandomAccessIterator - 'operator -'. Call pushFrontAllOf without size, letting
+                     * the function compute the distance between start and end */
                     this->pushFrontAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -886,6 +965,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
 
+                    /* initializer_list has RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                     this->pushFrontAllOf (
                             list.begin(),
                             list.end(),
@@ -911,6 +991,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant with RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                     this->pushBackAllOf (
                             iterable.begin(),
                             iterable.end(),
@@ -936,6 +1017,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
+                    /* Variant without RandomAccessIterator - 'operator -'. Call pushBackAllOf without size, letting
+                     * the function compute the distance between start and end */
                     this->pushBackAllOf (
                             iterable.begin(),
                             iterable.end()
@@ -960,6 +1043,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
 
+                    /* initializer_list has RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                     this->pushBackAllOf (
                             list.begin(),
                             list.end(),
@@ -984,19 +1068,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                   count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
 
+                    /* The number of received values is the numbers of elements to be created. If 0, compute */
                     Size    const parameterCount    = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements        = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Call local dispatcher handle for a new front address array with the created buffer */
                     reinterpret_cast < __ReceiverType * > ( this )->__newFrontArray (
                             parameterCount,
                             ppElements
                     );
 
+                    /* Parse iterator range and call placement new operator at received memory with
+                     * each iterator's value */
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
@@ -1017,19 +1107,25 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                   count
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
 
+                    /* The number of received values is the numbers of elements to be created. If 0, compute */
                     Size    const parameterCount    = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
+                    /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
                     auto          ppElements        = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
+                    /* Call local dispatcher handle for a new back address array with the created buffer */
                     reinterpret_cast < __ReceiverType * > ( this )->__newBackArray (
                             parameterCount,
                             ppElements
                     );
 
+                    /* Parse iterator range and call placement new operator at received memory with
+                     * each iterator's value */
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
+                    /* Free the temporary address buffer */
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 

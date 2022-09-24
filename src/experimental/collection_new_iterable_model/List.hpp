@@ -448,14 +448,101 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              */
             using DelegateBackwardConstIterableClient :: crend;
 
-        public:     using BoundaryInsertionClient :: pushBack;
-        public:     using BoundaryInsertionClient :: pushBackAll;
-        public:     using BoundaryInsertionClient :: pushBackAllOf;
-        public:     using BoundaryInsertionClient :: pushFront;
-        public:     using BoundaryInsertionClient :: pushFrontAll;
-        public:     using BoundaryInsertionClient :: pushFrontAllOf;
-        public:     using BoundaryInsertionClient :: emplaceBack;
-        public:     using BoundaryInsertionClient :: emplaceFront;
+        public:
+            /**
+             * @inherit pushBack function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00301-IT-pushBackCopy1,
+             *      LTC-00302-IT-pushBackCopy2,
+             *      LTC-00303-IT-pushBackCopy3,
+             *      LTC-00304-IT-pushBackMove1,
+             *      LTC-00305-IT-pushBackMove2
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushBack;
+
+        public:
+            /**
+             * @inherit pushBackAll function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00311-IT-pushBackValues
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushBackAll;
+
+        public:
+            /**
+             * @inherit pushBackAllOf function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00311-IT-pushBackAllOfInitList,
+             *      LTC-00312-IT-pushBackAllOfColl,
+             *      LTC-00315-IT-pushBackItRange1,
+             *      LTC-00317-IT-pushBackItRange2,
+             *      LTC-00319-IT-pushBackItRange3
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushBackAllOf;
+
+        public:
+            /**
+             * @inherit pushBack function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00306-IT-pushFrontCopy1,
+             *      LTC-00307-IT-pushFrontCopy2,
+             *      LTC-00308-IT-pushFrontCopy3,
+             *      LTC-00309-IT-pushFrontMove1,
+             *      LTC-00310-IT-pushFrontMove2
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushFront;
+
+        public:
+            /**
+             * @inherit pushFrontAll function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00312-IT-pushFrontValues
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushFrontAll;
+
+        public:
+            /**
+             * @inherit pushFrontAllOf function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00313-IT-pushFrontAllOfInitList,
+             *      LTC-00314-IT-pushFrontAllOfColl,
+             *      LTC-00316-IT-pushFrontItRange1,
+             *      LTC-00318-IT-pushFrontItRange2,
+             *      LTC-00320-IT-pushFrontItRange3
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: pushFrontAllOf;
+
+        public:
+            /**
+             * @inherit emplaceBack function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00324-IT-emplaceBack
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: emplaceBack;
+
+        public:
+            /**
+             * @inherit emplaceFront function inherited from BoundaryInsertionClient interface.
+             * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+             *      LTC-00323-IT-emplaceFront
+             * }
+             * @public
+             */
+            using BoundaryInsertionClient :: emplaceFront;
 
         public:     using IteratorRelativeInsertionClient :: insertBefore;
         public:     using IteratorRelativeInsertionClient :: insertAllBefore;
