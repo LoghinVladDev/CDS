@@ -254,7 +254,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the front of the iterable
                      * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
                      * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
-                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @exceptsafe if ElementType is exceptsafe constructible with given parameters
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -273,7 +273,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the back of the iterable
                      * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
                      * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
-                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @exceptsafe if ElementType is exceptsafe constructible with given parameters
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -292,7 +292,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the front of the iterable by creating a new front array request
                      * @tparam __ArgumentTypes is the type pack of the values to be inserted
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible with each given value
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00312-IT-pushFrontValues
@@ -310,7 +310,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the back of the iterable by creating a new back array request
                      * @tparam __ArgumentTypes is the type pack of the values to be inserted
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible with each given value
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00311-IT-pushBackValues
@@ -330,7 +330,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00314-IT-pushFrontAllOfColl
@@ -354,7 +354,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00314-IT-pushFrontAllOfColl
@@ -376,8 +376,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the front of the iterable, done by extracting
                      * each from a given initializer list and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
-                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to an initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00314-IT-pushFrontAllOfInitList
@@ -401,7 +401,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00312-IT-pushBackAllOfColl
@@ -425,7 +425,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00312-IT-pushBackAllOfColl
@@ -447,8 +447,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the back of the iterable, done by extracting
                      * each from a given initializer list and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
-                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to an initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00311-IT-pushBackAllOfInitList
@@ -477,7 +477,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @param [in] count : Size = Distance between begin and end iterators. If 0, distance will be computed
                      * by subtraction, if iterator type is random, or by iteration otherwise
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00316-IT-pushFrontItRange1,
@@ -506,7 +506,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @param [in] count : Size = Distance between begin and end iterators. If 0, distance will be computed
                      * by subtraction, if iterator type is random, or by iteration otherwise
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
                      *      LTC-00315-IT-pushBackItRange1,
@@ -735,7 +735,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the front of the iterable
                      * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
                      * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
-                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @exceptsafe if ElementType is exceptsafe constructible with given parameters
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -752,7 +752,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the back of the iterable
                      * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
                      * @param [in] parameters : __EmplaceArgumentTypes fref ... = Pack of forwarding references to given parameters for element emplace construction
-                     * @exceptsafe if ElementType is exceptsafe move constructible and if ReceiverType does not throw at insert request
+                     * @exceptsafe if ElementType is exceptsafe constructible with given parameters
                      * @return ElementReference = Reference to an element, new or non-replaceable, const or not, depending on use-case.
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
@@ -769,7 +769,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the front of the iterable by creating a new front array request
                      * @tparam __ArgumentTypes is the type pack of the values to be inserted
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible with each of the given parameter types
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -785,7 +785,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the back of the iterable by creating a new back array request
                      * @tparam __ArgumentTypes is the type pack of the values to be inserted
                      * @param [in] values : __ArgumentTypes fref ... = Pack of forwarding elements to values, each of the pack to be transformed into an Element via construction and inserted
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible with each of the given parameter types
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -803,7 +803,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -825,7 +825,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -845,8 +845,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the front of the iterable, done by extracting
                      * each from a given initializer list and inserting each into the received addresses from the add front array request.
                      * @tparam __IterableType is the type of iterable given as parameter
-                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to an initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -868,7 +868,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -890,7 +890,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * each from a given iterable and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
                      * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -910,8 +910,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @brief Function used to insert multiple elements at the back of the iterable, done by extracting
                      * each from a given initializer list and inserting each into the received addresses from the add back array request.
                      * @tparam __IterableType is the type of iterable given as parameter
-                     * @param [in] iterable : __IterableType cref = Constant Reference to the iterable to extract the values from
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @param [in] list : std :: initializer_list cref = Constant Reference to an initializer list to extract the values from
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -938,7 +938,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @param [in] count : Size = Distance between begin and end iterators. If 0, distance will be computed
                      * by subtraction, if iterator type is random, or by iteration otherwise
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *
@@ -963,7 +963,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                      * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
                      * @param [in] count : Size = Distance between begin and end iterators. If 0, distance will be computed
                      * by subtraction, if iterator type is random, or by iteration otherwise
-                     * @exceptsafe if ElementType is exceptsafe constructible and if ReceiverType does not throw at insert request.
+                     * @exceptsafe if ElementType is exceptsafe constructible
                      *
                      * @test Suite: TBA, Group: TBA, Test Cases: TBA
                      *

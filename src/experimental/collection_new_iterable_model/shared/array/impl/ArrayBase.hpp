@@ -556,7 +556,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* if array is empty or address is out of bounds, no new element created */
-                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                    if (
+                            this->_pData == nullptr ||
+                            pElement < this->_pData->_pFront ||
+                            pElement >= this->_pData->_pBack ||
+                            isReverse && iterator.current() == this->_pData->_pBack
+                    ) {
                         return nullptr;
                     }
 
@@ -699,7 +704,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* if array is empty or address is out of bounds, no new element created */
-                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                    if (
+                            this->_pData == nullptr ||
+                            pElement < this->_pData->_pFront ||
+                            pElement >= this->_pData->_pBack ||
+                            isReverse && iterator.current() == this->_pData->_pBack
+                    ) {
                         return false;
                     }
 
@@ -753,7 +763,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     /* if array is empty or address is out of bounds, no new element created */
-                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                    if (
+                            this->_pData == nullptr ||
+                            pElement < this->_pData->_pFront ||
+                            pElement >= this->_pData->_pBack ||
+                            isReverse && iterator.current() == this->_pData->_pBack
+                    ) {
                         return false;
                     }
 

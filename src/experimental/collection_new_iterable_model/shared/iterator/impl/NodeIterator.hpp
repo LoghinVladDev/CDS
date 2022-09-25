@@ -128,7 +128,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the next */
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return * this;
         }
 
@@ -139,7 +139,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return copy;
         }
 
@@ -273,7 +273,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the next */
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return * this;
         }
 
@@ -284,7 +284,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return copy;
         }
 
@@ -576,7 +576,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the next */
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return * this;
         }
 
@@ -587,7 +587,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance forward current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return copy;
         }
 
@@ -718,7 +718,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the next */
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return * this;
         }
 
@@ -729,7 +729,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance forward current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pNext;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pNext;
             return copy;
         }
 
@@ -860,7 +860,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the previous */
-            this->_pCurrentNode     = this->_pCurrentNode->_pPrevious;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pPrevious;
             return * this;
         }
 
@@ -871,7 +871,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance backward current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pPrevious;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pPrevious;
             return copy;
         }
 
@@ -1002,7 +1002,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* previous node becomes the current one */
             this->_pPreviousNode    = this->_pCurrentNode;
             /* current node becomes the previous */
-            this->_pCurrentNode     = this->_pCurrentNode->_pPrevious;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pPrevious;
             return * this;
         }
 
@@ -1013,7 +1013,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /* make a copy of this iterator, advance backward current one and return copy */
             auto copy = * this;
             this->_pPreviousNode    = this->_pCurrentNode;
-            this->_pCurrentNode     = this->_pCurrentNode->_pPrevious;
+            this->_pCurrentNode     = this->_pCurrentNode == nullptr ? nullptr : this->_pCurrentNode->_pPrevious;
             return copy;
         }
 

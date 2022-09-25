@@ -669,8 +669,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     pChainCurrent->_pNext               = const_cast < __NodeType * > ( pCurrent );
                     pChainFront->_pPrevious             = const_cast < __NodeType * > ( pPrevious );
-                    pChainCurrent->_pNext->_pPrevious   = pChainCurrent;
-                    pChainFront->_pPrevious->_pNext     = pChainFront;
+
+                    if ( pChainCurrent->_pNext != nullptr ) {
+                        pChainCurrent->_pNext->_pPrevious   = pChainCurrent;
+                    }
+
+                    if ( pChainFront->_pPrevious != nullptr ) {
+                        pChainFront->_pPrevious->_pNext     = pChainFront;
+                    }
 
                     this->_size += count;
                 }
@@ -783,6 +789,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return nullptr;
                     }
 
+                    if ( reversed && iterator._pCurrentNode == this->_pFront ) {
+                        return this->__dll_newFront();
+                    }
+
+                    if ( ! reversed && iterator._pCurrentNode == this->_pBack ) {
+                        return this->__dll_newBack();
+                    }
+
                     return this->__dll_newBetweenNodes (
                             reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
                             reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext
@@ -811,6 +825,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             reversed && iterator._pCurrentNode == nullptr
                     ) {
                         return nullptr;
+                    }
+
+                    if ( reversed && iterator._pCurrentNode == this->_pFront ) {
+                        return this->__dll_newFront();
+                    }
+
+                    if ( ! reversed && iterator._pCurrentNode == this->_pBack ) {
+                        return this->__dll_newBack();
                     }
 
                     return this->__dll_newBetweenNodes (
@@ -957,6 +979,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return false;
                     }
 
+                    if ( reversed && iterator._pCurrentNode == this->_pFront ) {
+                        this->__dll_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
+                    }
+
+                    if ( ! reversed && iterator._pCurrentNode == this->_pBack ) {
+                        this->__dll_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
+                    }
+
                     this->__dll_newBetweenNodesArray (
                             reversed ? iterator._pCurrentNode->_pPrevious : iterator._pCurrentNode,
                             reversed ? iterator._pCurrentNode : iterator._pCurrentNode->_pNext,
@@ -991,6 +1031,24 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             reversed && iterator._pCurrentNode == nullptr
                     ) {
                         return false;
+                    }
+
+                    if ( reversed && iterator._pCurrentNode == this->_pFront ) {
+                        this->__dll_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
+                    }
+
+                    if ( ! reversed && iterator._pCurrentNode == this->_pBack ) {
+                        this->__dll_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                        return true;
                     }
 
                     this->__dll_newBetweenNodesArray (
