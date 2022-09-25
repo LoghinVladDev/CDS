@@ -31,6 +31,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __rbt_NodeType const * pNodeParent
                 ) noexcept -> bool {
 
+                    if ( pNodeParent == nullptr )
+                        return true;
                     return pNodeParent->_pLeft == pNode;
                 }
 
@@ -911,6 +913,111 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                     return this->_size;
                 }
+
+
+                template <
+                        typename                                                            __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >              __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
+                > template < cds :: utility :: ComparisonFunction < __ElementType > __comparator >                     /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+                        __ElementType,
+                        __KeyType,
+                        __keyExtractor,
+                        __keyLowerComparator,
+                        __keyEqualsComparator,
+                        __nodeDestructor
+                > :: __rbt_equals (
+                        __RedBlackTree const & other
+                ) const noexcept -> bool {
+
+                    if ( this == & other ) {
+                        return true;
+                    }
+
+                    if ( this->__rbt_empty () ) {
+                        return other.__rbt_empty();
+                    }
+
+                    if ( this->_size != other._size ) {
+                        return false;
+                    }
+
+                    auto pTraversalThis  = this->_pRoot;
+                    auto pTraversalOther = other._pRoot;
+                    enum {
+                        _down, _upOrDown, _up
+                    } traversalDirection = _down;
+
+                    while ( pTraversalThis != nullptr ) {
+
+                        if ( pTraversalOther == nullptr ) {
+                            return false;
+                        }
+
+                        if ( ! __comparator ( pTraversalThis->_data, pTraversalOther->_data ) ) {
+                            return false;
+                        }
+
+                        switch ( traversalDirection ) {
+                            case ( _down ) : {
+                                if ( pTraversalThis->_pLeft != nullptr ) {
+                                    pTraversalThis  = pTraversalThis->_pLeft;
+                                    pTraversalOther = pTraversalOther->_pLeft;
+                                } else {
+                                    if ( pTraversalOther->_pLeft != nullptr ) {
+                                        return false;
+                                    }
+                                    if ( pTraversalThis->_pRight != nullptr ) {
+                                        pTraversalThis  = pTraversalThis->_pRight;
+                                        pTraversalOther = pTraversalOther->_pRight;
+                                    } else {
+                                        if ( pTraversalOther->_pRight != nullptr ) {
+                                            return false;
+                                        }
+                                        if ( __RedBlackTree :: __rbt_isLeftChild ( pTraversalThis, pTraversalThis->_pParent ) ) {
+                                            traversalDirection = _upOrDown;
+                                        } else {
+                                            traversalDirection = _up;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            case ( _upOrDown ) : {
+                                if ( pTraversalThis->_pRight != nullptr ) {
+                                    pTraversalThis     = pTraversalThis->_pRight;
+                                    pTraversalOther    = pTraversalOther->_pRight;
+                                    traversalDirection = _down;
+                                } else {
+                                    if ( pTraversalOther->_pRight != nullptr ) {
+                                        return false;
+                                    }
+                                    if ( __RedBlackTree :: __rbt_isRightChild ( pTraversalThis, pTraversalThis->_pParent ) ) {
+                                        traversalDirection = _up;
+                                    }
+                                    pTraversalThis  = pTraversalThis->_pParent;
+                                    pTraversalOther = pTraversalOther->_pParent;
+                                }
+                                break;
+                            }
+                            case ( _up ) : {
+                                if ( __RedBlackTree :: __rbt_isLeftChild ( pTraversalThis, pTraversalThis->_pParent ) ) {
+                                    traversalDirection = _upOrDown;
+                                }
+                                pTraversalThis  = pTraversalThis->_pParent;
+                                pTraversalOther = pTraversalOther->_pParent;
+                            }
+                            break;
+                        }
+                    }
+
+                    return true;
+                }
+
 
 
                 template <

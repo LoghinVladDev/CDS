@@ -200,6 +200,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard constexpr auto __rbt_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
+                    template < cds :: utility :: ComparisonFunction < __ElementType > comparator >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_equals ( __RedBlackTree const & other ) const noexcept -> bool; /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
                     template <
                             cds :: utility :: CopyConstructorFunction < __ElementType > __copy  /* NOLINT(bugprone-reserved-identifier) */
                     > auto __rbt_copy (                                                         /* NOLINT(bugprone-reserved-identifier) */

@@ -154,6 +154,29 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
             return this->__rbt_remove ( element );
         }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto TreeSet < __ElementType > :: operator == (
+                TreeSet const & set
+        ) const noexcept -> bool {
+
+            if ( this == & set ) {
+                return true;
+            }
+
+            return this-> template __rbt_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        }
+
+
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto TreeSet < __ElementType > :: operator != (
+                TreeSet const & set
+        ) const noexcept -> bool {
+
+            return ! this->operator== ( set );
+        }
+
     }
 }
 
