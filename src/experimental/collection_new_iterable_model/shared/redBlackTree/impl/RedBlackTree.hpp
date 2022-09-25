@@ -800,7 +800,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_removeIterator (
-                    AbstractTreeConstIterator < __ElementType > const & iterator
+                    AbstractRedBlackTreeConstIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
                     auto pToBeRemoved = const_cast < __rbt_NodeType * > ( iterator._pCurrentNode );
@@ -827,7 +827,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_removeConstIteratorArray (
-                        AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
+                        AbstractRedBlackTreeConstIterator < __ElementType > const * const * iteratorArray,
                         Size                                iteratorCount
                 ) noexcept -> Size {
 

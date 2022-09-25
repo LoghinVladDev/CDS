@@ -27,10 +27,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     using __rbt_NodeColourType          = cds :: __hidden :: __impl :: __RedBlackTreeNodeColour;    /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
-                    using __rbt_AbstractIterator        = AbstractTreeIterator < __ElementType >;                   /* NOLINT(bugprone-reserved-identifier) */
+                    using __rbt_AbstractIterator        = AbstractRedBlackTreeIterator < __ElementType >;                   /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
-                    using __rbt_AbstractConstIterator   = AbstractTreeConstIterator < __ElementType >;              /* NOLINT(bugprone-reserved-identifier) */
+                    using __rbt_AbstractConstIterator   = AbstractRedBlackTreeConstIterator < __ElementType >;              /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
                     using __rbt_Iterator                = RedBlackTreeForwardIterator < __ElementType >;            /* NOLINT(bugprone-reserved-identifier) */
@@ -50,11 +50,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 private:
                     template < typename >
-                    friend class AbstractTreeIterator;
+                    friend class AbstractRedBlackTreeIterator;
 
                 private:
                     template < typename >
-                    friend class AbstractTreeConstIterator;
+                    friend class AbstractRedBlackTreeConstIterator;
 
                 private:
                     __CDS_NoDiscard constexpr static auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
@@ -184,12 +184,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     auto __rbt_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
-                            AbstractTreeConstIterator < __ElementType > const & iterator
+                            AbstractRedBlackTreeConstIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
 
                 protected:
                     auto __rbt_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
-                            AbstractTreeConstIterator < __ElementType > const * const * iteratorArray,
+                            AbstractRedBlackTreeConstIterator < __ElementType > const * const * iteratorArray,
                             Size                                iteratorCount
                     ) noexcept -> Size;
 
@@ -303,7 +303,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     __nodeDestructor
                             >,
                             __ElementType,
-                            AbstractTreeConstIterator < __ElementType >,
+                            AbstractRedBlackTreeConstIterator < __ElementType >,
                             RedBlackTreeForwardConstIterator < __ElementType >,
                             RedBlackTreeBackwardConstIterator < __ElementType >,
                             & __RedBlackTree <

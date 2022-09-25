@@ -24,7 +24,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         }
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        class AbstractTreeIterator : public meta :: BidirectionalIterator {
+        class AbstractRedBlackTreeIterator : public meta :: BidirectionalIterator {
 
         private:
             template <
@@ -47,22 +47,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             RBTreeNode *         _pCurrentNode  { nullptr };
 
         protected:
-            constexpr AbstractTreeIterator () noexcept;
+            constexpr AbstractRedBlackTreeIterator () noexcept;
 
         protected:
-            constexpr AbstractTreeIterator (
+            constexpr AbstractRedBlackTreeIterator (
                     RBTreeNode * pRoot,
                     RBTreeNode * pCurrentNode
             ) noexcept;
 
         protected:
-            constexpr AbstractTreeIterator (
-                    AbstractTreeIterator const & iterator
+            constexpr AbstractRedBlackTreeIterator (
+                    AbstractRedBlackTreeIterator const & iterator
             ) noexcept;
 
         protected:
-            constexpr AbstractTreeIterator (
-                    AbstractTreeIterator && iterator
+            constexpr AbstractRedBlackTreeIterator (
+                    AbstractRedBlackTreeIterator && iterator
             ) noexcept;
 
         protected:
@@ -75,12 +75,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             __CDS_NoDiscard constexpr auto operator == (
-                    AbstractTreeIterator const & iterator
+                    AbstractRedBlackTreeIterator const & iterator
             ) const noexcept -> bool;
 
         public:
             __CDS_NoDiscard constexpr auto operator != (
-                    AbstractTreeIterator const & iterator
+                    AbstractRedBlackTreeIterator const & iterator
             ) const noexcept -> bool;
 
         public:
@@ -95,7 +95,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-        class AbstractTreeConstIterator : public meta :: BidirectionalIterator {
+        class AbstractRedBlackTreeConstIterator : public meta :: BidirectionalIterator {
             template <
                     typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
@@ -116,22 +116,22 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             RBTreeNode const *         _pCurrentNode  { nullptr };
 
         protected:
-            constexpr AbstractTreeConstIterator () noexcept;
+            constexpr AbstractRedBlackTreeConstIterator () noexcept;
 
         protected:
-            constexpr AbstractTreeConstIterator (
+            constexpr AbstractRedBlackTreeConstIterator (
                     RBTreeNode const * pRoot,
                     RBTreeNode const * pCurrentNode
             ) noexcept;
 
         protected:
-            constexpr AbstractTreeConstIterator (
-                    AbstractTreeConstIterator const & iterator
+            constexpr AbstractRedBlackTreeConstIterator (
+                    AbstractRedBlackTreeConstIterator const & iterator
             ) noexcept;
 
         protected:
-            constexpr AbstractTreeConstIterator (
-                    AbstractTreeConstIterator && iterator
+            constexpr AbstractRedBlackTreeConstIterator (
+                    AbstractRedBlackTreeConstIterator && iterator
             ) noexcept;
 
         protected:
@@ -144,12 +144,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             __CDS_NoDiscard constexpr auto operator == (
-                    AbstractTreeConstIterator const & iterator
+                    AbstractRedBlackTreeConstIterator const & iterator
             ) const noexcept -> bool;
 
         public:
             __CDS_NoDiscard constexpr auto operator != (
-                    AbstractTreeConstIterator const & iterator
+                    AbstractRedBlackTreeConstIterator const & iterator
             ) const noexcept -> bool;
 
         public:
@@ -164,7 +164,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
-        class RedBlackTreeForwardIterator : public AbstractTreeIterator < __ElementType > {
+        class RedBlackTreeForwardIterator : public AbstractRedBlackTreeIterator < __ElementType > {
 
         private:
             template <
@@ -177,7 +177,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
-            using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
+            using typename AbstractRedBlackTreeIterator < __ElementType > :: RBTreeNode;
 
         public:
             constexpr RedBlackTreeForwardIterator () noexcept;
@@ -224,7 +224,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
-        class RedBlackTreeForwardConstIterator : public AbstractTreeConstIterator < __ElementType > {   /* NOLINT(bugprone-reserved-identifier) */
+        class RedBlackTreeForwardConstIterator : public AbstractRedBlackTreeConstIterator < __ElementType > {   /* NOLINT(bugprone-reserved-identifier) */
             template <
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
@@ -235,47 +235,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
-            using typename AbstractTreeConstIterator < __ElementType > :: RBTreeNode;
+            using typename AbstractRedBlackTreeConstIterator < __ElementType > :: RBTreeNode;
 
         public:
-            RedBlackTreeForwardConstIterator () noexcept;
+            constexpr RedBlackTreeForwardConstIterator () noexcept;
 
         public:
-            RedBlackTreeForwardConstIterator (
+            constexpr RedBlackTreeForwardConstIterator (
                     RBTreeNode const * pRoot, RBTreeNode const * pCurrentNode
             ) noexcept;
 
         public:
-            RedBlackTreeForwardConstIterator (
+            constexpr RedBlackTreeForwardConstIterator (
                     RedBlackTreeForwardConstIterator const & iterator
             ) noexcept;
 
         public:
-            RedBlackTreeForwardConstIterator (
+            constexpr RedBlackTreeForwardConstIterator (
                     RedBlackTreeForwardConstIterator && iterator
             ) noexcept;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeForwardConstIterator const & iterator
             ) noexcept -> RedBlackTreeForwardConstIterator &;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeForwardConstIterator && iterator
             ) noexcept -> RedBlackTreeForwardConstIterator &;
 
         public:
-            auto operator ++ () noexcept -> RedBlackTreeForwardConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> RedBlackTreeForwardConstIterator &;
 
         public:
-            auto operator ++ (int) noexcept -> RedBlackTreeForwardConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> RedBlackTreeForwardConstIterator;
 
         public:
-            auto operator -- () noexcept -> RedBlackTreeForwardConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> RedBlackTreeForwardConstIterator &;
 
         public:
-            auto operator -- (int) noexcept -> RedBlackTreeForwardConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> RedBlackTreeForwardConstIterator;
 
         };
 
@@ -284,7 +284,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
-        class RedBlackTreeBackwardIterator : public AbstractTreeIterator < __ElementType > {
+        class RedBlackTreeBackwardIterator : public AbstractRedBlackTreeIterator < __ElementType > {
             template <
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
@@ -295,54 +295,54 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
-            using typename AbstractTreeIterator < __ElementType > :: RBTreeNode;
+            using typename AbstractRedBlackTreeIterator < __ElementType > :: RBTreeNode;
 
         public:
-            RedBlackTreeBackwardIterator () noexcept;
+            constexpr RedBlackTreeBackwardIterator () noexcept;
 
         public:
-            RedBlackTreeBackwardIterator (
+            constexpr RedBlackTreeBackwardIterator (
                     RBTreeNode * pRoot,
                     RBTreeNode * pCurrentNode
             ) noexcept;
 
         public:
-            RedBlackTreeBackwardIterator (
+            constexpr RedBlackTreeBackwardIterator (
                     RedBlackTreeBackwardIterator const & iterator
             ) noexcept;
 
         public:
-            RedBlackTreeBackwardIterator (
+            constexpr RedBlackTreeBackwardIterator (
                     RedBlackTreeBackwardIterator && iterator
             ) noexcept;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeBackwardIterator const & iterator
             ) noexcept -> RedBlackTreeBackwardIterator &;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeBackwardIterator && iterator
             ) noexcept -> RedBlackTreeBackwardIterator &;
 
         public:
-            auto operator ++ () noexcept -> RedBlackTreeBackwardIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> RedBlackTreeBackwardIterator &;
 
         public:
-            auto operator ++ (int) noexcept -> RedBlackTreeBackwardIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> RedBlackTreeBackwardIterator;
 
         public:
-            auto operator -- () noexcept -> RedBlackTreeBackwardIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> RedBlackTreeBackwardIterator &;
 
         public:
-            auto operator -- (int) noexcept -> RedBlackTreeBackwardIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> RedBlackTreeBackwardIterator;
 
         };
 
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
-        class RedBlackTreeBackwardConstIterator : public AbstractTreeConstIterator < __ElementType > {  /* NOLINT(bugprone-reserved-identifier) */
+        class RedBlackTreeBackwardConstIterator : public AbstractRedBlackTreeConstIterator < __ElementType > {  /* NOLINT(bugprone-reserved-identifier) */
             template <
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
@@ -353,47 +353,47 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
         private:
-            using typename AbstractTreeConstIterator < __ElementType > :: RBTreeNode;
+            using typename AbstractRedBlackTreeConstIterator < __ElementType > :: RBTreeNode;
 
         public:
-            RedBlackTreeBackwardConstIterator () noexcept;
+            constexpr RedBlackTreeBackwardConstIterator () noexcept;
 
         public:
-            RedBlackTreeBackwardConstIterator (
+            constexpr RedBlackTreeBackwardConstIterator (
                     RBTreeNode const * pRoot, RBTreeNode const * pCurrentNode
             ) noexcept;
 
         public:
-            RedBlackTreeBackwardConstIterator (
+            constexpr RedBlackTreeBackwardConstIterator (
                     RedBlackTreeBackwardConstIterator const & iterator
             ) noexcept;
 
         public:
-            RedBlackTreeBackwardConstIterator (
+            constexpr RedBlackTreeBackwardConstIterator (
                     RedBlackTreeBackwardConstIterator && iterator
             ) noexcept;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeBackwardConstIterator const & iterator
             ) noexcept -> RedBlackTreeBackwardConstIterator &;
 
         public:
-            auto operator = (
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                     RedBlackTreeBackwardConstIterator && iterator
             ) noexcept -> RedBlackTreeBackwardConstIterator &;
 
         public:
-            auto operator ++ () noexcept -> RedBlackTreeBackwardConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> RedBlackTreeBackwardConstIterator &;
 
         public:
-            auto operator ++ (int) noexcept -> RedBlackTreeBackwardConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> RedBlackTreeBackwardConstIterator;
 
         public:
-            auto operator -- () noexcept -> RedBlackTreeBackwardConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> RedBlackTreeBackwardConstIterator &;
 
         public:
-            auto operator -- (int) noexcept -> RedBlackTreeBackwardConstIterator;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> RedBlackTreeBackwardConstIterator;
 
         };
     }

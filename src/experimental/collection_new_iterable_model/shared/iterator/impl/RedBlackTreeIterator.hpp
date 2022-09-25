@@ -9,11 +9,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeIterator < __ElementType > :: AbstractTreeIterator () noexcept = default; /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeIterator < __ElementType > :: AbstractRedBlackTreeIterator () noexcept = default; /* NOLINT(bugprone-reserved-identifier) */
 
 
         template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeIterator < __ElementType > :: AbstractTreeIterator (                        /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeIterator < __ElementType > :: AbstractRedBlackTreeIterator (                        /* NOLINT(bugprone-reserved-identifier) */
                 RBTreeNode * pRoot,
                 RBTreeNode * pCurrentNode
         ) noexcept :
@@ -24,8 +24,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeIterator < __ElementType > :: AbstractTreeIterator (                        /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeIterator const & iterator
+        constexpr AbstractRedBlackTreeIterator < __ElementType > :: AbstractRedBlackTreeIterator (                        /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeIterator const & iterator
         ) noexcept :
                 _pRoot ( iterator._pRoot ),
                 _pCurrentNode ( iterator._pCurrentNode ) {
@@ -34,8 +34,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeIterator < __ElementType > :: AbstractTreeIterator (    /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeIterator && iterator )
+        constexpr AbstractRedBlackTreeIterator < __ElementType > :: AbstractRedBlackTreeIterator (    /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeIterator && iterator )
         noexcept :
                 _pRoot        ( cds :: exchange ( iterator._pRoot, nullptr ) ),
                 _pCurrentNode ( cds :: exchange ( iterator._pCurrentNode, nullptr ) ) {
@@ -44,22 +44,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr auto AbstractRedBlackTreeIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {    /* NOLINT(bugprone-reserved-identifier) */
 
             return this->_pCurrentNode->_data;
         }
 
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {   /* NOLINT(bugprone-reserved-identifier) */
+        constexpr auto AbstractRedBlackTreeIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {   /* NOLINT(bugprone-reserved-identifier) */
 
             return & this->_pCurrentNode->_data;
         }
 
 
         template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeIterator < __ElementType > :: operator == (    /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeIterator const & iterator
+        constexpr auto AbstractRedBlackTreeIterator < __ElementType > :: operator == (    /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeIterator const & iterator
         ) const noexcept -> bool {
 
             return this->_pCurrentNode == iterator._pCurrentNode;
@@ -67,8 +67,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeIterator < __ElementType > :: operator != (    /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeIterator const & iterator
+        constexpr auto AbstractRedBlackTreeIterator < __ElementType > :: operator != (    /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeIterator const & iterator
         ) const noexcept -> bool {
 
             return ! this->operator== ( iterator );
@@ -76,14 +76,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeIterator < __ElementType > :: operator bool () const noexcept {     /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeIterator < __ElementType > :: operator bool () const noexcept {     /* NOLINT(bugprone-reserved-identifier) */
 
             return this->_pCurrentNode != nullptr;
         }
 
 
         template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_cpplang_ConstexprConditioned auto AbstractTreeIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto AbstractRedBlackTreeIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
 
             if ( this->_pCurrentNode->_pRight != nullptr ) {
@@ -114,7 +114,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                           /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_cpplang_ConstexprConditioned auto AbstractTreeIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_ConstexprConditioned auto AbstractRedBlackTreeIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
             if ( this->_pCurrentNode->_pLeft != nullptr ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
@@ -144,11 +144,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeConstIterator < __ElementType > :: AbstractTreeConstIterator () noexcept = default;     /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeConstIterator < __ElementType > :: AbstractRedBlackTreeConstIterator () noexcept = default;     /* NOLINT(bugprone-reserved-identifier) */
 
 
         template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeConstIterator < __ElementType > :: AbstractTreeConstIterator (                          /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeConstIterator < __ElementType > :: AbstractRedBlackTreeConstIterator (                          /* NOLINT(bugprone-reserved-identifier) */
                 RBTreeNode const * pRoot,
                 RBTreeNode const * pCurrentNode
         ) noexcept :
@@ -159,8 +159,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeConstIterator < __ElementType > :: AbstractTreeConstIterator (          /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeConstIterator const & iterator
+        constexpr AbstractRedBlackTreeConstIterator < __ElementType > :: AbstractRedBlackTreeConstIterator (          /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeConstIterator const & iterator
         ) noexcept :
                 _pRoot ( iterator._pRoot ),
                 _pCurrentNode ( iterator._pCurrentNode ) {
@@ -169,8 +169,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeConstIterator < __ElementType > :: AbstractTreeConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeConstIterator && iterator )
+        constexpr AbstractRedBlackTreeConstIterator < __ElementType > :: AbstractRedBlackTreeConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeConstIterator && iterator )
         noexcept :
                 _pRoot        ( cds :: exchange ( iterator._pRoot, nullptr ) ),
                 _pCurrentNode ( cds :: exchange ( iterator._pCurrentNode, nullptr ) ) {
@@ -179,7 +179,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeConstIterator < __ElementType > :: operator * (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr auto AbstractRedBlackTreeConstIterator < __ElementType > :: operator * (    /* NOLINT(bugprone-reserved-identifier) */
         ) const noexcept -> __ElementType const & {
 
             return this->_pCurrentNode->_data;
@@ -187,7 +187,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeConstIterator < __ElementType > :: operator -> (   /* NOLINT(bugprone-reserved-identifier) */
+        constexpr auto AbstractRedBlackTreeConstIterator < __ElementType > :: operator -> (   /* NOLINT(bugprone-reserved-identifier) */
         ) const noexcept -> __ElementType const * {
 
             return & this->_pCurrentNode->_data;
@@ -195,8 +195,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeConstIterator < __ElementType > :: operator == (   /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeConstIterator const & iterator
+        constexpr auto AbstractRedBlackTreeConstIterator < __ElementType > :: operator == (   /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeConstIterator const & iterator
         ) const noexcept -> bool {
 
             return this->_pCurrentNode == iterator._pCurrentNode;
@@ -204,8 +204,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr auto AbstractTreeConstIterator < __ElementType > :: operator != (   /* NOLINT(bugprone-reserved-identifier) */
-                AbstractTreeConstIterator const & iterator
+        constexpr auto AbstractRedBlackTreeConstIterator < __ElementType > :: operator != (   /* NOLINT(bugprone-reserved-identifier) */
+                AbstractRedBlackTreeConstIterator const & iterator
         ) const noexcept -> bool {
 
             return ! this->operator== ( iterator );
@@ -213,14 +213,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier) */
-        constexpr AbstractTreeConstIterator < __ElementType > :: operator bool () const noexcept {    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr AbstractRedBlackTreeConstIterator < __ElementType > :: operator bool () const noexcept {    /* NOLINT(bugprone-reserved-identifier) */
 
             return this->_pCurrentNode != nullptr;
         }
 
 
         template < typename __ElementType >                                                  /* NOLINT(bugprone-reserved-identifier) */
-        auto AbstractTreeConstIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
+        auto AbstractRedBlackTreeConstIterator < __ElementType > :: advance () noexcept -> void {    /* NOLINT(bugprone-reserved-identifier) */
 
             if ( this->_pCurrentNode->_pRight != nullptr ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pRight;
@@ -249,7 +249,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                /* NOLINT(bugprone-reserved-identifier) */
-        auto AbstractTreeConstIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
+        auto AbstractRedBlackTreeConstIterator < __ElementType > :: reverse () noexcept -> void {  /* NOLINT(bugprone-reserved-identifier) */
 
             if ( this->_pCurrentNode->_pLeft != nullptr ) {
                 this->_pCurrentNode = this->_pCurrentNode->_pLeft;
@@ -286,7 +286,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 RBTreeNode  *  pRoot,
                 RBTreeNode  *  pCurrentNode
         ) noexcept :
-                AbstractTreeIterator < __ElementType > (
+                AbstractRedBlackTreeIterator < __ElementType > (
                         pRoot,
                         pCurrentNode
                 ) {
@@ -298,7 +298,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr RedBlackTreeForwardIterator < __ElementType > :: RedBlackTreeForwardIterator (  /* NOLINT(bugprone-reserved-identifier) */
                 const RedBlackTreeForwardIterator & iterator
         ) noexcept :
-                AbstractTreeIterator < __ElementType > ( iterator ) {
+                AbstractRedBlackTreeIterator < __ElementType > ( iterator ) {
 
         }
 
@@ -307,7 +307,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr RedBlackTreeForwardIterator < __ElementType > :: RedBlackTreeForwardIterator (  /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeForwardIterator && iterator
         ) noexcept :
-                AbstractTreeIterator < __ElementType > ( std :: move ( iterator ) ) {
+                AbstractRedBlackTreeIterator < __ElementType > ( std :: move ( iterator ) ) {
 
         }
 
@@ -381,15 +381,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator () noexcept = default;   /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator () noexcept = default;   /* NOLINT(bugprone-reserved-identifier) */
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 RBTreeNode const  *  pRoot,
                 RBTreeNode const  *  pCurrentNode
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > (
+                AbstractRedBlackTreeConstIterator < __ElementType > (
                         pRoot,
                         pCurrentNode
                 ) {
@@ -398,25 +398,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 const RedBlackTreeForwardConstIterator & iterator
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > ( iterator) {
+                AbstractRedBlackTreeConstIterator < __ElementType > ( iterator) {
 
         }
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeForwardConstIterator < __ElementType > :: RedBlackTreeForwardConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeForwardConstIterator && iterator
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > ( std :: move ( iterator ) ) {
+                AbstractRedBlackTreeConstIterator < __ElementType > ( std :: move ( iterator ) ) {
 
         }
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeForwardConstIterator const & iterator
         ) noexcept -> RedBlackTreeForwardConstIterator & {
 
@@ -432,7 +432,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeForwardConstIterator && iterator
         ) noexcept -> RedBlackTreeForwardConstIterator & {
 
@@ -448,7 +448,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator ++ (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator ++ (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeForwardConstIterator & {
 
             this->advance();
@@ -457,7 +457,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeForwardConstIterator {     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeForwardConstIterator {     /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = * this;
             ++ ( * this );
@@ -466,7 +466,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator -- (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator -- (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeForwardConstIterator & {
 
             this->reverse();
@@ -475,7 +475,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeForwardConstIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeForwardConstIterator {     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeForwardConstIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeForwardConstIterator {     /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = *this;
             -- ( * this );
@@ -484,15 +484,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator () noexcept = default;   /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator () noexcept = default;   /* NOLINT(bugprone-reserved-identifier) */
 
 
         template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 RBTreeNode  *  pRoot,
                 RBTreeNode  *  pCurrentNode
         ) noexcept :
-                AbstractTreeIterator < __ElementType > (
+                AbstractRedBlackTreeIterator < __ElementType > (
                         pRoot,
                         pCurrentNode
                 ) {
@@ -501,25 +501,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 const RedBlackTreeBackwardIterator & iterator
         ) noexcept :
-                AbstractTreeIterator < __ElementType > ( iterator ) {
+                AbstractRedBlackTreeIterator < __ElementType > ( iterator ) {
 
         }
 
 
         template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardIterator < __ElementType > :: RedBlackTreeBackwardIterator (    /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardIterator && iterator
         ) noexcept :
-                AbstractTreeIterator < __ElementType > ( std :: move ( iterator ) ) {
+                AbstractRedBlackTreeIterator < __ElementType > ( std :: move ( iterator ) ) {
 
         }
 
 
         template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardIterator const & iterator
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
@@ -535,7 +535,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator = (     /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardIterator && iterator
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
@@ -551,7 +551,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator ++ (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator ++ (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
             this->reverse();
@@ -560,7 +560,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeBackwardIterator {     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeBackwardIterator {     /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = * this;
             ++ ( * this );
@@ -569,7 +569,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator -- (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator -- (    /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardIterator & {
 
             this->advance();
@@ -578,7 +578,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeBackwardIterator {     /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeBackwardIterator {     /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = *this;
             -- ( * this );
@@ -587,15 +587,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator () noexcept = default; /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator () noexcept = default; /* NOLINT(bugprone-reserved-identifier) */
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
                 RBTreeNode const  *  pRoot,
                 RBTreeNode const  *  pCurrentNode
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > (
+                AbstractRedBlackTreeConstIterator < __ElementType > (
                         pRoot,
                         pCurrentNode
                 ) {
@@ -604,25 +604,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
                 const RedBlackTreeBackwardConstIterator & iterator
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > ( iterator) {
+                AbstractRedBlackTreeConstIterator < __ElementType > ( iterator) {
 
         }
 
 
         template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
-        RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
+        constexpr RedBlackTreeBackwardConstIterator < __ElementType > :: RedBlackTreeBackwardConstIterator (  /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardConstIterator && iterator
         ) noexcept :
-                AbstractTreeConstIterator < __ElementType > ( std :: move ( iterator ) ) {
+                AbstractRedBlackTreeConstIterator < __ElementType > ( std :: move ( iterator ) ) {
 
         }
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator = (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator = (    /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardConstIterator const & iterator
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
@@ -638,7 +638,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator = (    /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator = (    /* NOLINT(bugprone-reserved-identifier) */
                 RedBlackTreeBackwardConstIterator && iterator
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
@@ -654,7 +654,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator ++ (   /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator ++ (   /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
             this->reverse();
@@ -663,7 +663,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeBackwardConstIterator {   /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator ++ (int) noexcept -> RedBlackTreeBackwardConstIterator {   /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = * this;
             ++ ( * this );
@@ -672,7 +672,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator -- (   /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator -- (   /* NOLINT(bugprone-reserved-identifier) */
         ) noexcept -> RedBlackTreeBackwardConstIterator & {
 
             this->advance();
@@ -681,7 +681,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __ElementType >                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-        auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeBackwardConstIterator {   /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto RedBlackTreeBackwardConstIterator < __ElementType > :: operator -- (int) noexcept -> RedBlackTreeBackwardConstIterator {   /* NOLINT(bugprone-reserved-identifier) */
 
             auto copy = *this;
             -- ( * this );
