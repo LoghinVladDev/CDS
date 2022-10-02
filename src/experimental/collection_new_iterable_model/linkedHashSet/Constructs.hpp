@@ -1,23 +1,23 @@
 /*
- * Created by loghin on 10/08/22.
+ * Created by loghin on 02/10/22.
  */
 
-#ifndef __CDS_HASH_SET_CONSTRUCTS_HPP__
-#define __CDS_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__
+#define __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {
 
         template <
                 typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier) */
                 typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > > /* NOLINT(bugprone-reserved-identifier) */
-        > class HashSet;
+        > class LinkedHashSet;
 
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __hashSetKeyExtractor (  /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
+                constexpr auto __linkedHashSetKeyExtractor (    /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType const & element
                 ) noexcept -> __ElementType const & {
 
@@ -25,8 +25,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetCopyConstructor ( /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetCopyConstructor (   /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType       & destination,
                         __ElementType const & source
                 ) noexcept -> void {
@@ -35,8 +35,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetDestructor (  /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetDestructor (    /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType & element
                 ) noexcept -> void {
 
@@ -45,29 +45,79 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetImplementation =   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __DecoratedIteratorType,                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueAtType                              /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __linkedHashSetIteratorDecoratorValueAt (  /* NOLINT(bugprone-reserved-identifier) */
+                        __DecoratedIteratorType const & iterator
+                ) noexcept -> __ValueAtType & {
+
+                    return * ( * iterator );
+                }
+
+
+                template <
+                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetHashTableImplementation =    /* NOLINT(bugprone-reserved-identifier) */
                         __HashTable <
                                 __ElementType,
                                 __ElementType,
                                 __Hasher,
                                 cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
-                                & __hashSetKeyExtractor < __ElementType >,
+                                & __linkedHashSetKeyExtractor < __ElementType >,
                                 & cds :: meta :: equals < __ElementType >,
-                                & __hashSetDestructor < __ElementType >
+                                & __linkedHashSetDestructor < __ElementType >
                         >;
 
 
                 template <
-                        typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetDispatcher =   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __HashSetImplementation <
+                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetLinkedListImplementation =   /* NOLINT(bugprone-reserved-identifier) */
+                        __SingleLinkedList <
+                                __ElementType *,
+                                & cds :: meta :: equals < __ElementType * >
+                        >;
+
+
+                template <
+                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetIterator =   /* NOLINT(bugprone-reserved-identifier) */
+                        ForwardIteratorGenericDecorator <
+                                typename __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher > :: __sll_ConstIterator,
+                                __ElementType const,
+                                & __linkedHashSetIteratorDecoratorValueAt <
+                                        typename __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher > :: __sll_ConstIterator,
+                                        __ElementType const
+                                >
+                        >;
+
+
+                template <
+                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetHashTablePartialDispatcher = /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LinkedHashSetHashTableImplementation <
                                 __ElementType,
                                 __Hasher
                         > :: template __SetDispatcher <
-                                HashSet <
+                                LinkedHashSet <
+                                        __ElementType,
+                                        __Hasher
+                                >
+                        >;
+
+
+                template <
+                        typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetLinkedListPartialDispatcher =    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __LinkedHashSetLinkedListImplementation <
+                                __ElementType,
+                                __Hasher
+                        > :: template __Dispatcher <
+                                LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >
@@ -77,9 +127,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetServer =       /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetServer = /* NOLINT(bugprone-reserved-identifier) */
                         __SetServer <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -90,9 +140,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRandomInsertionPrimitiveClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -104,28 +154,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
                         __LocalConstIteratorRemovePrimitiveClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
                                 __ElementType,
-                                HashTableConstIterator < __ElementType >
+                                __LinkedHashSetIterator < __ElementType, __Hasher >
                         >;
 
 
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
                                 __ElementType,
-                                HashTableConstIterator < __ElementType >,
+                                __LinkedHashSetIterator < __ElementType, __Hasher >,
                                 cds :: experimental :: Collection < __ElementType >,
                                 & __collectionContains < __ElementType >,
                                 & __collectionNotContains < __ElementType >
@@ -135,14 +185,14 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
                                 __ElementType,
-                                HashTableConstIterator < __ElementType >,
+                                __LinkedHashSetIterator < __ElementType, __Hasher >,
                                 std :: initializer_list < __ElementType >,
                                 & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
                                 & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
@@ -152,23 +202,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetFindByClient =    /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetFindByClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindByImmutableCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
                                 __ElementType,
-                                HashTableConstIterator < __ElementType >
+                                __LinkedHashSetIterator < __ElementType, __Hasher >
                         >;
 
 
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -181,9 +231,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -196,9 +246,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveByCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -209,9 +259,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __LocalGenericImmutableStatementsCompositeClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
@@ -222,23 +272,23 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindUniqueImmutablePrimitiveClient <
-                                cds :: experimental :: HashSet <
+                                cds :: experimental :: LinkedHashSet <
                                         __ElementType,
                                         __Hasher
                                 >,
                                 __ElementType,
-                                HashTableConstIterator < __ElementType >
+                                __LinkedHashSetIterator < __ElementType, __Hasher >
                         >;
 
 
                 template <
                         typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __LocalContainsOfCompositeClient <
-                                cds :: experimental :: HashSet < __ElementType, __Hasher >,
+                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
                                 __ElementType,
                                 cds :: experimental :: Collection < __ElementType >,
                                 __collectionContains < __ElementType >
@@ -248,9 +298,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
                         __LocalContainsOfCompositeClient <
-                                cds :: experimental :: HashSet < __ElementType, __Hasher >,
+                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
                                 __ElementType,
                                 std :: initializer_list < __ElementType >,
                                 __initializerListContains <
@@ -263,15 +313,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashSetDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
+                > using __LinkedHashSetDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         __LocalDelegateForwardConstIterablePrimitiveClient <
-                                cds :: experimental :: HashSet < __ElementType, __Hasher >,
-                                typename __HashSetImplementation < __ElementType, __Hasher > :: __ht_ConstIterator
+                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
+                                __LinkedHashSetIterator < __ElementType, __Hasher >
                         >;
 
             }
         }
+
     }
 }
 
-#endif /* __CDS_HASH_SET_CONSTRUCTS_HPP__ */
+#endif /* __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__ */

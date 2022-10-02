@@ -4,6 +4,7 @@
 #include <CDS/String>
 #include <CDS/experimental/Array>
 #include <CDS/experimental/LinkedList>
+#include <CDS/experimental/LinkedHashSet>
 #include "src/experimental/collection_new_iterable_model/shared/iterator/IteratorSort.hpp"
 #include "src/experimental/collection_new_iterable_model/shared/iterator/impl/IteratorSort.hpp"
 #include <chrono>
@@ -337,6 +338,8 @@ int main () {
 //    std :: cout << std :: boolalpha << testList.insertAfter ( ++ ++ ++ ++ testList.rbegin(), 4 ) << " "; /// sigsegv
 //    std :: cout << std :: dec << testList << '\n';
 //    testList = {1, 2, 3};
+
+    LinkedHashSet < int > hssss;
 
     return 0;
 }

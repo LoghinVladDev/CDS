@@ -31,8 +31,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     using __dll_ConstReverseIterator    = BackwardBidirectionalNodeConstIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
                 public:
-                    template < typename __ServerType >
-                    class __Dispatcher; /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
+                    class __Dispatcher;                 /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using __NodeType = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;  /* NOLINT(bugprone-reserved-identifier) */
@@ -278,8 +278,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     template <
-                            typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )
-                    > auto __dll_sort (
+                            typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier) */
+                    > auto __dll_sort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
                             __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
                     ) noexcept -> void;
                 };

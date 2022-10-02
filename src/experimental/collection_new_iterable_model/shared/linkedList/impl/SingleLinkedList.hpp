@@ -1,0 +1,8 @@
+//
+// Created by loghin on 02/10/22.
+//
+
+#ifndef CDS_SINGLELINKEDLIST_HPP
+#define CDS_SINGLELINKEDLIST_HPP
+
+#endif //CDS_SINGLELINKEDLIST_HPP
