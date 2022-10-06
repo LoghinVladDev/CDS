@@ -80,7 +80,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __sll_newBack () noexcept -> __ElementType *;
 
                 protected:
-                    auto __sll_new ( __ElementType const *, bool * ) -> __ElementType *;
+                    auto __sll_new ( __ElementType const *, bool * ) noexcept -> __ElementType *;
 
                 protected:
                     __CDS_NoDiscard constexpr auto __sll_cbegin () const noexcept -> __sll_ConstIterator;
@@ -95,25 +95,36 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_end () noexcept -> __sll_Iterator;
 
                 protected:
+                    auto __sll_removeNode (
+                            __NodeType * pPrevious,
+                            __NodeType * pCurrent
+                    ) noexcept -> void;
+
+                protected:
+                    auto __sll_remove (
+                            __ElementType const & value
+                    ) noexcept -> bool;
+
+                protected:
                     auto __sll_removeIterator (
-                            UnidirectionalNodeIterator < __ElementType > const & iterator
+                            __sll_Iterator const & iterator
                     ) noexcept -> bool;
 
                 protected:
                     auto __sll_removeConstIterator (
-                            UnidirectionalNodeConstIterator < __ElementType > const & iterator
+                            __sll_ConstIterator const & iterator
                     ) noexcept -> bool;
 
                 protected:
                     auto __sll_removeIteratorArray (
-                            UnidirectionalNodeIterator < __ElementType >    const * const * ppIterators,
-                            Size                                                            iteratorCount
+                            __sll_Iterator  const * const * ppIterators,
+                            Size                            iteratorCount
                     ) noexcept -> Size;
 
                 protected:
                     auto __sll_removeConstIteratorArray (
-                            UnidirectionalNodeConstIterator < __ElementType >   const * const * ppIterators,
-                            Size                                                                iteratorCount
+                            __sll_ConstIterator const * const * ppIterators,
+                            Size                                iteratorCount
                     ) noexcept -> Size;
 
                 protected:

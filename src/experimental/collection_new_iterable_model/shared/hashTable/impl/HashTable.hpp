@@ -976,6 +976,83 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyExtractor,
                         __keyComparator,
                         __nodeDestructor
+                > :: __ht_removeGetPtr (
+                        __KeyType const & key
+                ) noexcept -> __ElementType * {
+
+                    /* no elements -> nothing to remove */
+                    if ( this->__ht_empty() ) {
+                        return nullptr;
+                    }
+
+                    __NodeType    * pToRemove;
+                    __NodeType    * pBucketHead;
+                    __ElementType * pOldElement;
+
+                    /* acquire bucket. if key matches the front node key, remove front */
+                    auto & bucket = this->__ht_bucket ( this->_hasher ( key ) );
+                    if ( bucket == nullptr ) {
+                        return nullptr;
+                    }
+
+                    if ( __keyComparator ( __keyExtractor ( bucket->_data ), key ) ) {
+
+                        pToRemove   = bucket;
+                        bucket      = bucket->_pNext;
+                        pOldElement = & pToRemove->_data;
+
+                        this->__ht_freeNode ( pToRemove );
+
+                        -- this->_size;
+
+                        /* removal successful */
+                        return pOldElement;
+                    }
+
+                    /* otherwise, parse with lookahead to be able to relink list */
+                    pBucketHead = bucket;
+                    while ( pBucketHead->_pNext != nullptr ) {
+
+                        /* matching key found, remove and relink */
+                        if ( __keyComparator ( __keyExtractor ( pBucketHead->_pNext->_data ), key ) ) {
+
+                            pToRemove           = pBucketHead->_pNext;
+                            pBucketHead->_pNext = pBucketHead->_pNext->_pNext;
+                            pOldElement         = & pToRemove->_data;
+
+                            this->__ht_freeNode ( pToRemove );
+
+                            -- this->_size;
+
+                            /* removal successful */
+                            return pOldElement;
+                        }
+
+                        /* otherwise, keep checking bucket */
+                        pBucketHead = pBucketHead->_pNext;
+                    }
+
+                    /* no removal done - no matching key in nodes found - unsuccessful */
+                    return nullptr;
+                }
+
+
+                template <
+                        typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __keyExtractor,
+                        __keyComparator,
+                        __nodeDestructor
                 > :: __ht_remove (
                         __NodeType  const * pPreviousNode,
                         __NodeType  const * pCurrentNode,

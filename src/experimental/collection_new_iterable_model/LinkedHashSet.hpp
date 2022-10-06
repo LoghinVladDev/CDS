@@ -129,7 +129,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             auto __removeConstArray ( /* NOLINT(bugprone-reserved-identifier) */
                     ConstIterator   const * const * ppIterators,
-                    Size                            iteratorArrayCount
+                    Size                            iteratorArraySize
             ) noexcept -> Size;
 
         protected:
@@ -371,8 +371,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/iterator/impl/HashTableIterator.hpp"
 #include "shared/iterator/impl/NodeIterator.hpp"
+#include "shared/iterator/impl/IteratorGenericDecorator.hpp"
 
 #include "shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
+
+#include "linkedHashSet/impl/LinkedHashSet.hpp"
 
 #endif /* __CDS_EX_LINKED_HASH_SET_HPP__ */

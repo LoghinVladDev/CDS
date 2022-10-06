@@ -503,6 +503,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __KeyType const & key
                     ) noexcept -> bool;
 
+                protected:
+                    auto __ht_removeGetPtr (                                             /* NOLINT(bugprone-reserved-identifier) */
+                            __KeyType const & key
+                    ) noexcept -> __ElementType *;
+
                 private:
                     /**
                      * @brief Function used to remove a node based on the bucket index, the node itself and the node before it, if applicable
