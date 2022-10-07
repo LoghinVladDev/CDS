@@ -31,9 +31,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __rbt_NodeType const * pNodeParent
                 ) noexcept -> bool {
 
-                    if ( pNodeParent == nullptr )
-                        return true;
-                    return pNodeParent->_pLeft == pNode;
+                    return pNodeParent == nullptr || pNodeParent->_pLeft == pNode;
                 }
 
 
