@@ -186,6 +186,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto pNewNode           = __SingleLinkedList :: __sll_allocateNode();
                     this->_pBack->_pNext    = pNewNode;
                     this->_pBack            = pNewNode;
+                    this->_pBack->_pNext    = nullptr;
 
                     return & pNewNode->_data;
                 }
