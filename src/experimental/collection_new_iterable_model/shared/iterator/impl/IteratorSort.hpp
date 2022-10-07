@@ -12,7 +12,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 namespace __helpers { /* NOLINT(bugprone-reserved-identifier) */
 
-#if defined (__CDS_compiler_gcc) || defined (__CDS_compiler_clang)
+#if defined (__CDS_compiler_gcc) || defined (__CDS_compiler_clang) || defined(__CDS_compiler_MinGW)
 
                     constexpr auto __lg ( sint32 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier) */
                         return (uint8) sizeof ( sint32 ) * 8U - 1U - __builtin_clz(n);
@@ -237,6 +237,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 namespace __introSortHelpers { /* NOLINT(bugprone-reserved-identifier) */
 
+#if !defined (__CDS_compiler_MinGW)
+
                     template <
                             typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
                             typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
@@ -281,6 +283,45 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         }
                     }
 
+#else
+
+                    template <
+                            typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                            typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
+                            Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier) */
+                    > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                            __RandomAccessIteratorType  const & begin,
+                            __RandomAccessIteratorType  const & end,
+                            __Comparator                const & comparator,
+                            Size                                depth
+                    ) noexcept -> void {
+
+                        auto const length = end - begin;
+
+                        if ( length < __threshold ) {
+                            __heapSort ( begin, end, comparator );
+                        } else if ( depth == 0U ) {
+                            __insertionSort ( begin, end, comparator );
+                        } else {
+
+                            auto const pivot = __m3Partition ( begin, end, comparator );
+
+                            __introSort <
+                                    __RandomAccessIteratorType,
+                                    __Comparator,
+                                    __threshold
+                            > ( begin, pivot, comparator, depth - 1 );
+
+                            __introSort <
+                                    __RandomAccessIteratorType,
+                                    __Comparator,
+                                    __threshold
+                            > ( pivot + 1, end, comparator, depth - 1 );
+                        }
+                    }
+
+#endif
+
                 }
 
                 template <
@@ -320,6 +361,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
                 }
 
+#if ! defined(__CDS_compiler_MinGW)
 
                 template <
                         typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
@@ -348,6 +390,32 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __helpers :: __lg ( (uint64) ( end - begin ) )
                     );
                 }
+
+#else
+
+                template <
+                        typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
+                        Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier) */
+                > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        __RandomAccessIteratorType  const & begin,
+                        __RandomAccessIteratorType  const & end,
+                        __Comparator                const & comparator
+                ) noexcept -> void {
+
+                    __introSortHelpers :: __introSort <
+                            __RandomAccessIteratorType,
+                            __Comparator,
+                            __threshold
+                    > (
+                            begin,
+                            end,
+                            comparator,
+                            __helpers :: __lg ( (uint64) ( end - begin ) )
+                    );
+                }
+
+#endif
 
 
                 template <
@@ -436,18 +504,35 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __Comparator                const & comparator
         ) noexcept -> void {
 
+#if !defined(__CDS_compiler_MinGW)
+
             return __hidden :: __impl :: __introSort <
                     __RandomAccessIteratorType,
                     __Comparator,
                     16U,
-                    & __hidden :: __impl :: __insertionSort < __RandomAccessIteratorType, __Comparator >,
-                    & __hidden :: __impl :: __heapSort < __RandomAccessIteratorType, __Comparator >,
-                    & __hidden :: __impl :: __m3Partition < __RandomAccessIteratorType, __Comparator >
+                    & cds :: experimental :: __hidden :: __impl :: __insertionSort < __RandomAccessIteratorType, __Comparator >,
+                    & cds :: experimental :: __hidden :: __impl :: __heapSort < __RandomAccessIteratorType, __Comparator >,
+                    & cds :: experimental :: __hidden :: __impl :: __m3Partition < __RandomAccessIteratorType, __Comparator >
             > (
                     begin,
                     end,
                     comparator
             );
+
+#else
+
+            return __hidden :: __impl :: __introSort <
+                    __RandomAccessIteratorType,
+                    __Comparator,
+                    16U
+            > (
+                    begin,
+                    end,
+                    comparator
+            );
+
+#endif
+
         }
     }
 }
