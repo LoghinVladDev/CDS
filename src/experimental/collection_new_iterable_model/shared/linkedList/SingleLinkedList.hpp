@@ -127,6 +127,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             Size                                iteratorCount
                     ) noexcept -> Size;
 
+                private:
+                    auto __sll_removeConstIteratorRange (
+                            __sll_ConstIterator const * pStart,
+                            __sll_ConstIterator const * pEnd
+                    ) noexcept -> Size;
+
                 protected:
                     template <
                             typename __TElementType = __ElementType,

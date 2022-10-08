@@ -122,12 +122,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ConstIterator const * pIterator
         ) noexcept -> bool {
 
-            if ( pIterator == nullptr ) {
+            if (
+                    pIterator == nullptr ||
+                    ! static_cast < bool > ( * pIterator ) ||
+                    ( * pIterator ).iterator() == this->__sll_cend()
+            ) {
                 return false;
             }
 
+            auto const pElement = * ( * pIterator ).iterator();
             if ( this->__sll_removeConstIterator ( ( * pIterator ).iterator() ) ) {
-                return this->__ht_remove ( * ( * pIterator ) );
+                return this->__ht_remove ( * pElement );
             }
 
             return false;
@@ -145,13 +150,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size                            iteratorArraySize
         ) noexcept -> Size {
 
-            Size removedCount = 0ULL;
-            for ( Size index = 0ULL; index < iteratorArraySize; ++ index ) {
-                if ( ppIterators [ index ] != nullptr && this->__sll_removeConstIterator ( ( * ppIterators [ index ] ).iterator() ) ) {
-                    this->__ht_remove ( * ( * ppIterators [ index ] ) );
-                    ++ removedCount;
-                }
+            auto pRemovedElementArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType const * > ( iteratorArraySize );
+            auto pSllIteratorPtrArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < typename LinkedListImplementation :: __sll_ConstIterator const * > ( iteratorArraySize );
+            for ( Size index = 0U; index < iteratorArraySize; ++ index ) {
+                pSllIteratorPtrArray [ index ] = & ( * ppIterators [index] ).iterator();
+                pRemovedElementArray [ index ] = * ( * pSllIteratorPtrArray [ index ] );
             }
+
+            Size removedCount = this->__sll_removeConstIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
+            for ( Size index = 0ULL; index < iteratorArraySize; ++ index ) {
+                this->__ht_remove ( * pRemovedElementArray [ index ] );
+            }
+
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pRemovedElementArray );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pSllIteratorPtrArray );
 
             return removedCount;
         }
@@ -231,8 +243,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept {
 
             this->__sll_copyCleared (
-                    set,
-                    & cds :: experimental :: __hidden :: __impl :: __linkedHashSetCopyConstructor < __ElementType * >
+                    set
             );
 
             this->__ht_copyCleared (

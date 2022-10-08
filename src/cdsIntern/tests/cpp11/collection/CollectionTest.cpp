@@ -8675,10 +8675,10 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringTreeSet */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringTreeSet", [& allOk, this] {
+    /* StringLinkedHashSet */   this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringLinkedHashSet", [& allOk, this] {
 
-        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00101-FS-anyNone-CPP11",
                 /* objUnderTest */  fs101,
@@ -8688,8 +8688,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP11 : CTC-00102-FS-anyOne-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP11 : CTC-00102-FS-anyOne-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00102-FS-anyOne-CPP11",
                 /* objUnderTest */  fs102,
@@ -8699,8 +8699,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP11 : CTC-00103-FS-anyMore-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP11 : CTC-00103-FS-anyMore-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP11",
                 /* objUnderTest */  fs103,
@@ -8710,8 +8710,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP11 : CTC-00104-FS-anyAll-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP11 : CTC-00104-FS-anyAll-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP11",
                 /* objUnderTest */  fs104,
@@ -8721,8 +8721,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP11 : CTC-00105-FS-allNone-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP11 : CTC-00105-FS-allNone-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP11",
                 /* objUnderTest */  fs105,
@@ -8732,8 +8732,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP11 : CTC-00106-FS-allOne-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP11 : CTC-00106-FS-allOne-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP11",
                 /* objUnderTest */  fs106,
@@ -8743,8 +8743,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP11 : CTC-00107-FS-allMore-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP11 : CTC-00107-FS-allMore-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP11",
                 /* objUnderTest */  fs107,
@@ -8754,8 +8754,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP11 : CTC-00108-FS-allAll-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP11 : CTC-00108-FS-allAll-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP11",
                 /* objUnderTest */  fs108,
@@ -8765,8 +8765,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP11 : CTC-00109-FS-noneNone-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP11 : CTC-00109-FS-noneNone-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP11",
                 /* objUnderTest */  fs109,
@@ -8776,8 +8776,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP11 : CTC-00110-FS-noneOne-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP11 : CTC-00110-FS-noneOne-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP11",
                 /* objUnderTest */  fs110,
@@ -8787,8 +8787,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP11 : CTC-00111-FS-noneMore-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP11 : CTC-00111-FS-noneMore-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP11",
                 /* objUnderTest */  fs111,
@@ -8798,8 +8798,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP11 : CTC-00112-FS-noneAll-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
+        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP11 : CTC-00112-FS-noneAll-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP11",
                 /* objUnderTest */  fs112,
@@ -8809,8 +8809,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-countProp1-CPP11 : CTC-00113-FS-countProp1-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-countProp1-CPP11 : CTC-00113-FS-countProp1-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP11",
                 /* objUnderTest */  fs113,
@@ -8820,8 +8820,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  2
         );
 
-        /* CollectionTestCase-FunctionalStatements-countProp2-CPP11 : CTC-00114-FS-countProp2-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-countProp2-CPP11 : CTC-00114-FS-countProp2-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP11",
                 /* objUnderTest */  fs114,
@@ -8831,8 +8831,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  3
         );
 
-        /* CollectionTestCase-FunctionalStatements-countProp3-CPP11 : CTC-00115-FS-countProp3-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-countProp3-CPP11 : CTC-00115-FS-countProp3-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP11",
                 /* objUnderTest */  fs115,
@@ -8842,8 +8842,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  2
         );
 
-        /* CollectionTestCase-FunctionalStatements-countProp4-CPP11 : CTC-00116-FS-countProp4-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-countProp4-CPP11 : CTC-00116-FS-countProp4-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP11",
                 /* objUnderTest */  fs116,
@@ -8854,8 +8854,8 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         int comparedTo = 3;
-        /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP11 : CTC-00117-FS-countPropLbd-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP11 : CTC-00117-FS-countPropLbd-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP11",
                 /* objUnderTest */  fs117,
@@ -8865,8 +8865,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  2
         );
 
-        /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP11 : CTC-00118-FS-fewerThanTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP11 : CTC-00118-FS-fewerThanTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP11",
                 /* objUnderTest */  fs118,
@@ -8877,8 +8877,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP11 : CTC-00119-FS-fewerThanCloseTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP11 : CTC-00119-FS-fewerThanCloseTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP11",
                 /* objUnderTest */  fs119,
@@ -8889,8 +8889,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP11 : CTC-00120-FS-fewerThanCloseFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP11 : CTC-00120-FS-fewerThanCloseFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP11",
                 /* objUnderTest */  fs120,
@@ -8901,8 +8901,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP11 : CTC-00121-FS-fewerThanFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP11 : CTC-00121-FS-fewerThanFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP11",
                 /* objUnderTest */  fs121,
@@ -8913,8 +8913,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP11 : CTC-00122-FS-fewerThanCompletelyFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP11 : CTC-00122-FS-fewerThanCompletelyFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP11",
                 /* objUnderTest */  fs122,
@@ -8925,8 +8925,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP11 : CTC-00123-FS-moreThanTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP11 : CTC-00123-FS-moreThanTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP11",
                 /* objUnderTest */  fs123,
@@ -8937,8 +8937,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP11 : CTC-00124-FS-moreThanCloseTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP11 : CTC-00124-FS-moreThanCloseTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP11",
                 /* objUnderTest */  fs124,
@@ -8949,8 +8949,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP11 : CTC-00125-FS-moreThanCloseFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP11 : CTC-00125-FS-moreThanCloseFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP11",
                 /* objUnderTest */  fs125,
@@ -8961,8 +8961,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP11 : CTC-00126-FS-moreThanFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP11 : CTC-00126-FS-moreThanFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP11",
                 /* objUnderTest */  fs126,
@@ -8973,8 +8973,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP11 : CTC-00127-FS-moreThanCompletelyFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP11 : CTC-00127-FS-moreThanCompletelyFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP11",
                 /* objUnderTest */  fs127,
@@ -8985,8 +8985,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP11 : CTC-00128-FS-atMostTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP11 : CTC-00128-FS-atMostTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP11",
                 /* objUnderTest */  fs128,
@@ -8997,8 +8997,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP11 : CTC-00129-FS-atMostCloseTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP11 : CTC-00129-FS-atMostCloseTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP11",
                 /* objUnderTest */  fs129,
@@ -9009,8 +9009,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP11 : CTC-00130-FS-atMostCloseFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP11 : CTC-00130-FS-atMostCloseFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP11",
                 /* objUnderTest */  fs130,
@@ -9021,8 +9021,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP11 : CTC-00131-FS-atMostFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP11 : CTC-00131-FS-atMostFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP11",
                 /* objUnderTest */  fs131,
@@ -9033,8 +9033,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP11 : CTC-00132-FS-atLeastTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP11 : CTC-00132-FS-atLeastTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP11",
                 /* objUnderTest */  fs132,
@@ -9045,8 +9045,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP11 : CTC-00133-FS-atLeastCloseTrue-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP11 : CTC-00133-FS-atLeastCloseTrue-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP11",
                 /* objUnderTest */  fs133,
@@ -9057,8 +9057,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP11 : CTC-00134-FS-atLeastCloseFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP11 : CTC-00134-FS-atLeastCloseFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP11",
                 /* objUnderTest */  fs134,
@@ -9069,8 +9069,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP11 : CTC-00135-FS-atLeastFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP11 : CTC-00135-FS-atLeastFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP11",
                 /* objUnderTest */  fs135,
@@ -9081,8 +9081,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-someExact-CPP11 : CTC-00136-FS-someExact-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-someExact-CPP11 : CTC-00136-FS-someExact-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP11",
                 /* objUnderTest */  fs136,
@@ -9093,8 +9093,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  true
         );
 
-        /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP11 : CTC-00137-FS-someLessFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP11 : CTC-00137-FS-someLessFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP11",
                 /* objUnderTest */  fs137,
@@ -9105,8 +9105,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP11 : CTC-00138-FS-someMoreFalse-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP11 : CTC-00138-FS-someMoreFalse-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP11",
                 /* objUnderTest */  fs138,
@@ -9117,8 +9117,8 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedRes. */  false
         );
 
-        /* CollectionTestCase-FunctionalStatements-forEachCount-CPP11 : CTC-00139-FS-forEachCount-CPP11 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
+        /* CollectionTestCase-FunctionalStatements-forEachCount-CPP11 : CTC-00139-FS-forEachCount-CPP11 : StringLinkedHashSet */
+        cds :: experimental :: LinkedHashSet < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
         experimental :: Collection < String > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( String const & e ) { if ( e.length() % 2 == 0 ) { ++ count; } };
@@ -10083,6 +10083,45 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : IntLinkedHashSet", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashSet < int > intTreeSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: LinkedHashSet < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: LinkedHashSet < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: LinkedHashSet < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: LinkedHashSet < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: LinkedHashSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < int > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intTreeSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+        std :: initializer_list < int > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < int > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < int > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < int > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < int > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < int > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intTreeSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : IntToIntHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < int, int > intToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
@@ -10283,6 +10322,46 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : StringLinkedHashSet", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashSet < String > StringLinkedHashSet = { 1, 2, 3, 4, 5 };
+
+        cds :: experimental :: LinkedHashSet < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: experimental :: LinkedHashSet < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: experimental :: LinkedHashSet < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: experimental :: LinkedHashSet < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: experimental :: LinkedHashSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-Collection-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < String > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringLinkedHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < String > noneCommonList = { 6, 7, 8, 9, 10 };
+        std :: initializer_list < String > oneCommonList = { 6, 2, 8, 9, 10 };
+        std :: initializer_list < String > moreCommonList = { 6, 2, 8, 4, 5 };
+        std :: initializer_list < String > allCommonList = { 1, 2, 3, 4, 5 };
+        std :: initializer_list < String > allCommonAndMoreList = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        /* CTC-00301-C0-InitializerList-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < String > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringLinkedHashSet,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : StringToIntHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < String, String > StringToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
@@ -10409,6 +10488,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 afterOtherRemove
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : IntLinkedHashSet", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < int > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedHashSet < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: LinkedHashSet < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: LinkedHashSet < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedHashSet < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedHashSet < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : IntToIntHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
@@ -10514,6 +10614,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 afterOtherRemove
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : StringLinkedHashSet", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: Collection < String > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedHashSet < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: experimental :: LinkedHashSet < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: experimental :: LinkedHashSet < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedHashSet < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: experimental :: LinkedHashSet < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : StringToStringHashMap", [this, & allOk]{
 
         cds :: experimental :: HashMap < String, String > underTest = { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
@@ -10539,6 +10660,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 #define make_a(type, ...) cds :: experimental :: Array < type > { __VA_ARGS__ }
 #define make_ll(type, ...) cds :: experimental :: LinkedList < type > { __VA_ARGS__ }
 #define make_hs(type, ...) cds :: experimental :: HashSet < type > { __VA_ARGS__ }
+#define make_lhs(type, ...) cds :: experimental :: LinkedHashSet < type > { __VA_ARGS__ }
 #define make_ts(type, ...) cds :: experimental :: TreeSet < type > { __VA_ARGS__ }
 #define make_hm(ktype, vtype, ...) cds :: experimental :: HashMap < ktype, vtype > { __VA_ARGS__ }
 #define make_il(...) { __VA_ARGS__ }
@@ -10685,6 +10807,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesOne = */               make_ts ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
                 /* equivAfterRemoveAllThatMatchesMore = */              make_ts ( int, 1, 2, 3, 7, 8, 9 ),
                 /* equivAfterRemoveAllThatMatchesAll = */               make_ts ( int )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : IntLinkedHashSet", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashSet < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](int x) { return x > 100; },
+                /* matchingOne = */                                     [](int x) { return x == 3; },
+                /* matchingMoreLessThanLimit = */                       [](int x) { return x >= 4 && x <= 5; },
+                /* matchingMore = */                                    [](int x) { return x >= 4 && x <= 6; },
+                /* matchingMoreMoreThanLimit = */                       [](int x) { return x >= 4 && x <= 7; },
+                /* matchingAll = */                                     [](int x) { return x >= 1 && x <= 9; },
+                /* equivAfterRemoveThatMatchesNone = */                 make_lhs ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_lhs ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_lhs ( int, 1, 2, 3, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_lhs ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_lhs ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_lhs ( int, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_lhs ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_lhs ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_lhs ( int, 1, 2, 3, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_lhs ( int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_lhs ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_lhs ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_lhs ( int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_lhs ( int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_lhs ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_lhs ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_lhs ( int, 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_lhs ( int )
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : IntToIntHashMap", [this, & allOk]{
@@ -10864,6 +11022,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesOne = */               make_ts ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
                 /* equivAfterRemoveAllThatMatchesMore = */              make_ts ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
                 /* equivAfterRemoveAllThatMatchesAll = */               make_ts ( String )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : StringLinkedHashSet", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashSet < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](String const & x) { return x == "ddd"; },
+                /* matchingOne = */                                     [](String const & x) { return x == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](String const & x) { return x.startsWith ("bb") && ! x.endsWith ("a"); },
+                /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
+                /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_lhs ( String, "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_lhs ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_lhs ( String, "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_lhs ( String, "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_lhs ( String, "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_lhs ( String, "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_lhs ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_lhs ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_lhs ( String )
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : StringToStringHashMap", [this, & allOk]{
