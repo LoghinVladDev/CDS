@@ -10,6 +10,7 @@
 #include <CDS/experimental/HashMap>
 #include <CDS/experimental/TreeSet>
 #include <CDS/experimental/LinkedHashSet>
+#include <CDS/experimental/LinkedHashMap>
 
 /* CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11. CTC-00351-RAIT to CTC-00356-RAIT */
 template <
@@ -3690,6 +3691,45 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP11 : CTG-00002-MF-CPP11 : IntToIntLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < int, int > intIntHashMapObjectUnderTest;
+        intIntHashMapObjectUnderTest = { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
+
+        auto expectedToString       = "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }";
+        auto expectedSize           = 5;
+        auto expectedToBeFound      = decltype ( intIntHashMapObjectUnderTest ) :: EntryType ( 2, 7 );
+        auto expectedToBeNotFound   = decltype ( intIntHashMapObjectUnderTest ) :: EntryType ( 6, 20 );
+        auto expectedHash           = ((((
+                                                 ( cds :: hash (1) ^ cds :: hash (6) ) * 31 + ( cds :: hash ( 2 ) ^ cds :: hash (7))
+                                         ) * 31 + ( cds :: hash ( 3 )) ^ cds :: hash (8)) * 31 + ( cds :: hash ( 4 ) ^ cds :: hash (9)) ) * 31 + ( cds :: hash ( 5 )) ^ cds :: hash (10));
+
+        /* error reported by IDE makes no sense? */
+        auto equalSameType          = cds :: experimental :: LinkedHashMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
+        auto equalDifferentType     = cds :: experimental :: LinkedHashMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
+        auto notEqualSameType       = cds :: experimental :: LinkedHashMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
+        auto notEqualDifferentType  = cds :: experimental :: LinkedHashMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
+        auto notEqualNonCollection  = cds :: String { "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }" };
+
+        auto status = collectionTestGroupMemberFunctions (
+                intIntHashMapObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP11 : CTG-00002-MF-CPP11 : StringArray", [& allOk, this] {
 
         cds :: experimental :: Array < cds :: String > stringArrayObjectUnderTest;
@@ -3919,6 +3959,45 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP11 : CTG-00002-MF-CPP11 : StringToStringLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < cds :: String, cds :: String > stringStringHashMapObjectUnderTest;
+        stringStringHashMapObjectUnderTest = { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+
+        auto expectedToString       = "{ Ana: name, are: verb, mere: noun }";
+        auto expectedSize           = 3;
+        auto expectedToBeFound      = decltype ( stringStringHashMapObjectUnderTest ) :: EntryType ( "are", "verb" );
+        auto expectedToBeNotFound   = decltype ( stringStringHashMapObjectUnderTest ) :: EntryType ( "pere", "noun" );
+        auto expectedHash           = (
+                (( cds :: hash ("Ana") ^ cds :: hash ("name") ) * 31 + ( cds :: hash ( "are" ) ^ cds :: hash ("verb")))
+                * 31 + ( cds :: hash ( "mere" ) ^ cds :: hash ("noun")));
+
+        /* error reported by IDE makes no sense? */
+        auto equalSameType          = cds :: experimental :: LinkedHashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto equalDifferentType     = cds :: experimental :: LinkedHashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto notEqualSameType       = cds :: experimental :: LinkedHashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "pere", "noun" } };
+        auto notEqualDifferentType  = cds :: experimental :: LinkedHashMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "other" } };
+        auto notEqualNonCollection  = cds :: String { "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }" };
+
+        auto status = collectionTestGroupMemberFunctions < cds :: MapEntry < cds :: String, cds :: String > > (
+                stringStringHashMapObjectUnderTest,
+                this,
+                expectedToString,
+                expectedSize,
+                expectedToBeFound,
+                expectedToBeNotFound,
+                expectedHash,
+                equalSameType,
+                equalDifferentType,
+                notEqualSameType,
+                notEqualDifferentType,
+                notEqualNonCollection
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
 
 
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP11 : CTG-00050-IT-CPP11 : IntArray", [& allOk, this] {
@@ -3989,6 +4068,23 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP11 : CTG-00050-IT-CPP11 : IntToIntHashMap", [& allOk, this] {
 
         cds :: experimental :: HashMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
+        auto status = collectionTestGroupDelegateForwardConstIterableClientImports < MapEntry < int, int > > (
+                objUnderTest,
+                this,
+                MapEntry < int, int > { 3, 4 },
+                MapEntry < int, int > { 4, 5 },
+                MapEntry < int, int > { 5, 6 },
+                MapEntry < int, int > { 6, 7 },
+                MapEntry < int, int > { 7, 8 }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+    this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP11 : CTG-00050-IT-CPP11 : IntToIntLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
         auto status = collectionTestGroupDelegateForwardConstIterableClientImports < MapEntry < int, int > > (
                 objUnderTest,
                 this,
@@ -4083,6 +4179,21 @@ auto CollectionTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP11 : CTG-00050-IT-CPP11 : StringToStringLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < String, String > objUnderTest = {{"Ana","name"}, {"are","verb"}, {"mere","noun"}};
+        auto status = collectionTestGroupDelegateForwardConstIterableClientImports < MapEntry < String, String > > (
+                objUnderTest,
+                this,
+                MapEntry < String, String > { "Ana", "name" },
+                MapEntry < String, String > { "are", "verb" },
+                MapEntry < String, String > { "mere", "noun" }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "CollectionTestGroup-SpecialAddressBasedIteratorAccess-CPP11 : CTG-00050-IT-CPP11 : StringArray", [& allOk, this] {
 
         /* only one test required, as it uses operator *, which was tested in previous group */
@@ -4105,7 +4216,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 
     /* CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 - Tests CTC-00101-FS to CTC-10139-FS - located directly below due to varability of these tests */
-    /* IntArray */              this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntArray", [& allOk, this] {
+    /* IntArray */                      this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntArray", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntArray */
         cds :: experimental :: Array < int > fs101 = { 1, 3, 5, 7, 9 };
@@ -4562,7 +4673,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* IntLinkedList */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntLinkedList", [& allOk, this] {
+    /* IntLinkedList */                 this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntLinkedList", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntLinkedList */
         cds :: experimental :: LinkedList < int > fs101 = { 1, 3, 5, 7, 9 };
@@ -5019,7 +5130,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* IntHashSet */            this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntHashSet", [& allOk, this] {
+    /* IntHashSet */                    this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntHashSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntHashSet */
         cds :: experimental :: HashSet < int > fs101 = { 1, 3, 5, 7, 9 };
@@ -5476,7 +5587,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* IntTreeSet */            this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntTreeSet", [& allOk, this] {
+    /* IntTreeSet */                    this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntTreeSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntTreeSet */
         cds :: experimental :: TreeSet < int > fs101 = { 1, 3, 5, 7, 9 };
@@ -5933,7 +6044,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* IntTreeSet */            this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntLinkedHashSet", [& allOk, this] {
+    /* IntTreeSet */                    this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntLinkedHashSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntLinkedHashSet */
         cds :: experimental :: LinkedHashSet < int > fs101 = { 1, 3, 5, 7, 9 };
@@ -6390,7 +6501,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* IntToIntHashMap */       this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntToIntHashMap", [& allOk, this] {
+    /* IntToIntHashMap */               this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntToIntHashMap", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntToIntHashMap */
         cds :: experimental :: HashMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
@@ -6847,7 +6958,464 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringArray */           this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringArray", [& allOk, this] {
+    /* IntToIntLinkedHashMap */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : IntToIntLinkedHashMap", [& allOk, this] {
+
+        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00101-FS-anyNone-CPP11",
+                /* objUnderTest */  fs101,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP11 : CTC-00102-FS-anyOne-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs102 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00102-FS-anyOne-CPP11",
+                /* objUnderTest */  fs102,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP11 : CTC-00103-FS-anyMore-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs103 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00103-FS-anyMore-CPP11",
+                /* objUnderTest */  fs103,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP11 : CTC-00104-FS-anyAll-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs104 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00104-FS-anyAll-CPP11",
+                /* objUnderTest */  fs104,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: any,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP11 : CTC-00105-FS-allNone-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs105 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00105-FS-allNone-CPP11",
+                /* objUnderTest */  fs105,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP11 : CTC-00106-FS-allOne-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs106 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00106-FS-allOne-CPP11",
+                /* objUnderTest */  fs106,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP11 : CTC-00107-FS-allMore-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs107 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00107-FS-allMore-CPP11",
+                /* objUnderTest */  fs107,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP11 : CTC-00108-FS-allAll-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs108 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00108-FS-allAll-CPP11",
+                /* objUnderTest */  fs108,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: all,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP11 : CTC-00109-FS-noneNone-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs109 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00109-FS-noneNone-CPP11",
+                /* objUnderTest */  fs109,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP11 : CTC-00110-FS-noneOne-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs110 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {8, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00110-FS-noneOne-CPP11",
+                /* objUnderTest */  fs110,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP11 : CTC-00111-FS-noneMore-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs111 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00111-FS-noneMore-CPP11",
+                /* objUnderTest */  fs111,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP11 : CTC-00112-FS-noneAll-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs112 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00112-FS-noneAll-CPP11",
+                /* objUnderTest */  fs112,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: none,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp1-CPP11 : CTC-00113-FS-countProp1-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs113 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00113-FS-countProp1-CPP11",
+                /* objUnderTest */  fs113,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp2-CPP11 : CTC-00114-FS-countProp2-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs114 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00114-FS-countProp2-CPP11",
+                /* objUnderTest */  fs114,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 1; },
+                /* expectedRes. */  3
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp3-CPP11 : CTC-00115-FS-countProp3-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs115 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00115-FS-countProp3-CPP11",
+                /* objUnderTest */  fs115,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp4-CPP11 : CTC-00116-FS-countProp4-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs116 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00116-FS-countProp4-CPP11",
+                /* objUnderTest */  fs116,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() >= 2; },
+                /* expectedRes. */  4
+        );
+
+        int comparedTo = 3;
+        /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP11 : CTC-00117-FS-countPropLbd-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs117 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00117-FS-countPropLbd-CPP11",
+                /* objUnderTest */  fs117,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: count,
+                /* predicate */     [comparedTo] (MapEntry<int, int>const & e) { return e.key() > comparedTo; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP11 : CTC-00118-FS-fewerThanTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs118 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00118-FS-fewerThanTrue-CPP11",
+                /* objUnderTest */  fs118,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       4,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP11 : CTC-00119-FS-fewerThanCloseTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs119 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP11",
+                /* objUnderTest */  fs119,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP11 : CTC-00120-FS-fewerThanCloseFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs120 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP11",
+                /* objUnderTest */  fs120,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP11 : CTC-00121-FS-fewerThanFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs121 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00121-FS-fewerThanFalse-CPP11",
+                /* objUnderTest */  fs121,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP11 : CTC-00122-FS-fewerThanCompletelyFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs122 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP11",
+                /* objUnderTest */  fs122,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: fewerThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP11 : CTC-00123-FS-moreThanTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs123 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00123-FS-moreThanTrue-CPP11",
+                /* objUnderTest */  fs123,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP11 : CTC-00124-FS-moreThanCloseTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs124 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP11",
+                /* objUnderTest */  fs124,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP11 : CTC-00125-FS-moreThanCloseFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs125 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP11",
+                /* objUnderTest */  fs125,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP11 : CTC-00126-FS-moreThanFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs126 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00126-FS-moreThanFalse-CPP11",
+                /* objUnderTest */  fs126,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP11 : CTC-00127-FS-moreThanCompletelyFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs127 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP11",
+                /* objUnderTest */  fs127,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: moreThan,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       20,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP11 : CTC-00128-FS-atMostTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs128 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00128-FS-atMostTrue-CPP11",
+                /* objUnderTest */  fs128,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP11 : CTC-00129-FS-atMostCloseTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs129 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP11",
+                /* objUnderTest */  fs129,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP11 : CTC-00130-FS-atMostCloseFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs130 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP11",
+                /* objUnderTest */  fs130,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP11 : CTC-00131-FS-atMostFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs131 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00131-FS-atMostFalse-CPP11",
+                /* objUnderTest */  fs131,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atMost,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP11 : CTC-00132-FS-atLeastTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs132 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00132-FS-atLeastTrue-CPP11",
+                /* objUnderTest */  fs132,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP11 : CTC-00133-FS-atLeastCloseTrue-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs133 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP11",
+                /* objUnderTest */  fs133,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP11 : CTC-00134-FS-atLeastCloseFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs134 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP11",
+                /* objUnderTest */  fs134,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP11 : CTC-00135-FS-atLeastFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs135 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00135-FS-atLeastFalse-CPP11",
+                /* objUnderTest */  fs135,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: atLeast,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
+                /* desired */       4,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someExact-CPP11 : CTC-00136-FS-someExact-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs136 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00136-FS-someExact-CPP11",
+                /* objUnderTest */  fs136,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP11 : CTC-00137-FS-someLessFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs137 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00137-FS-someLessFalse-CPP11",
+                /* objUnderTest */  fs137,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP11 : CTC-00138-FS-someMoreFalse-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs138 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00138-FS-someMoreFalse-CPP11",
+                /* objUnderTest */  fs138,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < int, int > > :: some,
+                /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-forEachCount-CPP11 : CTC-00139-FS-forEachCount-CPP11 : IntToIntLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < int, int > fs139 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        experimental :: Collection < MapEntry < int, int > > const & collection = fs139;
+        Size count = 0;
+        auto action = [& count] ( MapEntry<int, int>const & e ) { if ( e.key() % 2 == 0 ) { ++ count; } };
+        Size expected = 2;
+
+        collection.forEach (action);
+        if ( count != expected ) {
+            this->logError ( "'CTC-00139-FS-forEachCount-CPP11' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
+        }
+    });
+    /* StringArray */                   this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringArray", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringArray */
         cds :: experimental :: Array < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
@@ -7304,7 +7872,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringLinkedList */      this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringLinkedList", [& allOk, this] {
+    /* StringLinkedList */              this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringLinkedList", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringLinkedList */
         cds :: experimental :: LinkedList < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
@@ -7761,7 +8329,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringHashSet */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringHashSet", [& allOk, this] {
+    /* StringHashSet */                 this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringHashSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringHashSet */
         cds :: experimental :: HashSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
@@ -8218,7 +8786,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringTreeSet */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringTreeSet", [& allOk, this] {
+    /* StringTreeSet */                 this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringTreeSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringTreeSet */
         cds :: experimental :: TreeSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
@@ -8675,7 +9243,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringLinkedHashSet */   this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringLinkedHashSet", [& allOk, this] {
+    /* StringLinkedHashSet */           this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringLinkedHashSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringLinkedHashSet */
         cds :: experimental :: LinkedHashSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
@@ -9132,7 +9700,7 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
         }
     });
-    /* StringToStringHashMap */ this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringToStringHashMap", [& allOk, this] {
+    /* StringToStringHashMap */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringToStringHashMap", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringToStringHashMap */
         cds :: experimental :: HashMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
@@ -9576,6 +10144,463 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP11 : CTC-00139-FS-forEachCount-CPP11 : StringToStringHashMap */
         cds :: experimental :: HashMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
+        experimental :: Collection < MapEntry < String, String > > const & collection = fs139;
+        Size count = 0;
+        auto action = [& count] ( MapEntry<String, String>const & e ) { if ( e.key().length() % 2 == 0 ) { ++ count; } };
+        Size expected = 2;
+
+        collection.forEach (action);
+        if ( count != expected ) {
+            this->logError ( "'CTC-00139-FS-forEachCount-CPP11' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00139-FS-forEachCount-CPP11' OK" );
+        }
+    });
+    /* StringToStringLinkedHashMap */   this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP11 : CTG-00100-FS-CPP11 : StringToStringLinkedHashMap", [& allOk, this] {
+
+        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP11 : CTC-00101-FS-anyNone-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00101-FS-anyNone-CPP11",
+                /* objUnderTest */  fs101,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP11 : CTC-00102-FS-anyOne-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs102 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00102-FS-anyOne-CPP11",
+                /* objUnderTest */  fs102,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP11 : CTC-00103-FS-anyMore-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs103 = { {"x", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00103-FS-anyMore-CPP11",
+                /* objUnderTest */  fs103,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP11 : CTC-00104-FS-anyAll-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs104 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00104-FS-anyAll-CPP11",
+                /* objUnderTest */  fs104,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: any,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP11 : CTC-00105-FS-allNone-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs105 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00105-FS-allNone-CPP11",
+                /* objUnderTest */  fs105,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP11 : CTC-00106-FS-allOne-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs106 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00106-FS-allOne-CPP11",
+                /* objUnderTest */  fs106,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP11 : CTC-00107-FS-allMore-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs107 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00107-FS-allMore-CPP11",
+                /* objUnderTest */  fs107,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP11 : CTC-00108-FS-allAll-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs108 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00108-FS-allAll-CPP11",
+                /* objUnderTest */  fs108,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: all,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP11 : CTC-00109-FS-noneNone-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs109 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00109-FS-noneNone-CPP11",
+                /* objUnderTest */  fs109,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP11 : CTC-00110-FS-noneOne-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs110 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00110-FS-noneOne-CPP11",
+                /* objUnderTest */  fs110,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP11 : CTC-00111-FS-noneMore-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs111 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00111-FS-noneMore-CPP11",
+                /* objUnderTest */  fs111,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP11 : CTC-00112-FS-noneAll-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs112 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle (
+                /* tName */         "CTC-00112-FS-noneAll-CPP11",
+                /* objUnderTest */  fs112,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: none,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp1-CPP11 : CTC-00113-FS-countProp1-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs113 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00113-FS-countProp1-CPP11",
+                /* objUnderTest */  fs113,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp2-CPP11 : CTC-00114-FS-countProp2-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs114 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00114-FS-countProp2-CPP11",
+                /* objUnderTest */  fs114,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 1; },
+                /* expectedRes. */  3
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp3-CPP11 : CTC-00115-FS-countProp3-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs115 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00115-FS-countProp3-CPP11",
+                /* objUnderTest */  fs115,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-countProp4-CPP11 : CTC-00116-FS-countProp4-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs116 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00116-FS-countProp4-CPP11",
+                /* objUnderTest */  fs116,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() >= 2; },
+                /* expectedRes. */  4
+        );
+
+        int comparedTo = 3;
+        /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP11 : CTC-00117-FS-countPropLbd-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs117 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateHandle < Size > (
+                /* tName */         "CTC-00117-FS-countPropLbd-CPP11",
+                /* objUnderTest */  fs117,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: count,
+                /* predicate */     [comparedTo] (MapEntry<String, String>const & e) { return e.key().length() < comparedTo; },
+                /* expectedRes. */  2
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP11 : CTC-00118-FS-fewerThanTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs118 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00118-FS-fewerThanTrue-CPP11",
+                /* objUnderTest */  fs118,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       4,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP11 : CTC-00119-FS-fewerThanCloseTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs119 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP11",
+                /* objUnderTest */  fs119,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP11 : CTC-00120-FS-fewerThanCloseFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs120 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP11",
+                /* objUnderTest */  fs120,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP11 : CTC-00121-FS-fewerThanFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs121 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00121-FS-fewerThanFalse-CPP11",
+                /* objUnderTest */  fs121,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP11 : CTC-00122-FS-fewerThanCompletelyFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs122 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP11",
+                /* objUnderTest */  fs122,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: fewerThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP11 : CTC-00123-FS-moreThanTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs123 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00123-FS-moreThanTrue-CPP11",
+                /* objUnderTest */  fs123,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP11 : CTC-00124-FS-moreThanCloseTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs124 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP11",
+                /* objUnderTest */  fs124,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP11 : CTC-00125-FS-moreThanCloseFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs125 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP11",
+                /* objUnderTest */  fs125,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP11 : CTC-00126-FS-moreThanFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs126 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00126-FS-moreThanFalse-CPP11",
+                /* objUnderTest */  fs126,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP11 : CTC-00127-FS-moreThanCompletelyFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs127 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP11",
+                /* objUnderTest */  fs127,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: moreThan,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       20,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP11 : CTC-00128-FS-atMostTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs128 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00128-FS-atMostTrue-CPP11",
+                /* objUnderTest */  fs128,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP11 : CTC-00129-FS-atMostCloseTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs129 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP11",
+                /* objUnderTest */  fs129,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP11 : CTC-00130-FS-atMostCloseFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs130 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP11",
+                /* objUnderTest */  fs130,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP11 : CTC-00131-FS-atMostFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs131 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00131-FS-atMostFalse-CPP11",
+                /* objUnderTest */  fs131,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atMost,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       0,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP11 : CTC-00132-FS-atLeastTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs132 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00132-FS-atLeastTrue-CPP11",
+                /* objUnderTest */  fs132,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       1,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP11 : CTC-00133-FS-atLeastCloseTrue-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs133 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP11",
+                /* objUnderTest */  fs133,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP11 : CTC-00134-FS-atLeastCloseFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs134 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP11",
+                /* objUnderTest */  fs134,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP11 : CTC-00135-FS-atLeastFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs135 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00135-FS-atLeastFalse-CPP11",
+                /* objUnderTest */  fs135,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: atLeast,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
+                /* desired */       4,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someExact-CPP11 : CTC-00136-FS-someExact-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs136 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00136-FS-someExact-CPP11",
+                /* objUnderTest */  fs136,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* desired */       2,
+                /* expectedRes. */  true
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP11 : CTC-00137-FS-someLessFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs137 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00137-FS-someLessFalse-CPP11",
+                /* objUnderTest */  fs137,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* desired */       1,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP11 : CTC-00138-FS-someMoreFalse-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs138 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        allOk = allOk && collectionTestCasePredicateCountedHandle (
+                /* tName */         "CTC-00138-FS-someMoreFalse-CPP11",
+                /* objUnderTest */  fs138,
+                /* testLib */       this,
+                /* funcCaller */    & experimental :: Collection < MapEntry < String, String > > :: some,
+                /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
+                /* desired */       3,
+                /* expectedRes. */  false
+        );
+
+        /* CollectionTestCase-FunctionalStatements-forEachCount-CPP11 : CTC-00139-FS-forEachCount-CPP11 : StringToStringLinkedHashMap */
+        cds :: experimental :: LinkedHashMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
         experimental :: Collection < MapEntry < String, String > > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( MapEntry<String, String>const & e ) { if ( e.key().length() % 2 == 0 ) { ++ count; } };
@@ -10162,6 +11187,46 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : IntToIntLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < int, int > intToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+
+        cds :: experimental :: LinkedHashMap < int, int > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: LinkedHashMap < int, int > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: LinkedHashMap < int, int > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: experimental :: LinkedHashMap < int, int > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: experimental :: LinkedHashMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-Collection-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < MapEntry < int, int > > > (
+                /* groupName= */        "Collection",
+                /* collection= */       intToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < MapEntry < int, int > > noneCommonList = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < int, int > > oneCommonList = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < int, int > > moreCommonList = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < int, int > > allCommonList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < int, int > > allCommonAndMoreList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-InitializerList-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < MapEntry < int, int > > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       intToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : StringArray", [& allOk, this] {
 
         cds :: experimental :: Array < String > StringArray = { 1, 2, 3, 4, 5 };
@@ -10402,6 +11467,46 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommonAndMore= */ allCommonAndMoreList
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP11 : CTG-00300-CO-CPP11 : StringToIntLinkedHashMap", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashMap < String, String > StringToIntHashMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+
+        cds :: experimental :: LinkedHashMap < String, String > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: LinkedHashMap < String, String > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: experimental :: LinkedHashMap < String, String > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: experimental :: LinkedHashMap < String, String > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: experimental :: LinkedHashMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-Collection-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < experimental :: Collection < MapEntry < String, String > > > (
+                /* groupName= */        "Collection",
+                /* collection= */       StringToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommon,
+                /* oneCommon= */        oneCommon,
+                /* moreCommon= */       moreCommon,
+                /* allCommon= */        allCommon,
+                /* allCommonAndMore= */ allCommonAndMore
+        );
+
+        std :: initializer_list < MapEntry < String, String > > noneCommonList = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < String, String > > oneCommonList = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        std :: initializer_list < MapEntry < String, String > > moreCommonList = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < String, String > > allCommonList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        std :: initializer_list < MapEntry < String, String > > allCommonAndMoreList = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        /* CTC-00301-C0-InitializerList-CPP11 */
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < std :: initializer_list < MapEntry < String, String > > > (
+                /* groupName= */        "InitializerList",
+                /* collection= */       StringToIntHashMap,
+                /* pTestLib= */         this,
+                /* noneCommon= */       noneCommonList,
+                /* oneCommon= */        oneCommonList,
+                /* moreCommon= */       moreCommonList,
+                /* allCommon= */        allCommonList,
+                /* allCommonAndMore= */ allCommonAndMoreList
+        );
+    });
 
 
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : IntArray", [this, & allOk]{
@@ -10519,6 +11624,27 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: experimental :: HashMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
         cds :: experimental :: HashMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
         cds :: experimental :: HashMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : IntToIntLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: Collection < MapEntry < int, int > > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedHashMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: LinkedHashMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: LinkedHashMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: LinkedHashMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: LinkedHashMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
 
         allOk = allOk && collectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -10656,6 +11782,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 afterOtherRemove
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP11 : CTG-00350-RAIT-CPP11 : StringToStringLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: Collection < MapEntry < String, String > > & underTestColl = underTest;
+
+        cds :: experimental :: LinkedHashMap < String, String > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: LinkedHashMap < String, String > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: experimental :: LinkedHashMap < String, String > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: LinkedHashMap < String, String > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: experimental :: LinkedHashMap < String, String > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+
+        allOk = allOk && collectionTestGroupRemoveAbstractIterator (
+                underTest,
+                this,
+                afterFrontRemove,
+                afterMidRemove,
+                afterBackRemove,
+                afterAfterBackRemove,
+                afterOtherRemove
+        );
+    });
 
 #define make_a(type, ...) cds :: experimental :: Array < type > { __VA_ARGS__ }
 #define make_ll(type, ...) cds :: experimental :: LinkedList < type > { __VA_ARGS__ }
@@ -10663,6 +11810,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 #define make_lhs(type, ...) cds :: experimental :: LinkedHashSet < type > { __VA_ARGS__ }
 #define make_ts(type, ...) cds :: experimental :: TreeSet < type > { __VA_ARGS__ }
 #define make_hm(ktype, vtype, ...) cds :: experimental :: HashMap < ktype, vtype > { __VA_ARGS__ }
+#define make_lhm(ktype, vtype, ...) cds :: experimental :: LinkedHashMap < ktype, vtype > { __VA_ARGS__ }
 #define make_il(...) { __VA_ARGS__ }
 
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : IntArray", [this, & allOk]{
@@ -10881,6 +12029,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hm ( int, int )
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : IntToIntLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](MapEntry < int, int > const & x) { return x.key() > 100; },
+                /* matchingOne = */                                     [](MapEntry < int, int > const & x) { return x.key() == 3; },
+                /* matchingMoreLessThanLimit = */                       [](MapEntry < int, int > const & x) { return x.key() >= 4 && x.key() <= 5; },
+                /* matchingMore = */                                    [](MapEntry < int, int > const & x) { return x.key() >= 4 && x.key() <= 6; },
+                /* matchingMoreMoreThanLimit = */                       [](MapEntry < int, int > const & x) { return x.key() >= 4 && x.key() <= 7; },
+                /* matchingAll = */                                     [](MapEntry < int, int > const & x) { return x.key() >= 1 && x.key() <= 9; },
+                /* equivAfterRemoveThatMatchesNone = */                 make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_lhm ( int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_lhm ( int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_lhm ( int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_lhm ( int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_lhm ( int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_lhm ( int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_lhm ( int, int, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_lhm ( int, int )
+        );
+    });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : StringArray", [this, & allOk]{
 
         cds :: experimental :: Array < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
@@ -11094,6 +12278,42 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* equivAfterRemoveAllThatMatchesOne = */               make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"} ),
                 /* equivAfterRemoveAllThatMatchesMore = */              make_hm ( String, String, {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"cca", "cca"} ),
                 /* equivAfterRemoveAllThatMatchesAll = */               make_hm ( String, String )
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : StringToStringLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < String, String > originalArray = { {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} };
+
+
+        allOk = allOk && collectionTestGroupRemoveBy (
+                /* original= */                                         originalArray,
+                /* pTestLib= */                                         this,
+                /* removeThatLimit = */                                 3,
+                /* removeThatResultWhenLessThanLimit = */               2,
+                /* matchingNone = */                                    [](MapEntry < String, String > const & x) { return x.key() == "ddd"; },
+                /* matchingOne = */                                     [](MapEntry < String, String > const & x) { return x.key() == "bbc"; },
+                /* matchingMoreLessThanLimit = */                       [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb") && ! x.key().endsWith ("a"); },
+                /* matchingMore = */                                    [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb"); },
+                /* matchingMoreMoreThanLimit = */                       [](MapEntry < String, String > const & x) { return x.key().startsWith ("bb") || x.key().endsWith ("b"); },
+                /* matchingAll = */                                     [](MapEntry < String, String > const & x) { return ! x.key().empty(); },
+                /* equivAfterRemoveThatMatchesNone = */                 make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_lhm ( String, String, {"aaa", "aaa"}, {"aac", "aac"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_lhm ( String, String, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_lhm ( String, String, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"} ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_lhm ( String, String, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_lhm ( String, String )
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP11 : CTG-00400-RB-CPP11 : StringArrayMemberFunction", [this, & allOk]{
@@ -13302,6 +14522,429 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 #define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int, int ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int, int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, int, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, int, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+#define make(k, v, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(int, int),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < int, int > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(int, int, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(int, int, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, int, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < int, int > > :: removeAllNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(int, int),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(int, int, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(int, int, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < int, int > > :: removeLastNotOf,
+                /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(int, int, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(int, int, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+    });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP11 : CTG-00450-RO-CPP11 : IntToIntLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+#define make(k, v, ...) make_lhm(k, v, __VA_ARGS__)
 
         allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
@@ -16261,6 +17904,429 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #undef make
     });
+    this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP11 : CTG-00450-RO-CPP11 : StringToStringLinkedHashMap", [this, & allOk]{
+
+        cds :: experimental :: LinkedHashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+#define make(k, v, ...) make_lhm(k, v, __VA_ARGS__)
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String, String ),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "Collection",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String, String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, String, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, String, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "Collection",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+#define make(k, v, ...) {__VA_ARGS__}
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeOf",
+                /* subvariantOffset= */                         0,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   0U,
+                /* expectedCollectionFromNone= */               make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    1U,
+                /* expectedCollectionFromOne= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      2U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    3U,
+                /* expectedCollectionFromAll= */                make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             3U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           0U,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            1U,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           3U,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            9U,
+                /* expectedCollectionFromAll= */        make(String, String),
+                /* expectedResultFromAllAndMore= */     9U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String)
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstOf",
+                /* subvariantOffset= */                 0,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           false,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */            true,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromAllAndMore= */     true,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                                 this,
+                /* groupVariant= */                             "InitializerList",
+                /* subvariant= */                               "removeNotOf",
+                /* subvariantOffset= */                         7,
+                /* iterableUnderTest= */                        underTest,
+                /* removePfnVariant= */                         & cds :: experimental :: Collection < MapEntry < String, String > > :: removeNotOf,
+                /* limit= */                                    3U,
+                /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreLessThanLimitCommon= */                  make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}),
+                /* moreCommon= */                               make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* moreMoreThanLimitCommon= */                  make(String, String, {2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                                make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                         make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */                   3U,
+                /* expectedCollectionFromNone= */               make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromOne= */                    3U,
+                /* expectedCollectionFromOne= */                make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreLessThanLimit= */      3U,
+                /* expectedCollectionFromMoreLessThanLimit= */  make(String, String, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMore= */                   3U,
+                /* expectedCollectionFromMore= */               make(String, String, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromMoreMoreThanLimit= */      3U,
+                /* expectedCollectionFromMoreMoreThanLimit= */  make(String, String, {2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAll= */                    0U,
+                /* expectedCollectionFromAll= */                make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */             0U,
+                /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeAllNotOf",
+                /* subvariantOffset= */                 5,
+                /* iterableUnderTest= */                underTest,
+                /* removeAllPfnVariant= */              & cds :: experimental :: Collection < MapEntry < String, String > > :: removeAllNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           9U,
+                /* expectedCollectionFromNone= */       make(String, String),
+                /* expectedResultFromOne= */            8U,
+                /* expectedCollectionFromOne= */        make(String, String, {6, 6} ),
+                /* expectedResultFromMore= */           6U,
+                /* expectedCollectionFromMore= */       make(String, String, {3, 3}, {5, 5}, {7, 7} ),
+                /* expectedResultFromAll= */            0U,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1} ,{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} ),
+                /* expectedResultFromAllAndMore= */     0U,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeFirstNotOf",
+                /* subvariantOffset= */                 10,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+                /* pTestLib= */                         this,
+                /* groupVariant= */                     "InitializerList",
+                /* subvariant= */                       "removeLastNotOf",
+                /* subvariantOffset= */                 15,
+                /* iterableUnderTest= */                underTest,
+                /* removeFirstLastPfnVariant= */        & cds :: experimental :: Collection < MapEntry < String, String > > :: removeLastNotOf,
+                /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
+                /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
+                /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
+                /* allCommon= */                        make(String, String, {9, 9}, {2, 2}, {5, 5}, {1, 1}, {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} ),
+                /* allAndMoreCommon= */                 make(String, String, {91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} ),
+                /* expectedResultFromNone= */           true,
+                /* expectedCollectionFromNone= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} ),
+                /* expectedResultFromOne= */            true,
+                /* expectedCollectionFromOne= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromMore= */           true,
+                /* expectedCollectionFromMore= */       make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}),
+                /* expectedResultFromAll= */            false,
+                /* expectedCollectionFromAll= */        make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}),
+                /* expectedResultFromAllAndMore= */     false,
+                /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
+        );
+
+#undef make
+    });
 
 
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP11 : CTG-00600-FT-CPP11 : IntArray", [this, & allOk] {
@@ -16571,6 +18637,67 @@ auto CollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP11 : CTG-00600-FT-CPP11 : IntToIntHashMap", [this, & allOk] {
 
         cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && collectionTestGroupFindThat (
+                /* pTestLib= */                                 this,
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     []( MapEntry < int, int > const & x ){ return x.key() == 10000; },
+                /* one= */                                      []( MapEntry < int, int > const & x ){ return x.key() == 4; },
+                /* moreLessThanLimit= */                        []( MapEntry < int, int > const & x ){ return x.key() >= 3 && x.key() <= 5; },
+                /* more= */                                     []( MapEntry < int, int > const & x ){ return x.key() >= 2 && x.key() <= 6; },
+                /* moreMoreThanLimit= */                        []( MapEntry < int, int > const & x ){ return x.key() >= 1 && x.key() <= 3 || x.key() >= 5 && x.key() <= 8; },
+                /* all= */                                      []( MapEntry < int, int > const & x ){ return x.key() >= 1 && x.key() <= 9; },
+                /* allAndMore= */                               []( MapEntry < int, int > const & x ){ return x.key() >= -50 && x.key() <= 100; },
+                /* expectedSizeFindThatNone= */                 0U,
+                /* expectedFindThatNone= */                     {},
+                /* expectedSizeFindThatOne= */                  1U,
+                /* expectedFindThatOne= */                      { {4, 4} },
+                /* expectedSizeFindThatMoreLessThanLimit= */    3U,
+                /* expectedFindThatMoreLessThanLimit= */        { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindThatMore= */                 5U,
+                /* expectedFindThatMore= */                     { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindThatMoreMoreThanLimit= */    5U,
+                /* expectedFindThatMoreMoreThanLimit= */        { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindThatAll= */                  5U,
+                /* expectedFindThatAll= */                      { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindThatAllAndMore= */           5U,
+                /* expectedFindThatAllAndMore= */               { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstThatNone= */          false,
+                /* expectedFindFirstThatNone= */                {-1, -1},
+                /* expectedResultFindFirstThatOne= */           true,
+                /* expectedFindFirstThatOne= */                 {4, 4},
+                /* expectedResultFindFirstThatMore= */          true,
+                /* expectedFindFirstThatMore= */                {2, 2},
+                /* expectedResultFindFirstThatAll= */           true,
+                /* expectedFindFirstThatAll= */                 {1, 1},
+                /* expectedResultFindFirstThatAllAndMore= */    true,
+                /* expectedFindFirstThatAllAndMore= */          {1, 1},
+                /* expectedResultFindLastThatNone= */           false,
+                /* expectedFindLastThatNone= */                 {-1, -1},
+                /* expectedResultFindLastThatOne= */            true,
+                /* expectedFindLastThatOne= */                  {4, 4},
+                /* expectedResultFindLastThatMore= */           true,
+                /* expectedFindLastThatMore= */                 {6, 6},
+                /* expectedResultFindLastThatAll= */            true,
+                /* expectedFindLastThatAll= */                  {9, 9},
+                /* expectedResultFindLastThatAllAndMore= */     true,
+                /* expectedFindLastThatAllAndMore= */           {9, 9},
+                /* expectedSizeFindAllThatNone= */              0U,
+                /* expectedFindAllThatNone= */                  {},
+                /* expectedSizeFindAllThatOne= */               1U,
+                /* expectedFindAllThatOne= */                   { {4, 4} },
+                /* expectedSizeFindAllThatMore= */              5U,
+                /* expectedFindAllThatMore= */                  { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllThatAll= */               9U,
+                /* expectedFindAllThatAll= */                   { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllThatAllAndMore= */        9U,
+                /* expectedFindAllThatAllAndMore= */            { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-FindThat-CPP11 : CTG-00600-FT-CPP11 : IntToIntLinkedHashMap", [this, & allOk] {
+
+        cds :: experimental :: LinkedHashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && collectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -16993,6 +19120,67 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedFindAllThatAll= */                   { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
                 /* expectedSizeFindAllThatAllAndMore= */        9U,
                 /* expectedFindAllThatAllAndMore= */            { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} }
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-FindThat-CPP11 : CTG-00600-FT-CPP11 : StringToStringLinkedHashMap", [this, & allOk] {
+
+        cds :: experimental :: LinkedHashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && collectionTestGroupFindThat (
+                /* pTestLib= */                                 this,
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     []( MapEntry < String, String > const & x ){ return x.key() == String(10000); },
+                /* one= */                                      []( MapEntry < String, String > const & x ){ return x.key() == String(4); },
+                /* moreLessThanLimit= */                        []( MapEntry < String, String > const & x ){ return x.key() >= String(3) && x.key() <= String(5); },
+                /* more= */                                     []( MapEntry < String, String > const & x ){ return x.key() >= String(2) && x.key() <= String(6); },
+                /* moreMoreThanLimit= */                        []( MapEntry < String, String > const & x ){ return x.key() >= String(1) && x.key() <= String(3) || x.key() >= String(5) && x.key() <= String(8); },
+                /* all= */                                      []( MapEntry < String, String > const & x ){ return x.key() >= String(1) && x.key() <= String(9); },
+                /* allAndMore= */                               []( MapEntry < String, String > const & x ){ return x.key() >= String(0) && x.key() <= String(9); },
+                /* expectedSizeFindThatNone= */                 0U,
+                /* expectedFindThatNone= */                     {},
+                /* expectedSizeFindThatOne= */                  1U,
+                /* expectedFindThatOne= */                      { {4, 4} },
+                /* expectedSizeFindThatMoreLessThanLimit= */    3U,
+                /* expectedFindThatMoreLessThanLimit= */        { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindThatMore= */                 5U,
+                /* expectedFindThatMore= */                     { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindThatMoreMoreThanLimit= */    5U,
+                /* expectedFindThatMoreMoreThanLimit= */        { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindThatAll= */                  5U,
+                /* expectedFindThatAll= */                      { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindThatAllAndMore= */           5U,
+                /* expectedFindThatAllAndMore= */               { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstThatNone= */          false,
+                /* expectedFindFirstThatNone= */                {-1, -1},
+                /* expectedResultFindFirstThatOne= */           true,
+                /* expectedFindFirstThatOne= */                 {4, 4},
+                /* expectedResultFindFirstThatMore= */          true,
+                /* expectedFindFirstThatMore= */                {2, 2},
+                /* expectedResultFindFirstThatAll= */           true,
+                /* expectedFindFirstThatAll= */                 {1, 1},
+                /* expectedResultFindFirstThatAllAndMore= */    true,
+                /* expectedFindFirstThatAllAndMore= */          {1, 1},
+                /* expectedResultFindLastThatNone= */           false,
+                /* expectedFindLastThatNone= */                 {-1, -1},
+                /* expectedResultFindLastThatOne= */            true,
+                /* expectedFindLastThatOne= */                  {4, 4},
+                /* expectedResultFindLastThatMore= */           true,
+                /* expectedFindLastThatMore= */                 {6, 6},
+                /* expectedResultFindLastThatAll= */            true,
+                /* expectedFindLastThatAll= */                  {9, 9},
+                /* expectedResultFindLastThatAllAndMore= */     true,
+                /* expectedFindLastThatAllAndMore= */           {9, 9},
+                /* expectedSizeFindAllThatNone= */              0U,
+                /* expectedFindAllThatNone= */                  {},
+                /* expectedSizeFindAllThatOne= */               1U,
+                /* expectedFindAllThatOne= */                   { {4, 4} },
+                /* expectedSizeFindAllThatMore= */              5U,
+                /* expectedFindAllThatMore= */                  { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllThatAll= */               9U,
+                /* expectedFindAllThatAll= */                   { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllThatAllAndMore= */        9U,
+                /* expectedFindAllThatAllAndMore= */            { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
         );
     });
     this->executeSubtest ( "CollectionTestGroup-FindThatMemberFunction-CPP11 : CTG-00650-FTMF-CPP11 : StringArray", [this, & allOk] {
@@ -18137,6 +20325,218 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* moreMoreThanLimit= */                        make_hm(int, int, {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}),
                 /* all= */                                      make_hm(int, int, {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}),
                 /* allAndMore= */                               make_hm(int, int, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+                                                                        {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}),
+                /* expectedSizeFindOfNone= */                   0U,
+                /* expectedFindOfNone= */                       {},
+                /* expectedSizeFindOfOne= */                    1U,
+                /* expectedFindOfOne= */                        { {4, 4} },
+                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
+                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfMore= */                   5U,
+                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
+                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfAll= */                    5U,
+                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfAllAndMore= */             5U,
+                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstOfNone= */            false,
+                /* expectedFindFirstOfNone= */                  {-1, -1},
+                /* expectedResultFindFirstOfOne= */             true,
+                /* expectedFindFirstOfOne= */                   {4, 4},
+                /* expectedResultFindFirstOfMore= */            true,
+                /* expectedFindFirstOfMore= */                  {2, 2},
+                /* expectedResultFindFirstOfAll= */             true,
+                /* expectedFindFirstOfAll= */                   {1, 1},
+                /* expectedResultFindFirstOfAllAndMore= */      true,
+                /* expectedFindFirstOfAllAndMore= */            {1, 1},
+                /* expectedResultFindLastOfNone= */             false,
+                /* expectedFindLastOfNone= */                   {-1, -1},
+                /* expectedResultFindLastOfOne= */              true,
+                /* expectedFindLastOfOne= */                    {4, 4},
+                /* expectedResultFindLastOfMore= */             true,
+                /* expectedFindLastOfMore= */                   {6, 6},
+                /* expectedResultFindLastOfAll= */              true,
+                /* expectedFindLastOfAll= */                    {9, 9},
+                /* expectedResultFindLastOfAllAndMore= */       true,
+                /* expectedFindLastOfAllAndMore= */             {9, 9},
+                /* expectedSizeFindAllOfNone= */                0U,
+                /* expectedFindAllOfNone= */                    {},
+                /* expectedSizeFindAllOfOne= */                 1U,
+                /* expectedFindAllOfOne= */                     { {4, 4} },
+                /* expectedSizeFindAllOfMore= */                5U,
+                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllOfAll= */                 9U,
+                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllOfAllAndMore= */          9U,
+                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+
+                /* expectedSizeFindNotOfNone= */                5U,
+                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindNotOfOne= */                 5U,
+                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
+                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
+                /* expectedSizeFindNotOfMore= */                4U,
+                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
+                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
+                /* expectedSizeFindNotOfAll= */                 0U,
+                /* expectedFindNotOfAll= */                     {},
+                /* expectedSizeFindNotOfAllAndMore= */          0U,
+                /* expectedFindNotOfAllAndMore= */              {},
+                /* expectedResultFindFirstNotOfNone= */         true,
+                /* expectedFindFirstNotOfNone= */               {1, 1},
+                /* expectedResultFindFirstNotOfOne= */          true,
+                /* expectedFindFirstNotOfOne= */                {1, 1},
+                /* expectedResultFindFirstNotOfMore= */         true,
+                /* expectedFindFirstNotOfMore= */               {1, 1},
+                /* expectedResultFindFirstNotOfAll= */          false,
+                /* expectedFindFirstNotOfAll= */                {-1, -1},
+                /* expectedResultFindFirstNotOfAllAndMore= */   false,
+                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
+                /* expectedResultFindLastNotOfNone= */          true,
+                /* expectedFindLastNotOfNone= */                {9, 9},
+                /* expectedResultFindLastNotOfOne= */           true,
+                /* expectedFindLastNotOfOne= */                 {9, 9},
+                /* expectedResultFindLastNotOfMore= */          true,
+                /* expectedFindLastNotOfMore= */                {9, 9},
+                /* expectedResultFindLastNotOfAll= */           false,
+                /* expectedFindLastNotOfAll= */                 {-1, -1},
+                /* expectedResultFindLastNotOfAllAndMore= */    false,
+                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
+                /* expectedSizeFindAllNotOfNone= */             9U,
+                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfOne= */              8U,
+                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfMore= */             4U,
+                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfAll= */              0U,
+                /* expectedFindAllNotOfAll= */                  {},
+                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
+                /* expectedFindAllNotOfAllAndMore= */           {}
+        );
+
+        allOk = allOk && collectionTestGroupFindOf < std :: initializer_list < MapEntry < int, int > > > (
+                /* pTestLib= */                                 this,
+                /* variant= */                                  "InitializerList",
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     { {-1, -1}, {-4, -4}, {-7, -7}, {20, 20} },
+                /* one= */                                      { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1} },
+                /* moreLessThanLimit= */                        { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1} },
+                /* more= */                                     { {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1} },
+                /* moreMoreThanLimit= */                        { {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1} },
+                /* all= */                                      { {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1} },
+                /* allAndMore= */                               { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+                                                                  {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20} },
+                /* expectedSizeFindOfNone= */                   0U,
+                /* expectedFindOfNone= */                       {},
+                /* expectedSizeFindOfOne= */                    1U,
+                /* expectedFindOfOne= */                        { {4, 4} },
+                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
+                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfMore= */                   5U,
+                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
+                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfAll= */                    5U,
+                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfAllAndMore= */             5U,
+                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstOfNone= */            false,
+                /* expectedFindFirstOfNone= */                  {-1, -1},
+                /* expectedResultFindFirstOfOne= */             true,
+                /* expectedFindFirstOfOne= */                   {4, 4},
+                /* expectedResultFindFirstOfMore= */            true,
+                /* expectedFindFirstOfMore= */                  {2, 2},
+                /* expectedResultFindFirstOfAll= */             true,
+                /* expectedFindFirstOfAll= */                   {1, 1},
+                /* expectedResultFindFirstOfAllAndMore= */      true,
+                /* expectedFindFirstOfAllAndMore= */            {1, 1},
+                /* expectedResultFindLastOfNone= */             false,
+                /* expectedFindLastOfNone= */                   {-1, -1},
+                /* expectedResultFindLastOfOne= */              true,
+                /* expectedFindLastOfOne= */                    {4, 4},
+                /* expectedResultFindLastOfMore= */             true,
+                /* expectedFindLastOfMore= */                   {6, 6},
+                /* expectedResultFindLastOfAll= */              true,
+                /* expectedFindLastOfAll= */                    {9, 9},
+                /* expectedResultFindLastOfAllAndMore= */       true,
+                /* expectedFindLastOfAllAndMore= */             {9, 9},
+                /* expectedSizeFindAllOfNone= */                0U,
+                /* expectedFindAllOfNone= */                    {},
+                /* expectedSizeFindAllOfOne= */                 1U,
+                /* expectedFindAllOfOne= */                     { {4, 4} },
+                /* expectedSizeFindAllOfMore= */                5U,
+                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllOfAll= */                 9U,
+                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllOfAllAndMore= */          9U,
+                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+
+                /* expectedSizeFindNotOfNone= */                5U,
+                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindNotOfOne= */                 5U,
+                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
+                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
+                /* expectedSizeFindNotOfMore= */                4U,
+                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
+                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
+                /* expectedSizeFindNotOfAll= */                 0U,
+                /* expectedFindNotOfAll= */                     {},
+                /* expectedSizeFindNotOfAllAndMore= */          0U,
+                /* expectedFindNotOfAllAndMore= */              {},
+                /* expectedResultFindFirstNotOfNone= */         true,
+                /* expectedFindFirstNotOfNone= */               {1, 1},
+                /* expectedResultFindFirstNotOfOne= */          true,
+                /* expectedFindFirstNotOfOne= */                {1, 1},
+                /* expectedResultFindFirstNotOfMore= */         true,
+                /* expectedFindFirstNotOfMore= */               {1, 1},
+                /* expectedResultFindFirstNotOfAll= */          false,
+                /* expectedFindFirstNotOfAll= */                {-1, -1},
+                /* expectedResultFindFirstNotOfAllAndMore= */   false,
+                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
+                /* expectedResultFindLastNotOfNone= */          true,
+                /* expectedFindLastNotOfNone= */                {9, 9},
+                /* expectedResultFindLastNotOfOne= */           true,
+                /* expectedFindLastNotOfOne= */                 {9, 9},
+                /* expectedResultFindLastNotOfMore= */          true,
+                /* expectedFindLastNotOfMore= */                {9, 9},
+                /* expectedResultFindLastNotOfAll= */           false,
+                /* expectedFindLastNotOfAll= */                 {-1, -1},
+                /* expectedResultFindLastNotOfAllAndMore= */    false,
+                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
+                /* expectedSizeFindAllNotOfNone= */             9U,
+                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfOne= */              8U,
+                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfMore= */             4U,
+                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfAll= */              0U,
+                /* expectedFindAllNotOfAll= */                  {},
+                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
+                /* expectedFindAllNotOfAllAndMore= */           {}
+        );
+    });
+    this->executeSubtest ( "CollectionTestGroup-FindOf-CPP11 : CTG-00700-FO-CPP11 : IntToIntLinkedHashMap", [this, & allOk] {
+
+        cds :: experimental :: LinkedHashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && collectionTestGroupFindOf < cds :: experimental :: Collection < MapEntry < int, int > > > (
+                /* pTestLib= */                                 this,
+                /* variant= */                                  "Collection",
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     make_lhm(int, int, {-1, -1}, {-4, -4}, {-7, -7}, {20, 20}),
+                /* one= */                                      make_lhm(int, int, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}),
+                /* moreLessThanLimit= */                        make_lhm(int, int, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}),
+                /* more= */                                     make_lhm(int, int, {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}),
+                /* moreMoreThanLimit= */                        make_lhm(int, int, {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}),
+                /* all= */                                      make_lhm(int, int, {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}),
+                /* allAndMore= */                               make_lhm(int, int, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
                                                                         {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}),
                 /* expectedSizeFindOfNone= */                   0U,
                 /* expectedFindOfNone= */                       {},
@@ -19595,6 +21995,218 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedFindAllNotOfAllAndMore= */           {}
         );
     });
+    this->executeSubtest ( "CollectionTestGroup-FindOf-CPP11 : CTG-00700-FO-CPP11 : StringToStringLinkedHashMap", [this, & allOk] {
+
+        cds :: experimental :: LinkedHashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && collectionTestGroupFindOf < cds :: experimental :: Collection < MapEntry < String, String > > > (
+                /* pTestLib= */                                 this,
+                /* variant= */                                  "Collection",
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     make_lhm(String, String, {-1, -1}, {-4, -4}, {-7, -7}, {20, 20}),
+                /* one= */                                      make_lhm(String, String, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}),
+                /* moreLessThanLimit= */                        make_lhm(String, String, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}),
+                /* more= */                                     make_lhm(String, String, {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}),
+                /* moreMoreThanLimit= */                        make_lhm(String, String, {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}),
+                /* all= */                                      make_lhm(String, String, {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}),
+                /* allAndMore= */                               make_lhm(String, String, {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+                                                                        {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}),
+                /* expectedSizeFindOfNone= */                   0U,
+                /* expectedFindOfNone= */                       {},
+                /* expectedSizeFindOfOne= */                    1U,
+                /* expectedFindOfOne= */                        { {4, 4} },
+                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
+                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfMore= */                   5U,
+                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
+                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfAll= */                    5U,
+                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfAllAndMore= */             5U,
+                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstOfNone= */            false,
+                /* expectedFindFirstOfNone= */                  {-1, -1},
+                /* expectedResultFindFirstOfOne= */             true,
+                /* expectedFindFirstOfOne= */                   {4, 4},
+                /* expectedResultFindFirstOfMore= */            true,
+                /* expectedFindFirstOfMore= */                  {2, 2},
+                /* expectedResultFindFirstOfAll= */             true,
+                /* expectedFindFirstOfAll= */                   {1, 1},
+                /* expectedResultFindFirstOfAllAndMore= */      true,
+                /* expectedFindFirstOfAllAndMore= */            {1, 1},
+                /* expectedResultFindLastOfNone= */             false,
+                /* expectedFindLastOfNone= */                   {-1, -1},
+                /* expectedResultFindLastOfOne= */              true,
+                /* expectedFindLastOfOne= */                    {4, 4},
+                /* expectedResultFindLastOfMore= */             true,
+                /* expectedFindLastOfMore= */                   {6, 6},
+                /* expectedResultFindLastOfAll= */              true,
+                /* expectedFindLastOfAll= */                    {9, 9},
+                /* expectedResultFindLastOfAllAndMore= */       true,
+                /* expectedFindLastOfAllAndMore= */             {9, 9},
+                /* expectedSizeFindAllOfNone= */                0U,
+                /* expectedFindAllOfNone= */                    {},
+                /* expectedSizeFindAllOfOne= */                 1U,
+                /* expectedFindAllOfOne= */                     { {4, 4} },
+                /* expectedSizeFindAllOfMore= */                5U,
+                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllOfAll= */                 9U,
+                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllOfAllAndMore= */          9U,
+                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+
+                /* expectedSizeFindNotOfNone= */                5U,
+                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindNotOfOne= */                 5U,
+                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
+                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
+                /* expectedSizeFindNotOfMore= */                4U,
+                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
+                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
+                /* expectedSizeFindNotOfAll= */                 0U,
+                /* expectedFindNotOfAll= */                     {},
+                /* expectedSizeFindNotOfAllAndMore= */          0U,
+                /* expectedFindNotOfAllAndMore= */              {},
+                /* expectedResultFindFirstNotOfNone= */         true,
+                /* expectedFindFirstNotOfNone= */               {1, 1},
+                /* expectedResultFindFirstNotOfOne= */          true,
+                /* expectedFindFirstNotOfOne= */                {1, 1},
+                /* expectedResultFindFirstNotOfMore= */         true,
+                /* expectedFindFirstNotOfMore= */               {1, 1},
+                /* expectedResultFindFirstNotOfAll= */          false,
+                /* expectedFindFirstNotOfAll= */                {-1, -1},
+                /* expectedResultFindFirstNotOfAllAndMore= */   false,
+                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
+                /* expectedResultFindLastNotOfNone= */          true,
+                /* expectedFindLastNotOfNone= */                {9, 9},
+                /* expectedResultFindLastNotOfOne= */           true,
+                /* expectedFindLastNotOfOne= */                 {9, 9},
+                /* expectedResultFindLastNotOfMore= */          true,
+                /* expectedFindLastNotOfMore= */                {9, 9},
+                /* expectedResultFindLastNotOfAll= */           false,
+                /* expectedFindLastNotOfAll= */                 {-1, -1},
+                /* expectedResultFindLastNotOfAllAndMore= */    false,
+                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
+                /* expectedSizeFindAllNotOfNone= */             9U,
+                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfOne= */              8U,
+                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfMore= */             4U,
+                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfAll= */              0U,
+                /* expectedFindAllNotOfAll= */                  {},
+                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
+                /* expectedFindAllNotOfAllAndMore= */           {}
+        );
+
+        allOk = allOk && collectionTestGroupFindOf < std :: initializer_list < MapEntry < String, String > > > (
+                /* pTestLib= */                                 this,
+                /* variant= */                                  "InitializerList",
+                /* underTest= */                                underTest,
+                /* limit= */                                    5U,
+                /* none= */                                     { {-1, -1}, {-4, -4}, {-7, -7}, {20, 20} },
+                /* one= */                                      { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1} },
+                /* moreLessThanLimit= */                        { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1} },
+                /* more= */                                     { {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1} },
+                /* moreMoreThanLimit= */                        { {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1} },
+                /* all= */                                      { {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1} },
+                /* allAndMore= */                               { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+                                                                  {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20} },
+                /* expectedSizeFindOfNone= */                   0U,
+                /* expectedFindOfNone= */                       {},
+                /* expectedSizeFindOfOne= */                    1U,
+                /* expectedFindOfOne= */                        { {4, 4} },
+                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
+                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfMore= */                   5U,
+                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
+                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindOfAll= */                    5U,
+                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindOfAllAndMore= */             5U,
+                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedResultFindFirstOfNone= */            false,
+                /* expectedFindFirstOfNone= */                  {-1, -1},
+                /* expectedResultFindFirstOfOne= */             true,
+                /* expectedFindFirstOfOne= */                   {4, 4},
+                /* expectedResultFindFirstOfMore= */            true,
+                /* expectedFindFirstOfMore= */                  {2, 2},
+                /* expectedResultFindFirstOfAll= */             true,
+                /* expectedFindFirstOfAll= */                   {1, 1},
+                /* expectedResultFindFirstOfAllAndMore= */      true,
+                /* expectedFindFirstOfAllAndMore= */            {1, 1},
+                /* expectedResultFindLastOfNone= */             false,
+                /* expectedFindLastOfNone= */                   {-1, -1},
+                /* expectedResultFindLastOfOne= */              true,
+                /* expectedFindLastOfOne= */                    {4, 4},
+                /* expectedResultFindLastOfMore= */             true,
+                /* expectedFindLastOfMore= */                   {6, 6},
+                /* expectedResultFindLastOfAll= */              true,
+                /* expectedFindLastOfAll= */                    {9, 9},
+                /* expectedResultFindLastOfAllAndMore= */       true,
+                /* expectedFindLastOfAllAndMore= */             {9, 9},
+                /* expectedSizeFindAllOfNone= */                0U,
+                /* expectedFindAllOfNone= */                    {},
+                /* expectedSizeFindAllOfOne= */                 1U,
+                /* expectedFindAllOfOne= */                     { {4, 4} },
+                /* expectedSizeFindAllOfMore= */                5U,
+                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
+                /* expectedSizeFindAllOfAll= */                 9U,
+                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllOfAllAndMore= */          9U,
+                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+
+                /* expectedSizeFindNotOfNone= */                5U,
+                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
+                /* expectedSizeFindNotOfOne= */                 5U,
+                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
+                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
+                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
+                /* expectedSizeFindNotOfMore= */                4U,
+                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
+                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
+                /* expectedSizeFindNotOfAll= */                 0U,
+                /* expectedFindNotOfAll= */                     {},
+                /* expectedSizeFindNotOfAllAndMore= */          0U,
+                /* expectedFindNotOfAllAndMore= */              {},
+                /* expectedResultFindFirstNotOfNone= */         true,
+                /* expectedFindFirstNotOfNone= */               {1, 1},
+                /* expectedResultFindFirstNotOfOne= */          true,
+                /* expectedFindFirstNotOfOne= */                {1, 1},
+                /* expectedResultFindFirstNotOfMore= */         true,
+                /* expectedFindFirstNotOfMore= */               {1, 1},
+                /* expectedResultFindFirstNotOfAll= */          false,
+                /* expectedFindFirstNotOfAll= */                {-1, -1},
+                /* expectedResultFindFirstNotOfAllAndMore= */   false,
+                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
+                /* expectedResultFindLastNotOfNone= */          true,
+                /* expectedFindLastNotOfNone= */                {9, 9},
+                /* expectedResultFindLastNotOfOne= */           true,
+                /* expectedFindLastNotOfOne= */                 {9, 9},
+                /* expectedResultFindLastNotOfMore= */          true,
+                /* expectedFindLastNotOfMore= */                {9, 9},
+                /* expectedResultFindLastNotOfAll= */           false,
+                /* expectedFindLastNotOfAll= */                 {-1, -1},
+                /* expectedResultFindLastNotOfAllAndMore= */    false,
+                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
+                /* expectedSizeFindAllNotOfNone= */             9U,
+                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfOne= */              8U,
+                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfMore= */             4U,
+                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
+                /* expectedSizeFindAllNotOfAll= */              0U,
+                /* expectedFindAllNotOfAll= */                  {},
+                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
+                /* expectedFindAllNotOfAllAndMore= */           {}
+        );
+    });
 
 
     this->executeSubtest ( "CollectionTestGroup-RandomInsertion-CPP11 : CTG-00800-RI-CPP11 : IntArray", [this, & allOk] {
@@ -19809,6 +22421,54 @@ auto CollectionTest :: execute () noexcept -> bool {
         RI00810.emplace ( 4, 5 );
 
         if ( ! RI00810.equals ( cds :: experimental :: HashMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
+            this->logError( "'CTC-00810-RI-specialEmplace-CPP11' failed" );
+            allOk = false;
+        } else {
+            this->logOK ( "'CTC-00810-RI-specialEmplace-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "CollectionTestGroup-RandomInsertion-CPP11 : CTG-00800-RI-CPP11 : IntToIntLinkedHashMap", [this, & allOk] {
+
+        MapEntry < int, int > byCopy = {5, 87};
+        MapEntry < int, int > byMove = {8, 16};
+
+        cds :: experimental :: Array < MapEntry < int, int > > range1Definer = { {10, 20}, {20, 40}, {30, 60}, {40, 80} };
+        std :: array < MapEntry < int, int >, 3 > range2Definer { MapEntry < int, int > ( 5, 1 ), MapEntry < int, int > (6, 2), MapEntry < int, int > (7, 2) };
+        std :: vector < MapEntry < int, int > > range3Definer { {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25} };
+
+        allOk = allOk && collectionTestGroupRandomInsertion <
+                cds :: experimental :: LinkedHashMap < int, int >,
+                MapEntry < int, int >
+        > (
+                this,
+                byCopy,
+                std :: move ( byMove ),
+                MapEntry < int, int > {2, 3}, MapEntry < int, int > {3, 2}, MapEntry < int, int > {4, 6},
+                cds :: experimental :: Array < MapEntry < int, int > > ( { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} } ),
+                { {5, 10}, {6, 12}, {7, 14}, {8, 16}, {9, 18} },
+                range1Definer.begin(), range1Definer.end(),
+                range2Definer.begin(), range2Definer.end(),
+                range3Definer.begin(), range3Definer.end(),
+                make_lhm (int, int, {5, 87}),
+                make_lhm (int, int, {8, 16}),
+                make_lhm (int, int, {2, 3}, {3, 2}, {4, 6}),
+                make_lhm (int, int, {100, 10}, {200, 20}, {300, 30}, {400, 40}),
+                make_lhm (int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}),
+                make_lhm (int, int, {5, 10}, {6, 12}, {7, 14}, {8, 16}, {9, 18}),
+                make_lhm (int, int, {10, 20}, {20, 40}, {30, 60}, {40, 80}),
+                make_lhm (int, int, {5, 1}, {6,2 }, {7, 2}),
+                make_lhm (int, int, {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25}),
+                MapEntry < int, int > {100, 10}, MapEntry < int, int > {200, 20}, MapEntry < int, int > {300, 30}, MapEntry < int, int > {400, 40}
+        );
+
+        /* CollectionTestCase-RandomInsertion-specialEmplace-CPP11 : CTC-00810-RI-specialEmplace-CPP11 */
+        cds :: experimental :: LinkedHashMap < int, int > hm00810;
+        cds :: experimental :: Collection < MapEntry < int, int > > & RI00810 = hm00810;
+
+        RI00810.emplace ( 3, 5 );
+        RI00810.emplace ( 4, 5 );
+
+        if ( ! RI00810.equals ( cds :: experimental :: LinkedHashMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
             this->logError( "'CTC-00810-RI-specialEmplace-CPP11' failed" );
             allOk = false;
         } else {

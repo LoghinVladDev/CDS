@@ -343,6 +343,8 @@ int main () {
 
     LinkedHashSet < int > hssss;
     LinkedHashMap < int, int > hssssm;
+    hssssm.emplace ( 3, 4 );
+    std :: cout << hssssm.toString() << '\n';
 
 //    hssss.insert (3);
 

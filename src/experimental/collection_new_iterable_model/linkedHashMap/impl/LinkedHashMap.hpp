@@ -752,6 +752,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > :: ~LinkedHashMap () noexcept {
 
             this->__ht_clear ();
+            this->__sll_clear ();
         }
 
 
