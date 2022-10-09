@@ -111,7 +111,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             protected:
-                constexpr __HashTable (
+                __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
                         __HashTable && hashTable
                 ) noexcept;
 
@@ -225,7 +225,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> void;
 
             private:
-                constexpr auto __ht_moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
                         __HashTable && table
                 ) noexcept -> void;
 

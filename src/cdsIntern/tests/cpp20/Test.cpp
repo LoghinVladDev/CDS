@@ -3,6 +3,7 @@
 //
 
 #include "Test.h"
+#include <CDS/Pair>
 
 using namespace cds;
 

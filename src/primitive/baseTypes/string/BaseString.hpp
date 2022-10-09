@@ -428,7 +428,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_DynamicCastConstexpr auto equals (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals (
                         Object const & object
                 ) const noexcept -> bool override;
 

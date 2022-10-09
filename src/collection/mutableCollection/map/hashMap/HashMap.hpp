@@ -23,7 +23,7 @@ namespace cds {
     template <
             typename __KeyType,                                                             // NOLINT(bugprone-reserved-identifier)
             typename __ValueType,                                                           // NOLINT(bugprone-reserved-identifier)
-            typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
+            typename __Hasher = WrapperHasher < __KeyType, Hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
     > class HashMap :
             public Map < __KeyType, __ValueType >,
             protected __hidden :: __impl :: __HashTable <
@@ -39,7 +39,7 @@ namespace cds {
                     >,
                     FunctionComparator < __KeyType, & cds :: meta :: equals < __KeyType > >,
                     __Hasher,
-                    cds :: __hidden :: __impl :: __PrimeRehashPolicy,
+                    cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
                     FunctionDestructor <
                             typename Map < __KeyType, __ValueType > :: EntryType,
                             & __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
@@ -78,7 +78,7 @@ namespace cds {
 
     protected:
         using __HashTableRehashPolicy =  // NOLINT(bugprone-reserved-identifier)
-                cds :: __hidden :: __impl :: __PrimeRehashPolicy;
+                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >;
 
     protected:
         using __HashTableFunctionDestructor = // NOLINT(bugprone-reserved-identifier)

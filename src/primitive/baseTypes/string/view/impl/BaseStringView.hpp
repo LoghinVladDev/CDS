@@ -200,7 +200,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     index = index % static_cast < Index > ( this->size() );
                 }
 
-                return this->_pBuffer [ index ];
+                return this->_pData [ index ];
             }
 
 
@@ -211,7 +211,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     throw OutOfBoundsException ( 0, 0 );
                 }
 
-                return this->_pBuffer [ 0 ];
+                return this->_pData [ 0 ];
             }
 
 
@@ -222,7 +222,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     throw OutOfBoundsException ( 0, 0 );
                 }
 
-                return this->_pBuffer [ this->_length - 1U ];
+                return this->_pData [ this->_length - 1U ];
             }
 
 
@@ -279,7 +279,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return __BaseString < __CharType > ();
                 }
 
-                return __BaseString < __CharType > ( this->_pBuffer, static_cast < Size > ( until - from ) );
+                return __BaseString < __CharType > ( this->_pData, static_cast < Size > ( until - from ) );
             }
 
 
@@ -849,7 +849,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __BaseStringView < __CharType > const & string
             ) const noexcept ->__BaseString < __CharType > {
 
-               __BaseString < __CharType > result;
+                __BaseString < __CharType > result;
 
                 result._length      = this->length() + string.length();
                 result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
@@ -900,7 +900,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType character
             ) const noexcept -> __BaseString < __CharType > {
 
-               __BaseString < __CharType > result;
+                __BaseString < __CharType > result;
 
                 result._length      = this->length() + 1ULL;
                 result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
@@ -928,7 +928,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __NumericType value
             ) const noexcept ->__BaseString < __CharType > {
 
-               __BaseString < __CharType > result;
+                __BaseString < __CharType > result;
                 auto valueLength = StringUtils < __CharType > :: integerLength ( value );
 
                 result._length      = this->length() + valueLength;
@@ -961,7 +961,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     bool value
             ) const noexcept ->__BaseString < __CharType > {
 
-               __BaseString < __CharType > result;
+                __BaseString < __CharType > result;
                 auto valueLength = value ? 4ULL : 5ULL;
 
                 result._length      = this->length() + valueLength;
@@ -1147,7 +1147,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     StringUtils < __CharType > :: copy (
                             result._pBuffer,
                             result._length,
-                            this->_pBuffer,
+                            this->_pData,
                             0ULL,
                             this->length(),
                             false
@@ -1400,7 +1400,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 Size found = 0ULL;
                 for ( Size index = 0ULL; index < this->_length && found < maxCount; ++ index ) {
-                    if ( this->_pBuffer [ index ] == character ) {
+                    if ( this->_pData [ index ] == character ) {
                         storeIn.add ( static_cast < Index > ( index ) );
                         ++ found;
                     }
@@ -1735,7 +1735,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> __CollectionType < Index > & {
 
                 return StringUtils < __CharType > :: find (
-                        this->_pBuffer,
+                        this->_pData,
                         this->_length,
                         string.cStr(),
                         string.length(),
@@ -2333,7 +2333,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 Size offset = 0;
                 for ( auto minLength = minOf ( this->_length, string._length ); offset < minLength; ++ offset ) {
-                    if ( this->_pData [ this->_length - offset ] != string._pData [ string._length - offset ] ) {
+                    if ( this->_pData [ this->_length - offset - 1ULL ] != string._pData [ string._length - offset - 1ULL ] ) {
                         return false;
                     }
                 }

@@ -45,7 +45,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
                     typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
                     typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
-            > constexpr __HashTable <
+            > __CDS_cpplang_ConstexprConditioned __HashTable <
                     __ElementType,
                     __KeyType,
                     __KeyExtractor,

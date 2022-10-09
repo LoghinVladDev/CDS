@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set(GCC_COMPILE_OPTIONS "-Wa,-mbig-obj")
-        set(GCC_COMPILE_DEBUG_OPTIONS "${GCC_COMPILE_OPTIONS};-Os")
+        set(GCC_COMPILE_DEBUG_OPTIONS "${GCC_COMPILE_OPTIONS}")
         set(GCC_COMPILE_RELEASE_OPTIONS "${GCC_COMPILE_OPTIONS};-O3")
         add_compile_options("$<$<CONFIG:Debug>:${GCC_COMPILE_DEBUG_OPTIONS}>")
         add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
@@ -23,7 +23,8 @@ elseif (linux)
     add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
 endif()
 
-set(CDS_INCLUDE_DIRECTORIES
+set (
+        CDS_INCLUDE_DIRECTORIES
         include
 )
 
@@ -227,22 +228,11 @@ macro(test_set)
             ${CPP${ARGV0}_TEST_DEFAULT_SRC}
     )
 
-    test_suite(${ARGV0} primitive Boolean)
-    test_suite(${ARGV0} primitive Double)
-    test_suite(${ARGV0} primitive Float)
-    test_suite(${ARGV0} primitive Integer)
-    test_suite(${ARGV0} primitive Long)
-    test_suite(${ARGV0} primitive Optional)
-    test_suite(${ARGV0} primitive Pair)
-    test_suite(${ARGV0} primitive Pointer)
-    test_suite(${ARGV0} primitive Reference)
     test_suite(${ARGV0} primitive String)
-    test_suite(${ARGV0} primitive Sequence)
-    test_suite(${ARGV0} primitive Tuple)
-
     test_suite(${ARGV0} collection Collection)
-    test_suite(${ARGV0} collection/unordered HashMap)
-    test_suite(${ARGV0} collection/unordered Json)
+    test_suite(${ARGV0} collection/mutableCollection MutableCollection)
+    test_suite(${ARGV0} collection/mutableCollection/list List)
+    test_suite(${ARGV0} collection/set Set)
 
     add_executable(
             cpp${ARGV0}_test_all

@@ -25,17 +25,18 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 constexpr static bool hasLoadFactor = false;
             };
 
-            class __PrimeRehashPolicy : __RehashPolicy < uint32, true > { // NOLINT(bugprone-reserved-identifier)
+            template < typename __BaseType = uint32 >                                   // NOLINT(bugprone-reserved-identifier)
+            class __PrimeRehashPolicy : public __RehashPolicy < __BaseType, true > {    // NOLINT(bugprone-reserved-identifier)
 
             private:
-                uint32 _loadFactor;
+                __BaseType _loadFactor;
 
             private:
-                uint32 _factorIndex = 0U;
+                __BaseType _factorIndex = 0U;
 
             public:
                 __CDS_Explicit constexpr __PrimeRehashPolicy (
-                        uint32 loadFactor = 1U
+                        __BaseType loadFactor = 1U
                 ) noexcept :
                         _loadFactor ( loadFactor ) {
 
@@ -52,13 +53,13 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 }
 
             public:
-                __CDS_NoDiscard constexpr auto currentFactor () const noexcept -> uint32 {
+                __CDS_NoDiscard constexpr auto currentFactor () const noexcept -> __BaseType {
 
                     return __PrimeRehashPolicy :: _table [ this->_factorIndex ];
                 }
 
             public:
-                __CDS_NoDiscard constexpr auto loadFactor () const noexcept -> uint32 {
+                __CDS_NoDiscard constexpr auto loadFactor () const noexcept -> __BaseType {
 
                     return this->_loadFactor;
                 }
@@ -68,7 +69,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         Size bucketCount,
                         Size elementCount,
                         Size requiredCount
-                ) noexcept -> __RehashResult < uint32 > {
+                ) noexcept -> __RehashResult < __BaseType > {
 
                     if ( this->_factorIndex == 28U ) {
                         return { __PrimeRehashPolicy :: _table [ this->_factorIndex ], false };
@@ -92,7 +93,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 }
 
             private:
-                constexpr static uint32 _table [] = {
+                static __BaseType const _table [29U];
+            };
+
+            template < typename __BaseType > // NOLINT(bugprone-reserved-identifier)
+            __BaseType const __PrimeRehashPolicy < __BaseType > :: _table [29U] = {
                         13U, 27U, 57U, 117U, 237U,
                         477U, 957U, 1917U, 3837U, 7677U,
                         15357U, 30717U, 61437U, 122877U,
@@ -101,7 +106,6 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         62914557U, 125829117U, 251658237U,
                         503316477U, 1006632957U, 2013265917U,
                         4026531837U
-                };
             };
 
         }

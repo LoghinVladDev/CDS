@@ -23,7 +23,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             template <
                     typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                     typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
-            > constexpr auto __hashMapDataNodeDestructor (      // NOLINT(bugprone-reserved-identifier)
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDataNodeDestructor (      // NOLINT(bugprone-reserved-identifier)
                     typename Map < __KeyType, __ValueType > :: EntryType & dataNode
             ) noexcept -> void {
 
@@ -38,7 +38,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: isCopyConstructible < __KeyType > () &&
                             cds :: meta :: isCopyConstructible < __ValueType > ()
                     > = 0
-            > constexpr auto __hashMapDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
                     typename Map < __KeyType, __ValueType > :: EntryType        & destinationDataNode,
                     typename Map < __KeyType, __ValueType > :: EntryType  const & sourceDataNode
             ) noexcept -> void {
@@ -54,7 +54,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                             ! cds :: meta :: isCopyConstructible < __KeyType > () ||
                             ! cds :: meta :: isCopyConstructible < __ValueType > ()
                     > = 0
-            > constexpr auto __hashMapDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
                     typename Map < __KeyType, __ValueType > :: EntryType        & destinationDataNode,
                     typename Map < __KeyType, __ValueType > :: EntryType  const & sourceDataNode
             ) noexcept -> void {
@@ -65,7 +65,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             template <
                     typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                     typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
-            > constexpr auto __hashMapDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
                     typename Map < __KeyType, __ValueType > :: EntryType        & destinationDataNode,
                     typename Map < __KeyType, __ValueType > :: EntryType  const & sourceDataNode
             ) noexcept -> void {

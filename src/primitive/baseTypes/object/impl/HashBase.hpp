@@ -9,20 +9,43 @@
 
 namespace cds {
 
-    template < typename T, cds :: meta :: EnableIf < cds :: meta :: isObjectDerived < T > () > = 0 >
-    __CDS_cpplang_VirtualConstexpr auto hash (
-            T const & object
+    template < typename T, typename = void >
+    struct Hash {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                T const & object
+        ) noexcept -> Size {
+
+            return 0ULL;
+        }
+    };
+
+    template < typename T >
+    struct Hash < T, cds :: meta :: EnableIf < cds :: meta :: isObjectDerived < T > (), void > > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                T const & object
+        ) noexcept -> Size {
+
+            return object.hash();
+        }
+    };
+
+    template <>
+    struct Hash < StringLiteral > {
+
+        __CDS_NoDiscard __CDS_OptimalInline static auto hash ( StringLiteral object ) noexcept -> Size {
+
+            return StringView ( object ).hash();
+        }
+    };
+
+    template < typename T >
+    __CDS_NoDiscard constexpr auto hash (
+            T && object
     ) noexcept -> Size {
 
-        return object.hash();
-    }
-
-    template < typename T, cds :: meta :: EnableIf < ! cds :: meta :: isObjectDerived < T > () > = 0 >
-    constexpr auto hash (
-            T const & object
-    ) noexcept -> Size {
-
-        return 0ULL;
+        return Hash < cds :: meta :: Decay < T > > :: hash ( std :: forward < T > ( object ) );
     }
 
 }
@@ -30,97 +53,131 @@ namespace cds {
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     template <>
-    __CDS_cpplang_ConstexprConditioned auto hash < StringLiteral > (
-            StringLiteral const & object
-    ) noexcept -> Size {
+    struct Hash < uint8 > {
 
-        return StringUtils < char > :: length ( object );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                uint8 value
+        ) noexcept -> Size {
 
-    template <>
-    constexpr auto hash < uint8 > (
-            uint8 const & object
-    ) noexcept -> Size {
-
-        return static_cast < Size const > ( object );
-    }
+            return static_cast < Size > ( value );
+        }
+    };
 
     template <>
-    constexpr auto hash < uint16 > (
-            uint16 const & object
-    ) noexcept -> Size {
+    struct Hash < uint16 > {
 
-        return static_cast < Size const > ( object );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                uint16 value
+        ) noexcept -> Size {
 
-    template <>
-    constexpr auto hash < uint32 > (
-            uint32 const & object
-    ) noexcept -> Size {
-
-        return static_cast < Size const > ( object );
-    }
+            return static_cast < Size > ( value );
+        }
+    };
 
     template <>
-    constexpr auto hash < uint64 > (
-            uint64 const & object
-    ) noexcept -> Size {
+    struct Hash < uint32 > {
 
-        return static_cast < Size const > ( object );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                uint32 value
+        ) noexcept -> Size {
 
-    template <>
-    constexpr auto hash < sint8 > (
-            sint8 const & object
-    ) noexcept -> Size {
-
-        return static_cast < Size const > ( object );
-    }
+            return static_cast < Size > ( value );
+        }
+    };
 
     template <>
-    constexpr auto hash < sint16 > (
-            sint16 const & object
-    ) noexcept -> Size {
+    struct Hash < uint64 > {
 
-        return static_cast < Size const > ( object );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                uint64 value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value );
+        }
+    };
 
     template <>
-    constexpr auto hash < sint32 > (
-            sint32 const & object
-    ) noexcept -> Size {
+    struct Hash < sint8 > {
 
-        return static_cast < Size const > ( object );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                sint8 value
+        ) noexcept -> Size {
 
-    template <> constexpr auto hash < sint64 > (
-            sint64 const & object
-    ) noexcept -> Size {
+            return static_cast < Size > ( value );
+        }
+    };
 
-        return static_cast < Size const > ( object );
-    }
+    template <>
+    struct Hash < sint16 > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                sint16 value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value );
+        }
+    };
+
+    template <>
+    struct Hash < sint32 > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                sint32 value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value );
+        }
+    };
+
+    template <>
+    struct Hash < sint64 > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                sint64 value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value );
+        }
+    };
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressEnable
 
     template <>
-    constexpr auto hash < float > (
-            float const & object
-    ) noexcept -> Size {
+    struct Hash < float > {
 
-        return static_cast < Size > ( object * 1000.0f );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                float value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value * 1000.0f );
+        }
+    };
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressDisable
 
     template <>
-    constexpr auto hash < double > (
-            double const & object
-    ) noexcept -> Size {
+    struct Hash < double > {
 
-        return static_cast < Size > ( object * 100000.0 );
-    }
+        __CDS_NoDiscard constexpr static auto hash (
+                double value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value * 100000.0 );
+        }
+    };
 
 #if defined(CDS_GLM)
+
+    template < glm :: length_t l, typename T, glm :: qualifier q >
+    struct Hash < glm :: vec < l, T, q > > {
+
+        __CDS_NoDiscard constexpr static auto hash (
+                glm :: vec < l, T, q > const & value
+        ) noexcept -> Size {
+
+            return static_cast < Size > ( value * 100000.0 );
+        }
+    };
 
     template < glm::length_t l, typename T, glm::qualifier q >
     auto hash ( glm::vec < l, T , q > const & v ) noexcept -> Size {

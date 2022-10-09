@@ -876,7 +876,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_DynamicCastConstexpr auto __BaseString < __CharType > :: equals (
+            __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: equals (
                     Object const & object
             ) const noexcept -> bool {
 
@@ -1119,7 +1119,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
-                if ( this->length() > 1 && this->_pData [0] == character ) {
+                if ( this->length() > 1 && this->_pBuffer [0] == character ) {
                     return true;
                 }
 
@@ -3268,7 +3268,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType character
             ) const noexcept -> bool {
 
-                return ! this->empty() && this->_pData [ 0 ] == character;
+                return ! this->empty() && this->_pBuffer [ 0 ] == character;
             }
 
 
@@ -3298,7 +3298,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType character
             ) const noexcept -> bool {
 
-                return ! this->empty() && this->_pData [ this->_length - 1ULL ] == character;
+                return ! this->empty() && this->_pBuffer [ this->_length - 1ULL ] == character;
             }
 
 

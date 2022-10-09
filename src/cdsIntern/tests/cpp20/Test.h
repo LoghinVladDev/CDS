@@ -154,11 +154,11 @@ public:
     template < typename Function >
     auto executeSubtest ( cds :: String const & title, Function const & subtest ) noexcept -> void {
         this->logDepth++;
-        this->logBold("-----Start of subtest '%s'-----", title.cStr());
+        this->logBold("-----Start of test group '%s'-----", title.cStr());
         this->logDepth++;
         subtest();
         this->logDepth--;
-        this->logBold("-----End of subtest '%s'-----", title.cStr());
+        this->logBold("-----End of test group '%s'-----", title.cStr());
         this->logDepth--;
     }
 

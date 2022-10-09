@@ -13,21 +13,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename __Type, Size __size = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
                 struct __RawContainer { // NOLINT(bugprone-reserved-identifier)
 
-                    Byte _data [ __size ];
+                    Byte _data [ __size ] {0};
 
                     constexpr static auto size = __size;
 
                     using Type = __Type;
 
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-                    constexpr auto construct (
+                    __CDS_cpplang_ConstexprNonLiteralReturn auto construct (
                             __ArgumentTypes && ... arguments
                     ) noexcept -> void {
 
                         new ( this->_data ) __Type ( std :: forward < __ArgumentTypes > ( arguments ) ... );
                     }
 
-                    constexpr auto destruct () noexcept -> void {
+                    __CDS_cpplang_ConstexprNonLiteralReturn auto destruct () noexcept -> void {
 
                         reinterpret_cast < __Type * > ( this->_data )->~__Type ();
                     }
@@ -87,6 +87,36 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> void {
 
                     free ( pBuffer );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __LastType             // NOLINT(bugprone-reserved-identifier)
+                > inline auto __forwardIntoArray (      // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       ** ppElement,
+                        __LastType          && lastValue
+                ) noexcept (false) -> void {
+
+                    (void) new ( * ppElement ) __ElementType ( std :: forward < __LastType > ( lastValue ) );
+                }
+
+
+                template <
+                        typename     __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename     __FirstType,        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __RemainingTypes    // NOLINT(bugprone-reserved-identifier)
+                > inline auto __forwardIntoArray (       // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       **      ppElements,
+                        __FirstType         &&      firstValue,
+                        __RemainingTypes    && ...  remainingValues
+                ) noexcept (false) -> void {
+
+                    (void) new ( * ppElements ) __ElementType ( std :: forward < __FirstType > ( firstValue ) );
+                    __forwardIntoArray (
+                            ppElements + 1,
+                            std :: forward < __RemainingTypes > ( remainingValues ) ...
+                    );
                 }
 
             }

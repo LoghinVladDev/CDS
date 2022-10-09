@@ -3,26 +3,42 @@
 //
 
 #include "primitive/StringTest.h"
-#include "primitive/IntegerTest.h"
-#include "primitive/LongTest.h"
-#include "primitive/BooleanTest.h"
-#include "collection/unordered/JsonTest.h"
+#include "collection/CollectionTest.h"
+#include "collection/mutableCollection/MutableCollectionTest.h"
+#include "collection/mutableCollection/list/ListTest.h"
+#include "collection/set/SetTest.h"
+
+#include <CDS/Array>
+#include <CDS/Pair>
+#include <CDS/smartPointers/SharedPointer>
 
 int main () {
+    auto start = std::chrono::high_resolution_clock::now();
+
     auto test = [] ( Test & test, String const & name ) {
         return test.start(name);
     };
 
-    Array < Pair < SharedPointer < Test >, String > > tests = {
+    cds :: Array < Pair < SharedPointer < Test >, String > > tests = {
             Pair < SharedPointer < Test >, String > { new StringTest (),  "StringTest" },
-            Pair < SharedPointer < Test >, String > { new BooleanTest (),  "BooleanTest" },
-            Pair < SharedPointer < Test >, String > { new IntegerTest (),  "IntegerTest" },
-            Pair < SharedPointer < Test >, String > { new LongTest (),  "LongTest" },
-            Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
+            Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
+            Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
+            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
+            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" }
     };
 
     for ( auto & t : tests ) {
-        if ( ! test ( * t.first(), t.second() ) )
-            break;
+        if ( ! test ( * t.first(), t.second() ) ) {
+            return 1;
+        }
     }
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto diff = std::chrono::duration_cast < std::chrono::nanoseconds > ( (end - start) );
+
+    double power = std::pow(10, 9);
+    std::cout << "Total Duration: " << diff.count() << " nanoseconds ( " << static_cast < double > (diff.count()) / power << " seconds )" << '\n';\
+
+    return 0;
 }

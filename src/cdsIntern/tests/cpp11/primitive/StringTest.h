@@ -7,7 +7,7 @@
 
 #define CDS_TEST_EXPERIMENTAL
 
-#include <cdsIntern/tests/cpp20/Test.h>
+#include "../Test.h"
 
 class StringTest : public Test {
 public:

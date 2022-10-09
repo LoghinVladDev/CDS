@@ -22,6 +22,7 @@
 #undef BACKGROUND_GREEN
 #undef BACKGROUND_BLUE
 #endif
+using namespace cds;
 
 class Test {
 public:
