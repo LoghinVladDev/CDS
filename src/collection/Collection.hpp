@@ -1,1553 +1,1325 @@
-//
-// Created by loghin on 4/24/2022.
-//
+/*
+ * Created by loghin on 6/26/22.
+ */
 
 #ifndef __CDS_COLLECTION_HPP__
-#define __CDS_COLLECTION_HPP__
+#define __CDS_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include <CDS/std-types>
 #include <CDS/Object>
-#include <CDS/meta/TypeTraits>
-#include <CDS/Concepts>
-#include <CDS/smartPointers/UniquePointer>
+#include <CDS/Comparator>
 
-#include "collection/DelegateIteratorRequestType.hpp"
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
-namespace cds {
+#include "collection/CollectionFunctions.hpp"
+
+#include "../shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
+
+#include "../shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
+
+#include "../shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.hpp"
+#include "../shared/collectionInternalCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.hpp"
+#include "../shared/collectionInternalCommunication/client/primitive/RandomInsertionPrimitiveClient.hpp"
+
+#include "../shared/collectionInternalCommunication/client/composite/ContainsOfCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/FindOfImmutableCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/FindByImmutableCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/RemoveOfCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsCompositeClient.hpp"
+
+#include "collection/CollectionConstructs.hpp"
+
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     /**
-     * @class Abstract Object representing any Iterable Container of given elements of type
+     * @class Abstract Object representing any Iterable Container of given elements
      * @tparam __ElementType is the type of elements contained into Collection
-     * @test tested in collection/CollectionTest
+     *
+     * @extends [public]            __CollectionCommunicationChannel - Base class used to communicate requests from Abstract Collection to Derived Collections
+     * @extends [public,implicit]   Object - base cds Class, inherited from __CollectionCommunicationChannel
+     * @extends [protected]         __CollectionFunctions - container for statically stored equals function
+     *
+     * @implements [public]         __CollectionDelegateForwardConstIterableClient - Abstract Iterator Request Client - begin / end / cbegin / cend
+     * @implements [public]         __CollectionConstIteratorRemoveClient - Abstract Iterator Remove Client - remove
+     * @implements [public]         __CollectionRandomInsertionClient - Insertion without specified position Client - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
+     * @implements [public]         __CollectionContainsOfCollectionClient - Contains Functions for Collection parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+     * @implements [public]         __CollectionContainsOfInitializerListClient - Contains Functions for std :: initializer_list parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+     * @implements [public]         __CollectionFindOfCollectionClient - Find Of Functions for Collection parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+     * @implements [public]         __CollectionFindOfInitializerListClient - Find Of Functions for std :: initializer_list parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+     * @implements [public]         __CollectionFindByClient - Find By Functions for Predicates Client - findThat / findFirstThat / findLastThat / findAllThat
+     * @implements [public]         __CollectionRemoveOfCollectionClient - Remove Of Functions for Collection parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+     * @implements [public]         __CollectionRemoveOfInitializerListClient - Remove Of Functions for std :: initializer_list parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+     * @implements [public]         __CollectionRemoveByClient - Remove By Functions for Predicates Client - removeThat / removeFirstThat / removeLastThat / removeAllThat
+     * @implements [public]         __CollectionGenericStatementsClient - Generic Functional Statements for Predicates - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
+     *
+     * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+     * @namespace cds
+     * @public
      */
-    template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-    class Collection : public cds :: Object {
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    class Collection :
+            public __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >,
+            public __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionFindByClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >,
+            public __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >,
+            protected __hidden :: __impl :: __CollectionFunctions < __ElementType > {
 
     public:
         /**
-         * @typedef public alias for __ElementType, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+         * @typedef public alias for __ElementType, the type of the contained elements,
+         * publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+         * @public
          */
-        using ElementType = __ElementType;
-
-    protected:
-        /**
-         * @typedef Alias for std :: initializer_list < __ElementType > or std :: initializer_list < ElementType >
-         */
-        using InitializerList = std :: initializer_list < __ElementType >;
-
-    protected:
-        /**
-         * @interface An Iterator Delegate represents the actual implementation of the iterator done by the derived classes. The Abstract Delegate Iterator is the base used by the Iterator bases
-         */
-        class AbstractDelegateIterator;
-
-    protected:
-        /**
-         * @class The base class for immutable Iterator types. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
-         */
-        class DelegateConstIterator;
+        using ElementType                           = __ElementType;
 
     protected:
         /**
-         * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+         * @typedef protected alias for __CollectionCommunicationChannel base interface - providing communication channel abstract functions __cicch_obtainGenericHandler / __cicch_obtainGenericConstHandler
+         * @protected
          */
-        class AbstractIterator;
-
-    public:
-        /**
-         * @class The Iterator type used for Forward Iteration over immutable values
-         */
-        class ConstIterator;
-
-    public:
-        /**
-         * @class The Iterator type used for Backward Iteration over immutable values
-         */
-        class ConstReverseIterator;
+        using CommunicationChannel                  = __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
 
     protected:
         /**
-         * @enum The types of delegate iterator requests the Collection Base Object can make to its Derived Objects when acquiring an Iterator Delegate Implementation
-         * @test tested in nester class test
+         * @typedef protected alias for __CollectionDelegateForwardConstIterableClient base interface - providing begin / end / cbegin / cend for Abstract Iterators
+         * @protected
          */
-        using DelegateIteratorRequestType = __hidden :: __impl :: DelegateIteratorRequestType;
+        using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
-         * @param iterator : AbstractIterator cref = Constant Reference to an AbstractIterator-derived Object
-         * @exceptsafe
-         * @return AbstractDelegateIterator cptr = Pointer to an Immutable, AbstractDelegateIterator-derived Object
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionConstIteratorRemoveClient base interface - providing remove for Abstract Iterators
+         * @protected
          */
-        constexpr static auto acquireDelegate (
-                AbstractIterator const & iterator
-        ) noexcept -> AbstractDelegateIterator const *;
+        using ConstIteratorRemoveClient             = __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
-         * @param iterator : ConstIterator cref = Constant Reference to an ConstIterator Object
-         * @exceptsafe
-         * @return DelegateConstIterator cptr = Pointer to an Immutable, DelegateConstIterator-derived Object
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionRandomInsertionClient base interface - providing insertion functions - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
+         * @protected
          */
-        constexpr static auto acquireDelegate (
-                ConstIterator const & iterator
-        ) noexcept -> DelegateConstIterator const *;
+        using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
-         * @param iterator : ConstReverseIterator cref = Constant Reference to an ConstIterator Object
-         * @exceptsafe
-         * @return DelegateConstIterator cptr = Pointer to an Immutable, DelegateConstIterator-derived Object
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionContainsOfCollectionClient base interface - providing contains-of functions with a Collection parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+         * @protected
          */
-        constexpr static auto acquireDelegate (
-                ConstReverseIterator const & iterator
-        ) noexcept -> DelegateConstIterator const *;
+        using ContainsOfCollectionClient            = __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to request a DelegateConstIterator from the Iterator constructing functions ( begin/cbegin/rbegin/crbegin/end/cend/rend/crend ) to acquire a DelegateConstIterator containing
-         *      the implementation from the derived class, of requested iterator type
-         * @param requestType : DelegateIteratorRequestType = the type of request, associated with expected returned type of iterator implementation
-         * @exceptsafe
-         * @return UniquePointer < DelegateConstIterator > = Uniquely-Owned Pointer to a DelegateConstIterator-derived object
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionContainsOfInitializerListClient base interface - providing contains-of functions with a std :: initializer_list parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
+         * @protected
          */
-        virtual auto delegateConstIterator (
-                DelegateIteratorRequestType requestType
-        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
-
-
-    public:
-        /**
-         * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
-         * @exceptsafe
-         * @return ConstIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto begin () const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Forward-ConstIterator, indicating after the last element of the collection
-         * @exceptsafe
-         * @return ConstIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto end () const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
-         * @exceptsafe
-         * @return ConstIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto cbegin () const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Forward-ConstIterator, indicating after the last element of the collection
-         * @exceptsafe
-         * @return ConstIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto cend () const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Backward-ConstIterator, indicating to the first element of the collection in reverse iteration order - last element of the collection
-         * @exceptsafe
-         * @return ConstReverseIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto rbegin () const noexcept -> ConstReverseIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Backward-ConstIterator, indicating after the last element of the collection in reverse iteration order - before first element of the collection
-         * @exceptsafe
-         * @return ConstReverseIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto rend () const noexcept -> ConstReverseIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Backward-ConstIterator, indicating to the first element of the collection in reverse iteration order - last element of the collection
-         * @exceptsafe
-         * @return ConstReverseIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto crbegin () const noexcept -> ConstReverseIterator;
-
-    public:
-        /**
-         * @brief Function used to acquire a Backward-ConstIterator, indicating after the last element of the collection in reverse iteration order - before first element of the collection
-         * @exceptsafe
-         * @return ConstReverseIterator = requested Iterator object
-         * @test tested in the class test
-         */
-        auto crend () const noexcept -> ConstReverseIterator;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : ConstIterator cref = Constant Reference to the Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         * @test tested in the class test
-         */
-        virtual auto remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool = 0;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : ConstReverseIterator cref = Constant Reference to the Reverse Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         * @test tested in the class test
-         */
-        virtual auto remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool = 0;
+        using ContainsOfInitializerListClient       = __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : ConstIterator cptr = Address to an array of Constant ConstIterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
-         * @exceptsafe
-         * @return Size = number of elements that were successfully removed
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionFindOfCollectionClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+         * @protected
          */
-        virtual auto remove (
-                ConstIterator   const * pIterators,
-                Size                    size
-        ) noexcept -> Size = 0;
+        using FindOfCollectionClient                = __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
 
     protected:
         /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : ConstReverseIterator cptr = Address to an array of Constant ConstReverseIterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
-         * @exceptsafe
-         * @return Size = number of elements that were successfully removed
-         * @test tested in the class test
+         * @typedef protected alias for __CollectionFindOfInitializerListClient base interface - providing find-of functions with a std :: initializer_list parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+         * @protected
          */
-        virtual auto remove (
-                ConstReverseIterator    const * pIterators,
-                Size                            size
-        ) noexcept -> Size = 0;
+        using FindOfInitializerListClient           = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
 
-    public:
-        /**
-         * @brief Function used to remove a given number of elements based on the validation by a given predicate ( bool ( ElementType ) function )
-         * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-         * @param count : Size = maximum number of elements to remove
-         * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
-         * @exceptsafe if predicate is exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto remove (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that matches the validation of a given predicate ( bool ( ElementType ) function )
-         * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-         * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
-         * @exceptsafe if predicate is exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto removeFirst (
-                __Predicate const & predicate
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that matches the validation of a given predicate ( bool ( ElementType ) function )
-         * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-         * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
-         * @exceptsafe if predicate is exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto removeLast (
-                __Predicate const & predicate
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove all the elements that match the validation of a given predicate ( bool ( ElementType ) function )
-         * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-         * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
-         * @exceptsafe if predicate is exceptsafe
-         * @return Size = number of elements that were removed as a result of this call
-         * @test tested in the class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto removeAll (
-                __Predicate const & predicate
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements based by comparison to a given element
-         * @param count : Size = maximum number of elements to remove
-         * @param element : ElementType cref = Constant Reference to the element to compare collection elements to
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto remove (
-                Size                count,
-                ElementType const & element
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that matches the comparison to a given element
-         * @param element : ElementType cref = Constant Reference to the element to compare collection elements to
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeFirst (
-                ElementType const & element
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that matches the comparison to a given element
-         * @param element : ElementType cref = Constant Reference to the element to compare collection elements to
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeLast (
-                ElementType const & element
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove all the elements that match the comparison to a given element
-         * @param element : ElementType cref = Constant Reference to the element to compare collection elements to
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeAll (
-                ElementType const & element
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are contained in a given collection
-         * @param count : Size = maximum number of elements to remove
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeOf (
-                Size                                count,
-                Collection < ElementType >  const & collection
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that is contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeFirstOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that is contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeLastOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove all the elements that are contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeAllOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are not contained in a given collection
-         * @param count : Size = maximum number of elements to remove
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for not contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeNotOf (
-                Size                        count,
-                Collection < ElementType >    const & collection
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that is not contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for not contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeFirstNotOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that is not contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for not contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeLastNotOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are not contained in a given collection
-         * @param collection : Collection < ElementType > cref = Constant Reference a Collection given for not contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeAllNotOf (
-                Collection < ElementType > const & collection
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are contained in a given initializer list
-         * @param count : Size = maximum number of elements to remove
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeOf (
-                Size                    count,
-                InitializerList const & list
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that is contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeFirstOf (
-                InitializerList const & list
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that is contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeLastOf (
-                InitializerList const & list
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove all the elements that are contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeAllOf (
-                InitializerList const & list
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are not contained in a given initializer list
-         * @param count : Size = maximum number of elements to remove
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeNotOf (
-                Size                    count,
-                InitializerList const & list
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to remove the first element that is not contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeFirstNotOf (
-                InitializerList const & list
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove the last element that is not contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return bool = true if one element was removed, false otherwise
-         * @test tested in the class test
-         */
-        auto removeLastNotOf (
-                InitializerList const & list
-        ) noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to remove a given number of elements that are not contained in a given initializer list
-         * @param list : Collection < T > :: InitializerList cref = Constant Reference an Initializer List given for contains check
-         * @exceptsafe
-         * @return Size = number of removed elements
-         * @test tested in the class test
-         */
-        auto removeAllNotOf (
-                InitializerList const & list
-        ) noexcept -> Size;
-
-    public:
-        /**
-         * @brief Function used to apply an action over each element of the collection
-         * @tparam __Action the type of the action given as a parameter, the type must be callable and compatible with the void ( Decay < ElementType > ) function signature
-         * @param action : __Action cref = Constant Reference to callable object, to be called with each element of the collection as a parameter
-         * @exceptsafe if __Action is exceptsafe
-         * @test tested in base class test
-         */
-        template < typename __Action > // NOLINT(bugprone-reserved-identifier)
-        auto forEach (
-                __Action const & action
-        ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains exactly 'count' elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param count : Size = number of elements required to match
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
-         *      If no predicate is given, 'some' must yield the same value as 'caller.size() == count'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if number of elements validated == count, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto some (
-                Size                count,
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains at least 'count' elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param count : Size = minimum number of elements required to match
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'atLeast' must yield the same value as 'caller.size() >= count'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if number of elements validated >= count, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto atLeast (
-                Size                count,
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains at most 'count' elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param count : Size = maximum number of elements required to match
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'atMost' must yield the same value as 'caller.size() <= count'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if number of elements validated <= count, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto atMost (
-                Size                count,
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains more than 'count' elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param count : Size = minimum number of elements required to match
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'moreThan' must yield the same value as 'caller.size() > count'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if number of elements validated > count, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto moreThan (
-                Size                count,
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains less than 'count' elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param count : Size = maximum number of elements required to match
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'fewerThan' must yield the same value as 'caller.size() < count'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if number of elements validated < count, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto fewerThan (
-                Size                count,
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to acquire the number of elements that are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'count' must yield the same value as 'caller.size()'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Size = number of elements that are validated by the given predicate
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto count (
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Size;
-
-    public:
-        /**
-         * @brief Function used to check if any of the collection's elements are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'any' must yield the same value as 'caller.size() > 0'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if at least one element is validated by the given predicate, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto any (
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if all of the collection's elements are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'all' must return 'true'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if all of the collection's elements are validated by the given predicate, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto all (
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if none of the collection's elements are validated by a given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-         *      If no predicate is given, 'none' must yield the same value as 'caller.empty()'
-         * @exceptsafe if Predicate is exceptsafe
-         * @return bool = true if none of the collection's elements are validated by the given predicate, false otherwise
-         * @test tested in base class test
-         */
-        template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto none (
-                __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
-         * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto find (
-                Size                                        maxCount,
-                ElementType                         const & element,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto find (
-                Size                maxCount,
-                ElementType const & element
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the first value that is equal to the given 'element' value
-         * @param element : ElementType cref = Constant Reference to an element to compare the collection's elements to
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the first value equal to the given 'element' value, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findFirst (
-                ElementType const & element
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the last value that is equal to the given 'element' value
-         * @param element : ElementType cref = Constant Reference to an element to compare the collection's elements to
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the last value equal to the given 'element' value, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findLast (
-                ElementType const & element
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values matching the comparison to the given 'element' value
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAll (
-                ElementType                         const & element,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values matching the comparison to the given 'element' value
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-         * @exceptsafe
-         * @return __CollectionType < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAll (
-                ElementType const & element
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findOf (
-                Size                                maxCount,
-                Collection < ElementType >  const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the first value that is also found in the 'elements' collection
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the first value also found in the 'elements' collection, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findFirstOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the last value that is also found in the 'elements' collection
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the last value also found in the 'elements' collection, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findLastOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllOf (
-                Collection < ElementType >          const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findNotOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findNotOf (
-                Size                                maxCount,
-                Collection < ElementType >  const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the first value that is not found in the 'elements' collection
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the first value not found in the 'elements' collection, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findFirstNotOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the last value that is not found in the 'elements' collection
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the last value not found in the 'elements' collection, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findLastNotOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllNotOf (
-                Collection < ElementType >          const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' collection
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllNotOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findOf (
-                Size                    maxCount,
-                InitializerList const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the first value that is also found in the 'elements' InitializerList
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the first value also found in the 'elements' list, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findFirstOf (
-                InitializerList const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the last value that is also found in the 'elements' InitializerList
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the last value also found in the 'elements' list, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findLastOf (
-                InitializerList const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllOf (
-                InitializerList                     const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllOf (
-                InitializerList const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findNotOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
+    protected:
         /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
+         * @typedef protected alias for __CollectionFindByClient base interface - providing find-by-predicate functions - findThat / findFirstThat / findLastThat / findAllThat
+         * @protected
          */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findNotOf (
-                Size                    maxCount,
-                InitializerList const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
+        using FindByClient                          = __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
 
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the first value that is not found in the 'elements' InitializerList
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the first value not found in the 'elements' list, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findFirstNotOf (
-                InitializerList const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return the ConstIterator matching the last value that is not found in the 'elements' InitializerList
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return ConstIterator = iterator matching the last value not found in the 'elements' list, caller.end() if no value matches
-         * @test tested in base class test
-         */
-        auto findLastNotOf (
-                InitializerList const & elements
-        ) const noexcept -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllNotOf (
-                InitializerList                     const & elements,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept -> __CollectionType < ConstIterator > &;
-
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-         * @exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-        auto findAllNotOf (
-                InitializerList const & elements
-        ) const noexcept -> __CollectionType < ConstIterator >;
-
-    public:
+    protected:
         /**
-         * @brief Function used to populate a given Collection derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
+         * @typedef protected alias for __CollectionRemoveOfCollectionClient base interface - providing remove-of functions with a Collection parameter - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+         * @protected
          */
-        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto find (
-                Size                                        maxCount,
-                __Predicate                         const & predicate,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > &;
+        using RemoveOfCollectionClient              = __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >;
 
-    public:
-        /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param maxCount : Size = maximum number of iterators to add to the returned object
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
-         */
-        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto find (
-                Size                maxCount,
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
-
-    public:
-        /**
-         * @brief Function used to return an iterator to the first element validated by the given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < ElementType > :: ConstIterator = Iterator to the first element validated by the given predicate, caller.end() if none exist
-         * @test tested in base class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto findFirst (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
-
-    public:
-        /**
-         * @brief Function used to return an iterator to the last element validated by the given predicate
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < ElementType > :: ConstIterator = Iterator to the last element validated by the given predicate, caller.end() if none exist
-         * @test tested in base class test
-         */
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto findLast (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
-
-    public:
+    protected:
         /**
-         * @brief Function used to populate a given Collection derived type of Iterators with all iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-         * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
-         * @test tested in base class test
+         * @typedef protected alias for __CollectionRemoveOfInitializerListClient base interface - providing remove-of functions with a std :: initializer_list parameter - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
+         * @protected
          */
-        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto findAll (
-                __Predicate                         const & predicate,
-                __CollectionType < ConstIterator >        & storeIn
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > &;
+        using RemoveOfInitializerListClient         = __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >;
 
-    public:
+    protected:
         /**
-         * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-         * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-         * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-         * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
-         * @exceptsafe if Predicate is exceptsafe
-         * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
-         * @test tested in base class test
+         * @typedef protected alias for __CollectionRemoveByClient base interface - providing remove-by-predicate functions - removeThat / removeFirstThat / removeLastThat / removeAllThat
+         * @protected
          */
-        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto findAll (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
+        using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
 
-    public:
+    protected:
         /**
-         * @brief Bool cast operator, functionality equal to python's iterable empty check. '(bool) collection' is equivalent to '! collection.empty()'
-         * @exceptsafe
-         * @return bool = true if collection is not empty, false otherwise
-         * @test tested in base class test
+         * @typedef protected alias for __CollectionGenericStatementsClient base interface - providing functional-predicate functions - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
+         * @protected
          */
-        __CDS_cpplang_ConstexprPureAbstract __CDS_Implicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
+        using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
 
-    public:
+    protected:
         /**
-         * @brief String conversion function, used to obtain String representation of the object
-         * @exceptsafe
-         * @return String = string representation
-         * @test tested in base class test
+         * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
+         * @protected
          */
-        __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
+        using __GenericHandler                      = typename CommunicationChannel :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
 
-    public:
+    protected:
         /**
-         * @brief Hash function
-         * @exceptsafe
-         * @return Index = hash code value of the instance
-         * @test tested in base class test
+         * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
+         * @protected
          */
-        __CDS_NoDiscard auto hash () const noexcept -> Size override;
+        using __GenericConstHandler                 = typename CommunicationChannel :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
 
     public:
         /**
-         * @brief Explicit Comparison Function with generic CDS/Object
-         * @param object : Object cref = Constant Reference to an Object-derived instance
-         * @exceptsafe
-         * @return bool = true if objects are equal, false otherwise
-         * @test tested in base class test
+         * @typedef The Const Iterator Type, imported from Abstract Forward Iterator Client
+         * @public
          */
-        __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override;
+        using ConstIterator                         = typename DelegateForwardConstIterableClient :: ConstIterator;
 
     protected:
         /**
          * @brief Default Constructor
          * @exceptsafe
-         * @test tested in base class test
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @protected
          */
-        constexpr Collection () noexcept = default;
+        constexpr Collection () noexcept;
 
     protected:
+        /**
+         * @brief Copy Constructor
+         * @param [in] collection : Collection cref = Constant Reference to a collection to copy data from
+         * @exceptsafe
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @protected
+         */
         constexpr Collection (
                 Collection const & collection
         ) noexcept;
 
     protected:
+        /**
+         * @brief Move Constructor
+         * @param [in] collection : Collection mref = Move Reference to a collection to copy data from
+         * @exceptsafe
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @protected
+         */
         constexpr Collection (
                 Collection && collection
         ) noexcept;
 
     public:
         /**
-         * @brief Default Destructor
+         * @brief Destructor
          * @exceptsafe
-         * @test tested in base class test
+         * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+         * @public
          */
-        __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
+        __CDS_cpplang_ConstexprDestructor ~Collection() noexcept;
 
     public:
         /**
-         * @brief Function used to clear the collection, removing all elements from it
-         * @exceptsafe
-         * @test tested in base class test
+         * @inherit begin function inherited from DelegateForwardConstIterableClient interface.
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+         *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+         * @public
          */
-        virtual auto clear () noexcept -> void = 0;
+        using DelegateForwardConstIterableClient :: begin;
+
+    public:
+        /**
+         * @inherit end function inherited from DelegateForwardConstIterableClient interface.
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
+         *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: end;
+
+    public:
+        /**
+         * @inherit cbegin function inherited from DelegateForwardConstIterableClient interface.
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
+         *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: cbegin;
+
+    public:
+        /**
+         * @inherit cend function inherited from DelegateForwardConstIterableClient interface.
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
+         *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: cend;
+
+    public:
+        /**
+         * @inherit forEach functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00201-FSMF-forEach }
+         * @public
+         */
+        using GenericStatementsClient :: forEach;
+
+    public:
+        /**
+         * @inherit some functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00136-FS-someExact, CTC-00137-FS-someLessFalse, CTC-00138-someMoreFalse }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00202-FSMF-someEqual, CTC-00203-FSMF-someLess, CTC-00204-someMore }
+         * @public
+         */
+        using GenericStatementsClient :: some;
+
+    public:
+        /**
+         * @inherit atLeast functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00132-FS-atLeastTrue, CTC-00133-FS-atLeastCloseTrue, CTC-00134-atLeastCloseFalse, CTC-00135-atLeastFalse }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00205-FSMF-atLeast, CTC-00206-FSMF-atLeastLess, CTC-00207-atLeastMore }
+         * @public
+         */
+        using GenericStatementsClient :: atLeast;
+
+    public:
+        /**
+         * @inherit atMost functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00128-FS-atMostTrue, CTC-00129-FS-atMostCloseTrue, CTC-00130-atMostCloseFalse, CTC-00131-atMostFalse }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00208-FSMF-atMost, CTC-00209-FSMF-atMostLess, CTC-00210-atMostMore }
+         * @public
+         */
+        using GenericStatementsClient :: atMost;
+
+    public:
+        /**
+         * @inherit moreThan functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00123-FS-moreThanTrue, CTC-00124-FS-moreThanCloseTrue, CTC-00125-moreThanCloseFalse, CTC-00126-moreThanFalse, CTC-00127-moreThanCompletelyFalse }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00211-FSMF-moreThan, CTC-00212-FSMF-moreThanLess, CTC-00213-moreThanMore }
+         * @public
+         */
+        using GenericStatementsClient :: moreThan;
+
+    public:
+        /**
+         * @inherit fewerThan functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00118-FS-fewerThanTrue, CTC-00119-FS-fewerThanCloseTrue, CTC-00120-fewerThanCloseFalse, CTC-00121-fewerThanFalse, CTC-00122-fewerThanCompletelyFalse }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00214-FSMF-fewerThan, CTC-00215-FSMF-fewerThanLess, CTC-00216-fewerThanMore }
+         * @public
+         */
+        using GenericStatementsClient :: fewerThan;
+
+    public:
+        /**
+         * @inherit count functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00113-FS-countProp1, CTC-00114-FS-countProp2, CTC-00115-countProp3, CTC-00116-countProp4, CTC-00117-countPropLbd }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00217-FSMF-countExact }
+         * @public
+         */
+        using GenericStatementsClient :: count;
+
+    public:
+        /**
+         * @inherit any functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00101-FS-anyNone, CTC-00102-FS-anyOne, CTC-00103-anyMore, CTC-00104-anyAll }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00218-FSMF-anyNone, CTC-00219-FSMF-anyOne, CTC-00220-anyMore, CTC-00221-anyAll }
+         * @public
+         */
+        using GenericStatementsClient :: any;
+
+    public:
+        /**
+         * @inherit all functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00105-FS-allNone, CTC-00106-FS-allOne, CTC-00107-allMore, CTC-00108-allAll }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00222-FSMF-allNone, CTC-00223-FSMF-allOne, CTC-00224-allMore, CTC-00225-allAll }
+         * @public
+         */
+        using GenericStatementsClient :: all;
+
+    public:
+        /**
+         * @inherit none functional call, inherited from GenericStatementsClient interface
+         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00109-FS-noneNone, CTC-00110-FS-noneOne, CTC-00111-noneMore, CTC-00112-noneAll }
+         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00226-FSMF-noneNone, CTC-00227-FSMF-noneOne, CTC-00228-noneMore, CTC-00229-noneAll }
+         * @public
+         */
+        using GenericStatementsClient :: none;
+
+    public:
+        /**
+         * @inherit containsAnyOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-Collection Group],
+         *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-Collection Group],
+         *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-Collection Group],
+         *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-Collection Group],
+         *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using ContainsOfCollectionClient :: containsAnyOf;
+
+    public:
+        /**
+         * @inherit containsAllOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-Collection Group],
+         *      CTC-00307-CO-containsAllOfCollectionOneCommon [-Collection Group],
+         *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-Collection Group],
+         *      CTC-00309-CO-containsAllOfCollectionAllCommon [-Collection Group],
+         *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using ContainsOfCollectionClient :: containsAllOf;
+
+    public:
+        /**
+         * @inherit containsAnyNotOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-Collection Group],
+         *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-Collection Group],
+         *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-Collection Group],
+         *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-Collection Group],
+         *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using ContainsOfCollectionClient :: containsAnyNotOf;
+
+    public:
+        /**
+         * @inherit containsNoneOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-Collection Group],
+         *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-Collection Group],
+         *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-Collection Group],
+         *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-Collection Group],
+         *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using ContainsOfCollectionClient :: containsNoneOf;
+
+    public:
+        /**
+         * @inherit containsAnyOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-InitializerList Group],
+         *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-InitializerList Group],
+         *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-InitializerList Group],
+         *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-InitializerList Group],
+         *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using ContainsOfInitializerListClient :: containsAnyOf;
+
+    public:
+        /**
+         * @inherit containsAllOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-InitializerList Group],
+         *      CTC-00307-CO-containsAllOfCollectionOneCommon [-InitializerList Group],
+         *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-InitializerList Group],
+         *      CTC-00309-CO-containsAllOfCollectionAllCommon [-InitializerList Group],
+         *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using ContainsOfInitializerListClient :: containsAllOf;
+
+    public:
+        /**
+         * @inherit containsAnyNotOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-InitializerList Group],
+         *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-InitializerList Group],
+         *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-InitializerList Group],
+         *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-InitializerList Group],
+         *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using ContainsOfInitializerListClient :: containsAnyNotOf;
+
+    public:
+        /**
+         * @inherit containsNoneOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
+         *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-InitializerList Group],
+         *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-InitializerList Group],
+         *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-InitializerList Group],
+         *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-InitializerList Group],
+         *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using ContainsOfInitializerListClient :: containsNoneOf;
+
+    public:
+        /**
+         * @inherit remove ( ConstIterator ) call, inherited from ConstIteratorPrimitiveClient interface
+         * @test Suite: CTS-00001, Group: CTG-00350-RAIT, Test Cases: {
+         *      CTC-00351-RAIT-removeAtFront,
+         *      CTC-00352-RAIT-removeInBounds,
+         *      CTC-00353-RAIT-removeAtEnd,
+         *      CTC-00355-RAIT-removeBeforeFront,
+         *      CTC-00356-RAIT-removeFromOther
+         * }
+         * @public
+         */
+        using ConstIteratorRemoveClient :: remove;
+
+    public:
+        /**
+         * @inherit removeThat ( maxCount, Predicate ) call, inherited from RemoveByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+         *      CTC-00401-RB-removeThatMatchesNone,
+         *      CTC-00402-RB-removeThatMatchesOne,
+         *      CTC-00403-RB-removeThatMatchesMoreLessThanLimit,
+         *      CTC-00404-RB-removeThatMatchesMoreExact,
+         *      CTC-00405-RB-removeThatMatchesMoreThanLimit,
+         *      CTC-00406-RB-removeThatMatchesAll,
+         *      CTC-00419-RB-memberRemoveThat
+         * }
+         * @public
+         */
+        using RemoveByClient :: removeThat;
+
+    public:
+        /**
+         * @inherit removeFirstThat ( Predicate ) call, inherited from RemoveByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+         *      CTC-00407-RB-removeFirstThatMatchesNone,
+         *      CTC-00408-RB-removeFirstThatMatchesOne,
+         *      CTC-00409-RB-removeFirstThatMatchesMore,
+         *      CTC-00410-RB-removeFirstThatMatchesAll,
+         *      CTC-00420-RB-memberRemoveFirstThat
+         * }
+         * @public
+         */
+        using RemoveByClient :: removeFirstThat;
+
+    public:
+        /**
+         * @inherit removeLastThat ( Predicate ) call, inherited from RemoveByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+         *      CTC-00411-RB-removeLastThatMatchesNone,
+         *      CTC-00412-RB-removeLastThatMatchesOne,
+         *      CTC-00413-RB-removeLastThatMatchesMore,
+         *      CTC-00414-RB-removeLastThatMatchesAll,
+         *      CTC-00421-RB-memberRemoveLastThat
+         * }
+         * @public
+         */
+        using RemoveByClient :: removeLastThat;
+
+    public:
+        /**
+         * @inherit removeAllThat ( Predicate ) call, inherited from RemoveByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: {
+         *      CTC-00415-RB-removeAllThatMatchesNone,
+         *      CTC-00416-RB-removeAllThatMatchesOne,
+         *      CTC-00417-RB-removeAllThatMatchesMore,
+         *      CTC-00418-RB-removeAllThatMatchesAll,
+         *      CTC-00422-RB-memberRemoveAllThat
+         * }
+         * @public
+         */
+        using RemoveByClient :: removeAllThat;
+
+    public:
+        /**
+         * @inherit removeOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00451-RO-removeOfNoneCommon [-Collection Group],
+         *      CTC-00452-RO-removeOfOneCommon [-Collection Group],
+         *      CTC-00453-RO-removeOfMoreLessThanLimitCommon [-Collection Group],
+         *      CTC-00454-RO-removeOfMoreCommon [-Collection Group],
+         *      CTC-00455-RO-removeOfMoreMoreThanLimitCommon [-Collection Group],
+         *      CTC-00456-RO-removeOfAllCommon [-Collection Group],
+         *      CTC-00457-RO-removeOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeOf;
+
+    public:
+        /**
+         * @inherit removeFirstOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00501-RO-removeFirstOfNoneCommon [-Collection Group],
+         *      CTC-00502-RO-removeFirstOfOneCommon [-Collection Group],
+         *      CTC-00503-RO-removeFirstOfMoreCommon [-Collection Group],
+         *      CTC-00504-RO-removeFirstOfAllCommon [-Collection Group],
+         *      CTC-00505-RO-removeFirstOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeFirstOf;
+
+    public:
+        /**
+         * @inherit removeLastOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00506-RO-removeLastOfNoneCommon [-Collection Group],
+         *      CTC-00507-RO-removeLastOfOneCommon [-Collection Group],
+         *      CTC-00508-RO-removeLastOfMoreCommon [-Collection Group],
+         *      CTC-00509-RO-removeLastOfAllCommon [-Collection Group],
+         *      CTC-00510-RO-removeLastOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeLastOf;
+
+    public:
+        /**
+         * @inherit removeAllOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00481-RO-removeAllOfNoneCommon [-Collection Group],
+         *      CTC-00482-RO-removeAllOfOneCommon [-Collection Group],
+         *      CTC-00483-RO-removeAllOfMoreCommon [-Collection Group],
+         *      CTC-00484-RO-removeAllOfAllCommon [-Collection Group],
+         *      CTC-00485-RO-removeAllOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeAllOf;
+
+    public:
+        /**
+         * @inherit removeNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00458-RO-removeNotOfNoneCommon [-Collection Group],
+         *      CTC-00459-RO-removeNotOfOneCommon [-Collection Group],
+         *      CTC-00460-RO-removeNotOfMoreLessThanLimitCommon [-Collection Group],
+         *      CTC-00461-RO-removeNotOfMoreCommon [-Collection Group],
+         *      CTC-00462-RO-removeNotOfMoreMoreThanLimitCommon [-Collection Group],
+         *      CTC-00463-RO-removeNotOfAllCommon [-Collection Group],
+         *      CTC-00464-RO-removeNotOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeNotOf;
+
+    public:
+        /**
+         * @inherit removeFirstNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00511-RO-removeFirstNotOfNoneCommon [-Collection Group],
+         *      CTC-00512-RO-removeFirstNotOfOneCommon [-Collection Group],
+         *      CTC-00513-RO-removeFirstNotOfMoreCommon [-Collection Group],
+         *      CTC-00514-RO-removeFirstNotOfAllCommon [-Collection Group],
+         *      CTC-00515-RO-removeFirstNotOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeFirstNotOf;
+
+    public:
+        /**
+         * @inherit removeLastNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00516-RO-removeLastNotOfNoneCommon [-Collection Group],
+         *      CTC-00517-RO-removeLastNotOfOneCommon [-Collection Group],
+         *      CTC-00518-RO-removeLastNotOfMoreCommon [-Collection Group],
+         *      CTC-00519-RO-removeLastNotOfAllCommon [-Collection Group],
+         *      CTC-00520-RO-removeLastNotOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeLastNotOf;
+
+    public:
+        /**
+         * @inherit removeAllNotOf ( Collection ) call, inherited from RemoveOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00486-RO-removeAllNotOfNoneCommon [-Collection Group],
+         *      CTC-00487-RO-removeAllNotOfOneCommon [-Collection Group],
+         *      CTC-00488-RO-removeAllNotOfMoreCommon [-Collection Group],
+         *      CTC-00489-RO-removeAllNotOfAllCommon [-Collection Group],
+         *      CTC-00490-RO-removeAllNotOfAllAndMoreCommon [-Collection Group]
+         * }
+         * @public
+         */
+        using RemoveOfCollectionClient :: removeAllNotOf;
+
+    public:
+        /**
+         * @inherit removeOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00451-RO-removeOfNoneCommon [-InitializerList Group],
+         *      CTC-00452-RO-removeOfOneCommon [-InitializerList Group],
+         *      CTC-00453-RO-removeOfMoreLessThanLimitCommon [-InitializerList Group],
+         *      CTC-00454-RO-removeOfMoreCommon [-InitializerList Group],
+         *      CTC-00455-RO-removeOfMoreMoreThanLimitCommon [-InitializerList Group],
+         *      CTC-00456-RO-removeOfAllCommon [-InitializerList Group],
+         *      CTC-00457-RO-removeOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeOf;
+
+    public:
+        /**
+         * @inherit removeFirstOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00501-RO-removeFirstOfNoneCommon [-InitializerList Group],
+         *      CTC-00502-RO-removeFirstOfOneCommon [-InitializerList Group],
+         *      CTC-00503-RO-removeFirstOfMoreCommon [-InitializerList Group],
+         *      CTC-00504-RO-removeFirstOfAllCommon [-InitializerList Group],
+         *      CTC-00505-RO-removeFirstOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeFirstOf;
+
+    public:
+        /**
+         * @inherit removeLastOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00506-RO-removeLastOfNoneCommon [-InitializerList Group],
+         *      CTC-00507-RO-removeLastOfOneCommon [-InitializerList Group],
+         *      CTC-00508-RO-removeLastOfMoreCommon [-InitializerList Group],
+         *      CTC-00509-RO-removeLastOfAllCommon [-InitializerList Group],
+         *      CTC-00510-RO-removeLastOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeLastOf;
+
+    public:
+        /**
+         * @inherit removeAllOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00481-RO-removeAllOfNoneCommon [-InitializerList Group],
+         *      CTC-00482-RO-removeAllOfOneCommon [-InitializerList Group],
+         *      CTC-00483-RO-removeAllOfMoreCommon [-InitializerList Group],
+         *      CTC-00484-RO-removeAllOfAllCommon [-InitializerList Group],
+         *      CTC-00485-RO-removeAllOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeAllOf;
+
+    public:
+        /**
+         * @inherit removeNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00458-RO-removeNotOfNoneCommon [-InitializerList Group],
+         *      CTC-00459-RO-removeNotOfOneCommon [-InitializerList Group],
+         *      CTC-00460-RO-removeNotOfMoreLessThanLimitCommon [-InitializerList Group],
+         *      CTC-00461-RO-removeNotOfMoreCommon [-InitializerList Group],
+         *      CTC-00462-RO-removeNotOfMoreMoreThanLimitCommon [-InitializerList Group],
+         *      CTC-00463-RO-removeNotOfAllCommon [-InitializerList Group],
+         *      CTC-00464-RO-removeNotOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeNotOf;
+
+    public:
+        /**
+         * @inherit removeFirstNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00511-RO-removeFirstNotOfNoneCommon [-InitializerList Group],
+         *      CTC-00512-RO-removeFirstNotOfOneCommon [-InitializerList Group],
+         *      CTC-00513-RO-removeFirstNotOfMoreCommon [-InitializerList Group],
+         *      CTC-00514-RO-removeFirstNotOfAllCommon [-InitializerList Group],
+         *      CTC-00515-RO-removeFirstNotOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeFirstNotOf;
+
+    public:
+        /**
+         * @inherit removeLastNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00516-RO-removeLastNotOfNoneCommon [-InitializerList Group],
+         *      CTC-00517-RO-removeLastNotOfOneCommon [-InitializerList Group],
+         *      CTC-00518-RO-removeLastNotOfMoreCommon [-InitializerList Group],
+         *      CTC-00519-RO-removeLastNotOfAllCommon [-InitializerList Group],
+         *      CTC-00520-RO-removeLastNotOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeLastNotOf;
+
+    public:
+        /**
+         * @inherit removeAllNotOf ( std :: initializer_list ) call, inherited from RemoveOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: {
+         *      CTC-00486-RO-removeAllNotOfNoneCommon [-InitializerList Group],
+         *      CTC-00487-RO-removeAllNotOfOneCommon [-InitializerList Group],
+         *      CTC-00488-RO-removeAllNotOfMoreCommon [-InitializerList Group],
+         *      CTC-00489-RO-removeAllNotOfAllCommon [-InitializerList Group],
+         *      CTC-00490-RO-removeAllNotOfAllAndMoreCommon [-InitializerList Group]
+         * }
+         * @public
+         */
+        using RemoveOfInitializerListClient :: removeAllNotOf;
+
+    public:
+        /**
+         * @inherit findThat ( Predicate ) call, inherited from FindByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+         *      CTC-00601-FT-findThatStoreInMatchingNone,
+         *      CTC-00602-FT-findThatStoreInMatchingOne,
+         *      CTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit,
+         *      CTC-00604-FT-findThatStoreInMatchingMore,
+         *      CTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit,
+         *      CTC-00606-FT-findThatStoreInMatchingAll,
+         *      CTC-00607-FT-findThatStoreInMatchingAllAndMore,
+         *      CTC-00608-FT-findThatReturnedMatchingNone,
+         *      CTC-00609-FT-findThatReturnedMatchingOne,
+         *      CTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit,
+         *      CTC-00611-FT-findThatReturnedMatchingMore,
+         *      CTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit,
+         *      CTC-00613-FT-findThatReturnedMatchingAll,
+         *      CTC-00614-FT-findThatReturnedMatchingAllAndMore
+         * }
+         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+         *      CTC-00651-FTMF-findThatStoreInMemberFunction,
+         *      CTC-00652-FTMF-findThatReturnedMemberFunction
+         * }
+         * @public
+         */
+        using FindByClient :: findThat;
+
+    public:
+        /**
+         * @inherit findFirstThat ( Predicate ) call, inherited from FindByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+         *      CTC-00615-FT-findFirstThatMatchingNone,
+         *      CTC-00616-FT-findFirstThatMatchingOne,
+         *      CTC-00617-FT-findFirstThatMatchingMore,
+         *      CTC-00618-FT-findFirstThatMatchingAll,
+         *      CTC-00619-FT-findFirstThatMatchingAllAndMore
+         * }
+         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+         *      CTC-00653-FTMF-findFirstThatMemberFunction
+         * }
+         * @public
+         */
+        using FindByClient :: findFirstThat;
+
+    public:
+        /**
+         * @inherit findLastThat ( Predicate ) call, inherited from FindByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+         *      CTC-00620-FT-findLastThatMatchingNone,
+         *      CTC-00621-FT-findLastThatMatchingOne,
+         *      CTC-00622-FT-findLastThatMatchingMore,
+         *      CTC-00623-FT-findLastThatMatchingAll,
+         *      CTC-00624-FT-findLastThatMatchingAllAndMore
+         * }
+         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+         *      CTC-00654-FTMF-findLastThatMemberFunction
+         * }
+         * @public
+         */
+        using FindByClient :: findLastThat;
+
+    public:
+        /**
+         * @inherit findAllThat ( Predicate ) call, inherited from FindByClient interface
+         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
+         *      CTC-00625-FT-findAllThatStoreInMatchingNone,
+         *      CTC-00626-FT-findAllThatStoreInMatchingOne,
+         *      CTC-00627-FT-findAllThatStoreInMatchingMore,
+         *      CTC-00628-FT-findAllThatStoreInMatchingAll,
+         *      CTC-00629-FT-findAllThatStoreInMatchingAllAndMore,
+         *      CTC-00630-FT-findAllThatReturnedMatchingNone,
+         *      CTC-00631-FT-findAllThatReturnedMatchingOne,
+         *      CTC-00632-FT-findAllThatReturnedMatchingMore,
+         *      CTC-00633-FT-findAllThatReturnedMatchingAll,
+         *      CTC-00634-FT-findAllThatReturnedMatchingAllAndMore
+         * }
+         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
+         *      CTC-00655-FTMF-findAllThatStoreInMemberFunction,
+         *      CTC-00656-FTMF-findAllThatReturnedMemberFunction
+         * }
+         * @public
+         */
+        using FindByClient :: findAllThat;
+
+    public:
+        /**
+         * @inherit findOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00701-FO-findOfStoreInMatchingNone [-Collection Group],
+         *      CTC-00702-FO-findOfStoreInMatchingOne [-Collection Group],
+         *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-Collection Group],
+         *      CTC-00704-FO-findOfStoreInMatchingMore [-Collection Group],
+         *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
+         *      CTC-00706-FO-findOfStoreInMatchingAll [-Collection Group],
+         *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-Collection Group],
+         *      CTC-00708-FO-findOfReturnedMatchingNone [-Collection Group],
+         *      CTC-00709-FO-findOfReturnedMatchingOne [-Collection Group],
+         *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-Collection Group],
+         *      CTC-00711-FO-findOfReturnedMatchingMore [-Collection Group],
+         *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
+         *      CTC-00713-FO-findOfReturnedMatchingAll [-Collection Group],
+         *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findOf;
+
+    public:
+        /**
+         * @inherit findFirstOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00715-FO-findFirstOfMatchingNone [-Collection Group],
+         *      CTC-00716-FO-findFirstOfMatchingOne [-Collection Group],
+         *      CTC-00717-FO-findFirstOfMatchingMore [-Collection Group],
+         *      CTC-00718-FO-findFirstOfMatchingAll [-Collection Group],
+         *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findFirstOf;
+
+    public:
+        /**
+         * @inherit findLastOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00720-FO-findLastOfMatchingNone [-Collection Group],
+         *      CTC-00721-FO-findLastOfMatchingOne [-Collection Group],
+         *      CTC-00722-FO-findLastOfMatchingMore [-Collection Group],
+         *      CTC-00723-FO-findLastOfMatchingAll [-Collection Group],
+         *      CTC-00724-FO-findLastOfMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findLastOf;
+
+    public:
+        /**
+         * @inherit findAllOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00725-FO-findAllOfStoreInMatchingNone [-Collection Group],
+         *      CTC-00726-FO-findAllOfStoreInMatchingOne [-Collection Group],
+         *      CTC-00727-FO-findAllOfStoreInMatchingMore [-Collection Group],
+         *      CTC-00728-FO-findAllOfStoreInMatchingAll [-Collection Group],
+         *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-Collection Group],
+         *      CTC-00730-FO-findAllOfReturnedMatchingNone [-Collection Group],
+         *      CTC-00731-FO-findAllOfReturnedMatchingOne [-Collection Group],
+         *      CTC-00732-FO-findAllOfReturnedMatchingMore [-Collection Group],
+         *      CTC-00733-FO-findAllOfReturnedMatchingAll [-Collection Group],
+         *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findAllOf;
+
+    public:
+        /**
+         * @inherit findNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00735-FO-findNotOfStoreInMatchingNone [-Collection Group],
+         *      CTC-00736-FO-findNotOfStoreInMatchingOne [-Collection Group],
+         *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-Collection Group],
+         *      CTC-00738-FO-findNotOfStoreInMatchingMore [-Collection Group],
+         *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
+         *      CTC-00740-FO-findNotOfStoreInMatchingAll [-Collection Group],
+         *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-Collection Group],
+         *      CTC-00742-FO-findNotOfReturnedMatchingNone [-Collection Group],
+         *      CTC-00743-FO-findNotOfReturnedMatchingOne [-Collection Group],
+         *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-Collection Group],
+         *      CTC-00745-FO-findNotOfReturnedMatchingMore [-Collection Group],
+         *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
+         *      CTC-00747-FO-findNotOfReturnedMatchingAll [-Collection Group],
+         *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findNotOf;
+
+    public:
+        /**
+         * @inherit findFirstNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00749-FO-findFirstNotOfMatchingNone [-Collection Group],
+         *      CTC-00750-FO-findFirstNotOfMatchingOne [-Collection Group],
+         *      CTC-00751-FO-findFirstNotOfMatchingMore [-Collection Group],
+         *      CTC-00752-FO-findFirstNotOfMatchingAll [-Collection Group],
+         *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findFirstNotOf;
+
+    public:
+        /**
+         * @inherit findLastNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00754-FO-findLastNotOfMatchingNone [-Collection Group],
+         *      CTC-00755-FO-findLastNotOfMatchingOne [-Collection Group],
+         *      CTC-00756-FO-findLastNotOfMatchingMore [-Collection Group],
+         *      CTC-00757-FO-findLastNotOfMatchingAll [-Collection Group],
+         *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findLastNotOf;
+
+    public:
+        /**
+         * @inherit findAllNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-Collection Group],
+         *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-Collection Group],
+         *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-Collection Group],
+         *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-Collection Group],
+         *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-Collection Group],
+         *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-Collection Group],
+         *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-Collection Group],
+         *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-Collection Group],
+         *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-Collection Group],
+         *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-Collection Group]
+         * }
+         * @public
+         */
+        using FindOfCollectionClient :: findAllNotOf;
+
+    public:
+        /**
+         * @inherit findOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00701-FO-findOfStoreInMatchingNone [-InitializerList Group],
+         *      CTC-00702-FO-findOfStoreInMatchingOne [-InitializerList Group],
+         *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
+         *      CTC-00704-FO-findOfStoreInMatchingMore [-InitializerList Group],
+         *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
+         *      CTC-00706-FO-findOfStoreInMatchingAll [-InitializerList Group],
+         *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-InitializerList Group],
+         *      CTC-00708-FO-findOfReturnedMatchingNone [-InitializerList Group],
+         *      CTC-00709-FO-findOfReturnedMatchingOne [-InitializerList Group],
+         *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
+         *      CTC-00711-FO-findOfReturnedMatchingMore [-InitializerList Group],
+         *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
+         *      CTC-00713-FO-findOfReturnedMatchingAll [-InitializerList Group],
+         *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findOf;
+
+    public:
+        /**
+         * @inherit findFirstOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00715-FO-findFirstOfMatchingNone [-InitializerList Group],
+         *      CTC-00716-FO-findFirstOfMatchingOne [-InitializerList Group],
+         *      CTC-00717-FO-findFirstOfMatchingMore [-InitializerList Group],
+         *      CTC-00718-FO-findFirstOfMatchingAll [-InitializerList Group],
+         *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findFirstOf;
+
+    public:
+        /**
+         * @inherit findLastOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00720-FO-findLastOfMatchingNone [-InitializerList Group],
+         *      CTC-00721-FO-findLastOfMatchingOne [-InitializerList Group],
+         *      CTC-00722-FO-findLastOfMatchingMore [-InitializerList Group],
+         *      CTC-00723-FO-findLastOfMatchingAll [-InitializerList Group],
+         *      CTC-00724-FO-findLastOfMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findLastOf;
+
+    public:
+        /**
+         * @inherit findAllOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00725-FO-findAllOfStoreInMatchingNone [-InitializerList Group],
+         *      CTC-00726-FO-findAllOfStoreInMatchingOne [-InitializerList Group],
+         *      CTC-00727-FO-findAllOfStoreInMatchingMore [-InitializerList Group],
+         *      CTC-00728-FO-findAllOfStoreInMatchingAll [-InitializerList Group],
+         *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-InitializerList Group],
+         *      CTC-00730-FO-findAllOfReturnedMatchingNone [-InitializerList Group],
+         *      CTC-00731-FO-findAllOfReturnedMatchingOne [-InitializerList Group],
+         *      CTC-00732-FO-findAllOfReturnedMatchingMore [-InitializerList Group],
+         *      CTC-00733-FO-findAllOfReturnedMatchingAll [-InitializerList Group],
+         *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findAllOf;
+
+    public:
+        /**
+         * @inherit findNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00735-FO-findNotOfStoreInMatchingNone [-InitializerList Group],
+         *      CTC-00736-FO-findNotOfStoreInMatchingOne [-InitializerList Group],
+         *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
+         *      CTC-00738-FO-findNotOfStoreInMatchingMore [-InitializerList Group],
+         *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
+         *      CTC-00740-FO-findNotOfStoreInMatchingAll [-InitializerList Group],
+         *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-InitializerList Group],
+         *      CTC-00742-FO-findNotOfReturnedMatchingNone [-InitializerList Group],
+         *      CTC-00743-FO-findNotOfReturnedMatchingOne [-InitializerList Group],
+         *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
+         *      CTC-00745-FO-findNotOfReturnedMatchingMore [-InitializerList Group],
+         *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
+         *      CTC-00747-FO-findNotOfReturnedMatchingAll [-InitializerList Group],
+         *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findNotOf;
+
+    public:
+        /**
+         * @inherit findFirstNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00749-FO-findFirstNotOfMatchingNone [-InitializerList Group],
+         *      CTC-00750-FO-findFirstNotOfMatchingOne [-InitializerList Group],
+         *      CTC-00751-FO-findFirstNotOfMatchingMore [-InitializerList Group],
+         *      CTC-00752-FO-findFirstNotOfMatchingAll [-InitializerList Group],
+         *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findFirstNotOf;
+
+    public:
+        /**
+         * @inherit findLastNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00754-FO-findLastNotOfMatchingNone [-InitializerList Group],
+         *      CTC-00755-FO-findLastNotOfMatchingOne [-InitializerList Group],
+         *      CTC-00756-FO-findLastNotOfMatchingMore [-InitializerList Group],
+         *      CTC-00757-FO-findLastNotOfMatchingAll [-InitializerList Group],
+         *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findLastNotOf;
+
+    public:
+        /**
+         * @inherit findAllNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
+         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
+         *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-InitializerList Group],
+         *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-InitializerList Group],
+         *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-InitializerList Group],
+         *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-InitializerList Group],
+         *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-InitializerList Group],
+         *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-InitializerList Group],
+         *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-InitializerList Group],
+         *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-InitializerList Group],
+         *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-InitializerList Group],
+         *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-InitializerList Group]
+         * }
+         * @public
+         */
+        using FindOfInitializerListClient :: findAllNotOf;
+
+    public:
+        /**
+         * @inherit add ( copy / move ) call, inherited from RandomInsertionClient interface
+         * @deprecated 'Collection :: add' has been deprecated. Use 'Collection :: insert' instead
+         * @test Not Applicable
+         * @public
+         */
+        using RandomInsertionClient :: add;
+
+    public:
+        /**
+         * @inherit addAll ( pack ) call, inherited from RandomInsertionClient interface
+         * @deprecated 'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead
+         * @test Not Applicable
+         * @public
+         */
+        using RandomInsertionClient :: addAll;
+
+    public:
+        /**
+         * @inherit addAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
+         * @deprecated 'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead
+         * @test Not Applicable
+         * @public
+         */
+        using RandomInsertionClient :: addAllOf;
+
+    public:
+        /**
+         * @inherit insert ( copy / move ) call, inherited from RandomInsertionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+         *      CTC-00801-RI-insertByCopy,
+         *      CTC-00802-RI-insertByMove
+         * }
+         * @public
+         */
+        using RandomInsertionClient :: insert;
+
+    public:
+        /**
+         * @inherit insertAll ( pack ) call, inherited from RandomInsertionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+         *      CTC-00804-RI-insertByPack
+         * }
+         * @public
+         */
+        using RandomInsertionClient :: insertAll;
+
+    public:
+        /**
+         * @inherit insertAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+         *      CTC-00805-RI-insertByInsertAllIterable,
+         *      CTC-00806-RI-insertByInsertAllList,
+         *      CTC-00807-RI-insertByRange1,
+         *      CTC-00808-RI-insertByRange2,
+         *      CTC-00809-RI-insertByRange3
+         * }
+         * @public
+         */
+        using RandomInsertionClient :: insertAllOf;
+
+    public:
+        /**
+         * @inherit emplace ( forwarded arguments ) call, inherited from RandomInsertionClient interface
+         * @test Suite: CTS-00001, Group: CTG-00800-RI, Test Cases: {
+         *      CTC-00803-RI-insertByEmplace
+         * }
+         * @public
+         */
+        using RandomInsertionClient :: emplace;
+
 
     public:
         /**
          * @brief Function used to acquire the number of elements in the collection
          * @exceptsafe
          * @return Size = number of elements inside the collection
-         * @test tested in base class test
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00004-MF-size, CTC-00010-MF-clear }
+         * @public
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size = 0;
 
     public:
         /**
          * @brief Function used to check if the collection does not contain any elements ( is empty )
          * @exceptsafe
          * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
-         * @test tested in base class test
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00005-MF-empty, CTC-00010-MF-clear }
+         * @public
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
     public:
         /**
-         * @brief Function used to check if the collection contains the requested element. Equivalent to collection.findFirst ( element ) != collection.end()
-         * @param element : ElementType cref = Constant Reference to the element to be found in the collection
+         * @brief Bool cast operator, functionality equal to python's iterable empty check. '(bool) collection' is equivalent to '! collection.empty()'
+         * @exceptsafe
+         * @return bool = true if collection is not empty, false otherwise
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00006-MF-boolCast, CTC-00010-MF-clear }
+         * @public
+         */
+        __CDS_cpplang_VirtualConstexpr __CDS_Explicit operator bool () const noexcept;
+
+    public:
+        /**
+         * @brief String conversion function, used to obtain String representation of the Collection
+         * @exceptsafe
+         * @return String = string representation
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00003-MF-toString, CTC-00010-MF-clear }
+         * @public
+         */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public:
+        /**
+         * @brief Hash function, used to obtain the hash value of the Collection
+         * @exceptsafe
+         * @return Index = hash code value of the instance
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00009-MF-hash, CTC-00010-MF-clear }
+         * @public
+         */
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+    public:
+        /**
+         * @brief Explicit Comparison Function with generic CDS/Object
+         * @param [in] object : Object cref = Constant Reference to an Object-derived instance
+         * @exceptsafe
+         * @return bool = true if objects are equal, false otherwise
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00010-MF-clear, CTC-00011-MF-equalsSelf,
+         *      CTC-00012-MF-equalsTrueSameType, CTC-00013-MF-equalsTrueDifferentType, CTC-00014-MF-equalsFalseSameType,
+         *      CTC-00015-MF-equalsFalseDifferentType, CTC-00016-MF-equalsFalseNotCollection }
+         * @public
+         */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
+
+    public:
+        /**
+         * @brief Function used to clear the collection, removing all elements from it
+         * @exceptsafe
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00010-MF-clear }
+         * @public
+         */
+        virtual auto clear () noexcept -> void = 0;
+
+    public:
+        /**
+         * @brief Function used to check if the collection contains the requested element.
+         * @param [in] element : ElementType cref = Constant Reference to the element to be found in the collection
          * @return bool = true if the element exists in the collection, false otherwise
-         * @test tested in base class test
+         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00007-MF-containsTrue, CTC-00008-MF-containsFalse, CTC-00010-MF-clear }
+         * @public
          */
-        virtual auto contains (
+        __CDS_NoDiscard virtual auto contains (
                 ElementType const & element
         ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains any of the requested elements.
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection of elements from which the caller collection's elements must have at least one match
-         * @return bool = true if any element in the caller collection is found in the 'elements' collection, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAnyOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains any element that is not of the requested elements.
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection of elements from which the caller collection's elements must have at least one non-match
-         * @return bool = true if any element in the caller collection is not found in the 'elements' collection, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAnyNotOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains all of the requested elements.
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection of elements from which the caller collection's elements must have every element matching
-         * @return bool = true if all element in the caller collection are found in the 'elements' collection, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAllOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains none of the requested elements.
-         * @param elements : Collection < ElementType > cref = Constant Reference to the collection of elements from which the caller collection's elements must have every element non-matching
-         * @return bool = true if no element in the caller collection are found in the 'elements' collection, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAllNotOf (
-                Collection < ElementType > const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains any of the requested elements.
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the list of elements from which the caller collection's elements must have at least one match
-         * @return bool = true if any element in the caller collection is found in the 'elements' list, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAnyOf (
-                InitializerList const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains any element that is not of the requested elements.
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the list of elements from which the caller collection's elements must have at least one non-match
-         * @return bool = true if any element in the caller collection is not found in the 'elements' list, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAnyNotOf (
-                InitializerList const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains all of the requested elements.
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the list of elements from which the caller collection's elements must have every element matching
-         * @return bool = true if all element in the caller collection are found in the 'elements' list, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAllOf (
-                InitializerList const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to check if the collection contains none of the requested elements.
-         * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the list of elements from which the caller collection's elements must have every element non-matching
-         * @return bool = true if no element in the caller collection are found in the 'elements' list, false otherwise
-         * @test tested in base class test
-         */
-        auto containsAllNotOf (
-                InitializerList const & elements
-        ) const noexcept -> bool;
-
-    public:
-        /**
-         * @brief Function used to add an element to the collection via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
-         * @exceptsafe if ElementType copy constructor is exceptsafe
-         * @test tested in base class test
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto add (
-                ElementType const & element
-        ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void;
-
-    public:
-        /**
-         * @brief Function used to add an element to the collection via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType mref = Move Reference to the element to move into the collection
-         * @exceptsafe if ElementType move constructor is exceptsafe
-         * @test tested in base class test
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto add (
-                ElementType && element
-        ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void;
-
-    public:
-        /**
-         * @brief Function used to add a pack of elements to the collection via available means ( conversion -> copy / move ). Given values are required to be convertible to ElementType
-         * @tparam __ArgumentTypes pack of types, representing the types of each of the given parameters, each must be convertible to ElementType
-         * @param arguments : ArgumentTypes fref = Pack of Forwarding References to the given elements / values
-         * @exceptsafe
-         * @test tested in base class test
-         */
-        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-        auto addAll (
-                __ArgumentTypes && ... arguments
-        ) noexcept -> void;
-
-    public:
-        /**
-         * @brief Function used to add all the elements from a given collection to this collection, provided the type of the current collection is copy constructible and the given collection's element types are convertible to this collection's element types
-         * @tparam __OtherElementType the other collection's element type
-         * @tparam __VElementType alias for __ElementType used for sfinae enable
-         * @param otherCollection : Collection < R > cref = Constant Reference to the collection to acquire the values from
-         * @exceptsafe
-         * @test tested in base class test
-         */
-        template < typename __OtherElementType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () || meta :: isConvertible < __OtherElementType, __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto addAllOf (
-                Collection < __OtherElementType > const & otherCollection
-        ) noexcept -> void;
-
-    protected:
-        /**
-         * @brief Function used in Collection :: add implementation, called to acquire a pointer to place the new object at
-         * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
-         * @exceptsafe
-         * @return ElementType ptr = a pointer to an ElementType.
-         * @test tested in base class test
-         */
-        virtual auto pNewInsert (
-                ElementType const & referenceElement
-        ) noexcept -> ElementType * = 0;
 
     };
 
-    template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common = meta :: Common < __ArgumentTypes ... > > // NOLINT(bugprone-reserved-identifier)
-    auto collectionOf (
-            __ArgumentTypes && ... values
-    ) noexcept -> __CollectionType < __Common >;
-
 }
 
-/// definition of Collection < T > :: DelegateIteratorRequestType
-#include "collection/DelegateIteratorRequestType.hpp"
+#include "collection/impl/CollectionConstructs.hpp"
+#include "collection/impl/CollectionFunctions.hpp"
 
-/// definition of Collection < T > :: AbstractDelegateIterator
-#include "collection/AbstractDelegateIterator.hpp"
+#include "../shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
+#include "../shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
+#include "../shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClient.hpp"
+#include "../shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClient.hpp"
+#include "../shared/collectionInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClient.hpp"
 
-/// definition of Collection < T > :: DelegateConstIterator
-#include "collection/DelegateConstIterator.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/ContainsOfCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/FindByImmutableCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"
+#include "../shared/collectionInternalCommunication/client/composite/impl/GenericImmutableStatementsCompositeClient.hpp"
 
-/// definition of Collection < T > :: AbstractIterator
-#include "collection/AbstractIterator.hpp"
-
-/// definition of Collection < T > :: ConstIterator
-#include "collection/ConstIterator.hpp"
-
-/// definition of Collection < T > :: ConstReverseIterator
-#include "collection/ConstReverseIterator.hpp"
-
-
-/// implementation of Collection < T > :: AbstractDelegateIterator functions
-#include "collection/impl/AbstractDelegateIterator.hpp"
-
-/// implementation of Collection < T > :: DelegateConstIterator functions
-#include "collection/impl/DelegateConstIterator.hpp"
-
-/// implementation of Collection < T > :: AbstractIterator functions
-#include "collection/impl/AbstractIterator.hpp"
-
-/// implementation of Collection < T > :: ConstIterator functions
-#include "collection/impl/ConstIterator.hpp"
-
-/// implementation of Collection < T > :: ConstReverseIterator functions
-#include "collection/impl/ConstReverseIterator.hpp"
-
-
-/// implementation of Collection < T > functions
 #include "collection/impl/Collection.hpp"
 
-
-#endif // __CDS_COLLECTION_HPP__
-
+#endif /* __CDS_COLLECTION_HPP__ */
