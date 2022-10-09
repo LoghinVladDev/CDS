@@ -95,36 +95,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetHashTablePartialDispatcher = /* NOLINT(bugprone-reserved-identifier) */
-                        typename __LinkedHashSetHashTableImplementation <
-                                __ElementType,
-                                __Hasher
-                        > :: template __SetDispatcher <
-                                LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >
-                        >;
-
-
-                template <
-                        typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetLinkedListPartialDispatcher =    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __LinkedHashSetLinkedListImplementation <
-                                __ElementType,
-                                __Hasher
-                        > :: template __SetDispatcher <
-                                LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >
-                        >;
-
-
-                template <
                         typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
                         typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
                 > using __LinkedHashSetServer = /* NOLINT(bugprone-reserved-identifier) */

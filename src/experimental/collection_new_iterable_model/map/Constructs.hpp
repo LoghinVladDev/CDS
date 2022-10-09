@@ -22,7 +22,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 > using __MapFindUniqueImmutableClient =    /* NOLINT(bugprone-reserved-identifier) */
                         __FindUniqueImmutablePrimitiveClient <
                                 cds :: experimental :: Map < __KeyType, __ValueType >,
-                                cds :: __hidden :: __impl ::__MapEntry < __KeyType, __ValueType >,
+                                cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType >,
                                 __KeyType,
                                 false
                         >;

@@ -181,7 +181,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
             if ( this->__ht_getConst ( element ) == nullptr ) {
                 return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
-                        this->end()
+                        this->cend()
                 );
             }
 
@@ -194,7 +194,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
             return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
-                    this->end()
+                    this->cend()
             );
         }
 
@@ -210,7 +210,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) const noexcept -> ConstIterator {
 
             if ( this->__ht_getConst ( element ) == nullptr ) {
-                return this->end();
+                return this->cend();
             }
 
             for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
@@ -219,7 +219,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 }
             }
 
-            return this->end();
+            return this->cend();
         }
 
 
@@ -242,14 +242,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 LinkedHashSet const & set
         ) noexcept {
 
-            this->__sll_copyCleared (
-                    set
-            );
-
-            this->__ht_copyCleared (
-                    set,
-                    & cds :: experimental :: __hidden :: __impl :: __linkedHashSetCopyConstructor < __ElementType >
-            );
+            /* Copy of each not possible, linked list references hash table elements from other set */
+            for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+                this->insert ( * iterator );
+            }
         }
 
 
@@ -433,15 +429,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-            this->__ht_copy (
-                    set,
-                    & cds :: experimental :: __hidden :: __impl :: __linkedHashSetCopyConstructor < __ElementType >
-            );
+            this->__sll_clear ();
+            this->__ht_clear ();
 
-            this->__sll_copy (
-                    set,
-                    & cds :: experimental :: __hidden :: __impl :: __linkedHashSetCopyConstructor < __ElementType * >
-            );
+            /* Copy of each not possible, linked list references hash table elements from other set */
+            for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+                this->insert ( * iterator );
+            }
 
             return * this;
         }
@@ -478,6 +472,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> LinkedHashSet & {
 
             this->__ht_clear ();
+            this->__sll_clear ();
             for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
                 (void) this->insert ( * iterator );
             }
@@ -502,6 +497,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
             this->__ht_clear ();
+            this->__sll_clear ();
             for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }

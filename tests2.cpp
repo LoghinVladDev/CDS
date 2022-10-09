@@ -5,6 +5,8 @@
 #include <CDS/experimental/Array>
 #include <CDS/experimental/LinkedList>
 #include <CDS/experimental/LinkedHashSet>
+#include <CDS/experimental/LinkedHashMap>
+#include <CDS/experimental/HashMap>
 #include "src/experimental/collection_new_iterable_model/shared/iterator/IteratorSort.hpp"
 #include "src/experimental/collection_new_iterable_model/shared/iterator/impl/IteratorSort.hpp"
 #include <chrono>
@@ -340,6 +342,8 @@ int main () {
 //    testList = {1, 2, 3};
 
     LinkedHashSet < int > hssss;
+    LinkedHashMap < int, int > hssssm;
+
 //    hssss.insert (3);
 
     return 0;

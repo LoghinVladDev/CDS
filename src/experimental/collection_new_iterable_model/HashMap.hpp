@@ -110,18 +110,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  class KeySetProxy;
         protected:  class ValueMutableCollectionProxy;
         protected:  class EntryMutableCollectionProxy;
-        protected:  friend class KeySetProxy;
-        protected:  friend class ValueMutableCollectionProxy;
-        protected:  friend class EntryMutableCollectionProxy;
-
-        private:    KeySetProxy                 _keySetProxy;
-        private:    ValueMutableCollectionProxy _valueMutableCollectionProxy;
-        private:    EntryMutableCollectionProxy _entryMutableCollectionProxy;
 
         public:     using ElementType   = typename MapBase :: ElementType;
         public:     using EntryType     = typename MapBase :: EntryType;
         public:     using KeyType       = typename MapBase :: KeyType;
         public:     using ValueType     = typename MapBase :: ValueType;
+
+        private:    KeySetProxy                 _keySetProxy;
+        private:    ValueMutableCollectionProxy _valueMutableCollectionProxy;
+        private:    EntryMutableCollectionProxy _entryMutableCollectionProxy;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier) */

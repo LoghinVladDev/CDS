@@ -24,10 +24,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 public:
                     using __sll_ConstIterator           = UnidirectionalNodeConstIterator < __ElementType >;  /* NOLINT(bugprone-reserved-identifier) */
 
-                public:
-                    template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
-                    class __SetDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
-
                 private:
                     using __NodeType = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;  /* NOLINT(bugprone-reserved-identifier) */
 
@@ -177,34 +173,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __SingleLinkedList const & list
                     ) const noexcept -> bool;
                 };
-
-#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_SINGLE_LINKED_LIST_SET_SERVER_DISPATCHER_HPP__ ) && defined ( __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ )
-#define __CDS_SHARED_SINGLE_LINKED_LIST_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
-
-                template <
-                        typename                                                __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ComparisonFunction < __ElementType >  __equals        /* NOLINT(bugprone-reserved-identifier) */
-                > template <
-                        typename                                                __ServerType    /* NOLINT(bugprone-reserved-identifier) */
-                > class __SingleLinkedList <
-                        __ElementType,
-                        __equals
-                > :: __SetDispatcher :
-                        public __SetServerDispatcher <
-                                __ServerType,
-                                __SingleLinkedList < __ElementType, __equals >,
-                                __ElementType,
-                                UnidirectionalNodeConstIterator < __ElementType >,
-                                UnidirectionalNodeConstIterator < __ElementType >,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_cbegin,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_cend,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_new,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeConstIterator,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeConstIteratorArray,
-                                nullptr
-                        > {};
-
-#endif
 
             }
         }

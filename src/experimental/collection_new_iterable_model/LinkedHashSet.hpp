@@ -43,8 +43,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __LinkedHashSetHashTableImplementation < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher >,
-                private __hidden :: __impl :: __LinkedHashSetHashTablePartialDispatcher < __ElementType, __Hasher >,
-                private __hidden :: __impl :: __LinkedHashSetLinkedListPartialDispatcher < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __LinkedHashSetRandomInsertionClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __LinkedHashSetIteratorRemoveClient < __ElementType, __Hasher >,
                 public __hidden :: __impl :: __LinkedHashSetFindOfCollectionClient < __ElementType, __Hasher >,
@@ -63,8 +61,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  using Server                                = __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >;
         protected:  using HashTableImplementation               = __hidden :: __impl :: __LinkedHashSetHashTableImplementation < __ElementType, __Hasher >;
         protected:  using LinkedListImplementation              = __hidden :: __impl :: __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher >;
-        protected:  using HashTablePartialDispatcher            = __hidden :: __impl :: __LinkedHashSetHashTablePartialDispatcher < __ElementType, __Hasher >;
-        protected:  using LinkedListPartialDispatcher           = __hidden :: __impl :: __LinkedHashSetLinkedListPartialDispatcher < __ElementType, __Hasher >;
         protected:  using RandomInsertionClient                 = __hidden :: __impl :: __LinkedHashSetRandomInsertionClient < __ElementType, __Hasher >;
         protected:  using IteratorRemoveClient                  = __hidden :: __impl :: __LinkedHashSetIteratorRemoveClient < __ElementType, __Hasher >;
         protected:  using FindOfCollectionClient                = __hidden :: __impl :: __LinkedHashSetFindOfCollectionClient < __ElementType, __Hasher >;
@@ -377,5 +373,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 #include "shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
 
 #include "linkedHashSet/impl/LinkedHashSet.hpp"
+#include "linkedHashSet/impl/CTAD.hpp"
 
 #endif /* __CDS_EX_LINKED_HASH_SET_HPP__ */

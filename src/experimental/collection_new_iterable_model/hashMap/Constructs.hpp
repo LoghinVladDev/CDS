@@ -282,7 +282,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __ValueType,
                                         __Hasher
                                 >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                __KeyType,
                                 HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
@@ -298,7 +298,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                         __ValueType,
                                         __Hasher
                                 >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                __KeyType,
                                 HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
@@ -414,7 +414,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
                                 __initializerListContains <
                                         typename Map < __KeyType, __ValueType > :: EntryType,
-                                        & cds :: meta :: equals < typename Map < __KeyType, __ValueType > :: EntryType >
+                                        & __hashMapEquals < __KeyType, __ValueType >
                                 >
                         >;
 
