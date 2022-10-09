@@ -36,8 +36,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template <
-                typename __ElementType,
-                typename __Hasher
+                typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
         > class LinkedHashSet :
                 public Set < __ElementType >,
                 protected __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >,
@@ -104,16 +104,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> __GenericConstHandler override;
 
         protected:
-            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;
+            __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
-            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;
+            __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
-            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator;
+            __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator;    /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
-            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator;
+            __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator;      /* NOLINT(bugprone-reserved-identifier) */
 
         protected:
             auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */

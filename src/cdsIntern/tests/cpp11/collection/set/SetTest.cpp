@@ -5,6 +5,8 @@
 #include "SetTest.h"
 
 #include <CDS/experimental/HashSet>
+#include <CDS/experimental/TreeSet>
+#include <CDS/experimental/LinkedHashSet>
 
 #include <CDS/Range>
 #include <vector>
@@ -168,10 +170,102 @@ auto SetTest :: execute () noexcept -> bool {
             this->logOK( "'STC-00003-MU-SetDuplicateProperty-CPP11' OK" );
         }
     });
+    this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : IntTreeSet", [& allOk, this] {
+
+        /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
+        cds :: experimental :: TreeSet < int > intSetUnderTest;
+        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
+        bool status = true;
+
+        for ( auto const & e : underTest ) {
+            if ( underTest.count([& e](int e2) { return e2 == e; }) != 1 ) {
+                status = false;
+            }
+        }
+
+        if ( allOk && ! status ) {
+            this->logError ( "'STC-00003-MU-SetDuplicateProperty-CPP11' failed" );
+            allOk = false;
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00003-MU-SetDuplicateProperty-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : IntLinkedHashSet", [& allOk, this] {
+
+        /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
+        cds :: experimental :: LinkedHashSet < int > intSetUnderTest;
+        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
+        bool status = true;
+
+        for ( auto const & e : underTest ) {
+            if ( underTest.count([& e](int e2) { return e2 == e; }) != 1 ) {
+                status = false;
+            }
+        }
+
+        if ( allOk && ! status ) {
+            this->logError ( "'STC-00003-MU-SetDuplicateProperty-CPP11' failed" );
+            allOk = false;
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00003-MU-SetDuplicateProperty-CPP11' OK" );
+        }
+    });
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : StringHashSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
         cds :: experimental :: HashSet < String > intSetUnderTest;
+        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
+        bool status = true;
+
+        for ( auto const & e : underTest ) {
+            if ( underTest.count([& e](String const & e2) { return e2 == e; }) != 1 ) {
+                status = false;
+            }
+        }
+
+        if ( allOk && ! status ) {
+            this->logError ( "'STC-00003-MU-SetDuplicateProperty-CPP11' failed" );
+            allOk = false;
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00003-MU-SetDuplicateProperty-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : StringTreeSet", [& allOk, this] {
+
+        /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
+        cds :: experimental :: TreeSet < String > intSetUnderTest;
+        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
+        bool status = true;
+
+        for ( auto const & e : underTest ) {
+            if ( underTest.count([& e](String const & e2) { return e2 == e; }) != 1 ) {
+                status = false;
+            }
+        }
+
+        if ( allOk && ! status ) {
+            this->logError ( "'STC-00003-MU-SetDuplicateProperty-CPP11' failed" );
+            allOk = false;
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00003-MU-SetDuplicateProperty-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : StringLinkedHashSet", [& allOk, this] {
+
+        /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
+        cds :: experimental :: LinkedHashSet < String > intSetUnderTest;
         cds :: experimental :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
@@ -201,7 +295,77 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
             auto it = underTest.find ( e );
-            if ( it.valid() || it != underTest.end() ) {
+            if ( it != underTest.end() ) {
+                this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00051-FU-FindUniqueNotIn-CPP11' OK" );
+        }
+
+        /* SetTestCase-FindUnique-FindUniqueIn-CPP11 : STC-00052-MU-FindUniqueIn-CPP11 */
+
+        for ( auto e : { 1, 2, 3, 4, 5 } ) {
+            auto it = underTest.find ( e );
+            if ( ! it.valid() || it == underTest.end() || ( * it != e ) ) {
+                this->logError ( "'STC-00052-FU-FindUniqueIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00052-FU-FindUniqueIn-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : IntTreeSet", [& allOk, this] {
+
+        /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
+        cds :: experimental :: TreeSet < int > intSetUnderTest;
+        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 2, 3, 4, 5 };
+
+        for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
+            auto it = underTest.find ( e );
+            if ( it != underTest.end() ) {
+                this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00051-FU-FindUniqueNotIn-CPP11' OK" );
+        }
+
+        /* SetTestCase-FindUnique-FindUniqueIn-CPP11 : STC-00052-MU-FindUniqueIn-CPP11 */
+
+        for ( auto e : { 1, 2, 3, 4, 5 } ) {
+            auto it = underTest.find ( e );
+            if ( ! it.valid() || it == underTest.end() || ( * it != e ) ) {
+                this->logError ( "'STC-00052-FU-FindUniqueIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00052-FU-FindUniqueIn-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : IntLinkedHashSet", [& allOk, this] {
+
+        /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
+        cds :: experimental :: LinkedHashSet < int > intSetUnderTest;
+        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 2, 3, 4, 5 };
+
+        for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
+            auto it = underTest.find ( e );
+            if ( it != underTest.end() ) {
                 this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
                 allOk = false;
                 break;
@@ -236,7 +400,77 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
             auto it = underTest.find ( e );
-            if ( it.valid() || it != underTest.end() ) {
+            if ( it != underTest.end() ) {
+                this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00051-FU-FindUniqueNotIn-CPP11' OK" );
+        }
+
+        /* SetTestCase-FindUnique-FindUniqueIn-CPP11 : STC-00052-MU-FindUniqueIn-CPP11 */
+
+        for ( auto e : { 1, 2, 3, 4, 5 } ) {
+            auto it = underTest.find ( e );
+            if ( ! it.valid() || it == underTest.end() || ( * it != String(e) ) ) {
+                this->logError ( "'STC-00052-FU-FindUniqueIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00052-FU-FindUniqueIn-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : StringTreeSet", [& allOk, this] {
+
+        /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
+        cds :: experimental :: TreeSet < String > intSetUnderTest;
+        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 2, 3, 4, 5 };
+
+        for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
+            auto it = underTest.find ( e );
+            if ( it != underTest.end() ) {
+                this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00051-FU-FindUniqueNotIn-CPP11' OK" );
+        }
+
+        /* SetTestCase-FindUnique-FindUniqueIn-CPP11 : STC-00052-MU-FindUniqueIn-CPP11 */
+
+        for ( auto e : { 1, 2, 3, 4, 5 } ) {
+            auto it = underTest.find ( e );
+            if ( ! it.valid() || it == underTest.end() || ( * it != String(e) ) ) {
+                this->logError ( "'STC-00052-FU-FindUniqueIn-CPP11' failed" );
+                allOk = false;
+                break;
+            }
+        }
+
+        if ( allOk ) {
+            this->logOK( "'STC-00052-FU-FindUniqueIn-CPP11' OK" );
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : StringLinkedHashSet", [& allOk, this] {
+
+        /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
+        cds :: experimental :: LinkedHashSet < String > intSetUnderTest;
+        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        intSetUnderTest = { 1, 2, 3, 4, 5 };
+
+        for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
+            auto it = underTest.find ( e );
+            if ( it != underTest.end() ) {
                 this->logError ( "'STC-00051-FU-FindUniqueNotIn-CPP11' failed" );
                 allOk = false;
                 break;
@@ -290,6 +524,60 @@ auto SetTest :: execute () noexcept -> bool {
             allOk = false;
         }
     });
+    this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : IntTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < int > intSet;
+        intSet = { 1, 2, 3, 4, 5 };
+
+        auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
+
+        auto status = setTestGroupMemberFunctions (
+                intSet,
+                this,
+                expectedToString,
+                6, false,
+                { 1, 2, 3, 4, 5 },
+                -1, false,
+                { 1, 2, 3, 4, 5 },
+                5, true,
+                { 1, 2, 3, 4 },
+                1, true,
+                { 2, 3, 4 },
+                3, true,
+                { 2, 4 }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : IntLinkedHashSet", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashSet < int > intSet;
+        intSet = { 1, 2, 3, 4, 5 };
+
+        auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
+
+        auto status = setTestGroupMemberFunctions (
+                intSet,
+                this,
+                expectedToString,
+                6, false,
+                { 1, 2, 3, 4, 5 },
+                -1, false,
+                { 1, 2, 3, 4, 5 },
+                5, true,
+                { 1, 2, 3, 4 },
+                1, true,
+                { 2, 3, 4 },
+                3, true,
+                { 2, 4 }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : StringHashSet", [& allOk, this] {
 
         cds :: experimental :: HashSet < String > intSet;
@@ -311,6 +599,60 @@ auto SetTest :: execute () noexcept -> bool {
                 { 4, 2, 3 },
                 3, true,
                 { 4, 2 }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : StringTreeSet", [& allOk, this] {
+
+        cds :: experimental :: TreeSet < String > intSet;
+        intSet = { 1, 2, 3, 4, 5 };
+
+        auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
+
+        auto status = setTestGroupMemberFunctions < String > (
+                intSet,
+                this,
+                expectedToString,
+                6, false,
+                { 1, 2, 3, 4, 5 },
+                -1, false,
+                { 1, 2, 3, 4, 5 },
+                5, true,
+                { 1, 2, 3, 4 },
+                1, true,
+                { 2, 3, 4 },
+                3, true,
+                { 2, 4 }
+        );
+
+        if ( allOk && ! status ) {
+            allOk = false;
+        }
+    });
+    this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : StringLinkedHashSet", [& allOk, this] {
+
+        cds :: experimental :: LinkedHashSet < String > intSet;
+        intSet = { 1, 2, 3, 4, 5 };
+
+        auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
+
+        auto status = setTestGroupMemberFunctions < String > (
+                intSet,
+                this,
+                expectedToString,
+                6, false,
+                { 1, 2, 3, 4, 5 },
+                -1, false,
+                { 1, 2, 3, 4, 5 },
+                5, true,
+                { 1, 2, 3, 4 },
+                1, true,
+                { 2, 3, 4 },
+                3, true,
+                { 2, 4 }
         );
 
         if ( allOk && ! status ) {

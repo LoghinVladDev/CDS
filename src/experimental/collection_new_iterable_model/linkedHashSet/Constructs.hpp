@@ -116,7 +116,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __LinkedHashSetLinkedListImplementation <
                                 __ElementType,
                                 __Hasher
-                        > :: template __Dispatcher <
+                        > :: template __SetDispatcher <
                                 LinkedHashSet <
                                         __ElementType,
                                         __Hasher

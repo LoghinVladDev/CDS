@@ -26,7 +26,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 public:
                     template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
-                    class __Dispatcher;                 /* NOLINT(bugprone-reserved-identifier) */
+                    class __SetDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using __NodeType = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;  /* NOLINT(bugprone-reserved-identifier) */
@@ -62,80 +62,89 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     auto __sll_clear () noexcept -> void;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __sll_empty () const noexcept -> bool;
+                    __CDS_NoDiscard constexpr auto __sll_empty () const noexcept -> bool;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __sll_front () const noexcept -> __ElementType const *;
+                    __CDS_NoDiscard constexpr auto __sll_front () const noexcept -> __ElementType const *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_front () noexcept -> __ElementType *;
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_front () noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __sll_removeFront () noexcept -> void;
+                    auto __sll_removeFront () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __sll_newFront () noexcept -> __ElementType *;
+                    auto __sll_newFront () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __sll_newBack () noexcept -> __ElementType *;
+                    auto __sll_newBack () noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __sll_new ( __ElementType const *, bool * ) noexcept -> __ElementType *;
+                    auto __sll_new (                                    /* NOLINT(bugprone-reserved-identifier) */
+                            __ElementType const * pReferenceElement,
+                            bool                * pNewElementCreated
+                    ) noexcept -> __ElementType *;
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __sll_cbegin () const noexcept -> __sll_ConstIterator;
+                    __CDS_NoDiscard constexpr auto __sll_cbegin () const noexcept -> __sll_ConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard constexpr auto __sll_cend () const noexcept -> __sll_ConstIterator;
+                    __CDS_NoDiscard constexpr auto __sll_cend () const noexcept -> __sll_ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_begin () noexcept -> __sll_Iterator;
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_begin () noexcept -> __sll_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_end () noexcept -> __sll_Iterator;
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_end () noexcept -> __sll_Iterator;     /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    auto __sll_removeNode (
+                    auto __sll_removeNode ( /* NOLINT(bugprone-reserved-identifier) */
                             __NodeType * pPrevious,
                             __NodeType * pCurrent
                     ) noexcept -> void;
 
                 protected:
-                    auto __sll_remove (
+                    auto __sll_remove ( /* NOLINT(bugprone-reserved-identifier) */
                             __ElementType const & value
                     ) noexcept -> bool;
 
                 protected:
-                    auto __sll_removeIterator (
+                    auto __sll_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
                             __sll_Iterator const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __sll_removeConstIterator (
+                    auto __sll_removeConstIterator (    /* NOLINT(bugprone-reserved-identifier) */
                             __sll_ConstIterator const & iterator
                     ) noexcept -> bool;
 
                 protected:
-                    auto __sll_removeIteratorArray (
+                    auto __sll_removeIteratorArray (    /* NOLINT(bugprone-reserved-identifier) */
                             __sll_Iterator  const * const * ppIterators,
                             Size                            iteratorCount
                     ) noexcept -> Size;
 
+                private:
+                    auto __sll_removeIteratorRange (   /* NOLINT(bugprone-reserved-identifier) */
+                            __sll_Iterator const * pStart,
+                            __sll_Iterator const * pEnd
+                    ) noexcept -> Size;
+
                 protected:
-                    auto __sll_removeConstIteratorArray (
+                    auto __sll_removeConstIteratorArray (   /* NOLINT(bugprone-reserved-identifier) */
                             __sll_ConstIterator const * const * ppIterators,
                             Size                                iteratorCount
                     ) noexcept -> Size;
 
                 private:
-                    auto __sll_removeConstIteratorRange (
+                    auto __sll_removeConstIteratorRange (   /* NOLINT(bugprone-reserved-identifier) */
                             __sll_ConstIterator const * pStart,
                             __sll_ConstIterator const * pEnd
                     ) noexcept -> Size;
 
                 protected:
                     template <
-                            typename __TElementType = __ElementType,
+                            typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
@@ -145,58 +154,57 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     template <
-                            typename __TElementType = __ElementType,
+                            typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto __sll_copyCleared (
+                    > auto __sll_copyCleared (                          /* NOLINT(bugprone-reserved-identifier) */
                             __SingleLinkedList const & list
                     ) noexcept -> void;
 
                 protected:
-                    auto __sll_move (
+                    auto __sll_move (   /* NOLINT(bugprone-reserved-identifier) */
                             __SingleLinkedList && list
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_moveCleared (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
                             __SingleLinkedList && list
                     ) noexcept -> void;
 
                 protected:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __sll_equals (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __sll_equals (  /* NOLINT(bugprone-reserved-identifier) */
                             __SingleLinkedList const & list
                     ) const noexcept -> bool;
                 };
 
+#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_SINGLE_LINKED_LIST_SET_SERVER_DISPATCHER_HPP__ ) && defined ( __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ )
+#define __CDS_SHARED_SINGLE_LINKED_LIST_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename                                                __ElementType,
-                        cds :: utility :: ComparisonFunction < __ElementType >  __equals
+                        typename                                                __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >  __equals        /* NOLINT(bugprone-reserved-identifier) */
                 > template <
-                        typename                                                __ServerType
+                        typename                                                __ServerType    /* NOLINT(bugprone-reserved-identifier) */
                 > class __SingleLinkedList <
                         __ElementType,
                         __equals
-                > :: __Dispatcher :
-                        public __MutableCollectionServerDispatcher <
+                > :: __SetDispatcher :
+                        public __SetServerDispatcher <
                                 __ServerType,
                                 __SingleLinkedList < __ElementType, __equals >,
                                 __ElementType,
-                                UnidirectionalNodeIterator < __ElementType >,
                                 UnidirectionalNodeConstIterator < __ElementType >,
-                                UnidirectionalNodeIterator < __ElementType >,
                                 UnidirectionalNodeConstIterator < __ElementType >,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_begin,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_end,
                                 & __SingleLinkedList < __ElementType, __equals > :: __sll_cbegin,
                                 & __SingleLinkedList < __ElementType, __equals > :: __sll_cend,
                                 & __SingleLinkedList < __ElementType, __equals > :: __sll_new,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeIterator,
                                 & __SingleLinkedList < __ElementType, __equals > :: __sll_removeConstIterator,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeIteratorArray,
-                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeConstIteratorArray
+                                & __SingleLinkedList < __ElementType, __equals > :: __sll_removeConstIteratorArray,
+                                nullptr
                         > {};
+
+#endif
 
             }
         }

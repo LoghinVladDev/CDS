@@ -316,6 +316,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             this->__sll_removeNode ( pPrevious, pPrevious->_pNext );
                             return true;
                         }
+
+                        pPrevious = pPrevious->_pNext;
                     }
 
                     return false;
@@ -407,7 +409,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     if ( pKeepEndNode == nullptr ) {
-                        this->_pBack            = pKeepStartNode == nullptr ? this->_pFront : pKeepStartNode->_pNext;
+                        this->_pBack            = pKeepStartNode == nullptr ? this->_pFront : pKeepStartNode;
                     }
 
                     return removedCount;
@@ -444,16 +446,17 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                         if ( pEndRange->_pCurrentNode == ppIterators [ index ]->_pPreviousNode ) {
                             pEndRange = ppIterators [ index ];
-                        } else if ( pStartRange == pEndRange ) {
-                            if ( this->__sll_removeConstIterator ( * pStartRange ) ) {
-                                ++ removedCount;
+                        } else {
+                            if ( pStartRange == pEndRange ) {
+                                if ( this->__sll_removeConstIterator( * pStartRange ) ) {
+                                    ++ removedCount;
+                                }
+                            } else {
+                                removedCount += this->__sll_removeConstIteratorRange ( pStartRange, pEndRange );
                             }
 
                             pStartRange = ppIterators [ index ];
                             pEndRange   = ppIterators [ index ];
-                        } else {
-
-                            removedCount += this->__sll_removeConstIteratorRange ( pStartRange, pEndRange );
                         }
                     }
 
@@ -467,6 +470,125 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
 
                     return removedCount;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_removeIteratorRange (
+                        __sll_Iterator const * pStart,
+                        __sll_Iterator const * pEnd
+                ) noexcept -> Size {
+
+                    Size removedCount = 0ULL;
+                    auto pKeepStartNode = const_cast < __NodeType * > ( pStart->_pPreviousNode );
+                    auto pKeepEndNode   = const_cast < __NodeType * > ( pEnd->_pCurrentNode->_pNext );
+
+                    auto pSeek          = const_cast < __NodeType * > ( pStart->_pCurrentNode );
+                    while ( pSeek != pKeepEndNode ) {
+
+                        auto pRemoveCopy = pSeek;
+                        pSeek = pSeek->_pNext;
+                        __SingleLinkedList :: __sll_freeNode ( pRemoveCopy );
+                        ++ removedCount;
+                    }
+
+                    if ( pKeepStartNode != nullptr ) {
+                        pKeepStartNode->_pNext  = pKeepEndNode;
+                    } else {
+                        this->_pFront           = pKeepEndNode;
+                    }
+
+                    if ( pKeepEndNode == nullptr ) {
+                        this->_pBack            = pKeepStartNode == nullptr ? this->_pFront : pKeepStartNode;
+                    }
+
+                    return removedCount;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_removeIteratorArray (
+                        __sll_Iterator  const * const * ppIterators,
+                        Size                            iteratorCount
+                ) noexcept -> Size {
+
+                    Size removedCount = 0U;
+                    while ( iteratorCount > 0 && & ( * ( * ppIterators [0U] ) ) == & this->_pFront->_data ) {
+                        this->__sll_removeFront();
+                        ++ ppIterators;
+                        ++ removedCount;
+                        -- iteratorCount;
+                    }
+
+                    if ( iteratorCount == 0U ) {
+                        return removedCount;
+                    }
+
+                    __sll_Iterator const * pStartRange    = ppIterators [ 0U ];
+                    __sll_Iterator const * pEndRange      = ppIterators [ 0U ];
+
+                    for ( Size index = 1U; index < iteratorCount; ++ index ) {
+
+                        if ( pEndRange->_pCurrentNode == ppIterators [ index ]->_pPreviousNode ) {
+                            pEndRange = ppIterators [ index ];
+                        } else {
+                            if ( pStartRange == pEndRange ) {
+                                if ( this->__sll_removeIterator( * pStartRange ) ) {
+                                    ++ removedCount;
+                                }
+                            } else {
+                                removedCount += this->__sll_removeIteratorRange ( pStartRange, pEndRange );
+                            }
+
+                            pStartRange = ppIterators [ index ];
+                            pEndRange   = ppIterators [ index ];
+                        }
+                    }
+
+                    if ( pStartRange == pEndRange ) {
+                        if ( this->__sll_removeIterator ( * pStartRange ) ) {
+                            ++ removedCount;
+                        }
+                    } else {
+
+                        removedCount += this->__sll_removeIteratorRange ( pStartRange, pEndRange );
+                    }
+
+                    return removedCount;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > template <
+                        typename __TElementType,
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_copy (
+                        __SingleLinkedList const & list
+                ) noexcept -> void {
+
+                    if ( this == & list ) {
+                        return;
+                    }
+
+                    this->__sll_clear();
+                    this->__sll_copyCleared ( list );
                 }
 
 
@@ -501,6 +623,75 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         this->_pBack = pNewNode;
                         pOtherHead = pOtherHead->_pNext;
                     }
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_OptimalInline auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_move (
+                        __SingleLinkedList && list
+                ) noexcept -> void {
+
+                    if ( this == & list ) {
+                        return;
+                    }
+
+                    this->__sll_clear();
+                    this->__sll_moveCleared ( std :: move ( list ) );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_moveCleared (
+                        __SingleLinkedList && list
+                ) noexcept -> void {
+
+                    this->_pFront   = cds :: exchange ( list._pFront, nullptr );
+                    this->_pBack    = cds :: exchange ( list._pBack, nullptr );
+                }
+
+
+                template <
+                        typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        utility :: ComparisonFunction < __ElementType > __equals    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprConditioned auto __SingleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __sll_equals (
+                        __SingleLinkedList const & list
+                ) const noexcept -> bool {
+
+                    if ( this->_pFront == list._pFront ) {
+                        return true;
+                    }
+
+                    if ( this->_pFront == nullptr || list._pFront == nullptr ) {
+                        return false;
+                    }
+
+                    auto thisFront  = this->_pFront;
+                    auto otherFront = list._pFront;
+
+                    while ( thisFront != nullptr ) {
+
+                        if ( ! __equals ( thisFront->_data, otherFront->_data ) ) {
+                            return false;
+                        }
+
+                        thisFront   = thisFront->_pNext;
+                        otherFront  = otherFront->_pNext;
+                    }
+
+                    return true;
                 }
 
             }

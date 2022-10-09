@@ -1205,7 +1205,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             return ( __rbt_ConstIterator ( this->_pRoot, pSearch ) );
                         }
 
-                        if ( __keyLowerComparator ( __keyExtractor ( pSearch->_data ), key ) ) {
+                        if ( __keyLowerComparator ( key, __keyExtractor ( pSearch->_data ) ) ) {
                             pSearch = pSearch->_pLeft;
                         } else {
                             pSearch = pSearch->_pRight;
