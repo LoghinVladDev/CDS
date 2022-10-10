@@ -2,261 +2,81 @@
  * Created by loghin on 08/07/22.
  */
 
-#ifndef __CDS_LIST_CONSTRUCTS_HPP__
-#define __CDS_LIST_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_LIST_CONSTRUCTS_HPP__
+#define __CDS_EX_LIST_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
-
-        /**
-         * @brief Pre-declaration of the List class
-         * @namespace cds :: experimental
-         */
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        class List;
-
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                /**
-                 * @typedef Alias used by List to implement the Delegate Forward Iterable Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ListDelegateForwardIterableClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __DelegateForwardIterablePrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                true
-                        >;
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateForwardIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >;
 
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateBackwardIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Delegate Backward Iterable Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ListDelegateBackwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __DelegateBackwardIterablePrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                true
-                        >;
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateForwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >;
 
+                template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListDelegateBackwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Delegate Forward Const Iterable Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ListDelegateForwardConstIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __DelegateForwardConstIterablePrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                true
-                        >;
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListBoundaryInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >;
 
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIteratorRelativeInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Delegate Backward Const Iterable Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ListDelegateBackwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __DelegateBackwardConstIterablePrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                true
-                        >;
+                template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ListConstIteratorRelativeInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
 
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndexedOperationsClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Boundary Insertion Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ListBoundaryInsertionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __BoundaryInsertionPrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                __ElementType
-                        >;
+                template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListReplaceClient < __ElementType >;
 
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Iterator-Relative Insertion Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIteratorRelativeInsertionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __AbstractIteratorRelativeInsertionPrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
 
+                template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ListReplaceByClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListReplaceByClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Const-Iterator-Relative Insertion Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ListConstIteratorRelativeInsertionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __AbstractConstIteratorRelativeInsertionPrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
+                template < typename __ElementType >                                                       /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIndicesClient < __ElementType >;
 
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
 
-                /**
-                 * @typedef Alias used by List to implement the Indexed Operations Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIndexedOperationsClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __IndexedOperationsPrimitiveClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
 
-
-                /**
-                 * @typedef Alias used by List to implement the Replace Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ListReplaceClient =         /* NOLINT(bugprone-reserved-identifier) */
-                        __ReplaceCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Replace of Collection Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ListReplaceOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __ReplaceOfCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Replace of Initializer List Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ListReplaceOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __ReplaceOfCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Replace by Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ListReplaceByClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __ReplaceByCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Indices Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIndicesClient =         /* NOLINT(bugprone-reserved-identifier) */
-                        __IndicesCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Indices of Collection Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIndicesOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __IndicesOfCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Indices of Initializer List Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIndicesOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __IndicesOfCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                /**
-                 * @typedef Alias used by List to implement the Indices by Client
-                 * @tparam __ElementType the type of the elements enclosed in the extending Collection
-                 * @namespace cds :: experimental :: __hidden :: __impl
-                 * @internal library-private
-                 */
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ListIndicesByClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __IndicesByCompositeClient <
-                                cds :: experimental :: List < __ElementType >,
-                                __ElementType
-                        >;
+                template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ListIndicesByClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
 
             }
         }
     }
 }
 
-#endif /* __CDS_LIST_CONSTRUCTS_HPP__ */
+#endif /* __CDS_EX_LIST_CONSTRUCTS_HPP__ */

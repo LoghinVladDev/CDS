@@ -1,125 +1,276 @@
-//
-// Created by loghin on 4/24/2022.
-//
+/*
+ * Created by loghin on 4/24/2022.
+ */
 
 #ifndef __CDS_LIST_HPP__
-#define __CDS_LIST_HPP__
+#define __CDS_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
+#include <CDS/Function>
 #include <CDS/MutableCollection>
+
+#include "../../../shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
+
+#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/IteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
+
+#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/IndicesCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/IndicesOfCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/IndicesByCompositeClient.hpp"
+
+#include "list/Constructs.hpp"
 
 namespace cds {
 
     /**
-     * @class Abstract Object representing any Indexed Iterable Container of given elements of type
-     * @tparam __ElementType is the type of elements contained into List
+     * @class Abstract Object representing any List-Type Linear Iterable Container. Order of elements preserved.
+     * @tparam __ElementType is the type of elements contained in the List
+     *
+     * @extends [public]    MutableCollection - Base MutableCollection Class, inheriting properties of mutable/immutable forward iterable container-type
+     *
+     * @implements [public] __ListDelegateForwardIterableClient - Abstract Mutable Bidirectional Iterator Request Client - begin / end
+     * @implements [public] __ListDelegateBackwardIterableClient - Abstract Mutable Bidirectional Reverse Iterator Request Client - rbegin / rend
+     * @implements [public] __ListDelegateForwardConstIterableClient - Abstract Immutable Bidirectional Iterator Request Client - cbegin / cend
+     * @implements [public] __ListDelegateForwardConstIterableClient - Abstract Immutable Bidirectional Reverse Iterator Request Client - crbegin / crend
+     * @implements [public] __ListBoundaryInsertionClient - Insertion at List boundaries Client - pushFront / pushFrontAll / pushFrontAllOf / emplaceFront / pushBack / pushBackAll / pushBackAllOf / emplaceBack
+     * @implements [public] __ListIteratorRelativeInsertionClient - Insertion relative to given iterator position Client - insertBefore / insertAllBefore / insertAllOfBefore / emplaceBefore / insertAfter / insertAllAfter / insertAllOfAfter / emplaceAfter
+     * @implements [public] __ListConstIteratorRelativeInsertionClient - Insertion relative to given const iterator position Client - insertBefore / insertAllBefore / insertAllOfBefore / emplaceBefore / insertAfter / insertAllAfter / insertAllOfAfter / emplaceAfter
+     * @implements [public] __ListIndexedOperationsClient - List Operations using indices. operator[], sub < list >, sub ( list )
+     * @implements [public] __ListReplaceClient - Replace singular element values - replace / replaceFirst / replaceLast / replaceAll
+     * @implements [public] __ListReplaceOfCollectionClient - Replace Client for replacing values belonging to a given collection - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
+     * @implements [public] __ListReplaceOfInitializerListClient - Replace Client for replacing values belonging to a given initializer list - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
+     * @implements [public] __ListReplaceByClient - Replace Client for replacing values validated by a given predicate - replaceThat / replaceFirstThat / replaceLastThat / replaceAllThat
+     * @implements [public] __ListIndicesClient - Client used for identifying indices of a given element - indexOf / firstIndexOf / lastIndexOf / indicesOf
+     * @implements [public] __ListIndicesOfCollectionClient - Client used for identifying indices of the elements found in the given collection - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
+     * @implements [public] __ListIndicesOfInitializerListClient - Client used for identifying indices of the elements found in the given initializer list - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
+     * @implements [public] __ListIndicesByClient - Client used for identifying indices of the elements validated by a given predicate - indicesOfThat / indexOfFirstThat / indexOfLastThat / indicesOfAllThat
+     *
+     * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+     * @test Suite: MCTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
+     * @test Suite: LTS-00001, Group: All, Test Cases: All
+     *
+     * @namespace cds
+     * @public
      */
-    template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-    class List : public MutableCollection < __ElementType > {
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    class List :
+            public MutableCollection < __ElementType >,
+            public __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >,
+            public __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >,
+            public __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >,
+            public __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >,
+            public __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >,
+            public __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >,
+            public __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >,
+            public __hidden :: __impl :: __ListReplaceClient < __ElementType >,
+            public __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >,
+            public __hidden :: __impl :: __ListReplaceByClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndicesClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndicesByClient < __ElementType > {
 
     public:
         /**
-         * @typedef Alias for __ElementType, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+         * @typedef public alias for __ElementType, the type of the contained elements,
+         * publicly accessible, useful in sfinae statements - decltype ( List ) :: ElementType
+         * @public
          */
-        using typename MutableCollection < __ElementType > :: ElementType;
+        using ElementType                           = __ElementType;
 
     protected:
         /**
-         * @typedef Alias for std :: initializer_list < T > or std :: initializer_list < ElementType >
+         * @typedef protected alias for MutableCollection \< __ElementType \> base extended class - providing mutable iterable properties
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: InitializerList;
+        using MutableCollectionBase = MutableCollection < __ElementType >;
 
     protected:
         /**
-         * @interface An Iterator Delegate represents the actual implementation of the iterator done by the derived classes. The Abstract Delegate Iterator is the base used by the Iterator bases
+         * @typedef protected alias for __ListDelegateForwardIterableClient base interface - providing begin / end for Abstract Bidirectional Mutable Iterators
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: AbstractDelegateIterator;
+        using DelegateForwardIterableClient         = __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >;
 
     protected:
         /**
-         * @class The base class for mutable Iterator types. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+         * @typedef protected alias for __ListDelegateBackwardIterableClient base interface - providing rbegin / rend for Abstract Bidirectional Mutable Reverse Iterators
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: DelegateIterator;
+        using DelegateBackwardIterableClient        = __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >;
 
     protected:
         /**
-         * @class The base class for immutable Iterator types. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+         * @typedef protected alias for __ListDelegateForwardConstIterableClient base interface - providing cbegin / cend for Abstract Bidirectional Immutable Iterators
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: DelegateConstIterator;
+        using DelegateForwardConstIterableClient    = __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >;
 
     protected:
         /**
-         * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+         * @typedef protected alias for DelegateBackwardConstIterableClient base interface - providing crbegin / crend for Abstract Bidirectional Immutable Reverse Iterators
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: AbstractIterator;
+        using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >;
 
     protected:
         /**
-         * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivative Objects when acquiring an Iterator Delegate Implementation
+         * @typedef protected alias for __ListBoundaryInsertionClient base interface - providing boundary insertion functions
+         * @protected
          */
-        using typename MutableCollection < __ElementType > :: DelegateIteratorRequestType;
+        using BoundaryInsertionClient               = __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIteratorRelativeInsertionClient base interface - providing iterator relative insertion functions
+         * @protected
+         */
+        using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListConstIteratorRelativeInsertionClient base interface - providing const iterator relative insertion functions
+         * @protected
+         */
+        using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIndexedOperationsClient base interface - providing index based operations
+         * @protected
+         */
+        using IndexedOperationsClient               = __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListReplaceClient base interface - providing replace operations
+         * @protected
+         */
+        using ReplaceClient                         = __hidden :: __impl :: __ListReplaceClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListReplaceOfCollectionClient base interface - providing replace of collection operations
+         * @protected
+         */
+        using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListReplaceOfInitializerListClient base interface - providing replace of initializer list operations
+         * @protected
+         */
+        using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListReplaceByClient base interface - providing replace by predicate operations
+         * @protected
+         */
+        using ReplaceByClient                       = __hidden :: __impl :: __ListReplaceByClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIndicesClient base interface - providing index query operations
+         * @protected
+         */
+        using IndicesClient                         = __hidden :: __impl :: __ListIndicesClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIndicesOfCollectionClient base interface - providing indices of collection elements query operations
+         * @protected
+         */
+        using IndicesOfCollectionClient             = __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIndicesOfInitializerListClient base interface - providing indices of initializer list elements query operations
+         * @protected
+         */
+        using IndicesOfInitializerListClient        = __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef protected alias for __ListIndicesByClient base interface - providing indices of elements validated by predicate query operations
+         * @protected
+         */
+        using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
+
+    protected:
+        /**
+         * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
+         * @protected
+         */
+        using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+
+    protected:
+        /**
+         * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
+         * @protected
+         */
+        using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
 
     public:
         /**
-         * @class The Iterator type used for Forward Iteration over mutable values
+         * @typedef imported protected alias for Iterator, representing a forward mutable iterator
+         * @public
          */
-        using typename MutableCollection < __ElementType > :: Iterator;
+        using typename DelegateForwardIterableClient :: Iterator;
 
     public:
         /**
-         * @class The Iterator type used for Forward Iteration over immutable values
+         * @typedef imported protected alias for ConstIterator, representing a forward immutable iterator
+         * @public
          */
-        using typename MutableCollection < __ElementType > :: ConstIterator;
+        using typename DelegateForwardConstIterableClient :: ConstIterator;
 
     public:
         /**
-         * @class The Iterator type used for Backward Iteration over mutable values
+         * @typedef imported protected alias for ReverseIterator, representing a backward mutable iterator
+         * @public
          */
-        using typename MutableCollection < __ElementType > :: ReverseIterator;
+        using typename DelegateBackwardIterableClient :: ReverseIterator;
 
     public:
         /**
-         * @class The Iterator type used for Backward Iteration over immutable values
+         * @typedef imported protected alias for ConstReverseIterator, representing a backward immutable iterator
+         * @public
          */
-        using typename MutableCollection < __ElementType > :: ConstReverseIterator;
+        using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
 
     public:
+        /**
+         * @brief Public constant representing an invalid list index. Used by index functions to denote the absence of an element.
+         * @static
+         * @public
+         */
         static Index const invalidIndex = -1;
-
-    protected:
-        /**
-         * @brief Import statement for
-         *      acquireDelegate ( AbstractIterator ),
-         *      acquireDelegate ( ConstIterator ),
-         *      acquireDelegate ( ConstReverseIterator )
-         */
-        using MutableCollection < __ElementType > :: acquireDelegate;
-
-    protected:
-        /**
-         * @brief Function used to request a DelegateIterator from the Iterator constructing functions ( begin/end/rbegin/rend ) to acquire a DelegateIterator containing
-         *      the implementation from the derived class, of requested iterator type
-         * @param requestType : DelegateIteratorRequestType = the type of request, associated with expected returned type of iterator implementation
-         * @exceptsafe
-         * @return UniquePointer < DelegateIterator > = Uniquely-Owned Pointer to a DelegateIterator-derived object
-         */
-        auto delegateIterator (
-                DelegateIteratorRequestType
-        ) noexcept -> cds :: UniquePointer < DelegateIterator > override = 0;
 
     protected:
         /**
          * @brief Default Constructor
          * @exceptsafe
-         * @test tested in collection/Collection test
+         * @test Suite: STS-00001, Group: All, Test Cases: All
+         * @protected
          */
-        constexpr List () noexcept = default;
+        constexpr List () noexcept;
 
     protected:
         /**
          * @brief Copy Constructor
-         * @param list : List cref = Constant Reference to List to copy field values from
+         * @param [in] list : List cref = Constant Reference to a list to copy the data from
          * @exceptsafe
-         * @test tested in collection/Collection test
+         * @test Suite: STS-00001, Group: All, Test Cases: All
+         * @protected
          */
         constexpr List (
                 List const & list
@@ -128,1365 +279,995 @@ namespace cds {
     protected:
         /**
          * @brief Move Constructor
-         * @param list : List mref = Move Reference to List to move field values from
+         * @param [in, out] list : List mref = Move Reference to a list to acquire and release the data from
          * @exceptsafe
-         * @test tested in collection/Collection test
+         * @test Suite: STS-00001, Group: All, Test Cases: All
+         * @protected
          */
         constexpr List (
                 List && list
         ) noexcept;
 
     protected:
-        __CDS_Explicit constexpr List (
-                Size size
-        ) noexcept;
-
-    protected:
-        Size _size { 0ULL };
-
-    public:
         /**
-         * @brief Default Destructor
+         * @brief Destructor
          * @exceptsafe
-         * @test tested in collection/Collection test
+         * @test Suite: STS-00001, Group: All, Test Cases: All
+         * @public
          */
-        __CDS_cpplang_ConstexprDestructor ~List () noexcept override = default;
+        __CDS_cpplang_ConstexprDestructor ~List () noexcept override;
 
     public:
         /**
-         * @brief Function used to clear the collection, removing all elements from it
+         * @inherit begin function inherited from DelegateForwardIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00201-IT-perValueCheck,
+         *      LTC-00205-IT-perValueBwdCheck,
+         *      LTC-00209-IT-itMutabilityRange,
+         *      LTC-00210-IT-itMutabilityStd
+         * }
+         * @public
+         */
+        using DelegateForwardIterableClient :: begin;
+
+    public:
+        /**
+         * @inherit end function inherited from DelegateForwardIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00201-IT-perValueCheck,
+         *      LTC-00205-IT-perValueBwdCheck,
+         *      LTC-00209-IT-itMutabilityRange,
+         *      LTC-00210-IT-itMutabilityStd
+         * }
+         * @public
+         */
+        using DelegateForwardIterableClient :: end;
+
+    public:
+        /**
+         * @inherit reverse begin function inherited from DelegateBackwardIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00203-IT-perValueRevCheck,
+         *      LTC-00207-IT-perValueRevBwdCheck,
+         *      LTC-00211-IT-itMutabilityStdRev
+         * }
+         * @public
+         */
+        using DelegateBackwardIterableClient :: rbegin;
+
+    public:
+        /**
+         * @inherit reverse end function inherited from DelegateBackwardIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00203-IT-perValueRevCheck,
+         *      LTC-00207-IT-perValueRevBwdCheck,
+         *      LTC-00211-IT-itMutabilityStdRev
+         * }
+         * @public
+         */
+        using DelegateBackwardIterableClient :: rend;
+
+    public:
+        /**
+         * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00202-IT-perValueImmCheck,
+         *      LTC-00206-IT-perValueBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: begin;
+
+    public:
+        /**
+         * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00202-IT-perValueImmCheck,
+         *      LTC-00206-IT-perValueBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: end;
+
+    public:
+        /**
+         * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00202-IT-perValueImmCheck,
+         *      LTC-00206-IT-perValueBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: cbegin;
+
+    public:
+        /**
+         * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
+         * Will hide the variant inherited from MutableCollection, which is unidirectional
+         * and will use the bidirectional one provided by this inheritance
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00202-IT-perValueImmCheck,
+         *      LTC-00206-IT-perValueBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateForwardConstIterableClient :: cend;
+
+    public:
+        /**
+         * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00204-IT-perValueRevImmCheck,
+         *      LTC-00208-IT-perValueRevBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateBackwardConstIterableClient :: rbegin;
+
+    public:
+        /**
+         * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00204-IT-perValueRevImmCheck,
+         *      LTC-00208-IT-perValueRevBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateBackwardConstIterableClient :: rend;
+
+    public:
+        /**
+         * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00204-IT-perValueRevImmCheck,
+         *      LTC-00208-IT-perValueRevBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateBackwardConstIterableClient :: crbegin;
+
+    public:
+        /**
+         * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
+         *      LTC-00204-IT-perValueRevImmCheck,
+         *      LTC-00208-IT-perValueRevBwdImmCheck
+         * }
+         * @public
+         */
+        using DelegateBackwardConstIterableClient :: crend;
+
+    public:
+        /**
+         * @inherit pushBack function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00301-IT-pushBackCopy1,
+         *      LTC-00302-IT-pushBackCopy2,
+         *      LTC-00303-IT-pushBackCopy3,
+         *      LTC-00304-IT-pushBackMove1,
+         *      LTC-00305-IT-pushBackMove2
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushBack;
+
+    public:
+        /**
+         * @inherit pushBackAll function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00311-IT-pushBackValues
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushBackAll;
+
+    public:
+        /**
+         * @inherit pushBackAllOf function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00311-IT-pushBackAllOfInitList,
+         *      LTC-00312-IT-pushBackAllOfColl,
+         *      LTC-00315-IT-pushBackItRange1,
+         *      LTC-00317-IT-pushBackItRange2,
+         *      LTC-00319-IT-pushBackItRange3
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushBackAllOf;
+
+    public:
+        /**
+         * @inherit pushBack function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00306-IT-pushFrontCopy1,
+         *      LTC-00307-IT-pushFrontCopy2,
+         *      LTC-00308-IT-pushFrontCopy3,
+         *      LTC-00309-IT-pushFrontMove1,
+         *      LTC-00310-IT-pushFrontMove2
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushFront;
+
+    public:
+        /**
+         * @inherit pushFrontAll function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00312-IT-pushFrontValues
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushFrontAll;
+
+    public:
+        /**
+         * @inherit pushFrontAllOf function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00313-IT-pushFrontAllOfInitList,
+         *      LTC-00314-IT-pushFrontAllOfColl,
+         *      LTC-00316-IT-pushFrontItRange1,
+         *      LTC-00318-IT-pushFrontItRange2,
+         *      LTC-00320-IT-pushFrontItRange3
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: pushFrontAllOf;
+
+    public:
+        /**
+         * @inherit emplaceBack function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00324-IT-emplaceBack
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: emplaceBack;
+
+    public:
+        /**
+         * @inherit emplaceFront function inherited from BoundaryInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
+         *      LTC-00323-IT-emplaceFront
+         * }
+         * @public
+         */
+        using BoundaryInsertionClient :: emplaceFront;
+
+    public:
+        /**
+         * @inherit insertBefore function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00401-IT-insertBeforeItCase1SingleValue1OffsetCase1,
+         *      LTC-00402-IT-insertBeforeItCase1SingleValue1OffsetCase2,
+         *      LTC-00403-IT-insertBeforeItCase1SingleValue1OffsetCase3,
+         *      LTC-00404-IT-insertBeforeItCase1SingleValue1OffsetCase4,
+         *      LTC-00405-IT-insertBeforeItCase1SingleValue2OffsetCase1,
+         *      LTC-00406-IT-insertBeforeItCase1SingleValue2OffsetCase2,
+         *      LTC-00407-IT-insertBeforeItCase1SingleValue2OffsetCase3,
+         *      LTC-00408-IT-insertBeforeItCase1SingleValue2OffsetCase4,
+         *      LTC-00409-IT-insertBeforeItCase1SingleValue3OffsetCase1,
+         *      LTC-00410-IT-insertBeforeItCase1SingleValue3OffsetCase2,
+         *      LTC-00411-IT-insertBeforeItCase1SingleValue3OffsetCase3,
+         *      LTC-00412-IT-insertBeforeItCase1SingleValue3OffsetCase4,
+         *      LTC-00413-IT-insertBeforeItCase3SingleValue1OffsetCase1,
+         *      LTC-00414-IT-insertBeforeItCase3SingleValue1OffsetCase2,
+         *      LTC-00415-IT-insertBeforeItCase3SingleValue1OffsetCase3,
+         *      LTC-00416-IT-insertBeforeItCase3SingleValue1OffsetCase4,
+         *      LTC-00417-IT-insertBeforeItCase3SingleValue2OffsetCase1,
+         *      LTC-00418-IT-insertBeforeItCase3SingleValue2OffsetCase2,
+         *      LTC-00419-IT-insertBeforeItCase3SingleValue2OffsetCase3,
+         *      LTC-00420-IT-insertBeforeItCase3SingleValue2OffsetCase4,
+         *      LTC-00421-IT-insertBeforeItCase3SingleValue3OffsetCase1,
+         *      LTC-00422-IT-insertBeforeItCase3SingleValue3OffsetCase2,
+         *      LTC-00423-IT-insertBeforeItCase3SingleValue3OffsetCase3,
+         *      LTC-00424-IT-insertBeforeItCase3SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertBefore;
+
+    public:
+        /**
+         * @inherit insertAllBefore function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00593-IT-insertAllBeforeItCase1PackOffsetCase1,
+         *      LTC-00594-IT-insertAllBeforeItCase1PackOffsetCase2,
+         *      LTC-00595-IT-insertAllBeforeItCase1PackOffsetCase3,
+         *      LTC-00596-IT-insertAllBeforeItCase1PackOffsetCase4,
+         *      LTC-00601-IT-insertAllBeforeItCase3PackOffsetCase1,
+         *      LTC-00602-IT-insertAllBeforeItCase3PackOffsetCase2,
+         *      LTC-00603-IT-insertAllBeforeItCase3PackOffsetCase3,
+         *      LTC-00604-IT-insertAllBeforeItCase3PackOffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertAllBefore;
+
+    public:
+        /**
+         * @inherit insertAllOfBefore function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00497-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase1,
+         *      LTC-00498-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase2,
+         *      LTC-00499-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase3,
+         *      LTC-00500-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase4,
+         *      LTC-00501-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase1,
+         *      LTC-00502-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase2,
+         *      LTC-00503-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase3,
+         *      LTC-00504-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase4,
+         *      LTC-00505-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase1,
+         *      LTC-00506-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase2,
+         *      LTC-00507-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase3,
+         *      LTC-00508-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase4,
+         *      LTC-00509-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase1,
+         *      LTC-00510-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase2,
+         *      LTC-00511-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase3,
+         *      LTC-00512-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase4,
+         *      LTC-00513-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase1,
+         *      LTC-00514-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase2,
+         *      LTC-00515-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase3,
+         *      LTC-00516-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase4,
+         *      LTC-00517-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase1,
+         *      LTC-00518-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase2,
+         *      LTC-00519-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase3,
+         *      LTC-00520-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertAllOfBefore;
+
+    public:
+        /**
+         * @inherit insertAfter function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00449-IT-insertAfterItCase1SingleValue1OffsetCase1,
+         *      LTC-00450-IT-insertAfterItCase1SingleValue1OffsetCase2,
+         *      LTC-00451-IT-insertAfterItCase1SingleValue1OffsetCase3,
+         *      LTC-00452-IT-insertAfterItCase1SingleValue1OffsetCase4,
+         *      LTC-00453-IT-insertAfterItCase1SingleValue2OffsetCase1,
+         *      LTC-00454-IT-insertAfterItCase1SingleValue2OffsetCase2,
+         *      LTC-00455-IT-insertAfterItCase1SingleValue2OffsetCase3,
+         *      LTC-00456-IT-insertAfterItCase1SingleValue2OffsetCase4,
+         *      LTC-00457-IT-insertAfterItCase1SingleValue3OffsetCase1,
+         *      LTC-00458-IT-insertAfterItCase1SingleValue3OffsetCase2,
+         *      LTC-00459-IT-insertAfterItCase1SingleValue3OffsetCase3,
+         *      LTC-00460-IT-insertAfterItCase1SingleValue3OffsetCase4,
+         *      LTC-00461-IT-insertAfterItCase3SingleValue1OffsetCase1,
+         *      LTC-00462-IT-insertAfterItCase3SingleValue1OffsetCase2,
+         *      LTC-00463-IT-insertAfterItCase3SingleValue1OffsetCase3,
+         *      LTC-00464-IT-insertAfterItCase3SingleValue1OffsetCase4,
+         *      LTC-00465-IT-insertAfterItCase3SingleValue2OffsetCase1,
+         *      LTC-00466-IT-insertAfterItCase3SingleValue2OffsetCase2,
+         *      LTC-00467-IT-insertAfterItCase3SingleValue2OffsetCase3,
+         *      LTC-00468-IT-insertAfterItCase3SingleValue2OffsetCase4,
+         *      LTC-00469-IT-insertAfterItCase3SingleValue3OffsetCase1,
+         *      LTC-00470-IT-insertAfterItCase3SingleValue3OffsetCase2,
+         *      LTC-00471-IT-insertAfterItCase3SingleValue3OffsetCase3,
+         *      LTC-00472-IT-insertAfterItCase3SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertAfter;
+
+    public:
+        /**
+         * @inherit insertAllAfter function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00609-IT-insertAllAfterItCase1PackOffsetCase1,
+         *      LTC-00610-IT-insertAllAfterItCase1PackOffsetCase2,
+         *      LTC-00611-IT-insertAllAfterItCase1PackOffsetCase3,
+         *      LTC-00612-IT-insertAllAfterItCase1PackOffsetCase4,
+         *      LTC-00617-IT-insertAllAfterItCase3PackOffsetCase1,
+         *      LTC-00618-IT-insertAllAfterItCase3PackOffsetCase2,
+         *      LTC-00619-IT-insertAllAfterItCase3PackOffsetCase3,
+         *      LTC-00620-IT-insertAllAfterItCase3PackOffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertAllAfter;
+
+    public:
+        /**
+         * @inherit insertAllOfAfter function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00545-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase1,
+         *      LTC-00546-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase2,
+         *      LTC-00547-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase3,
+         *      LTC-00548-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase4,
+         *      LTC-00549-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase1,
+         *      LTC-00550-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase2,
+         *      LTC-00551-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase3,
+         *      LTC-00552-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase4,
+         *      LTC-00553-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase1,
+         *      LTC-00554-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase2,
+         *      LTC-00555-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase3,
+         *      LTC-00556-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase4,
+         *      LTC-00557-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase1,
+         *      LTC-00558-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase2,
+         *      LTC-00559-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase3,
+         *      LTC-00560-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase4,
+         *      LTC-00561-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase1,
+         *      LTC-00562-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase2,
+         *      LTC-00563-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase3,
+         *      LTC-00564-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase4,
+         *      LTC-00565-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase1,
+         *      LTC-00566-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase2,
+         *      LTC-00567-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase3,
+         *      LTC-00568-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: insertAllOfAfter;
+
+    public:
+        /**
+         * @inherit emplaceBefore function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00401-IT-insertBeforeItCase1SingleValue1OffsetCase1,
+         *      LTC-00402-IT-insertBeforeItCase1SingleValue1OffsetCase2,
+         *      LTC-00403-IT-insertBeforeItCase1SingleValue1OffsetCase3,
+         *      LTC-00404-IT-insertBeforeItCase1SingleValue1OffsetCase4,
+         *      LTC-00405-IT-insertBeforeItCase1SingleValue2OffsetCase1,
+         *      LTC-00406-IT-insertBeforeItCase1SingleValue2OffsetCase2,
+         *      LTC-00407-IT-insertBeforeItCase1SingleValue2OffsetCase3,
+         *      LTC-00408-IT-insertBeforeItCase1SingleValue2OffsetCase4,
+         *      LTC-00409-IT-insertBeforeItCase1SingleValue3OffsetCase1,
+         *      LTC-00410-IT-insertBeforeItCase1SingleValue3OffsetCase2,
+         *      LTC-00411-IT-insertBeforeItCase1SingleValue3OffsetCase3,
+         *      LTC-00412-IT-insertBeforeItCase1SingleValue3OffsetCase4,
+         *      LTC-00413-IT-insertBeforeItCase3SingleValue1OffsetCase1,
+         *      LTC-00414-IT-insertBeforeItCase3SingleValue1OffsetCase2,
+         *      LTC-00415-IT-insertBeforeItCase3SingleValue1OffsetCase3,
+         *      LTC-00416-IT-insertBeforeItCase3SingleValue1OffsetCase4,
+         *      LTC-00417-IT-insertBeforeItCase3SingleValue2OffsetCase1,
+         *      LTC-00418-IT-insertBeforeItCase3SingleValue2OffsetCase2,
+         *      LTC-00419-IT-insertBeforeItCase3SingleValue2OffsetCase3,
+         *      LTC-00420-IT-insertBeforeItCase3SingleValue2OffsetCase4,
+         *      LTC-00421-IT-insertBeforeItCase3SingleValue3OffsetCase1,
+         *      LTC-00422-IT-insertBeforeItCase3SingleValue3OffsetCase2,
+         *      LTC-00423-IT-insertBeforeItCase3SingleValue3OffsetCase3,
+         *      LTC-00424-IT-insertBeforeItCase3SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: emplaceBefore;
+
+    public:
+        /**
+         * @inherit emplaceAfter function inherited from IteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00449-IT-insertAfterItCase1SingleValue1OffsetCase1,
+         *      LTC-00450-IT-insertAfterItCase1SingleValue1OffsetCase2,
+         *      LTC-00451-IT-insertAfterItCase1SingleValue1OffsetCase3,
+         *      LTC-00452-IT-insertAfterItCase1SingleValue1OffsetCase4,
+         *      LTC-00453-IT-insertAfterItCase1SingleValue2OffsetCase1,
+         *      LTC-00454-IT-insertAfterItCase1SingleValue2OffsetCase2,
+         *      LTC-00455-IT-insertAfterItCase1SingleValue2OffsetCase3,
+         *      LTC-00456-IT-insertAfterItCase1SingleValue2OffsetCase4,
+         *      LTC-00457-IT-insertAfterItCase1SingleValue3OffsetCase1,
+         *      LTC-00458-IT-insertAfterItCase1SingleValue3OffsetCase2,
+         *      LTC-00459-IT-insertAfterItCase1SingleValue3OffsetCase3,
+         *      LTC-00460-IT-insertAfterItCase1SingleValue3OffsetCase4,
+         *      LTC-00461-IT-insertAfterItCase3SingleValue1OffsetCase1,
+         *      LTC-00462-IT-insertAfterItCase3SingleValue1OffsetCase2,
+         *      LTC-00463-IT-insertAfterItCase3SingleValue1OffsetCase3,
+         *      LTC-00464-IT-insertAfterItCase3SingleValue1OffsetCase4,
+         *      LTC-00465-IT-insertAfterItCase3SingleValue2OffsetCase1,
+         *      LTC-00466-IT-insertAfterItCase3SingleValue2OffsetCase2,
+         *      LTC-00467-IT-insertAfterItCase3SingleValue2OffsetCase3,
+         *      LTC-00468-IT-insertAfterItCase3SingleValue2OffsetCase4,
+         *      LTC-00469-IT-insertAfterItCase3SingleValue3OffsetCase1,
+         *      LTC-00470-IT-insertAfterItCase3SingleValue3OffsetCase2,
+         *      LTC-00471-IT-insertAfterItCase3SingleValue3OffsetCase3,
+         *      LTC-00472-IT-insertAfterItCase3SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using IteratorRelativeInsertionClient :: emplaceAfter;
+
+    public:
+        /**
+         * @inherit insertBefore function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00425-IT-insertBeforeItCase2SingleValue1OffsetCase1,
+         *      LTC-00426-IT-insertBeforeItCase2SingleValue1OffsetCase2,
+         *      LTC-00427-IT-insertBeforeItCase2SingleValue1OffsetCase3,
+         *      LTC-00428-IT-insertBeforeItCase2SingleValue1OffsetCase4,
+         *      LTC-00429-IT-insertBeforeItCase2SingleValue2OffsetCase1,
+         *      LTC-00430-IT-insertBeforeItCase2SingleValue2OffsetCase2,
+         *      LTC-00431-IT-insertBeforeItCase2SingleValue2OffsetCase3,
+         *      LTC-00432-IT-insertBeforeItCase2SingleValue2OffsetCase4,
+         *      LTC-00433-IT-insertBeforeItCase2SingleValue3OffsetCase1,
+         *      LTC-00434-IT-insertBeforeItCase2SingleValue3OffsetCase2,
+         *      LTC-00435-IT-insertBeforeItCase2SingleValue3OffsetCase3,
+         *      LTC-00436-IT-insertBeforeItCase2SingleValue3OffsetCase4,
+         *      LTC-00437-IT-insertBeforeItCase4SingleValue1OffsetCase1,
+         *      LTC-00438-IT-insertBeforeItCase4SingleValue1OffsetCase2,
+         *      LTC-00439-IT-insertBeforeItCase4SingleValue1OffsetCase3,
+         *      LTC-00440-IT-insertBeforeItCase4SingleValue1OffsetCase4,
+         *      LTC-00441-IT-insertBeforeItCase4SingleValue2OffsetCase1,
+         *      LTC-00442-IT-insertBeforeItCase4SingleValue2OffsetCase2,
+         *      LTC-00443-IT-insertBeforeItCase4SingleValue2OffsetCase3,
+         *      LTC-00444-IT-insertBeforeItCase4SingleValue2OffsetCase4,
+         *      LTC-00445-IT-insertBeforeItCase4SingleValue3OffsetCase1,
+         *      LTC-00446-IT-insertBeforeItCase4SingleValue3OffsetCase2,
+         *      LTC-00447-IT-insertBeforeItCase4SingleValue3OffsetCase3,
+         *      LTC-00448-IT-insertBeforeItCase4SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertBefore;
+
+    public:
+        /**
+         * @inherit insertAllBefore function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00597-IT-insertAllBeforeItCase2PackOffsetCase1,
+         *      LTC-00598-IT-insertAllBeforeItCase2PackOffsetCase2,
+         *      LTC-00599-IT-insertAllBeforeItCase2PackOffsetCase3,
+         *      LTC-00600-IT-insertAllBeforeItCase2PackOffsetCase4,
+         *      LTC-00605-IT-insertAllBeforeItCase4PackOffsetCase1,
+         *      LTC-00606-IT-insertAllBeforeItCase4PackOffsetCase2,
+         *      LTC-00607-IT-insertAllBeforeItCase4PackOffsetCase3,
+         *      LTC-00608-IT-insertAllBeforeItCase4PackOffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertAllBefore;
+
+    public:
+        /**
+         * @inherit insertAllOfBefore function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00521-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase1,
+         *      LTC-00522-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase2,
+         *      LTC-00523-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase3,
+         *      LTC-00524-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase4,
+         *      LTC-00525-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase1,
+         *      LTC-00526-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase2,
+         *      LTC-00527-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase3,
+         *      LTC-00528-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase4,
+         *      LTC-00529-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase1,
+         *      LTC-00530-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase2,
+         *      LTC-00531-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase3,
+         *      LTC-00532-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase4,
+         *      LTC-00533-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase1,
+         *      LTC-00534-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase2,
+         *      LTC-00535-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase3,
+         *      LTC-00536-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase4,
+         *      LTC-00537-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase1,
+         *      LTC-00538-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase2,
+         *      LTC-00539-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase3,
+         *      LTC-00540-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase4,
+         *      LTC-00541-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase1,
+         *      LTC-00542-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase2,
+         *      LTC-00543-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase3,
+         *      LTC-00544-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+
+    public:
+        /**
+         * @inherit insertAfter function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00473-IT-insertAfterItCase2SingleValue1OffsetCase1,
+         *      LTC-00474-IT-insertAfterItCase2SingleValue1OffsetCase2,
+         *      LTC-00475-IT-insertAfterItCase2SingleValue1OffsetCase3,
+         *      LTC-00476-IT-insertAfterItCase2SingleValue1OffsetCase4,
+         *      LTC-00477-IT-insertAfterItCase2SingleValue2OffsetCase1,
+         *      LTC-00478-IT-insertAfterItCase2SingleValue2OffsetCase2,
+         *      LTC-00479-IT-insertAfterItCase2SingleValue2OffsetCase3,
+         *      LTC-00480-IT-insertAfterItCase2SingleValue2OffsetCase4,
+         *      LTC-00481-IT-insertAfterItCase2SingleValue3OffsetCase1,
+         *      LTC-00482-IT-insertAfterItCase2SingleValue3OffsetCase2,
+         *      LTC-00483-IT-insertAfterItCase2SingleValue3OffsetCase3,
+         *      LTC-00484-IT-insertAfterItCase2SingleValue3OffsetCase4,
+         *      LTC-00485-IT-insertAfterItCase4SingleValue1OffsetCase1,
+         *      LTC-00486-IT-insertAfterItCase4SingleValue1OffsetCase2,
+         *      LTC-00487-IT-insertAfterItCase4SingleValue1OffsetCase3,
+         *      LTC-00488-IT-insertAfterItCase4SingleValue1OffsetCase4,
+         *      LTC-00489-IT-insertAfterItCase4SingleValue2OffsetCase1,
+         *      LTC-00490-IT-insertAfterItCase4SingleValue2OffsetCase2,
+         *      LTC-00491-IT-insertAfterItCase4SingleValue2OffsetCase3,
+         *      LTC-00492-IT-insertAfterItCase4SingleValue2OffsetCase4,
+         *      LTC-00493-IT-insertAfterItCase4SingleValue3OffsetCase1,
+         *      LTC-00494-IT-insertAfterItCase4SingleValue3OffsetCase2,
+         *      LTC-00495-IT-insertAfterItCase4SingleValue3OffsetCase3,
+         *      LTC-00496-IT-insertAfterItCase4SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertAfter;
+
+    public:
+        /**
+         * @inherit insertAllAfter function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00613-IT-insertAllAfterItCase2PackOffsetCase1,
+         *      LTC-00614-IT-insertAllAfterItCase2PackOffsetCase2,
+         *      LTC-00615-IT-insertAllAfterItCase2PackOffsetCase3,
+         *      LTC-00616-IT-insertAllAfterItCase2PackOffsetCase4,
+         *      LTC-00621-IT-insertAllAfterItCase4PackOffsetCase1,
+         *      LTC-00622-IT-insertAllAfterItCase4PackOffsetCase2,
+         *      LTC-00623-IT-insertAllAfterItCase4PackOffsetCase3,
+         *      LTC-00624-IT-insertAllAfterItCase4PackOffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertAllAfter;
+
+    public:
+        /**
+         * @inherit insertAllOfAfter function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00569-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase1,
+         *      LTC-00570-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase2,
+         *      LTC-00571-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase3,
+         *      LTC-00572-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase4,
+         *      LTC-00573-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase1,
+         *      LTC-00574-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase2,
+         *      LTC-00575-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase3,
+         *      LTC-00576-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase4,
+         *      LTC-00577-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase1,
+         *      LTC-00578-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase2,
+         *      LTC-00579-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase3,
+         *      LTC-00580-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase4,
+         *      LTC-00581-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase1,
+         *      LTC-00582-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase2,
+         *      LTC-00583-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase3,
+         *      LTC-00584-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase4,
+         *      LTC-00585-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase1,
+         *      LTC-00586-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase2,
+         *      LTC-00587-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase3,
+         *      LTC-00588-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase4,
+         *      LTC-00589-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase1,
+         *      LTC-00590-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase2,
+         *      LTC-00591-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase3,
+         *      LTC-00592-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+
+    public:
+        /**
+         * @inherit emplaceBefore function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00425-IT-insertBeforeItCase2SingleValue1OffsetCase1,
+         *      LTC-00426-IT-insertBeforeItCase2SingleValue1OffsetCase2,
+         *      LTC-00427-IT-insertBeforeItCase2SingleValue1OffsetCase3,
+         *      LTC-00428-IT-insertBeforeItCase2SingleValue1OffsetCase4,
+         *      LTC-00429-IT-insertBeforeItCase2SingleValue2OffsetCase1,
+         *      LTC-00430-IT-insertBeforeItCase2SingleValue2OffsetCase2,
+         *      LTC-00431-IT-insertBeforeItCase2SingleValue2OffsetCase3,
+         *      LTC-00432-IT-insertBeforeItCase2SingleValue2OffsetCase4,
+         *      LTC-00433-IT-insertBeforeItCase2SingleValue3OffsetCase1,
+         *      LTC-00434-IT-insertBeforeItCase2SingleValue3OffsetCase2,
+         *      LTC-00435-IT-insertBeforeItCase2SingleValue3OffsetCase3,
+         *      LTC-00436-IT-insertBeforeItCase2SingleValue3OffsetCase4,
+         *      LTC-00437-IT-insertBeforeItCase4SingleValue1OffsetCase1,
+         *      LTC-00438-IT-insertBeforeItCase4SingleValue1OffsetCase2,
+         *      LTC-00439-IT-insertBeforeItCase4SingleValue1OffsetCase3,
+         *      LTC-00440-IT-insertBeforeItCase4SingleValue1OffsetCase4,
+         *      LTC-00441-IT-insertBeforeItCase4SingleValue2OffsetCase1,
+         *      LTC-00442-IT-insertBeforeItCase4SingleValue2OffsetCase2,
+         *      LTC-00443-IT-insertBeforeItCase4SingleValue2OffsetCase3,
+         *      LTC-00444-IT-insertBeforeItCase4SingleValue2OffsetCase4,
+         *      LTC-00445-IT-insertBeforeItCase4SingleValue3OffsetCase1,
+         *      LTC-00446-IT-insertBeforeItCase4SingleValue3OffsetCase2,
+         *      LTC-00447-IT-insertBeforeItCase4SingleValue3OffsetCase3,
+         *      LTC-00448-IT-insertBeforeItCase4SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: emplaceBefore;
+
+    public:
+        /**
+         * @inherit emplaceAfter function inherited from ConstIteratorRelativeInsertionClient interface.
+         * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
+         *      LTC-00473-IT-insertAfterItCase2SingleValue1OffsetCase1,
+         *      LTC-00474-IT-insertAfterItCase2SingleValue1OffsetCase2,
+         *      LTC-00475-IT-insertAfterItCase2SingleValue1OffsetCase3,
+         *      LTC-00476-IT-insertAfterItCase2SingleValue1OffsetCase4,
+         *      LTC-00477-IT-insertAfterItCase2SingleValue2OffsetCase1,
+         *      LTC-00478-IT-insertAfterItCase2SingleValue2OffsetCase2,
+         *      LTC-00479-IT-insertAfterItCase2SingleValue2OffsetCase3,
+         *      LTC-00480-IT-insertAfterItCase2SingleValue2OffsetCase4,
+         *      LTC-00481-IT-insertAfterItCase2SingleValue3OffsetCase1,
+         *      LTC-00482-IT-insertAfterItCase2SingleValue3OffsetCase2,
+         *      LTC-00483-IT-insertAfterItCase2SingleValue3OffsetCase3,
+         *      LTC-00484-IT-insertAfterItCase2SingleValue3OffsetCase4,
+         *      LTC-00485-IT-insertAfterItCase4SingleValue1OffsetCase1,
+         *      LTC-00486-IT-insertAfterItCase4SingleValue1OffsetCase2,
+         *      LTC-00487-IT-insertAfterItCase4SingleValue1OffsetCase3,
+         *      LTC-00488-IT-insertAfterItCase4SingleValue1OffsetCase4,
+         *      LTC-00489-IT-insertAfterItCase4SingleValue2OffsetCase1,
+         *      LTC-00490-IT-insertAfterItCase4SingleValue2OffsetCase2,
+         *      LTC-00491-IT-insertAfterItCase4SingleValue2OffsetCase3,
+         *      LTC-00492-IT-insertAfterItCase4SingleValue2OffsetCase4,
+         *      LTC-00493-IT-insertAfterItCase4SingleValue3OffsetCase1,
+         *      LTC-00494-IT-insertAfterItCase4SingleValue3OffsetCase2,
+         *      LTC-00495-IT-insertAfterItCase4SingleValue3OffsetCase3,
+         *      LTC-00496-IT-insertAfterItCase4SingleValue3OffsetCase4
+         * }
+         * @public
+         */
+        using ConstIteratorRelativeInsertionClient :: emplaceAfter;
+
+    public:     using IndexedOperationsClient :: sub;
+
+    public:
+        /**
+         * @inherit operator [] for index operations.
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00107-MF-getOp,
+         *      LTC-00118-MF-getCircularRightOp,
+         *      LTC-00119-MF-getCircularLeftOp,
+         *      LTC-00120-MF-getOpThrow
+         * }
+         * @public
+         */
+        using IndexedOperationsClient :: operator[];
+
+    public:     using IndexedOperationsClient :: removeAt;
+
+    public:     using ReplaceClient :: replace;
+    public:     using ReplaceClient :: replaceFirst;
+    public:     using ReplaceClient :: replaceLast;
+    public:     using ReplaceClient :: replaceAll;
+
+    public:     using ReplaceOfCollectionClient :: replaceOf;
+    public:     using ReplaceOfCollectionClient :: replaceFirstOf;
+    public:     using ReplaceOfCollectionClient :: replaceLastOf;
+    public:     using ReplaceOfCollectionClient :: replaceAllOf;
+    public:     using ReplaceOfCollectionClient :: replaceNotOf;
+    public:     using ReplaceOfCollectionClient :: replaceFirstNotOf;
+    public:     using ReplaceOfCollectionClient :: replaceLastNotOf;
+    public:     using ReplaceOfCollectionClient :: replaceAllNotOf;
+
+    public:     using ReplaceOfInitializerListClient :: replaceOf;
+    public:     using ReplaceOfInitializerListClient :: replaceFirstOf;
+    public:     using ReplaceOfInitializerListClient :: replaceLastOf;
+    public:     using ReplaceOfInitializerListClient :: replaceAllOf;
+    public:     using ReplaceOfInitializerListClient :: replaceNotOf;
+    public:     using ReplaceOfInitializerListClient :: replaceFirstNotOf;
+    public:     using ReplaceOfInitializerListClient :: replaceLastNotOf;
+    public:     using ReplaceOfInitializerListClient :: replaceAllNotOf;
+
+    public:     using ReplaceByClient :: replaceThat;
+    public:     using ReplaceByClient :: replaceFirstThat;
+    public:     using ReplaceByClient :: replaceLastThat;
+    public:     using ReplaceByClient :: replaceAllThat;
+    public:     using ReplaceByClient :: replaceThatBy;
+    public:     using ReplaceByClient :: replaceFirstThatBy;
+    public:     using ReplaceByClient :: replaceLastThatBy;
+    public:     using ReplaceByClient :: replaceAllThatBy;
+
+    public:     using IndicesClient :: indicesOf;
+    public:     using IndicesClient :: firstIndexOf;
+    public:     using IndicesClient :: lastIndexOf;
+    public:     using IndicesClient :: allIndicesOf;
+
+    public:     using IndicesOfCollectionClient :: indicesOfFrom;
+    public:     using IndicesOfCollectionClient :: firstIndexOfFrom;
+    public:     using IndicesOfCollectionClient :: lastIndexOfFrom;
+    public:     using IndicesOfCollectionClient :: allIndicesOfFrom;
+    public:     using IndicesOfCollectionClient :: indicesOfNotFrom;
+    public:     using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+    public:     using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+    public:     using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+
+    public:     using IndicesOfInitializerListClient :: indicesOfFrom;
+    public:     using IndicesOfInitializerListClient :: firstIndexOfFrom;
+    public:     using IndicesOfInitializerListClient :: lastIndexOfFrom;
+    public:     using IndicesOfInitializerListClient :: allIndicesOfFrom;
+    public:     using IndicesOfInitializerListClient :: indicesOfNotFrom;
+    public:     using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
+    public:     using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
+    public:     using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+
+    public:     using IndicesByClient :: indicesOfThat;
+    public:     using IndicesByClient :: firstIndexOfThat;
+    public:     using IndicesByClient :: lastIndexOfThat;
+    public:     using IndicesByClient :: allIndicesOfThat;
+
+    public:
+        /**
+         * @brief String conversion function, used to obtain String representation of the List
          * @exceptsafe
-         * @test tested in base class test
+         * @return String = string representation
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00101-MF-toString }
+         * @public
+         */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public:
+        /**
+         * @brief Function used to clear the list, removing all elements from it
+         * @exceptsafe
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00102-MF-clear }
+         * @public
          */
         auto clear () noexcept -> void override = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
-
-    public:
         /**
-         * @brief Function used to acquire a mutable reference to the element at a given index.
-         * @param index : Index = index of the element to acquire a reference to
-         * @throws OutOfBoundsException if list is empty
-         * @return ElementType ref = Reference to the element at the requested index
-         *
-         * Indexing works in a circular manner
-         * <ul>
-         *      <li> any index greater than or equal to the number of elements gets truncated by modulo with the number of elements. </li>
-         *      <li> any negative index will act as if parsing the list in reverse. Any negative index less than the negative number of elements will behave as in the other case, being truncated </li>
-         * </ul>
-         *
-         * @example
-         *      given a list = [ 1, 2, 3, 4 ] <br/>
-         *      list [ 1 ] = 1 <br/>
-         *      list [ 5 ] = 1 <br/>
-         *      list [ 6 ] = 1 <br/>
-         *      list [ 14 ] = 3 <br/>
-         *      list [ -1 ] = 4 <br/>
-         *      list [ -2 ] = 3 <br/>
-         *      list [ -3 ] = 2 <br/>
-         *      list [ -4 ] = 1 <br/>
-         *      list [ -7 ] = 2 <br/>
-         */
-        virtual auto get (
-                Index index
-        ) noexcept (false) -> ElementType & = 0;
-
-    public:
-        /**
-         * @brief Function used to acquire an immutable reference to the element at a given index.
-         * @param index : Index = index of the element to acquire a reference to
-         * @throws OutOfBoundsException if list is empty
-         * @return ElementType cref = Constant Reference to the element at the requested index
-         *
-         * Indexing works in a circular manner
-         * <ul>
-         *      <li> any index greater than or equal to the number of elements gets truncated by modulo with the number of elements. </li>
-         *      <li> any negative index will act as if parsing the list in reverse. Any negative index less than the negative number of elements will behave as in the other case, being truncated </li>
-         * </ul>
-         *
-         * @example
-         *      given a list = [ 1, 2, 3, 4 ] <br/>
-         *      list [ 1 ] = 1 <br/>
-         *      list [ 5 ] = 1 <br/>
-         *      list [ 6 ] = 1 <br/>
-         *      list [ 14 ] = 3 <br/>
-         *      list [ -1 ] = 4 <br/>
-         *      list [ -2 ] = 3 <br/>
-         *      list [ -3 ] = 2 <br/>
-         *      list [ -4 ] = 1 <br/>
-         *      list [ -7 ] = 2 <br/>
-         */
-        virtual auto get (
-                Index index
-        ) const noexcept (false) -> ElementType const & = 0;
-
-    protected:
-        /**
-         * @brief Function used in Collection :: add implementation, called to acquire a pointer to emplace the element to
-         * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
+         * @brief Function used to remove the first element from the list, if any is present.
          * @exceptsafe
-         * @return ElementType ptr = Pointer to an ElementType.
-         * @test tested in collection/Collection test
-         */
-        auto pNewInsert (
-                ElementType const & referenceElement
-        ) noexcept -> ElementType * override;
-
-    public:
-        /**
-         * @brief Function used to obtain a subsection of the current list, and store it into a given list
-         * @tparam __CollectionType is the type of the list to store the sublist into
-         * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
-         * @param storeIn : __CollectionType ref = Reference to the list to store the new elements into
-         * @param from : Index = the index from which to create the sublist, inclusive
-         * @param to : Index = the index until which to create the sublist, exclusive
-         * @exceptsafe
-         * @return __CollectionType ref = Reference to the given list in 'storeIn'
-         */
-        template < typename __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto sub (
-                __CollectionType  & storeIn,
-                Index               from,
-                Index               to
-        ) const noexcept -> __CollectionType &;
-
-    public:
-        /**
-         * @brief Function used to obtain a subsection of the current list
-         * @tparam __CollectionType is the type of the list to store the sublist into
-         * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
-         * @param from : Index = the index from which to create the sublist, inclusive
-         * @param to : Index = the index until which to create the sublist, exclusive
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested subsection
-         */
-        template < typename __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto sub (
-                Index from,
-                Index to
-        ) const noexcept -> __CollectionType;
-
-    public:
-        /**
-         * @brief Function used to obtain a subsection of the current list
-         * @tparam __CollectionType is the type of the list to store the sublist into
-         * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
-         * @param from : Index = the index from which to create the sublist, inclusive
-         * @param to : Index = the index until which to create the sublist, exclusive
-         * @exceptsafe
-         * @return ListType = List containing the requested subsection
-         */
-        template < template < typename ... > class __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType < __ElementType >, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-         auto sub (
-                 Index from,
-                 Index to
-         ) const noexcept -> __CollectionType < ElementType >;
-
-    public:
-        /**
-         * @brief Subscript Operator used to acquire a mutable reference to the element at a given index.
-         * @param index : Index = index of the element to acquire a reference to
-         * @throws OutOfBoundsException if list is empty
-         * @return ElementType ref = Reference to the element at the requested index
-         *
-         * Indexing works in a circular manner
-         * <ul>
-         *      <li> any index greater than or equal to the number of elements gets truncated by modulo with the number of elements. </li>
-         *      <li> any negative index will act as if parsing the list in reverse. Any negative index less than the negative number of elements will behave as in the other case, being truncated </li>
-         * </ul>
-         *
-         * @example
-         *      given a list = [ 1, 2, 3, 4 ] <br/>
-         *      list [ 1 ] = 1 <br/>
-         *      list [ 5 ] = 1 <br/>
-         *      list [ 6 ] = 1 <br/>
-         *      list [ 14 ] = 3 <br/>
-         *      list [ -1 ] = 4 <br/>
-         *      list [ -2 ] = 3 <br/>
-         *      list [ -3 ] = 2 <br/>
-         *      list [ -4 ] = 1 <br/>
-         *      list [ -7 ] = 2 <br/>
-         */
-        auto operator [] (
-                Index index
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Subscript Operator used to acquire an immutable reference to the element at a given index.
-         * @param index : Index = index of the element to acquire a reference to
-         * @throws OutOfBoundsException if list is empty
-         * @return ElementType cref = Constant Reference to the element at the requested index
-         *
-         * Indexing works in a circular manner
-         * <ul>
-         *      <li> any index greater than or equal to the number of elements gets truncated by modulo with the number of elements. </li>
-         *      <li> any negative index will act as if parsing the list in reverse. Any negative index less than the negative number of elements will behave as in the other case, being truncated </li>
-         * </ul>
-         *
-         * @example
-         *      given a list = [ 1, 2, 3, 4 ] <br/>
-         *      list [ 1 ] = 1 <br/>
-         *      list [ 5 ] = 1 <br/>
-         *      list [ 6 ] = 1 <br/>
-         *      list [ 14 ] = 3 <br/>
-         *      list [ -1 ] = 4 <br/>
-         *      list [ -2 ] = 3 <br/>
-         *      list [ -3 ] = 2 <br/>
-         *      list [ -4 ] = 1 <br/>
-         *      list [ -7 ] = 2 <br/>
-         */
-        auto operator [] (
-                Index index
-        ) const noexcept (false) -> ElementType const &;
-
-    public:
-        /**
-         * @brief Function used to remove the first element of the list
-         * @exceptsafe
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00104-MF-popFront }
+         * @public
          */
         virtual auto popFront () noexcept -> void = 0;
 
     public:
         /**
-         * @brief Function used to remove the last element of the list
+         * @brief Function used to remove the last element from the list, if any is present.
          * @exceptsafe
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00106-MF-popBack }
+         * @public
          */
         virtual auto popBack () noexcept -> void = 0;
 
-    protected:
+    public:
         /**
-         * @brief Function used to create and return the storage space for a new element, at the front of the list.
-         *      Used in pushFront
+         * @brief Function used to peek at the front of the list, acquiring a mutable reference to the first enclosed element
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType ref = Mutable Reference to the first element
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00103-MF-front, LTC-00110-MF-frontThrow }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () noexcept (false) -> ElementType & = 0;
+
+    public:
+        /**
+         * @brief Function used to peek at the front of the list, acquiring an immutable reference to the first enclosed element
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType cref = Immutable Reference to the first element
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00103-MF-front, LTC-00110-MF-frontThrow }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () const noexcept (false) -> ElementType const & = 0;
+
+    public:
+        /**
+         * @brief Function used to peek at the back of the list, acquiring a mutable reference to the last enclosed element
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType ref = Mutable Reference to the last element
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00105-MF-back, LTC-00111-MF-backThrow }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () noexcept (false) -> ElementType & = 0;
+
+    public:
+        /**
+         * @brief Function used to peek at the last of the list, acquiring an immutable reference to the last enclosed element
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType cref = Immutable Reference to the last element
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00105-MF-back, LTC-00111-MF-backThrow }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () const noexcept (false) -> ElementType const & = 0;
+
+    public:
+        /**
+         * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType ref = Mutable Reference to the element at the requested index
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00107-MF-get,
+         *      LTC-00108-MF-getCircularRight,
+         *      LTC-00109-MF-getCircularLeft,
+         *      LTC-00112-MF-getThrow
+         * }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
+                Index index
+        ) noexcept ( false ) -> ElementType & = 0;
+
+    public:
+        /**
+         * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
+         * @throws cds::OutOfBoundsException if list is empty
+         * @return __ElementType cref = Immutable Reference to the element at the requested index
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00107-MF-get,
+         *      LTC-00108-MF-getCircularRight,
+         *      LTC-00109-MF-getCircularLeft,
+         *      LTC-00112-MF-getThrow
+         * }
+         * @public
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
+                Index index
+        ) const noexcept ( false ) -> ElementType const & = 0;
+
+    public:
+        /**
+         * @brief Function used to sort the elements with the requested ordering, given as parameter. Parameter must be a callable object ( function / lambda / functor ). Default ordering, if no parameter given, is ascending
+         * @param comparator : cds :: Function < bool ( ElementType, ElementType ) > cref = Constant Reference to wrapped callable
          * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00121-MF-sortAscFn,
+         *      LTC-00122-MF-sortDescFn,
+         *      LTC-00123-MF-sortAscLambda,
+         *      LTC-00124-MF-sortDescLambda,
+         *      LTC-00125-MF-sortAscFunctor,
+         *      LTC-00126-MF-sortDescFunctor,
+         *      LTC-00127-MF-sortDefault
+         * }
+         * @public
          */
-        virtual auto pNewFront () noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, at the back of the list.
-         *      Used in pushBack
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewBack () noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, before the position indicated by a given iterator.
-         *      Used in insertBefore
-         * @param iterator : Iterator cref = the iterator indicating the position to insert before
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewBefore (
-                Iterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, after the position indicated by a given iterator.
-         *      Used in insertAfter
-         * @param iterator : Iterator cref = the iterator indicating the position to insert after
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewAfter (
-                Iterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, before the position indicated by a given iterator.
-         *      Used in insertBefore
-         * @param iterator : ConstIterator cref = the iterator indicating the position to insert before
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewBefore (
-                ConstIterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, after the position indicated by a given iterator.
-         *      Used in insertAfter
-         * @param iterator : ConstIterator cref = the iterator indicating the position to insert after
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewAfter (
-                ConstIterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, before the position indicated by a given iterator.
-         *      Used in insertBefore
-         * @param iterator : ReverseIterator cref = the iterator indicating the position to insert before
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewBefore (
-                ReverseIterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, after the position indicated by a given iterator.
-         *      Used in insertAfter
-         * @param iterator : ReverseIterator cref = the iterator indicating the position to insert after
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewAfter (
-                ReverseIterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, before the position indicated by a given iterator.
-         *      Used in insertBefore
-         * @param iterator : ConstReverseIterator cref = the iterator indicating the position to insert before
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewBefore (
-                ConstReverseIterator const & iterator
-        ) noexcept -> ElementType * = 0;
-
-    protected:
-        /**
-         * @brief Function used to create and return the storage space for a new element, after the position indicated by a given iterator.
-         *      Used in insertAfter
-         * @param iterator : ConstReverseIterator cref = the iterator indicating the position to insert after
-         * @exceptsafe
-         * @return ElementType ptr = address value to emplace the new element at
-         */
-        virtual auto pNewAfter (
-                ConstReverseIterator const & iterator
-        ) noexcept -> ElementType * = 0;
+        virtual auto sort ( /* NOLINT(google-default-arguments) */
+                cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator = & cds :: predicates :: lessThan < __ElementType >
+        ) noexcept -> void = 0;
 
     public:
         /**
-         * @brief Function used to add an element at the front of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
-         * @exceptsafe if ElementType copy constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto pushFront (
-                ElementType const & element
-        ) noexcept -> void;
-
-    public:
-        /**
-         * @brief Function used to add an element at the front of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType mref = Move Reference to the element to move into the collection
-         * @exceptsafe if ElementType move constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto pushFront (
-                ElementType && element
-        ) noexcept -> void;
-
-    public:
-        /**
-         * @brief Function used to add an element at the back of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
-         * @exceptsafe if ElementType copy constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto pushBack (
-                ElementType const & element
-        ) noexcept -> void;
-
-    public:
-        /**
-         * @brief Function used to add an element at the back of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-         * @tparam V alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType mref = Move Reference to the element to move into the collection
-         * @exceptsafe if ElementType move constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto pushBack (
-                ElementType && element
-        ) noexcept -> void;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __VElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : Iterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                Iterator    const & iterator,
-                ElementType const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __VElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : Iterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                Iterator    const & iterator,
-                ElementType      && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : Iterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                Iterator    const & iterator,
-                ElementType const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : Iterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                Iterator   const & iterator,
-                ElementType     && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ConstIterator   const & iterator,
-                ElementType     const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ConstIterator  const & iterator,
-                ElementType         && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ConstIterator   const & iterator,
-                ElementType     const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ConstIterator  const & iterator,
-                ElementType         && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ReverseIterator const & iterator,
-                ElementType     const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ReverseIterator const & iterator,
-                ElementType          && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ReverseIterator const & iterator,
-                ElementType     const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ReverseIterator const & iterator,
-                ElementType          && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ConstReverseIterator    const & iterator,
-                ElementType             const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element before
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertBefore (
-                ConstReverseIterator const & iterator,
-                ElementType               && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType cref = Constant Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ConstReverseIterator    const & iterator,
-                ElementType             const & element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element after
-         * @param element : ElementType mref = Move Reference to the element to copy and place
-         * @throws IllegalArgumentException if the given iterator is not obtained from this collection
-         * @throws OutOfBoundsException if the given iterator is out of bounds
-         * @return ElementType ref = Reference to the newly inserted value
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto insertAfter (
-                ConstReverseIterator const & iterator,
-                ElementType               && element
-        ) noexcept (false) -> ElementType &;
-
-    public:
-        /**
-         * @brief Alias for pushBack, function used to add an element at the back of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
-         * @exceptsafe if ElementType copy constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto append (
-                ElementType const & element
-        ) noexcept -> ElementType &;
-
-    public:
-        /**
-         * @brief Alias for pushBack, function used to add an element at the back of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType mref = Move Reference to the element to move into the collection
-         * @exceptsafe if ElementType move constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto append (
-                ElementType && element
-        ) noexcept -> ElementType &;
-
-    public:
-        /**
-         * @brief Alias for pushFront, function used to add an element at the front of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
-         * @exceptsafe if ElementType copy constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto prepend (
-                ElementType const & element
-        ) noexcept -> ElementType &;
-
-    public:
-        /**
-         * @brief Alias for pushFront, function used to add an element at the front of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-         * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
-         * @param element : ElementType mref = Move Reference to the element to move into the collection
-         * @exceptsafe if ElementType move constructor is exceptsafe
-         */
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto prepend (
-                ElementType && element
-        ) noexcept -> ElementType &;
-
-    public:
-        /**
-         * @brief Function used to remove an element at a given index
-         * @param index : Index = index of the element to remove
+         * @brief Function used to remove an element from the list via given index
+         * @param index : Index = index of the element to be removed
          * @exceptsafe
          * @return bool = true if removal was done, false otherwise
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00113-MF-removeAtEmpty,
+         *      LTC-00114-MF-removeAtFront,
+         *      LTC-00115-MF-removeAtBack,
+         *      LTC-00116-MF-removeAt
+         * }
+         * @public
          */
         virtual auto removeAt (
                 Index index
         ) noexcept -> bool = 0;
 
-    public:
-        /**
-         * @brief Function used to remove several elements located at the given indices
-         * @param indices : Collection < Index > cref = Constant Reference to a collection of indices of the elements to remove
-         * @exceptsafe
-         * @return Size = the number of elements that were removed successfully
-         */
-        virtual auto removeAt (
-                Collection < Index > const & indices
-        ) noexcept -> Size = 0;
-
-    public:
-        /**
-         * @brief Function used to remove several elements located at the given indices
-         * @param indices : InitializerList cref = Constant Reference to a collection of indices of the elements to remove
-         * @exceptsafe
-         * @return Size = the number of elements that were removed successfully
-         */
-        virtual auto removeAt (
-                std :: initializer_list < Index > const & indices
-        ) noexcept -> Size = 0;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : Iterator cref = Constant Reference to the Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         */
-        auto remove (
-                Iterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : ConstIterator cref = Constant Reference to the Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         * @test tested in the class test
-         */
-        auto remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : ReverseIterator cref = Constant Reference to the Reverse Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         */
-        auto remove (
-                ReverseIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        /**
-         * @brief Function used to remove an element identified by a given Iterator
-         * @param iterator : ConstReverseIterator cref = Constant Reference to the Reverse Iterator indicating the value to be removed
-         * @exceptsafe
-         * @return bool = true if removal was successful, false otherwise ( invalid iterator )
-         * @test tested in the class test
-         */
-        auto remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-
     protected:
         /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : Iterator cptr = Address to an array of Constant Iterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
+         * @brief Function used to circularly adapt an index based on the current list bounds
+         * @param index : Index = requested index to bound
          * @exceptsafe
-         * @return Size = number of elements that were successfully removed
+         * @return Index = bounded index
+         * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
+         *      LTC-00108-MF-getCircularRight,
+         *      LTC-00109-MF-getCircularLeft
+         * }
+         * @public
          */
-        auto remove (
-                Iterator    const * pIterators,
-                Size                size
-        ) noexcept -> Size override = 0;
-
-    protected:
-        /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : ConstIterator cptr = Address to an array of Constant ConstIterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
-         * @exceptsafe
-         * @return Size = number of elements that were successfully removed
-         * @test tested in the class test
-         */
-        auto remove (
-                ConstIterator   const * pIterators,
-                Size                    size
-        ) noexcept -> Size override = 0;
-
-    protected:
-        /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : ReverseIterator cptr = Address to an array of Constant ReverseIterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
-         * @exceptsafe
-         * @return Size = number of elements that were successfully removed
-         */
-        auto remove (
-                ReverseIterator const * pIterators,
-                Size                    size
-        ) noexcept -> Size override = 0;
-
-    protected:
-        /**
-         * @brief Function used to remove a batch of elements identified by a given array of Iterators
-         * @param pIterators : ConstReverseIterator cptr = Address to an array of Constant ConstReverseIterator objects, indicating the elements to be removed
-         * @param size : Size = the number of elements in the pIterators array
-         * @exceptsafe
-         * @return Size = number of elements that were successfully removed
-         * @test tested in the class test
-         */
-        auto remove (
-                ConstReverseIterator    const * pIterators,
-                Size                            size
-        ) noexcept -> Size override = 0;
-
-    public:
-        /**
-         * @brief Function used to sort the current List based on a given comparator function
-         * @tparam __ComparatorFunction is the type of the comparator function, its signature must be compatible with bool ( Decay < ElementType >, Decay < ElementType > )
-         * @param comparatorFunction : ComparatorFunction const & = Constant Reference to the comparator callable object / function
-         * @exceptsafe if ComparatorFunction is exceptsafe
-         */
-        template < typename __ComparatorFunction = decltype ( & predicates :: lessThan < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
-        auto sort (
-                __ComparatorFunction const & comparatorFunction = & predicates :: lessThan < ElementType >
-        ) noexcept ( noexcept ( comparatorFunction ( meta :: valueOf < ElementType > (), meta :: valueOf < ElementType > () ) ) ) -> void;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replace (
-                Size                count,
-                ElementType const & what,
-                ElementType const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAll (
-                ElementType const & what,
-                ElementType const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirst (
-                ElementType const & what,
-                ElementType const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirst (
-                ElementType const & what,
-                ElementType      && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLast (
-                ElementType const & what,
-                ElementType const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLast (
-                ElementType const & what,
-                ElementType      && with
-        ) noexcept -> bool;
-
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceOf (
-                Size                                count,
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAllOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstOf (
-                Collection < ElementType >  const & of,
-                ElementType                      && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastOf (
-                Collection < ElementType >  const & of,
-                ElementType                      && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceNotOf (
-                Size                                count,
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAllNotOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstNotOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstNotOf (
-                Collection < ElementType >  const & of,
-                ElementType                      && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastNotOf (
-                Collection < ElementType >  const & of,
-                ElementType                 const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastNotOf (
-                Collection < ElementType >  const & of,
-                ElementType                      && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceOf (
-                Size                        count,
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAllOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstOf (
-                InitializerList     const & of,
-                ElementType              && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastOf (
-                InitializerList     const & of,
-                ElementType              && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceNotOf (
-                Size                        count,
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAllNotOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> Size;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstNotOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirstNotOf (
-                InitializerList     const & of,
-                ElementType              && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastNotOf (
-                InitializerList     const & of,
-                ElementType         const & with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLastNotOf (
-                InitializerList     const & of,
-                ElementType              && with
-        ) noexcept -> bool;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replace (
-                Size                count,
-                __Predicate const & predicate,
-                ElementType const & with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAll (
-                __Predicate const & predicate,
-                ElementType const & with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirst (
-                __Predicate const & predicate,
-                ElementType const & with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirst (
-                __Predicate const & predicate,
-                ElementType      && with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLast (
-                __Predicate const & predicate,
-                ElementType const & with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLast (
-                __Predicate const & predicate,
-                ElementType      && with
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
-        auto replace (
-                Size                count,
-                __Predicate const & predicate,
-                __Supplier  const & supplier
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-    public:
-        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
-        auto replaceAll (
-                __Predicate const & predicate,
-                __Supplier  const & supplier
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-    public:
-        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
-        auto replaceFirst (
-                __Predicate const & predicate,
-                __Supplier  const & supplier
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
-        auto replaceLast (
-                __Predicate const & predicate,
-                __Supplier  const & supplier
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-
-    public:
-        virtual auto front () noexcept (false) -> ElementType & = 0;
-
-    public:
-        virtual auto front () const noexcept (false) -> ElementType const & = 0;
-
-    public:
-        virtual auto back () noexcept (false) -> ElementType & = 0;
-
-    public:
-        virtual auto back () const noexcept (false) -> ElementType const & = 0;
-
-    public:
-        virtual auto makeUnique () noexcept -> void = 0;
-
-    public:
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
-
-
-    public:
-        /**
-         * @brief Function used to obtain a maximum number of indices of a given element and store them into a given list
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
-         */
-        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                  count,
-                __CollectionType    & storeIn,
-                ElementType   const & element
-        ) const noexcept -> __CollectionType &;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of a given element
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                count,
-                ElementType const & element
-        ) const noexcept -> __CollectionType;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of a given element
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                count,
-                ElementType const & element
-        ) const noexcept -> __CollectionType < Index >;
-
-    public:
-        auto firstIndex (
-                ElementType const & element
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (
+                Index index
         ) const noexcept -> Index;
-
-    public:
-        auto lastIndex (
-                ElementType const & element
-        ) const noexcept -> Index;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of a given element and store them into a given list
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
-         */
-        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                __CollectionType    & storeIn,
-                ElementType   const & element
-        ) const noexcept -> __CollectionType &;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of a given element
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                ElementType const & element
-        ) const noexcept -> __CollectionType;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of a given element
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                ElementType const & element
-        ) const noexcept -> __CollectionType < Index >;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
-         */
-        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                count,
-                __CollectionType  & storeIn,
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                count,
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param count : Size = maximum number of indices to obtain
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto indices (
-                Size                count,
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
-
-    public:
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto firstIndex (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
-
-    public:
-        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
-        auto lastIndex (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
-         */
-        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                __CollectionType          & storeIn,
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
-
-    public:
-        /**
-         * @brief Function used to obtain the indices of the elements that validate a given predicate
-         * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-         *      bool ( Decay < ElementType > )
-         * @tparam __CollectionType is the type of the list to store the indices into
-         * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-         * @exceptsafe
-         * @return __CollectionType = List containing the requested indices
-         */
-        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        auto allIndices (
-                __Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType;
     };
 
 }
 
+#include "../../../shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
+
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
+
 #include "list/impl/List.hpp"
 
-#endif // __CDS_LIST_HPP__
+#endif /* __CDS_LIST_HPP__ */
