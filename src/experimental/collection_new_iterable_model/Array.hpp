@@ -27,9 +27,6 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        /**
-         * @deprecated
-         */
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
         using Array __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: Array < __ElementType >;
 
