@@ -4,14 +4,14 @@
 
 #include "ListTest.h"
 
-#include <CDS/experimental/Array>
-#include <CDS/experimental/LinkedList>
+#include <CDS/Array>
+#include <CDS/LinkedList>
 
 #include <vector>
 #include <array>
 #include <CDS/Range>
 
-using namespace cds :: experimental;
+using namespace cds;
 
 template < typename I, typename C >
 auto sortCheck ( I const & iterable, C const & comparator ) -> bool {
@@ -41,7 +41,7 @@ template <
 ) noexcept -> bool {
 
     __TestedType < __EnclosedType > underTest = values;
-    List < __EnclosedType > & lref = underTest;
+    cds :: List < __EnclosedType > & lref = underTest;
 
     /* ListTestCase-MemberFunctions-toString-CPP11 : LTC-00101-MF-toString-CPP11 */
     if ( lref.toString() != expectedToString ) {

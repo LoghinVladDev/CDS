@@ -1870,8 +1870,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* otherwise, start parsing */
-                auto const thisFront    = this->_pData->_pFront;
-                auto const otherFront   = array._pData->_pFront;
+                auto thisFront    = this->_pData->_pFront;
+                auto otherFront   = array._pData->_pFront;
 
                 /* equal in size, so only use this array's end as parse limit */
                 while ( thisFront != this->_pData->_pBack ) {

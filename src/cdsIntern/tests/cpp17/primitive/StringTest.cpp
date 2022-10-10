@@ -744,25 +744,25 @@ auto StringTest::execute() noexcept -> bool {
         this->log("Original String : '%s'", str.cStr());
 
         this->log("Find of char 'a' : %s", str.findAll <Array> ('a').toString().cStr());
-        if ( str.findAll <Array>('a') != LinkedList < Index > { 8, 11 } ) {
+        if ( str.findAll <Array>('a') != Array < Index > { 8, 11 } ) {
             this->logWarning("Find char error");
             allOk = false;
         }
 
         this->log("Find of string 'is' : %s", str.findAll <Array>("is").toString().cStr());
-        if ( str.findAll <Array>("is") != LinkedList < Index > { 2, 5 } ) {
+        if ( str.findAll <Array>("is") != Array < Index > { 2, 5 } ) {
             this->logWarning("Find string error");
             allOk = false;
         }
 
         this->log("Find of characters 'a', ' ', 's' : %s", str.findAllOf < Array > ("as ").toString().cStr());
-        if ( str.findAllOf < Array > ("as ") != LinkedList < Index > { 3, 4, 6, 7, 8, 9, 10, 11, 16, 17 } ) {
+        if ( str.findAllOf < Array > ("as ") != Array < Index > { 3, 4, 6, 7, 8, 9, 10, 11, 16, 17 } ) {
             this->logWarning("Find of String error");
             allOk = false;
         }
 
         this->log("Find characters not 'a' 's' ' ' : %s", str.findAllNotOf < Array > ("as ").toString().cStr());
-        if ( str.findAllNotOf < Array > ("as ") != LinkedList < Index > { 0, 1, 2, 5, 12, 13, 14, 15, 18, 19, 20, 21, 22 } ) {
+        if ( str.findAllNotOf < Array > ("as ") != Array < Index > { 0, 1, 2, 5, 12, 13, 14, 15, 18, 19, 20, 21, 22 } ) {
             this->logWarning("Find not of String error");
             allOk = false;
         }

@@ -5,7 +5,7 @@
 #ifndef __CDS_LINKED_LIST_HPP__
 #define __CDS_LINKED_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include <CDS/experimental/List>
+#include <CDS/List>
 
 #include "linkedList/Predeclaration.hpp"
 
