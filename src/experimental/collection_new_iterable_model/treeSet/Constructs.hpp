@@ -65,7 +65,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetServer =                     /* NOLINT(bugprone-reserved-identifier) */
-                        __SetServer <
+                        cds :: __hidden :: __impl :: __SetServer <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType
                         >;
@@ -73,7 +73,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetDelegateForwardConstIterableClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardConstIterablePrimitiveClient <
+                        cds :: __hidden :: __impl :: __LocalDelegateForwardConstIterablePrimitiveClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 typename __TreeSetImplementation < __ElementType > :: __rbt_ConstIterator
                         >;
@@ -81,7 +81,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetDelegateBackwardConstIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateBackwardConstIterablePrimitiveClient <
+                        cds :: __hidden :: __impl :: __LocalDelegateBackwardConstIterablePrimitiveClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 typename __TreeSetImplementation < __ElementType > :: __rbt_ReverseConstIterator
                         >;
@@ -89,7 +89,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetConstIteratorRemoveClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalConstIteratorRemovePrimitiveClient <
+                        cds :: __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 typename __TreeSetImplementation < __ElementType > :: __rbt_AbstractConstIterator
@@ -98,7 +98,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetRandomInsertionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRandomInsertionPrimitiveClient <
+                        cds :: __hidden :: __impl :: __LocalRandomInsertionPrimitiveClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 __ElementType const
@@ -106,7 +106,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetFindUniqueClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindUniqueImmutablePrimitiveClient <
+                        cds :: __hidden :: __impl :: __LocalFindUniqueImmutablePrimitiveClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 typename __TreeSetImplementation < __ElementType > :: __rbt_ConstIterator
@@ -115,21 +115,21 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetContainsOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
+                                cds :: Collection < __ElementType >,
+                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
                         >;
 
 
                 template < typename __ElementType >                  /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetContainsOfInitializerListClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 std :: initializer_list < __ElementType >,
-                                & __initializerListContains  <
+                                & cds :: __hidden :: __impl :: __initializerListContains  <
                                         __ElementType,
                                         & cds :: meta :: equals < __ElementType >
                                 >
@@ -138,31 +138,31 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetFindOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalFindOfImmutableCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 AbstractRedBlackTreeConstIterator < __ElementType >,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >,
-                                & __collectionNotContains < __ElementType >
+                                cds :: Collection < __ElementType >,
+                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >,
+                                & cds :: __hidden :: __impl :: __collectionNotContains < __ElementType >
                         >;
 
 
                 template < typename __ElementType >              /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetFindOfInitializerListClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalFindOfImmutableCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 AbstractRedBlackTreeConstIterator < __ElementType >,
                                 std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
-                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                                & cds :: __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
+                                & cds :: __hidden :: __impl :: __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 
                 template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetFindByClient =           /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByImmutableCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalFindByImmutableCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 AbstractRedBlackTreeConstIterator < __ElementType >
@@ -171,27 +171,27 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetRemoveOfCollectionClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalRemoveOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
+                                cds :: Collection < __ElementType >,
+                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
                         >;
 
 
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetRemoveOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalRemoveOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 std :: initializer_list< __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                                & cds :: __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                         >;
 
 
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetRemoveByClient =                 /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveByCompositeClient <
+                        cds :: __hidden :: __impl :: __LocalRemoveByCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType
                         >;
@@ -199,7 +199,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
                 using __TreeSetGenericStatementsClient =        /* NOLINT(bugprone-reserved-identifier) */
-                        __GenericImmutableStatementsCompositeClient <
+                        cds :: __hidden :: __impl :: __GenericImmutableStatementsCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType
                         >;

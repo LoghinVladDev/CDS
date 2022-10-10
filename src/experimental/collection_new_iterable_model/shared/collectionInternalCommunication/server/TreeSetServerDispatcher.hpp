@@ -5,8 +5,7 @@
 #ifndef __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__
 #define __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__   /* NOLINT(bugprone-reserved-identifier) */
 
-#warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../shared/collectionInternalCommunication/server/TreeSetServerDispatcher.hpp"
+#include "../../../../../shared/collectionInternalCommunication/server/SetServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -28,15 +27,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                     -> bool,                          /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )       -> Size,                          /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __findConstFunction )         ( __ElementType const & )                             const -> __ConstIteratorType            /* NOLINT(bugprone-reserved-identifier) */
-                > using __TreeSetServerDispatcher __CDS_DeprecatedHint("No longer an experimental feature.") =                                                                /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __TreeSetServerDispatcher <
-                                __ServerType, __ServiceType, __ElementType,
-                                __AbstractConstIteratorType, __ConstIteratorType, __ReverseConstIteratorType,
-                                __cbeginFunction, __cendFunction, __crbeginFunction, __crendFunction,
-                                __newAddressFunction, __removeConstFunction, __removeConstArrayFunction,
+                > class __TreeSetServerDispatcher :     /* NOLINT(bugprone-reserved-identifier) */
+                        public cds :: __hidden :: __impl :: __SetServerDispatcher <
+                                __ServerType,
+                                __ServiceType,
+                                __ElementType,
+                                __AbstractConstIteratorType,
+                                __ConstIteratorType,
+                                __cbeginFunction,
+                                __cendFunction,
+                                __newAddressFunction,
+                                __removeConstFunction,
+                                __removeConstArrayFunction,
                                 __findConstFunction
-                        >;
+                        > {
 
+                protected:
+                    auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        /* NOLINT(bugprone-reserved-identifier) */
+
+                protected:
+                    auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          /* NOLINT(bugprone-reserved-identifier) */
+
+                };
             }
         }
     }
