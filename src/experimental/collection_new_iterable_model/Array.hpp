@@ -66,8 +66,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 public __hidden :: __impl :: __ArrayDelegateBackwardConstIterableClient < __ElementType > {
 
         private:
-            template < typename, typename >
-            friend class cds :: experimental :: __hidden :: __impl :: __ListServer; /* NOLINT(bugprone-reserved-identifier) */
+            friend cds :: experimental :: __hidden :: __impl :: __ListServer < Array < __ElementType >, __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
         protected:  using Implementation                        = __hidden :: __impl :: __ArrayImplementation < __ElementType >;
         protected:  using Server                                = __hidden :: __impl :: __ArrayServer < __ElementType >;

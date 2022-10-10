@@ -2,10 +2,11 @@
  * Created by stefan on 29.08.2022.
  */
 
-#ifndef __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__
-#define __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__   /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__
+#define __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__   /* NOLINT(bugprone-reserved-identifier) */
 
-#include "SetServerDispatcher.hpp"
+#warning No longer an experimental feature. Use the non-experimental header.
+#include "../../../../../shared/collectionInternalCommunication/server/TreeSetServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -27,31 +28,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                     -> bool,                          /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )       -> Size,                          /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __findConstFunction )         ( __ElementType const & )                             const -> __ConstIteratorType            /* NOLINT(bugprone-reserved-identifier) */
-                > class __TreeSetServerDispatcher :     /* NOLINT(bugprone-reserved-identifier) */
-                        public __SetServerDispatcher <
-                                __ServerType,
-                                __ServiceType,
-                                __ElementType,
-                                __AbstractConstIteratorType,
-                                __ConstIteratorType,
-                                __cbeginFunction,
-                                __cendFunction,
-                                __newAddressFunction,
-                                __removeConstFunction,
-                                __removeConstArrayFunction,
+                > using __TreeSetServerDispatcher __CDS_DeprecatedHint("No longer an experimental feature.") =                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __TreeSetServerDispatcher <
+                                __ServerType, __ServiceType, __ElementType,
+                                __AbstractConstIteratorType, __ConstIteratorType, __ReverseConstIteratorType,
+                                __cbeginFunction, __cendFunction, __crbeginFunction, __crendFunction,
+                                __newAddressFunction, __removeConstFunction, __removeConstArrayFunction,
                                 __findConstFunction
-                        > {
+                        >;
 
-                        protected:
-                            auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        /* NOLINT(bugprone-reserved-identifier) */
-
-                        protected:
-                            auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          /* NOLINT(bugprone-reserved-identifier) */
-
-                        };
             }
         }
     }
 }
 
-#endif /* __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ */
+#endif /* __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ */

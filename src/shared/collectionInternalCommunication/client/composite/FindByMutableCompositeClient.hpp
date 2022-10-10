@@ -6,6 +6,7 @@
 #define __CDS_SHARED_FIND_BY_MUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #include "../../../iterator/IteratorFindStatements.hpp"
+#include "../../../iterator/IteratorFindMemberStatements.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
@@ -287,5 +288,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 }
 
 #include "../../../iterator/impl/IteratorFindStatements.hpp"
+#include "../../../iterator/impl/IteratorFindMemberStatements.hpp"
 
 #endif /* __CDS_SHARED_FIND_BY_MUTABLE_COMPOSITE_CLIENT_HPP__ */

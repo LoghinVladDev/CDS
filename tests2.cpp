@@ -1,7 +1,8 @@
 #include <CDS/Collection>
+#include <CDS/experimental/Array>
 
 int main () {
 
-    cds :: Collection < int > * pColl = nullptr;
+    cds :: experimental :: Array < int > arr;
     return 0;
 }

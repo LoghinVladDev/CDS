@@ -19,6 +19,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         }
     }
 
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+
+                template <
+                        typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType >
+                > class __CDS_DeprecatedHint("No longer an experimental feature.") __ArrayBase;     /* NOLINT(bugprone-reserved-identifier) */
+
+            }
+        }
+    }
+
     /**
      * @brief Abstract Address Iterator, iterating over continuous address ranges.
      * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
@@ -34,9 +47,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     private:
         /** Friend class declaration for use of 'absoluteBase' function */
         template <
-                typename __TElementType,                                            /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,                            /* NOLINT(bugprone-reserved-identifier) */
                 cds :: utility :: ComparisonFunction < __TElementType >
         > friend class cds :: __hidden :: __impl :: __ArrayBase;    /* NOLINT(bugprone-reserved-identifier) */
+
+    private:
+        /** Friend class declaration for use of 'absoluteBase' function */
+        template <
+                typename __TElementType,                            /* NOLINT(bugprone-reserved-identifier) */
+                cds :: utility :: ComparisonFunction < __TElementType >
+        > friend class cds :: experimental :: __hidden :: __impl :: __ArrayBase;    /* NOLINT(bugprone-reserved-identifier) */
 
     public:
         /**

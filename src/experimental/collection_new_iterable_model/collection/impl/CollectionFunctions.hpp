@@ -2,8 +2,8 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__
-#define __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_COLLECTION_FUNCTIONS_IMPL_HPP__
+#define __CDS_EX_COLLECTION_FUNCTIONS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -29,4 +29,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_COLLECTION_FUNCTIONS_IMPL_HPP__ */
+#endif /* __CDS_EX_COLLECTION_FUNCTIONS_IMPL_HPP__ */
