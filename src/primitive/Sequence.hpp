@@ -4395,13 +4395,13 @@ namespace cds {
 __CDS_Meta_RegisterParseTemplateType(Sequence)
 
 #include "../shared/array/impl/ArraySequence.hpp"
-#include "../shared/linkedList/impl/LinkedListSequence.hpp"
+#include "../shared/linkedList/impl/Sequence.hpp"
 
-#include "../shared/hashSet/impl/HashSetSequence.hpp"
+#include "../shared/hashSet/impl/Sequence.hpp"
 #include "../shared/orderedSet/impl/OrderedSetSequence.hpp"
 #include "../shared/unorderedSet/impl/UnorderedSetSequence.hpp"
 
-#include "../shared/hashMap/impl/HashMapSequence.hpp"
+#include "../shared/hashMap/impl/Sequence.hpp"
 
 #include "../shared/string/impl/StringSequence.hpp"
 #include "../shared/string/view/impl/StringViewSequence.hpp"

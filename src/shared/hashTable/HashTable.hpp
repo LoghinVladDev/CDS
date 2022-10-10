@@ -1,261 +1,953 @@
-//
-// Created by loghin on 6/21/22.
-//
+/*
+ * Created by loghin on 27/07/22.
+ */
 
 #ifndef __CDS_SHARED_HASH_TABLE_HPP__
-#define __CDS_SHARED_HASH_TABLE_HPP__
+#define __CDS_SHARED_HASH_TABLE_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include "hashTable/HashTableUtils.hpp"
-#include "../Node.hpp"
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
-    namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
-
+            /**
+             * @class Base implementation class for hashtable-based objects
+             *
+             * Works with a bucket buffer, each bucket being a single linked list.
+             * Will allocate the bucket buffer based on a given template rehash policy
+             *
+             * @tparam __ElementType is the element stored in each node located in the 'bucket' lists
+             * @tparam __KeyType is the key extracted from the element stored in each node that will be hashed to determine the bucket location of the node
+             * @tparam __KeyHasher is the type of the hasher object used to compute the hash of the key of each node. Used as type, to be declared and stored in
+             * the class to facilitate initialization with key hasher
+             * @tparam __RehashPolicy is the type of the rehash policy object used to determine when a rehash is required ( reallocation of buckets ). Used as type,
+             * to be declared and stored in the class to facilitate initialization with key hasher
+             * @tparam __keyExtractor is the function used to extract a __KeyType value from an __ElementType value.
+             * Passed as function as it is not intended for copy. It is standard per interface type. ( set uses same value as key, map extracts )
+             * @tparam __keyComparator is the function used to compare two __KeyType values, used when hashes are equal, to compare
+             * keys in a given bucket.
+             * @tparam __nodeDestructor is the function used to destroy an __ElementType value.
+             * Called at destruction of a node, as an element can be composed of multiple objects ( i.e. MapEntry )
+             *
+             * @test Suite: CTS-00001, Group: All, Test Cases: All
+             * @test Suite: MCTS-00001, Group: All, Test Cases: All
+             *
+             * @namespace cds :: __hidden :: __impl
+             * @internal library-private
+             */
             template <
-                    typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyType,                 // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyExtractor,            // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyEqualsComparator,     // NOLINT(bugprone-reserved-identifier)
-                    typename __KeyHasher,               // NOLINT(bugprone-reserved-identifier)
-                    typename __RehashPolicy,            // NOLINT(bugprone-reserved-identifier)
-                    typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
-            > class __HashTable :                       // NOLINT(bugprone-reserved-identifier)
-                    protected __HashTableUtils <
-                            __KeyHasher,
-                            __RehashPolicy
-                    > {
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+            > class __HashTable {                                                                           /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                using ElementType           = __ElementType;            // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @typedef Alias for template parameter __ElementType
+                 * @protected
+                 */
+                using ElementType           = __ElementType;    /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                using KeyType               = __ElementType;            // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @typedef Alias for template parameter __KeyType
+                 * @protected
+                 */
+                using KeyType               = __KeyType;        /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                using KeyExtractor          = __KeyExtractor;           // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @typedef Alias for template parameter __KeyHasher
+                 * @protected
+                 */
+                using KeyHasher             = __KeyHasher;      /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                using KeyEqualsComparator   = __KeyEqualsComparator;    // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @typedef Alias for template parameter __RehashPolicy
+                 * @protected
+                 */
+                using RehashPolicy          = __RehashPolicy;   /* NOLINT(bugprone-reserved-identifier) */
 
-            protected:
-                using KeyHasher             = __KeyHasher;              // NOLINT(bugprone-reserved-identifier)
+            public:
+                /**
+                 * @typedef Alias for forward mutable iterator
+                 * @public
+                 */
+                using __ht_Iterator         = HashTableIterator < __ElementType >;      /* NOLINT(bugprone-reserved-identifier) */
 
-            protected:
-                using RehashPolicy          = __RehashPolicy;           // NOLINT(bugprone-reserved-identifier)
+            public:
+                /**
+                 * @typedef Alias for forward immutable iterator
+                 * @public
+                 */
+                using __ht_ConstIterator    = HashTableConstIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
-            protected:
-                using ElementTypeDestruct   = __ElementTypeDestruct;    // NOLINT(bugprone-reserved-identifier)
+            public:
+                /**
+                 * @class Dispatcher to this class' set-type implementation
+                 * @implements __SetServerDispatcher
+                 * @public
+                 */
+                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
+                class __SetDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
 
-            protected:
-                class HashTableIterator;
-
-            protected:
-                class HashTableConstIterator;
-
-            protected:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> HashTableIterator;    // NOLINT(bugprone-reserved-identifier)
-
-            protected:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> HashTableIterator;      // NOLINT(bugprone-reserved-identifier)
-
-            protected:
-                constexpr auto __ht_cbegin () const noexcept -> HashTableConstIterator;                            // NOLINT(bugprone-reserved-identifier)
-
-            protected:
-                constexpr auto __ht_cend () const noexcept -> HashTableConstIterator;                              // NOLINT(bugprone-reserved-identifier)
-
-            protected:
-                using __DataType        = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >; // NOLINT(bugprone-reserved-identifier)
+            public:
+                /**
+                 * @class Dispatcher to this class' map-type implementation
+                 * @implements __MapServerDispatcher
+                 * @public
+                 */
+                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
+                class __MapDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
 
             private:
-                __CDS_NoUniqueAddress __KeyExtractor          _key;
+                /**
+                 * @typedef Alias for a bucket node type. Uses standard unidirectional node
+                 * @private
+                 */
+                using __NodeType    = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
 
             private:
-                __CDS_NoUniqueAddress __KeyEqualsComparator   _equals;
+                /** @brief Number of allocated buckets */
+                Size                                    _bucketCount    { 0ULL };
 
             private:
-                __CDS_NoUniqueAddress __ElementTypeDestruct   _destruct;
+                /** @brief Number of total enclosed element count */
+                Size                                    _size           { 0ULL };
 
             private:
-                using __DataNode = __UnidirectionalNode < __DataType >; // NOLINT(bugprone-reserved-identifier)
+                /** @brief Pointer to the bucket array. */
+                __NodeType                           ** _pBucketArray   { nullptr };
 
             private:
-                using __BucketType = __DataNode *;  // NOLINT(bugprone-reserved-identifier)
+                /** @brief The Key Hasher. Functor object, preferably, no address allocated. */
+                __CDS_NoUniqueAddress __KeyHasher       _hasher;
 
             private:
-                struct __BucketArrayType {          // NOLINT(bugprone-reserved-identifier)
-                    __BucketType  * _pArray;
-                    Size            _size;
-                };
-
-            private:
-                __BucketArrayType   _bucketArray    { nullptr, 0ULL };
-
-            private:
-                Size                _totalSize      { 0ULL };
+                /** @brief The Rehash Policy. Functor object, preferably, no address allocated. */
+                __CDS_NoUniqueAddress __RehashPolicy    _rehash;
 
             protected:
-                constexpr __HashTable () noexcept;
+                /**
+                 * @brief Default Constructor, constexpr
+                 * @exceptsafe
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                constexpr __HashTable() noexcept;
 
             protected:
+                /**
+                 * @brief Initialization constructor, using given key hasher
+                 * @param [in] keyHasher : __KeyHasher cref = Constant Reference to key hasher to be used
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
                 __CDS_Explicit constexpr __HashTable (
                         __KeyHasher const & keyHasher
                 ) noexcept;
 
             protected:
-                template < typename __EntryCopyFunction > // NOLINT(bugprone-reserved-identifier)
-                __HashTable (
-                        __HashTable         const & hashTable,
-                        __EntryCopyFunction const & copyFunction
+                /**
+                 * @brief Initialization constructor, using given rehash policy
+                 * @param [in] rehashPolicy : __RehashPolicy cref = Constant Reference to rehash policy to be used
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_Explicit constexpr __HashTable (
+                        __RehashPolicy const & rehashPolicy
                 ) noexcept;
 
             protected:
+                /**
+                 * @brief Initialization constructor, using given key hasher and rehash policy
+                 * @param [in] keyHasher : __KeyHasher cref = Constant Reference to key hasher to be used
+                 * @param [in] rehashPolicy : __RehashPolicy cref = Constant Reference to rehash policy to be used
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                constexpr __HashTable (
+                        __KeyHasher     const & keyHasher,
+                        __RehashPolicy  const & rehashPolicy
+                ) noexcept;
+
+            protected:
+                /**
+                 * @brief Copy constructor, using given hash table and node copy function
+                 * @tparam __CopyFunction is the type of the copy functor to be used
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @param [in] copyFunction : __CopyFunction cref = Constant Reference to the copy functor to initialize the new nodes with
+                 * @exceptsafe
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                template <
+                        typename __CopyFunction /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_Implicit __HashTable (  /* NOLINT(google-explicit-constructor) */
+                        __HashTable     const & hashTable,
+                        __CopyFunction  const & copyFunction
+                ) noexcept;
+
+            protected:
+                /**
+                 * @brief Move constructor, using given hash table
+                 * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
+                 * @exceptsafe
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
                 __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
                         __HashTable && hashTable
                 ) noexcept;
 
             protected:
+                /**
+                 * @brief Function used to purge the hash table data
+                 * @exceptsafe
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                auto __ht_clear () noexcept -> void;    /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                auto __ht_clear () noexcept -> void;   // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire the number of elements in the hash table
+                 * @exceptsafe
+                 * @return Size = number of elements in the hash table
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;       // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to check if the hash table is empty
+                 * @exceptsafe
+                 * @return bool = true if hash table is empty, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;    /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;        // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire the number of buckets
+                 * @exceptsafe
+                 * @return Size = number of buckets
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard constexpr auto __ht_bucketCount () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                __CDS_NoDiscard constexpr auto __ht_bucketCount () const noexcept -> Size; // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire a mutable forward iterator referencing the first element
+                 * @excetpsafe
+                 * @return __ht_Iterator = Hash Table Iterator to the first element
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+                 * @protected
+                 */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> __ht_Iterator; /* NOLINT(bugprone-reserved-identifier) */
 
             protected:
-                auto __ht_get (                        // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire a mutable forward iterator referencing the space after the last element
+                 * @excetpsafe
+                 * @return __ht_Iterator = Hash Table Iterator to the space after the last element
+                 *
+                 * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+                 * @protected
+                 */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> __ht_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
+
+            protected:
+                /**
+                 * @brief Function used to acquire an immutable forward iterator referencing the first element
+                 * @excetpsafe
+                 * @return __ht_ConstIterator = Hash Table Const Iterator to the first element
+                 *
+                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+                 * @protected
+                 */
+                __CDS_NoDiscard constexpr auto __ht_cbegin () const noexcept -> __ht_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+
+            protected:
+                /**
+                 * @brief Function used to acquire an immutable forward iterator referencing the space after the last element
+                 * @excetpsafe
+                 * @return __ht_ConstIterator = Hash Table Const Iterator to the space after the last element
+                 *
+                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+                 * @protected
+                 */
+                __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
+
+            protected:
+                /**
+                 * @brief Function used to allocate space for an element based on its key and return the memory address. Function is intended
+                 * as an adapter to __ht_get, after the key has been extracted from pReferenceElement
+                 * @param [in] pReferenceElement : __ElementType cptr = Address to an Immutable Reference comparison element. Used to extract the key of the new element
+                 * @param [out] pNewElementCreated : bool ptr = Address of a boolean value to be set to true if newly created value was created. If key already exists, it will be set to false and the node address will be returned
+                 * @exceptsafe
+                 * @return __ElementType ptr = Address to the newly created space for the element. If no element created, an address to the element containing the same key will be returned
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_new ( /* NOLINT(bugprone-reserved-identifier) */
+                        __ElementType const * pReferenceElement,
+                        bool                * pNewElementCreated
+                ) noexcept -> __ElementType *;
+
+            protected:
+                /**
+                 * @brief Function used to allocate space for an element based on the given key
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to check if a new element can be created
+                 * @param [out] pNewElementCreated : bool ptr = Address of a boolean value to be set to true if newly created value was created. If key already exists, it will be set to false and the node address will be returned
+                 * @exceptsafe
+                 * @return __ElementType ptr = Address to the newly created space for the element. If no element created, an address to the element containing the same key will be returned
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_get ( /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key,
                         bool            * pIsNew
                 ) noexcept -> __ElementType *;
 
             protected:
-                auto __ht_get (                        // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire an immutable address of the node with the given key
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the element with
+                 * @exceptsafe
+                 * @return __ElementType cptr = Address to an immutable node, if any found, nullptr otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_getConst (    /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
             protected:
-                auto __ht_at (                         // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire a mutable address of the node with the given key. Unlike '__ht_get',
+                 * '__ht_at' will not allocate new space, if key does not exist
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the element with
+                 * @exceptsafe
+                 * @return __ElementType ptr = Address to an mutable node, if any found, nullptr otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_at (                         /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key
                 ) noexcept -> __ElementType *;
 
             protected:
-                auto __ht_at (                         // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire an immutable address of the node with the given key
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the element with
+                 * @exceptsafe
+                 * @return __ElementType cptr = Address to an immutable node, if any found, nullptr otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_atConst (                         /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
             private:
-                auto __ht_rehash (                     // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to rehash the hash table - increase the bucket buffer and relocate all newly misplaced nodes ( since remainder class value will increase )
+                 * @param [in] bucketCount : Size = next number of buckets determined by the rehash policy
+                 * @param [in] hashValueOfNewNode : Size = the hash value of the node that was inserted prior to rehash trigger.
+                 * @param [in] pNewEmptyNode : __NodeType cptr = Address to the immutable new, uninitialized node. Used to identify said node, as it is not to be directly hashed.
+                 * The hashValueOfNewNode value should be used
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                auto __ht_rehash (                     /* NOLINT(bugprone-reserved-identifier) */
                         Size                bucketCount,
                         Size                hashValueOfNewNode,
-                        __DataNode  const * pNewEmptyNode
+                        __NodeType  const * pNewEmptyNode
                 ) noexcept -> void;
 
             private:
-                static auto __ht_rehashEmplace (       // NOLINT(bugprone-reserved-identifier)
-                        __BucketType * pBucket,
-                        __DataNode   * pNode
+                /**
+                 * @brief Function used to relocate a node to a different given bucket. Used in rehashing
+                 * @param [in, out] pBucket : __NodeType ptr ptr = Address to the head of the list ( therefore, address as well ) to emplace the node in
+                 * @param [in] pNode : __NodeType ptr = Address to the node to be emplaced in the bucket
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                static auto __ht_rehashEmplace (       /* NOLINT(bugprone-reserved-identifier) */
+                        __NodeType ** pBucket,
+                        __NodeType  * pNode
                 ) noexcept -> void;
 
             private:
-                auto __ht_bucket (                                             // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire the mutable bucket at the given hash value. It will safely truncate the hash value to the current bucket count, which is also called the 'remainder class'
+                 * @param [in] hash : Size = the hash used to identify intended bucket to be acquired
+                 * @exceptsafe
+                 * @return __NodeType ptr ref = Reference to the acquired bucket ( therefore address )
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier) */
                         Size hash
-                ) noexcept -> __BucketType &;
+                ) noexcept -> __NodeType * &;
 
             private:
-                auto __ht_bucket (                                             // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire the immutable bucket at the given hash value. It will safely truncate the hash value to the current bucket count, which is also called the 'remainder class'
+                 * @param [in] hash : Size = the hash used to identify intended bucket to be acquired
+                 * @exceptsafe
+                 * @return __NodeType ptr cref = Constant Reference to the acquired bucket ( therefore address )
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                __CDS_NoDiscard constexpr auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier) */
                         Size hash
-                ) const noexcept -> __BucketType const &;
+                ) const noexcept -> __NodeType * const &;
 
             private:
-                auto __ht_allocateBuckets (                                    // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to allocate a requested number of buckets. It will keep the current existing contents, but not rehash any elements
+                 * @param [in] bucketCount : Size = the number of requested buckets
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                auto __ht_allocateBuckets (                                    /* NOLINT(bugprone-reserved-identifier) */
                         Size bucketCount
                 ) noexcept -> void;
 
             private:
-                auto __ht_freeBuckets () noexcept -> void;                     // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to free the bucket array. It will NOT clear the buckets before
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                auto __ht_freeBuckets () noexcept -> void;                     /* NOLINT(bugprone-reserved-identifier) */
 
             private:
-                auto __ht_allocateNode () const noexcept -> __DataNode *;      // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to allocate memory for a new node. It will NOT initialize the __ElementType data
+                 * @exceptsafe
+                 * @return __NodeType ptr = Address to the newly created node
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                __CDS_NoDiscard auto __ht_allocateNode () const noexcept -> __NodeType *;      /* NOLINT(bugprone-reserved-identifier) */
 
             private:
-                auto __ht_freeNode (                                           // NOLINT(bugprone-reserved-identifier)
-                        __DataNode * pNode
+                /**
+                 * @brief Function used to free the memory used by a node, including destroying the __ElementType data prior to free of memory
+                 * @param [in] pNode : __NodeType ptr = Address to the node to be freed
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @private
+                 */
+                auto __ht_freeNode (                                           /* NOLINT(bugprone-reserved-identifier) */
+                        __NodeType * pNode
                 ) const noexcept -> void;
 
             protected:
-                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to remove a node based on a given key
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the node with
+                 * @exceptsafe
+                 * @return bool = true if a node was removed, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key
                 ) noexcept -> bool;
 
+            protected:
+                auto __ht_removeGetPtr (                                             /* NOLINT(bugprone-reserved-identifier) */
+                        __KeyType const & key
+                ) noexcept -> __ElementType *;
+
             private:
-                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
-                        __DataNode  const * pNode,
+                /**
+                 * @brief Function used to remove a node based on the bucket index, the node itself and the node before it, if applicable
+                 * @param [in] pPreviousNode : __NodeType cptr = Address to the immutable node previous to the removed node
+                 * @param [in] pCurrentNode : __NodeType cptr = Address to the immutable node to be removed
+                 * @param [in] bucketIndex : Size = index of the bucket to remove the node from. Used if 'pPreviousNode' is null, to remove the head node
+                 * @exceptsafe
+                 * @return bool = true if a node was removed, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier) */
+                        __NodeType  const * pPreviousNode,
+                        __NodeType  const * pCurrentNode,
                         Size                bucketIndex
                 ) noexcept -> bool;
 
             protected:
-                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
-                        HashTableIterator const & iterator
+                /**
+                 * @brief Function used to remove a node based on a given iterator. It will acquire the bucket index, the current and previous node and remove the node using these
+                 * @param [in] iterator : __ht_Iterator cref = Constant Reference to a mutable forward iterator
+                 * @exceptsafe
+                 * @return bool = true if a node was removed, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_removeIterator (                                             /* NOLINT(bugprone-reserved-identifier) */
+                        __ht_Iterator const & iterator
                 ) noexcept -> bool;
 
             protected:
-                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
-                        HashTableConstIterator const & iterator
+                /**
+                 * @brief Function used to remove a node based on a given const iterator. It will acquire the bucket index, the current and previous node and remove the node using these
+                 * @param [in] iterator : __ht_ConstIterator cref = Constant Reference to an immutable forward iterator
+                 * @exceptsafe
+                 * @return bool = true if a node was removed, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_removeIteratorConst (                                         /* NOLINT(bugprone-reserved-identifier) */
+                        __ht_ConstIterator const & iterator
                 ) noexcept -> bool;
 
             protected:
-                template < typename __EntryCompareFunction >                // NOLINT(bugprone-reserved-identifier)
-                auto __ht_equals (                                             // NOLINT(bugprone-reserved-identifier)
-                        __HashTable             const & table,
-                        __EntryCompareFunction  const & entryCompareFunction
-                ) const noexcept -> bool;
+                /**
+                 * @brief Function used to remove multiple nodes based on a given iterator array. It will acquire the bucket index, the current and previous node from each iterator and remove the nodes using these
+                 * @param [in] ppIterators : __ht_Iterator cptr cptr = Address to an immutable array of addresses to immutable forward mutable iterators
+                 * @param [in] iteratorCount : Size = number of elements in the iterator array
+                 * @exceptsafe
+                 * @return Size = number of removed nodes
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier) */
+                        __ht_Iterator   const * const * ppIterators,
+                        Size                            iteratorCount
+                ) noexcept -> Size;
 
-            private:
-                template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
-                auto __ht_copyFrom (                                           // NOLINT(bugprone-reserved-identifier)
-                        __HashTable         const & table,
-                        __EntryCopyFunction const & entryCopyFunction
+            protected:
+                /**
+                 * @brief Function used to remove multiple nodes based on a given const iterator array. It will acquire the bucket index, the current and previous node from each iterator and remove the nodes using these
+                 * @param [in] ppIterators : __ht_ConstIterator cptr cptr = Address to an immutable array of addresses to immutable forward immutable iterators
+                 * @param [in] iteratorCount : Size = number of elements in the iterator array
+                 * @exceptsafe
+                 * @return Size = number of removed nodes
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier) */
+                        __ht_ConstIterator  const * const * ppIterators,
+                        Size                                iteratorCount
+                ) noexcept -> Size;
+
+            protected:
+                /**
+                 * @brief Function used to clear the current contents and copy the data from a received hash table.
+                 * @tparam __CopyFunction is the type of the copy functor to be used
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @param [in] copyFunction : __CopyFunction cref = Constant Reference to the copy functor to initialize the new nodes with
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                template <
+                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier) */
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
                 ) noexcept -> void;
 
-            private:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
+            protected:
+                /**
+                 * @brief Function used to ONLY copy the data from a received hash table.
+                 * @tparam __CopyFunction is the type of the copy functor to be used
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @param [in] copyFunction : __CopyFunction cref = Constant Reference to the copy functor to initialize the new nodes with
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                template <
+                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ht_copyCleared (           /* NOLINT(bugprone-reserved-identifier) */
+                        __HashTable     const & table,
+                        __CopyFunction  const & copyFunction
+                ) noexcept -> void;
+
+            protected:
+                /**
+                 * @brief Function used to clear the current contents and move the data from a received hash table.
+                 * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                auto __ht_move (    /* NOLINT(bugprone-reserved-identifier) */
                         __HashTable && table
                 ) noexcept -> void;
 
             protected:
-                template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
-                auto __ht_assign (                                             // NOLINT(bugprone-reserved-identifier)
-                        __HashTable         const & table,
-                        __EntryCopyFunction const & entryCopyFunction
-                ) noexcept -> void;
-
-            protected:
-                auto __ht_assign (                                             // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to ONLY move the data from a received hash table.
+                 * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
+                 * @exceptsafe
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveCleared (   /* NOLINT(bugprone-reserved-identifier) */
                         __HashTable && table
                 ) noexcept -> void;
 
             protected:
-                auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                /**
+                 * @brief Function used to acquire an iterator to the node identified by given key. Will return end() if key does not exist in any node
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to find the desired node
+                 * @exceptsafe
+                 * @return __ht_Iterator = Mutable Iterator to requested node with given key. end() if key does not exist
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_findIterator ( /* NOLINT(bugprone-reserved-identifier) */
                         __KeyType const & key
-                ) noexcept -> HashTableIterator;
+                ) noexcept -> __ht_Iterator;
+
+            protected:
+                /**
+                 * @brief Function used to acquire a const iterator to the node identified by given key. Will return cend() if key does not exist in any node
+                 * @param [in] key : __KeyType cref = Constant Reference to a key to be used to find the desired node
+                 * @exceptsafe
+                 * @return __ht_ConstIterator = Immutable Iterator to requested node with given key. cend() if key does not exist
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                __CDS_NoDiscard auto __ht_findIteratorConst ( /* NOLINT(bugprone-reserved-identifier) */
+                        __KeyType const & key
+                ) const noexcept -> __ht_ConstIterator;
+
+            protected:
+                /**
+                 * @brief Function used to compare the current hash table to a given hash table
+                 * @param [in] table : __HashTable cref = Constant Reference to a hash table to compare the current one to
+                 * @exceptsafe
+                 * @return bool = true if tables contain equal content, false otherwise
+                 *
+                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
+                 * @protected
+                 */
+                template <
+                        cds :: utility :: ComparisonFunction < __ElementType > __comparator /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_equals (                                        /* NOLINT(bugprone-reserved-identifier) */
+                        __HashTable const & table
+                ) const noexcept -> bool;
             };
 
         }
     }
 }
 
-#include "hashTable/Iterator.hpp"
-#include "hashTable/ConstIterator.hpp"
+#endif /* __CDS_SHARED_HASH_TABLE_HPP__ */
 
-#include "hashTable/impl/Iterator.hpp"
-#include "hashTable/impl/ConstIterator.hpp"
-#include "hashTable/impl/HashTable.hpp"
 
-#endif // __CDS_SHARED_HASH_TABLE_HPP__
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+
+/**
+* This is outside of the include guards, but with reasoning.
+* Special include guards apply to the dispatchers, as there is no reason to generate dispatchers that will not be used
+* ( i.e. including only HashSet should not require an inclusion of MapServerDispatcher )
+* Therefore, if both hash table AND set server dispatcher exist, generate set dispatcher
+* - same for map
+*/
+
+#if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_SHARED_HASH_TABLE_HPP__)
+#define __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+
+            template <
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+            > template <
+                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier) */
+            > class __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __keyExtractor,
+                    __keyComparator,
+                    __nodeDestructor
+            > :: __SetDispatcher :
+                    public __SetServerDispatcher <
+                            __ServerType,
+                            __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            >,
+                            __ElementType,
+                            HashTableConstIterator < __ElementType >,
+                            HashTableConstIterator < __ElementType >,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_cbegin,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_cend,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_new,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeIteratorConst,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeConstIteratorArray,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_findIteratorConst
+                    > {};
+
+#endif
+
+
+#if defined ( __CDS_SHARED_MAP_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_SHARED_HASH_TABLE_HPP__)
+#define __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+
+            template <
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+            > template <
+                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier) */
+            > class __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __keyExtractor,
+                    __keyComparator,
+                    __nodeDestructor
+            > :: __MapDispatcher :
+                    public __MapServerDispatcher <
+                            __ServerType,
+                            __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            >,
+                            __ElementType,
+                            __KeyType,
+                            HashTableIterator < __ElementType >,
+                            HashTableConstIterator < __ElementType >,
+                            HashTableIterator < __ElementType >,
+                            HashTableConstIterator < __ElementType >,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_begin,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_end,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_cbegin,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_cend,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_new,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeIterator,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeIteratorConst,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeIteratorArray,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_removeConstIteratorArray,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_findIterator,
+                            & __HashTable <
+                                    __ElementType,
+                                    __KeyType,
+                                    __KeyHasher,
+                                    __RehashPolicy,
+                                    __keyExtractor,
+                                    __keyComparator,
+                                    __nodeDestructor
+                            > :: __ht_findIteratorConst
+                    > {};
+
+#endif
+
+        }
+    }
+}

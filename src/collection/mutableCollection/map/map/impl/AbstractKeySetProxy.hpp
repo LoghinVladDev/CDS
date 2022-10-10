@@ -1,112 +1,92 @@
-//
-// Created by loghin on 6/18/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_MAP_ABSTRACT_KEY_SET_PROXY_IMPL_HPP__
-#define __CDS_MAP_ABSTRACT_KEY_SET_PROXY_IMPL_HPP__
+#define __CDS_MAP_ABSTRACT_KEY_SET_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: AbstractKeySetProxy (
             Map < __KeyType, __ValueType > * pMap
     ) noexcept :
-            AbstractProxy ( pMap ) {
+            ProxyBase ( pMap ) {
 
     }
 
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
-            AbstractKeySetProxy const & set
-    ) noexcept :
-            AbstractProxy ( set ),
-            Set < KeyType > ( set ) {
-
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
-            AbstractKeySetProxy && set
-    ) noexcept :
-            AbstractProxy ( std :: move ( set ) ),
-            Set < KeyType > ( std :: move ( set ) ) {
-
-    }
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprDestructor Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: ~AbstractKeySetProxy () noexcept = default;
 
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_cpplang_ConstexprDestructor Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: ~AbstractKeySetProxy() noexcept = default;
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: remove (
-            KeyType const & key
-    ) noexcept -> bool {
-
-        return this->map()->remove ( key );
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: remove (
-            ConstIterator   const * pIterators,
-            Size                    iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: remove (
-            ConstReverseIterator    const * pIterators,
-            Size                            iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: pNewInsert (
-            ElementType const & referenceElement
-    ) noexcept -> ElementType * {
-
-        return nullptr;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: contains (
-            KeyType const & key
-    ) const noexcept -> bool {
-
-        return this->map()->containsKey ( key );
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: clear () noexcept -> void {
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: clear () noexcept -> void {
 
         this->map()->clear();
     }
 
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: remove (
+            KeyType const & key
+    ) noexcept -> bool {
+
+        return this->map()->remove(key);
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_VirtualConstexpr auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: size () const noexcept -> Size {
+
+        return this->map()->size();
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :: __newAddress (
+            __KeyType const * pReferenceKey,
+            bool            * pIsNew        /* NOLINT(readability-non-const-parameter) */
+    ) noexcept (false) -> __KeyType * {
+
+        (void) pReferenceKey;
+        (void) pIsNew;
+
+        throw cds :: UnsupportedOperationException (
+                cds :: String ( "Cannot insert a value into a Map Key Set" )
+        );
+    }
+
 }
 
-#endif // __CDS_MAP_ABSTRACT_KEY_SET_PROXY_IMPL_HPP__
+#endif /* __CDS_MAP_ABSTRACT_KEY_SET_PROXY_IMPL_HPP__ */

@@ -1,140 +1,69 @@
-//
-// Created by loghin on 6/18/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_HPP__
-#define __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_HPP__
+#define __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    class Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :
-            public cds :: MutableCollection < ValueType >,
-            protected Map < __KeyType, __ValueType > :: AbstractProxy {
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > class Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :
+            public cds :: MutableCollection < __ValueType >,
+            protected Map < __KeyType, __ValueType > :: AbstractMapProxy {
 
-    public:
-        using ValueType = typename Map < __KeyType, __ValueType > :: ValueType;
+    protected:  using ProxyBase             = Map < __KeyType, __ValueType > :: AbstractMapProxy;
+    protected:  using MutableCollectionBase = MutableCollection < __ValueType >;
 
-    public:
-        using typename MutableCollection < ValueType > :: ElementType;
-
-    public:
-        using typename MutableCollection < ValueType > :: Iterator;
-
-    public:
-        using typename MutableCollection < ValueType > :: ConstIterator;
-
-    public:
-        using typename MutableCollection < ValueType > :: ReverseIterator;
-
-    public:
-        using typename MutableCollection < ValueType > :: ConstReverseIterator;
-
-    protected:
-        using typename MutableCollection < ValueType > :: InitializerList;
-
-    protected:
-        using typename MutableCollection < ValueType > :: DelegateIterator;
-
-    protected:
-        using typename MutableCollection < ValueType > :: DelegateConstIterator;
-
-    protected:
-        using typename MutableCollection < ValueType > :: AbstractIterator;
-
-    protected:
-        using typename MutableCollection < ValueType > :: AbstractDelegateIterator;
-
-    protected:
-        using typename MutableCollection < ValueType > :: DelegateIteratorRequestType;
-
-    protected:
-        auto delegateIterator (
-                DelegateIteratorRequestType requestType
-        ) noexcept -> cds :: UniquePointer < DelegateIterator > override = 0;
-
-    protected:
-        auto delegateConstIterator (
-                DelegateIteratorRequestType requestType
-        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
+    protected:  using typename MutableCollectionBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier) */
+    protected:  using typename MutableCollectionBase :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier) */
 
     protected:
         __CDS_Explicit constexpr AbstractValueMutableCollectionProxy (
                 Map < __KeyType, __ValueType > * pMap
         ) noexcept;
 
-    protected:
-        constexpr AbstractValueMutableCollectionProxy (
+    public:
+        AbstractValueMutableCollectionProxy (
                 AbstractValueMutableCollectionProxy const & collection
-        ) noexcept;
+        ) noexcept = delete;
 
-    protected:
-        constexpr AbstractValueMutableCollectionProxy (
+    public:
+        AbstractValueMutableCollectionProxy (
                 AbstractValueMutableCollectionProxy && collection
-        ) noexcept;
+        ) noexcept = delete;
 
     public:
-        __CDS_cpplang_ConstexprDestructor ~AbstractValueMutableCollectionProxy() noexcept override;
+        __CDS_cpplang_ConstexprDestructor ~AbstractValueMutableCollectionProxy () noexcept override;
 
     public:
-        auto remove (
-                Iterator const & iterator
-        ) noexcept -> bool override = 0;
+        auto operator = (
+                AbstractValueMutableCollectionProxy const &
+        ) noexcept -> AbstractValueMutableCollectionProxy & = delete;
 
     public:
-        auto remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        auto remove (
-                ReverseIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        auto remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        auto remove (
-                Iterator    const * pIterators,
-                Size                iteratorCount
-        ) noexcept -> Size override;
-
-    public:
-        auto remove (
-                ConstIterator   const * pIterators,
-                Size                    iteratorCount
-        ) noexcept -> Size override;
-
-    public:
-        auto remove (
-                ReverseIterator const * pIterators,
-                Size                    iteratorCount
-        ) noexcept -> Size override;
-
-    public:
-        auto remove (
-                ConstReverseIterator    const * pIterators,
-                Size                            iteratorCount
-        ) noexcept -> Size override;
-
-    protected:
-        auto pNewInsert (
-                ElementType const & referenceElement
-        ) noexcept -> ElementType * override;
+        auto operator = (
+                AbstractValueMutableCollectionProxy &&
+        ) noexcept -> AbstractValueMutableCollectionProxy & = delete;
 
     public:
         auto clear () noexcept -> void override;
 
     public:
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
 
-    public:
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override = 0;
+    protected:
+        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
+                __ValueType const * pReferenceKey,
+                bool              * pIsNew
+        ) noexcept (false) -> __ValueType *;
     };
 
 }
 
-#endif // __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_HPP__
+#endif /* __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_HPP__ */

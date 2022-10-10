@@ -5,9 +5,10 @@
 //
 // Created by loghin on 05.04.2021.
 //
-
 #define CDS_STRING_DEBUG
+
 #include "StringTest.h"
+
 
 #include <CDS/String>
 
@@ -21,7 +22,6 @@ using namespace cds;
 #include <CDS/Integer>
 #include <CDS/Array>
 #include <CDS/LinkedList>
-
 
 auto StringTest::execute() noexcept -> bool {
 
@@ -71,7 +71,7 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-         String defaultedString(10, 'a');
+        String defaultedString(10, 'a');
         this->log("String Constructed with default values : '%s'. Diag : %s", defaultedString.cStr(),
                   defaultedString.diag().cStr());
 
@@ -198,17 +198,17 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        String fromAddress = String ( ( int * ) 0x10 );
+        String fromAddress = ( int * ) 0x10;
 
-        this->log("String constructed from raw address. Intended : 0x%d, Result : '%s'. Diag : '%s'", 10, fromAddress.cStr(), fromAddress.diag().cStr());
-        if ( std::strcmp ( fromAddress.cStr(), "0x10" ) != 0 ) {
+        this->log("String constructed from raw address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromAddress.cStr(), fromAddress.diag().cStr());
+        if ( std::strcmp ( fromAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
-        String fromConstAddress = String ( ( int const * const ) 0x10 );
+        String fromConstAddress = ( int const * const ) 0x10;
 
-        this->log("String constructed from raw const address. Intended : 0x%d, Result : '%s'. Diag : '%s'", 10, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
-        if ( std::strcmp ( fromConstAddress.cStr(), "0x10" ) != 0 ) {
+        this->log("String constructed from raw const address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
+        if ( std::strcmp ( fromConstAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw const address construction error");
         }
     });
@@ -744,25 +744,25 @@ auto StringTest::execute() noexcept -> bool {
         this->log("Original String : '%s'", str.cStr());
 
         this->log("Find of char 'a' : %s", str.findAll <Array> ('a').toString().cStr());
-        if ( str.findAll <Array>('a') != LinkedList < Index > { 8, 11 } ) {
+        if ( str.findAll <Array>('a') != Array < Index > { 8, 11 } ) {
             this->logWarning("Find char error");
             allOk = false;
         }
 
         this->log("Find of string 'is' : %s", str.findAll <Array>("is").toString().cStr());
-        if ( str.findAll <Array>("is") != LinkedList < Index > { 2, 5 } ) {
+        if ( str.findAll <Array>("is") != Array < Index > { 2, 5 } ) {
             this->logWarning("Find string error");
             allOk = false;
         }
 
         this->log("Find of characters 'a', ' ', 's' : %s", str.findAllOf < Array > ("as ").toString().cStr());
-        if ( str.findAllOf < Array > ("as ") != LinkedList < Index > { 3, 4, 6, 7, 8, 9, 10, 11, 16, 17 } ) {
+        if ( str.findAllOf < Array > ("as ") != Array < Index > { 3, 4, 6, 7, 8, 9, 10, 11, 16, 17 } ) {
             this->logWarning("Find of String error");
             allOk = false;
         }
 
         this->log("Find characters not 'a' 's' ' ' : %s", str.findAllNotOf < Array > ("as ").toString().cStr());
-        if ( str.findAllNotOf < Array > ("as ") != LinkedList < Index > { 0, 1, 2, 5, 12, 13, 14, 15, 18, 19, 20, 21, 22 } ) {
+        if ( str.findAllNotOf < Array > ("as ") != Array < Index > { 0, 1, 2, 5, 12, 13, 14, 15, 18, 19, 20, 21, 22 } ) {
             this->logWarning("Find not of String error");
             allOk = false;
         }
@@ -1401,9 +1401,9 @@ auto StringTest::execute() noexcept -> bool {
         String original = "Test String";
 
         String m = original;
-        this->log("Replaced in '%s' from 2 to 5 with 'inserted value' : '%s'", original.cStr(), m.replace(2, 5, "inserted value").cStr());
+        this->log("Replaced in '%s' from 2 to 3 with 'inserted value' : '%s'", original.cStr(), m.replace(2, 3, "inserted value").cStr());
 
-        if ( std::strcmp ( String ( "Test String" ).replace(2, 5, "inserted value").cStr(), "Teinserted valueString" ) != 0 ) {
+        if ( std::strcmp ( String ( "Test String" ).replace(2, 3, "inserted value").cStr(), "Teinserted valuet String" ) != 0 ) {
             this->logWarning("Replace Error");
             allOk = false;
         }
@@ -1436,7 +1436,7 @@ auto StringTest::execute() noexcept -> bool {
             String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([& sum](auto e) { sum += e; });
+            toApplyTo.forEach([& sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                       toApplyTo.cStr(), sum, 1079);
@@ -1451,7 +1451,7 @@ auto StringTest::execute() noexcept -> bool {
             const String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([& sum](auto e) { sum += e; });
+            toApplyTo.forEach([& sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                       toApplyTo.cStr(), sum, 1079);

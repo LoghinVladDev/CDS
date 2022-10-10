@@ -2,8 +2,11 @@
  * Created by loghin on 6/30/2022.
  */
 
-#ifndef __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__
+#define __CDS_EX_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+
+#warning No longer an experimental feature. Use the non-experimental header.
+#include "../../../../../../shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -11,94 +14,21 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
-                > class __ReplaceCompositeClient {              /* NOLINT(bugprone-reserved-identifier) */
-
-                private:
-                    using ElementType = __ElementType;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __TElementType > ()
-                            > = 0
-                    > auto replace (
-                            Size                count,
-                            ElementType const & what,
-                            ElementType const & with
-                    ) noexcept -> Size;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __TElementType > ()
-                            > = 0
-                    > auto replaceFirst (
-                            ElementType const & what,
-                            ElementType const & with
-                    ) noexcept -> bool;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __TElementType > ()
-                            > = 0
-                    > auto replaceFirst (
-                            ElementType const & what,
-                            ElementType      && with
-                    ) noexcept -> bool;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __TElementType > ()
-                            > = 0
-                    > auto replaceLast (
-                            ElementType const & what,
-                            ElementType const & with
-                    ) noexcept -> bool;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __TElementType > ()
-                            > = 0
-                    > auto replaceLast (
-                            ElementType const & what,
-                            ElementType      && with
-                    ) noexcept -> bool;
-
-                public:
-                    template <
-                            typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __TElementType > ()
-                            > = 0
-                    > auto replaceAll (
-                            ElementType const & what,
-                            ElementType const & with
-                    ) noexcept -> Size;
-                };
+                        typename __ReceiverType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                > using __ReplaceCompositeClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ReplaceCompositeClient < __ReceiverType, __ElementType >;
 
 
                 template <
-                        typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
-                > using __LocalReplaceCompositeClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __ReplaceCompositeClient <
-                                __ReceiverType,
-                                __ElementType
-                        >;
+                        typename __ReceiverType,                                                                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ElementType                                                                      /* NOLINT(bugprone-reserved-identifier) */
+                > using __LocalReplaceCompositeClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LocalReplaceCompositeClient < __ReceiverType, __ElementType >;
 
             }
         }
     }
 }
 
-#endif /* __CDS_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ */
+#endif /* __CDS_EX_SHARED_REPLACE_COMPOSITE_CLIENT_HPP__ */

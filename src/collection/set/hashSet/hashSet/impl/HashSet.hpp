@@ -1,371 +1,402 @@
-//
-// Created by loghin on 6/13/22.
-//
+/*
+ * Created by loghin on 10/08/22.
+ */
 
 #ifndef __CDS_HASH_SET_IMPL_HPP__
-#define __CDS_HASH_SET_IMPL_HPP__
+#define __CDS_HASH_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: delegateConstIterator (
-            DelegateIteratorRequestType requestType
-    ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: __cicch_obtainGenericHandler (
+            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    ) noexcept -> __GenericHandler {
 
-        switch ( requestType ) {
-            case DelegateIteratorRequestType :: ForwardBegin:
-            case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashSetDelegateIterator > ( this->__ht_cbegin() );
-            case DelegateIteratorRequestType :: ForwardEnd:
-            case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashSetDelegateIterator > ( this->__ht_cend() );
-        }
-
-        return nullptr;
+        return this->__ss_handlers() [ static_cast < uint32 > ( requestType ) ];
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    constexpr HashSet < __ElementType, __Hasher > :: HashSet () noexcept = default;
-
-
-    template < typename __ElementType, typename __Hasher >  // NOLINT(bugprone-reserved-identifier)
     template <
-            typename __TElementType,                                // NOLINT(bugprone-reserved-identifier)
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: __cicch_obtainGenericConstHandler (
+            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    ) const noexcept -> __GenericConstHandler {
+
+        return this->__ss_constHandlers() [ static_cast < uint32 > ( requestType ) ];
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet () noexcept = default;
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            HashSet const & set
+    ) noexcept {
+
+        this->__ht_copyCleared (
+                set,
+                & cds :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
+        );
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            HashSet && set
+    ) noexcept :
+            Implementation ( std :: move ( set ) ) {
+
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
-    > __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            HashSet const & set
-    ) noexcept :
-            Set < __ElementType > ( set ),
-            __hidden :: __impl :: __HashTable <
-                    __HashTableElementType,
-                    __HashTableKeyType,
-                    __HashTableFunctionExtractor,
-                    __HashTableFunctionComparator,
-                    __HashTableHasher,
-                    __HashTableRehashPolicy,
-                    __HashTableFunctionDestructor
-            > ( set, __HashTableFunctionCopyConstructor () ) {
-
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    constexpr HashSet < __ElementType, __Hasher > :: HashSet (
-            HashSet && set
-    ) noexcept :
-            Set < __ElementType > ( std :: move ( set ) ),
-            __hidden :: __impl :: __HashTable <
-                    __HashTableElementType,
-                    __HashTableKeyType,
-                    __HashTableFunctionExtractor,
-                    __HashTableFunctionComparator,
-                    __HashTableHasher,
-                    __HashTableRehashPolicy,
-                    __HashTableFunctionDestructor
-            > ( std :: move ( set ) ) {
-
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            __Hasher const & hasher
-    ) noexcept :
-            __hidden :: __impl :: __HashTable <
-                    __HashTableElementType,
-                    __HashTableKeyType,
-                    __HashTableFunctionExtractor,
-                    __HashTableFunctionComparator,
-                    __HashTableHasher,
-                    __HashTableRehashPolicy,
-                    __HashTableFunctionDestructor
-            > ( hasher ) {
-
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            __IteratorType      const & begin,
-            __IteratorType      const & end
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            __IteratorType const & begin,
+            __IteratorType const & end,
+            Size                   count
     ) noexcept {
 
+        (void) count;
         for ( auto iterator = begin; iterator != end; ++ iterator ) {
             this->insert ( * iterator );
         }
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            __IteratorType      const & begin,
-            __IteratorType      const & end,
-            __Hasher    const & hasher
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            __Hasher        const & hasher,
+            __IteratorType  const & begin,
+            __IteratorType  const & end,
+            Size                    count
     ) noexcept :
-            __hidden :: __impl :: __HashTable <
-                    __HashTableElementType,
-                    __HashTableKeyType,
-                    __HashTableFunctionExtractor,
-                    __HashTableFunctionComparator,
-                    __HashTableHasher,
-                    __HashTableRehashPolicy,
-                    __HashTableFunctionDestructor
-            > ( hasher ) {
+            Implementation ( hasher ) {
 
+        (void) count;
         for ( auto iterator = begin; iterator != end; ++ iterator ) {
-            this->insert ( * iterator );
+            this->insert ( iterator );
         }
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            InitializerList     const & initializerList
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            std :: initializer_list < __ElementType > const & initializerList
     ) noexcept :
             HashSet (
-                    initializerList.begin(),
-                    initializerList.end()
+                    initializerList.begin (),
+                    initializerList.end (),
+                    initializerList.size()
             ) {
 
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            InitializerList     const & initializerList,
-            __Hasher    const & hasher
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            __Hasher                                    const & hasher,
+            std :: initializer_list < __ElementType >   const & initializerList
     ) noexcept :
             HashSet (
-                    initializerList.begin(),
-                    initializerList.end(),
-                    hasher
+                    hasher,
+                    initializerList.begin (),
+                    initializerList.end (),
+                    initializerList.size()
             ) {
 
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            Collection < __OtherElementType >   const & collection
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            __IterableType const & iterable
     ) noexcept :
             HashSet (
-                    collection.begin(),
-                    collection.end()
+                    iterable.begin (),
+                    iterable.end ()
             ) {
 
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline HashSet < __ElementType, __Hasher > :: HashSet (
-            Collection < __OtherElementType >   const & collection,
-            __Hasher                    const & hasher
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: HashSet (
+            __Hasher        const & hasher,
+            __IterableType  const & iterable
     ) noexcept :
             HashSet (
-                    collection.begin(),
-                    collection.end(),
-                    hasher
+                    hasher,
+                    iterable.begin (),
+                    iterable.end ()
             ) {
 
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    HashSet < __ElementType, __Hasher > :: ~HashSet () noexcept {
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline HashSet <
+            __ElementType,
+            __Hasher
+    > :: ~HashSet () noexcept {
 
-        this->__ht_clear();
+        this->__ht_clear ();
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __Hasher > :: size () const noexcept -> Size {
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            HashSet const & set
+    ) noexcept -> HashSet & {
 
-        return this->__ht_size();
+        if ( this == & set ) {
+            return * this;
+        }
+
+        this->__ht_copy (
+                set,
+                & cds :: __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
+        );
+
+        return * this;
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: remove (
-            ElementType const & element
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            HashSet && set
+    ) noexcept -> HashSet & {
+
+        if ( this == & set ) {
+            return * this;
+        }
+
+        this->__ht_move ( std :: move ( set ) );
+        return * this;
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            std :: initializer_list < __ElementType > const & initializerList
+    ) noexcept -> HashSet & {
+
+        this->__ht_clear ();
+        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+            (void) this->insert ( * iterator );
+        }
+
+        return * this;
+    }
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            __IterableType const & iterable
+    ) noexcept -> HashSet & {
+
+        if ( this == & iterable ) {
+            return * this;
+        }
+
+        this->__ht_clear ();
+        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
+            this->insert ( * iterator );
+        }
+
+        return * this;
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: size () const noexcept -> Size {
+
+        return this->__ht_size ();
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: clear () noexcept -> void {
+
+        return this->__ht_clear();
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: remove (
+            __ElementType const & element
     ) noexcept -> bool {
 
         return this->__ht_remove ( element );
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: remove (
-            ConstIterator const & iterator
-    ) noexcept -> bool {
-
-        return this->__ht_remove (
-                reinterpret_cast < HashSetDelegateIterator const * > (
-                        HashSet :: acquireDelegate ( iterator )
-                )->iterator()
-        );
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: remove (
-            ConstReverseIterator const & iterator
-    ) noexcept -> bool {
-
-        return this->__ht_remove (
-                reinterpret_cast < HashSetDelegateIterator const * > (
-                        HashSet :: acquireDelegate ( iterator )
-                )->iterator()
-        );
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: remove (
-            ConstIterator   const * pIterators,
-            Size                    iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            removedCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: remove (
-            ConstReverseIterator    const * pIterators,
-            Size                            iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            removedCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: pNewInsert (
-            ElementType const & referenceElement
-    ) noexcept -> ElementType * {
-
-        bool isNew;
-        auto pEntry = this->__ht_get ( referenceElement, & isNew );
-        return isNew ? pEntry : nullptr;
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: contains (
-            ElementType const & element
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: contains (
+            __ElementType const & element
     ) const noexcept -> bool {
 
-        return this->__ht_get ( element ) != nullptr;
+        return this->__ht_getConst ( element ) != nullptr;
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: clear () noexcept -> void {
-
-        this->__ht_clear();
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: operator == (
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprConditioned auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator == (
             HashSet const & set
     ) const noexcept -> bool {
 
-        return this->__ht_equals ( set );
+        if ( this == & set ) {
+            return true;
+        }
+
+        return this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto HashSet < __ElementType, __Hasher > :: operator != (
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprConditioned auto HashSet <
+            __ElementType,
+            __Hasher
+    > :: operator != (
             HashSet const & set
     ) const noexcept -> bool {
 
-        return ! this->__ht_equals ( set );
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: operator = (
-            HashSet const & set
-    ) noexcept -> HashSet & {
-
         if ( this == & set ) {
-            return * this;
+            return false;
         }
 
-        this->clear();
-        for ( auto const & entry : set ) {
-            this->insert ( entry );
-        }
-
-        return * this;
+        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
     }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: operator = (
-            HashSet && set
-    ) noexcept -> HashSet & {
-
-        if ( this == & set ) {
-            return * this;
-        }
-
-        this->move ( std :: move ( set ) );
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_cpplang_VirtualConstexpr auto HashSet < __ElementType, __Hasher > :: move (
-            HashSet && set
-    ) noexcept -> HashSet & {
-
-        if ( this == & set ) {
-            return * this;
-        }
-
-        this->__ht_assign ( std :: move ( set ) );
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto HashSet < __ElementType, __Hasher > :: operator = (
-            Collection < __OtherElementType > const & collection
-    ) noexcept -> HashSet & {
-
-        if ( this == & collection ) {
-            return * this;
-        }
-
-        this->clear();
-        for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator ) {
-            this->insert ( * iterator );
-        }
-
-        return * this;
-    }
-
+        
 }
 
-#endif // __CDS_HASH_SET_IMPL_HPP__
+#endif /* __CDS_HASH_SET_IMPL_HPP__ */

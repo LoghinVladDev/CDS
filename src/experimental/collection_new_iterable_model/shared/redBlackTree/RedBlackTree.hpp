@@ -276,8 +276,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-#if defined ( __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_EX_SHARED_RED_BLACK_TREE_HPP__)
-#define __CDS_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#if defined ( __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_EX_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_EX_SHARED_RED_BLACK_TREE_HPP__)
+#define __CDS_EX_SHARED_TREE_SET_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
             template <
                     typename                                                            __ElementType,             /* NOLINT(bugprone-reserved-identifier) */

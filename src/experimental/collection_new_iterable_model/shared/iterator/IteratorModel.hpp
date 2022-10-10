@@ -2,48 +2,25 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_ITERATOR_MODEL_HPP__
-#define __CDS_ITERATOR_MODEL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_ITERATOR_MODEL_HPP__
+#define __CDS_EX_ITERATOR_MODEL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+
+#warning No longer an experimental feature. Use the non-experimental header.
+#include "../../../../shared/iterator/IteratorModel.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
 
         namespace meta {
 
-            /**
-             * @interface Model Structure representing a non-standard iterator model
-             * @test Not Applicable.
-             * @public
-             **/
-            struct Iterator {};
-
-            /**
-             * @interface Model Structure representing a Forward-Iterable Iterator. Can advance begin-to-end
-             * @extends Iterator
-             * @test Not Applicable.
-             * @public
-             */
-            struct ForwardIterator : Iterator {};
-
-            /**
-             * @interface Model Structure representing a Bidirectional-Iterable Iterator. Can advance begin-to-end and end-to-begin
-             * @extends ForwardIterator
-             * @test Not Applicable.
-             * @public
-             */
-            struct BidirectionalIterator : ForwardIterator {};
-
-            /**
-             * @interface Model Structure representing a Random-Access-Iterable Iterator. Can advance begin-to-end, end-to-begin, and jump positions more than one step at a time.
-             * @extends BidirectionalIterator
-             * @test Not Applicable.
-             * @public
-             */
-            struct RandomAccessIterator : BidirectionalIterator {};
+            using Iterator              __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: meta :: Iterator;
+            using ForwardIterator       __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: meta :: ForwardIterator;
+            using BidirectionalIterator __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: meta :: BidirectionalIterator;
+            using RandomAccessIterator  __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: meta :: RandomAccessIterator;
 
         }
 
     }
 }
 
-#endif /* __CDS_ITERATOR_MODEL_HPP__ */
+#endif /* __CDS_EX_ITERATOR_MODEL_HPP__ */

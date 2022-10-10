@@ -2,10 +2,10 @@
  * Created by stefan on 01.09.2022.
  */
 
-#ifndef __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__
-#define __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__
+#define __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include "SetServerDispatcher.hpp"
+#include "../../../../../../shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -89,4 +89,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__ */
+#endif /* __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__ */

@@ -23,8 +23,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             }
         }
 
-        template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        class AbstractRedBlackTreeIterator : public meta :: BidirectionalIterator {
+        template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+        class AbstractRedBlackTreeIterator : public cds :: meta :: BidirectionalIterator {
 
         private:
             template <
@@ -161,7 +161,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected:
             auto reverse () noexcept -> void;
         };
-        
+
 
         template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
         class RedBlackTreeForwardIterator : public AbstractRedBlackTreeIterator < __ElementType > {

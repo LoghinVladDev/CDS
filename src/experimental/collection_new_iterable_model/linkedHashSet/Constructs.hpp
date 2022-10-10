@@ -2,292 +2,136 @@
  * Created by loghin on 02/10/22.
  */
 
-#ifndef __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__
-#define __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_LINKED_HASH_SET_CONSTRUCTS_HPP__
+#define __CDS_EX_LINKED_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace experimental {
-
-        template <
-                typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier) */
-                typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > > /* NOLINT(bugprone-reserved-identifier) */
-        > class LinkedHashSet;
-
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __linkedHashSetKeyExtractor (    /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_DeprecatedHint("No longer an experimental feature.") constexpr auto __linkedHashSetKeyExtractor ( /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType const & element
                 ) noexcept -> __ElementType const & {
 
-                    return element;
+                    return cds :: __hidden :: __impl :: __linkedHashSetKeyExtractor < __ElementType > ( element );
                 }
 
 
-                template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetCopyConstructor (   /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_DeprecatedHint("No longer an experimental feature.") __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetCopyConstructor (    /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType       & destination,
                         __ElementType const & source
                 ) noexcept -> void {
 
-                    (void) new ( & destination ) __ElementType ( source );
+                    cds :: __hidden :: __impl :: __linkedHashSetCopyConstructor < __ElementType > ( destination, source );
                 }
 
 
-                template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetDestructor (    /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >                                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_DeprecatedHint("No longer an experimental feature.") __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetDestructor ( /* NOLINT(bugprone-reserved-identifier) */
                         __ElementType & element
                 ) noexcept -> void {
 
-                    element.~__ElementType();
+                    cds :: __hidden :: __impl :: __linkedHashSetDestructor < __ElementType > ( element );
                 }
 
 
                 template <
-                        typename __DecoratedIteratorType,                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueAtType                              /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __linkedHashSetIteratorDecoratorValueAt (  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __DecoratedIteratorType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueAtType                                                                                          /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_DeprecatedHint("No longer an experimental feature.") constexpr auto __linkedHashSetIteratorDecoratorValueAt (   /* NOLINT(bugprone-reserved-identifier) */
                         __DecoratedIteratorType const & iterator
                 ) noexcept -> __ValueAtType & {
 
-                    return * ( * iterator );
+                    return cds :: __hidden :: __impl :: __linkedHashSetIteratorDecoratorValueAt < __DecoratedIteratorType, __ValueAtType > ( iterator );
                 }
 
 
-                template <
-                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetHashTableImplementation =    /* NOLINT(bugprone-reserved-identifier) */
-                        __HashTable <
-                                __ElementType,
-                                __ElementType,
-                                __Hasher,
-                                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
-                                & __linkedHashSetKeyExtractor < __ElementType >,
-                                & cds :: meta :: equals < __ElementType >,
-                                & __linkedHashSetDestructor < __ElementType >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetHashTableImplementation __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetHashTableImplementation < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetLinkedListImplementation =   /* NOLINT(bugprone-reserved-identifier) */
-                        __SingleLinkedList <
-                                __ElementType *,
-                                & cds :: meta :: equals < __ElementType * >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetLinkedListImplementation __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetIterator =   /* NOLINT(bugprone-reserved-identifier) */
-                        ForwardIteratorGenericDecorator <
-                                typename __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher > :: __sll_ConstIterator,
-                                __ElementType const,
-                                & __linkedHashSetIteratorDecoratorValueAt <
-                                        typename __LinkedHashSetLinkedListImplementation < __ElementType, __Hasher > :: __sll_ConstIterator,
-                                        __ElementType const
-                                >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetIterator __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetIterator < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetServer = /* NOLINT(bugprone-reserved-identifier) */
-                        __SetServer <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType
-                        >;
+                template < typename __ElementType, typename __Hasher >                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetServer __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRandomInsertionPrimitiveClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __ElementType const
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                  /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetRandomInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetRandomInsertionClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalConstIteratorRemovePrimitiveClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                  /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetIteratorRemoveClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetIteratorRemoveClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >,
-                                & __collectionNotContains < __ElementType >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetFindOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetFindOfCollectionClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
-                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                          /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetFindOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetFindOfInitializerListClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetFindByClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByImmutableCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                          /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetFindByClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetFindByClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetRemoveOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetRemoveOfCollectionClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                          /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetRemoveOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetRemoveOfInitializerListClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveByCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType
-                        >;
+                template < typename __ElementType, typename __Hasher >                                              /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetRemoveByClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetRemoveByClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalGenericImmutableStatementsCompositeClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetGenericStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetGenericStatementsClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindUniqueImmutablePrimitiveClient <
-                                cds :: experimental :: LinkedHashSet <
-                                        __ElementType,
-                                        __Hasher
-                                >,
-                                __ElementType,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                              /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetFindUniqueClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetFindUniqueClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                __collectionContains < __ElementType >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                          /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetContainsOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetContainsOfCollectionClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                __initializerListContains <
-                                        __ElementType,
-                                        & cds :: meta :: equals < __ElementType >
-                                >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                              /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetContainsOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetContainsOfInitializerListClient < __ElementType, __Hasher >;
 
 
-                template <
-                        typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-                > using __LinkedHashSetDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardConstIterablePrimitiveClient <
-                                cds :: experimental :: LinkedHashSet < __ElementType, __Hasher >,
-                                __LinkedHashSetIterator < __ElementType, __Hasher >
-                        >;
+                template < typename __ElementType, typename __Hasher >                                                                  /* NOLINT(bugprone-reserved-identifier) */
+                using __LinkedHashSetDelegateForwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __LinkedHashSetDelegateForwardConstIterableClient < __ElementType, __Hasher >;
 
             }
         }
@@ -295,4 +139,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__ */
+#endif /* __CDS_EX_LINKED_HASH_SET_CONSTRUCTS_HPP__ */

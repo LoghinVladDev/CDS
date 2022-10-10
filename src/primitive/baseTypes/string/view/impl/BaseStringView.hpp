@@ -1465,7 +1465,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 for ( Size index = 0ULL; index < this->_length; ++ index ) {
                     if ( this->_pData [ index ] == character ) {
-                        storeIn.add ( static_cast < Index > ( index ) );
+                        storeIn.insert ( static_cast < Index > ( index ) );
                     }
                 }
 
@@ -1824,7 +1824,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size found = 0ULL;
                 for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
                     if ( string.contains ( this->_pData [ index ] ) ) {
-                        storeIn.add ( static_cast < Index > ( index ) );
+                        storeIn.insert ( static_cast < Index > ( index ) );
                         ++ found;
                     }
                 }
@@ -1884,7 +1884,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 for ( Size index = 0ULL; index < this->length(); ++ index ) {
                     if ( string.contains ( this->_pData [ index ] ) ) {
-                        storeIn.add ( static_cast < Index > ( index ) );
+                        storeIn.insert ( static_cast < Index > ( index ) );
                     }
                 }
 
@@ -1914,7 +1914,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size found = 0ULL;
                 for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
                     if ( ! string.contains ( this->_pData [ index ] ) ) {
-                        storeIn.add ( static_cast < Index > ( index ) );
+                        storeIn.insert ( static_cast < Index > ( index ) );
                         ++ found;
                     }
                 }
@@ -1974,7 +1974,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 for ( Size index = 0ULL; index < this->length(); ++ index ) {
                     if ( ! string.contains ( this->_pData [ index ] ) ) {
-                        storeIn.add ( static_cast < Index > ( index ) );
+                        storeIn.insert ( static_cast < Index > ( index ) );
                     }
                 }
 
@@ -2019,14 +2019,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
 
                         ++ splitIndex;
-                        storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.insert (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                         currentSegmentLength = 0ULL;
                         currentSegmentOffset = index + 1;
                     }
                 }
 
                 if ( currentSegmentLength != 0ULL ) {
-                    storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                    storeIn.insert (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                 }
 
                 return storeIn;
@@ -2108,14 +2108,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
 
                         ++ splitIndex;
-                        storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.insert (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                         currentSegmentLength = 0ULL;
                         currentSegmentOffset = index + 1;
                     }
                 }
 
                 if ( currentSegmentLength != 0ULL ) {
-                    storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                    storeIn.insert (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                 }
 
                 return storeIn;
@@ -2206,7 +2206,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                         if ( addedTokenCount < maxCount ) {
                             ++ addedTokenCount;
-                            storeIn.add (
+                            storeIn.insert (
                                    __BaseString < __CharType > (
                                             this->_pData + tokenOffset,
                                             static_cast < Size > ( pOccurrences [ currentSeparatorIndex ] )

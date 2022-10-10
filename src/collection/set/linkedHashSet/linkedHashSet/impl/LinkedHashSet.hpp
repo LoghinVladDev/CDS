@@ -1,330 +1,599 @@
-//
-// Created by loghin on 6/25/22.
-//
+/*
+ * Created by loghin on 06/10/22.
+ */
 
 #ifndef __CDS_LINKED_HASH_SET_IMPL_HPP__
-#define __CDS_LINKED_HASH_SET_IMPL_HPP__
+#define __CDS_LINKED_HASH_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: delegateConstIterator (
-            DelegateIteratorRequestType requestType
-    ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cicch_obtainGenericHandler (
+            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    ) noexcept -> __GenericHandler {
 
-        switch ( requestType ) {
-            case DelegateIteratorRequestType :: ForwardBegin:
-            case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < LinkedHashSetDelegateConstIterator > ( this->__sll_cbegin() );
-            case DelegateIteratorRequestType :: ForwardEnd:
-            case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < LinkedHashSetDelegateConstIterator > ( this->__sll_cend() );
-        }
-
-        return nullptr;
+        return this->__ss_handlers() [ static_cast < uint32 > ( requestType ) ];
     }
 
 
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    constexpr LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet () noexcept = default;
-    
-    
-    template < typename __ElementType, typename __Hasher >  // NOLINT(bugprone-reserved-identifier)
     template <
-            typename __TElementType,                                // NOLINT(bugprone-reserved-identifier)
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cicch_obtainGenericConstHandler (
+            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    ) const noexcept -> __GenericConstHandler {
+
+        return this->__ss_constHandlers() [ static_cast < uint32 > ( requestType ) ];
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cbegin () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ElementType const > * {
+
+        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
+                ConstIterator ( this->__sll_cbegin() )
+        );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cend () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ElementType const > * {
+
+        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
+                ConstIterator ( this->__sll_cend() )
+        );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cbeginLocal () const noexcept -> ConstIterator {
+
+        return ConstIterator ( this->__sll_cbegin() );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __cendLocal () const noexcept -> ConstIterator {
+
+        return ConstIterator ( this->__sll_cend() );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __newAddress (
+            __ElementType const * pReferenceElement,
+            bool                * pNewElementCreated
+    ) noexcept -> __ElementType * {
+
+        __ElementType * pNewElement = this->__ht_new (
+                pReferenceElement,
+                pNewElementCreated
+        );
+
+        if ( * pNewElementCreated ) {
+            (void) new ( this->__sll_newBack () ) __ElementType * ( pNewElement );
+        }
+
+        return pNewElement;
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __removeConst (
+            ConstIterator const * pIterator
+    ) noexcept -> bool {
+
+        if (
+                pIterator == nullptr ||
+                ! static_cast < bool > ( * pIterator ) ||
+                ( * pIterator ).iterator() == this->__sll_cend()
+        ) {
+            return false;
+        }
+
+        auto const pElement = * ( * pIterator ).iterator();
+        if ( this->__sll_removeConstIterator ( ( * pIterator ).iterator() ) ) {
+            return this->__ht_remove ( * pElement );
+        }
+
+        return false;
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __removeConstArray (
+            ConstIterator   const * const * ppIterators,
+            Size                            iteratorArraySize
+    ) noexcept -> Size {
+
+        auto pRemovedElementArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType const * > ( iteratorArraySize );
+        auto pSllIteratorPtrArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < typename LinkedListImplementation :: __sll_ConstIterator const * > ( iteratorArraySize );
+        for ( Size index = 0U; index < iteratorArraySize; ++ index ) {
+            pSllIteratorPtrArray [ index ] = & ( * ppIterators [index] ).iterator();
+            pRemovedElementArray [ index ] = * ( * pSllIteratorPtrArray [ index ] );
+        }
+
+        Size removedCount = this->__sll_removeConstIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
+        for ( Size index = 0ULL; index < iteratorArraySize; ++ index ) {
+            this->__ht_remove ( * pRemovedElementArray [ index ] );
+        }
+
+        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pRemovedElementArray );
+        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pSllIteratorPtrArray );
+
+        return removedCount;
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __findConst (
+            __ElementType const & element
+    ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > * {
+
+        if ( this->__ht_getConst ( element ) == nullptr ) {
+            return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
+                    this->cend()
+            );
+        }
+
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+            if ( cds :: meta :: equals ( * iterator, element ) ) {
+                return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
+                        iterator
+                );
+            }
+        }
+
+        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
+                this->cend()
+        );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: __findConstLocal (
+            __ElementType const & element
+    ) const noexcept -> ConstIterator {
+
+        if ( this->__ht_getConst ( element ) == nullptr ) {
+            return this->cend();
+        }
+
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+            if ( cds :: meta :: equals ( * iterator, element ) ) {
+                return iterator;
+            }
+        }
+
+        return this->cend();
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet () noexcept = default;
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            LinkedHashSet const & set
+    ) noexcept {
+
+        /* Copy of each not possible, linked list references hash table elements from other set */
+        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+            this->insert ( * iterator );
+        }
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            LinkedHashSet && set
+    ) noexcept :
+            HashTableImplementation ( std :: move ( set ) ),
+            LinkedListImplementation ( std :: move ( set ) ) {
+
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
-    > __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            LinkedHashSet const & set
-    ) noexcept :
-            HashSet <
-                    __ElementType,
-                    __Hasher
-            > ( set ),
-            __hidden :: __impl :: __SingleLinkedList <
-                    __SingleLinkedListElementType,
-                    __SingleLinkedListElementComparator,
-                    __SingleLinkedListElementDestructor
-            > ( set ) {
-    
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    constexpr LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            LinkedHashSet && set
-    ) noexcept :
-            HashSet <
-                    __ElementType,
-                    __Hasher
-            > ( std :: move ( set ) ),
-            __hidden :: __impl :: __SingleLinkedList <
-                    __SingleLinkedListElementType,
-                    __SingleLinkedListElementComparator,
-                    __SingleLinkedListElementDestructor
-            > ( std :: move ( set ) ) {
-    
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            __Hasher const & hasher
-    ) noexcept :
-            HashSet <
-                    __ElementType,
-                    __Hasher
-            > ( hasher ) {
-    
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            __IteratorType      const & begin,
-            __IteratorType      const & end
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __IteratorType const & begin,
+            __IteratorType const & end,
+            Size                   count
     ) noexcept {
-    
+
+        (void) count;
         for ( auto iterator = begin; iterator != end; ++ iterator ) {
             this->insert ( * iterator );
         }
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            __IteratorType      const & begin,
-            __IteratorType      const & end,
-            __Hasher    const & hasher
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __Hasher        const & hasher,
+            __IteratorType  const & begin,
+            __IteratorType  const & end,
+            Size                    count
     ) noexcept :
-            HashSet <
-                    __ElementType,
-                    __Hasher
-            > ( hasher ) {
-    
+            HashTableImplementation ( hasher ) {
+
+        (void) count;
         for ( auto iterator = begin; iterator != end; ++ iterator ) {
-            this->insert ( * iterator );
+            this->insert ( iterator );
         }
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            InitializerList     const & initializerList
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            std :: initializer_list < __ElementType > const & initializerList
     ) noexcept :
             LinkedHashSet (
-                    initializerList.begin(),
-                    initializerList.end()
+                    initializerList.begin (),
+                    initializerList.end (),
+                    initializerList.size()
             ) {
-    
+
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            InitializerList     const & initializerList,
-            __Hasher    const & hasher
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isCopyConstructible < __TElementType > ()
+            >
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __Hasher                                    const & hasher,
+            std :: initializer_list < __ElementType >   const & initializerList
     ) noexcept :
             LinkedHashSet (
-                    initializerList.begin(),
-                    initializerList.end(),
-                    hasher
+                    hasher,
+                    initializerList.begin (),
+                    initializerList.end (),
+                    initializerList.size()
             ) {
-    
+
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            Collection < __OtherElementType >   const & collection
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __IterableType const & iterable
     ) noexcept :
             LinkedHashSet (
-                    collection.begin(),
-                    collection.end()
+                    iterable.begin (),
+                    iterable.end ()
             ) {
-    
+
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline LinkedHashSet < __ElementType, __Hasher > :: LinkedHashSet (
-            Collection < __OtherElementType >   const & collection,
-            __Hasher                    const & hasher
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __Hasher        const & hasher,
+            __IterableType  const & iterable
     ) noexcept :
             LinkedHashSet (
-                    collection.begin(),
-                    collection.end(),
-                    hasher
+                    hasher,
+                    iterable.begin (),
+                    iterable.end ()
             ) {
-    
+
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    LinkedHashSet < __ElementType, __Hasher > :: ~LinkedHashSet () noexcept {
 
-        this->__sll_clear();
-        this->__ht_clear();
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: ~LinkedHashSet () noexcept {
+
+        this->__ht_clear ();
+        this->__sll_clear ();
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto LinkedHashSet < __ElementType, __Hasher > :: remove (
-            ElementType const & element
-    ) noexcept -> bool {
 
-        auto htIterator = this->__ht_find ( element );
 
-        return
-                this->__sll_remove ( & ( * htIterator ) ) &&
-                this->__ht_remove ( htIterator );
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto LinkedHashSet < __ElementType, __Hasher > :: remove (
-            ConstIterator const & iterator
-    ) noexcept -> bool {
-
-        auto const & rootIterator = reinterpret_cast < LinkedHashSetDelegateConstIterator const * > (
-                LinkedHashSet :: acquireDelegate ( iterator )
-        )->iterator();
-
-        return
-                this->__ht_remove ( * ( * rootIterator ) ) &&
-                this->__sll_remove ( rootIterator );
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto LinkedHashSet < __ElementType, __Hasher > :: remove (
-            ConstReverseIterator const & iterator
-    ) noexcept -> bool {
-
-        auto const & rootIterator = reinterpret_cast < LinkedHashSetDelegateConstIterator const * > (
-                LinkedHashSet :: acquireDelegate ( iterator )
-        )->iterator();
-
-        return
-                this->__ht_remove ( * ( * rootIterator ) ) &&
-                this->__sll_remove ( rootIterator );
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: pNewInsert (
-            ElementType const & referenceElement
-    ) noexcept -> ElementType * {
-    
-        bool isNew;
-        auto pEntry = this->__ht_get ( referenceElement, & isNew );
-
-        if ( isNew ) {
-            new ( this->__sll_newBack() ) __ElementType * ( pEntry );
-        }
-
-        return isNew ? pEntry : nullptr;
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: clear () noexcept -> void {
-
-        this->__sll_clear();
-        this->__ht_clear();
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: operator == (
-            LinkedHashSet const & set
-    ) const noexcept -> bool {
-    
-        return this->__ht_equals ( set );
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto LinkedHashSet < __ElementType, __Hasher > :: operator != (
-            LinkedHashSet const & set
-    ) const noexcept -> bool {
-    
-        return ! this->__ht_equals ( set );
-    }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: operator = (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
             LinkedHashSet const & set
     ) noexcept -> LinkedHashSet & {
-    
+
         if ( this == & set ) {
             return * this;
         }
-    
-        this->clear();
-        for ( auto const & entry : set ) {
-            this->insert ( entry );
+
+        this->__sll_clear ();
+        this->__ht_clear ();
+
+        /* Copy of each not possible, linked list references hash table elements from other set */
+        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+            this->insert ( * iterator );
         }
-    
+
         return * this;
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: operator = (
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
             LinkedHashSet && set
     ) noexcept -> LinkedHashSet & {
-    
+
         if ( this == & set ) {
             return * this;
         }
-    
-        this->move ( std :: move ( set ) );
+
+        this->__ht_move ( std :: move ( set ) );
+        this->__sll_move ( std :: move ( set ) );
         return * this;
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    __CDS_cpplang_VirtualConstexpr auto LinkedHashSet < __ElementType, __Hasher > :: move (
-            HashSet < __ElementType, __Hasher > && hashSet
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            std :: initializer_list < __ElementType > const & initializerList
     ) noexcept -> LinkedHashSet & {
 
-        this->__sll_clear();
-        this->__ht_assign ( std :: move ( hashSet ) );
-
-        for ( auto it = this->__ht_begin(), end = this->__ht_end(); it != end; ++ it ) {
-            new ( this->__sll_newBack () ) __ElementType * ( & ( * it ) );
+        this->__ht_clear ();
+        this->__sll_clear ();
+        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+            (void) this->insert ( * iterator );
         }
 
         return * this;
     }
-    
-    
-    template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-    template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto LinkedHashSet < __ElementType, __Hasher > :: operator = (
-            Collection < __OtherElementType > const & collection
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+    __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator = (
+            __IterableType const & iterable
     ) noexcept -> LinkedHashSet & {
-    
-        if ( this == & collection ) {
+
+        if ( this == & iterable ) {
             return * this;
         }
-    
-        this->clear();
-        for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator ) {
+
+        this->__ht_clear ();
+        this->__sll_clear ();
+        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
             this->insert ( * iterator );
         }
-    
+
         return * this;
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: size () const noexcept -> Size {
+
+        return this->__ht_size ();
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: clear () noexcept -> void {
+
+        this->__ht_clear();
+        this->__sll_clear();
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: remove (
+            __ElementType const & element
+    ) noexcept -> bool {
+
+        auto const pElement = this->__ht_removeGetPtr ( element );
+        return pElement != nullptr && this->__sll_remove ( pElement );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: contains (
+            __ElementType const & element
+    ) const noexcept -> bool {
+
+        return this->__ht_getConst ( element ) != nullptr;
+    }
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator == (
+            LinkedHashSet const & set
+    ) const noexcept -> bool {
+
+        if ( this == & set ) {
+            return true;
+        }
+
+        return this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+    }
+
+
+    template <
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: operator != (
+            LinkedHashSet const & set
+    ) const noexcept -> bool {
+
+        if ( this == & set ) {
+            return false;
+        }
+
+        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
     }
 
 }
 
-#endif // __CDS_LINKED_HASH_SET_IMPL_HPP__
+#endif /* __CDS_LINKED_HASH_SET_IMPL_HPP__ */

@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_TREE_SET_HPP__
 #define __CDS_EX_TREE_SET_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include <CDS/experimental/Set>
+#include <CDS/Set>
 
 #include <CDS/Comparator>
 #include <CDS/Extractor>
@@ -22,11 +22,11 @@
 
 #include "shared/redBlackTree/RedBlackTree.hpp"
 
-#include "shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
-#include "shared/delegateIterator/DelegateIterator.hpp"
+#include "../../shared/delegateIterator/DelegateIterator.hpp"
 
-#include "shared/collectionInternalCommunication/server/SetServer.hpp"
+#include "../../shared/collectionInternalCommunication/server/SetServer.hpp"
 
 #include "treeSet/Constructs.hpp"
 
@@ -66,7 +66,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected:  using ContainsOfCollectionClient             = __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType >;
         protected:  using ContainsOfInitializerListClient        = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >;
         protected:  using FindOfCollectionClient                 = __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType >;
-        protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
+        protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >;
         protected:  using FindByClient                           = __hidden :: __impl :: __TreeSetFindByClient< __ElementType >;
         protected:  using RemoveOfCollectionClient               = __hidden :: __impl :: __TreeSetRemoveOfCollectionClient< __ElementType >;
         protected:  using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType >;
@@ -86,12 +86,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                    __hidden :: __impl :: __CollectionInternalRequestType requestType
+                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                    __hidden :: __impl :: __CollectionInternalRequestType requestType
+                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
 
@@ -272,15 +272,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "shared/redBlackTree/impl/RedBlackTree.hpp"
 
-#include "shared/delegateIterator/impl/DelegateIterator.hpp"
+#include "../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "shared/collectionInternalCommunication/server/impl/SetServer.hpp"
+#include "../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
 
 #include "treeSet/impl/TreeSet.hpp"
 
-#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #endif /* __CDS_EX_TREE_SET_HPP__ */

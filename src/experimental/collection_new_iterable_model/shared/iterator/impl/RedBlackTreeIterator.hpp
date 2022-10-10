@@ -107,7 +107,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     return;
                 }
             }
-            
+
             this->_pCurrentNode = this->_pCurrentNode->_pParent;
 
         }

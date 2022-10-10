@@ -10,6 +10,7 @@
 #include <CDS/Array>
 #include <CDS/Pair>
 #include <CDS/smartPointers/SharedPointer>
+#include "collection/mutableCollection/list/ListTest.h"
 
 int main () {
     auto start = std::chrono::high_resolution_clock::now();
@@ -22,7 +23,8 @@ int main () {
             Pair < SharedPointer < Test >, String > { new StringTest (),  "StringTest" },
             Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
             Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
-            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" }
+            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
+            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" }
     };
 
     for ( auto & t : tests ) {

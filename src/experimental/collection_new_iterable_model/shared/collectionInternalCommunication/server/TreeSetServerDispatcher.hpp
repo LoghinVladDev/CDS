@@ -2,10 +2,10 @@
  * Created by stefan on 29.08.2022.
  */
 
-#ifndef __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__
-#define __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__   /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__
+#define __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__   /* NOLINT(bugprone-reserved-identifier) */
 
-#include "SetServerDispatcher.hpp"
+#include "../../../../../shared/collectionInternalCommunication/server/SetServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
@@ -28,7 +28,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )       -> Size,                          /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __findConstFunction )         ( __ElementType const & )                             const -> __ConstIteratorType            /* NOLINT(bugprone-reserved-identifier) */
                 > class __TreeSetServerDispatcher :     /* NOLINT(bugprone-reserved-identifier) */
-                        public __SetServerDispatcher <
+                        public cds :: __hidden :: __impl :: __SetServerDispatcher <
                                 __ServerType,
                                 __ServiceType,
                                 __ElementType,
@@ -42,16 +42,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 __findConstFunction
                         > {
 
-                        protected:
-                            auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        /* NOLINT(bugprone-reserved-identifier) */
+                protected:
+                    auto __crbeginLocal () const noexcept -> __ReverseConstIteratorType;        /* NOLINT(bugprone-reserved-identifier) */
 
-                        protected:
-                            auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          /* NOLINT(bugprone-reserved-identifier) */
+                protected:
+                    auto __crendLocal () const noexcept -> __ReverseConstIteratorType;          /* NOLINT(bugprone-reserved-identifier) */
 
-                        };
+                };
             }
         }
     }
 }
 
-#endif /* __CDS_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ */
+#endif /* __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_HPP__ */

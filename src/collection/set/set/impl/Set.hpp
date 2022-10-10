@@ -1,87 +1,104 @@
-//
-// Created by loghin on 6/3/22.
-//
+/*
+ * Created by loghin on 09/08/22.
+ */
 
 #ifndef __CDS_SET_IMPL_HPP__
-#define __CDS_SET_IMPL_HPP__
+#define __CDS_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
+    
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isValidSetElement < __ElementType > ()
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr Set <
+            __ElementType,
+            __enabler
+    > :: Set () noexcept = default;
 
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    constexpr Set < __ElementType, __enabler > :: Set (
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isValidSetElement < __ElementType > ()
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr Set <
+            __ElementType,
+            __enabler
+    > :: Set (
             Set const & set
     ) noexcept :
-            Collection < __ElementType > ( set ) {
+            CollectionBase ( set ) {
 
+        /* call base copy constructor */
     }
 
 
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    constexpr Set < __ElementType, __enabler > :: Set (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isValidSetElement < __ElementType > ()
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr Set <
+            __ElementType,
+            __enabler
+    > :: Set (
             Set && set
     ) noexcept :
-            Collection < __ElementType > ( std :: move ( set ) ) {
+            CollectionBase ( std :: move ( set ) ) {
 
+        /* call base move constructor */
     }
 
 
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    auto Set < __ElementType, __enabler > :: toString () const noexcept -> String {
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isValidSetElement < __ElementType > ()
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprDestructor Set <
+            __ElementType,
+            __enabler
+    > :: ~Set () noexcept = default;
 
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isValidSetElement < __ElementType > ()
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+    > auto Set <
+            __ElementType,
+            __enabler
+    > :: toString () const noexcept -> String {
+
+        /* Set toString representation is curly-brackets enclosed list */
+        /* if empty, return empty list */
         if ( this->empty() ) {
-            return "{}";
+            return {"{}"};
         }
 
-        std :: stringstream out;
+        /* use a StringStream to output the contents for maximum compatibility. Start with open bracket */
+        std::stringstream out;
         out << "{ ";
 
+        /* iterate through Set and append iterator value to Stream */
         for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
             cds :: meta :: print ( out, * iterator ) << ", ";
         }
 
+        /* transform to std string */
         auto asString = out.str();
 
+        /* replace ", " with " }" */
         asString [ asString.length() - 2U ] = ' ';
         asString [ asString.length() - 1U ] = '}';
 
+        /* return std :: string to be reused as cds :: String */
         return asString;
     }
-
-
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Set < __ElementType, __enabler > :: remove (
-            ElementType const & element
-    ) noexcept -> bool {
-
-        return this->removeFirst ( element );
-    }
-
-
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto Set < __ElementType, __enabler > :: insert (
-            ElementType const & element
-    ) noexcept -> void {
-
-        auto pElementLocation = this->pNewInsert ( element );
-        if ( pElementLocation != nullptr ) {
-            new ( pElementLocation ) ElementType ( element );
-        }
-    }
-
-
-    template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
-    template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-    auto Set < __ElementType, __enabler > :: insert (
-            ElementType && element
-    ) noexcept -> void {
-
-        auto pElementLocation = this->pNewInsert ( element );
-        if ( pElementLocation != nullptr ) {
-            new ( pElementLocation ) ElementType ( std :: move ( element ) );
-        }
-    }
-
+    
 }
 
-#endif // __CDS_SET_IMPL_HPP__
+#endif /* __CDS_SET_IMPL_HPP__ */

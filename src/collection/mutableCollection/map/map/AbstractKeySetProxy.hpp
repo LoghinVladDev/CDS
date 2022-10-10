@@ -1,112 +1,74 @@
-//
-// Created by loghin on 6/18/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
-#define __CDS_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
+#define __CDS_MAP_ABSTRACT_KEY_SET_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    class Map < __KeyType, __ValueType > :: AbstractKeySetProxy :
-            public cds :: Set < KeyType const >,
-            protected Map < __KeyType, __ValueType > :: AbstractProxy {
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > class Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractKeySetProxy :
+            public cds :: Set < __KeyType const >,
+            protected Map < __KeyType, __ValueType > :: AbstractMapProxy {
 
-    public:
-        using KeyType = typename Map < __KeyType, __ValueType > :: KeyType const;
+    protected:  using ProxyBase = Map < __KeyType, __ValueType > :: AbstractMapProxy;
+    protected:  using SetBase   = Set < __KeyType const >;
 
-    public:
-        using typename Set < KeyType > :: ElementType;
-
-    public:
-        using typename Set < KeyType > :: ConstIterator;
-
-    public:
-        using typename Set < KeyType > :: ConstReverseIterator;
-
-    protected:
-        using typename Set < KeyType > :: InitializerList;
-
-    protected:
-        using typename Set < KeyType > :: DelegateConstIterator;
-
-    protected:
-        using typename Set < KeyType > :: AbstractIterator;
-
-    protected:
-        using typename Set < KeyType > :: AbstractDelegateIterator;
-
-    protected:
-        using typename Set < KeyType > :: DelegateIteratorRequestType;
-
-    protected:
-        auto delegateConstIterator (
-                DelegateIteratorRequestType requestType
-        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
+    protected:  using typename SetBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier) */
+    protected:  using typename SetBase :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier) */
 
     protected:
         __CDS_Explicit constexpr AbstractKeySetProxy (
                 Map < __KeyType, __ValueType > * pMap
         ) noexcept;
 
-    protected:
-        constexpr AbstractKeySetProxy (
+    public:
+        AbstractKeySetProxy (
                 AbstractKeySetProxy const & set
-        ) noexcept;
-
-    protected:
-        constexpr AbstractKeySetProxy (
-                AbstractKeySetProxy && set
-        ) noexcept;
+        ) noexcept = delete;
 
     public:
-        __CDS_cpplang_ConstexprDestructor ~AbstractKeySetProxy() noexcept override;
+        AbstractKeySetProxy (
+                AbstractKeySetProxy &&
+        ) noexcept = delete;
 
     public:
-        auto remove (
-                KeyType const & value
-        ) noexcept -> bool override;
+        __CDS_cpplang_ConstexprDestructor ~AbstractKeySetProxy () noexcept override;
 
     public:
-        auto remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool override = 0;
+        auto operator = (
+                AbstractKeySetProxy const &
+        ) noexcept -> AbstractKeySetProxy & = delete;
 
     public:
-        auto remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool override = 0;
-
-    public:
-        auto remove (
-                ConstIterator   const * pIterators,
-                Size                    iteratorCount
-        ) noexcept -> Size override;
-
-    public:
-        auto remove (
-                ConstReverseIterator    const * pIterators,
-                Size                            iteratorCount
-        ) noexcept -> Size override;
-
-    protected:
-        auto pNewInsert (
-                ElementType const & referenceElement
-        ) noexcept -> ElementType * override;
-
-    public:
-        auto contains (
-                KeyType const & element
-        ) const noexcept -> bool override;
+        auto operator = (
+                AbstractKeySetProxy &&
+        ) noexcept -> AbstractKeySetProxy & = delete;
 
     public:
         auto clear () noexcept -> void override;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override = 0;
+        auto remove (
+                KeyType const & key
+        ) noexcept -> bool override;
 
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
+
+    protected:
+        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
+                __KeyType const * pReferenceKey,
+                bool            * pIsNew
+        ) noexcept (false) -> __KeyType *;
     };
 
 }
 
-#endif // __CDS_MAP_ABSTRACT_KEY_SET_PROXY_HPP__
+#endif /* __CDS_MAP_ABSTRACT_KEY_SET_PROXY_HPP__ */
