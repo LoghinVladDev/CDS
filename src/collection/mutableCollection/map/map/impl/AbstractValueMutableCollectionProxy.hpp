@@ -1,150 +1,78 @@
-//
-// Created by loghin on 6/18/22.
-//
+/*
+ * Created by loghin on 14/08/22.
+ */
 
 #ifndef __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
-#define __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
+#define __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: AbstractValueMutableCollectionProxy (
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :: AbstractValueMutableCollectionProxy (
             Map < __KeyType, __ValueType > * pMap
     ) noexcept :
-            AbstractProxy ( pMap ) {
+            ProxyBase ( pMap ) {
 
     }
 
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: AbstractValueMutableCollectionProxy (
-            AbstractValueMutableCollectionProxy const & collection
-    ) noexcept :
-            AbstractProxy ( collection ) {
-
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    constexpr Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: AbstractValueMutableCollectionProxy (
-            AbstractValueMutableCollectionProxy && collection
-    ) noexcept :
-            AbstractProxy ( std :: move ( collection ) ) {
-
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_cpplang_ConstexprDestructor Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: ~AbstractValueMutableCollectionProxy() noexcept = default;
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: remove (
-            Iterator    const * pIterators,
-            Size                iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: remove (
-            ConstIterator   const * pIterators,
-            Size                    iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: remove (
-            ReverseIterator const * pIterators,
-            Size                    iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: remove (
-            ConstReverseIterator    const * pIterators,
-            Size                            iteratorCount
-    ) noexcept -> Size {
-
-        Size removedCount = 0ULL;
-        for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-            if ( this->remove ( pIterators [ index ] ) ) {
-                ++ removedCount;
-            }
-        }
-
-        return removedCount;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: pNewInsert (
-            ElementType const & elementType
-    ) noexcept -> ElementType * {
-
-        return nullptr;
-    }
-
-
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: clear () noexcept -> void {
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :: clear () noexcept -> void {
 
         this->map()->clear();
     }
 
 
-    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-    auto Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: toString () const noexcept -> String {
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprDestructor Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :: ~AbstractValueMutableCollectionProxy () noexcept = default;
 
-        if ( this->empty() ) {
-            return {"[]"};
-        }
 
-        std::stringstream out;
-        out << "[ ";
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_VirtualConstexpr auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :: size () const noexcept -> Size {
 
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+        return this->map()->size();
+    }
 
-            cds :: meta :: print ( out, * iterator ) << ", ";
-        }
 
-        auto asString = out.str();
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractValueMutableCollectionProxy :: __newAddress (
+            __ValueType const * pReferenceKey,
+            bool              * pIsNew        /* NOLINT(readability-non-const-parameter) */
+    ) noexcept (false) -> __ValueType * {
 
-        asString [ asString.length() - 2U ] = ' ';
-        asString [ asString.length() - 1U ] = ']';
+        (void) pReferenceKey;
+        (void) pIsNew;
 
-        return asString;
+        throw cds :: UnsupportedOperationException (
+                cds :: String ( "Cannot insert a value into a Map Value Collection" )
+        );
     }
 
 }
 
-#endif // __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
+#endif /* __CDS_MAP_ABSTRACT_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ */
