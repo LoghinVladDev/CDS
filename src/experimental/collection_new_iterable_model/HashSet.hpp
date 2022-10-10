@@ -35,7 +35,7 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
-        template < typename __ElementType, typename __Hasher > /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __ElementType, typename __Hasher = cds :: WrapperHasher < __ElementType, Hash < __ElementType > > > /* NOLINT(bugprone-reserved-identifier) */
         using HashSet __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: HashSet < __ElementType, __Hasher >;
 
     }

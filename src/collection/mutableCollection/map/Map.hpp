@@ -21,6 +21,11 @@ namespace cds {
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
             typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > using MapEntry = __hidden :: __impl :: __MapEntry < __KeyType, __ValueType >;
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
     > class Map :
             public MutableCollection < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > >,
             public __hidden :: __impl :: __MapFindUniqueImmutableClient < __KeyType, __ValueType >,
@@ -124,6 +129,54 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto containsValue (
                 __ValueType const & value
         ) const noexcept -> bool = 0;
+
+    protected:
+        virtual auto entryAt (
+                __KeyType const & key,
+                bool            * pNewElementCreated
+        ) noexcept -> EntryType * = 0;
+
+    protected:
+        virtual auto entryAt (
+                __KeyType const & key
+        ) const noexcept -> EntryType const * = 0;
+
+    public:
+        template <
+                typename __TKeyType,                /* NOLINT(bugprone-reserved-identifier) */
+                typename __TValueType = ValueType,  /* NOLINT(bugprone-reserved-identifier) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isDefaultConstructible < __TValueType > ()
+                > = 0
+        > auto get (
+                __TKeyType && key
+        ) noexcept -> ValueType &;
+
+    public:
+        auto at (
+                KeyType const & key
+        ) noexcept (false) -> ValueType &;
+
+    public:
+        auto at (
+                KeyType const & key
+        ) const noexcept (false) -> ValueType const &;
+
+    public:
+        template <
+                typename __TKeyType,                /* NOLINT(bugprone-reserved-identifier) */
+                typename __TValueType = ValueType,  /* NOLINT(bugprone-reserved-identifier) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isDefaultConstructible < __TValueType > ()
+                > = 0
+        > auto operator [] (
+                __TKeyType && key
+        ) noexcept -> ValueType &;
+
+    public:
+        auto operator [] (
+                KeyType const & key
+        ) const noexcept (false) -> ValueType const &;
     };
 
 }

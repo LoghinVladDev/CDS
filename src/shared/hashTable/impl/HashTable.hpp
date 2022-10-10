@@ -500,7 +500,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
-            > auto __HashTable <
+            > __CDS_cpplang_ConstexprConditioned auto __HashTable <
                     __ElementType,
                     __KeyType,
                     __KeyHasher,

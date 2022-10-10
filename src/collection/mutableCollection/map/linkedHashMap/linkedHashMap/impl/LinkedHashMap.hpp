@@ -977,6 +977,48 @@ namespace cds {
         return false;
     }
 
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto LinkedHashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: entryAt (
+            __KeyType const & key,
+            bool            * pNewElementCreated
+    ) noexcept -> EntryType * {
+
+        EntryType * pNewElement = this->__ht_get (
+                key,
+                pNewElementCreated
+        );
+
+        if ( * pNewElementCreated ) {
+            (void) new ( this->__sll_newBack () ) EntryType * ( pNewElement );
+        }
+
+        return pNewElement;
+    }
+
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto LinkedHashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: entryAt (
+            __KeyType const & key
+    ) const noexcept -> EntryType const * {
+
+        return this->__ht_getConst ( key );
+    }
+
 }
 
 #endif /* __CDS_LINKED_HASH_MAP_IMPL_HPP__ */

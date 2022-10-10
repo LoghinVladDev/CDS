@@ -167,6 +167,108 @@ namespace cds {
         return this->containsKey ( entry.key() );
     }
 
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isDefaultConstructible < __TValueType > ()
+            >
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: get (
+            __TKeyType && key
+    ) noexcept -> ValueType & {
+
+        bool isNew;
+        auto pEntry = this->entryAt ( key, & isNew );
+
+        if ( isNew ) {
+            new ( pEntry ) EntryType (
+                    cds :: forward < __TKeyType > ( key ),
+                    ValueType ()
+            );
+        }
+
+        return pEntry->value();
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: at (
+            KeyType const & key
+    ) noexcept (false) -> ValueType & {
+
+        auto pEntry = const_cast < EntryType * > ( this->entryAt ( key ) );
+        if ( pEntry == nullptr ) {
+            throw KeyException ( key );
+        }
+
+        return pEntry->value();
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: at (
+            KeyType const & key
+    ) const noexcept (false) -> ValueType const & {
+
+        auto pEntry = this->entryAt ( key );
+        if ( pEntry == nullptr ) {
+            throw KeyException ( key );
+        }
+
+        return pEntry->value();
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > template <
+            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isDefaultConstructible < __TValueType > ()
+            >
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: operator [] (
+            __TKeyType && key
+    ) noexcept -> ValueType & {
+
+        return this->get ( key );
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: operator [] (
+            KeyType const & key
+    ) const noexcept (false) -> ValueType const & {
+
+        return this->at ( key );
+    }
+
 }
 
 #endif /* __CDS_MAP_IMPL_HPP__ */

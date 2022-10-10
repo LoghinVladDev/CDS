@@ -481,6 +481,17 @@ namespace cds {
                 __ValueType const & value
         ) const noexcept -> bool override;
 
+    private:
+        auto entryAt (
+                __KeyType const & key,
+                bool            * pNewElementCreated
+        ) noexcept -> EntryType * override;
+
+    private:
+        __CDS_cpplang_ConstexprOverride auto entryAt (
+                __KeyType const & key
+        ) const noexcept -> EntryType const * override;
+
     public:
         __CDS_NoDiscard auto sequence () & noexcept -> Sequence < LinkedHashMap < __KeyType, __ValueType, __Hasher > >;
 

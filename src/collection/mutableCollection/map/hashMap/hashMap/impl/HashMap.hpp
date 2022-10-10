@@ -582,6 +582,39 @@ namespace cds {
 
         return false;
     }
+
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: entryAt (
+            __KeyType const & key,
+            bool            * pNewElementCreated
+    ) noexcept -> EntryType * {
+
+        return this->__ht_get ( key, pNewElementCreated );
+    }
+
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: entryAt (
+            __KeyType const & key
+    ) const noexcept -> EntryType const * {
+
+        return this->__ht_getConst ( key );
+    }
     
 }
 
