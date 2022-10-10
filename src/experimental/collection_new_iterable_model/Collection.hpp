@@ -5,9 +5,11 @@
 #ifndef __CDS_EX_COLLECTION_HPP__
 #define __CDS_EX_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
+#warning No longer an experimental feature. Use the non-experimental header.
 #include <CDS/Collection>
 
 #include "collection/CollectionConstructs.hpp"
+#include "collection/CollectionFunctions.hpp"
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 

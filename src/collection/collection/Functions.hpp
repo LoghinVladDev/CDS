@@ -13,7 +13,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @typedef Represents the type of function used by the Collection to check if an Iterable contains a given element
              * @tparam __IterableType is the type of the iterable to check if the element is included in it
              * @tparam __ElementType is the type of the element to be checked if it is included in the given collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __IterableType, typename __ElementType >                                /* NOLINT(bugprone-reserved-identifier) */
@@ -25,7 +25,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @tparam __ElementType is the type of the elements contained by the Collection
              * @tparam __compare is an address to a comparison function, default cds :: meta :: equals
              * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template <

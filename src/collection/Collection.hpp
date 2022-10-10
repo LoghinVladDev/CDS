@@ -1,5 +1,5 @@
 /*
- * Created by loghin on 6/26/22.
+ * Created by loghin on 15.01.2021.
  */
 
 #ifndef __CDS_COLLECTION_HPP__
@@ -10,7 +10,7 @@
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 
-#include "collection/CollectionFunctions.hpp"
+#include "collection/Functions.hpp"
 
 #include "../shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 
@@ -27,7 +27,7 @@
 #include "../shared/collectionInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
 #include "../shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsCompositeClient.hpp"
 
-#include "collection/CollectionConstructs.hpp"
+#include "collection/Constructs.hpp"
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
@@ -1304,8 +1304,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 }
 
-#include "collection/impl/CollectionConstructs.hpp"
-#include "collection/impl/CollectionFunctions.hpp"
+#include "collection/impl/Constructs.hpp"
+#include "collection/impl/Functions.hpp"
 
 #include "../shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
 #include "../shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"

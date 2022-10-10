@@ -9,7 +9,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
     /**
      * @brief Pre-declaration of the Collection class
-     * @namespace cds :: experimental
+     * @namespace cds
      */
     template < typename > /* NOLINT(bugprone-reserved-identifier) */
     class Collection;
@@ -25,7 +25,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if collection contains given element, false otherwise
              * @test Not Applicable
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
@@ -42,7 +42,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if collection does not contain the given element, false otherwise
              * @test Not Applicable
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
@@ -61,7 +61,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if initializer list contains given element, false otherwise
              * @test Not Applicable
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template <
@@ -82,7 +82,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @exceptsafe
              * @return bool = true if initializer list does not contain given element, false otherwise
              * @test Not Applicable
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template <
@@ -97,7 +97,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to extend the Communication Channel object
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
@@ -111,7 +111,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Delegate Forward Const Iterable Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier) */
@@ -126,7 +126,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Const Iterator Remove Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
@@ -140,7 +140,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Random Insertion Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
@@ -155,7 +155,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Contains Of Collection Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
@@ -171,7 +171,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Contains of Initializer List Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
@@ -187,7 +187,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Find Of Immutable Collection Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
@@ -205,7 +205,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Find Of Immutable Initializer List Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
@@ -223,7 +223,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Find by Immutable Predicate Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -238,7 +238,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Remove of Collection Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
@@ -254,7 +254,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Remove of Initializer List Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
@@ -270,7 +270,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Remove by Predicate Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -284,7 +284,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @typedef Alias used by Collection to implement the Generic Immutable Statements Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
