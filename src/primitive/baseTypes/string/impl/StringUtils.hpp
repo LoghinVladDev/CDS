@@ -529,7 +529,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             if ( patternIndex == static_cast < Index > ( toBeFoundLength ) ) {
 
                 if ( found < maxCount ) {
-                    storeIn.add ( sourceIndex - patternIndex );
+                    storeIn.insert ( sourceIndex - patternIndex );
                     ++ found;
                 } else {
                     __hidden :: __impl :: __allocation :: __free ( pLPSArray );
@@ -690,7 +690,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( patternIndex == static_cast < Index > ( toBeFoundLength ) ) {
 
-                storeIn.add ( sourceIndex - patternIndex );
+                storeIn.insert ( sourceIndex - patternIndex );
                 patternIndex = pLPSArray [ patternIndex - 1 ];
             } else if (
                     sourceIndex < static_cast < Index > ( sourceLength ) &&

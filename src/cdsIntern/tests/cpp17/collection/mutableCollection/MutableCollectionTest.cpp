@@ -4,9 +4,9 @@
 
 #include "MutableCollectionTest.h"
 
-#include <CDS/experimental/Array>
-#include <CDS/experimental/LinkedList>
-#include <CDS/experimental/HashMap>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+#include <CDS/HashMap>
 
 #include <CDS/Range>
 #include <vector>
@@ -16,7 +16,7 @@
 template <
         typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestGroupMemberFunctions (
-        cds :: experimental :: MutableCollection < __MemberType >        & collection,
+        cds :: MutableCollection < __MemberType >        & collection,
         Test                                                             * pTestLib,
         String                                                     const & expectedToString
 ) -> bool {
@@ -105,7 +105,7 @@ template <
         typename __MemberType,                              /* NOLINT(bugprone-reserved-identifier) */
         typename ... __OrderedValues                        /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestGroupDelegateForwardIterableClientImports (
-        experimental :: MutableCollection < __MemberType > & collection,
+        MutableCollection < __MemberType > & collection,
         Test                  *     pTestLib,
         bool                        mutabilityTestExecute,
         __MemberType    const &     mutabilityTestValue,
@@ -141,7 +141,7 @@ template <
         pTestLib->logOK ( "'MCTC-00053-IT-begin_end-CPP17' OK" );
     }
 
-    if (mutabilityTestExecute) {
+    if ( mutabilityTestExecute ) {
         /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityRange-CPP17 : MCTC-00058-IT-mutabilityRange-CPP17 */
         for ( auto & e : collection ) {
             e = mutabilityTestValue;
@@ -160,12 +160,13 @@ template <
         }
 
         if ( collection.any ( [& mutabilityTestValue2](__MemberType const & e) { return e != mutabilityTestValue2; } ) ) {
-        pTestLib->logError ( "'MCTC-00059-IT-mutabilityIteration-CPP17' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00059-IT-mutabilityIteration-CPP17' OK" );
-    };
+            pTestLib->logError ( "'MCTC-00059-IT-mutabilityIteration-CPP17' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00059-IT-mutabilityIteration-CPP17' OK" );
+        };
     }
+
 
     collection.clear();
 
@@ -202,9 +203,9 @@ template <
         typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestCasePredicateHandle (
         StringLiteral testCaseName,
-        experimental :: MutableCollection < __MemberType > const & collection,
+        MutableCollection < __MemberType > const & collection,
         Test                                              * pTestLib,
-        auto ( experimental :: MutableCollection < __MemberType > :: * pFunctionalCall ) ( __Predicate const & ) const -> __PredicateReturnType,
+        auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( __Predicate const & ) const -> __PredicateReturnType,
         __Predicate const & predicate,
         __PredicateReturnType                       const & expectedReturn
 ) -> bool {
@@ -225,43 +226,43 @@ template <
         typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestCasePredicateCountedHandle (
         StringLiteral testCaseName,
-        experimental :: MutableCollection < __MemberType > const & collection,
+        MutableCollection < __MemberType > const & collection,
         Test                                              * pTestLib,
-        auto ( experimental :: MutableCollection < __MemberType > :: * pFunctionalCall ) ( Size, __Predicate const & ) const -> __PredicateReturnType,
+        auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( Size, __Predicate const & ) const -> __PredicateReturnType,
         __Predicate const & predicate,
-Size desiredCount,
+        Size desiredCount,
         __PredicateReturnType                       const & expectedReturn
 ) -> bool {
 
-auto returned = (collection.*pFunctionalCall) ( desiredCount, predicate );
-if ( returned != expectedReturn ) {
-pTestLib->logError( "'%s' failed", testCaseName);
-return false;
-}
+    auto returned = (collection.*pFunctionalCall) ( desiredCount, predicate );
+    if ( returned != expectedReturn ) {
+        pTestLib->logError( "'%s' failed", testCaseName);
+        return false;
+    }
 
-pTestLib->logOK ( "'%s' OK", testCaseName );
-return true;
+    pTestLib->logOK ( "'%s' OK", testCaseName );
+    return true;
 }
 
 /* MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17. MCTC-00351-RAIT to MCTC-00356-RAIT */
 template <
         typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestGroupRemoveAbstractIterator (
-        cds :: experimental :: MutableCollection < __MemberType >       & collection,
+        cds :: MutableCollection < __MemberType >       & collection,
         Test                                                     * pTestLib,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfter1,
-        cds :: experimental :: MutableCollection < __MemberType >  & equivAfter2,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfter3,
-//        cds :: experimental :: Collection < __MemberType > const & equivAfter3,                                   N/A with Collection
-//        typename cds :: experimental :: Collection < __MemberType > :: Iterator const & toRemoveBeforeFront,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfter5,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfter6
+        cds :: MutableCollection < __MemberType > const & equivAfter1,
+        cds :: MutableCollection < __MemberType >  & equivAfter2,
+        cds :: MutableCollection < __MemberType > const & equivAfter3,
+//        cds :: Collection < __MemberType > const & equivAfter3,                                   N/A with Collection
+//        typename cds :: Collection < __MemberType > :: Iterator const & toRemoveBeforeFront,
+        cds :: MutableCollection < __MemberType > const & equivAfter5,
+        cds :: MutableCollection < __MemberType > const & equivAfter6
 ) -> bool {
 
     pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
 
     /* MutableCollectionTestGroup-RemoveAbsIt-removeAtFront-CPP17 : MCTC-00351-RAIT-removeAtFront-CPP17 */
-    typename cds :: experimental :: MutableCollection < __MemberType > :: Iterator toRemoveAtFront = collection.begin();
+    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtFront = collection.begin();
     auto const resultToRemoveAtFront = collection.remove( toRemoveAtFront );
     auto const expectedResultToRemoveAtFront = true;
     pTestLib->log ( "object after 'removeAtFront' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter1.toString().cStr() );
@@ -273,7 +274,7 @@ template <
     }
 
     /* MutableCollectionTestGroup-RemoveAbsIt-removeInBounds-CPP17 : MCTC-00352-RAIT-removeInBounds-CPP17 */
-    typename cds :: experimental :: MutableCollection < __MemberType > :: Iterator toRemoveInBounds = collection.begin();
+    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveInBounds = collection.begin();
     for ( uint32 i = 0; i * 2 < collection.size(); ++ i ) {
         ++ toRemoveInBounds;
     }
@@ -289,7 +290,7 @@ template <
     }
 
     /* MutableCollectionTestGroup-RemoveAbsIt-removeAtEnd-CPP17 : MCTC-00353-RAIT-removeAtEnd-CPP17 */
-    typename cds :: experimental :: MutableCollection < __MemberType > :: Iterator toRemoveAtEnd = collection.begin();
+    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtEnd = collection.begin();
     for ( uint32 i = 0; i + 1 < collection.size(); ++ i ) {
         ++ toRemoveAtEnd;
     }
@@ -307,7 +308,7 @@ template <
     /* MutableCollectionTestGroup-RemoveAbsIt-removeBeforeFront-CPP17 : MCTC-00354-RAIT-removeBeforeFront-CPP17 : N/A */
 
     /* MutableCollectionTestGroup-RemoveAbsIt-removeAfterEnd-CPP17 : MCTC-00355-RAIT-removeAfterEnd-CPP17 */
-    typename cds :: experimental :: MutableCollection < __MemberType > :: Iterator toRemoveAfterBack = collection.end();
+    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAfterBack = collection.end();
     auto const resultToRemoveAfterEnd = collection.remove( toRemoveAfterBack );
     auto const expectedResultToRemoveAfterEnd = false;
     pTestLib->log ( "object after 'removeAfterEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
@@ -319,7 +320,7 @@ template <
     }
 
     /* MutableCollectionTestGroup-RemoveAbsIt-removeFromOther-CPP17 : MCTC-00355-RAIT-removeFromOther-CPP17 */
-    typename cds :: experimental :: MutableCollection < __MemberType > :: Iterator toRemoveFromSimilar = equivAfter2.begin();
+    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveFromSimilar = equivAfter2.begin();
     auto const resultToRemoveFromSimilar = collection.remove( toRemoveFromSimilar );
     auto const expectedResultToRemoveFromSimilar = false;
     pTestLib->log ( "object after 'removeFromOther' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
@@ -356,31 +357,31 @@ template <
         __MatchingMorePredicateType                        const & matchingMore,
         __MatchingMoreMTLPredicateType                     const & matchingMoreMoreThanLimit,
         __MatchingAllPredicateType                         const & matchingAll,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesNone,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesOne,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreLessThanLimit,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreExact,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreMoreThanLimit,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesAll,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesNone,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesOne,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesMore,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesAll,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesNone,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesOne,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesMore,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesAll,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesNone,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesOne,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesMore,
-        cds :: experimental :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesAll
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesNone,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesOne,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreLessThanLimit,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreExact,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreMoreThanLimit,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesAll,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesNone,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesOne,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesMore,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesAll,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesNone,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesOne,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesMore,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesAll,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesNone,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesOne,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesMore,
+        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesAll
 ) -> bool {
 
     pTestLib->log ( "Object Under Test : %s", original.toString().cStr() );
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesNone-CPP17 : MCTC-00401-RB-removeThatMatchesNone-CPP17 */
     auto       copyRB401            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB401 = copyRB401;
+    cds :: MutableCollection < __MemberType > & collectionRB401 = copyRB401;
     auto       removedCountRB401    = collectionRB401.removeThat ( removeThatLimit, matchingNone );
     auto const expectedRemovedCountRB401 = 0;
     pTestLib->log ( "object after 'removeThat with none matching' : '%s'. expected : '%s'", collectionRB401.toString().cStr(), equivAfterRemoveThatMatchesNone.toString().cStr() );
@@ -393,7 +394,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesOne-CPP17 : MCTC-00402-RB-removeThatMatchesOne-CPP17 */
     auto       copyRB402            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB402 = copyRB402;
+    cds :: MutableCollection < __MemberType > & collectionRB402 = copyRB402;
     auto       removedCountRB402    = collectionRB402.removeThat ( removeThatLimit, matchingOne );
     auto const expectedRemovedCountRB402 = 1;
     pTestLib->log ( "object after 'removeThat with one matching' : '%s'. expected : '%s'", collectionRB402.toString().cStr(), equivAfterRemoveThatMatchesOne.toString().cStr() );
@@ -406,7 +407,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreLessThanLimit-CPP17 : MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-CPP17 */
     auto       copyRB403            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB403 = copyRB403;
+    cds :: MutableCollection < __MemberType > & collectionRB403 = copyRB403;
     auto       removedCountRB403    = collectionRB403.removeThat ( removeThatLimit, matchingMoreLessThanLimit );
     auto const expectedRemovedCountRB403 = removeThatResultWhenLessThanLimit;
     pTestLib->log ( "object after 'removeThat with more matching, less than limit' : '%s'. expected : '%s'", collectionRB403.toString().cStr(), equivAfterRemoveThatMatchesMoreLessThanLimit.toString().cStr() );
@@ -419,7 +420,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreExact-CPP17 : MCTC-00404-RB-removeThatMatchesMoreExact-CPP17 */
     auto       copyRB404            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB404 = copyRB404;
+    cds :: MutableCollection < __MemberType > & collectionRB404 = copyRB404;
     auto       removedCountRB404    = collectionRB404.removeThat ( removeThatLimit, matchingMore );
     auto const expectedRemovedCountRB404 = removeThatLimit;
     pTestLib->log ( "object after 'removeThat with more matching, exact' : '%s'. expected : '%s'", collectionRB404.toString().cStr(), equivAfterRemoveThatMatchesMoreExact.toString().cStr() );
@@ -432,7 +433,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreMoreThanLimit-CPP17 : MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-CPP17 */
     auto       copyRB405            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB405 = copyRB405;
+    cds :: MutableCollection < __MemberType > & collectionRB405 = copyRB405;
     auto       removedCountRB405    = collectionRB405.removeThat ( removeThatLimit, matchingMoreMoreThanLimit );
     auto const expectedRemovedCountRB405 = removeThatLimit;
     pTestLib->log ( "object after 'removeThat with more matching' : '%s'. expected : '%s'", collectionRB405.toString().cStr(), equivAfterRemoveThatMatchesMoreMoreThanLimit.toString().cStr() );
@@ -445,7 +446,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeThatMatchesAll-CPP17 : MCTC-00406-RB-removeThatMatchesAll-CPP17 */
     auto       copyRB406            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB406 = copyRB406;
+    cds :: MutableCollection < __MemberType > & collectionRB406 = copyRB406;
     auto       removedCountRB406    = collectionRB406.removeThat ( removeThatLimit, matchingAll );
     auto const expectedRemovedCountRB406 = removeThatLimit;
     pTestLib->log ( "object after 'removeThat with all matching, less than limit' : '%s'. expected : '%s'", collectionRB406.toString().cStr(), equivAfterRemoveThatMatchesAll.toString().cStr() );
@@ -458,7 +459,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesNone-CPP17 : MCTC-00407-RB-removeFirstThatMatchesNone-CPP17 */
     auto       copyRB407            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB407 = copyRB407;
+    cds :: MutableCollection < __MemberType > & collectionRB407 = copyRB407;
     auto       removedCountRB407    = collectionRB407.removeFirstThat ( matchingNone );
     auto const expectedRemovedCountRB407 = false;
     pTestLib->log ( "object after 'removeFirstThat with no matches' : '%s'. expected : '%s'", collectionRB407.toString().cStr(), equivAfterRemoveFirstThatMatchesNone.toString().cStr() );
@@ -471,7 +472,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesOne-CPP17 : MCTC-00408-RB-removeFirstThatMatchesOne-CPP17 */
     auto       copyRB408            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB408 = copyRB408;
+    cds :: MutableCollection < __MemberType > & collectionRB408 = copyRB408;
     auto       removedCountRB408    = collectionRB408.removeFirstThat ( matchingOne );
     auto const expectedRemovedCountRB408 = true;
     pTestLib->log ( "object after 'removeFirstThat with one match' : '%s'. expected : '%s'", collectionRB408.toString().cStr(), equivAfterRemoveFirstThatMatchesOne.toString().cStr() );
@@ -484,7 +485,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesMore-CPP17 : MCTC-00409-RB-removeFirstThatMatchesMore-CPP17 */
     auto       copyRB409            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB409 = copyRB409;
+    cds :: MutableCollection < __MemberType > & collectionRB409 = copyRB409;
     auto       removedCountRB409    = collectionRB409.removeFirstThat ( matchingMore );
     auto const expectedRemovedCountRB409 = true;
     pTestLib->log ( "object after 'removeFirstThat with one or more matches' : '%s'. expected : '%s'", collectionRB409.toString().cStr(), equivAfterRemoveFirstThatMatchesMore.toString().cStr() );
@@ -497,7 +498,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesAll-CPP17 : MCTC-00410-RB-removeFirstThatMatchesAll-CPP17 */
     auto       copyRB410            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB410 = copyRB410;
+    cds :: MutableCollection < __MemberType > & collectionRB410 = copyRB410;
     auto       removedCountRB410    = collectionRB410.removeFirstThat ( matchingAll );
     auto const expectedRemovedCountRB410 = true;
     pTestLib->log ( "object after 'removeFirstThat matches all' : '%s'. expected : '%s'", collectionRB410.toString().cStr(), equivAfterRemoveFirstThatMatchesAll.toString().cStr() );
@@ -510,7 +511,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesNone-CPP17 : MCTC-00411-RB-removeLastThatMatchesNone-CPP17 */
     auto       copyRB411            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB411 = copyRB411;
+    cds :: MutableCollection < __MemberType > & collectionRB411 = copyRB411;
     auto       removedCountRB411    = collectionRB411.removeLastThat ( matchingNone );
     auto const expectedRemovedCountRB411 = false;
     pTestLib->log ( "object after 'removeLastThat with no matches' : '%s'. expected : '%s'", collectionRB411.toString().cStr(), equivAfterRemoveLastThatMatchesNone.toString().cStr() );
@@ -523,7 +524,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesOne-CPP17 : MCTC-00412-RB-removeLastThatMatchesOne-CPP17 */
     auto       copyRB412            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB412 = copyRB412;
+    cds :: MutableCollection < __MemberType > & collectionRB412 = copyRB412;
     auto       removedCountRB412    = collectionRB412.removeLastThat ( matchingOne );
     auto const expectedRemovedCountRB412 = true;
     pTestLib->log ( "object after 'removeLastThat with one match' : '%s'. expected : '%s'", collectionRB412.toString().cStr(), equivAfterRemoveLastThatMatchesOne.toString().cStr() );
@@ -536,7 +537,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesMore-CPP17 : MCTC-00413-RB-removeLastThatMatchesMore-CPP17 */
     auto       copyRB413            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB413 = copyRB413;
+    cds :: MutableCollection < __MemberType > & collectionRB413 = copyRB413;
     auto       removedCountRB413    = collectionRB413.removeLastThat ( matchingMore );
     auto const expectedRemovedCountRB413 = true;
     pTestLib->log ( "object after 'removeLastThat with one or more matches' : '%s'. expected : '%s'", collectionRB413.toString().cStr(), equivAfterRemoveLastThatMatchesMore.toString().cStr() );
@@ -549,7 +550,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesAll-CPP17 : MCTC-00414-RB-removeLastThatMatchesAll-CPP17 */
     auto       copyRB414            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB414 = copyRB414;
+    cds :: MutableCollection < __MemberType > & collectionRB414 = copyRB414;
     auto       removedCountRB414    = collectionRB414.removeLastThat ( matchingAll );
     auto const expectedRemovedCountRB414 = true;
     pTestLib->log ( "object after 'removeLastThat matching all' : '%s'. expected : '%s'", collectionRB414.toString().cStr(), equivAfterRemoveLastThatMatchesAll.toString().cStr() );
@@ -562,7 +563,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesNone-CPP17 : MCTC-00415-RB-removeAllThatMatchesNone-CPP17 */
     auto       copyRB415            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB415 = copyRB415;
+    cds :: MutableCollection < __MemberType > & collectionRB415 = copyRB415;
     auto const expectedRemovedCountRB415 = collectionRB415.count ( matchingNone );
     auto       removedCountRB415    = collectionRB415.removeAllThat ( matchingNone );
     pTestLib->log ( "object after 'removeAllThat match none' : '%s'. expected : '%s'", collectionRB415.toString().cStr(), equivAfterRemoveAllThatMatchesNone.toString().cStr() );
@@ -575,7 +576,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesOne-CPP17 : MCTC-00416-RB-removeAllThatMatchesOne-CPP17 */
     auto       copyRB416            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB416 = copyRB416;
+    cds :: MutableCollection < __MemberType > & collectionRB416 = copyRB416;
     auto const expectedRemovedCountRB416 = collectionRB416.count ( matchingOne );
     auto       removedCountRB416    = collectionRB416.removeAllThat ( matchingOne );
     pTestLib->log ( "object after 'removeAllThat matching one' : '%s'. expected : '%s'", collectionRB416.toString().cStr(), equivAfterRemoveAllThatMatchesOne.toString().cStr() );
@@ -588,7 +589,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesMore-CPP17 : MCTC-00417-RB-removeAllThatMatchesMore-CPP17 */
     auto       copyRB417            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB417 = copyRB417;
+    cds :: MutableCollection < __MemberType > & collectionRB417 = copyRB417;
     auto const expectedRemovedCountRB417 = collectionRB417.count ( matchingMore );
     auto       removedCountRB417    = collectionRB417.removeAllThat ( matchingMore );
     pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB417.toString().cStr(), equivAfterRemoveAllThatMatchesMore.toString().cStr() );
@@ -601,7 +602,7 @@ template <
 
     /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesAll-CPP17 : MCTC-00418-RB-removeAllThatMatchesAll-CPP17 */
     auto       copyRB418            = original;
-    cds :: experimental :: MutableCollection < __MemberType > & collectionRB418 = copyRB418;
+    cds :: MutableCollection < __MemberType > & collectionRB418 = copyRB418;
     auto const expectedRemovedCountRB418 = collectionRB418.count ( matchingAll );
     auto       removedCountRB418    = collectionRB418.removeAllThat ( matchingAll );
     pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB418.toString().cStr(), equivAfterRemoveAllThatMatchesAll.toString().cStr() );
@@ -687,125 +688,125 @@ template <
         StringLiteral               subvariant,
         Size                        subvariantOffset,
         __IterableType      const & iterableUnderTest,
-        Size ( cds :: experimental :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
+        Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
         Size                        limit,
-__OtherIterableType const & noneCommon,
+        __OtherIterableType const & noneCommon,
         __OtherIterableType const & oneCommon,
-__OtherIterableType const & moreLessThanLimitCommon,
+        __OtherIterableType const & moreLessThanLimitCommon,
         __OtherIterableType const & moreCommon,
-__OtherIterableType const & moreMoreThanLimitCommon,
+        __OtherIterableType const & moreMoreThanLimitCommon,
         __OtherIterableType const & allCommon,
-__OtherIterableType const & allAndMoreCommon,
+        __OtherIterableType const & allAndMoreCommon,
         Size                        expectedResultFromNone,
-__OtherIterableType const & expectedCollectionFromNone,
+        __OtherIterableType const & expectedCollectionFromNone,
         Size                        expectedResultFromOne,
-__OtherIterableType const & expectedCollectionFromOne,
+        __OtherIterableType const & expectedCollectionFromOne,
         Size                        expectedResultFromMoreLessThanLimit,
-__OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
+        __OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
         Size                        expectedResultFromMore,
-__OtherIterableType const & expectedCollectionFromMore,
+        __OtherIterableType const & expectedCollectionFromMore,
         Size                        expectedResultFromMoreMoreThanLimit,
-__OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
+        __OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
         Size                        expectedResultFromAll,
-__OtherIterableType const & expectedCollectionFromAll,
+        __OtherIterableType const & expectedCollectionFromAll,
         Size                        expectedResultFromAllAndMore,
-__OtherIterableType const & expectedCollectionFromAllAndMore
+        __OtherIterableType const & expectedCollectionFromAllAndMore
 ) -> bool {
 
-pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
 
 /* MutableCollectionTestCase-RemoveOf-removeOfNoneCommon-CPP17 : MCTC-00451-RO-removeOfNoneCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfNoneCommon-CPP17 : MCTC-00458-RO-removeNotOfNoneCommon-CPP17 */
-auto       copyRO451            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO451 = copyRO451;
-auto       removedCountRB451    = ( collectionRO451.* removePfnVariant ) ( limit, noneCommon );
-pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO451.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
-if ( removedCountRB451 != expectedResultFromNone || ! equals ( collectionRO451, expectedCollectionFromNone ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-CPP17' failed", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-CPP17' OK", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO451            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO451 = copyRO451;
+    auto       removedCountRB451    = ( collectionRO451.* removePfnVariant ) ( limit, noneCommon );
+    pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO451.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
+    if ( removedCountRB451 != expectedResultFromNone || ! equals ( collectionRO451, expectedCollectionFromNone ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-CPP17' failed", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-CPP17' OK", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfOneCommon-CPP17 : MCTC-00452-RO-removeOfOneCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfOneCommon-CPP17 : MCTC-00459-RO-removeNotOfOneCommon-CPP17 */
-auto       copyRO452            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO452 = copyRO452;
-auto       removedCountRB452    = ( collectionRO452.* removePfnVariant ) ( limit, oneCommon );
-pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO452.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
-if ( removedCountRB452 != expectedResultFromOne || ! equals ( collectionRO452, expectedCollectionFromOne ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-CPP17' failed", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-CPP17' OK", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO452            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO452 = copyRO452;
+    auto       removedCountRB452    = ( collectionRO452.* removePfnVariant ) ( limit, oneCommon );
+    pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO452.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
+    if ( removedCountRB452 != expectedResultFromOne || ! equals ( collectionRO452, expectedCollectionFromOne ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-CPP17' failed", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-CPP17' OK", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfMoreLessThanLimitCommon-CPP17 : MCTC-00453-RO-removeOfMoreLessThanLimitCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreLessThanLimitCommon-CPP17 : MCTC-00460-RO-removeOfMoreLessThanLimitCommon-CPP17 */
-auto       copyRO453            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO453 = copyRO453;
-auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
-pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() );
-if ( removedCountRB453 != expectedResultFromMoreLessThanLimit || ! equals ( collectionRO453, expectedCollectionFromMoreLessThanLimit ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-CPP17' failed", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-CPP17' OK", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO453            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO453 = copyRO453;
+    auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
+    pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() );
+    if ( removedCountRB453 != expectedResultFromMoreLessThanLimit || ! equals ( collectionRO453, expectedCollectionFromMoreLessThanLimit ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-CPP17' failed", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-CPP17' OK", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfMoreCommon-CPP17 : MCTC-00454-RO-removeOfMoreCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreCommon-CPP17 : MCTC-00461-RO-removeNotOfMoreCommon-CPP17 */
-auto       copyRO454            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO454 = copyRO454;
-auto       removedCountRB454    = ( collectionRO454.* removePfnVariant ) ( limit, moreCommon );
-pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO454.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
-if ( removedCountRB454 != expectedResultFromMore || ! equals ( collectionRO454, expectedCollectionFromMore ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-CPP17' failed", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-CPP17' OK", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO454            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO454 = copyRO454;
+    auto       removedCountRB454    = ( collectionRO454.* removePfnVariant ) ( limit, moreCommon );
+    pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO454.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
+    if ( removedCountRB454 != expectedResultFromMore || ! equals ( collectionRO454, expectedCollectionFromMore ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-CPP17' failed", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-CPP17' OK", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfMoreMoreThanLimitCommon-CPP17 : MCTC-00455-RO-removeOfMoreMoreThanLimitCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreMoreThanLimitCommon-CPP17 : MCTC-00462-RO-removeNotOfMoreMoreThanLimitCommon-CPP17 */
-auto       copyRO455            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO455 = copyRO455;
-auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
-pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() );
-if ( removedCountRB455 != expectedResultFromMoreMoreThanLimit || ! equals ( collectionRO455, expectedCollectionFromMoreMoreThanLimit ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-CPP17' failed", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-CPP17' OK", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO455            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO455 = copyRO455;
+    auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
+    pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() );
+    if ( removedCountRB455 != expectedResultFromMoreMoreThanLimit || ! equals ( collectionRO455, expectedCollectionFromMoreMoreThanLimit ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-CPP17' failed", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-CPP17' OK", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfAllCommon-CPP17 : MCTC-00456-RO-removeOfAllCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfAllCommon-CPP17 : MCTC-00463-RO-removeNotOfAllCommon-CPP17 */
-auto       copyRO456            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO456 = copyRO456;
-auto       removedCountRB456    = ( collectionRO456.* removePfnVariant ) ( limit, allCommon );
-pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO456.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
-if ( removedCountRB456 != expectedResultFromAll || ! equals ( collectionRO456, expectedCollectionFromAll ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-CPP17' failed", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-CPP17' OK", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO456            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO456 = copyRO456;
+    auto       removedCountRB456    = ( collectionRO456.* removePfnVariant ) ( limit, allCommon );
+    pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO456.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
+    if ( removedCountRB456 != expectedResultFromAll || ! equals ( collectionRO456, expectedCollectionFromAll ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-CPP17' failed", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-CPP17' OK", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
 /* MutableCollectionTestCase-RemoveOf-removeOfAllAndMoreCommon-CPP17 : MCTC-00457-RO-removeOfAllAndMoreCommon-CPP17 */
 /* MutableCollectionTestCase-RemoveOf-removeNotOfAllAndMoreCommon-CPP17 : MCTC-00464-RO-removeNotOfAllAndMoreCommon-CPP17 */
-auto       copyRO457            = iterableUnderTest;
-cds :: experimental :: MutableCollection < __ElementType > & collectionRO457 = copyRO457;
-auto       removedCountRB457    = ( collectionRO457.* removePfnVariant ) ( limit, allAndMoreCommon );
-pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO457.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
-if ( removedCountRB457 != expectedResultFromAllAndMore || ! equals ( collectionRO457, expectedCollectionFromAllAndMore ) ) {
-pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-CPP17' failed", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
-return false;
-} else {
-pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-CPP17' OK", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
-}
+    auto       copyRO457            = iterableUnderTest;
+    cds :: MutableCollection < __ElementType > & collectionRO457 = copyRO457;
+    auto       removedCountRB457    = ( collectionRO457.* removePfnVariant ) ( limit, allAndMoreCommon );
+    pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO457.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
+    if ( removedCountRB457 != expectedResultFromAllAndMore || ! equals ( collectionRO457, expectedCollectionFromAllAndMore ) ) {
+        pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-CPP17' failed", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
+        return false;
+    } else {
+        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-CPP17' OK", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
+    }
 
-return true;
+    return true;
 }
 
 
@@ -821,7 +822,7 @@ template <
         StringLiteral               subvariant,
         Size                        subvariantOffset,
         __IterableType      const & iterableUnderTest,
-        bool ( cds :: experimental :: MutableCollection < __ElementType > :: * removeFirstLastPfnVariant ) ( __OtherIterableType const & ),
+        bool ( cds :: MutableCollection < __ElementType > :: * removeFirstLastPfnVariant ) ( __OtherIterableType const & ),
         __OtherIterableType const & noneCommon,
         __OtherIterableType const & oneCommon,
         __OtherIterableType const & moreCommon,
@@ -846,7 +847,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfNoneCommon-CPP17 : MCTC-00511-RO-removeFirstNotOfNoneCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeLastNotOfNoneCommon-CPP17 : MCTC-00516-RO-removeLastNotOfNoneCommon-CPP17 */
     auto       copyRO501            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO501 = copyRO501;
+    cds :: MutableCollection < __ElementType > & collectionRO501 = copyRO501;
     auto       removedCountRB501    = ( collectionRO501.* removeFirstLastPfnVariant ) ( noneCommon );
     pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO501.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
     if ( removedCountRB501 != expectedResultFromNone || ! equals ( collectionRO501, expectedCollectionFromNone ) ) {
@@ -861,7 +862,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfOneCommon-CPP17 : MCTC-00512-RO-removeFirstNotOfOneCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeLastNotOfOneCommon-CPP17 : MCTC-00517-RO-removeLastNotOfOneCommon-CPP17 */
     auto       copyRO502            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO502 = copyRO502;
+    cds :: MutableCollection < __ElementType > & collectionRO502 = copyRO502;
     auto       removedCountRB502    = ( collectionRO502.* removeFirstLastPfnVariant ) ( oneCommon );
     pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO502.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
     if ( removedCountRB502 != expectedResultFromOne || ! equals ( collectionRO502, expectedCollectionFromOne ) ) {
@@ -876,7 +877,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfMoreCommon-CPP17 : MCTC-00513-RO-removeFirstNotOfMoreCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeLastNotOfMoreCommon-CPP17 : MCTC-00518-RO-removeLastNotOfMoreCommon-CPP17 */
     auto       copyRO503            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO503 = copyRO503;
+    cds :: MutableCollection < __ElementType > & collectionRO503 = copyRO503;
     auto       removedCountRB503    = ( collectionRO503.* removeFirstLastPfnVariant ) ( moreCommon );
     pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO503.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
     if ( removedCountRB503 != expectedResultFromMore || ! equals ( collectionRO503, expectedCollectionFromMore ) ) {
@@ -891,7 +892,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllCommon-CPP17 : MCTC-00514-RO-removeFirstNotOfAllCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllCommon-CPP17 : MCTC-00519-RO-removeLastNotOfAllCommon-CPP17 */
     auto       copyRO504            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO504 = copyRO504;
+    cds :: MutableCollection < __ElementType > & collectionRO504 = copyRO504;
     auto       removedCountRB504    = ( collectionRO504.* removeFirstLastPfnVariant ) ( allCommon );
     pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO504.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
     if ( removedCountRB504 != expectedResultFromAll || ! equals ( collectionRO504, expectedCollectionFromAll ) ) {
@@ -906,7 +907,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllAndMoreCommon-CPP17 : MCTC-00515-RO-removeFirstNotOfAllAndMoreCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllAndMoreCommon-CPP17 : MCTC-00520-RO-removeLastNotOfAllAndMoreCommon-CPP17 */
     auto       copyRO505            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO505 = copyRO505;
+    cds :: MutableCollection < __ElementType > & collectionRO505 = copyRO505;
     auto       removedCountRB505    = ( collectionRO505.* removeFirstLastPfnVariant ) ( allAndMoreCommon );
     pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO505.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
     if ( removedCountRB505 != expectedResultFromAllAndMore || ! equals ( collectionRO505, expectedCollectionFromAllAndMore ) ) {
@@ -930,7 +931,7 @@ template <
         StringLiteral               subvariant,
         Size                        subvariantOffset,
         __IterableType      const & iterableUnderTest,
-        Size ( cds :: experimental :: MutableCollection < __ElementType > :: * removeAllPfnVariant ) ( __OtherIterableType const & ),
+        Size ( cds :: MutableCollection < __ElementType > :: * removeAllPfnVariant ) ( __OtherIterableType const & ),
         __OtherIterableType const & noneCommon,
         __OtherIterableType const & oneCommon,
         __OtherIterableType const & moreCommon,
@@ -953,7 +954,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeAllOfNoneCommon-CPP17 : MCTC-00481-RO-removeAllOfNoneCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeAllNotOfNoneCommon-CPP17 : MCTC-00486-RO-removeAllNotOfNoneCommon-CPP17 */
     auto       copyRO481            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO481 = copyRO481;
+    cds :: MutableCollection < __ElementType > & collectionRO481 = copyRO481;
     auto       removedCountRB481    = ( collectionRO481.* removeAllPfnVariant ) ( noneCommon );
     pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO481.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
     if ( removedCountRB481 != expectedResultFromNone || ! equals ( collectionRO481, expectedCollectionFromNone ) ) {
@@ -966,7 +967,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeAllOfOneCommon-CPP17 : MCTC-00482-RO-removeAllOfOneCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeAllNotOfOneCommon-CPP17 : MCTC-00487-RO-removeAllNotOfOneCommon-CPP17 */
     auto       copyRO482            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO482 = copyRO482;
+    cds :: MutableCollection < __ElementType > & collectionRO482 = copyRO482;
     auto       removedCountRB482    = ( collectionRO482.* removeAllPfnVariant ) ( oneCommon );
     pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO482.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
     if ( removedCountRB482 != expectedResultFromOne || ! equals ( collectionRO482, expectedCollectionFromOne ) ) {
@@ -979,7 +980,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeAllOfMoreCommon-CPP17 : MCTC-00483-RO-removeAllOfMoreCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeAllNotOfMoreCommon-CPP17 : MCTC-00488-RO-removeAllNotOfMoreCommon-CPP17 */
     auto       copyRO483            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO483 = copyRO483;
+    cds :: MutableCollection < __ElementType > & collectionRO483 = copyRO483;
     auto       removedCountRB483    = ( collectionRO483.* removeAllPfnVariant ) ( moreCommon );
     pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO483.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
     if ( removedCountRB483 != expectedResultFromMore || ! equals ( collectionRO483, expectedCollectionFromMore ) ) {
@@ -992,7 +993,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeAllOfAllCommon-CPP17 : MCTC-00484-RO-removeAllOfAllCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllCommon-CPP17 : MCTC-00489-RO-removeAllNotOfAllCommon-CPP17 */
     auto       copyRO484            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO484 = copyRO484;
+    cds :: MutableCollection < __ElementType > & collectionRO484 = copyRO484;
     auto       removedCountRB484    = ( collectionRO484.* removeAllPfnVariant ) ( allCommon );
     pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO484.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
     if ( removedCountRB484 != expectedResultFromAll || ! equals ( collectionRO484, expectedCollectionFromAll ) ) {
@@ -1005,7 +1006,7 @@ template <
     /* MutableCollectionTestCase-RemoveOf-removeAllOfAllAndMoreCommon-CPP17 : MCTC-00485-RO-removeAllOfAllAndMoreCommon-CPP17 */
     /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllAndMoreCommon-CPP17 : MCTC-00490-RO-removeAllNotOfAllAndMoreCommon-CPP17 */
     auto       copyRO485            = iterableUnderTest;
-    cds :: experimental :: MutableCollection < __ElementType > & collectionRO485 = copyRO485;
+    cds :: MutableCollection < __ElementType > & collectionRO485 = copyRO485;
     auto       removedCountRB485    = ( collectionRO485.* removeAllPfnVariant ) ( allAndMoreCommon );
     pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO485.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
     if ( removedCountRB485 != expectedResultFromAllAndMore || ! equals ( collectionRO485, expectedCollectionFromAllAndMore ) ) {
@@ -1022,7 +1023,7 @@ template <
         typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
         template < typename ... > class __CollectionType,                                                       /* NOLINT(bugprone-reserved-identifier) */
         typename __ValidatorPredicate,                                                                          /* NOLINT(bugprone-reserved-identifier) */
-        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
+        typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
 > auto iteratorListEqualityCheck (
         __ValidatorPredicate                const & validator,
         __CollectionType < __IteratorType > const & iteratorCollection,
@@ -1050,7 +1051,7 @@ template <
 template <
         typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
         template < typename ... > class __CollectionType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
-        typename __IteratorType = typename cds :: experimental :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
+        typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
 > auto iteratorListEqualityCheckNoPred (
         __CollectionType < __IteratorType > const & iteratorCollection,
         __CollectionType < __ElementType >  const & elementCollection
@@ -1086,10 +1087,10 @@ template <
         typename __MorePredicateMoreThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
         typename __AllPredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
         typename __AllAndMorePredicate,                                                         /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array   /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestGroupFindThat (
         Test                                                      * pTestLib,
-        cds :: experimental :: MutableCollection < __ElementType > & underTest,
+        cds :: MutableCollection < __ElementType > & underTest,
         Size                                                        limit,
         __NonePredicate                                     const & none,
         __OnePredicate                                      const & one,
@@ -1145,10 +1146,10 @@ template <
 ) -> bool {
 
     pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
-    using Iterator = typename cds :: experimental :: MutableCollection < __ElementType > :: Iterator;
+    using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingNone-CPP17 : MCTC-00601-FT-findThatStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00601 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00601 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00601;
     auto                                                        expectedSize00601 = expectedSizeFindThatNone;
     auto                                                const & expected00601 = expectedFindThatNone;
@@ -1163,7 +1164,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingOne-CPP17 : MCTC-00602-FT-findThatStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00602 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00602 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00602;
     auto                                                        expectedSize00602 = expectedSizeFindThatOne;
     auto                                                const & expected00602 = expectedFindThatOne;
@@ -1178,7 +1179,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreLessThanLimit-CPP17 : MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00603 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00603 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00603;
     auto                                                        expectedSize00603 = expectedSizeFindThatMoreLessThanLimit;
     auto                                                const & expected00603 = expectedFindThatMoreLessThanLimit;
@@ -1193,7 +1194,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMore-CPP17 : MCTC-00604-FT-findThatStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00604 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00604 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00604;
     auto                                                        expectedSize00604 = expectedSizeFindThatMore;
     auto                                                const & expected00604 = expectedFindThatMore;
@@ -1208,7 +1209,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreMoreThanLimit-CPP17 : MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00605 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00605 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00605;
     auto                                                        expectedSize00605 = expectedSizeFindThatMoreMoreThanLimit;
     auto                                                const & expected00605 = expectedFindThatMoreMoreThanLimit;
@@ -1223,7 +1224,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAll-CPP17 : MCTC-00606-FT-findThatStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00606 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00606 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00606;
     auto                                                        expectedSize00606 = expectedSizeFindThatAll;
     auto                                                const & expected00606 = expectedFindThatAll;
@@ -1238,7 +1239,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAllAndMore-CPP17 : MCTC-00607-FT-findThatStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00607 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00607 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00607;
     auto                                                        expectedSize00607 = expectedSizeFindThatAllAndMore;
     auto                                                const & expected00607 = expectedFindThatAllAndMore;
@@ -1253,7 +1254,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingNone-CPP17 : MCTC-00608-FT-findThatReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00608 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00608 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00608;
     auto                                                        expectedSize00608 = expectedSizeFindThatNone;
     auto                                                const & expected00608 = expectedFindThatNone;
@@ -1268,7 +1269,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingOne-CPP17 : MCTC-00609-FT-findThatReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00609 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00609 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00609;
     auto                                                        expectedSize00609 = expectedSizeFindThatOne;
     auto                                                const & expected00609 = expectedFindThatOne;
@@ -1283,7 +1284,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreLessThanLimit-CPP17 : MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00610 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00610 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00610;
     auto                                                        expectedSize00610 = expectedSizeFindThatMoreLessThanLimit;
     auto                                                const & expected00610 = expectedFindThatMoreLessThanLimit;
@@ -1298,7 +1299,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMore-CPP17 : MCTC-00611-FT-findThatReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00611 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00611 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00611;
     auto                                                        expectedSize00611 = expectedSizeFindThatMore;
     auto                                                const & expected00611 = expectedFindThatMore;
@@ -1313,7 +1314,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreMoreThanLimit-CPP17 : MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00612 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00612 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00612;
     auto                                                        expectedSize00612 = expectedSizeFindThatMoreMoreThanLimit;
     auto                                                const & expected00612 = expectedFindThatMoreMoreThanLimit;
@@ -1328,7 +1329,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAll-CPP17 : MCTC-00613-FT-findThatReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00613 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00613 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00613;
     auto                                                        expectedSize00613 = expectedSizeFindThatAll;
     auto                                                const & expected00613 = expectedFindThatAll;
@@ -1343,7 +1344,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAllAndMore-CPP17 : MCTC-00614-FT-findThatReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00614 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00614 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00614;
     auto                                                        expectedSize00614 = expectedSizeFindThatAllAndMore;
     auto                                                const & expected00614 = expectedFindThatAllAndMore;
@@ -1358,7 +1359,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findFirstThatMatchingNone-CPP17 : MCTC-00615-FT-findFirstThatMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00615 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00615 = underTest;
     Iterator                                               result00615;
     auto                                                        expectedValid00615 = expectedResultFindFirstThatNone;
     auto                                                        expectedValue00615 = expectedFindFirstThatNone;
@@ -1373,7 +1374,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findFirstThatMatchingOne-CPP17 : MCTC-00616-FT-findFirstThatMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00616 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00616 = underTest;
     Iterator                                               result00616;
     auto                                                        expectedValid00616 = expectedResultFindFirstThatOne;
     auto                                                        expectedValue00616 = expectedFindFirstThatOne;
@@ -1388,7 +1389,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findFirstThatMatchingMore-CPP17 : MCTC-00617-FT-findFirstThatMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00617 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00617 = underTest;
     Iterator                                               result00617;
     auto                                                        expectedValid00617 = expectedResultFindFirstThatMore;
     auto                                                        expectedValue00617 = expectedFindFirstThatMore;
@@ -1403,7 +1404,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAll-CPP17 : MCTC-00618-FT-findFirstThatMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00618 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00618 = underTest;
     Iterator                                               result00618;
     auto                                                        expectedValid00618 = expectedResultFindFirstThatAll;
     auto                                                        expectedValue00618 = expectedFindFirstThatAll;
@@ -1418,7 +1419,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAllAndMore-CPP17 : MCTC-00619-FT-findFirstThatMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00619 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00619 = underTest;
     Iterator                                               result00619;
     auto                                                        expectedValid00619 = expectedResultFindFirstThatAllAndMore;
     auto                                                        expectedValue00619 = expectedFindFirstThatAllAndMore;
@@ -1433,7 +1434,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findLastThatMatchingNone-CPP17 : MCTC-00620-FT-findLastThatMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00620 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00620 = underTest;
     Iterator                                               result00620;
     auto                                                        expectedValid00620 = expectedResultFindLastThatNone;
     auto                                                        expectedValue00620 = expectedFindLastThatNone;
@@ -1448,7 +1449,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findLastThatMatchingOne-CPP17 : MCTC-00621-FT-findLastThatMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00621 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00621 = underTest;
     Iterator                                               result00621;
     auto                                                        expectedValid00621 = expectedResultFindLastThatOne;
     auto                                                        expectedValue00621 = expectedFindLastThatOne;
@@ -1463,7 +1464,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findLastThatMatchingMore-CPP17 : MCTC-00622-FT-findLastThatMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00622 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00622 = underTest;
     Iterator                                               result00622;
     auto                                                        expectedValid00622 = expectedResultFindLastThatMore;
     auto                                                        expectedValue00622 = expectedFindLastThatMore;
@@ -1478,7 +1479,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findLastThatMatchingAll-CPP17 : MCTC-00623-FT-findLastThatMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00623 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00623 = underTest;
     Iterator                                               result00623;
     auto                                                        expectedValid00623 = expectedResultFindLastThatAll;
     auto                                                        expectedValue00623 = expectedFindLastThatAll;
@@ -1493,7 +1494,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findLastThatMatchingAllAndMore-CPP17 : MCTC-00624-FT-findLastThatMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00624 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00624 = underTest;
     Iterator                                               result00624;
     auto                                                        expectedValid00624 = expectedResultFindLastThatAllAndMore;
     auto                                                        expectedValue00624 = expectedFindLastThatAllAndMore;
@@ -1508,7 +1509,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingNone-CPP17 : MCTC-00625-FT-findAllThatStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00625 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00625 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00625;
     auto                                                        expectedSize00625 = expectedSizeFindAllThatNone;
     auto                                                const & expected00625 = expectedFindAllThatNone;
@@ -1523,7 +1524,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingOne-CPP17 : MCTC-00626-FT-findAllThatStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00626 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00626 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00626;
     auto                                                        expectedSize00626 = expectedSizeFindAllThatOne;
     auto                                                const & expected00626 = expectedFindAllThatOne;
@@ -1538,7 +1539,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingMore-CPP17 : MCTC-00627-FT-findAllThatStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00627 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00627 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00627;
     auto                                                        expectedSize00627 = expectedSizeFindAllThatMore;
     auto                                                const & expected00627 = expectedFindAllThatMore;
@@ -1553,7 +1554,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAll-CPP17 : MCTC-00628-FT-findAllThatStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00628 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00628 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00628;
     auto                                                        expectedSize00628 = expectedSizeFindAllThatAll;
     auto                                                const & expected00628 = expectedFindAllThatAll;
@@ -1568,7 +1569,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAllAndMore-CPP17 : MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00629 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00629 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00629;
     auto                                                        expectedSize00629 = expectedSizeFindAllThatAllAndMore;
     auto                                                const & expected00629 = expectedFindAllThatAllAndMore;
@@ -1583,7 +1584,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingNone-CPP17 : MCTC-00630-FT-findAllThatReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00630 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00630 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00630;
     auto                                                        expectedSize00630 = expectedSizeFindAllThatNone;
     auto                                                const & expected00630 = expectedFindAllThatNone;
@@ -1598,7 +1599,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingOne-CPP17 : MCTC-00631-FT-findAllThatReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00631 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00631 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00631;
     auto                                                        expectedSize00631 = expectedSizeFindAllThatOne;
     auto                                                const & expected00631 = expectedFindAllThatOne;
@@ -1613,7 +1614,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingMore-CPP17 : MCTC-00632-FT-findAllThatReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00632 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00632 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00632;
     auto                                                        expectedSize00632 = expectedSizeFindAllThatMore;
     auto                                                const & expected00632 = expectedFindAllThatMore;
@@ -1628,7 +1629,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAll-CPP17 : MCTC-00633-FT-findAllThatReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00633 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00633 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00633;
     auto                                                        expectedSize00633 = expectedSizeFindAllThatAll;
     auto                                                const & expected00633 = expectedFindAllThatAll;
@@ -1643,7 +1644,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAllAndMore-CPP17 : MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00634 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00634 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00634;
     auto                                                        expectedSize00634 = expectedSizeFindAllThatAllAndMore;
     auto                                                const & expected00634 = expectedFindAllThatAllAndMore;
@@ -1664,11 +1665,11 @@ template <
 template <
         typename __IterableType,                                                                /* NOLINT(bugprone-reserved-identifier) */
         typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __ComparisonEquivalent = cds :: experimental :: Array   /* NOLINT(bugprone-reserved-identifier) */
+        template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
 > auto mutableCollectionTestGroupFindOf (
         Test                                                      * pTestLib,
         StringLiteral                                               variant,
-        cds :: experimental :: MutableCollection < __ElementType > & underTest,
+        cds :: MutableCollection < __ElementType > & underTest,
         Size                                                        limit,
         __IterableType                                      const & none,
         __IterableType                                      const & one,
@@ -1768,10 +1769,10 @@ template <
 ) -> bool {
 
     pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
-    using Iterator = typename cds :: experimental :: MutableCollection < __ElementType > :: Iterator;
+    using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingNone-CPP17 : MCTC-00701-FO-findOfStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00701 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00701 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00701;
     auto                                                        expectedSize00701 = expectedSizeFindOfNone;
     auto                                                const & expected00701 = expectedFindOfNone;
@@ -1786,7 +1787,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingOne-CPP17 : MCTC-00702-FO-findOfStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00702 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00702 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00702;
     auto                                                        expectedSize00702 = expectedSizeFindOfOne;
     auto                                                const & expected00702 = expectedFindOfOne;
@@ -1801,7 +1802,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreLessThanLimit-CPP17 : MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00703 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00703 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00703;
     auto                                                        expectedSize00703 = expectedSizeFindOfMoreLessThanLimit;
     auto                                                const & expected00703 = expectedFindOfMoreLessThanLimit;
@@ -1816,7 +1817,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMore-CPP17 : MCTC-00704-FO-findOfStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00704 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00704 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00704;
     auto                                                        expectedSize00704 = expectedSizeFindOfMore;
     auto                                                const & expected00704 = expectedFindOfMore;
@@ -1831,7 +1832,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreMoreThanLimit-CPP17 : MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00705 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00705 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00705;
     auto                                                        expectedSize00705 = expectedSizeFindOfMoreMoreThanLimit;
     auto                                                const & expected00705 = expectedFindOfMoreMoreThanLimit;
@@ -1846,7 +1847,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAll-CPP17 : MCTC-00706-FO-findOfStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00706 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00706 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00706;
     auto                                                        expectedSize00706 = expectedSizeFindOfAll;
     auto                                                const & expected00706 = expectedFindOfAll;
@@ -1861,7 +1862,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAllAndMore-CPP17 : MCTC-00707-FO-findOfStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00707 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00707 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00707;
     auto                                                        expectedSize00707 = expectedSizeFindOfAllAndMore;
     auto                                                const & expected00707 = expectedFindOfAllAndMore;
@@ -1876,7 +1877,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingNone-CPP17 : MCTC-00708-FO-findOfReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00708 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00708 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00708;
     auto                                                        expectedSize00708 = expectedSizeFindOfNone;
     auto                                                const & expected00708 = expectedFindOfNone;
@@ -1891,7 +1892,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingOne-CPP17 : MCTC-00709-FO-findOfReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00709 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00709 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00709;
     auto                                                        expectedSize00709 = expectedSizeFindOfOne;
     auto                                                const & expected00709 = expectedFindOfOne;
@@ -1906,7 +1907,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreLessThanLimit-CPP17 : MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00710 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00710 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00710;
     auto                                                        expectedSize00710 = expectedSizeFindOfMoreLessThanLimit;
     auto                                                const & expected00710 = expectedFindOfMoreLessThanLimit;
@@ -1921,7 +1922,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMore-CPP17 : MCTC-00711-FO-findOfReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00711 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00711 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00711;
     auto                                                        expectedSize00711 = expectedSizeFindOfMore;
     auto                                                const & expected00711 = expectedFindOfMore;
@@ -1936,7 +1937,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreMoreThanLimit-CPP17 : MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00712 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00712 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00712;
     auto                                                        expectedSize00712 = expectedSizeFindOfMoreMoreThanLimit;
     auto                                                const & expected00712 = expectedFindOfMoreMoreThanLimit;
@@ -1951,7 +1952,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAll-CPP17 : MCTC-00713-FO-findOfReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00713 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00713 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00713;
     auto                                                        expectedSize00713 = expectedSizeFindOfAll;
     auto                                                const & expected00713 = expectedFindOfAll;
@@ -1966,7 +1967,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAllAndMore-CPP17 : MCTC-00714-FO-findOfReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00714 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00714 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00714;
     auto                                                        expectedSize00714 = expectedSizeFindOfAllAndMore;
     auto                                                const & expected00714 = expectedFindOfAllAndMore;
@@ -1981,7 +1982,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstOfMatchingNone-CPP17 : MCTC-00715-FO-findFirstOfMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00715 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00715 = underTest;
     Iterator                                               result00715;
     auto                                                        expectedResult00715 = expectedResultFindFirstOfNone;
     auto                                                const & expected00715 = expectedFindFirstOfNone;
@@ -1996,7 +1997,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstOfMatchingOne-CPP17 : MCTC-00716-FO-findFirstOfMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00716 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00716 = underTest;
     Iterator                                               result00716;
     auto                                                        expectedResult00716 = expectedResultFindFirstOfOne;
     auto                                                const & expected00716 = expectedFindFirstOfOne;
@@ -2011,7 +2012,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstOfMatchingMore-CPP17 : MCTC-00717-FO-findFirstOfMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00717 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00717 = underTest;
     Iterator                                               result00717;
     auto                                                        expectedResult00717 = expectedResultFindFirstOfMore;
     auto                                                const & expected00717 = expectedFindFirstOfMore;
@@ -2026,7 +2027,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAll-CPP17 : MCTC-00718-FO-findFirstOfMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00718 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00718 = underTest;
     Iterator                                               result00718;
     auto                                                        expectedResult00718 = expectedResultFindFirstOfAll;
     auto                                                const & expected00718 = expectedFindFirstOfAll;
@@ -2041,7 +2042,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAllAndMore-CPP17 : MCTC-00719-FO-findFirstOfMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00719 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00719 = underTest;
     Iterator                                               result00719;
     auto                                                        expectedResult00719 = expectedResultFindFirstOfAllAndMore;
     auto                                                const & expected00719 = expectedFindFirstOfAllAndMore;
@@ -2056,7 +2057,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingNone-CPP17 : MCTC-00720-FO-findLastOfMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00720 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00720 = underTest;
     Iterator                                               result00720;
     auto                                                        expectedResult00720 = expectedResultFindLastOfNone;
     auto                                                const & expected00720 = expectedFindLastOfNone;
@@ -2071,7 +2072,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingOne-CPP17 : MCTC-00721-FO-findLastOfMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00721 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00721 = underTest;
     Iterator                                               result00721;
     auto                                                        expectedResult00721 = expectedResultFindLastOfOne;
     auto                                                const & expected00721 = expectedFindLastOfOne;
@@ -2086,7 +2087,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingMore-CPP17 : MCTC-00722-FO-findLastOfMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00722 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00722 = underTest;
     Iterator                                               result00722;
     auto                                                        expectedResult00722 = expectedResultFindLastOfMore;
     auto                                                const & expected00722 = expectedFindLastOfMore;
@@ -2101,7 +2102,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingAll-CPP17 : MCTC-00723-FO-findLastOfMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00723 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00723 = underTest;
     Iterator                                               result00723;
     auto                                                        expectedResult00723 = expectedResultFindLastOfAll;
     auto                                                const & expected00723 = expectedFindLastOfAll;
@@ -2116,7 +2117,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-CPP17 : MCTC-00724-FO-findLastOfMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00724 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00724 = underTest;
     Iterator                                               result00724;
     auto                                                        expectedResult00724 = expectedResultFindLastOfAllAndMore;
     auto                                                const & expected00724 = expectedFindLastOfAllAndMore;
@@ -2131,7 +2132,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingNone-CPP17 : MCTC-00725-FO-findAllOfStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00725 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00725 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00725;
     auto                                                        expectedSize00725 = expectedSizeFindAllOfNone;
     auto                                                const & expected00725 = expectedFindAllOfNone;
@@ -2146,7 +2147,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingOne-CPP17 : MCTC-00726-FO-findAllOfStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00726 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00726 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00726;
     auto                                                        expectedSize00726 = expectedSizeFindAllOfOne;
     auto                                                const & expected00726 = expectedFindAllOfOne;
@@ -2161,7 +2162,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingMore-CPP17 : MCTC-00727-FO-findAllOfStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00727 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00727 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00727;
     auto                                                        expectedSize00727 = expectedSizeFindAllOfMore;
     auto                                                const & expected00727 = expectedFindAllOfMore;
@@ -2176,7 +2177,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAll-CPP17 : MCTC-00728-FO-findAllOfStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00728 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00728 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00728;
     auto                                                        expectedSize00728 = expectedSizeFindAllOfAll;
     auto                                                const & expected00728 = expectedFindAllOfAll;
@@ -2191,7 +2192,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAllAndMore-CPP17 : MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00729 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00729 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00729;
     auto                                                        expectedSize00729 = expectedSizeFindAllOfAllAndMore;
     auto                                                const & expected00729 = expectedFindAllOfAllAndMore;
@@ -2206,7 +2207,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingNone-CPP17 : MCTC-00730-FO-findAllOfReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00730 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00730 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00730;
     auto                                                        expectedSize00730 = expectedSizeFindAllOfNone;
     auto                                                const & expected00730 = expectedFindAllOfNone;
@@ -2221,7 +2222,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingOne-CPP17 : MCTC-00731-FO-findAllOfReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00731 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00731 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00731;
     auto                                                        expectedSize00731 = expectedSizeFindAllOfOne;
     auto                                                const & expected00731 = expectedFindAllOfOne;
@@ -2236,7 +2237,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingMore-CPP17 : MCTC-00732-FO-findAllOfReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00732 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00732 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00732;
     auto                                                        expectedSize00732 = expectedSizeFindAllOfMore;
     auto                                                const & expected00732 = expectedFindAllOfMore;
@@ -2251,7 +2252,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAll-CPP17 : MCTC-00733-FO-findAllOfReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00733 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00733 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00733;
     auto                                                        expectedSize00733 = expectedSizeFindAllOfAll;
     auto                                                const & expected00733 = expectedFindAllOfAll;
@@ -2266,7 +2267,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAllAndMore-CPP17 : MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00734 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00734 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00734;
     auto                                                        expectedSize00734 = expectedSizeFindAllOfAllAndMore;
     auto                                                const & expected00734 = expectedFindAllOfAllAndMore;
@@ -2281,7 +2282,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingNone-CPP17 : MCTC-00735-FO-findNotOfStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00735 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00735 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00735;
     auto                                                        expectedSize00735 = expectedSizeFindNotOfNone;
     auto                                                const & expected00735 = expectedFindNotOfNone;
@@ -2296,7 +2297,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingOne-CPP17 : MCTC-00736-FO-findNotOfStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00736 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00736 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00736;
     auto                                                        expectedSize00736 = expectedSizeFindNotOfOne;
     auto                                                const & expected00736 = expectedFindNotOfOne;
@@ -2311,7 +2312,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreLessThanLimit-CPP17 : MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00737 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00737 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00737;
     auto                                                        expectedSize00737 = expectedSizeFindNotOfMoreLessThanLimit;
     auto                                                const & expected00737 = expectedFindNotOfMoreLessThanLimit;
@@ -2326,7 +2327,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMore-CPP17 : MCTC-00738-FO-findNotOfStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00738 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00738 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00738;
     auto                                                        expectedSize00738 = expectedSizeFindNotOfMore;
     auto                                                const & expected00738 = expectedFindNotOfMore;
@@ -2341,7 +2342,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreMoreThanLimit-CPP17 : MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00739 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00739 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00739;
     auto                                                        expectedSize00739 = expectedSizeFindNotOfMoreMoreThanLimit;
     auto                                                const & expected00739 = expectedFindNotOfMoreMoreThanLimit;
@@ -2356,7 +2357,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAll-CPP17 : MCTC-00740-FO-findNotOfStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00740 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00740 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00740;
     auto                                                        expectedSize00740 = expectedSizeFindNotOfAll;
     auto                                                const & expected00740 = expectedFindNotOfAll;
@@ -2371,7 +2372,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAllAndMore-CPP17 : MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00741 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00741 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00741;
     auto                                                        expectedSize00741 = expectedSizeFindNotOfAllAndMore;
     auto                                                const & expected00741 = expectedFindNotOfAllAndMore;
@@ -2386,7 +2387,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingNone-CPP17 : MCTC-00742-FO-findNotOfReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00742 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00742 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00742;
     auto                                                        expectedSize00742 = expectedSizeFindNotOfNone;
     auto                                                const & expected00742 = expectedFindNotOfNone;
@@ -2401,7 +2402,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingOne-CPP17 : MCTC-00743-FO-findNotOfReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00743 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00743 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00743;
     auto                                                        expectedSize00743 = expectedSizeFindNotOfOne;
     auto                                                const & expected00743 = expectedFindNotOfOne;
@@ -2416,7 +2417,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreLessThanLimit-CPP17 : MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00744 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00744 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00744;
     auto                                                        expectedSize00744 = expectedSizeFindNotOfMoreLessThanLimit;
     auto                                                const & expected00744 = expectedFindNotOfMoreLessThanLimit;
@@ -2431,7 +2432,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMore-CPP17 : MCTC-00745-FO-findNotOfReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00745 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00745 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00745;
     auto                                                        expectedSize00745 = expectedSizeFindNotOfMore;
     auto                                                const & expected00745 = expectedFindNotOfMore;
@@ -2446,7 +2447,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreMoreThanLimit-CPP17 : MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00746 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00746 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00746;
     auto                                                        expectedSize00746 = expectedSizeFindNotOfMoreMoreThanLimit;
     auto                                                const & expected00746 = expectedFindNotOfMoreMoreThanLimit;
@@ -2461,7 +2462,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAll-CPP17 : MCTC-00747-FO-findNotOfReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00747 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00747 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00747;
     auto                                                        expectedSize00747 = expectedSizeFindNotOfAll;
     auto                                                const & expected00747 = expectedFindNotOfAll;
@@ -2476,7 +2477,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAllAndMore-CPP17 : MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00748 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00748 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00748;
     auto                                                        expectedSize00748 = expectedSizeFindNotOfAllAndMore;
     auto                                                const & expected00748 = expectedFindNotOfAllAndMore;
@@ -2491,7 +2492,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingNone-CPP17 : MCTC-00749-FO-findFirstNotOfMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00749 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00749 = underTest;
     Iterator                                               result00749;
     auto                                                        expectedResult00749 = expectedResultFindFirstNotOfNone;
     auto                                                const & expected00749 = expectedFindFirstNotOfNone;
@@ -2506,7 +2507,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingOne-CPP17 : MCTC-00750-FO-findFirstNotOfMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00750 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00750 = underTest;
     Iterator                                               result00750;
     auto                                                        expectedResult00750 = expectedResultFindFirstNotOfOne;
     auto                                                const & expected00750 = expectedFindFirstNotOfOne;
@@ -2521,7 +2522,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingMore-CPP17 : MCTC-00751-FO-findFirstNotOfMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00751 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00751 = underTest;
     Iterator                                               result00751;
     auto                                                        expectedResult00751 = expectedResultFindFirstNotOfMore;
     auto                                                const & expected00751 = expectedFindFirstNotOfMore;
@@ -2536,7 +2537,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAll-CPP17 : MCTC-00752-FO-findFirstNotOfMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00752 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00752 = underTest;
     Iterator                                               result00752;
     auto                                                        expectedResult00752 = expectedResultFindFirstNotOfAll;
     auto                                                const & expected00752 = expectedFindFirstNotOfAll;
@@ -2551,7 +2552,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAllAndMore-CPP17 : MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00753 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00753 = underTest;
     Iterator                                               result00753;
     auto                                                        expectedResult00753 = expectedResultFindFirstNotOfAllAndMore;
     auto                                                const & expected00753 = expectedFindFirstNotOfAllAndMore;
@@ -2566,7 +2567,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingNone-CPP17 : MCTC-00754-FO-findLastNotOfMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00754 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00754 = underTest;
     Iterator                                               result00754;
     auto                                                        expectedResult00754 = expectedResultFindLastNotOfNone;
     auto                                                const & expected00754 = expectedFindLastNotOfNone;
@@ -2581,7 +2582,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingOne-CPP17 : MCTC-00755-FO-findLastNotOfMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00755 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00755 = underTest;
     Iterator                                               result00755;
     auto                                                        expectedResult00755 = expectedResultFindLastNotOfOne;
     auto                                                const & expected00755 = expectedFindLastNotOfOne;
@@ -2596,7 +2597,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingMore-CPP17 : MCTC-00756-FO-findLastNotOfMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00756 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00756 = underTest;
     Iterator                                               result00756;
     auto                                                        expectedResult00756 = expectedResultFindLastNotOfMore;
     auto                                                const & expected00756 = expectedFindLastNotOfMore;
@@ -2611,7 +2612,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingAll-CPP17 : MCTC-00757-FO-findLastNotOfMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00757 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00757 = underTest;
     Iterator                                               result00757;
     auto                                                        expectedResult00757 = expectedResultFindLastNotOfAll;
     auto                                                const & expected00757 = expectedFindLastNotOfAll;
@@ -2626,7 +2627,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-CPP17 : MCTC-00758-FO-findLastNotOfMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00758 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00758 = underTest;
     Iterator                                               result00758;
     auto                                                        expectedResult00758 = expectedResultFindLastNotOfAllAndMore;
     auto                                                const & expected00758 = expectedFindLastNotOfAllAndMore;
@@ -2641,7 +2642,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingNone-CPP17 : MCTC-00759-FO-findAllNotOfStoreInMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00759 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00759 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00759;
     auto                                                        expectedSize00759 = expectedSizeFindAllNotOfNone;
     auto                                                const & expected00759 = expectedFindAllNotOfNone;
@@ -2656,7 +2657,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingOne-CPP17 : MCTC-00760-FO-findAllNotOfStoreInMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00760 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00760 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00760;
     auto                                                        expectedSize00760 = expectedSizeFindAllNotOfOne;
     auto                                                const & expected00760 = expectedFindAllNotOfOne;
@@ -2671,7 +2672,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingMore-CPP17 : MCTC-00761-FO-findAllNotOfStoreInMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00761 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00761 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00761;
     auto                                                        expectedSize00761 = expectedSizeFindAllNotOfMore;
     auto                                                const & expected00761 = expectedFindAllNotOfMore;
@@ -2686,7 +2687,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAll-CPP17 : MCTC-00762-FO-findAllNotOfStoreInMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00762 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00762 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00762;
     auto                                                        expectedSize00762 = expectedSizeFindAllNotOfAll;
     auto                                                const & expected00762 = expectedFindAllNotOfAll;
@@ -2701,7 +2702,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAllAndMore-CPP17 : MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00763 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00763 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00763;
     auto                                                        expectedSize00763 = expectedSizeFindAllNotOfAllAndMore;
     auto                                                const & expected00763 = expectedFindAllNotOfAllAndMore;
@@ -2716,7 +2717,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingNone-CPP17 : MCTC-00764-FO-findAllNotOfReturnedMatchingNone-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00764 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00764 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00764;
     auto                                                        expectedSize00764 = expectedSizeFindAllNotOfNone;
     auto                                                const & expected00764 = expectedFindAllNotOfNone;
@@ -2731,7 +2732,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingOne-CPP17 : MCTC-00765-FO-findAllNotOfReturnedMatchingOne-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00765 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00765 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00765;
     auto                                                        expectedSize00765 = expectedSizeFindAllNotOfOne;
     auto                                                const & expected00765 = expectedFindAllNotOfOne;
@@ -2746,7 +2747,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingMore-CPP17 : MCTC-00766-FO-findAllNotOfReturnedMatchingMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00766 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00766 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00766;
     auto                                                        expectedSize00766 = expectedSizeFindAllNotOfMore;
     auto                                                const & expected00766 = expectedFindAllNotOfMore;
@@ -2761,7 +2762,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAll-CPP17 : MCTC-00767-FO-findAllNotOfReturnedMatchingAll-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00767 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00767 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00767;
     auto                                                        expectedSize00767 = expectedSizeFindAllNotOfAll;
     auto                                                const & expected00767 = expectedFindAllNotOfAll;
@@ -2776,7 +2777,7 @@ template <
     }
 
     /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAllAndMore-CPP17 : MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-CPP17 */
-    cds :: experimental :: MutableCollection < __ElementType > & collection00768 = underTest;
+    cds :: MutableCollection < __ElementType > & collection00768 = underTest;
     __ComparisonEquivalent < Iterator >                    storeIn00768;
     auto                                                        expectedSize00768 = expectedSizeFindAllNotOfAllAndMore;
     auto                                                const & expected00768 = expectedFindAllNotOfAllAndMore;
@@ -2811,27 +2812,27 @@ template <
         __FwdElementType1 && insertByEmplace1,
         __FwdElementType2 && insertByEmplace2,
         __FwdElementType3 && insertByEmplace3,
-        cds :: experimental :: MutableCollection < __ElementType > const & toInsertAll,
+        cds :: MutableCollection < __ElementType > const & toInsertAll,
         std :: initializer_list < __ElementType > const & toInsertAllList,
         __ItType1 const & r1Begin, __ItType1 const & r1End,
         __ItType2 const & r2Begin, __ItType2 const & r2End,
         __ItType3 const & r3Begin, __ItType3 const & r3End,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedInsertByCopy,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedInsertByMove,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterAllInsertByEmplace,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterPackInsertion,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterInsertAll,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterInsertAllList,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterR1Insert,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterR2Insert,
-        cds :: experimental :: MutableCollection < __ElementType > const & expectedAfterR3Insert,
+        cds :: MutableCollection < __ElementType > const & expectedInsertByCopy,
+        cds :: MutableCollection < __ElementType > const & expectedInsertByMove,
+        cds :: MutableCollection < __ElementType > const & expectedAfterAllInsertByEmplace,
+        cds :: MutableCollection < __ElementType > const & expectedAfterPackInsertion,
+        cds :: MutableCollection < __ElementType > const & expectedAfterInsertAll,
+        cds :: MutableCollection < __ElementType > const & expectedAfterInsertAllList,
+        cds :: MutableCollection < __ElementType > const & expectedAfterR1Insert,
+        cds :: MutableCollection < __ElementType > const & expectedAfterR2Insert,
+        cds :: MutableCollection < __ElementType > const & expectedAfterR3Insert,
 
         __Pack && ... insertedPack
 ) -> bool {
 
     /* MutableCollectionTestCase-RandomInsertion-insertByCopy-CPP17 : MCTC-00801-RI-insertByCopy-CPP17 */
     __DerivedType RI00801;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00801 = RI00801;
+    cds :: MutableCollection < __ElementType > & baseRI00801 = RI00801;
 
     baseRI00801.insert ( insertByCopy );
     if ( ! RI00801.equals ( expectedInsertByCopy ) ) {
@@ -2843,7 +2844,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByMove-CPP17 : MCTC-00802-RI-insertByMove-CPP17 */
     __DerivedType RI00802;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00802 = RI00802;
+    cds :: MutableCollection < __ElementType > & baseRI00802 = RI00802;
 
     baseRI00802.insert ( std :: move ( insertByMove ) );
     if ( ! RI00802.equals ( expectedInsertByMove ) ) {
@@ -2855,7 +2856,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByEmplace-CPP17 : MCTC-00803-RI-insertByEmplace-CPP17 */
     __DerivedType RI00803;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00803 = RI00803;
+    cds :: MutableCollection < __ElementType > & baseRI00803 = RI00803;
 
     baseRI00803.emplace ( std :: forward < __FwdElementType1 > ( insertByEmplace1 ) );
     baseRI00803.emplace ( std :: forward < __FwdElementType2 > ( insertByEmplace2 ) );
@@ -2869,7 +2870,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByPack-CPP17 : MCTC-00804-RI-insertByPack-CPP17 */
     __DerivedType RI00804;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00804 = RI00804;
+    cds :: MutableCollection < __ElementType > & baseRI00804 = RI00804;
 
     baseRI00804.insertAll ( std :: forward < __Pack > ( insertedPack ) ... );
     if ( ! RI00804.equals ( expectedAfterPackInsertion ) ) {
@@ -2881,7 +2882,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllIterable-CPP17 : MCTC-00805-RI-insertByInsertAllIterable-CPP17 */
     __DerivedType RI00805;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00805 = RI00805;
+    cds :: MutableCollection < __ElementType > & baseRI00805 = RI00805;
 
     baseRI00805.insertAllOf ( toInsertAll );
     if ( ! RI00805.equals ( expectedAfterInsertAll ) ) {
@@ -2893,7 +2894,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllList-CPP17 : MCTC-00806-RI-insertByInsertAllList-CPP17 */
     __DerivedType RI00806;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00806 = RI00806;
+    cds :: MutableCollection < __ElementType > & baseRI00806 = RI00806;
 
     baseRI00806.insertAllOf ( toInsertAllList );
     if ( ! RI00806.equals ( expectedAfterInsertAllList ) ) {
@@ -2905,7 +2906,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByRange1-CPP17 : MCTC-00807-RI-insertByRange1-CPP17 */
     __DerivedType RI00807;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00807 = RI00807;
+    cds :: MutableCollection < __ElementType > & baseRI00807 = RI00807;
 
     baseRI00807.insertAllOf ( r1Begin, r1End );
     if ( ! RI00807.equals ( expectedAfterR1Insert ) ) {
@@ -2917,7 +2918,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByRange2-CPP17 : MCTC-00808-RI-insertByRange2-CPP17 */
     __DerivedType RI00808;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00808 = RI00808;
+    cds :: MutableCollection < __ElementType > & baseRI00808 = RI00808;
 
     baseRI00808.insertAllOf ( r2Begin, r2End );
     if ( ! RI00808.equals ( expectedAfterR2Insert ) ) {
@@ -2929,7 +2930,7 @@ template <
 
     /* MutableCollectionTestCase-RandomInsertion-insertByRange3-CPP17 : MCTC-00809-RI-insertByRange3-CPP17 */
     __DerivedType RI00809;
-    cds :: experimental :: MutableCollection < __ElementType > & baseRI00809 = RI00809;
+    cds :: MutableCollection < __ElementType > & baseRI00809 = RI00809;
 
     baseRI00809.insertAllOf ( r3Begin, r3End );
     if ( ! RI00809.equals ( expectedAfterR3Insert ) ) {
@@ -2948,7 +2949,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : IntArray", [& allOk, this] {
 
-        cds :: experimental :: Array < int > intArrayObjectUnderTest;
+        cds :: Array < int > intArrayObjectUnderTest;
         intArrayObjectUnderTest     = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "[ 1, 2, 3, 4, 5 ]";
@@ -2964,7 +2965,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : IntLinkedList", [& allOk, this] {
 
-        cds :: experimental :: LinkedList < int > intLinkedListObjectUnderTest;
+        cds :: LinkedList < int > intLinkedListObjectUnderTest;
         intLinkedListObjectUnderTest = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "[ 1, 2, 3, 4, 5 ]";
@@ -2981,7 +2982,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : IntToIntHashMap", [& allOk, this] {
 
-        cds :: experimental :: HashMap < int, int > intIntHashMapObjectUnderTest;
+        cds :: HashMap < int, int > intIntHashMapObjectUnderTest;
         intIntHashMapObjectUnderTest = { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
 
         auto expectedToString       = "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }";
@@ -2998,7 +2999,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : StringArray", [& allOk, this] {
 
-        cds :: experimental :: Array < cds :: String > stringArrayObjectUnderTest;
+        cds :: Array < cds :: String > stringArrayObjectUnderTest;
         stringArrayObjectUnderTest     = { "Ana", "are", "mere" };
 
         auto expectedToString       = "[ Ana, are, mere ]";
@@ -3015,7 +3016,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : StringLinkedList", [& allOk, this] {
 
-        cds :: experimental :: LinkedList < cds :: String > stringLinkedListObjectUnderTest;
+        cds :: LinkedList < cds :: String > stringLinkedListObjectUnderTest;
         stringLinkedListObjectUnderTest     = { "Ana", "are", "mere" };
 
         auto expectedToString       = "[ Ana, are, mere ]";
@@ -3032,7 +3033,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-CPP17 : MCTG-00002-MF-CPP17 : StringToStringHashMap", [& allOk, this] {
 
-        cds :: experimental :: HashMap < cds :: String, cds :: String > stringStringHashMapObjectUnderTest;
+        cds :: HashMap < cds :: String, cds :: String > stringStringHashMapObjectUnderTest;
         stringStringHashMapObjectUnderTest = { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
 
         auto expectedToString       = "{ are: verb, Ana: name, mere: noun }"; /// due to hash table
@@ -3051,7 +3052,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : IntArray", [& allOk, this] {
 
-        cds :: experimental :: Array < int > objUnderTest = {3, 4, 5, 6, 7};
+        cds :: Array < int > objUnderTest = {3, 4, 5, 6, 7};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < int > (
                 objUnderTest,
                 this,
@@ -3066,7 +3067,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : IntLinkedList", [& allOk, this] {
 
-        cds :: experimental :: LinkedList < int > objUnderTest = {3, 4, 5, 6, 7};
+        cds :: LinkedList < int > objUnderTest = {3, 4, 5, 6, 7};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < int > (
                 objUnderTest,
                 this,
@@ -3081,7 +3082,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : IntToIntHashMap", [& allOk, this] {
 
-        cds :: experimental :: HashMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
+        cds :: HashMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < MapEntry < int, int > > (
                 objUnderTest,
                 this,
@@ -3101,7 +3102,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : StringArray", [& allOk, this] {
 
-        cds :: experimental :: Array < String > objUnderTest = {"Ana", "are", "mere"};
+        cds :: Array < String > objUnderTest = {"Ana", "are", "mere"};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < String > (
                 objUnderTest,
                 this,
@@ -3116,7 +3117,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : StringLinkedList", [& allOk, this] {
 
-        cds :: experimental :: LinkedList < String > objUnderTest = {"Ana", "are", "mere"};
+        cds :: LinkedList < String > objUnderTest = {"Ana", "are", "mere"};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < String > (
                 objUnderTest,
                 this,
@@ -3131,7 +3132,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-DelegateForwardIterableClientImports-CPP17 : MCTG-00050-IT-CPP17 : StringToStringHashMap", [& allOk, this] {
 
-        cds :: experimental :: HashMap < String, String > objUnderTest = {{"are","verb"}, {"Ana","name"}, {"mere","noun"}};
+        cds :: HashMap < String, String > objUnderTest = {{"are","verb"}, {"Ana","name"}, {"mere","noun"}};
         auto status = mutableCollectionTestGroupDelegateForwardIterableClientImports < MapEntry < String, String > > (
                 objUnderTest,
                 this,
@@ -3150,8 +3151,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "MutableCollectionTestGroup-SpecialAddressBasedIteratorAccess-CPP17 : MCTG-00050-IT-CPP17 : StringArray", [& allOk, this] {
 
         /* only one test required, as it uses operator *, which was tested in previous group */
-        cds :: experimental :: Array < String > arr = { "Ana", "are", "mere" };
-        cds :: experimental :: MutableCollection < String > & c = arr;
+        cds :: Array < String > arr = { "Ana", "are", "mere" };
+        cds :: MutableCollection < String > & c = arr;
         auto begin = c.begin();
 
         /* MutableCollectionTestGroup-SpecialAddressBasedIteratorAccess-addressOperator-CPP17 : MCTC-00057-IT-addressOperator-CPP17 */
@@ -3172,448 +3173,448 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* IntArray */              this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : IntArray", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs101 = { 1, 3, 5, 7, 9 };
+        cds :: Array < int > fs101 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs102 = { 1, 4, 5, 7, 9 };
+        cds :: Array < int > fs102 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs103 = { 1, 4, 5, 6, 8 };
+        cds :: Array < int > fs103 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs104 = { 2, 4, 6, 8, 10 };
+        cds :: Array < int > fs104 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs105 = { 1, 3, 5, 7, 9 };
+        cds :: Array < int > fs105 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs106 = { 1, 4, 5, 7, 9 };
+        cds :: Array < int > fs106 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs107 = { 1, 4, 5, 6, 8 };
+        cds :: Array < int > fs107 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs108 = { 2, 4, 6, 8, 10 };
+        cds :: Array < int > fs108 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs109 = { 1, 3, 5, 7, 9 };
+        cds :: Array < int > fs109 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs110 = { 1, 4, 5, 7, 9 };
+        cds :: Array < int > fs110 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs111 = { 1, 4, 5, 6, 8 };
+        cds :: Array < int > fs111 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs112 = { 2, 4, 6, 8, 10 };
+        cds :: Array < int > fs112 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs113 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs113 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs114 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs114 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs115 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs115 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs116 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs116 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs117 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs117 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [comparedTo] (int e) { return e > comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs118 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs118 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs119 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs119 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs120 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs120 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs121 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs121 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs122 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs122 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs123 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs123 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs124 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs124 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs125 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs125 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs126 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs126 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs127 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs127 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs128 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs128 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs129 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs129 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs130 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs130 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs131 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs131 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs132 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs132 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs133 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs133 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs134 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs134 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs135 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs135 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs136 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs136 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs137 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs137 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs138 = { 1, 2, 3, 4, 5 };
+        cds :: Array < int > fs138 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs139 = { 1, 2, 3, 4, 5 };
-        experimental :: MutableCollection < int > const & MutableCollection = fs139;
+        cds :: Array < int > fs139 = { 1, 2, 3, 4, 5 };
+        MutableCollection < int > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( int e ) { if ( e % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -3627,8 +3628,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: Array < int > fs140 = { 1, 2, 3, 4, 5 };
-        experimental :: MutableCollection < int > & MutableCollectionFS140 = fs140;
+        cds :: Array < int > fs140 = { 1, 2, 3, 4, 5 };
+        cds :: MutableCollection < int > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( int & e ) { e = 3; };
 
         MutableCollectionFS140.forEach (actionfs140);
@@ -3644,448 +3645,448 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* IntLinkedList */         this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : IntLinkedList", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs101 = { 1, 3, 5, 7, 9 };
+        cds :: LinkedList < int > fs101 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs102 = { 1, 4, 5, 7, 9 };
+        cds :: LinkedList < int > fs102 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs103 = { 1, 4, 5, 6, 8 };
+        cds :: LinkedList < int > fs103 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs104 = { 2, 4, 6, 8, 10 };
+        cds :: LinkedList < int > fs104 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: any,
+                /* funcCaller */    & MutableCollection < int > :: any,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs105 = { 1, 3, 5, 7, 9 };
+        cds :: LinkedList < int > fs105 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs106 = { 1, 4, 5, 7, 9 };
+        cds :: LinkedList < int > fs106 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs107 = { 1, 4, 5, 6, 8 };
+        cds :: LinkedList < int > fs107 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs108 = { 2, 4, 6, 8, 10 };
+        cds :: LinkedList < int > fs108 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: all,
+                /* funcCaller */    & MutableCollection < int > :: all,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs109 = { 1, 3, 5, 7, 9 };
+        cds :: LinkedList < int > fs109 = { 1, 3, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs110 = { 1, 4, 5, 7, 9 };
+        cds :: LinkedList < int > fs110 = { 1, 4, 5, 7, 9 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs111 = { 1, 4, 5, 6, 8 };
+        cds :: LinkedList < int > fs111 = { 1, 4, 5, 6, 8 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs112 = { 2, 4, 6, 8, 10 };
+        cds :: LinkedList < int > fs112 = { 2, 4, 6, 8, 10 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: none,
+                /* funcCaller */    & MutableCollection < int > :: none,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs113 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs113 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs114 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs114 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs115 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs115 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs116 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs116 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [] (int e) { return e >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs117 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs117 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: count,
+                /* funcCaller */    & MutableCollection < int > :: count,
                 /* predicate */     [comparedTo] (int e) { return e > comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs118 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs118 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs119 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs119 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs120 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs120 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs121 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs121 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs122 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs122 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: fewerThan,
+                /* funcCaller */    & MutableCollection < int > :: fewerThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs123 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs123 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs124 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs124 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs125 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs125 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs126 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs126 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs127 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs127 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: moreThan,
+                /* funcCaller */    & MutableCollection < int > :: moreThan,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs128 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs128 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs129 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs129 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs130 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs130 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs131 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs131 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atMost,
+                /* funcCaller */    & MutableCollection < int > :: atMost,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs132 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs132 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs133 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs133 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs134 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs134 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs135 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs135 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: atLeast,
+                /* funcCaller */    & MutableCollection < int > :: atLeast,
                 /* predicate */     [] (int e) { return e < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs136 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs136 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs137 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs137 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs138 = { 1, 2, 3, 4, 5 };
+        cds :: LinkedList < int > fs138 = { 1, 2, 3, 4, 5 };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < int > :: some,
+                /* funcCaller */    & MutableCollection < int > :: some,
                 /* predicate */     [] (int e) { return e % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : IntLinkedList */
-        cds :: experimental :: LinkedList < int > fs139 = { 1, 2, 3, 4, 5 };
-        experimental :: MutableCollection < int > const & MutableCollection = fs139;
+        cds :: LinkedList < int > fs139 = { 1, 2, 3, 4, 5 };
+        MutableCollection < int > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( int e ) { if ( e % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -4099,8 +4100,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: LinkedList < int > fs140 = { 1, 2, 3, 4, 5 };
-        experimental :: MutableCollection < int > & MutableCollectionFS140 = fs140;
+        cds :: LinkedList < int > fs140 = { 1, 2, 3, 4, 5 };
+        cds :: MutableCollection < int > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( int & e ) { e = 3; };
 
         MutableCollectionFS140.forEach (actionfs140);
@@ -4116,448 +4117,448 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* IntToIntHashMap */       this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : IntToIntHashMap", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: HashMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: any,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs102 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: HashMap < int, int > fs102 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: any,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs103 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs103 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: any,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs104 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs104 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: any,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs105 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: HashMap < int, int > fs105 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: all,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs106 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: HashMap < int, int > fs106 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: all,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs107 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs107 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: all,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs108 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs108 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: all,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs109 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: HashMap < int, int > fs109 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: none,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs110 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {8, 9} };
+        cds :: HashMap < int, int > fs110 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {8, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: none,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs111 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs111 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: none,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs112 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: HashMap < int, int > fs112 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: none,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs113 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs113 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: count,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs114 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs114 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: count,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs115 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs115 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: count,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs116 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs116 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: count,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs117 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs117 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: count,
                 /* predicate */     [comparedTo] (MapEntry<int, int>const & e) { return e.key() > comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs118 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs118 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: fewerThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs119 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs119 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: fewerThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs120 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs120 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: fewerThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs121 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs121 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: fewerThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs122 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs122 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: fewerThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs123 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs123 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: moreThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs124 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs124 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: moreThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs125 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs125 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: moreThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs126 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs126 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: moreThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs127 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs127 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: moreThan,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs128 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs128 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atMost,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs129 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs129 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atMost,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs130 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs130 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atMost,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs131 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs131 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atMost,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs132 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs132 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atLeast,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs133 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs133 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atLeast,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs134 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs134 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atLeast,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs135 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs135 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: atLeast,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs136 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs136 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: some,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs137 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs137 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: some,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs138 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: HashMap < int, int > fs138 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < int, int > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < int, int > > :: some,
                 /* predicate */     [] (MapEntry<int, int>const & e) { return e.key() % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : IntToIntHashMap */
-        cds :: experimental :: HashMap < int, int > fs139 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
-        experimental :: MutableCollection < MapEntry < int, int > > const & MutableCollection = fs139;
+        cds :: HashMap < int, int > fs139 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        MutableCollection < MapEntry < int, int > > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( MapEntry<int, int>const & e ) { if ( e.key() % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -4571,8 +4572,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: HashMap < int, int > fs140 = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
-        experimental :: MutableCollection < MapEntry < int, int > > & MutableCollectionFS140 = fs140;
+        cds :: HashMap < int, int > fs140 = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: MutableCollection < MapEntry < int, int > > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( MapEntry < int, int > & e ) {
 //            e.key() = 3;  must always fail compilation
             e.value () = 7;
@@ -4594,448 +4595,448 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* StringArray */           this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : StringArray", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: Array < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: Array < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: Array < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: Array < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: Array < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: Array < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: Array < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [comparedTo] (String const & e) { return e.length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: Array < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : StringArray */
-        cds :: experimental :: Array < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
-        experimental :: MutableCollection < String > const & MutableCollection = fs139;
+        cds :: Array < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
+        MutableCollection < String > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( String const & e ) { if ( e.length() % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -5049,8 +5050,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: Array < String > fs140 = { "a", "bb", "ccc", "dddd", "eeeee" };
-        experimental :: MutableCollection < String > & MutableCollectionFS140 = fs140;
+        cds :: Array < String > fs140 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: MutableCollection < String > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( String & e ) { e = "ccc"; };
 
         MutableCollectionFS140.forEach (actionfs140);
@@ -5064,8 +5065,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMemberFnMutability-CPP17 : MCTC-00141-FS-forEachMemberFnMutability-CPP17 : IntArray */
-        cds :: experimental :: Array < String > fs141 = { "a", "bb", "ccc", "dddd", "eeeee" };
-        experimental :: MutableCollection < String > & MutableCollectionFS141 = fs141;
+        cds :: Array < String > fs141 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: MutableCollection < String > & MutableCollectionFS141 = fs141;
         auto actionfs141 = & String :: clear;
 
         MutableCollectionFS141.forEach (actionfs141);
@@ -5081,447 +5082,447 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* StringLinkedList */      this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : StringLinkedList", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: LinkedList < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: LinkedList < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: LinkedList < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: LinkedList < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: LinkedList < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: LinkedList < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: LinkedList < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [] (String const & e) { return e.length() >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     [comparedTo] (String const & e) { return e.length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: LinkedList < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     [] (String const & e) { return e.length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : StringLinkedList */
-        cds :: experimental :: LinkedList < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
-        experimental :: MutableCollection < String > const & MutableCollection = fs139;
+        cds :: LinkedList < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
+        MutableCollection < String > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( String const & e ) { if ( e.length() % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -5535,8 +5536,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: LinkedList < String > fs140 = { "a", "bb", "ccc", "dddd", "eeeee" };
-        experimental :: MutableCollection < String > & MutableCollectionFS140 = fs140;
+        cds :: LinkedList < String > fs140 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: MutableCollection < String > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( String & e ) { e = "ccc"; };
 
         MutableCollectionFS140.forEach (actionfs140);
@@ -5550,8 +5551,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMemberFnMutability-CPP17 : MCTC-00141-FS-forEachMemberFnMutability-CPP17 : IntArray */
-        cds :: experimental :: LinkedList < String > fs141 = { "a", "bb", "ccc", "dddd", "eeeee" };
-        experimental :: MutableCollection < String > & MutableCollectionFS141 = fs141;
+        cds :: LinkedList < String > fs141 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: MutableCollection < String > & MutableCollectionFS141 = fs141;
         auto actionfs141 = & String :: clear;
 
         MutableCollectionFS141.forEach (actionfs141);
@@ -5568,448 +5569,448 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     /* StringToStringHashMap */ this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP17 : MCTG-00100-FS-CPP17 : StringToStringHashMap", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP17 : MCTC-00101-FS-anyNone-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00101-FS-anyNone-CPP17",
                 /* objUnderTest */  fs101,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: any,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyOneApplicable-CPP17 : MCTC-00102-FS-anyOne-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs102 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs102 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00102-FS-anyOne-CPP17",
                 /* objUnderTest */  fs102,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: any,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP17 : MCTC-00103-FS-anyMore-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs103 = { {"x", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs103 = { {"x", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00103-FS-anyMore-CPP17",
                 /* objUnderTest */  fs103,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: any,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-anyAllApplicable-CPP17 : MCTC-00104-FS-anyAll-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs104 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: HashMap < String, String > fs104 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00104-FS-anyAll-CPP17",
                 /* objUnderTest */  fs104,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: any,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: any,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allNoneApplicable-CPP17 : MCTC-00105-FS-allNone-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs105 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs105 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00105-FS-allNone-CPP17",
                 /* objUnderTest */  fs105,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: all,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allOneApplicable-CPP17 : MCTC-00106-FS-allOne-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs106 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs106 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00106-FS-allOne-CPP17",
                 /* objUnderTest */  fs106,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: all,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allMoreApplicable-CPP17 : MCTC-00107-FS-allMore-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs107 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: HashMap < String, String > fs107 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00107-FS-allMore-CPP17",
                 /* objUnderTest */  fs107,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: all,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-allAllApplicable-CPP17 : MCTC-00108-FS-allAll-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs108 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: HashMap < String, String > fs108 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00108-FS-allAll-CPP17",
                 /* objUnderTest */  fs108,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: all,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: all,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP17 : MCTC-00109-FS-noneNone-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs109 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs109 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00109-FS-noneNone-CPP17",
                 /* objUnderTest */  fs109,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: none,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneOneApplicable-CPP17 : MCTC-00110-FS-noneOne-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs110 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: HashMap < String, String > fs110 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00110-FS-noneOne-CPP17",
                 /* objUnderTest */  fs110,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: none,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP17 : MCTC-00111-FS-noneMore-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs111 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: HashMap < String, String > fs111 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00111-FS-noneMore-CPP17",
                 /* objUnderTest */  fs111,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: none,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-noneAllApplicable-CPP17 : MCTC-00112-FS-noneAll-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs112 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: HashMap < String, String > fs112 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00112-FS-noneAll-CPP17",
                 /* objUnderTest */  fs112,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: none,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: none,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp1-CPP17 : MCTC-00113-FS-countProp1-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs113 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs113 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00113-FS-countProp1-CPP17",
                 /* objUnderTest */  fs113,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: count,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp2-CPP17 : MCTC-00114-FS-countProp2-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs114 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs114 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00114-FS-countProp2-CPP17",
                 /* objUnderTest */  fs114,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: count,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 1; },
                 /* expectedRes. */  3
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp3-CPP17 : MCTC-00115-FS-countProp3-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs115 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs115 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00115-FS-countProp3-CPP17",
                 /* objUnderTest */  fs115,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: count,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-countProp4-CPP17 : MCTC-00116-FS-countProp4-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs116 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs116 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00116-FS-countProp4-CPP17",
                 /* objUnderTest */  fs116,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: count,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() >= 2; },
                 /* expectedRes. */  4
         );
 
         int comparedTo = 3;
         /* MutableCollectionTestCase-FunctionalStatements-countPropLbd-CPP17 : MCTC-00117-FS-countPropLbd-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs117 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs117 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00117-FS-countPropLbd-CPP17",
                 /* objUnderTest */  fs117,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: count,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: count,
                 /* predicate */     [comparedTo] (MapEntry<String, String>const & e) { return e.key().length() < comparedTo; },
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanTrue-CPP17 : MCTC-00118-FS-fewerThanTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs118 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs118 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00118-FS-fewerThanTrue-CPP17",
                 /* objUnderTest */  fs118,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: fewerThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP17 : MCTC-00119-FS-fewerThanCloseTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs119 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs119 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00119-FS-fewerThanCloseTrue-CPP17",
                 /* objUnderTest */  fs119,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: fewerThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP17 : MCTC-00120-FS-fewerThanCloseFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs120 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs120 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00120-FS-fewerThanCloseFalse-CPP17",
                 /* objUnderTest */  fs120,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: fewerThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanFalse-CPP17 : MCTC-00121-FS-fewerThanFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs121 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs121 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00121-FS-fewerThanFalse-CPP17",
                 /* objUnderTest */  fs121,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: fewerThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP17 : MCTC-00122-FS-fewerThanCompletelyFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs122 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs122 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00122-FS-fewerThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs122,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: fewerThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: fewerThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanTrue-CPP17 : MCTC-00123-FS-moreThanTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs123 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs123 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00123-FS-moreThanTrue-CPP17",
                 /* objUnderTest */  fs123,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: moreThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP17 : MCTC-00124-FS-moreThanCloseTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs124 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs124 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00124-FS-moreThanCloseTrue-CPP17",
                 /* objUnderTest */  fs124,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: moreThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP17 : MCTC-00125-FS-moreThanCloseFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs125 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs125 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00125-FS-moreThanCloseFalse-CPP17",
                 /* objUnderTest */  fs125,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: moreThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanFalse-CPP17 : MCTC-00126-FS-moreThanFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs126 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs126 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00126-FS-moreThanFalse-CPP17",
                 /* objUnderTest */  fs126,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: moreThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP17 : MCTC-00127-FS-moreThanCompletelyFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs127 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs127 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00127-FS-moreThanCompletelyFalse-CPP17",
                 /* objUnderTest */  fs127,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: moreThan,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: moreThan,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       20,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostTrue-CPP17 : MCTC-00128-FS-atMostTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs128 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs128 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00128-FS-atMostTrue-CPP17",
                 /* objUnderTest */  fs128,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atMost,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP17 : MCTC-00129-FS-atMostCloseTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs129 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs129 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00129-FS-atMostCloseTrue-CPP17",
                 /* objUnderTest */  fs129,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atMost,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP17 : MCTC-00130-FS-atMostCloseFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs130 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs130 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00130-FS-atMostCloseFalse-CPP17",
                 /* objUnderTest */  fs130,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atMost,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atMostFalse-CPP17 : MCTC-00131-FS-atMostFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs131 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs131 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00131-FS-atMostFalse-CPP17",
                 /* objUnderTest */  fs131,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atMost,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atMost,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastTrue-CPP17 : MCTC-00132-FS-atLeastTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs132 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs132 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00132-FS-atLeastTrue-CPP17",
                 /* objUnderTest */  fs132,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atLeast,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP17 : MCTC-00133-FS-atLeastCloseTrue-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs133 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs133 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00133-FS-atLeastCloseTrue-CPP17",
                 /* objUnderTest */  fs133,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atLeast,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP17 : MCTC-00134-FS-atLeastCloseFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs134 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs134 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00134-FS-atLeastCloseFalse-CPP17",
                 /* objUnderTest */  fs134,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atLeast,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-atLeastFalse-CPP17 : MCTC-00135-FS-atLeastFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs135 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs135 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00135-FS-atLeastFalse-CPP17",
                 /* objUnderTest */  fs135,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: atLeast,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: atLeast,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() < 3; },
                 /* desired */       4,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someExact-CPP17 : MCTC-00136-FS-someExact-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs136 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs136 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00136-FS-someExact-CPP17",
                 /* objUnderTest */  fs136,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: some,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* desired */       2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someLessFalse-CPP17 : MCTC-00137-FS-someLessFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs137 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs137 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00137-FS-someLessFalse-CPP17",
                 /* objUnderTest */  fs137,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: some,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* desired */       1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-someMoreFalse-CPP17 : MCTC-00138-FS-someMoreFalse-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs138 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: HashMap < String, String > fs138 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00138-FS-someMoreFalse-CPP17",
                 /* objUnderTest */  fs138,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < MapEntry < String, String > > :: some,
+                /* funcCaller */    & MutableCollection < MapEntry < String, String > > :: some,
                 /* predicate */     [] (MapEntry<String, String>const & e) { return e.key().length() % 2 == 0; },
                 /* desired */       3,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachCount-CPP17 : MCTC-00139-FS-forEachCount-CPP17 : StringToStringHashMap */
-        cds :: experimental :: HashMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
-        experimental :: MutableCollection < MapEntry < String, String > > const & MutableCollection = fs139;
+        cds :: HashMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
+        MutableCollection < MapEntry < String, String > > const & MutableCollection = fs139;
         Size count = 0;
         auto action = [& count] ( MapEntry<String, String>const & e ) { if ( e.key().length() % 2 == 0 ) { ++ count; } };
         Size expected = 2;
@@ -6023,8 +6024,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FunctionalStatements-forEachMutability-CPP17 : MCTC-00140-FS-forEachMutability-CPP17 : IntArray */
-        cds :: experimental :: HashMap < String, String > fs140 = { {"a", "1"}, {"bb", "2"}, {"ccc", "3"}, {"dddd", "4"}, {"eeeee", "5"} };
-        experimental :: MutableCollection < MapEntry < String, String > > & MutableCollectionFS140 = fs140;
+        cds :: HashMap < String, String > fs140 = { {"a", "1"}, {"bb", "2"}, {"ccc", "3"}, {"dddd", "4"}, {"eeeee", "5"} };
+        cds :: MutableCollection < MapEntry < String, String > > & MutableCollectionFS140 = fs140;
         auto actionfs140 = [] ( MapEntry < String, String > & e ) {
 //            e.key() = "ccc"; // should not compile
             e.value() = "8";
@@ -6045,330 +6046,330 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatementsMemberFunction-CPP17 : MCTG-00200-FSMF-CPP17 : StringArray", [& allOk, this] {
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-forEach-CPP17 : MCTC-00201-FSMF-forEach-CPP17. Test Success if compile success */
-        cds :: experimental :: Array < String > fs201 = { "Ana", "are", "mere" };
+        cds :: Array < String > fs201 = { "Ana", "are", "mere" };
         fs201.forEach ( [](String const & e){ (void) e.length(); } );
         fs201.forEach ( & String :: length );
         this->logOK ( "'MCTC-00201-FSMF-forEach-CPP17' OK" );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-someEqual-CPP17 : MCTC-00202-FSMF-someEqual-CPP17. */
-        cds :: experimental :: Array < String > fs202 = { "a", "", "c" };
+        cds :: Array < String > fs202 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00202-FSMF-someEqual-CPP17",
                 /* objUnderTest */  fs202,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-someLess-CPP17 : MCTC-00203-FSMF-someLess-CPP17. */
-        cds :: experimental :: Array < String > fs203 = { "a", "", "c" };
+        cds :: Array < String > fs203 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00203-FSMF-someLess-CPP17",
                 /* objUnderTest */  fs203,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-someMore-CPP17 : MCTC-00204-FSMF-someMore-CPP17. */
-        cds :: experimental :: Array < String > fs204 = { "a", "", "c" };
+        cds :: Array < String > fs204 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00204-FSMF-someMore-CPP17",
                 /* objUnderTest */  fs204,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: some,
+                /* funcCaller */    & MutableCollection < String > :: some,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atLeast-CPP17 : MCTC-00205-FSMF-atLeast-CPP17. */
-        cds :: experimental :: Array < String > fs205 = { "a", "", "c" };
+        cds :: Array < String > fs205 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00205-FSMF-atLeast-CPP17",
                 /* objUnderTest */  fs205,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atLeastLess-CPP17 : MCTC-00206-FSMF-atLeastLess-CPP17. */
-        cds :: experimental :: Array < String > fs206 = { "a", "", "c" };
+        cds :: Array < String > fs206 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00206-FSMF-atLeastLess-CPP17",
                 /* objUnderTest */  fs206,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atLeastMore-CPP17 : MCTC-00207-FSMF-atLeastMore-CPP17. */
-        cds :: experimental :: Array < String > fs207 = { "a", "", "c" };
+        cds :: Array < String > fs207 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00207-FSMF-atLeastMore-CPP17",
                 /* objUnderTest */  fs207,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atLeast,
+                /* funcCaller */    & MutableCollection < String > :: atLeast,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atMost-CPP17 : MCTC-00208-FSMF-atMost-CPP17. */
-        cds :: experimental :: Array < String > fs208 = { "a", "", "c" };
+        cds :: Array < String > fs208 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00208-FSMF-atMost-CPP17",
                 /* objUnderTest */  fs208,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atMostLess-CPP17 : MCTC-00209-FSMF-atMostLess-CPP17. */
-        cds :: experimental :: Array < String > fs209 = { "a", "", "c" };
+        cds :: Array < String > fs209 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00209-FSMF-atMostLess-CPP17",
                 /* objUnderTest */  fs209,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 0,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-atMostMore-CPP17 : MCTC-00210-FSMF-atMostMore-CPP17. */
-        cds :: experimental :: Array < String > fs210 = { "a", "", "c" };
+        cds :: Array < String > fs210 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00210-FSMF-atMostMore-CPP17",
                 /* objUnderTest */  fs210,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: atMost,
+                /* funcCaller */    & MutableCollection < String > :: atMost,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-moreThan-CPP17 : MCTC-00211-FSMF-moreThan-CPP17. */
-        cds :: experimental :: Array < String > fs211 = { "a", "", "" };
+        cds :: Array < String > fs211 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00211-FSMF-moreThan-CPP17",
                 /* objUnderTest */  fs211,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 1,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-moreThanLess-CPP17 : MCTC-00212-FSMF-moreThanLess-CPP17. */
-        cds :: experimental :: Array < String > fs212 = { "a", "", "" };
+        cds :: Array < String > fs212 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00212-FSMF-moreThanLess-CPP17",
                 /* objUnderTest */  fs212,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 0,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-moreThanMore-CPP17 : MCTC-00213-FSMF-moreThanMore-CPP17. */
-        cds :: experimental :: Array < String > fs213 = { "a", "", "" };
+        cds :: Array < String > fs213 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00213-FSMF-moreThanMore-CPP17",
                 /* objUnderTest */  fs213,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: moreThan,
+                /* funcCaller */    & MutableCollection < String > :: moreThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 2,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-fewerThan-CPP17 : MCTC-00214-FSMF-fewerThan-CPP17. */
-        cds :: experimental :: Array < String > fs214 = { "a", "", "c" };
+        cds :: Array < String > fs214 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00214-FSMF-fewerThan-CPP17",
                 /* objUnderTest */  fs214,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 2,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-fewerThanLess-CPP17 : MCTC-00215-FSMF-fewerThanLess-CPP17. */
-        cds :: experimental :: Array < String > fs215 = { "a", "", "c" };
+        cds :: Array < String > fs215 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00215-FSMF-fewerThanLess-CPP17",
                 /* objUnderTest */  fs215,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 1,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-fewerThanMore-CPP17 : MCTC-00216-FSMF-fewerThanMore-CPP17. */
-        cds :: experimental :: Array < String > fs216 = { "a", "", "c" };
+        cds :: Array < String > fs216 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateCountedHandle (
                 /* tName */         "MCTC-00216-FSMF-fewerThanMore-CPP17",
                 /* objUnderTest */  fs216,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: fewerThan,
+                /* funcCaller */    & MutableCollection < String > :: fewerThan,
                 /* predicate */     & String :: empty,
                 /* expectedCount */ 3,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-countExact-CPP17 : MCTC-00217-FSMF-countExact-CPP17. */
-        cds :: experimental :: Array < String > fs217 = { "a", "", "" };
+        cds :: Array < String > fs217 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle < Size > (
                 /* tName */         "MCTC-00217-FSMF-countExact-CPP17",
                 /* objUnderTest */  fs217,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: count,
+                /* funcCaller */    & MutableCollection < String > :: count,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  2
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-anyNone-CPP17 : MCTC-00218-FSMF-anyNone-CPP17. */
-        cds :: experimental :: Array < String > fs218 = { "a", "b", "c" };
+        cds :: Array < String > fs218 = { "a", "b", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00218-FSMF-anyNone-CPP17",
                 /* objUnderTest */  fs218,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-anyOne-CPP17 : MCTC-00219-FSMF-anyOne-CPP17. */
-        cds :: experimental :: Array < String > fs219 = { "a", "", "c" };
+        cds :: Array < String > fs219 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00219-FSMF-anyOne-CPP17",
                 /* objUnderTest */  fs219,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-anyMore-CPP17 : MCTC-00220-FSMF-anyMore-CPP17. */
-        cds :: experimental :: Array < String > fs220 = { "a", "", "" };
+        cds :: Array < String > fs220 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00220-FSMF-anyMore-CPP17",
                 /* objUnderTest */  fs220,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-anyAll-CPP17 : MCTC-00221-FSMF-anyAll-CPP17. */
-        cds :: experimental :: Array < String > fs221 = { "", "", "" };
+        cds :: Array < String > fs221 = { "", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00221-FSMF-anyAll-CPP17",
                 /* objUnderTest */  fs221,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: any,
+                /* funcCaller */    & MutableCollection < String > :: any,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-allNone-CPP17 : MCTC-00222-FSMF-allNone-CPP17. */
-        cds :: experimental :: Array < String > fs222 = { "a", "b", "c" };
+        cds :: Array < String > fs222 = { "a", "b", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00222-FSMF-allNone-CPP17",
                 /* objUnderTest */  fs222,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-allOne-CPP17 : MCTC-00223-FSMF-allOne-CPP17. */
-        cds :: experimental :: Array < String > fs223 = { "a", "", "c" };
+        cds :: Array < String > fs223 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00223-FSMF-allOne-CPP17",
                 /* objUnderTest */  fs223,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-allMore-CPP17 : MCTC-00224-FSMF-allMore-CPP17. */
-        cds :: experimental :: Array < String > fs224 = { "a", "", "" };
+        cds :: Array < String > fs224 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00224-FSMF-allMore-CPP17",
                 /* objUnderTest */  fs224,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-allAll-CPP17 : MCTC-00225-FSMF-allAll-CPP17. */
-        cds :: experimental :: Array < String > fs225 = { "", "", "" };
+        cds :: Array < String > fs225 = { "", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00225-FSMF-allAll-CPP17",
                 /* objUnderTest */  fs225,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: all,
+                /* funcCaller */    & MutableCollection < String > :: all,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-noneNone-CPP17 : MCTC-00226-FSMF-noneNone-CPP17. */
-        cds :: experimental :: Array < String > fs226 = { "a", "b", "c" };
+        cds :: Array < String > fs226 = { "a", "b", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00226-FSMF-noneNone-CPP17",
                 /* objUnderTest */  fs226,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  true
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-noneOne-CPP17 : MCTC-00227-FSMF-noneOne-CPP17. */
-        cds :: experimental :: Array < String > fs227 = { "a", "", "c" };
+        cds :: Array < String > fs227 = { "a", "", "c" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00227-FSMF-noneOne-CPP17",
                 /* objUnderTest */  fs227,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-noneMore-CPP17 : MCTC-00228-FSMF-noneMore-CPP17. */
-        cds :: experimental :: Array < String > fs228 = { "a", "", "" };
+        cds :: Array < String > fs228 = { "a", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00228-FSMF-noneMore-CPP17",
                 /* objUnderTest */  fs228,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
 
         /* MutableCollectionTestCase-FunctionalStatementsMemberFunction-noneAll-CPP17 : MCTC-00229-FSMF-noneAll-CPP17. */
-        cds :: experimental :: Array < String > fs229 = { "", "", "" };
+        cds :: Array < String > fs229 = { "", "", "" };
         allOk = allOk && mutableCollectionTestCasePredicateHandle (
                 /* tName */         "MCTC-00229-FSMF-noneAll-CPP17",
                 /* objUnderTest */  fs229,
                 /* testLib */       this,
-                /* funcCaller */    & experimental :: MutableCollection < String > :: none,
+                /* funcCaller */    & MutableCollection < String > :: none,
                 /* predicate */     & String :: empty,
                 /* expectedRes. */  false
         );
@@ -6377,14 +6378,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : IntArray", [this, & allOk]{
 
-        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: MutableCollection < int > & underTestColl = underTest;
+        cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: MutableCollection < int > & underTestColl = underTest;
 
-        cds :: experimental :: Array < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: Array < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: Array < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: Array < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: Array < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: Array < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6398,14 +6399,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : IntLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: MutableCollection < int > & underTestColl = underTest;
+        cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: MutableCollection < int > & underTestColl = underTest;
 
-        cds :: experimental :: LinkedList < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: LinkedList < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: LinkedList < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: LinkedList < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: LinkedList < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: LinkedList < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6419,14 +6420,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : IntToIntHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: MutableCollection < MapEntry < int, int > > & underTestColl = underTest;
+        cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: MutableCollection < MapEntry < int, int > > & underTestColl = underTest;
 
-        cds :: experimental :: HashMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: HashMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: HashMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: HashMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: HashMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: HashMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: HashMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: HashMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6440,14 +6441,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : StringArray", [this, & allOk]{
 
-        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: MutableCollection < String > & underTestColl = underTest;
+        cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: MutableCollection < String > & underTestColl = underTest;
 
-        cds :: experimental :: Array < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: Array < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: Array < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: Array < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: Array < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: Array < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: Array < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6461,14 +6462,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : StringLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: MutableCollection < String > & underTestColl = underTest;
+        cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: MutableCollection < String > & underTestColl = underTest;
 
-        cds :: experimental :: LinkedList < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: LinkedList < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: LinkedList < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: LinkedList < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: LinkedList < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: LinkedList < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: LinkedList < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6482,14 +6483,14 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP17 : MCTG-00350-RAIT-CPP17 : StringToStringHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < String, String > underTest = { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
-        cds :: experimental :: MutableCollection < MapEntry < String, String > > & underTestColl = underTest;
+        cds :: HashMap < String, String > underTest = { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        cds :: MutableCollection < MapEntry < String, String > > & underTestColl = underTest;
 
-        cds :: experimental :: HashMap < String, String > afterFrontRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3},  };
-        cds :: experimental :: HashMap < String, String > afterMidRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2}, {3, 3} };
-        cds :: experimental :: HashMap < String, String > afterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
-        cds :: experimental :: HashMap < String, String > afterAfterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
-        cds :: experimental :: HashMap < String, String > afterOtherRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+        cds :: HashMap < String, String > afterFrontRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3},  };
+        cds :: HashMap < String, String > afterMidRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2}, {3, 3} };
+        cds :: HashMap < String, String > afterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+        cds :: HashMap < String, String > afterAfterBackRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
+        cds :: HashMap < String, String > afterOtherRemove = { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}, {2, 2} };
 
         allOk = allOk && mutableCollectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -6502,15 +6503,15 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         );
     });
 
-#define make_a(type, ...) cds :: experimental :: Array < type > { __VA_ARGS__ }
-#define make_ll(type, ...) cds :: experimental :: LinkedList < type > { __VA_ARGS__ }
-#define make_hs(type, ...) cds :: experimental :: HashSet < type > { __VA_ARGS__ }
-#define make_hm(ktype, vtype, ...) cds :: experimental :: HashMap < ktype, vtype > { __VA_ARGS__ }
+#define make_a(type, ...) cds :: Array < type > { __VA_ARGS__ }
+#define make_ll(type, ...) cds :: LinkedList < type > { __VA_ARGS__ }
+#define make_hs(type, ...) cds :: HashSet < type > { __VA_ARGS__ }
+#define make_hm(ktype, vtype, ...) cds :: HashMap < ktype, vtype > { __VA_ARGS__ }
 #define make_il(...) { __VA_ARGS__ }
 
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : IntArray", [this, & allOk]{
 
-        cds :: experimental :: Array < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6546,7 +6547,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : IntLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6582,7 +6583,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : IntToIntHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6618,7 +6619,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : StringArray", [this, & allOk]{
 
-        cds :: experimental :: Array < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+        cds :: Array < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6654,7 +6655,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : StringLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+        cds :: LinkedList < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6690,7 +6691,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : StringToStringHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < String, String > originalArray = { {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} };
+        cds :: HashMap < String, String > originalArray = { {"ccb", "ccb"}, {"ccc", "ccc"}, {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"} };
 
 
         allOk = allOk && mutableCollectionTestGroupRemoveBy (
@@ -6726,26 +6727,26 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveBy-CPP17 : MCTG-00400-RB-CPP17 : StringArrayMemberFunction", [this, & allOk]{
 
-        cds :: experimental :: Array < String > strArray = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5", "" };
+        cds :: Array < String > strArray = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5", "" };
 
         auto copyForRemoveThat      = strArray;
         auto copyForRemoveFirstThat = strArray;
         auto copyForRemoveLastThat  = strArray;
         auto copyForRemoveAllThat   = strArray;
-        cds :: experimental :: Array < String > copyForRemoveAllThatCoverage   = {"word1", "word2", "", "word3", "word4", "word5"};
+        cds :: Array < String > copyForRemoveAllThatCoverage   = {"word1", "word2", "", "word3", "word4", "word5"};
 
-        cds :: experimental :: MutableCollection < String > & cRT  = copyForRemoveThat;
-        cds :: experimental :: MutableCollection < String > & cRFT = copyForRemoveFirstThat;
-        cds :: experimental :: MutableCollection < String > & cRLT = copyForRemoveLastThat;
-        cds :: experimental :: MutableCollection < String > & cRAT = copyForRemoveAllThat;
-        cds :: experimental :: MutableCollection < String > & cRATCoverage = copyForRemoveAllThatCoverage;
+        cds :: MutableCollection < String > & cRT  = copyForRemoveThat;
+        cds :: MutableCollection < String > & cRFT = copyForRemoveFirstThat;
+        cds :: MutableCollection < String > & cRLT = copyForRemoveLastThat;
+        cds :: MutableCollection < String > & cRAT = copyForRemoveAllThat;
+        cds :: MutableCollection < String > & cRATCoverage = copyForRemoveAllThatCoverage;
         Size removeThatLimit = 5;
 
-        cds :: experimental :: Array < String > expectedAfterRemoveThat         = { "word1", "word2", "word3", "word4", "", "", "word5", "" };
-        cds :: experimental :: Array < String > expectedAfterRemoveFirstThat    = { "word1", "word2", "", "word3", "", "word4", "", "", "","", "word5", "" };
-        cds :: experimental :: Array < String > expectedAfterRemoveLastThat     = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5" };
-        cds :: experimental :: Array < String > expectedAfterRemoveAllThat      = { "word1", "word2", "word3", "word4", "word5" };
-        cds :: experimental :: Array < String > expectedAfterRemoveAllThatCoverage = { "word1", "word2", "word3", "word4", "word5" };
+        cds :: Array < String > expectedAfterRemoveThat         = { "word1", "word2", "word3", "word4", "", "", "word5", "" };
+        cds :: Array < String > expectedAfterRemoveFirstThat    = { "word1", "word2", "", "word3", "", "word4", "", "", "","", "word5", "" };
+        cds :: Array < String > expectedAfterRemoveLastThat     = { "word1", "word2", "", "", "word3", "", "word4", "", "", "","", "word5" };
+        cds :: Array < String > expectedAfterRemoveAllThat      = { "word1", "word2", "word3", "word4", "word5" };
+        cds :: Array < String > expectedAfterRemoveAllThatCoverage = { "word1", "word2", "word3", "word4", "word5" };
 
         Size removeThatExpected = 5;
         bool removeFirstThatExpected = true;
@@ -6797,7 +6798,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
             this->logOK ( "'MCTC-00423-RB-memberRemoveThatCoverage-CPP17' OK" );
         }
 
-        cds :: experimental :: MutableCollection < String > & extraForNegCoverage = expectedAfterRemoveAllThatCoverage;
+        cds :: MutableCollection < String > & extraForNegCoverage = expectedAfterRemoveAllThatCoverage;
 
         (void) extraForNegCoverage.removeThat (5, & String :: empty);
         (void) extraForNegCoverage.removeFirstThat (& String :: empty);
@@ -6812,17 +6813,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : IntArray", [this, & allOk]{
 
-        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 #define make(t, ...) make_a(t, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -6847,13 +6848,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -6871,13 +6872,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -6895,13 +6896,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -6919,13 +6920,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -6950,13 +6951,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -6974,13 +6975,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -6998,13 +6999,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7031,7 +7032,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7062,7 +7063,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7086,7 +7087,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7110,7 +7111,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7134,7 +7135,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7165,7 +7166,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7189,7 +7190,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7213,7 +7214,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7235,17 +7236,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : IntLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 #define make(t, ...) make_ll(t, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7270,13 +7271,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7294,13 +7295,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7318,13 +7319,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7342,13 +7343,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7373,13 +7374,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7397,13 +7398,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7421,13 +7422,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7454,7 +7455,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7485,7 +7486,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7509,7 +7510,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7533,7 +7534,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7557,7 +7558,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < int > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, 10, 11, 12, 13),
                 /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
@@ -7588,7 +7589,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < int > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < int > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7612,7 +7613,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7636,7 +7637,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < int > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < int > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, 10, 11, 12, 13),
                 /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -7658,17 +7659,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : IntToIntHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 #define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -7693,13 +7694,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < int, int > > :: removeAllOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7717,13 +7718,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, int )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeFirstOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7741,13 +7742,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeLastOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7765,13 +7766,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -7796,13 +7797,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < int, int > > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7820,13 +7821,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7844,13 +7845,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7877,7 +7878,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -7908,7 +7909,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < int, int > > :: removeAllOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7932,7 +7933,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeFirstOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7956,7 +7957,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeLastOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -7980,7 +7981,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -8011,7 +8012,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < int, int > > :: removeAllNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -8035,7 +8036,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeFirstNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -8059,7 +8060,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < int, int > > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < int, int > > :: removeLastNotOf,
                 /* noneCommon= */                       make(int, int, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(int, int, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(int, int, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -8081,17 +8082,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : StringArray", [this, & allOk]{
 
-        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 #define make(t, ...) make_a(t, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8116,13 +8117,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8140,13 +8141,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8164,13 +8165,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8188,13 +8189,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8219,13 +8220,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8243,13 +8244,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8267,13 +8268,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8300,7 +8301,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8331,7 +8332,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8355,7 +8356,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8379,7 +8380,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8403,7 +8404,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8434,7 +8435,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8458,7 +8459,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8482,7 +8483,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8504,17 +8505,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : StringLinkedList", [this, & allOk]{
 
-        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 #define make(t, ...) make_ll(t, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8539,13 +8540,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8563,13 +8564,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8587,13 +8588,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8611,13 +8612,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8642,13 +8643,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8666,13 +8667,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8690,13 +8691,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8723,7 +8724,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8754,7 +8755,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8778,7 +8779,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8802,7 +8803,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8826,7 +8827,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < String > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, 10, 11, 12, 13),
                 /* oneCommon= */                                make(String, 16, 6, 11, 12, 13),
@@ -8857,7 +8858,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < String > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < String > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8881,7 +8882,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8905,7 +8906,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < String > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < String > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, 10, 11, 12, 13),
                 /* oneCommon= */                        make(String, 16, 6, 11, 12, 13),
                 /* moreCommon= */                       make(String, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
@@ -8927,17 +8928,17 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-CPP17 : MCTG-00450-RO-CPP17 : StringToStringHashMap", [this, & allOk]{
 
-        cds :: experimental :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 #define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -8962,13 +8963,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < String, String > > :: removeAllOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -8986,13 +8987,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, String )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeFirstOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9010,13 +9011,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeLastOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9034,13 +9035,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "MutableCollection",
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -9065,13 +9066,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < String, String > > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9089,13 +9090,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9113,13 +9114,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: experimental :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "MutableCollection",
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9146,7 +9147,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeOf",
                 /* subvariantOffset= */                         0,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -9177,7 +9178,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeAllOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < String, String > > :: removeAllOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9201,7 +9202,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstOf",
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeFirstOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeFirstOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9225,7 +9226,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeLastOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeLastOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9249,7 +9250,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                               "removeNotOf",
                 /* subvariantOffset= */                         7,
                 /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
+                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
                 /* limit= */                                    3U,
                 /* noneCommon= */                               make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                                make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
@@ -9280,7 +9281,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeAllNotOf",
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
-                /* removeAllPfnVariant= */              & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeAllNotOf,
+                /* removeAllPfnVariant= */              & cds :: MutableCollection < MapEntry < String, String > > :: removeAllNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9304,7 +9305,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeFirstNotOf",
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeFirstNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeFirstNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9328,7 +9329,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
                 /* subvariant= */                       "removeLastNotOf",
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
-                /* removeFirstLastPfnVariant= */        & cds :: experimental :: MutableCollection < MapEntry < String, String > > :: removeLastNotOf,
+                /* removeFirstLastPfnVariant= */        & cds :: MutableCollection < MapEntry < String, String > > :: removeLastNotOf,
                 /* noneCommon= */                       make(String, String, {10, 10}, {11, 11}, {12, 12}, {13, 13}),
                 /* oneCommon= */                        make(String, String, {16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}),
                 /* moreCommon= */                       make(String, String, {20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}),
@@ -9352,7 +9353,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : IntArray", [this, & allOk] {
 
-        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && mutableCollectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -9413,7 +9414,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : IntLinkedList", [this, & allOk] {
 
-        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && mutableCollectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -9474,7 +9475,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : IntToIntHashMap", [this, & allOk] {
 
-        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && mutableCollectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -9535,7 +9536,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : StringArray", [this, & allOk] {
 
-        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && mutableCollectionTestGroupFindThat < String > (
                 /* pTestLib= */                                 this,
@@ -9596,7 +9597,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : StringLinkedList", [this, & allOk] {
 
-        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && mutableCollectionTestGroupFindThat < String > (
                 /* pTestLib= */                                 this,
@@ -9657,7 +9658,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindThat-CPP17 : MCTG-00600-FT-CPP17 : StringToStringHashMap", [this, & allOk] {
 
-        cds :: experimental :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && mutableCollectionTestGroupFindThat < MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
@@ -9720,12 +9721,12 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
         /* MutableCollectionTestGroup-FindThatMemberFunction-CPP17 : MCTG-00650-FTMF-CPP17 : MCTC-00651-FTMF to MCTC-00656-FTMF */
 
-        cds :: experimental :: Array < String > arr = { "word1", "", "word2", "", "word3", "word4", "", "word5" };
-        cds :: experimental :: MutableCollection < String > & underTest = arr;
-        using Iterator = cds :: experimental :: MutableCollection < String > :: Iterator;
+        cds :: Array < String > arr = { "word1", "", "word2", "", "word3", "word4", "", "word5" };
+        cds :: MutableCollection < String > & underTest = arr;
+        using Iterator = cds :: MutableCollection < String > :: Iterator;
 
         /* MutableCollectionTestCase-FindThatMemberFunction-findThatStoreInMemberFunction-CPP17 : MCTC-00651-FTMF-findThatStoreInMemberFunction-CPP17 */
-        cds :: experimental :: Array < Iterator > storeIn651;
+        cds :: Array < Iterator > storeIn651;
         underTest.findThat ( 2, storeIn651, & String :: empty );
 
         if ( storeIn651.size() != 2 || * ( ++ storeIn651[0] ) != "word2" || * ( ++ storeIn651[1] ) != "word3" ) {
@@ -9736,8 +9737,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FindThatMemberFunction-findThatReturnedMemberFunction-CPP17 : MCTC-00652-FTMF-findThatReturnedMemberFunction-CPP17 */
-        cds :: experimental :: Array < Iterator > storeIn652;
-        storeIn652 = underTest.findThat < cds :: experimental :: Array > ( 2, & String :: empty );
+        cds :: Array < Iterator > storeIn652;
+        storeIn652 = underTest.findThat < cds :: Array > ( 2, & String :: empty );
 
         if ( storeIn652.size() != 2 || * ( ++ storeIn652[0] ) != "word2" || * ( ++ storeIn652[1] ) != "word3" ) {
             this->logError( "'MCTC-00652-FTMF-findThatReturnedMemberFunction-CPP17' failed" );
@@ -9769,7 +9770,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FindThatMemberFunction-findAllThatStoreInMemberFunction-CPP17 : MCTC-00655-FTMF-findAllThatStoreInMemberFunction-CPP17 */
-        cds :: experimental :: Array < Iterator > storeIn655;
+        cds :: Array < Iterator > storeIn655;
         underTest.findAllThat ( storeIn655, & String :: empty );
 
         if ( storeIn655.size() != 3 || * ( ++ storeIn655[0] ) != "word2" || * ( ++ storeIn655[1] ) != "word3" || * ( ++ storeIn655 [2] ) != "word5" ) {
@@ -9780,8 +9781,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
 
         /* MutableCollectionTestCase-FindThatMemberFunction-findAllThatReturnedMemberFunction-CPP17 : MCTC-00656-FTMF-findAllThatReturnedMemberFunction-CPP17 */
-        cds :: experimental :: Array < Iterator > storeIn656;
-        storeIn656 = underTest.findAllThat < cds :: experimental :: Array > ( & String :: empty );
+        cds :: Array < Iterator > storeIn656;
+        storeIn656 = underTest.findAllThat < cds :: Array > ( & String :: empty );
 
         if ( storeIn656.size() != 3 || * ( ++ storeIn656[0] ) != "word2" || * ( ++ storeIn656[1] ) != "word3" || * ( ++ storeIn656 [2] ) != "word5" ) {
             this->logError( "'MCTC-00656-FTMF-findAllThatReturnedMemberFunction-CPP17' failed" );
@@ -9794,9 +9795,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : IntArray", [this, & allOk] {
 
-        cds :: experimental :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < int > > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -10004,9 +10005,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : IntLinkedList", [this, & allOk] {
 
-        cds :: experimental :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < int > > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -10214,9 +10215,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : IntToIntHashMap", [this, & allOk] {
 
-        cds :: experimental :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < MapEntry < int, int > > > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry < int, int > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -10426,9 +10427,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : StringArray", [this, & allOk] {
 
-        cds :: experimental :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < String >, String > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -10636,9 +10637,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : StringLinkedList", [this, & allOk] {
 
-        cds :: experimental :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < String >, String > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -10846,9 +10847,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-CPP17 : MCTG-00700-FO-CPP17 : StringToStringHashMap", [this, & allOk] {
 
-        cds :: experimental :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: experimental :: MutableCollection < MapEntry < String, String > > > (
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry < String, String > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "MutableCollection",
                 /* underTest= */                                underTest,
@@ -11063,12 +11064,12 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         int byCopy = 5;
         int byMove = 8;
 
-        cds :: experimental :: Array < int > range1Definer = { 10, 20, 30, 40 };
+        cds :: Array < int > range1Definer = { 10, 20, 30, 40 };
         cds :: Range range2Definer ( 10, 15 );
         std :: vector < int > range3Definer { 20, 21, 22, 23, 24, 25 };
 
         allOk = allOk && mutableCollectionTestGroupRandomInsertion <
-                cds :: experimental :: Array < int >,
+                cds :: Array < int >,
                 int
         > (
                 this,
@@ -11097,12 +11098,12 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         int byCopy = 5;
         int byMove = 8;
 
-        cds :: experimental :: Array < int > range1Definer = { 10, 20, 30, 40 };
+        cds :: Array < int > range1Definer = { 10, 20, 30, 40 };
         cds :: Range range2Definer ( 10, 15 );
         std :: vector < int > range3Definer { 20, 21, 22, 23, 24, 25 };
 
         allOk = allOk && mutableCollectionTestGroupRandomInsertion <
-                cds :: experimental :: LinkedList < int >,
+                cds :: LinkedList < int >,
                 int
         > (
                 this,
@@ -11131,19 +11132,19 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         MapEntry < int, int > byCopy = {5, 87};
         MapEntry < int, int > byMove = {8, 16};
 
-        cds :: experimental :: Array < MapEntry < int, int > > range1Definer = { {10, 20}, {20, 40}, {30, 60}, {40, 80} };
+        cds :: Array < MapEntry < int, int > > range1Definer = { {10, 20}, {20, 40}, {30, 60}, {40, 80} };
         std :: array < MapEntry < int, int >, 3 > range2Definer { MapEntry < int, int > ( 5, 1 ), MapEntry < int, int > (6, 2), MapEntry < int, int > (7, 2) };
         std :: vector < MapEntry < int, int > > range3Definer { {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25} };
 
         allOk = allOk && mutableCollectionTestGroupRandomInsertion <
-                cds :: experimental :: HashMap < int, int >,
+                cds :: HashMap < int, int >,
                 MapEntry < int, int >
         > (
                 this,
                 byCopy,
                 std :: move ( byMove ),
                 MapEntry < int, int > {2, 3}, MapEntry < int, int > {3, 2}, MapEntry < int, int > {4, 6},
-                cds :: experimental :: Array < MapEntry < int, int > > ( { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} } ),
+                cds :: Array < MapEntry < int, int > > ( { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} } ),
                 { {5, 10}, {6, 12}, {7, 14}, {8, 16}, {9, 18} },
                 range1Definer.begin(), range1Definer.end(),
                 range2Definer.begin(), range2Definer.end(),
@@ -11161,13 +11162,13 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         );
 
         /* MutableCollectionTestCase-RandomInsertion-specialEmplace-CPP17 : MCTC-00810-RI-specialEmplace-CPP17 */
-        cds :: experimental :: HashMap < int, int > hm00810;
-        cds :: experimental :: MutableCollection < MapEntry < int, int > > & RI00810 = hm00810;
+        cds :: HashMap < int, int > hm00810;
+        cds :: MutableCollection < MapEntry < int, int > > & RI00810 = hm00810;
 
         RI00810.emplace ( 3, 5 );
         RI00810.emplace ( 4, 5 );
 
-        if ( ! RI00810.equals ( cds :: experimental :: HashMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
+        if ( ! RI00810.equals ( cds :: HashMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
             this->logError( "'MCTC-00810-RI-specialEmplace-CPP17' failed" );
             allOk = false;
         } else {
@@ -11179,12 +11180,12 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         String byCopy = 5;
         String byMove = "Ana are mere";
 
-        cds :: experimental :: Array < String > range1Definer = { 10, 20, 30, 40 };
+        cds :: Array < String > range1Definer = { 10, 20, 30, 40 };
         cds :: Range range2Definer ( 10, 15 );
         std :: vector < std :: string > range3Definer { "w1", "s2", "s3", "w4", "s25", "t35" };
 
         allOk = allOk && mutableCollectionTestGroupRandomInsertion <
-                cds :: experimental :: Array < String >,
+                cds :: Array < String >,
                 String
         > (
                 this,

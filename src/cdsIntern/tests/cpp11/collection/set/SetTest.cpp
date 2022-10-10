@@ -4,9 +4,9 @@
 
 #include "SetTest.h"
 
-#include <CDS/experimental/HashSet>
+#include <CDS/HashSet>
 #include <CDS/experimental/TreeSet>
-#include <CDS/experimental/LinkedHashSet>
+#include <CDS/LinkedHashSet>
 
 #include <CDS/Range>
 #include <vector>
@@ -14,7 +14,7 @@
 
 template < typename __ElementType >
 inline auto equiv (
-        cds :: experimental :: Set < __ElementType >    const & s,
+        cds :: Set < __ElementType >    const & s,
         std :: initializer_list < __ElementType >       const & l
 ) noexcept -> bool {
 
@@ -45,7 +45,7 @@ inline auto equiv (
 template <
         typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
 > auto setTestGroupMemberFunctions (
-        cds :: experimental :: Set < __MemberType >       & collection,
+        cds :: Set < __MemberType >       & collection,
         Test                                              * pTestLib,
         String                                      const & expectedToString,
         __MemberType                                const & remove1,
@@ -150,8 +150,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : IntHashSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
-        cds :: experimental :: HashSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: HashSet < int > intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -174,7 +174,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
         cds :: experimental :: TreeSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -196,8 +196,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : IntLinkedHashSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
-        cds :: experimental :: LinkedHashSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: LinkedHashSet < int > intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -219,8 +219,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : StringHashSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
-        cds :: experimental :: HashSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: HashSet < String > intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -243,7 +243,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
         cds :: experimental :: TreeSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -265,8 +265,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP11 : STG-00002-MU-CPP11 : StringLinkedHashSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP11 : STC-00003-MU-SetDuplicateProperty-CPP11 */
-        cds :: experimental :: LinkedHashSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: LinkedHashSet < String > intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
 
@@ -289,8 +289,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : IntHashSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
-        cds :: experimental :: HashSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: HashSet < int > intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -325,7 +325,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
         cds :: experimental :: TreeSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -359,8 +359,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : IntLinkedHashSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
-        cds :: experimental :: LinkedHashSet < int > intSetUnderTest;
-        cds :: experimental :: Set < int > & underTest = intSetUnderTest;
+        cds :: LinkedHashSet < int > intSetUnderTest;
+        cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -394,8 +394,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : StringHashSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
-        cds :: experimental :: HashSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: HashSet < String > intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -430,7 +430,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
         cds :: experimental :: TreeSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -464,8 +464,8 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP11 : STG-00050-FU-CPP11 : StringLinkedHashSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP11 : STC-00051-MU-FindUniqueNotIn-CPP11 */
-        cds :: experimental :: LinkedHashSet < String > intSetUnderTest;
-        cds :: experimental :: Set < String > & underTest = intSetUnderTest;
+        cds :: LinkedHashSet < String > intSetUnderTest;
+        cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
         for ( auto e : { -5, -4, -3, -2, -1, 0, 6, 7, 8, 9 } ) {
@@ -499,7 +499,7 @@ auto SetTest :: execute () noexcept -> bool {
 
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : IntHashSet", [& allOk, this] {
 
-        cds :: experimental :: HashSet < int > intSet;
+        cds :: HashSet < int > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
@@ -553,7 +553,7 @@ auto SetTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : IntLinkedHashSet", [& allOk, this] {
 
-        cds :: experimental :: LinkedHashSet < int > intSet;
+        cds :: LinkedHashSet < int > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
@@ -580,7 +580,7 @@ auto SetTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : StringHashSet", [& allOk, this] {
 
-        cds :: experimental :: HashSet < String > intSet;
+        cds :: HashSet < String > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 4, 5, 1, 2, 3 }";
@@ -634,7 +634,7 @@ auto SetTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP11 : STG-00100-MF-CPP11 : StringLinkedHashSet", [& allOk, this] {
 
-        cds :: experimental :: LinkedHashSet < String > intSet;
+        cds :: LinkedHashSet < String > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
