@@ -1,11 +1,13 @@
-#include <CDS/HashSet>
+#include <CDS/LinkedHashSet>
 
 int main () {
 
-    cds :: HashSet < int > a;
+    cds :: LinkedHashSet < int > a;
     a.insert(3);
     a.insert(3);
     a.insert(3);
+    a.insert(2);
+    a.insert(4);
 
     std :: cout << a << '\n';
 
