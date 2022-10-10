@@ -2,333 +2,191 @@
  * Created by loghin on 08/07/22.
  */
 
-#ifndef __CDS_ARRAY_CONSTRUCTS_HPP__
-#define __CDS_ARRAY_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_ARRAY_CONSTRUCTS_HPP__
+#define __CDS_EX_ARRAY_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayImplementation =               /* NOLINT(bugprone-reserved-identifier) */
-                        __ArrayBase <
-                                __ElementType,
-                                & cds :: meta :: equals < __ElementType >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayDispatcher =           /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ArrayImplementation < __ElementType > :: template __Dispatcher < Array < __ElementType > >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayServer =                       /* NOLINT(bugprone-reserved-identifier) */
-                        __ListServer <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayRandomInsertionClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRandomInsertionPrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayBoundaryInsertionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalBoundaryInsertionPrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIteratorRelativeInsertionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIteratorRelativeInsertionPrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AbstractAddressIterator < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayConstIteratorRelativeInsertionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalConstIteratorRelativeInsertionPrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AbstractAddressIterator < __ElementType const >
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfMutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType >,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >,
-                                & __collectionNotContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfMutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType >,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
-                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindConstOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType const >,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >,
-                                & __collectionNotContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindConstOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType const >,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >,
-                                & __initializerListNotContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindByClient =         /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByMutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayFindConstByClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByImmutableCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AddressIterator < __ElementType const >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIteratorRemovePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AbstractAddressIterator < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayConstIteratorRemoveClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalConstIteratorRemovePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                AbstractAddressIterator < __ElementType const >
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveByCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalGenericMutableStatementsCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayGenericConstStatementsClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalGenericImmutableStatementsCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayReplaceClient =           /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalReplaceCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayReplaceOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalReplaceOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayReplaceOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalReplaceOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayReplaceByClient =      /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalReplaceByCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIndexedOperationsClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIndexedOperationsPrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIndicesClient =        /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIndicesCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIndicesOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIndicesOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                & __collectionContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIndicesOfInitializerListClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIndicesOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayIndicesByClient =      /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIndicesByCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType
-                        >;
-
-
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                cds :: experimental :: Collection < __ElementType >,
-                                __collectionContains < __ElementType >
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                __ElementType,
-                                std :: initializer_list < __ElementType >,
-                                __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardIterablePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __ab_Iterator
-                        >;
-
-
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardConstIterablePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __ab_ConstIterator
-                        >;
-
-
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayDelegateBackwardIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateBackwardIterablePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __ab_ReverseIterator
-                        >;
-
-
-                template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-                using __ArrayDelegateBackwardConstIterableClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateBackwardConstIterablePrimitiveClient <
-                                cds :: experimental :: Array < __ElementType >,
-                                typename __ArrayImplementation < __ElementType > :: __ab_ConstReverseIterator
-                        >;
+                template < typename __ElementType >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayImplementation __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayImplementation < __ElementType >;
+
+
+                template < typename __ElementType >                                                  /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayDispatcher __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayDispatcher < __ElementType >;
+
+
+                template < typename __ElementType >                                              /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayServer __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayServer < __ElementType >;
+
+
+                template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayRandomInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayRandomInsertionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayBoundaryInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIteratorRelativeInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIteratorRelativeInsertionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayConstIteratorRelativeInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayConstIteratorRelativeInsertionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                               /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindConstOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindConstOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindConstOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindConstOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindByClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindByClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayFindConstByClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayFindConstByClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIteratorRemoveClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIteratorRemoveClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayConstIteratorRemoveClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayConstIteratorRemoveClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayRemoveOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayRemoveOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayRemoveOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayRemoveOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayRemoveByClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayRemoveByClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayGenericStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayGenericStatementsClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayGenericConstStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayGenericConstStatementsClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                      /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayReplaceClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayReplaceClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayReplaceOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayReplaceOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayReplaceByClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayReplaceByClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIndexedOperationsClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIndexedOperationsClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIndicesClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIndicesClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIndicesOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIndicesOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIndicesOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIndicesOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayIndicesByClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayIndicesByClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayContainsOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayContainsOfCollectionClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayContainsOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayContainsOfInitializerListClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayDelegateForwardIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayDelegateForwardIterableClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayDelegateForwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayDelegateForwardConstIterableClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayDelegateBackwardIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayDelegateBackwardIterableClient < __ElementType >;
+
+
+                template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                using __ArrayDelegateBackwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __ArrayDelegateBackwardConstIterableClient < __ElementType >;
 
             }
         }
     }
 }
 
-#endif /* __CDS_ARRAY_CONSTRUCTS_HPP__ */
+#endif /* __CDS_EX_ARRAY_CONSTRUCTS_HPP__ */

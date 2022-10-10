@@ -509,9 +509,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __RandomAccessIteratorType,
                 __Comparator,
                 16U,
-                & cds :: experimental :: __hidden :: __impl :: __insertionSort < __RandomAccessIteratorType, __Comparator >,
-                & cds :: experimental :: __hidden :: __impl :: __heapSort < __RandomAccessIteratorType, __Comparator >,
-                & cds :: experimental :: __hidden :: __impl :: __m3Partition < __RandomAccessIteratorType, __Comparator >
+                & cds :: __hidden :: __impl :: __insertionSort < __RandomAccessIteratorType, __Comparator >,
+                & cds :: __hidden :: __impl :: __heapSort < __RandomAccessIteratorType, __Comparator >,
+                & cds :: __hidden :: __impl :: __m3Partition < __RandomAccessIteratorType, __Comparator >
         > (
                 begin,
                 end,

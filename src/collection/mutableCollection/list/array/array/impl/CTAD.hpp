@@ -8,14 +8,12 @@
 #if __CDS_cpplang_CTAD_available
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace experimental {
 
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        Array (
-                std :: initializer_list < __ElementType >
-        ) -> Array < __ElementType >;
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    Array (
+            std :: initializer_list < __ElementType >
+    ) -> Array < __ElementType >;
 
-    }
 }
 
 #endif

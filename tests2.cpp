@@ -1,8 +1,8 @@
-#include <CDS/Collection>
-#include <CDS/experimental/Array>
+#include <CDS/Array>
 
 int main () {
 
-    cds :: experimental :: Array < int > arr;
+    cds :: Array < int > a;
+
     return 0;
 }
