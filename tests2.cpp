@@ -1,8 +1,8 @@
-#include <CDS/HashMap>
+#include <CDS/LinkedHashMap>
 
 int main () {
 
-    cds :: HashMap < int, int > a;
+    cds :: LinkedHashMap < int, int > a;
     a.emplace(3, 4);
     a.emplace(3, 1);
     a.emplace(3, 2);
