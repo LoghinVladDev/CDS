@@ -1,8 +1,13 @@
-#include <CDS/LinkedList>
+#include <CDS/HashSet>
 
 int main () {
 
-    cds :: LinkedList < int > a;
+    cds :: HashSet < int > a;
+    a.insert(3);
+    a.insert(3);
+    a.insert(3);
+
+    std :: cout << a << '\n';
 
     return 0;
 }
