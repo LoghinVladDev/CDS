@@ -4401,7 +4401,7 @@ __CDS_Meta_RegisterParseTemplateType(Sequence)
 #include "../shared/orderedSet/impl/OrderedSetSequence.hpp"
 #include "../shared/unorderedSet/impl/UnorderedSetSequence.hpp"
 
-#include "../shared/hashMap/impl/HashMapSequence.hpp"
+#include "../shared/hashMap/impl/Sequence.hpp"
 
 #include "../shared/string/impl/StringSequence.hpp"
 #include "../shared/string/view/impl/StringViewSequence.hpp"

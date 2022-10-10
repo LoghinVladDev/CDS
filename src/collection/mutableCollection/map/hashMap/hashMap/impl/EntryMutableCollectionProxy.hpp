@@ -2,8 +2,8 @@
  * Created by loghin on 14/08/22.
  */
 
-#ifndef __CDS_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
-#define __CDS_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_HASH_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_IMPL_HPP__
+#define __CDS_HASH_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
 
@@ -15,7 +15,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cicch_obtainGenericHandler (
+    > :: EntryMutableCollectionProxy :: __cicch_obtainGenericHandler (
             __hidden :: __impl :: __CollectionInternalRequestType requestType
     ) noexcept -> __GenericHandler {
 
@@ -31,7 +31,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cicch_obtainGenericConstHandler (
+    > :: EntryMutableCollectionProxy :: __cicch_obtainGenericConstHandler (
             __hidden :: __impl :: __CollectionInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
 
@@ -47,10 +47,10 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: ValueMutableCollectionProxy (
+    > :: EntryMutableCollectionProxy :: EntryMutableCollectionProxy (
             HashMap < __KeyType, __ValueType, __Hasher > * pMap
     ) noexcept :
-            AbstractValueMutableCollectionProxy ( pMap ) {
+            AbstractEntryMutableCollectionProxy ( pMap ) {
 
     }
 
@@ -63,7 +63,23 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: ~ValueMutableCollectionProxy () noexcept = default;
+    > :: EntryMutableCollectionProxy :: ~EntryMutableCollectionProxy () noexcept = default;
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto HashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: EntryMutableCollectionProxy :: contains (
+            EntryType const & entry
+    ) const noexcept -> bool {
+
+        return this->map()->containsKey ( entry.key() );
+    }
 
 
     template <
@@ -74,10 +90,14 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __begin () noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ValueType > * {
+    > :: EntryMutableCollectionProxy :: __newAddress (
+            EntryType const * pReferenceElement,
+            bool            * pIsNew
+    ) noexcept -> EntryType * {
 
-        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > > (
-                Iterator ( this->template map < HashMapBase > ()->__beginLocal() )
+        return this->template map < HashMapBase > ()->__ht_new (
+                pReferenceElement,
+                pIsNew
         );
     }
 
@@ -90,11 +110,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __end () noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ValueType > * {
+    > :: EntryMutableCollectionProxy :: __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > > (
-                Iterator ( this->template map < HashMapBase > ()->__endLocal() )
-        );
+        return this->template map < HashMapBase > ()->__begin();
     }
 
 
@@ -106,11 +124,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cbegin () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ValueType const > * {
+    > :: EntryMutableCollectionProxy :: __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > > (
-                ConstIterator ( this->template map < HashMapBase > ()->__cbeginLocal() )
-        );
+        return this->template map < HashMapBase > ()->__end();
     }
 
 
@@ -122,11 +138,23 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cend () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < __ValueType const > * {
+    > :: EntryMutableCollectionProxy :: __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
 
-        return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > > (
-                ConstIterator ( this->template map < HashMapBase > ()->__cendLocal() )
-        );
+        return this->template map < HashMapBase > ()->__cbegin();
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: EntryMutableCollectionProxy :: __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+
+        return this->template map < HashMapBase > ()->__cend();
     }
 
 
@@ -138,9 +166,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
+    > :: EntryMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
 
-        return Iterator ( this->template map < HashMapBase > ()->__beginLocal() );
+        return this->template map < HashMapBase > ()->__beginLocal();
     }
 
 
@@ -152,9 +180,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
+    > :: EntryMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
 
-        return Iterator ( this->template map < HashMapBase > ()->__endLocal() );
+        return this->template map < HashMapBase > ()->__endLocal();
     }
 
 
@@ -166,9 +194,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
+    > :: EntryMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < HashMapBase > ()->__cbeginLocal() );
+        return this->template map < HashMapBase > ()->__cbeginLocal();
     }
 
 
@@ -180,9 +208,9 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
+    > :: EntryMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < HashMapBase > ()->__cendLocal() );
+        return this->template map < HashMapBase > ()->__cendLocal();
     }
 
 
@@ -194,11 +222,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __remove (
-            Iterator const * pIterator
+    > :: EntryMutableCollectionProxy :: __remove (
+            Iterator const * iterator
     ) noexcept -> bool {
 
-        return this->template map < HashMapBase > ()->__remove ( & pIterator->iterator() );
+        return this->template map < HashMapBase > ()->__remove ( iterator );
     }
 
 
@@ -210,11 +238,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __removeConst (
-            ConstIterator const * pIterator
+    > :: EntryMutableCollectionProxy :: __removeConst (
+            ConstIterator const * iterator
     ) noexcept -> bool {
 
-        return this->template map < HashMapBase > ()->__removeConst ( & pIterator->iterator() );
+        return this->template map < HashMapBase > ()->__removeConst ( iterator );
     }
 
 
@@ -226,31 +254,15 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __removeArray (
+    > :: EntryMutableCollectionProxy :: __removeArray (
             Iterator    const * const * ppIterators,
             Size                        iteratorArrayCount
     ) noexcept -> Size {
 
-        auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
-                typename cds :: __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator const *
-        > ( iteratorArrayCount );
-
-        for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
-
-            if ( ppIterators [ iteratorIndex ] != nullptr ) {
-                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
-            } else {
-                ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
-            }
-        }
-
-        auto const removedIteratorCount = this->template map < HashMapBase > ()->__removeArray (
-                ppWrappedIteratorArray,
+        return this->template map < HashMapBase > ()->__removeArray (
+                ppIterators,
                 iteratorArrayCount
         );
-
-        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
-        return removedIteratorCount;
     }
 
 
@@ -262,68 +274,15 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: __removeConstArray (
+    > :: EntryMutableCollectionProxy :: __removeConstArray (
             ConstIterator   const * const * ppIterators,
             Size                            iteratorArrayCount
     ) noexcept -> Size {
 
-        auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
-                typename cds :: __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator const *
-        > ( iteratorArrayCount );
-
-        for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
-
-            if ( ppIterators [ iteratorIndex ] != nullptr ) {
-                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
-            } else {
-                ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
-            }
-        }
-
-        auto const removedIteratorCount = this->template map < HashMapBase > ()->__removeConstArray (
-                ppWrappedIteratorArray,
+        return this->template map < HashMapBase > ()->__removeConstArray (
+                ppIterators,
                 iteratorArrayCount
         );
-
-        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
-        return removedIteratorCount;
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-    > auto HashMap <
-            __KeyType,
-            __ValueType,
-            __Hasher
-    > :: ValueMutableCollectionProxy :: __equals (
-            ValueMutableCollectionProxy const & set
-    ) const noexcept -> bool {
-
-        if ( this == & set ) {
-            return true;
-        }
-
-        if ( this->size() != set.size() ) {
-            return false;
-        }
-
-        for (
-                auto
-                        leftIt  = this->begin(),    rightIt     = set.begin(),
-                        leftEnd = this->end(),      rightEnd    = set.end();
-
-                leftIt != leftEnd;
-                ++ leftIt, ++ rightIt
-        ) {
-            if ( ! cds :: meta :: equals ( * leftIt, * rightIt ) ) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
 
@@ -335,8 +294,24 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: operator == (
-            ValueMutableCollectionProxy const & set
+    > :: EntryMutableCollectionProxy :: __equals (
+            EntryMutableCollectionProxy const & set
+    ) const noexcept -> bool {
+
+        return this->template map < HashMapBase > ()->__ht_equals ( * set.template map < HashMapBase > () );
+    }
+
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto HashMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: EntryMutableCollectionProxy :: operator == (
+            EntryMutableCollectionProxy const & set
     ) const noexcept -> bool {
 
         return this->__equals ( set );
@@ -351,8 +326,8 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: ValueMutableCollectionProxy :: operator != (
-            ValueMutableCollectionProxy const & set
+    > :: EntryMutableCollectionProxy :: operator != (
+            EntryMutableCollectionProxy const & set
     ) const noexcept -> bool {
 
         return ! this->__equals ( set );
@@ -360,4 +335,4 @@ namespace cds {
 
 }
 
-#endif /* __CDS_HASH_MAP_VALUE_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ */
+#endif /* __CDS_HASH_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ */

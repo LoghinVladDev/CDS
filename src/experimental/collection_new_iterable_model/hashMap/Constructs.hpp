@@ -2,443 +2,242 @@
  * Created by loghin on 13/08/22.
  */
 
-#ifndef __CDS_HASH_MAP_CONSTRUCTS_HPP__
-#define __CDS_HASH_MAP_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_HASH_MAP_CONSTRUCTS_HPP__
+#define __CDS_EX_HASH_MAP_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */
-
-        template <
-                typename __KeyType,                                                         /* NOLINT(bugprone-reserved-identifier) */
-                typename __ValueType,                                                       /* NOLINT(bugprone-reserved-identifier) */
-                typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  /* NOLINT(bugprone-reserved-identifier) */
-        > class HashMap;
-
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType                /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __hashMapKeyExtractor (    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                                                        /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_DeprecatedHint("No longer an experimental feature.") constexpr auto __hashMapKeyExtractor ( /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType const & element
                 ) noexcept -> __KeyType const & {
 
-                    return element.key ();
+                    return cds :: __hidden :: __impl :: __hashMapKeyExtractor < __KeyType, __ValueType > ( element );
                 }
 
 
                 template <
-                        typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType                                                /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapCopyConstructor (   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_DeprecatedHint("No longer an experimental feature.") __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapCopyConstructor (    /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType       & destinationDataNode,
                         typename Map < __KeyType, __ValueType > :: EntryType const & sourceDataNode
                 ) noexcept -> void {
 
-                    new ( & destinationDataNode ) typename Map < __KeyType, __ValueType > :: EntryType ( sourceDataNode );
+                    cds :: __hidden :: __impl :: __hashMapCopyConstructor < __KeyType, __ValueType > ( destinationDataNode, sourceDataNode );
                 }
 
 
                 template <
-                        typename __KeyType,                                             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType                                            /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDestructor (    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_DeprecatedHint("No longer an experimental feature.") __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDestructor ( /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType & entry
                 ) noexcept -> void {
 
-                    using EntryType = typename Map < __KeyType, __ValueType > :: EntryType;
-                    entry.~EntryType();
+                    cds :: __hidden :: __impl :: __hashMapDestructor < __KeyType, __ValueType > ( entry );
                 }
 
 
                 template <
-                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
-                > constexpr auto __hashMapEquals (      /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                                                                    /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_DeprecatedHint("No longer an experimental feature.") constexpr auto __hashMapEquals (   /* NOLINT(bugprone-reserved-identifier) */
                         typename Map < __KeyType, __ValueType > :: EntryType const & leftEntry,
                         typename Map < __KeyType, __ValueType > :: EntryType const & rightEntry
                 ) noexcept -> bool {
 
-                    return
-                            cds :: meta :: equals ( leftEntry.key(), rightEntry.key() ) &&
-                            cds :: meta :: equals ( leftEntry.value(), rightEntry.value() );
+                    return cds :: __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > ( leftEntry, rightEntry );
                 }
 
 
                 template <
-                        typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapImplementation =   /* NOLINT(bugprone-reserved-identifier) */
-                        __HashTable <
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                __KeyType,
-                                __Hasher,
-                                cds :: __hidden :: __impl :: __PrimeRehashPolicy < uint32 >,
-                                & __hashMapKeyExtractor < __KeyType, __ValueType >,
-                                & cds :: meta :: equals < __KeyType >,
-                                & __hashMapDestructor < __KeyType, __ValueType >
-                        >;
+                        typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapImplementation __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapDispatcher =       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __HashMapImplementation <
-                                __KeyType,
-                                __ValueType,
-                                __Hasher
-                        > :: template __MapDispatcher <
-                                HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >
-                        >;
+                        typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapDispatcher __CDS_DeprecatedHint("No longer an experimental feature.") =        /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapDispatcher < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapServer =           /* NOLINT(bugprone-reserved-identifier) */
-                        __MapServer <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType
-                        >;
+                        typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapServer __CDS_DeprecatedHint("No longer an experimental feature.") =            /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapServer < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapRandomInsertionClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRandomInsertionPrimitiveClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                typename Map < __KeyType, __ValueType > :: EntryType
-                        >;
+                        typename __KeyType,                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapRandomInsertionClient __CDS_DeprecatedHint("No longer an experimental feature.") =     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapRandomInsertionClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIteratorRemovePrimitiveClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapIteratorRemoveClient __CDS_DeprecatedHint("No longer an experimental feature.") =      /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapIteratorRemoveClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapConstIteratorRemoveClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalIteratorRemovePrimitiveClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapConstIteratorRemoveClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapConstIteratorRemoveClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfMutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                cds :: experimental :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindOfCollectionClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfMutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __initializerListContains < typename Map < __KeyType, __ValueType > :: EntryType, & __hashMapEquals < __KeyType, __ValueType > >,
-                                & __initializerListNotContains < typename Map < __KeyType, __ValueType > :: EntryType, & __hashMapEquals < __KeyType, __ValueType > >
-                        >;
+                        typename __KeyType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindOfInitializerListClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindByClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByMutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindByClient __CDS_DeprecatedHint("No longer an experimental feature.") =                  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindByClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindOfConstCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                cds :: experimental :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                               /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindOfConstCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindOfConstCollectionClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindOfConstInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindOfImmutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __initializerListContains < typename Map < __KeyType, __ValueType > :: EntryType, & __hashMapEquals < __KeyType, __ValueType > >,
-                                & __initializerListNotContains < typename Map < __KeyType, __ValueType > :: EntryType, & __hashMapEquals < __KeyType, __ValueType > >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindOfConstInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindOfConstInitializerListClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindByConstClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindByImmutableCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindByConstClient __CDS_DeprecatedHint("No longer an experimental feature.") =                 /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindByConstClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindUniqueClient =     /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindUniqueMutablePrimitiveClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                __KeyType,
-                                HashTableIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindUniqueClient __CDS_DeprecatedHint("No longer an experimental feature.") =                  /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindUniqueClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapFindUniqueConstClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalFindUniqueImmutablePrimitiveClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                __KeyType,
-                                HashTableConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapFindUniqueConstClient __CDS_DeprecatedHint("No longer an experimental feature.") =             /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapFindUniqueConstClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                cds :: experimental :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapRemoveOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =          /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapRemoveOfCollectionClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapRemoveOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveOfCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & __initializerListContains < typename Map < __KeyType, __ValueType > :: EntryType, & __hashMapEquals < __KeyType, __ValueType > >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapRemoveOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapRemoveOfInitializerListClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapRemoveByClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalRemoveByCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapRemoveByClient __CDS_DeprecatedHint("No longer an experimental feature.") =                    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapRemoveByClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalGenericMutableStatementsCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapGenericStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =           /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapGenericStatementsClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapConstGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalGenericImmutableStatementsCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapConstGenericStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =      /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapConstGenericStatementsClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                cds :: experimental :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapContainsOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =        /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapContainsOfCollectionClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalContainsOfCompositeClient <
-                                cds :: experimental :: HashMap <
-                                        __KeyType,
-                                        __ValueType,
-                                        __Hasher
-                                >,
-                                typename Map < __KeyType, __ValueType > :: EntryType,
-                                std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                __initializerListContains <
-                                        typename Map < __KeyType, __ValueType > :: EntryType,
-                                        & __hashMapEquals < __KeyType, __ValueType >
-                                >
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapContainsOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapContainsOfInitializerListClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardIterablePrimitiveClient <
-                                cds :: experimental :: HashMap < __KeyType, __ValueType, __Hasher >,
-                                typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator
-                        >;
+                        typename __KeyType,                                                                                     /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapDelegateForwardIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapDelegateForwardIterableClient < __KeyType, __ValueType, __Hasher >;
 
 
                 template <
-                        typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
-                        typename __ValueType,                           /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-                > using __HashMapDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
-                        __LocalDelegateForwardConstIterablePrimitiveClient <
-                                cds :: experimental :: HashMap < __KeyType, __ValueType, __Hasher >,
-                                typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator
-                        >;
+                        typename __KeyType,                                                                                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType,                                                                                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Hasher                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                > using __HashMapDelegateForwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: __hidden :: __impl :: __HashMapDelegateForwardConstIterableClient < __KeyType, __ValueType, __Hasher >;
 
             }
         }
@@ -446,4 +245,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_HASH_MAP_CONSTRUCTS_HPP__ */
+#endif /* __CDS_EX_HASH_MAP_CONSTRUCTS_HPP__ */
