@@ -17,7 +17,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  *
-                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @namespace cds :: __hidden :: __impl
                  * @internal library-private
                  */
                 template <
@@ -32,7 +32,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  *
-                 * @namespace cds :: experimental :: __hidden :: __impl
+                 * @namespace cds :: __hidden :: __impl
                  * @internal library-private
                  */
                 template <
@@ -48,7 +48,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              *
              * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
              *
-             * @namespace cds :: experimental :: __hidden :: __impl
+             * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template <

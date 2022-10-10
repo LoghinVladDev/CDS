@@ -1,8 +1,8 @@
-#include <CDS/Array>
+#include <CDS/LinkedList>
 
 int main () {
 
-    cds :: Array < int > a;
+    cds :: LinkedList < int > a;
 
     return 0;
 }
