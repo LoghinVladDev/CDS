@@ -11,6 +11,8 @@
 #include "collection/CollectionConstructs.hpp"
 #include "collection/CollectionFunctions.hpp"
 
+#include "shared/iterator/IteratorModel.hpp"
+
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 
 #include "shared/collectionInternalCommunication/CollectionInternalRequestType.hpp"

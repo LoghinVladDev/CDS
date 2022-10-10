@@ -19,7 +19,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         template <
                 typename                                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf < cds :: experimental :: meta :: isValidSetElement < __ElementType > () >   __enabler       /* NOLINT(bugprone-reserved-identifier) */
+                cds :: meta :: EnableIf < cds :: experimental :: meta :: isValidSetElement < __ElementType > () >   __enabler = 0   /* NOLINT(bugprone-reserved-identifier) */
         > using Set __CDS_DeprecatedHint("No longer an experimental feature.") = cds :: Set < __ElementType >;
 
     }

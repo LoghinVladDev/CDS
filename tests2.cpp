@@ -1,8 +1,8 @@
-#include <CDS/LinkedHashSet>
+#include <CDS/experimental/TreeSet>
 
 int main () {
 
-    cds :: LinkedHashSet < int > a;
+    cds :: experimental :: TreeSet < int > a;
     a.insert(3);
     a.insert(3);
     a.insert(3);
