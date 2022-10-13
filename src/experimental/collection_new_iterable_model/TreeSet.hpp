@@ -30,7 +30,7 @@
 
 #include "treeSet/Constructs.hpp"
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
+namespace cds {                             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
