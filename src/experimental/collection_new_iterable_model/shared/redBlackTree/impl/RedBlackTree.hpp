@@ -1288,7 +1288,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __nodeDestructor
                 > :: __rbt_findIterator (
                         __KeyType const & key
-                ) const noexcept -> __rbt_Iterator {
+                ) noexcept -> __rbt_Iterator {
 
                     if ( this->__rbt_empty() ) {
                         return __rbt_Iterator();

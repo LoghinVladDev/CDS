@@ -20,6 +20,9 @@
 
 #include "shared/iterator/RedBlackTreeIterator.hpp"
 
+#include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+
 #include "../../shared/delegateIterator/DelegateIterator.hpp"
 
 #include "shared/redBlackTree/RedBlackTree.hpp"
@@ -35,9 +38,32 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > class TreeMap :
-            public cds :: Map < __KeyType, __ValueType >,
-            protected  __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType> {
+                public cds :: Map < __KeyType, __ValueType >,
+                protected  __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapDelegateBackwardIterableClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapDelegateForwardConstIterableClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapDelegateBackwardConstIterableClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapIteratorRemoveClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapConstIteratorRemoveClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindUniqueClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindUniqueConstClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapRandomInsertionClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapContainsOfCollectionClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapContainsOfInitializerListClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindByClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindByConstClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindOfCollectionClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindOfInitializerListClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindOfConstCollectionClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapFindOfConstInitializerListClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapGenericStatementsClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapConstGenericStatementsClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapRemoveByClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapRemoveOfCollectionClient < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __TreeMapRemoveOfInitializerListClient < __KeyType, __ValueType > {
 
         };
                 
@@ -49,6 +75,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 #include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
 
 #include "../../shared/delegateIterator/impl/DelegateIterator.hpp"
+
+#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "shared/iterator/impl/RedBlackTreeIterator.hpp"
 

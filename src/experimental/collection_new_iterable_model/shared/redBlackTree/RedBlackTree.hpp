@@ -256,7 +256,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 protected:
                     __CDS_cpplang_ConstexprConditioned auto __rbt_findIterator (       /* NOLINT(bugprone-reserved-identifier) */
                             __KeyType const & key
-                    ) const noexcept -> __rbt_Iterator;
+                    ) noexcept -> __rbt_Iterator;
 
                 protected:
                     __CDS_cpplang_ConstexprConditioned auto __rbt_findIteratorConst (  /* NOLINT(bugprone-reserved-identifier) */
@@ -528,7 +528,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     __keyEqualsComparator,
                                     __nodeDestructor
                             > :: __rbt_removeIterator,
-                                & __RedBlackTree <
+                            & __RedBlackTree <
                                     __ElementType,
                                     __KeyType,
                                     __keyExtractor,
@@ -536,7 +536,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     __keyEqualsComparator,
                                     __nodeDestructor
                             > :: __rbt_removeConstIterator,
-                                    & __RedBlackTree <
+                            & __RedBlackTree <
                                     __ElementType,
                                     __KeyType,
                                     __keyExtractor,
