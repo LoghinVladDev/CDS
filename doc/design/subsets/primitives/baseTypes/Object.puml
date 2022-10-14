@@ -1,19 +1,30 @@
 @startuml
 
+!includesub String.puml!public_declaration
+
 !startsub public_declaration
 
 namespace cds {
 
     abstract class Object {
+        ..default methods..
+        # {method} Object () noexcept
+        # {method} Object (Object const &) noexcept
+        # {method} Object (Object &&) noexcept
+        ..default overloaded operators..
+        # {method} operator = (Object const &) noexcept -> Object &
+        # {method} operator = (Object &&) noexcept -> Object &
         ..methods with default implementation..
-        + {method} {abstract} String toString () const noexcept
-        + {method} {abstract} bool equals (Object const &) const noexcept
-        + {method} {abstract} Size hash () const noexcept
+        + {method} {abstract} toString () const noexcept -> String
+        + {method} {abstract} equals (Object const &) const noexcept -> bool
+        + {method} {abstract} hash () const noexcept -> Size
         + {method} {abstract} ~Object () noexcept
         ..overloaded operators..
-        + {method} {static} std::ostream & operator << (std::ostream &, Object const &) noexcept
+        + {method} {static} operator << (std::ostream &, Object const &) noexcept -> std::ostream &
         + {method} operator String () const noexcept
     }
+
+    Object "toString(), cast -> yields" -- String
 
 }
 

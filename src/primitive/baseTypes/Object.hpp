@@ -24,6 +24,36 @@ namespace cds {
      */
     class Object {
 
+    protected: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Object () noexcept = default;
+
+    protected: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Object (
+                Object const &
+        ) noexcept = default;
+
+    protected: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Object (
+                Object &&
+        ) noexcept = default;
+
+    protected: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Object const &
+        ) noexcept -> Object & = default;
+
+    protected: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Object &&
+        ) noexcept -> Object & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief implicit destructor
+         * @exceptsafe
+         */
+        __CDS_cpplang_ConstexprDestructor virtual ~Object () noexcept = default;
+
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief String conversion function, used to obtain String representation of the object
@@ -71,36 +101,6 @@ namespace cds {
          * @return Index = hash code value of the instance
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto hash () const noexcept -> Size;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @brief implicit destructor
-         * @exceptsafe
-         */
-        __CDS_cpplang_ConstexprDestructor virtual ~Object () noexcept = default;
-
-    protected: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Object () noexcept = default;
-
-    protected: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Object (
-                Object const &
-        ) noexcept = default;
-
-    protected: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Object (
-                Object &&
-        ) noexcept = default;
-
-    protected: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = (
-                Object const &
-        ) noexcept -> Object & = default;
-
-    protected: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = (
-                Object &&
-        ) noexcept -> Object & = default;
     };
 
 } /* namespace cds */
