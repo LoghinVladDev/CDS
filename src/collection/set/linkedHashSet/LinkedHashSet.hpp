@@ -378,4 +378,7 @@ namespace cds {
 #include "linkedHashSet/impl/LinkedHashSet.hpp"
 #include "linkedHashSet/impl/CTAD.hpp"
 
+#include "../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #endif /* __CDS_LINKED_HASH_SET_HPP__ */

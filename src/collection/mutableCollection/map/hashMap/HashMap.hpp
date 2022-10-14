@@ -456,4 +456,7 @@ namespace cds {
 
 #include "../../../../shared/hashMap/impl/Sequence.hpp"
 
+#include "../../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #endif /* __CDS_HASH_MAP_HPP__ */

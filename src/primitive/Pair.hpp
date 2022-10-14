@@ -12,11 +12,28 @@
 
 namespace cds {
 
+    namespace __hidden {
+        namespace __impl {
+
+            template <
+                    typename __KeyType,
+                    typename __ValueType
+            > class __MapEntry;
+
+        }
+    }
+
     template <class K, class V>
     class Pair : public Object { // NOLINT(clion-misra-cpp2008-14-5-2)
     public:
         using Key __CDS_MaybeUnused = K;
         using Value                 = V;
+
+    private:
+        template <
+                typename __TKeyType,
+                typename __TValueType
+        > friend class cds :: __hidden :: __impl :: __MapEntry;
 
     private:
         K _first;

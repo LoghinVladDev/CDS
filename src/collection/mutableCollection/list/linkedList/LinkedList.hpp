@@ -516,4 +516,7 @@ namespace cds {
 #include "linkedList/impl/LinkedList.hpp"
 #include "linkedList/impl/CTAD.hpp"
 
+#include "../../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #endif /* __CDS_LINKED_LIST_HPP__ */

@@ -23,6 +23,44 @@ namespace cds {
             typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
     > using MapEntry = __hidden :: __impl :: __MapEntry < __KeyType, __ValueType >;
 
+
+    template <
+            typename __KeyType,
+            typename __ValueType
+    > constexpr auto mapEntryOf (
+            __KeyType   && key,
+            __ValueType && value
+    ) noexcept ( noexcept ( MapEntry < __KeyType, __ValueType > ( std :: forward < __KeyType > ( key ), std :: forward < __ValueType > ( value ) ) ) ) -> MapEntry < __KeyType, __ValueType >;
+
+
+    namespace meta {
+
+        template < typename __T >               struct IsMapEntryCompatible                                     : FalseType {};
+        template < typename __K, typename __V > struct IsMapEntryCompatible < cds :: Pair < __K, __V > >        : TrueType {};
+        template < typename __K, typename __V > struct IsMapEntryCompatible < cds :: MapEntry < __K, __V > >    : TrueType {};
+
+        template < typename __T, bool = IsMapEntryCompatible < __T > :: value > // NOLINT(bugprone-reserved-identifier)
+        struct MapEntryTraits {
+            constexpr static bool const valid = false;
+        };
+
+        template < typename __K, typename __V >
+        struct MapEntryTraits < cds :: MapEntry < __K, __V >, true > {
+            constexpr static bool const valid = true;
+            using KeyType   = cds :: meta :: RemoveConst < cds :: meta :: RemoveReference < decltype ( cds :: meta :: valueOf < cds :: MapEntry < __K, __V > > ().key () ) > >;
+            using ValueType = cds :: meta :: RemoveReference < decltype ( cds :: meta :: valueOf < cds :: MapEntry < __K, __V > > ().value () ) >;
+        };
+
+        template < typename __K, typename __V >
+        struct MapEntryTraits < cds :: Pair < __K, __V >, true > {
+            constexpr static bool const valid = true;
+            using KeyType   = cds :: meta :: RemoveReference < decltype ( cds :: meta :: valueOf < cds :: Pair < __K, __V > > ().first () ) >;
+            using ValueType = cds :: meta :: RemoveReference < decltype ( cds :: meta :: valueOf < cds :: Pair < __K, __V > > ().second () ) >;
+        };
+
+    }
+
+
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
             typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */

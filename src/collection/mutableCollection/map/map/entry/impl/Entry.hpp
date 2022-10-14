@@ -74,6 +74,42 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
+            template <
+                    typename __KeyType,
+                    typename __ValueType
+            > template <
+                    typename __DecayedKeyType,
+                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >
+            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+                    __MapEntry < __DecayedKeyType, __ValueType > const & entry
+            ) noexcept (
+                    noexcept ( KeyType ( entry.key() ) ) &&
+                    noexcept ( ValueType ( entry.value() ) )
+            ) :
+                    _key ( entry.key() ),
+                    _value ( entry.value() ) {
+
+            }
+
+
+            template <
+                    typename __KeyType,
+                    typename __ValueType
+            > template <
+                    typename __TKeyType,
+                    typename __TValueType
+            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+                    cds :: Pair < __TKeyType, __TValueType > const & entry
+            ) noexcept (
+                    noexcept ( KeyType ( entry.first() ) ) &&
+                    noexcept ( ValueType ( entry.second() ) )
+            ) :
+                    _key ( entry.first() ),
+                    _value ( entry.second() ) {
+
+            }
+
+
             template < typename __KeyType, typename __ValueType > /* NOLINT(bugprone-reserved-identifier) */
             constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry && entry
@@ -83,6 +119,42 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) :
                     _key ( std :: move ( entry._key ) ),
                     _value ( std :: move ( entry._value ) ) {
+
+            }
+
+
+            template <
+                    typename __KeyType,
+                    typename __ValueType
+            > template <
+                    typename __DecayedKeyType,
+                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >
+            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+                    __MapEntry < __DecayedKeyType, __ValueType > && entry
+            ) noexcept (
+                    noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
+                    noexcept ( ValueType ( std :: move ( entry._value ) ) )
+            ) :
+                    _key ( std :: move ( entry._key ) ),
+                    _value ( std :: move ( entry._value ) ) {
+
+            }
+
+
+            template <
+                    typename __KeyType,
+                    typename __ValueType
+            > template <
+                    typename __TKeyType,
+                    typename __TValueType
+            > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
+                    cds :: Pair < __TKeyType, __TValueType > && entry
+            ) noexcept (
+                    noexcept ( KeyType ( std :: move ( entry._first ) ) ) &&
+                    noexcept ( ValueType ( std :: move ( entry._second ) ) )
+            ) :
+                    _key ( std :: move ( entry._first ) ),
+                    _value ( std :: move ( entry._second ) ) {
 
             }
 
@@ -221,6 +293,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             return entry.hash();
         }
     };
+
 }
+
+#include "CTAD.hpp"
 
 #endif /* __CDS_MAP_ENTRY_IMPL_HPP__ */

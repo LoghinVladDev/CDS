@@ -8,6 +8,18 @@
 namespace cds {
 
     template <
+            typename __KeyType,
+            typename __ValueType
+    > constexpr auto mapEntryOf (
+            __KeyType   && key,
+            __ValueType && value
+    ) noexcept ( noexcept ( MapEntry < __KeyType, __ValueType > ( std :: forward < __KeyType > ( key ), std :: forward < __ValueType > ( value ) ) ) ) -> MapEntry < __KeyType, __ValueType > {
+
+        return MapEntry < __KeyType, __ValueType > ( std :: forward < __KeyType > ( key ), std :: forward < __ValueType > ( value ) );
+    }
+
+
+    template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
             typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprPureAbstract auto Map <

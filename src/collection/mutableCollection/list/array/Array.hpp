@@ -570,6 +570,10 @@ namespace cds {
 #include "../../../../shared/collectionInternalCommunication/server/impl/ListServerDispatcher.hpp"
 
 #include "../../../../shared/array/impl/Sequence.hpp"
+
+#include "../../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #include "array/impl/CTAD.hpp"
 
 #endif /* __CDS_ARRAY_HPP__ */

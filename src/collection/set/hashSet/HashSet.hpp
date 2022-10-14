@@ -333,4 +333,7 @@ namespace cds {
 
 #include "../../../shared/hashSet/impl/Sequence.hpp"
 
+#include "../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #endif /* __CDS_HASH_SET_HPP__ */

@@ -532,4 +532,7 @@ namespace cds {
 #include "linkedHashMap/impl/ValueMutableCollectionProxy.hpp"
 #include "linkedHashMap/impl/EntryMutableCollectionProxy.hpp"
 
+#include "../../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../../shared/collection/impl/FunctionalConstructors.hpp"
+
 #endif /* __CDS_LINKED_HASH_MAP_HPP__ */
