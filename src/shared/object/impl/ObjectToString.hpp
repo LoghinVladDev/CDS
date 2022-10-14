@@ -1,6 +1,6 @@
-//
-// Created by loghin on 6/9/22.
-//
+/* NOLINT(llvm-header-guard)
+ * Created by loghin on 6/9/22.
+ */
 
 #if defined ( __CDS_OBJECT_HPP__ ) && defined ( __CDS_STRING_HPP__ )
 #ifndef __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__
@@ -16,7 +16,7 @@ namespace cds {
     }
 
 
-    inline Object :: operator String () const noexcept {
+    inline Object :: operator __hidden :: __impl :: __BaseString < char > () const noexcept {
 
         return this->toString();
     }
@@ -30,7 +30,7 @@ namespace cds {
         return (out << object.toString());
     }
 
-}
+} /* namespace cds */
 
-#endif // __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__
-#endif
+#endif /* __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__ */
+#endif /* defined ( __CDS_OBJECT_HPP__ ) && defined ( __CDS_STRING_HPP__ ) */

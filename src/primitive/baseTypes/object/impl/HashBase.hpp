@@ -1,9 +1,9 @@
-//
-// Created by loghin on 6/9/22.
-//
+/*
+ * Created by loghin on 6/9/22.
+ */
 
-#ifndef __CDS_HASH_BASE_HPP__
-#define __CDS_HASH_BASE_HPP__
+#ifndef __CDS_HASH_BASE_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_HASH_BASE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "../../string/StringUtils.hpp"
 
@@ -13,7 +13,7 @@ namespace cds {
     struct Hash {
 
         __CDS_NoDiscard constexpr static auto hash (
-                T const & object
+                T const &  /* object */
         ) noexcept -> Size {
 
             return 0ULL;
@@ -48,9 +48,9 @@ namespace cds {
         return Hash < cds :: meta :: Decay < T > > :: hash ( std :: forward < T > ( object ) );
     }
 
-}
+} /* namespace cds */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {
 
     template <>
     struct Hash < uint8 > {
@@ -190,6 +190,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #endif
 
-}
+} /* namespace cds */
 
-#endif // __CDS_HASH_BASE_HPP__
+#endif /* __CDS_HASH_BASE_HPP__ */

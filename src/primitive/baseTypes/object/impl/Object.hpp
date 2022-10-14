@@ -1,9 +1,9 @@
-//
-// Created by loghin on 4/27/22.
-//
+/*
+ * Created by loghin on 4/27/22.
+ */
 
-#ifndef __CDS_OBJECT_IMPL_HPP__
-#define __CDS_OBJECT_IMPL_HPP__
+#ifndef __CDS_OBJECT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_OBJECT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
@@ -18,8 +18,9 @@ namespace cds {
 
         return this == & object;
     }
-}
 
-__CDS_Meta_RegisterParseType(Object) // NOLINT(clion-misra-cpp2008-8-0-1)
+} /* namespace cds */
 
-#endif // __CDS_OBJECT_IMPL_HPP__
+__CDS_Meta_RegisterParseType(Object) /* NOLINT(clion-misra-cpp2008-8-0-1, cppcoreguidelines-avoid-non-const-global-variables) */
+
+#endif /* __CDS_OBJECT_IMPL_HPP__ */
