@@ -328,22 +328,22 @@ namespace cds {
     public:     using FindUniqueClient :: find;
     public:     using FindUniqueConstClient :: find;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () const noexcept -> KeySetProxy const & override;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () noexcept -> KeySetProxy & override;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () const noexcept -> ValueMutableCollectionProxy const & override;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () noexcept -> ValueMutableCollectionProxy & override;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () const noexcept -> EntryMutableCollectionProxy const & override;
 
-    protected:
+    public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () noexcept -> EntryMutableCollectionProxy & override;
 
 

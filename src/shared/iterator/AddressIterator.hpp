@@ -36,7 +36,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __TElementType,                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class __CDS_MaybeUnused cds :: __hidden :: __impl :: __ArrayBase;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > friend class cds :: __hidden :: __impl :: __ArrayBase;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         /**

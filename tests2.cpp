@@ -20,5 +20,23 @@ int main () {
     auto view = cds :: StringView ( "abcd" );
     std :: cout << view << '\n';
 
+    auto hm = cds :: hashMapOf ( cds :: mapEntryOf ( 1, 1 ), cds :: mapEntryOf ( 2, 2 ), cds :: mapEntryOf ( 3, 3 ), cds :: mapEntryOf ( 4, 4 ) );
+
+    std :: cout << hm.keys() << '\n';
+    std :: cout << hm.values() << '\n';
+    std :: cout << hm.entries() << '\n';
+
+    for ( auto & e : hm.keys() ) {
+        std :: cout << e << '\n';
+    }
+
+    for ( auto & e : hm.values() ) {
+        std :: cout << e << '\n';
+    }
+
+    for ( auto & e : hm.entries() ) {
+        std :: cout << e << '\n';
+    }
+
     return 0;
 }

@@ -397,45 +397,45 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     > :: EntryMutableCollectionProxy :
             public AbstractEntryMutableCollectionProxy,
             protected __hidden :: __impl :: __LinkedHashMapEntryProxyServer < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardIterableClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Hasher > {
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyRandomInsertionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyConstGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardConstIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher > {
 
     protected:  using LinkedHashMapBase                     = LinkedHashMap < __KeyType, __ValueType, __Hasher >;
     protected:  using Server                                = __hidden :: __impl :: __LinkedHashMapEntryProxyServer < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using RandomInsertionClient                 = __hidden :: __impl :: __LinkedHashMapEntryProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using IteratorRemoveClient                  = __hidden :: __impl :: __LinkedHashMapEntryProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __LinkedHashMapEntryProxyConstIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using FindOfCollectionClient                = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ConstFindOfCollectionClient           = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ConstFindOfInitializerListClient      = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using FindByClient                          = __hidden :: __impl :: __LinkedHashMapEntryProxyFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ConstFindByClient                     = __hidden :: __impl :: __LinkedHashMapEntryProxyConstFindByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using RemoveOfCollectionClient              = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using RemoveByClient                        = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using GenericStatementsClient               = __hidden :: __impl :: __LinkedHashMapEntryProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using ConstGenericStatementsClient          = __hidden :: __impl :: __LinkedHashMapEntryProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using DelegateForwardIterableClient         = __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardIterableClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
-    protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using RandomInsertionClient                 = __hidden :: __impl :: __LinkedHashMapEntryProxyRandomInsertionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using IteratorRemoveClient                  = __hidden :: __impl :: __LinkedHashMapEntryProxyIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __LinkedHashMapEntryProxyConstIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using FindOfCollectionClient                = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ConstFindOfCollectionClient           = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ConstFindOfInitializerListClient      = __hidden :: __impl :: __LinkedHashMapEntryProxyFindOfConstInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using FindByClient                          = __hidden :: __impl :: __LinkedHashMapEntryProxyFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ConstFindByClient                     = __hidden :: __impl :: __LinkedHashMapEntryProxyConstFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using RemoveOfCollectionClient              = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using RemoveByClient                        = __hidden :: __impl :: __LinkedHashMapEntryProxyRemoveByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using GenericStatementsClient               = __hidden :: __impl :: __LinkedHashMapEntryProxyGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __LinkedHashMapEntryProxyContainsOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using ConstGenericStatementsClient          = __hidden :: __impl :: __LinkedHashMapEntryProxyConstGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using DelegateForwardIterableClient         = __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+    protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __LinkedHashMapEntryProxyDelegateForwardConstIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  using typename AbstractEntryMutableCollectionProxy :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier) */
     protected:  using typename AbstractEntryMutableCollectionProxy :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier) */
