@@ -255,22 +255,22 @@ namespace cds {
     public:     using FindUniqueConstClient :: find;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () const noexcept -> KeySetProxy const & override;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () noexcept -> AbstractKeySetProxy & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () noexcept -> KeySetProxy & override;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () const noexcept -> ValueMutableCollectionProxy const & override;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () noexcept -> ValueMutableCollectionProxy & override;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () const noexcept -> EntryMutableCollectionProxy const & override;
 
     protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () noexcept -> EntryMutableCollectionProxy & override;
 
     public:
         constexpr HashMap () noexcept;

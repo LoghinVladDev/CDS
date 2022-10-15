@@ -88,40 +88,22 @@ namespace cds {
     protected:  class AbstractEntryMutableCollectionProxy;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const & = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > &;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > & = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> MutableCollection < ValueType > const &;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> MutableCollection < ValueType > const & = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> MutableCollection < ValueType > &;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> MutableCollection < ValueType > & = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> MutableCollection < EntryType > const &;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> MutableCollection < EntryType > const & = 0;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
+        __CDS_NoDiscard virtual __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > & = 0;
 
     public:
         constexpr Map () noexcept;

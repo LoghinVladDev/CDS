@@ -92,7 +92,7 @@ namespace cds {
             __Hasher
     > :: KeySetProxy :: __cbeginLocal () const noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < LinkedHashMapBase > ()->__cbegin() );
+        return ConstIterator ( this->template map < LinkedHashMapBase > ()->__cbeginLocal() );
     }
 
 
@@ -106,7 +106,7 @@ namespace cds {
             __Hasher
     > :: KeySetProxy :: __cendLocal () const noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < LinkedHashMapBase > ()->__cend() );
+        return ConstIterator ( this->template map < LinkedHashMapBase > ()->__cendLocal() );
     }
 
 

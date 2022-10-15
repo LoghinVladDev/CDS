@@ -47,7 +47,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: keySetProxy () const noexcept -> AbstractKeySetProxy const & {
+    > :: keys () const noexcept -> KeySetProxy const & {
 
         return this->_keySetProxy;
     }
@@ -61,7 +61,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: keySetProxy () noexcept -> AbstractKeySetProxy & {
+    > :: keys () noexcept -> KeySetProxy & {
 
         return this->_keySetProxy;
     }
@@ -75,7 +75,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: valueMutableCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & {
+    > :: values () const noexcept -> ValueMutableCollectionProxy const & {
 
         return this->_valueMutableCollectionProxy;
     }
@@ -89,7 +89,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: valueMutableCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & {
+    > :: values () noexcept -> ValueMutableCollectionProxy & {
 
         return this->_valueMutableCollectionProxy;
     }
@@ -103,7 +103,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: entryMutableCollectionProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & {
+    > :: entries () const noexcept -> EntryMutableCollectionProxy const & {
 
         return this->_entryMutableCollectionProxy;
     }
@@ -117,7 +117,7 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: entryMutableCollectionProxy () noexcept -> AbstractEntryMutableCollectionProxy & {
+    > :: entries () noexcept -> EntryMutableCollectionProxy & {
 
         return this->_entryMutableCollectionProxy;
     }
