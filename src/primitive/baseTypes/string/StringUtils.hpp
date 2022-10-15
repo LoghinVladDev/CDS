@@ -1,39 +1,42 @@
-//
-// Created by loghin on 6/4/22.
-//
+/*
+ * Created by loghin on 6/4/22.
+ */
 
-#ifndef __CDS_STRING_STRING_UTILS_HPP__
-#define __CDS_STRING_STRING_UTILS_HPP__
+#ifndef __CDS_STRING_STRING_UTILS_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_STRING_STRING_UTILS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {
 
-    namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl { // NOLINT(bugprone-reserved-identifier)
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            class __BaseStringView; // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __BaseStringView;             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            class __BaseString; // NOLINT(bugprone-reserved-identifier)
+            
+            template < typename __CharType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __BaseString;                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
-    namespace meta { // NOLINT(modernize-concat-nested-namespaces)
-        namespace __impl { // NOLINT(bugprone-reserved-identifier)
+    namespace meta {        /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename >
-            struct __IsStringCharType               : FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            struct __IsStringCharType               : FalseType {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
 
             template <>
             struct __IsStringCharType < char >      : TrueType {};
+
 
             template <>
             struct __IsStringCharType < wchar_t >   : TrueType {};
 
 
-            template < typename __CharType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
-            struct __IsIntegralToString : BoolConstant < // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType, typename __NumericType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsIntegralToString : BoolConstant <                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     ! isSame < __CharType, __NumericType > () && (
                             isSigned    < __NumericType > () ||
                             isUnsigned  < __NumericType > ()
@@ -42,10 +45,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < typename, typename, typename = void >
-            struct __IsConvertibleToBaseStringView : FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            struct __IsConvertibleToBaseStringView : FalseType {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            struct __IsConvertibleToBaseStringView < // NOLINT(bugprone-reserved-identifier)
+            template < typename __ConvertibleType, typename __CharType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsConvertibleToBaseStringView <                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ConvertibleType,
                     __CharType,
                     Void < decltype ( __hidden :: __impl :: __BaseStringView < __CharType > ( valueOf < __ConvertibleType > () ) ) >
@@ -61,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             > {};
 
             template < typename >
-            struct __StringData {}; // NOLINT(bugprone-reserved-identifier)
+            struct __StringData {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <>
             struct __StringData < char > {
@@ -84,102 +87,104 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 constexpr static wchar_t    const * const vowels            = L"AEIOUaeiou";
                 constexpr static wchar_t    const * const consonants        = L"BCDFGHJKLMNPQRSTVXYZWbcdfghjklmnpqrstvxyzw";
             };
-        }
 
-        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto isStringCharType () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+        } /* namespace __impl */
+
+        template < typename __CharType >                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isStringCharType () noexcept -> bool {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             return __impl :: __IsStringCharType < __CharType > :: value;
         }
 
-        template < typename __CharType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto isIntegralToString () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+        template < typename __CharType, typename __NumericType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isIntegralToString () noexcept -> bool {     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             return __impl :: __IsIntegralToString < __CharType, __NumericType > :: value;
         }
 
-        template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto isConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+        template < typename __ConvertibleType, typename __CharType >        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isConvertibleToBaseStringView () noexcept -> bool {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             return __impl :: __IsConvertibleToBaseStringView < __ConvertibleType, __CharType > :: value;
         }
 
-        template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+        template < typename __ConvertibleType, typename __CharType >                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             return
                     isConvertibleToBaseStringView < __ConvertibleType, __CharType > () &&
                     ! isSame < Decay < __ConvertibleType >, __hidden :: __impl :: __BaseString < __CharType > > ();
         }
-    }
 
-    template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+    } /* namespace meta */
+
+    template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class StringUtils {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         using ElementType = __CharType;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         StringUtils () noexcept = delete;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         static sint8 const lesser       { -1 };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         static sint8 const equal        {  0 };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         static sint8 const greater      {  1 };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         static Index const invalidIndex { -1 };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isUpper (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isLower (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isDigit (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isLetter (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isAlpha (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isVowel (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto isConsonant (
                 ElementType character
         ) noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto lower (
                 ElementType character
         ) noexcept -> ElementType;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr static auto upper (
                 ElementType character
         ) noexcept -> ElementType;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConditioned static auto compare (
                 ElementType const * pLeftBuffer,
                 Size                leftLength,
@@ -187,12 +192,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                rightLength
         ) noexcept -> sint8;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConditioned static auto length (
                 ElementType const * pBuffer
         ) noexcept -> Size;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConditioned static auto copy (
                 ElementType       * pDestination,
                 Size                destinationOffset,
@@ -202,9 +207,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 bool                writeTerminator = true
         ) noexcept -> ElementType *;
 
-    public:
-        template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprConditioned static auto copy (
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __OtherCharType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf <
+                        ! meta :: isSame < __OtherCharType, __CharType > () &&
+                        sizeof ( __CharType ) >= sizeof ( __OtherCharType )
+                > = 0
+        > __CDS_cpplang_ConstexprConditioned static auto copy (
                 ElementType           * pDestination,
                 Size                    destinationOffset,
                 __OtherCharType const * pSource,
@@ -213,23 +223,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 bool                    writeTerminator = true
         ) noexcept -> ElementType *;
 
-    public:
-        template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprConditioned static auto integerLength (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __NumericType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0
+        > __CDS_cpplang_ConstexprConditioned static auto integerLength (
                 __NumericType value,
                 uint8         base = 10U
         ) noexcept -> uint8;
 
-    public:
-        template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprConditioned static auto integerLength (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __NumericType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0
+        > __CDS_cpplang_ConstexprConditioned static auto integerLength (
                 __NumericType value,
                 uint8         base = 10U
         ) noexcept -> uint8;
 
-    public:
-        template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprConditioned static auto writeInteger (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __NumericType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0
+        > __CDS_cpplang_ConstexprConditioned static auto writeInteger (
                 ElementType           * pDestination,
                 Size                    offset,
                 __NumericType           value,
@@ -237,9 +253,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                  * pOffsetAfterWrite
         ) noexcept -> ElementType *;
 
-    public:
-        template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprConditioned static auto writeInteger (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __NumericType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0
+        > __CDS_cpplang_ConstexprConditioned static auto writeInteger (
                 ElementType           * pDestination,
                 Size                    offset,
                 __NumericType           value,
@@ -247,8 +265,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                  * pOffsetAfterWrite
         ) noexcept -> ElementType *;
 
-    public:
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+    public:                                                             /* NOLINT(readability-redundant-access-specifiers) */
+        template < template < typename ... > class __CollectionType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         static auto find (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
@@ -258,7 +276,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CollectionType < Index >        & storeIn
         ) noexcept -> __CollectionType < Index > &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprDynamicAllocation static auto findFirst (
                 ElementType     const * pSource,
                 Size                    sourceLength,
@@ -266,7 +284,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    toBeFoundLength
         ) noexcept -> Index;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprDynamicAllocation static auto findLast (
                 ElementType     const * pSource,
                 Size                    sourceLength,
@@ -274,8 +292,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    toBeFoundLength
         ) noexcept -> Index;
 
-    public:
-        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+    public:                                                             /* NOLINT(readability-redundant-access-specifiers) */
+        template < template < typename ... > class __CollectionType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         static auto findAll (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
@@ -284,7 +302,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CollectionType < Index >        & storeIn
         ) noexcept -> __CollectionType < Index > &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         static auto findAll (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
@@ -294,53 +312,59 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                                maxIndexCount
         ) noexcept -> Size;
 
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto contains (
+    public:                                                                         /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto contains (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, misc-non-private-member-variables-in-classes) */
                 ElementType const * pBuffer,
                 Size                length,
                 ElementType         character
         ) noexcept -> bool;
 
-    public:
-        template < typename __ArgumentType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __ArgumentType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > = 0
+        > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 __ArgumentType && argumentType
         ) noexcept -> Size;
 
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 __hidden :: __impl :: __BaseStringView < __CharType > const & string
         ) noexcept -> Size;
 
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 ElementType character
         ) noexcept -> Size;
 
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 bool value
         ) noexcept -> Size;
 
-    public:
-        template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __NumericType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > = 0
+        > __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 __NumericType value
         ) noexcept -> Size;
 
-    public:
-        template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+    public:                                     /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __FloatingPointType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0
+        > __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 __FloatingPointType value
         ) noexcept -> Size;
 
-    public:
-        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArguments (
+    public:                                         /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename ... __ArgumentTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArguments (
                 __ArgumentTypes && ... arguments
         ) noexcept -> Size;
     };
 
-}
+} /* namespace cds */
 
-#endif // __CDS_STRING_STRING_UTILS_HPP__
+#endif /* __CDS_STRING_STRING_UTILS_HPP__ */

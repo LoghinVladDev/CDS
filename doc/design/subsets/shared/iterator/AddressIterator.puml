@@ -1,0 +1,118 @@
+@startuml
+
+!includesub IteratorModel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef ADDRESS_ITERATOR_PUBLIC
+!define ADDRESS_ITERATOR_PUBLIC
+
+namespace cds {
+
+    abstract class AbstractAddressIterator <__ElementType> {
+        ..base fields and methods..
+        # {field} _currentAddress :__ElementType *
+        # {method} AbstractAddressIterator () noexcept
+        # {method} AbstractAddressIterator (__ElementType *) noexcept
+        # {method} AbstractAddressIterator (AbstractAddressIterator const &) noexcept
+        # {method} AbstractAddressIterator (AbstractAddressIterator &&) noexcept
+        + {method} ~AbstractAddressIterator () noexcept
+        + {method} operator = (AbstractAddressIterator const &) noexcept -> AbstractAddressIterator & = delete
+        + {method} operator = (AbstractAddressIterator &&) noexcept -> AbstractAddressIterator & = delete
+        ..protected methods for derived classes..
+        # {method} copy (AbstractAddressIterator const &) noexcept -> void
+        # {method} move (AbstractAddressIterator &&) noexcept -> void
+        ..ArrayBase abstract required methods..
+        # {method} {abstract} absoluteBefore () const noexcept -> __ElementType *
+        # {method} {abstract} absoluteAfter () const noexcept -> __ElementType *
+        ..public methods..
+        + {method} operator * () const noexcept -> __ElementType &
+        + {method} operator -> () const noexcept -> __ElementType *
+        + {method} operator == (AbstractAddressIterator const &) const noexcept -> bool
+        + {method} operator != (AbstractAddressIterator const &) const noexcept -> bool
+        + {method} operator - (AbstractAddressIterator const &) const noexcept -> Size
+        + {method} <__NumericType> operator [] (__NumericType) const noexcept -> __ElementType &
+        + {method} operator bool () const noexcept
+    }
+
+    class ForwardAddressIterator <__ElementType> {
+        ..base methods..
+        + {method} ForwardAddressIterator () noexcept
+        + {method} ForwardAddressIterator (__ElementType *) noexcept
+        + {method} ForwardAddressIterator (ForwardAddressIterator const &) noexcept
+        + {method} ForwardAddressIterator (ForwardAddressIterator &&) noexcept
+        + {method} operator = (ForwardAddressIterator const &) noexcept -> ForwardAddressIterator &
+        + {method} operator = (ForwardAddressIterator &&) noexcept -> ForwardAddressIterator &
+        ..operator overloads..
+        + {method} operator == (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator != (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator < (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator > (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator <= (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator >= (ForwardAddressIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> ForwardAddressIterator &
+        + {method} operator ++ (int) noexcept -> ForwardAddressIterator
+        + {method} operator -- () noexcept -> ForwardAddressIterator &
+        + {method} operator -- (int) noexcept -> ForwardAddressIterator
+        + {method} <__NumericType> operator + (__NumericType) const noexcept -> ForwardAddressIterator
+        + {method} <__NumericType> operator - (__NumericType) const noexcept -> ForwardAddressIterator
+        + {method} <__NumericType> operator - (ForwardAddressIterator const &) const noexcept -> Size
+        ..ArrayBase abstract required methods..
+        - {method} absoluteBefore () const noexcept -> __ElementType *
+        - {method} absoluteAfter () const noexcept -> __ElementType *
+    }
+
+    class BackwardAddressIterator <__ElementType> {
+        ..base methods..
+        + {method} BackwardAddressIterator () noexcept
+        + {method} BackwardAddressIterator (__ElementType *) noexcept
+        + {method} BackwardAddressIterator (BackwardAddressIterator const &) noexcept
+        + {method} BackwardAddressIterator (BackwardAddressIterator &&) noexcept
+        + {method} operator = (BackwardAddressIterator const &) noexcept -> BackwardAddressIterator &
+        + {method} operator = (BackwardAddressIterator &&) noexcept -> BackwardAddressIterator &
+        ..operator overloads..
+        + {method} operator == (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator != (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator < (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator > (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator <= (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator >= (BackwardAddressIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> BackwardAddressIterator &
+        + {method} operator ++ (int) noexcept -> BackwardAddressIterator
+        + {method} operator -- () noexcept -> BackwardAddressIterator &
+        + {method} operator -- (int) noexcept -> BackwardAddressIterator
+        + {method} <__NumericType> operator + (__NumericType) const noexcept -> BackwardAddressIterator
+        + {method} <__NumericType> operator - (__NumericType) const noexcept -> BackwardAddressIterator
+        + {method} <__NumericType> operator - (BackwardAddressIterator const &) const noexcept -> Size
+        ..ArrayBase abstract required methods..
+        - {method} absoluteBefore () const noexcept -> __ElementType *
+        - {method} absoluteAfter () const noexcept -> __ElementType *
+    }
+
+    AbstractAddressIterator <|-- BackwardAddressIterator
+    AbstractAddressIterator <|-- ForwardAddressIterator
+    cds.meta.RandomAccessIterator <|-- AbstractAddressIterator
+
+}
+
+!endif
+!endsub
+
+!startsub private_declaration
+!ifndef ADDRESS_ITERATOR_PRIVATE
+!define ADDRESS_ITERATOR_PRIVATE
+
+namespace cds {
+
+    class AddressIterator <__ElementType, reverse> << (T, #aa9999) >> {
+
+    }
+
+    ForwardAddressIterator .. "is when reverse is false" AddressIterator
+    BackwardAddressIterator .. "is when reverse is true" AddressIterator
+
+}
+
+!endif
+!endsub
+
+@enduml

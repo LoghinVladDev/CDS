@@ -1,5 +1,9 @@
 @startuml
 
-!includesub ../subsets/primitives/baseTypes/Object.puml!public_declaration
+!include ../subsets/primitives/baseTypes/Object.puml
+!include ../subsets/primitives/baseTypes/String.puml
+
+!include ../subsets/shared/iterator/IteratorModel.puml
+!include ../subsets/shared/iterator/AddressIterator.puml
 
 @enduml

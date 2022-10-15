@@ -1999,13 +1999,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "impl/StringUtils.hpp"
 #include "impl/BaseString.hpp"
 
-#include "view/AbstractConstIterator.hpp"
-#include "view/ConstIterator.hpp"
-#include "view/ConstReverseIterator.hpp"
-
-#include "view/impl/AbstractConstIterator.hpp"
-#include "view/impl/ConstIterator.hpp"
-#include "view/impl/ConstReverseIterator.hpp"
 #include "view/impl/BaseStringView.hpp"
 
 #include "view/Literal.hpp"

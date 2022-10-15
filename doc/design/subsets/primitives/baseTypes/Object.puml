@@ -1,7 +1,5 @@
 @startuml
 
-!includesub String.puml!public_declaration
-
 !startsub public_declaration
 
 namespace cds {
@@ -23,8 +21,6 @@ namespace cds {
         + {method} {static} operator << (std::ostream &, Object const &) noexcept -> std::ostream &
         + {method} operator String () const noexcept
     }
-
-    Object "toString(), cast -> yields" -- String
 
 }
 

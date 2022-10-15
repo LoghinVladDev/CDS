@@ -17,5 +17,8 @@ int main () {
     std :: cout << cds :: hashMapOf ( cds :: mapEntryOf (3, 1), cds :: mapEntryOf (1, 1), cds :: mapEntryOf (2, 4) ) << '\n';
     std :: cout << cds :: linkedHashMapOf ( cds :: mapEntryOf (3, 1), cds :: mapEntryOf (1, 1), cds :: mapEntryOf (2, 4) ) << '\n';
 
+    auto view = cds :: StringView ( "abcd" );
+    std :: cout << view << '\n';
+
     return 0;
 }
