@@ -1,0 +1,35 @@
+@startuml
+
+!includesub ../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef LIST_SERVER_PUBLIC
+!define LIST_SERVER_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            abstract class __CollectionInternalCommunicationChannel
+
+            note "To be implemented by classes derived from CDS/List\nand, ideally, alongside __ListServerDispatcher" as LSUsage
+
+            interface __ListServer <R, E> {
+                - {field} {static} __routingTable : __GenericHandler const []
+                - {field} {static} __constRoutingTable : __GenericConstHandler const []
+                # {method} __ls_handlers () const noexcept -> __GenericHandler const *
+                # {method} __ls_constHandlers () const noexcept -> __GenericConstHandler const *
+            }
+
+            __ListServer "provides generic handler list" .. cds.__hidden.__impl.__CollectionInternalCommunicationChannel
+
+            LSUsage . __ListServer
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

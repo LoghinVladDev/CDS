@@ -1,0 +1,29 @@
+@startuml
+
+!includesub SetServer.puml!public_declaration
+
+!startsub public_declaration
+!ifndef SET_SERVER_DISPATCHER_PUBLIC
+!define SET_SERVER_DISPATCHER_PUBLIC
+
+!includesub CollectionServerDispatcher.puml!public_declaration
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __SetServerDispatcher <S, I, E, ACIT, CIT, \ncbegin(), cend(), new(), removeConst(),\n removeConstArray(), findConst()> extends __CollectionServerDispatcher {
+                # {method} __findConst (E const &) const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __findConstLocal (E const &) const noexcept -> CIT
+            }
+
+            __SetServerDispatcher "provides server-to-implementation handlers" .. cds.__hidden.__impl.__SetServer
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml
