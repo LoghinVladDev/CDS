@@ -223,7 +223,7 @@ auto StringTest::execute() noexcept -> bool {
         std::cout << "\n";
 
         std::cout << this->getDepthString() << "Reverse Iteration : ";
-        for (auto e = toIterate.rbegin(); e != toIterate.rend(); e++) std::cout << e.value() << ' ';
+        for (auto e = toIterate.rbegin(); e != toIterate.rend(); e++) std::cout << * e << ' ';
         std::cout << '\n';
 
         std::cout << this->getDepthString() << "Regular Const Iteration : ";
@@ -231,7 +231,7 @@ auto StringTest::execute() noexcept -> bool {
         std::cout << "\n";
 
         std::cout << this->getDepthString() << "Reverse Const Iteration : ";
-        for (auto e = toIterate.crbegin(); e != toIterate.crend(); e++) std::cout << e.value() << ' ';
+        for (auto e = toIterate.crbegin(); e != toIterate.crend(); e++) std::cout << * e << ' ';
         std::cout << '\n';
 
         std::cout << this->getDepthString() << "Reference Iteration : ";
@@ -249,7 +249,7 @@ auto StringTest::execute() noexcept -> bool {
         this->log("New String : %s", toIterate.cStr());
 
         std::cout << "Reverse Iteration with modification : ";
-        for (auto e = toIterate.rbegin(); e != toIterate.rend(); e++) std::cout << --e.value() << ' ';
+        for (auto e = toIterate.rbegin(); e != toIterate.rend(); e++) std::cout << -- ( * e ) << ' ';
         std::cout << '\n';
 
         this->log("New String : %s", toIterate.cStr());

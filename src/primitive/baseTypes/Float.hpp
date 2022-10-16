@@ -227,41 +227,41 @@ namespace cds {
             bool pastFloatingPoint = false;
             bool negative = false;
 
-            while (! ( isNumericChar (iterator.value() ) ) && iterator != string.end() && ! negative ) {
-                if (iterator.value() == '-' ) {
+            while (! ( isNumericChar ( * iterator ) ) && iterator != string.end() && ! negative ) {
+                if ( * iterator == '-' ) {
                     negative = true;
                 }
 
-                (void) iterator.next();
+                (void) ++ iterator;
             }
 
-            while (! ( isNumericChar (iterator.value() ) ) && iterator != string.end() ) {
-                if (iterator.value() == '.' ) {
+            while (! ( isNumericChar ( * iterator ) ) && iterator != string.end() ) {
+                if ( * iterator == '.' ) {
                     pastFloatingPoint = true;
                 }
 
-                (void) iterator.next();
+                (void) ++ iterator;
             }
 
             int whole = 0;
             int frac = 0;
             int div = 1;
 
-            while ((isNumericChar (iterator.value()) || iterator.value() == '.' ) && iterator != string.end() ) {
-                if (iterator.value() == '.' ) {
+            while ((isNumericChar ( * iterator ) || * iterator == '.' ) && iterator != string.end() ) {
+                if ( * iterator == '.' ) {
                     pastFloatingPoint = true;
-                    (void) iterator.next();
+                    (void) ++ iterator;
                     continue;
                 }
 
                 if ( ! pastFloatingPoint ) {
-                    whole = whole * 10 + numericCharToInt(iterator.value());
+                    whole = whole * 10 + numericCharToInt ( * iterator );
                 } else {
-                    frac = frac * 10 + numericCharToInt(iterator.value());
+                    frac = frac * 10 + numericCharToInt ( * iterator );
                     div *= 10;
                 }
 
-                (void) iterator.next();
+                (void) ++ iterator;
             }
 
             auto value = static_cast<float> (whole) + ( static_cast<float>(frac) / static_cast<float>(div) );

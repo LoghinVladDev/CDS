@@ -1248,19 +1248,19 @@ namespace cds {
             __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char character) noexcept -> bool { return character >= '0' && character <= '9'; };
             __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char character) noexcept -> int { return static_cast < int > ( character ) - 48; };
 
-            while(! isNumericChar (iterator.value() ) && iterator != string.end() ) {
-                if (iterator.value() == '-' ) {
+            while(! isNumericChar ( * iterator ) && iterator != string.end() ) {
+                if ( * iterator == '-' ) {
                     negative = true;
                 }
 
-                (void) iterator.next();
+                (void) ++ iterator;
             }
 
             CType numericValue = 0;
 
-            while (isNumericChar (iterator.value() ) && iterator != string.end() ) {
-                numericValue = numericValue * 10 + numericCharToInt (iterator.value() );
-                (void) iterator.next();
+            while (isNumericChar ( * iterator ) && iterator != string.end() ) {
+                numericValue = numericValue * 10 + numericCharToInt ( * iterator );
+                (void) ++ iterator;
             }
 
             return negative ? (-numericValue) : numericValue;

@@ -1271,26 +1271,26 @@ namespace cds {
                 return static_cast<int>(character);
             };
 
-            while(( base == 10 && ! isNumericChar (iterator.value() ) || ! isBaseNumericChar(base, iterator.value()) ) && iterator != string.end() ) {
-                if (iterator.value() == '-' ) {
+            while(( base == 10 && ! isNumericChar ( * iterator ) || ! isBaseNumericChar ( base, * iterator ) ) && iterator != string.end() ) {
+                if ( * iterator == '-' ) {
                     negative = true;
                 }
 
-                (void) iterator.next();
+                (void) ++ iterator;
             }
 
             if ( base == 16 ) {
                 auto copy = iterator;
-                if ( copy.value() == '0' && copy.next().value() == 'x' ) {
+                if ( * copy == '0' && * ( ++ copy ) == 'x' ) {
                     iterator = ++ copy;
                 }
             }
 
             int numericValue = 0;
 
-            while (( base == 10 && isNumericChar (iterator.value() ) || isBaseNumericChar(base, iterator.value() ) ) && iterator != string.end() ) {
-                numericValue = numericValue * base + ((base == 10) ? numericCharToInt (iterator.value() ) : baseNumericCharToInt(iterator.value()));
-                (void) iterator.next();
+            while (( base == 10 && isNumericChar ( * iterator ) || isBaseNumericChar ( base, * iterator ) ) && iterator != string.end() ) {
+                numericValue = numericValue * base + ((base == 10) ? numericCharToInt ( * iterator ) : baseNumericCharToInt ( * iterator ));
+                (void) ++ iterator;
             }
 
             return negative ? (-numericValue) : numericValue;
