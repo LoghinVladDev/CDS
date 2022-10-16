@@ -77,10 +77,10 @@ namespace cds {
                 + {method} size () const noexcept -> Size
                 + {method} empty () const noexcept -> bool
                 + {method} clear () noexcept -> void
-                + {method} at (Index) throws OutOfBoundsException -> __CharType
-                + {method} get (Index) throws OutOfBoundsException -> __CharType
-                + {method} front () throws OutOfBoundsException -> __CharType
-                + {method} back () throws OutOfBoundsException -> __CharType
+                + {method} at (Index) const throws OutOfBoundsException -> __CharType
+                + {method} get (Index) const throws OutOfBoundsException -> __CharType
+                + {method} front () const throws OutOfBoundsException -> __CharType
+                + {method} back () const throws OutOfBoundsException -> __CharType
                 + {method} hash () const noexcept -> Size
                 + {method} toString () const noexcept -> __BaseString <__CharType>
                 ..polymorphic methods..
@@ -92,9 +92,9 @@ namespace cds {
                 ..substr methods..
                 + {method} substr (Index, Index) const noexcept -> __BaseString < __CharType >
                 ..operator overloads..
-                + {method} operator [] (Index) throws OutOfBoundsException -> __CharType
-                + {method} operator [] (__RangeType const &) throws OutOfBoundsException -> __BaseString<__CharType>
-                + {method} operator () (Index, Index) throws OutOfBoundsException -> __BaseString<__CharType>
+                + {method} operator [] (Index) const throws OutOfBoundsException -> __CharType
+                + {method} operator [] (__RangeType const &) const throws OutOfBoundsException -> __BaseString<__CharType>
+                + {method} operator () (Index, Index) const throws OutOfBoundsException -> __BaseString<__CharType>
                 + {method} operator = (__BaseString <__CharType> const &) noexcept -> __BaseStringView &
                 + {method} operator = (__BaseStringView const &) noexcept -> __BaseStringView &
                 + {method} operator = (__BaseStringView &&) noexcept -> __BaseStringView &
@@ -118,10 +118,10 @@ namespace cds {
                 + {method} operator < (__CharType const *) const noexcept -> bool
                 + {method} operator < (__CharType) const noexcept -> bool
 
-                + {method} operator < (__BaseStringView const &) const noexcept -> bool
-                + {method} operator < (std::basic_string <__CharType> const &) const noexcept -> bool
-                + {method} operator < (__CharType const *) const noexcept -> bool
-                + {method} operator < (__CharType) const noexcept -> bool
+                + {method} operator > (__BaseStringView const &) const noexcept -> bool
+                + {method} operator > (std::basic_string <__CharType> const &) const noexcept -> bool
+                + {method} operator > (__CharType const *) const noexcept -> bool
+                + {method} operator > (__CharType) const noexcept -> bool
 
                 + {method} operator >= (__BaseStringView const &) const noexcept -> bool
                 + {method} operator >= (std::basic_string <__CharType> const &) const noexcept -> bool
@@ -247,17 +247,312 @@ namespace cds {
                 + {method} <__Predicate> none (__Predicate const &) const throws if __Predicate throws -> bool
             }
 
-            class "__BaseStringView::ConstIterator" << (T, #aa9999) >> {
+            class "__BaseStringView::ConstIterator" << (T, #aa9999) >>
+            class "__BaseStringView::ConstReverseIterator" << (T, #aa9999) >>
 
+            class __BaseString <__CharType> {
+                ..fields..
+                - {field} _pBuffer : __CharType *
+                - {field} _length : Size
+                - {field} _capacity : Size
+                ..static fields..
+                - {field} {static} minCapacity : Size const
+                + {field} {static} invalidIndex : Index const
+                ..base methods..
+                + {method} __BaseString () noexcept
+                + {method} __BaseString (__BaseString const &) noexcept
+                + {method} <__OtherCharType> __BaseString (__BaseString <__OtherCharType> const &) noexcept
+                + {method} __BaseString (__BaseString &&) noexcept
+                + {method} __BaseString (__BaseStringView <__CharType> const &) noexcept
+                + {method} <__OtherCharType> __BaseString (__BaseStringView <__OtherCharType> const &) noexcept
+                + {method} __BaseString (std::basic_string <__CharType> const &) noexcept
+                + {method} __BaseString (__CharType const *) noexcept
+                + {method} __BaseString (__CharType const *, Size) noexcept
+                + {method} <__OtherCharType> __BaseString (__OtherCharType const *) noexcept
+                + {method} <__OtherCharType> __BaseString (__OtherCharType const *, Size) noexcept
+                + {method} __BaseString (Object const &) noexcept
+                + {method} __BaseString (Size, __CharType) noexcept
+                + {method} <__IteratorType> __BaseString (__IteratorType const &, __IteratorType const &) noexcept
+                + {method} __BaseString (std::initializer_list <__CharType> const &) noexcept
+                + {method} __BaseString (__CharType) noexcept
+                + {method} __BaseString (bool) noexcept
+                + {method} <__NumericType> __BaseString (__NumericType) noexcept
+                + {method} <__FloatingPointType> __BaseString (__FloatingPointType) noexcept
+                + {method} <__AddressType> __BaseString (__AddressType) noexcept
+                + {method} ~__BaseString () noexcept
+                ..iterator acquisition methods..
+                + {method} begin () noexcept -> Iterator
+                + {method} end () noexcept -> Iterator
+                + {method} begin () const noexcept -> ConstIterator
+                + {method} end () const noexcept -> ConstIterator
+                + {method} cbegin () const noexcept -> ConstIterator
+                + {method} cend () const noexcept -> ConstIterator
+                + {method} rbegin () noexcept -> ReverseIterator
+                + {method} rend () noexcept -> ReverseIterator
+                + {method} rbegin () const noexcept -> ConstReverseIterator
+                + {method} rend () const noexcept -> ConstReverseIterator
+                + {method} crbegin () const noexcept -> ConstReverseIterator
+                + {method} crend () const noexcept -> ConstReverseIterator
+                ..public methods..
+                + {method} length () const noexcept -> Size
+                + {method} size () const noexcept -> Size
+                + {method} capacity () const noexcept -> Size
+                + {method} empty () const noexcept -> bool
+                + {method} clear () noexcept -> void
+                + {method} at (Index) throws OutOfBoundsException -> __CharType &
+                + {method} get (Index) throws OutOfBoundsException -> __CharType &
+                + {method} front () throws OutOfBoundsException -> __CharType &
+                + {method} back () throws OutOfBoundsException -> __CharType &
+                + {method} at (Index) const throws OutOfBoundsException -> __CharType
+                + {method} get (Index) const throws OutOfBoundsException -> __CharType
+                + {method} front () const throws OutOfBoundsException -> __CharType
+                + {method} back () const throws OutOfBoundsException -> __CharType
+                + {method} hash () const noexcept -> Size
+                + {method} toString () const noexcept -> __BaseString <__CharType>
+                ..size management methods..
+                + {method} resize (Size) noexcept -> void
+                + {method} reserve (Size) noexcept -> void
+                + {method} shrink (Size) noexcept -> void
+                ..polymorphic methods..
+                + {method} toStdString () const noexcept -> std :: basic_string <__CharType>
+                + {method} cStr () const noexcept -> __CharType const *
+                + {method} data () const noexcept -> __CharType const *
+                + {method} data () noexcept -> __CharType *
+                + {method} operator __CharType const * () const noexcept
+                + {method} sequence () const noexcept -> Sequence <__BaseString const>
+                + {method} sequence () noexcept -> Sequence <__BaseString>
+                ..substr methods..
+                + {method} substr (Index, Index) const noexcept -> __BaseString < __CharType >
+                ..operator overloads..
+                + {method} operator [] (Index) const throws OutOfBoundsException -> __CharType
+                + {method} operator [] (__RangeType const &) const throws OutOfBoundsException -> __BaseString<__CharType>
+                + {method} operator [] (Index) throws OutOfBoundsException -> __CharType &
+                + {method} operator () (Index, Index) const throws OutOfBoundsException -> __BaseString<__CharType>
+                + {method} <__ConvertibleType> operator = (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} operator = (__BaseString const &) noexcept -> __BaseString &
+                + {method} operator = (__BaseString &&) noexcept -> __BaseString &
+                + {method} operator = (__BaseStringView const &) noexcept -> __BaseString &
+                + {method} operator = (__CharType) noexcept -> __BaseString &
+                + {method} operator = (bool) noexcept -> __BaseString &
+                + {method} <__NumericType> operator = (__NumericType) noexcept -> __BaseString &
+                + {method} <__FloatingPointType> operator = (__FloatingPointType) noexcept -> __BaseString &
+                ..comparison operators and methods..
+                + {method} equals (Object const &) const noexcept -> bool
+
+                + {method} operator == (__BaseString const &) const noexcept -> bool
+                + {method} operator == (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator == (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator == (__CharType) const noexcept -> bool
+
+                + {method} operator != (__BaseString const &) const noexcept -> bool
+                + {method} operator != (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator != (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator != (__CharType) const noexcept -> bool
+
+                + {method} operator < (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator < (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator < (__CharType) const noexcept -> bool
+
+                + {method} operator > (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator > (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator > (__CharType) const noexcept -> bool
+
+                + {method} operator >= (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator >= (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator >= (__CharType) const noexcept -> bool
+
+                + {method} operator <= (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> operator <= (__ConvertibleType &&) const noexcept -> bool
+                + {method} operator <= (__CharType) const noexcept -> bool
+                ..addition methods..
+                + {method} <__ConvertibleType> operator += (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} operator += (__BaseStringView const &) noexcept -> __BaseString &
+                + {method} operator += (__BaseString &&) noexcept -> __BaseString &
+                + {method} operator += (__CharType) noexcept -> __BaseString &
+                + {method} operator += (bool) noexcept -> __BaseString &
+                + {method} <__NumericType> operator += (__NumericType) noexcept -> __BaseString &
+                + {method} <__FloatingPointType> operator += (__FloatingPointType) noexcept -> __BaseString &
+
+                + {method} <__ConvertibleType> append (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} append (__BaseStringView const &) noexcept -> __BaseString &
+                + {method} append (__BaseString &&) noexcept -> __BaseString &
+                + {method} append (__CharType) noexcept -> __BaseString &
+                + {method} append (bool) noexcept -> __BaseString &
+                + {method} <__NumericType> append (__NumericType) noexcept -> __BaseString &
+                + {method} <__FloatingPointType> append (__FloatingPointType) noexcept -> __BaseString &
+
+                + {method} <__ConvertibleType> prepend (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} prepend (__BaseStringView const &) noexcept -> __BaseString &
+                + {method} prepend (__BaseString &&) noexcept -> __BaseString &
+                + {method} prepend (__CharType) noexcept -> __BaseString &
+                + {method} prepend (bool) noexcept -> __BaseString &
+                + {method} <__NumericType> prepend (__NumericType) noexcept -> __BaseString &
+                + {method} <__FloatingPointType> prepend (__FloatingPointType) noexcept -> __BaseString &
+                ..composition operator overloads..
+                + {method} operator + (__BaseStringView const &) const noexcept -> __BaseString <__CharType>
+                + {method} operator + (std::basic_string <__CharType> const &) const noexcept -> __BaseString <__CharType>
+                + {method} operator + (__CharType const *) const noexcept -> __BaseString <__CharType>
+                + {method} operator + (__CharType) const noexcept -> __BaseString <__CharType>
+                + {method} <__NumericType> operator + (__NumericType) const noexcept -> __BaseString <__CharType>
+                + {method} <__FloatingPointType> operator + (__FloatingPointType) const noexcept -> __BaseString <__CharType>
+                + {method} operator + (bool) const noexcept -> __BaseString <__CharType>
+
+                + {method} operator * (int) const noexcept -> __BaseString <__CharType>
+                ..inclusion methods..
+                + {method} contains (__CharType) const noexcept -> bool
+                + {method} contains (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> contains (__ConvertibleType &&) const noexcept -> bool
+
+                + {method} <__CollectionType<...>> containsAnyOf (__CollectionType <__CharType> const &) const noexcept -> bool
+                + {method} <__ConvertibleType> containsAnyOf (__ConvertibleType &&) const noexcept -> bool
+                + {method} containsAnyOf (__BaseStringView const &) const noexcept -> bool
+
+                + {method} <__CollectionType<...>> containsAllOf (__CollectionType <__CharType> const &) const noexcept -> bool
+                + {method} <__ConvertibleType> containsAllOf (__ConvertibleType &&) const noexcept -> bool
+                + {method} containsAllOf (__BaseStringView const &) const noexcept -> bool
+
+                + {method} <__CollectionType<...>> containsAnyNotOf (__CollectionType <__CharType> const &) const noexcept -> bool
+                + {method} <__ConvertibleType> containsAnyNotOf (__ConvertibleType &&) const noexcept -> bool
+                + {method} containsAnyNotOf (__BaseStringView const &) const noexcept -> bool
+
+                + {method} <__CollectionType<...>> containsAllNotOf (__CollectionType <__CharType> const &) const noexcept -> bool
+                + {method} <__ConvertibleType> containsAllNotOf (__ConvertibleType &&) const noexcept -> bool
+                + {method} containsAllNotOf (__BaseStringView const &) const noexcept -> bool
+                ..find methods..
+                + {method} <__CollectionType<...>> find (Size, __CharType, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> find (Size, __CharType) const noexcept -> __CollectionType <Index>
+                + {method} findFirst (__CharType) const noexcept -> Index
+                + {method} findLast (__CharType) const noexcept -> Index
+                + {method} <__CollectionType<...>> findAll (__CharType, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findAll (__CharType) const noexcept -> __CollectionType <Index>
+
+                + {method} <__CollectionType<...>> find (Size, __BaseStringView const & __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> find (Size, __BaseStringView const &) const noexcept -> __CollectionType <Index>
+                + {method} findFirst (__BaseStringView const &) const noexcept -> Index
+                + {method} findLast (__BaseStringView const &) const noexcept -> Index
+                + {method} <__CollectionType<...>> findAll (__BaseStringView const &, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findAll (__BaseStringView const &) const noexcept -> __CollectionType <Index>
+
+                + {method} <__CollectionType<...>, __ConvertibleType> find (Size, __ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> find (Size, __ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                + {method} <__ConvertibleType> findFirst (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__ConvertibleType> findLast (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__CollectionType<...>, __ConvertibleType> findAll (__ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> findAll (__ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                ..findOf methods..
+                + {method} <__CollectionType<...>> findOf (Size, __BaseStringView const & __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findOf (Size, __BaseStringView const &) const noexcept -> __CollectionType <Index>
+                + {method} findFirstOf (__BaseStringView const &) const noexcept -> Index
+                + {method} findLastOf (__BaseStringView const &) const noexcept -> Index
+                + {method} <__CollectionType<...>> findAllOf (__BaseStringView const &, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findAllOf (__BaseStringView const &) const noexcept -> __CollectionType <Index>
+
+                + {method} <__CollectionType<...>, __ConvertibleType> findOf (Size, __ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> findOf (Size, __ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                + {method} <__ConvertibleType> findFirstOf (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__ConvertibleType> findLastOf (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__CollectionType<...>, __ConvertibleType> findAllOf (__ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> findAllOf (__ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                ..findNotOf methods..
+                + {method} <__CollectionType<...>> findNotOf (Size, __BaseStringView const & __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findNotOf (Size, __BaseStringView const &) const noexcept -> __CollectionType <Index>
+                + {method} findFirstNotOf (__BaseStringView const &) const noexcept -> Index
+                + {method} findLastNotOf (__BaseStringView const &) const noexcept -> Index
+                + {method} <__CollectionType<...>> findAllNotOf (__BaseStringView const &, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>> findAllNotOf (__BaseStringView const &) const noexcept -> __CollectionType <Index>
+
+                + {method} <__CollectionType<...>, __ConvertibleType> findNotOf (Size, __ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> findNotOf (Size, __ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                + {method} <__ConvertibleType> findFirstNotOf (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__ConvertibleType> findLastNotOf (__ConvertibleType &&) const noexcept -> Index
+                + {method} <__CollectionType<...>, __ConvertibleType> findAllNotOf (__ConvertibleType &&, __CollectionType <Index> &) const noexcept -> __CollectionType <Index> &
+                + {method} <__CollectionType<...>, __ConvertibleType> findAllNotOf (__ConvertibleType &&) const noexcept -> __CollectionType <Index>
+                ..formatting methods..
+                + {method} ltrim (__CharType) noexcept -> __BaseString &
+                + {method} <__ConvertibleType> ltrim (__ConvertibleType) noexcept -> __BaseString &
+                + {method} ltrim (__BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} rtrim (__CharType) noexcept -> __BaseString &
+                + {method} <__ConvertibleType> rtrim (__ConvertibleType) noexcept -> __BaseString &
+                + {method} rtrim (__BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} trim (__CharType) noexcept -> __BaseString &
+                + {method} <__ConvertibleType> trim (__ConvertibleType) noexcept -> __BaseString &
+                + {method} trim (__BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} ljust (Size, __CharType) noexcept -> __BaseString &
+                + {method} rjust (Size, __CharType) noexcept -> __BaseString &
+
+                + {method} toUpper () noexcept -> __BaseString &
+                + {method} toLower () noexcept -> __BaseString &
+
+                + {method} reverse () noexcept -> __BaseString &
+
+                + {method} <__ConvertibleType> replace (Index, Index, __ConvertibleType &&) noexcept -> __BaseString &
+                + {method} replace (Index, Index, __BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} removePrefix (__CharType) noexcept -> __BaseString &
+                + {method} <__ConvertibleType> removePrefix (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} removePrefix (__BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} removeSuffix (__CharType) noexcept -> __BaseString &
+                + {method} <__ConvertibleType> removeSuffix (__ConvertibleType &&) noexcept -> __BaseString &
+                + {method} removeSuffix (__BaseStringView const &) noexcept -> __BaseString &
+
+                + {method} {static} <__CollectionType <...>> join (__CollectionType <__BaseString> const &, __BaseStringView const &) noexcept -> __BaseString &
+                + {method} {static} <__CollectionType <...>, __ConvertibleType> join (__CollectionType <__BaseString> const &, __ConvertibleType &&) noexcept -> __BaseString &
+                + {method} {static} <__CollectionType <...>> join (__CollectionType <__BaseString> const &, __ConvertibleType &&) noexcept -> __BaseString &
+                ..split methods..
+                + {method} <__CollectionType> split (__CharType, __CollectionType &, Size) const noexcept -> __CollectionType &
+                + {method} <__CollectionType<...>> split (__CharType, Size) const noexcept -> __CollectionType <__BaseString <__CharType>>
+
+                + {method} <__CollectionType> split (__BaseStringView const &, __CollectionType &, Size) const noexcept -> __CollectionType &
+                + {method} <__CollectionType<...>> split (__BaseStringView const &, Size) const noexcept -> __CollectionType <__BaseString <__CharType>>
+
+                + {method} <__CollectionType, __ConvertibleType> split (__ConvertibleType &&, __CollectionType &, Size) const noexcept -> __CollectionType &
+                + {method} <__CollectionType<...>, __ConvertibleType> split (__ConvertibleType &&, Size) const noexcept -> __CollectionType <__BaseString <__CharType>>
+
+                + {method} <__CollectionType> splitByString (__BaseStringView const &, __CollectionType &, Size) const noexcept -> __CollectionType &
+                + {method} <__CollectionType<...>> splitByString (__BaseStringView const &, Size) const noexcept -> __CollectionType <__BaseString <__CharType>>
+
+                + {method} <__CollectionType, __ConvertibleType> splitByString (__ConvertibleType &&, __CollectionType &, Size) const noexcept -> __CollectionType &
+                + {method} <__CollectionType<...>, __ConvertibleType> splitByString (__ConvertibleType &&, Size) const noexcept -> __CollectionType <__BaseString <__CharType>>
+                ..specialized find methods..
+                + {method} startsWith (__CharType) const noexcept -> bool
+                + {method} startsWith (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> startsWith (__ConvertibleType &&) const noexcept -> bool
+
+                + {method} endsWith (__CharType) const noexcept -> bool
+                + {method} endsWith (__BaseStringView const &) const noexcept -> bool
+                + {method} <__ConvertibleType> endsWith (__ConvertibleType &&) const noexcept -> bool
+                ..functional methods..
+                + {method} <__Action> forEach (__Action const &) const throws if __Action throws -> void
+                + {method} <__Predicate> some (Size, __Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> atLeast (Size, __Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> atMost (Size, __Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> moreThan (Size, __Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> fewerThan (Size, __Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> count (__Predicate const &) const throws if __Predicate throws -> Size
+                + {method} <__Predicate> any (__Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> all (__Predicate const &) const throws if __Predicate throws -> bool
+                + {method} <__Predicate> none (__Predicate const &) const throws if __Predicate throws -> bool
+
+                + {method} <__Action> forEach (__Action const &) throws if __Action throws -> void
+                + {method} <__Predicate> some (Size, __Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> atLeast (Size, __Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> atMost (Size, __Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> moreThan (Size, __Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> fewerThan (Size, __Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> count (__Predicate const &) throws if __Predicate throws -> Size
+                + {method} <__Predicate> any (__Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> all (__Predicate const &) throws if __Predicate throws -> bool
+                + {method} <__Predicate> none (__Predicate const &) throws if __Predicate throws -> bool
             }
 
-            class "__BaseStringView::ConstReverseIterator" << (T, #aa9999) >> {
-
-            }
-
-            class __BaseString {
-
-            }
+            class "__BaseString::Iterator" << (T, #aa9999) >>
+            class "__BaseString::ConstIterator" << (T, #aa9999) >>
+            class "__BaseString::ReverseIterator" << (T, #aa9999) >>
+            class "__BaseString::ConstReverseIterator" << (T, #aa9999) >>
 
             cds.Object <|-- __BaseString
 
@@ -270,8 +565,18 @@ namespace cds {
             cds.ForwardAddressIterator .. "is" "__BaseStringView::ConstIterator"
             cds.BackwardAddressIterator .. "is" "__BaseStringView::ConstReverseIterator"
 
+            cds.ForwardAddressIterator .. "is" "__BaseString::Iterator"
+            cds.ForwardAddressIterator .. "is" "__BaseString::ConstIterator"
+            cds.BackwardAddressIterator .. "is" "__BaseString::ReverseIterator"
+            cds.BackwardAddressIterator .. "is" "__BaseString::ConstReverseIterator"
+
             "__BaseStringView::ConstIterator" "nested in" ... __BaseStringView
             "__BaseStringView::ConstReverseIterator" "nested in" ... __BaseStringView
+
+            "__BaseString::Iterator" "nested in" ... __BaseString
+            "__BaseString::ConstIterator" "nested in" ... __BaseString
+            "__BaseString::ReverseIterator" "nested in" ... __BaseString
+            "__BaseString::ConstReverseIterator" "nested in" ... __BaseString
 
             __BaseStringView ... "used by" cds.StringUtils
             __BaseString ... "used by" cds.StringUtils
