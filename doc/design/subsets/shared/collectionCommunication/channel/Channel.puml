@@ -1,0 +1,63 @@
+@startuml
+
+!startsub public_declaration
+!ifndef COLLECTION_COMMUNICATION_CHANNEL_PUBLIC
+!define COLLECTION_COMMUNICATION_CHANNEL_PUBLIC
+
+!includesub ../../../primitives/baseTypes/Object.puml!public_declaration
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            abstract class __CollectionInternalCommunicationChannel <R, E> {
+                # {method} __CollectionInternalCommunicationChannel () noexcept
+                # {method} __CollectionInternalCommunicationChannel (__CollectionInternalCommunicationChannel const &) noexcept
+                # {method} __CollectionInternalCommunicationChannel (__CollectionInternalCommunicationChannel &) noexcept
+                # {method} operator = (__CollectionInternalCommunicationChannel const &) noexcept -> __CollectionInternalCommunicationChannel &
+                # {method} operator = (__CollectionInternalCommunicationChannel &&) noexcept -> __CollectionInternalCommunicationChannel &
+                + {method} ~__CollectionInternalCommunicationChannel () noexcept
+
+                # {method} {abstract} obtainGenericHandler (__CollectionInternalRequestType) noexcept -> __GenericHandler
+                # {method} {abstract} obtainGenericConstHandler (__CollectionInternalRequestType) const noexcept -> __GenericConstHandler
+            }
+
+            cds.Object <|-- __CollectionInternalCommunicationChannel
+
+            interface __DelegateForwardIterablePrimitiveClient <R, E, bidirectional>
+            interface __DelegateBackwardIterablePrimitiveClient <R, E, bidirectional>
+            interface __DelegateForwardConstIterablePrimitiveClient <R, E, bidirectional>
+            interface __DelegateBackwardConstIterablePrimitiveClient <R, E, bidirectional>
+            interface __AbstractIteratorRemovePrimitiveClient <R, E>
+            interface __AbstractConstIteratorRemovePrimitiveClient <R, E>
+            interface __RandomInsertionPrimitiveClient <R, E, RV>
+            interface __BoundaryInsertionPrimitiveClient <R, E, RV>
+            interface __AbstractIteratorRelativeInsertionPrimitiveClient <R, E>
+            interface __AbstractConstIteratorRelativeInsertionPrimitiveClient <R, E>
+            interface __FindUniqueImmutablePrimitiveClient <R, E, K, bidirectional>
+            interface __FindUniqueMutablePrimitiveClient <R, E, K, bidirectional>
+
+            <> PrivateAccessRef
+
+        }
+    }
+}
+
+cds.__hidden.__impl.__CollectionInternalCommunicationChannel "allows private access to" - PrivateAccessRef
+PrivateAccessRef -- cds.__hidden.__impl.__DelegateForwardIterablePrimitiveClient
+PrivateAccessRef -- cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
+PrivateAccessRef -- cds.__hidden.__impl.__DelegateForwardConstIterablePrimitiveClient
+PrivateAccessRef --- cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
+PrivateAccessRef --- cds.__hidden.__impl.__AbstractIteratorRemovePrimitiveClient
+PrivateAccessRef --- cds.__hidden.__impl.__AbstractConstIteratorRemovePrimitiveClient
+PrivateAccessRef ---- cds.__hidden.__impl.__RandomInsertionPrimitiveClient
+PrivateAccessRef ---- cds.__hidden.__impl.__BoundaryInsertionPrimitiveClient
+PrivateAccessRef ---- cds.__hidden.__impl.__AbstractIteratorRelativeInsertionPrimitiveClient
+PrivateAccessRef ----- cds.__hidden.__impl.__AbstractConstIteratorRelativeInsertionPrimitiveClient
+PrivateAccessRef ----- cds.__hidden.__impl.__FindUniqueImmutablePrimitiveClient
+PrivateAccessRef ----- cds.__hidden.__impl.__FindUniqueMutablePrimitiveClient
+
+!endif
+!endsub
+
+@enduml
