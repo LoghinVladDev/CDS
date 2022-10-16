@@ -2,25 +2,25 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @class pre-declaration of Bi-Directional Abstract Iterator Wrapper, to be used in Conditional
              */
             template < typename >
-            class __BidirectionalDelegateWrapperIterator;   /* NOLINT(bugprone-reserved-identifier) */
+            class __BidirectionalDelegateWrapperIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
             /**
              * @class pre-declaration of Uni-Directional Abstract Iterator Wrapper, to be used in Conditional
              */
             template < typename >
-            class __ForwardDelegateWrapperIterator; /* NOLINT(bugprone-reserved-identifier) */
+            class __ForwardDelegateWrapperIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
             /**
@@ -41,32 +41,32 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    bool     __bidirectional                        /* NOLINT(bugprone-reserved-identifier) */
-            > class __DelegateForwardConstIterablePrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    bool     __bidirectional                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __DelegateForwardConstIterablePrimitiveClient { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef internal alias representing the __ElementType template parameter
                  * @protected
                  */
-                using __dfcic_ElementType   = /* NOLINT(bugprone-reserved-identifier) */
+                using __dfcic_ElementType   = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ElementType const;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for chosen Wrapper Iterator, to be used in implementor class to represent the ConstIterator type.
                  * @public
                  */
-                using ConstIterator         = /* NOLINT(bugprone-reserved-identifier) */
+                using ConstIterator         = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: Conditional <
                                 __bidirectional,
                                 __BidirectionalDelegateWrapperIterator < __dfcic_ElementType >,
                                 __ForwardDelegateWrapperIterator < __dfcic_ElementType >
                         >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
                  * @exceptsafe
@@ -77,7 +77,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard auto begin () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
                  * @exceptsafe
@@ -88,7 +88,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard auto end () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
                  * @exceptsafe
@@ -99,7 +99,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard auto cbegin () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using a __cirt_end request
                  * @exceptsafe
@@ -125,18 +125,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType                            /* NOLINT(bugprone-reserved-identifier) */
-            > class __LocalDelegateForwardConstIterablePrimitiveClient {    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ConstIteratorType                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __LocalDelegateForwardConstIterablePrimitiveClient {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for chosen const iterator.
                  * @public
                  */
                 using ConstIterator = __ConstIteratorType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __cbeginLocal function
                  * @exceptsafe
@@ -146,7 +146,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using the __cendLocal function
                  * @exceptsafe
@@ -156,7 +156,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard constexpr auto end () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __cbeginLocal function
                  * @exceptsafe
@@ -166,7 +166,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard constexpr auto cbegin () const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the iterator at the end of the sequence of elements in iterable container. Will acquire iterator using the __cendLocal function
                  * @exceptsafe
@@ -177,8 +177,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__ */

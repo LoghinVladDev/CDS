@@ -2,12 +2,12 @@
  * Created by loghin on 6/28/22.
  */
 
-#ifndef __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for creating Const-Iterator-Relative-To Insertion requests, inserting / emplacing elements before or after a given iterator
@@ -30,18 +30,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                                      /* NOLINT(bugprone-reserved-identifier) */
-            > class __AbstractConstIteratorRelativeInsertionPrimitiveClient {   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __AbstractConstIteratorRelativeInsertionPrimitiveClient {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ElementType template parameter
                  * @private
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for Abstract Const Iterator type
                  * @private
@@ -49,7 +49,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 using AbstractConstIterator  =
                         __AbstractDelegateWrapperIterator < __ElementType const >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -88,7 +88,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -97,7 +97,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType             const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -136,7 +136,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -145,7 +145,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType                   && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -184,7 +184,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -193,7 +193,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType             const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -232,7 +232,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -241,7 +241,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType                   && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by emplacement
                  * @tparam __EmplaceArgumentTypes is the pack of argument types passed to the constructor
@@ -279,13 +279,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceBefore (
                         AbstractConstIterator        const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by emplacement
                  * @tparam __EmplaceArgumentTypes is the pack of argument types passed to the constructor
@@ -323,13 +323,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceAfter (
                         AbstractConstIterator        const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before a given iterator by creating a new before array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -351,13 +351,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllBefore (
                         AbstractConstIterator    const &     iterator,
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after a given iterator by creating a new before array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -379,13 +379,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllAfter (
                         AbstractConstIterator    const &     iterator,
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -425,7 +425,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -434,7 +434,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -474,7 +474,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -483,7 +483,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add before array request.
@@ -522,7 +522,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -531,7 +531,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -571,7 +571,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -580,7 +580,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -620,7 +620,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -629,7 +629,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add after array request.
@@ -668,7 +668,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -677,7 +677,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -721,7 +721,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOfBefore (
                         AbstractConstIterator   const & iterator,
                         __OtherIteratorType     const & begin,
@@ -729,7 +729,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                            count = 0ULL
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -773,7 +773,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOfAfter (
                         AbstractConstIterator   const & iterator,
                         __OtherIteratorType     const & begin,
@@ -799,26 +799,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                                 /* NOLINT(bugprone-reserved-identifier) */
-            > class __LocalConstIteratorRelativeInsertionPrimitiveClient {  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __LocalConstIteratorRelativeInsertionPrimitiveClient {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ElementType template parameter
                  * @private
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for Const Iterator type
                  * @private
                  */
                 using ConstIterator = __IteratorType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -832,7 +832,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -841,7 +841,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType     const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -855,7 +855,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -864,7 +864,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType           && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -878,7 +878,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -887,7 +887,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType     const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -901,7 +901,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -910,7 +910,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType           && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element before a given iterator by emplacement
                  * @tparam __EmplaceArgumentTypes is the pack of argument types passed to the constructor
@@ -923,13 +923,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceBefore (
                         ConstIterator                const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element after a given iterator by emplacement
                  * @tparam __EmplaceArgumentTypes is the pack of argument types passed to the constructor
@@ -942,13 +942,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceAfter (
                         ConstIterator                const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before a given iterator by creating a new before array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -961,13 +961,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllBefore (
                         ConstIterator            const &     iterator,
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after a given iterator by creating a new before array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -980,13 +980,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllAfter (
                         ConstIterator            const &     iterator,
                         __ArgumentTypes               && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -1001,7 +1001,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -1010,7 +1010,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType  const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -1025,7 +1025,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -1034,7 +1034,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType  const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add before array request.
@@ -1048,7 +1048,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -1057,7 +1057,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -1072,7 +1072,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -1081,7 +1081,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -1096,7 +1096,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -1105,7 +1105,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add after array request.
@@ -1119,7 +1119,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -1128,7 +1128,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements before an iterator of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -1147,7 +1147,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOfBefore (
                         ConstIterator           const & iterator,
                         __OtherIteratorType     const & begin,
@@ -1155,7 +1155,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                            count = 0ULL
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements after an iterator of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -1174,7 +1174,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __OtherIteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOfAfter (
                         ConstIterator           const & iterator,
                         __OtherIteratorType     const & begin,
@@ -1183,8 +1183,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_CONST_ITERATOR_RELATIVE_INSERTION_PRIMITIVE_CLIENT_HPP__ */

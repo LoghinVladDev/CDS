@@ -2,12 +2,12 @@
  * Created by loghin on 6/28/22.
  */
 
-#ifndef __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             namespace meta {
 
@@ -18,8 +18,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @namespace cds :: __hidden :: __impl :: meta
                  * @internal library-private
                  */
-                template < typename __IterableType, typename = void >           /* NOLINT(bugprone-reserved-identifier) */
-                struct __IterableSizeAvailable : cds :: meta :: FalseType {};   /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IterableType, typename = void >           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IterableSizeAvailable : cds :: meta :: FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /**
                  * @struct Meta-Type used to determine if a given type has the 'size' function available. True when type can call size()
@@ -28,10 +28,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @namespace cds :: __hidden :: __impl :: meta
                  * @internal library-private
                  */
-                template < typename __IterableType >                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                struct __IterableSizeAvailable < __IterableType, cds :: meta :: Void < decltype ( cds :: meta :: addressOf < __IterableType > ()->size() ) > > : cds :: meta :: TrueType {};    /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IterableType >                                                                                                                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IterableSizeAvailable < __IterableType, cds :: meta :: Void < decltype ( cds :: meta :: addressOf < __IterableType > ()->size() ) > > : cds :: meta :: TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            }
+            } /* namespace meta */
 
             /**
              * @struct Meta-Type used to determine the noexcept specification of a function calling multiple constructions of given __ElementType
@@ -42,9 +42,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __FirstConstructedArgument /* NOLINT(bugprone-reserved-identifier) */
-            > struct __ConstructExceptSpecOne {         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __FirstConstructedArgument /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > struct __ConstructExceptSpecOne {         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* the value is the noexcept value of the constructor call */
                 constexpr static bool value = noexcept ( __ElementType ( cds :: meta :: valueOf < __FirstConstructedArgument > () ) );
@@ -61,10 +61,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __FirstConstructedArgument,            /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __RemainingConstructedArguments    /* NOLINT(bugprone-reserved-identifier) */
-            > struct __ConstructExceptSpecMultiple;                 /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __FirstConstructedArgument,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __RemainingConstructedArguments    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > struct __ConstructExceptSpecMultiple;                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
             /**
@@ -76,9 +76,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __FirstConstructedArgument                                             /* NOLINT(bugprone-reserved-identifier) */
-            > struct __ConstructExceptSpecMultiple < __ElementType, __FirstConstructedArgument > {  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __FirstConstructedArgument                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > struct __ConstructExceptSpecMultiple < __ElementType, __FirstConstructedArgument > {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* when only one type remaining, call noexcept spec of One value constructed */
                 constexpr static bool value =
@@ -96,10 +96,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __FirstConstructedArgument,            /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __RemainingConstructedArguments    /* NOLINT(bugprone-reserved-identifier) */
-            > struct __ConstructExceptSpecMultiple {                /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __FirstConstructedArgument,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __RemainingConstructedArguments    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > struct __ConstructExceptSpecMultiple {                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* when more than or two values are to be constructed, acquire the noexcept spec of the current one, use and on the
                  * noexcept spec of the remaining types */
@@ -126,9 +126,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
-            > auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __LastType         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __AccumulatorType   * pAccumulator,
                     __LastType         && lastValue
             ) noexcept ( false ) -> void;
@@ -153,10 +153,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
-            > auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier) */
+                    typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __AccumulatorType      *     pAccumulator,
                     __FirstType           &&     firstValue,
                     __RemainingTypes      && ... remainingValues
@@ -182,54 +182,54 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReturnType               /* NOLINT(bugprone-reserved-identifier) */
-            > class __RandomInsertionPrimitiveClient {  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReturnType               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __RandomInsertionPrimitiveClient {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ElementType template parameter
                  * @private
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ReturnType template parameter reference
                  * @private
                  */
                 using ElementReference  = __ReturnType &;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Friend declaration of the function to allow usage of insert from caller object
                  * @private
                  */
                 template <
-                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
-                > friend auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __LastType         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > friend auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AccumulatorType   * pAccumulator,
                         __LastType         && lastValue
                 ) noexcept ( false ) -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Friend declaration of the function to allow usage of insert from caller object
                  * @private
                  */
                 template <
-                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
-                > friend auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier) */
+                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > friend auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AccumulatorType      *     pAccumulator,
                         __FirstType           &&     firstValue,
                         __RemainingTypes      && ... remainingValues
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to insert an element into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -248,7 +248,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -256,7 +256,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to insert an element into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -275,7 +275,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -283,7 +283,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
                  * @brief Function used to create a request to insert an element into the receiver.
@@ -303,7 +303,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -311,7 +311,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
                  * @brief Function used to create a request to insert an element into the receiver
@@ -331,7 +331,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -339,7 +339,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) into the receiver
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -357,12 +357,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplace (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -379,12 +379,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAll' function deprecated, kept for support. replaced by 'insertAll', same functionality
                  * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
@@ -402,12 +402,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
                  * @tparam __IterableType is the type of iterable given as parameter
@@ -424,12 +424,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOf (
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -447,7 +447,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -456,7 +456,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( false ) -> void;
 
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
@@ -474,12 +474,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
+                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
@@ -498,7 +498,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -506,7 +506,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
                  * @tparam __IteratorType is the type of given iterators
@@ -528,13 +528,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
@@ -557,8 +557,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __IteratorType const & begin,
                         __IteratorType const & end
                 ) noexcept ( false ) -> void;
@@ -579,54 +579,54 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReturnType                   /* NOLINT(bugprone-reserved-identifier) */
-            > class __LocalRandomInsertionPrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReturnType                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __LocalRandomInsertionPrimitiveClient { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ElementType template parameter
                  * @private
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ReturnType template parameter reference
                  * @private
                  */
                 using ElementReference  = __ReturnType &;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Friend declaration of the function to allow usage of insert from caller object
                  * @private
                  */
                 template <
-                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename __LastType         /* NOLINT(bugprone-reserved-identifier) */
-                > friend auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __LastType         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > friend auto __expansiveInsert (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AccumulatorType   * pAccumulator,
                         __LastType         && lastValue
                 ) noexcept ( false ) -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Friend declaration of the function to allow usage of insert from caller object
                  * @private
                  */
                 template <
-                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
-                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
-                > friend auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier) */
+                        typename     __AccumulatorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > friend auto __expansiveInsert (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AccumulatorType      *     pAccumulator,
                         __FirstType           &&     firstValue,
                         __RemainingTypes      && ... remainingValues
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to insert an element into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -639,7 +639,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -647,7 +647,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to insert an element into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -660,7 +660,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -668,7 +668,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
                  * @brief Function used to create a request to insert an element into the receiver.
@@ -682,7 +682,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -690,7 +690,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'add' function deprecated, kept for support. replaced by 'insert', same functionality
                  * @brief Function used to create a request to insert an element into the receiver
@@ -704,7 +704,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -712,7 +712,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) into the receiver
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -724,12 +724,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplace (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( false ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -740,12 +740,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAll' function deprecated, kept for support. replaced by 'insertAll', same functionality
                  * @brief Function used to insert multiple elements by creating multiple insert requests into the receiver
@@ -757,12 +757,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll (
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAll' has been deprecated. Use 'Collection :: insertAll' instead") auto addAll ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __ArgumentTypes && ... values
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
                  * @tparam __IterableType is the type of iterable given as parameter
@@ -773,12 +773,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOf (
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -790,7 +790,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -799,7 +799,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( false ) -> void;
 
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given iterable and inserting each into the receiver
@@ -811,12 +811,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
+                template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __IterableType const & iterable
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given initializer list and inserting each into the receiver
@@ -829,7 +829,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -837,7 +837,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
                  * @tparam __IteratorType is the type of given iterators
@@ -849,13 +849,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
                 ) noexcept ( false ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'addAllOf' function deprecated, kept for support. replaced by 'insertAllOf', same functionality
                  * @brief Function used to insert multiple elements by extracting each from a given iterator range and inserting each into the receiver
@@ -868,15 +868,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-trailing-return-type) */
                         __IteratorType const & begin,
                         __IteratorType const & end
                 ) noexcept ( false ) -> void;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_RANDOM_INSERTION_PRIMITIVE_CLIENT_HPP__ */

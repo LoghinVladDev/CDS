@@ -2,12 +2,12 @@
  * Created by loghin on 6/28/22.
  */
 
-#ifndef __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for creating Boundary Insertion requests, inserting / emplacing elements at the back or front of the list
@@ -30,26 +30,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReturnType                   /* NOLINT(bugprone-reserved-identifier) */
-            > class __BoundaryInsertionPrimitiveClient {    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReturnType                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __BoundaryInsertionPrimitiveClient {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ElementType template parameter
                  * @private
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ReturnType template parameter reference
                  * @private
                  */
                 using ElementReference  = __ReturnType &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the front of the iterable by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -66,7 +66,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -74,7 +74,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the front of the iterable by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -90,7 +90,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -98,7 +98,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the back of the iterable by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -115,7 +115,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -123,7 +123,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the back of the iterable by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -139,7 +139,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -147,7 +147,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'prepend' function deprecated, kept for support. Replaced by 'pushFront', same functionality
                  * @brief Function used to create a new element at the front of the iterable by copy
@@ -165,7 +165,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -173,7 +173,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'prepend' function deprecated, kept for support. Replaced by 'pushFront', same functionality
                  * @brief Function used to create a new element at the front of the iterable by move
@@ -190,7 +190,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -198,7 +198,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'append' function deprecated, kept for support. Replaced by 'pushBack', same functionality
                  * @brief Function used to create a new element at the back of the iterable by copy
@@ -216,7 +216,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -224,7 +224,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'append' function deprecated, kept for support. Replaced by 'pushBack', same functionality
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -240,7 +240,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -248,7 +248,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the front of the iterable
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -262,12 +262,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceFront (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the back of the iterable
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -281,12 +281,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceBack (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable by creating a new front array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -299,12 +299,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushFrontAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable by creating a new back array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -317,12 +317,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushBackAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -338,7 +338,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -346,7 +346,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -362,7 +362,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -370,7 +370,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add front array request.
@@ -385,7 +385,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -393,7 +393,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -409,7 +409,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -417,7 +417,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -433,7 +433,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -441,7 +441,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add back array request.
@@ -456,7 +456,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -464,7 +464,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -486,14 +486,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushFrontAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count = 0ULL
                 ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -515,7 +515,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushBackAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end,
@@ -539,10 +539,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReturnType                       /* NOLINT(bugprone-reserved-identifier) */
-            > class __LocalBoundaryInsertionPrimitiveClient {   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReturnType                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __LocalBoundaryInsertionPrimitiveClient {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:
                 /**
@@ -551,14 +551,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 using ElementType       = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef alias for __ReturnType template parameter reference
                  * @private
                  */
                 using ElementReference  = __ReturnType &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the front of the iterable by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -571,7 +571,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -579,7 +579,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the front of the iterable by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -592,7 +592,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -600,7 +600,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the back of the iterable by copy
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a copy constructor
@@ -613,7 +613,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -621,7 +621,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a new element at the back of the iterable by move
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -634,7 +634,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -642,7 +642,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'prepend' function deprecated, kept for support. Replaced by 'pushFront', same functionality
                  * @brief Function used to create a new element at the front of the iterable by copy
@@ -656,7 +656,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -664,7 +664,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'prepend' function deprecated, kept for support. Replaced by 'pushFront', same functionality
                  * @brief Function used to create a new element at the front of the iterable by move
@@ -678,7 +678,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -686,7 +686,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'append' function deprecated, kept for support. Replaced by 'pushBack', same functionality
                  * @brief Function used to create a new element at the back of the iterable by copy
@@ -700,7 +700,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -708,7 +708,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType const & element
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @deprecated 'append' function deprecated, kept for support. Replaced by 'pushBack', same functionality
                  * @tparam __TElementType is an alias to __ElementType, used to disable the function when the given type does not implement a move constructor
@@ -721,7 +721,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         > = 0
@@ -729,7 +729,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ElementType && element
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the front of the iterable
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -741,12 +741,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceFront (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to emplace an element ( construct with given parameters ) at the back of the iterable
                  * @tparam __EmplaceArgumentTypes is the type pack of the construction argument types
@@ -758,12 +758,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __EmplaceArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto emplaceBack (
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable by creating a new front array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -774,12 +774,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushFrontAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable by creating a new back array request
                  * @tparam __ArgumentTypes is the type pack of the values to be inserted
@@ -790,12 +790,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushBackAll (
                         __ArgumentTypes && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -809,7 +809,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -817,7 +817,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -831,7 +831,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -839,7 +839,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add front array request.
@@ -852,7 +852,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -860,7 +860,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -874,7 +874,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -882,7 +882,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable. This function varies whenever a RandomAccessIterator is given, to be able to efficiently determine
                  * the element count to insert. Otherwise, the distance will be computed iteratively. Insertion is done by extracting
@@ -896,7 +896,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __IterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! meta :: __IterableSizeAvailable < __IterableType > :: value
                         > = 0
@@ -904,7 +904,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IterableType const & iterable
                 ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable, done by extracting
                  * each from a given initializer list and inserting each into the received addresses from the add back array request.
@@ -917,7 +917,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
@@ -925,7 +925,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         std :: initializer_list < __ElementType > const & list
                 ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the front of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -943,14 +943,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushFrontAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count = 0ULL
                 ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to insert multiple elements at the back of the iterable
                  * by extracting each from a given iterator range and inserting each into the addresses received
@@ -968,7 +968,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __IteratorType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto pushBackAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end,
@@ -976,8 +976,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_BOUNDARY_INSERTION_PRIMITIVE_CLIENT_HPP__ */
