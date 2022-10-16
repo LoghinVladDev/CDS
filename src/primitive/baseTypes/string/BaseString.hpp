@@ -1473,34 +1473,34 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_cpplang_NonConstConstexprMemberFunction auto reverse () noexcept -> __BaseString &;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                constexpr auto startsWith (
+                __CDS_NoDiscard constexpr auto startsWith (
                         ElementType character
                 ) const noexcept -> bool;
 
             public:                                                                                                                                             /* NOLINT(readability-redundant-access-specifiers) */
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __CDS_cpplang_ConstexprConditioned auto startsWith (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto startsWith (
                         __ConvertibleType && string
                 ) const noexcept -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_cpplang_ConstexprConditioned auto startsWith (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto startsWith (
                         __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                constexpr auto endsWith (
+                __CDS_NoDiscard constexpr auto endsWith (
                         ElementType character
                 ) const noexcept -> bool;
 
             public:                                                                                                                                             /* NOLINT(readability-redundant-access-specifiers) */
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __CDS_cpplang_ConstexprConditioned auto endsWith (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto endsWith (
                         __ConvertibleType && string
                 ) const noexcept -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_cpplang_ConstexprConditioned auto endsWith (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto endsWith (
                         __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool;
 
@@ -1705,16 +1705,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept ( false ) -> __BaseString;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto sequence () & noexcept -> Sequence < __BaseString >;
+                __CDS_NoDiscard auto sequence () & noexcept -> Sequence < __BaseString >;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto sequence () const & noexcept -> Sequence < __BaseString const >;
+                __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < __BaseString const >;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto sequence () && noexcept -> Sequence < __BaseString >;
+                __CDS_NoDiscard auto sequence () && noexcept -> Sequence < __BaseString >;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto sequence () const && noexcept -> Sequence < __BaseString const >;
+                __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < __BaseString const >;
 
 
 #if defined(CDS_STRING_DEBUG)
