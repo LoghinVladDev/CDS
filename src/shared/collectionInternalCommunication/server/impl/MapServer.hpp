@@ -2,23 +2,23 @@
  * Created by loghin on 7/3/22.
  */
 
-#ifndef __CDS_SHARED_MAP_SERVER_IMPL_HPP__
-#define __CDS_SHARED_MAP_SERVER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_MAP_SERVER_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_MAP_SERVER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > typename __MapServer <
                     __ReceiverType,
                     __ElementType
             > :: __GenericHandler const __MapServer <
                     __ReceiverType,
                     __ElementType
-            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier) */
+            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),              /* __cirt_begin                         - expected part of Map      */
@@ -48,15 +48,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > typename __MapServer <
                     __ReceiverType,
                     __ElementType
             > :: __GenericConstHandler const __MapServer <
                     __ReceiverType,
                     __ElementType
-            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier) */
+            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of Map      */
@@ -86,8 +86,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __MapServer <
                     __ReceiverType,
                     __ElementType
@@ -99,8 +99,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __MapServer <
                     __ReceiverType,
                     __ElementType
@@ -110,8 +110,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return & __MapServer :: __constRoutingTable [0U];
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_MAP_SERVER_IMPL_HPP__ */

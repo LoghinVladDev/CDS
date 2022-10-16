@@ -6,4 +6,7 @@
 !include ../subsets/shared/iterator/IteratorModel.puml
 !include ../subsets/shared/iterator/AddressIterator.puml
 
+!include ../subsets/shared/collectionCommunication/RequestType.puml
+!include ../subsets/shared/collectionCommunication/channel/Channel.puml
+
 @enduml

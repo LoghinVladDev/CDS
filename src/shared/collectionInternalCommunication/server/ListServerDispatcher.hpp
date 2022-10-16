@@ -2,14 +2,14 @@
  * Created by loghin on 09/07/22.
  */
 
-#ifndef __CDS_SHARED_LIST_SERVER_DISPATCHER_HPP__
-#define __CDS_SHARED_LIST_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_LIST_SERVER_DISPATCHER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_LIST_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "MutableCollectionServerDispatcher.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Server-Dispatcher-Type Class part of the Collection Communication Model, to be
@@ -66,41 +66,41 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ServerType,                                                                                                                                              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseIteratorType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstReverseIteratorType,                                                                                                                                /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )                 ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )                   ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )                ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )                  ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rbeginFunction )                ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rendFunction )                  ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crbeginFunction )               ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crendFunction )                 ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )            ( __ElementType const *, bool * )                                       -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newFrontFunction )              ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBackFunction )               ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newFrontArrayFunction )         ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBackArrayFunction )          ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBeforeFunction )             ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBeforeConstFunction )        ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAfterFunction )              ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAfterConstFunction )         ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBeforeArrayFunction )        ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newBeforeArrayConstFunction )   ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier) */
-            > class __ListServerDispatcher :                                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,                                                                                                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ServiceType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                                                                                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __AbstractIteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __AbstractConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType,                                                                                                                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ConstIteratorType,                                                                                                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReverseIteratorType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ConstReverseIteratorType,                                                                                                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __beginFunction )                 ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __endFunction )                   ()                                                                      -> __IteratorType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __cbeginFunction )                ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __cendFunction )                  ()                                                              const   -> __ConstIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __rbeginFunction )                ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __rendFunction )                  ()                                                                      -> __ReverseIteratorType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __crbeginFunction )               ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __crendFunction )                 ()                                                              const   -> __ConstReverseIteratorType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAddressFunction )            ( __ElementType const *, bool * )                                       -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newFrontFunction )              ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBackFunction )               ()                                                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newFrontArrayFunction )         ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBackArrayFunction )          ( Size, __ElementType ** )                                              -> void,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBeforeFunction )             ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBeforeConstFunction )        ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAfterFunction )              ( __AbstractIteratorType const & )                                      -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAfterConstFunction )         ( __AbstractConstIteratorType const & )                                 -> __ElementType *,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBeforeArrayFunction )        ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newBeforeArrayConstFunction )   ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAfterArrayFunction )         ( __AbstractIteratorType const &, Size, __ElementType ** )              -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAfterArrayConstFunction )    ( __AbstractConstIteratorType const &, Size, __ElementType ** )         -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeFunction )                ( __AbstractIteratorType const & )                                      -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeConstFunction )           ( __AbstractConstIteratorType const & )                                 -> bool,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeArrayFunction )           ( __AbstractIteratorType const * const *, Size )                        -> Size,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeConstArrayFunction )      ( __AbstractConstIteratorType const * const *, Size )                   -> Size                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __ListServerDispatcher :                                                                                                                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-member-init) */
                     public __MutableCollectionServerDispatcher <
                             __ServerType,
                             __ServiceType,
@@ -120,7 +120,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __removeConstArrayFunction
                     > {
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __rbeginFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -129,9 +129,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __rendFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -140,9 +140,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __rend () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __rend () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __crbeginFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -151,9 +151,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __crendFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -162,9 +162,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __rbeginFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -173,9 +173,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rbeginLocal () noexcept -> __ReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rbeginLocal () noexcept -> __ReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __rendFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -184,9 +184,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rendLocal () noexcept -> __ReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rendLocal () noexcept -> __ReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __crbeginFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -195,9 +195,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __crbeginLocal () const noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __crbeginLocal () const noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __crendFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -206,9 +206,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __crendLocal () const noexcept -> __ConstReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __crendLocal () const noexcept -> __ConstReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newFrontFunction, and is used by the server
                  * @exceptsafe
@@ -217,9 +217,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newFront () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                auto __newFront () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBackFunction, and is used by the server
                  * @exceptsafe
@@ -228,9 +228,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBack () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBack () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newFrontArrayFunction, and is used by the server
                  * @param [in] count : Size = number of elements to allocate
@@ -240,12 +240,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newFrontArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newFrontArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size             count,
                         __ElementType ** ppElements
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBackArrayFunction, and is used by the server
                  * @param [in] count : Size = number of elements to allocate
@@ -255,12 +255,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBackArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBackArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size             count,
                         __ElementType ** ppElements
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBeforeFunction, and is used by the server
                  * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
@@ -270,11 +270,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBefore ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBefore ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBeforeConstFunction, and is used by the server
                  * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
@@ -284,11 +284,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBeforeConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBeforeConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractConstIteratorType const * pIterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newAfterFunction, and is used by the server
                  * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
@@ -298,11 +298,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newAfter ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newAfter ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newAfterConstFunction, and is used by the server
                  * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
@@ -312,11 +312,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newAfterConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newAfterConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractConstIteratorType const * pIterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBeforeArrayFunction, and is used by the server
                  * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
@@ -327,13 +327,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBeforeArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBeforeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType  const * pIterator,
                         Size                            count,
                         __ElementType                ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newBeforeArrayConstFunction, and is used by the server
                  * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
@@ -344,13 +344,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractConstIteratorType const * pIterator,
                         Size                                count,
                         __ElementType                    ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newAfterArrayFunction, and is used by the server
                  * @param [in] pIterator : __IteratorType cptr = Address to an Immutable iterator
@@ -361,13 +361,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newAfterArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newAfterArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType  const * pIterator,
                         Size                            count,
                         __ElementType                ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __newAfterArrayConstFunction, and is used by the server
                  * @param [in] pIterator : __ConstIteratorType cptr = Address to an Immutable const iterator
@@ -378,15 +378,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractConstIteratorType const * pIterator,
                         Size                                count,
                         __ElementType                    ** ppElements
                 ) noexcept -> bool;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_LIST_SERVER_DISPATCHER_HPP__ */

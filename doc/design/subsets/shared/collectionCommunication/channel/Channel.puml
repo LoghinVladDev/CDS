@@ -44,18 +44,18 @@ namespace cds {
 }
 
 cds.__hidden.__impl.__CollectionInternalCommunicationChannel "allows private access to" - PrivateAccessRef
-PrivateAccessRef -- cds.__hidden.__impl.__DelegateForwardIterablePrimitiveClient
-PrivateAccessRef -- cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
-PrivateAccessRef -- cds.__hidden.__impl.__DelegateForwardConstIterablePrimitiveClient
-PrivateAccessRef --- cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
-PrivateAccessRef --- cds.__hidden.__impl.__AbstractIteratorRemovePrimitiveClient
-PrivateAccessRef --- cds.__hidden.__impl.__AbstractConstIteratorRemovePrimitiveClient
-PrivateAccessRef ---- cds.__hidden.__impl.__RandomInsertionPrimitiveClient
-PrivateAccessRef ---- cds.__hidden.__impl.__BoundaryInsertionPrimitiveClient
-PrivateAccessRef ---- cds.__hidden.__impl.__AbstractIteratorRelativeInsertionPrimitiveClient
-PrivateAccessRef ----- cds.__hidden.__impl.__AbstractConstIteratorRelativeInsertionPrimitiveClient
-PrivateAccessRef ----- cds.__hidden.__impl.__FindUniqueImmutablePrimitiveClient
-PrivateAccessRef ----- cds.__hidden.__impl.__FindUniqueMutablePrimitiveClient
+PrivateAccessRef .. cds.__hidden.__impl.__DelegateForwardIterablePrimitiveClient
+PrivateAccessRef .. cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
+PrivateAccessRef .. cds.__hidden.__impl.__DelegateForwardConstIterablePrimitiveClient
+PrivateAccessRef ... cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
+PrivateAccessRef ... cds.__hidden.__impl.__AbstractIteratorRemovePrimitiveClient
+PrivateAccessRef ... cds.__hidden.__impl.__AbstractConstIteratorRemovePrimitiveClient
+PrivateAccessRef .... cds.__hidden.__impl.__RandomInsertionPrimitiveClient
+PrivateAccessRef .... cds.__hidden.__impl.__BoundaryInsertionPrimitiveClient
+PrivateAccessRef .... cds.__hidden.__impl.__AbstractIteratorRelativeInsertionPrimitiveClient
+PrivateAccessRef ..... cds.__hidden.__impl.__AbstractConstIteratorRelativeInsertionPrimitiveClient
+PrivateAccessRef ..... cds.__hidden.__impl.__FindUniqueImmutablePrimitiveClient
+PrivateAccessRef ..... cds.__hidden.__impl.__FindUniqueMutablePrimitiveClient
 
 !endif
 !endsub

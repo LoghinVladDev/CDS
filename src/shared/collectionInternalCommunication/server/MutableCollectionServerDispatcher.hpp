@@ -2,14 +2,14 @@
  * Created by loghin on 09/07/22.
  */
 
-#ifndef __CDS_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_HPP__
-#define __CDS_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "CollectionServerDispatcher.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Server-Dispatcher-Type Class part of the Collection Communication Model, to be
@@ -45,23 +45,23 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ServerType,                                                                                                                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                   /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )         ()                                                                  -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )           ()                                                                  -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )        ()                                                          const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )          ()                                                          const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )                                   -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )        ( __AbstractIteratorType const & )                                  -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )                             -> bool,                /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )   ( __AbstractIteratorType const * const *, Size )                    -> Size,                /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size                 /* NOLINT(bugprone-reserved-identifier) */
-            > class __MutableCollectionServerDispatcher :                                                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,                                                                                                                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ServiceType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                                                                                                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __AbstractIteratorType,                                                                                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __AbstractConstIteratorType,                                                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ConstIteratorType,                                                                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __beginFunction )         ()                                                                  -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __endFunction )           ()                                                                  -> __IteratorType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __cbeginFunction )        ()                                                          const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __cendFunction )          ()                                                          const   -> __ConstIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __newAddressFunction )    ( __ElementType const *, bool * )                                   -> __ElementType *,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeFunction )        ( __AbstractIteratorType const & )                                  -> bool,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeConstFunction )   ( __AbstractConstIteratorType const & )                             -> bool,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeArrayFunction )   ( __AbstractIteratorType const * const *, Size )                    -> Size,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __MutableCollectionServerDispatcher :                                                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-member-init) */
                     public __CollectionServerDispatcher <
                             __ServerType,
                             __ServiceType,
@@ -75,7 +75,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __removeConstArrayFunction
                     > {
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __beginFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -84,9 +84,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __endFunction to construct a new delegate iterator using the received iterator
                  * @exceptsafe
@@ -95,9 +95,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __beginFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -106,9 +106,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __endFunction to return the received iterator. Used by local clients
                  * @exceptsafe
@@ -117,9 +117,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __removeFunction, and is used by the server
                  * @param [in] pIterator : __IteratorType cptr = Address to an Immutable Iterator to be removed
@@ -131,11 +131,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                  * @protected
                  */
-                auto __remove ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function provided by the dispatcher interface calling the received __removeArrayFunction, and is used by the server
                  * @param [in] ppIterators : __AbstractIteratorType cptr cptr = Address to an Immutable Array of Immutable Addresses to Iterators to be removed
@@ -147,14 +147,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                  * @protected
                  */
-                auto __removeArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __removeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractIteratorType  const * const * ppIterators,
                         Size                                    iteratorArrayCount
                 ) noexcept -> Size;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_HPP__ */
