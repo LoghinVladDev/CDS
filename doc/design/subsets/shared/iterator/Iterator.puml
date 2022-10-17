@@ -9,6 +9,7 @@
 !includesub HashTableIterator.puml!public_declaration
 !includesub AddressIterator.puml!public_declaration
 !includesub NodeIterator.puml!public_declaration
+!includesub IteratorGenericDecorator.puml!public_declaration
 
 !endif
 !endsub
