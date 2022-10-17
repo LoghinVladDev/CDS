@@ -121,7 +121,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeHandlerType    = __ElementType * ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverNewBeforeHandlerType    = __ElementType * ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                    = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -170,7 +170,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterHandlerType = __ElementType * ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverNewAfterHandlerType = __ElementType * ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -219,7 +219,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeArrayHandlerType   = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                using __ReceiverNewBeforeArrayHandlerType   = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -274,7 +274,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterArrayHandlerType    = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                using __ReceiverNewAfterArrayHandlerType    = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -487,7 +487,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeArrayHandlerType   = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                using __ReceiverNewBeforeArrayHandlerType   = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -545,7 +545,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterArrayHandlerType    = bool ( __ReceiverType :: * ) ( __GenericIterator, Size, __ElementType ** );
+                using __ReceiverNewAfterArrayHandlerType    = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 

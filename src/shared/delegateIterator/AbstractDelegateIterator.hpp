@@ -12,12 +12,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
-             * @typedef Alias for a generic delegate iterator. Unknown, intentional, as iterator server will generate a derived delegate iterator
-             * */
-            using __GenericIterator = void const *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-
-            /**
              * @interface Abstract Delegate Iterator, without defined proper type, abstract only, as Collection must not know the type of delegate.
              * @tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
              *
@@ -131,11 +125,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @brief Function used to obtain the base iterator of the derived class, used in extraction of base iterator, such as Collection :: remove ( abstract ) -> Array :: remove ( base iterator )
                  * @exceptsafe
-                 * @return __GenericIterator = unknown type, pointer to iterator. To be returned by delegates and to be reinterpreted by base derived class functions
+                 * @return cds :: meta :: Iterator cptr = pointer to const iterator. To be returned by delegates and to be reinterpreted by base derived class functions
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> __GenericIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> cds :: meta :: Iterator const * = 0; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**

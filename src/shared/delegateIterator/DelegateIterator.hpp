@@ -189,13 +189,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /**
                  * @brief Function used to acquire the wrapped iterator's address as a generic iterator
                  * @exceptsafe
-                 * @return __GenericIterator = address of the wrapped iterator, a 'generic' iterator
+                 * @return cds :: meta :: Iterator cptr = address of the wrapped constant iterator, a 'generic' iterator
                  *
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  *
                  * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto iterator () const noexcept -> __GenericIterator override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto iterator () const noexcept -> cds :: meta :: Iterator const * override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**

@@ -19,7 +19,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     AbstractIterator const & iterator
             ) noexcept -> bool {
 
-                using __ReceiverRemoveIteratorHandlerType   = bool ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverRemoveIteratorHandlerType   = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
                 auto pReceiver                              = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* Since iterator is abstract, it is compatible with Collection Ownership -> has 'of' function. Check for ownership. If not owned, removal unsuccessful */
@@ -51,11 +51,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size                     iteratorCount
             ) noexcept -> Size {
 
-                using __ReceiverRemoveIteratorArrayHandlerType  = Size ( __ReceiverType :: * ) ( __GenericIterator const *, Size );
-                using __ReceiverRemoveIteratorHandlerType       = bool ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverRemoveIteratorArrayHandlerType  = Size ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * const *, Size );
+                using __ReceiverRemoveIteratorHandlerType       = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
 
                 auto pReceiver                  = reinterpret_cast < __ReceiverType * > ( this );
-                auto genericIteratorArray       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __GenericIterator > ( iteratorCount );
+                auto genericIteratorArray       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < cds :: meta :: Iterator const * > ( iteratorCount );
                 Size genericIteratorArraySize   = 0ULL;
                 Size removedIteratorCount       = 0ULL;
 

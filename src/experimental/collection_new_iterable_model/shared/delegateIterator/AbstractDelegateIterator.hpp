@@ -14,7 +14,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
                 using __GenericIterator             __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __GenericIterator;
+                        cds :: meta :: Iterator const *;
 
                 template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
                 using __AbstractDelegateIterator    __CDS_DeprecatedHint("No longer an experimental feature.") =    /* NOLINT(bugprone-reserved-identifier) */

@@ -15,7 +15,7 @@ namespace cds {
         # {method} AbstractAddressIterator (__ElementType *) noexcept
         # {method} AbstractAddressIterator (AbstractAddressIterator const &) noexcept
         # {method} AbstractAddressIterator (AbstractAddressIterator &&) noexcept
-        + {method} ~AbstractAddressIterator () noexcept
+        + {method} {abstract} ~AbstractAddressIterator () noexcept
         + {method} operator = (AbstractAddressIterator const &) noexcept -> AbstractAddressIterator & = delete
         + {method} operator = (AbstractAddressIterator &&) noexcept -> AbstractAddressIterator & = delete
         ..protected methods for derived classes..

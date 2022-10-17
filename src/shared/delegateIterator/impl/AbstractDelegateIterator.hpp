@@ -16,14 +16,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDestructor __AbstractDelegateIterator < __ElementType > :: ~__AbstractDelegateIterator () noexcept = default;
 
-
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_VirtualConstexpr auto __AbstractDelegateIterator < __ElementType > :: iterator () const noexcept -> __GenericIterator {
-
-                /* Intended as pure abstract, made as abstract due to MinGW-cpp14-constexpr pure virtual limitation */
-                return nullptr;
-            }
-
         } /* namespace __impl */
     } /* namespace __hidden */
 } /* namespace cds */
