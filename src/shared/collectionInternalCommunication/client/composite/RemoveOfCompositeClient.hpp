@@ -2,12 +2,12 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_REMOVE_OF_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_REMOVE_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_REMOVE_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_REMOVE_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling removeOf statements - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf.
@@ -31,13 +31,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > class __RemoveOfCompositeClient {                                                     /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __RemoveOfCompositeClient {                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will remove begin for count times, unless count >= size, when it will just call clear.
@@ -49,12 +49,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                        count,
                         __FromIterableType  const & from
                 ) noexcept -> Size;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeFirstOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will remove begin once.
@@ -65,11 +65,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeFirstOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeFirstOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeLastOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will remove last element once.
@@ -80,11 +80,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeLastOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeLastOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeAllOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will clear the collection and return the size before clear
@@ -95,11 +95,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeAllOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeAllOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> Size;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will do nothing.
@@ -111,12 +111,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeNotOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeNotOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                        count,
                         __FromIterableType  const & from
                 ) noexcept -> Size;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeFirstNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will do nothing.
@@ -127,11 +127,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeFirstNotOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeFirstNotOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeLastNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will do nothing.
@@ -142,11 +142,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeLastNotOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeLastNotOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used in removeAllNotOf in the case of a self-referential remove ( removeOf with caller as parameter ).
                  * Will do nothing.
@@ -157,11 +157,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __iro_selfReferentialCase_removeAllNotOf ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __iro_selfReferentialCase_removeAllNotOf ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __FromIterableType const & from
                 ) noexcept -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the elements in the caller that are found in the given iterable parameter, until a removal limit has been reached, at which point the function will stop
                  * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
@@ -185,7 +185,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType  const & from
                 ) noexcept -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the first element in the caller that is found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the first element found in.
@@ -205,7 +205,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the last element in the caller that is found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the last element found in.
@@ -225,7 +225,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove all the elements in the caller that are found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements found in.
@@ -245,7 +245,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) noexcept -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the elements in the caller that not are found in the given iterable parameter, until a removal limit has been reached, at which point the function will stop
                  * @param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
@@ -269,7 +269,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType  const & from
                 ) noexcept -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the first element in the caller that is not found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the first element not found in.
@@ -289,7 +289,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove the last element in the caller that is not found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the last element not found in.
@@ -309,7 +309,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove all the elements in the caller that are not found in the given iterable parameter.
                  * @param [in] from : __FromIterableType cref = Constant Reference to the iterable to remove the elements not found in.
@@ -352,11 +352,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalRemoveOfCompositeClient =                                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalRemoveOfCompositeClient =                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RemoveOfCompositeClient <
                             __IterableType,
                             __ElementType,
@@ -364,8 +364,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __containsFunction
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_REMOVE_OF_COMPOSITE_CLIENT_HPP__ */

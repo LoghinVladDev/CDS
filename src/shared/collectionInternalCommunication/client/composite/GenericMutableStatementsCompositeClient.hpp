@@ -2,15 +2,15 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include "../../../iterator/IteratorStatements.hpp"
+#include "../../../iterator/IteratorStatements.hpp"         /* NOLINT(llvm-include-order) */
 #include "../../../iterator/IteratorMemberStatements.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling functional statements ( actions & predicates as parameters ) on an mutable iterable type ( has 'begin' and 'end' )
@@ -26,18 +26,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                      /* NOLINT(bugprone-reserved-identifier) */
-            > class __GenericMutableStatementsCompositeClient { /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __GenericMutableStatementsCompositeClient { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Private definition for __ElementType template parameter  
                  * @private
                  * */
                 using ElementType = __ElementType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to apply an action over each element of the iterable
                  * @tparam __Action the type of the action given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
@@ -49,7 +49,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __Action > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __Action > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto forEach (
                         __Action const & action
                 ) noexcept ( noexcept ( __forEach (
@@ -58,7 +58,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         action
                 ) ) ) -> void;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the iterable contains exactly 'count' elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be a callable compatible with the 'bool ( Decay < ElementType > )' function signature or a member function compatible with the signature 'bool () const'
@@ -74,7 +74,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto some (
                         Size                count,
                         __Predicate const & predicate
@@ -85,7 +85,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the iterable contains at least 'count' elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -101,7 +101,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto atLeast (
                         Size                count,
                         __Predicate const & predicate
@@ -112,7 +112,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the iterable contains at most 'count' elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -128,7 +128,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto atMost (
                         Size                count,
                         __Predicate const & predicate
@@ -139,7 +139,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the iterable contains more than 'count' elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -155,7 +155,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto moreThan (
                         Size                count,
                         __Predicate const & predicate
@@ -166,7 +166,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the collection contains less than 'count' elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -182,7 +182,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto fewerThan (
                         Size                count,
                         __Predicate const & predicate
@@ -193,7 +193,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the number of elements that are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -208,7 +208,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto count (
                         __Predicate const & predicate = & predicates :: alwaysTrue < __ElementType >
                 ) noexcept ( noexcept ( __count (
@@ -217,7 +217,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if any of the collection's elements are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -232,7 +232,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto any (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( __any (
@@ -241,7 +241,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if all of the collection's elements are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -256,7 +256,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto all (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( __all (
@@ -265,7 +265,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if none of the collection's elements are validated by a given predicate
                  * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable compatible with the signature 'bool ( Decay < ElementType > )' or a member function compatible with the signature 'bool () const'
@@ -280,7 +280,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto none (
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( __none (
@@ -305,19 +305,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                              /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalGenericMutableStatementsCompositeClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalGenericMutableStatementsCompositeClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericMutableStatementsCompositeClient <
                             __IterableType,
                             __ElementType
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
-#include "../../../iterator/impl/IteratorStatements.hpp"
+#include "../../../iterator/impl/IteratorStatements.hpp"        /* NOLINT(llvm-include-order) */
 #include "../../../iterator/impl/IteratorMemberStatements.hpp"
 
 #endif /* __CDS_SHARED_GENERIC_MUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ */

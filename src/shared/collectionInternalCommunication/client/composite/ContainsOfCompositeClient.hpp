@@ -2,12 +2,12 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_CONTAINS_OF_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_CONTAINS_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_CONTAINS_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_CONTAINS_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling containsOf statements - contains + AnyOf / AnyNotOf / AllOf / NoneOf, with a generic parameter type ( Collection, initializer_list, etc. )
@@ -24,13 +24,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier) */
-            > class __ContainsOfCompositeClient {                                                   /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __ContainsOfCompositeClient {                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the caller iterable contains any element that matches any element from the given parameter iterable
                  * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
@@ -51,7 +51,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the caller iterable contains any element that does not match any element from the given parameter iterable
                  * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
@@ -72,7 +72,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if all of the elements in the given parameter iterable match an element in the caller iterable
                  * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
@@ -93,7 +93,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the caller collection contains no element that matches any element from the given parameter iterable
                  * @param [in] from : __FromIterableType cref = Constant Reference to an iterable to check inclusion for
@@ -132,11 +132,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalContainsOfCompositeClient =                                              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalContainsOfCompositeClient =                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ContainsOfCompositeClient <
                             __IterableType,
                             __ElementType,
@@ -144,8 +144,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __contains
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_CONTAINS_OF_COMPOSITE_CLIENT_HPP__ */

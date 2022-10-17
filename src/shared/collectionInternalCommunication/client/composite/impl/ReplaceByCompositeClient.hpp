@@ -2,20 +2,20 @@
  * Created by loghin on 6/30/2022.
  */
 
-#ifndef __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier,        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMoveAssignable < __ElementType > ()
                     > = 0
-            > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ElementType         & element,
                     __Supplier      const & supplier
             ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = std :: move ( cds :: meta :: referenceOf < __ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> void {
@@ -25,12 +25,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier,        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             ! cds :: meta :: isMoveAssignable < __ElementType > ()
                     > = 0
-            > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ElementType         & element,
                     __Supplier      const & supplier
             ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = cds :: meta :: referenceOf < __ElementType > () ) && noexcept ( supplier ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> void {
@@ -40,11 +40,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyAssignable < __TElementType > ()
                     >
@@ -77,11 +77,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyAssignable < __TElementType > ()
                     >
@@ -112,11 +112,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMoveAssignable < __TElementType > ()
                     >
@@ -147,11 +147,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyAssignable < __TElementType > ()
                     >
@@ -182,11 +182,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMoveAssignable < __TElementType > ()
                     >
@@ -217,11 +217,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyAssignable < __TElementType > ()
                     >
@@ -253,11 +253,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ReplaceByCompositeClient <
                     __ReceiverType,
                     __ElementType
@@ -291,11 +291,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ReplaceByCompositeClient <
                     __ReceiverType,
                     __ElementType
@@ -327,11 +327,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ReplaceByCompositeClient <
                     __ReceiverType,
                     __ElementType
@@ -363,11 +363,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Predicate,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Supplier         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ReplaceByCompositeClient <
                     __ReceiverType,
                     __ElementType
@@ -398,8 +398,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return replacedCount;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ */

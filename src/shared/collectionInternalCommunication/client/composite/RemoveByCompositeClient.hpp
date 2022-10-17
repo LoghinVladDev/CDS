@@ -2,12 +2,12 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_REMOVE_BY_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_REMOVE_BY_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_REMOVE_BY_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_REMOVE_BY_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling removeThat statements - removeThat / removeFirstThat / removeLastThat / removeAllThat.
@@ -29,18 +29,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
-            > class __RemoveByCompositeClient {     /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __RemoveByCompositeClient {     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for parameter type __ElementType
                  * @protected
                  */
                 using ElementType = __ElementType const;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the elements that yield true to the given predicate, until a removal limit has been reached
                  * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
@@ -61,7 +61,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -73,7 +73,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the elements that yield true to the given predicate member function, until a removal limit has been reached
                  * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
@@ -87,7 +87,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -99,7 +99,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( ( cds :: meta :: addressOf < ElementType > () ->* predicate ) () ) ) -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the first element that yields true to the given predicate
                  * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
@@ -117,7 +117,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -128,7 +128,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the first element that yields true to the given predicate member function
                  * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
@@ -141,7 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -152,7 +152,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( ( cds :: meta :: addressOf < ElementType > () ->* predicate ) () ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the last element that yields true to the given predicate
                  * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
@@ -170,7 +170,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -181,7 +181,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller the last element that yields true to the given predicate member function
                  * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
@@ -194,7 +194,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -205,7 +205,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( ( cds :: meta :: addressOf < ElementType > () ->* predicate ) () ) ) -> bool;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller all the elements that yield true to the given predicate
                  * @tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
@@ -223,7 +223,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -234,7 +234,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __Predicate const & predicate
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove from the caller all the element that yield true to the given predicate member function
                  * @tparam __Predicate is the type of the predicate member function, compatible with the signature bool (), member function of ElementType
@@ -247,7 +247,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Predicate, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMemberFunctionPointer <
                                         __Predicate,
@@ -279,16 +279,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType              /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalRemoveByCompositeClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalRemoveByCompositeClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RemoveByCompositeClient <
                             __IterableType,
                             __ElementType
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_REMOVE_BY_COMPOSITE_CLIENT_HPP__ */

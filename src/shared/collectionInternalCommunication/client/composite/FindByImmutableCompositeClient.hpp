@@ -2,15 +2,15 @@
  * Created by loghin on 6/27/22.
  */
 
-#ifndef __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include "../../../iterator/IteratorFindStatements.hpp"
+#include "../../../iterator/IteratorFindStatements.hpp"         /* NOLINT(llvm-include-order) */
 #include "../../../iterator/IteratorFindMemberStatements.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling functional find statements ( predicates as parameters, henceforth the 'find' elements 'that' are validated by a predicate )
@@ -28,19 +28,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
-            > class __FindByImmutableCompositeClient {      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __FindByImmutableCompositeClient {      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Private definition for __IteratorType template parameter
                  * @private
                  */
                 using ConstIterator = __IteratorType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are validated by a given predicate and return the iterators of the elements in a given collection, until a given limit has been reached, at which point the iteration will stop.
                  * @tparam __CollectionType is the type of template iterable to store the iterators in
@@ -68,8 +68,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier) */
+                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > auto findThat (
                         Size                                        count,
                         __CollectionType < ConstIterator >        & storeIn,
@@ -82,7 +82,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are validated by a given predicate and return the iterators of the elements in a new collection, until a given limit has been reached, at which point the iteration will stop.
                  * @tparam __CollectionType is the type of template iterable to store the iterators in
@@ -109,8 +109,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier) */
+                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto findThat (
                         Size count,
                         __Predicate const & predicate
@@ -122,7 +122,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the first element validated by a given predicate and return the iterator of the element, if applicable.
                  * @tparam __Predicate is the type of the predicate given as a parameter, the type must be callable and compatible with the 'bool ( Decay < ElementType > )' function signature, or with the 'bool () const' member function signature.
@@ -144,7 +144,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findFirstThat (
                         __Predicate const & predicate
                 ) const noexcept ( noexcept ( __findFirstThat (
@@ -153,7 +153,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the last element validated by a given predicate and return the iterator of the element, if applicable.
                  * @tparam __Predicate is the type of the predicate given as a parameter, the type must be callable and compatible with the 'bool ( Decay < ElementType > )' function signature, or with the 'bool () const' member function signature.
@@ -175,7 +175,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findLastThat (
                         __Predicate const & predicate
                 ) const noexcept ( noexcept ( __findLastThat (
@@ -184,7 +184,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are validated by a given predicate and return the iterators of the elements in a given collection
                  * @tparam __CollectionType is the type of template iterable to store the iterators in
@@ -209,8 +209,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier) */
+                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > auto findAllThat (
                         __CollectionType < ConstIterator >        & storeIn,
                         __Predicate                         const & predicate
@@ -221,7 +221,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         predicate
                 ) ) ) -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are validated by a given predicate and return the iterators of the elements in a new collection
                  * @tparam __CollectionType is the type of template iterable to store the iterators in
@@ -245,8 +245,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @public
                  */
                 template <
-                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier) */
+                        template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto findAllThat (
                         __Predicate const & predicate
                 ) const noexcept ( noexcept ( __findAllThat (
@@ -273,21 +273,21 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __IterableType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalFindByImmutableCompositeClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IterableType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalFindByImmutableCompositeClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindByImmutableCompositeClient <
                             __IterableType,
                             __ElementType,
                             __IteratorType
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
-#include "../../../iterator/impl/IteratorFindStatements.hpp"
+#include "../../../iterator/impl/IteratorFindStatements.hpp"        /* NOLINT(llvm-include-order) */
 #include "../../../iterator/impl/IteratorFindMemberStatements.hpp"
 
 #endif /* __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__ */
