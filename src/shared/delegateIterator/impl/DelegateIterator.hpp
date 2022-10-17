@@ -90,7 +90,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > __CDS_cpplang_ConstexprOverride auto __DelegateIterator <
                     __ElementType,
                     __WrappedIteratorType
-            > :: iterator () const noexcept -> cds :: meta :: Iterator const * {
+            > :: iterator () const noexcept -> __WrappedIteratorType const * {
 
                 /* return the address of this iterator */
                 return & this->_wrappedIterator;

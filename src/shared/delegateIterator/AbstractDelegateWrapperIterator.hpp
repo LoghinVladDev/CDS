@@ -145,7 +145,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00350-RAIT, Test Cases: All
                  * @test Suite: CTS-00001, Group: CTG-00400-RB, Test Cases: All
                  * @test Suite: CTS-00001, Group: CTG-00450-RO, Test Cases: All
-                 * @public
+                 * @protected
                  */
                 __CDS_NoDiscard constexpr auto of (
                         Object const * pObject

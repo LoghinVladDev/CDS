@@ -1,0 +1,23 @@
+@startuml
+
+!startsub public_declaration
+!ifndef IT_ADV_DIR_PUBLIC
+!define IT_ADV_DIR_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            enum __IteratorAdvanceDirection {
+                + {field} {static} __iad_forward
+                + {field} {static} __iad_backward
+            }
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

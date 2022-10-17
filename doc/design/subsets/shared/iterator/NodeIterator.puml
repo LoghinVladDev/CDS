@@ -70,7 +70,7 @@ namespace cds {
         # {method} AbstractBidirectionalNodeIterator (cds.__hidden.__impl.__BidirectionalNode <E> *, cds.__hidden.__impl.__BidirectionalNode <E> *) noexcept
         # {method} AbstractBidirectionalNodeIterator (AbstractBidirectionalNodeIterator const &) noexcept
         # {method} AbstractBidirectionalNodeIterator (AbstractBidirectionalNodeIterator &&) noexcept
-        + {method} ~AbstractBidirectionalNodeIterator () noexcept
+        + {method} {abstract} ~AbstractBidirectionalNodeIterator () noexcept
         # {method} operator = (AbstractBidirectionalNodeIterator const &) noexcept -> AbstractBidirectionalNodeIterator &
         # {method} operator = (AbstractBidirectionalNodeIterator &&) noexcept -> AbstractBidirectionalNodeIterator &
         ..public methods..
@@ -92,7 +92,7 @@ namespace cds {
         # {method} AbstractBidirectionalNodeConstIterator (cds.__hidden.__impl.__BidirectionalNode <E> const *, cds.__hidden.__impl.__BidirectionalNode <E> const *) noexcept
         # {method} AbstractBidirectionalNodeConstIterator (AbstractBidirectionalNodeConstIterator const &) noexcept
         # {method} AbstractBidirectionalNodeConstIterator (AbstractBidirectionalNodeConstIterator &&) noexcept
-        + {method} ~AbstractBidirectionalNodeConstIterator () noexcept
+        + {method} {abstract} ~AbstractBidirectionalNodeConstIterator () noexcept
         # {method} operator = (AbstractBidirectionalNodeConstIterator const &) noexcept -> AbstractBidirectionalNodeConstIterator &
         # {method} operator = (AbstractBidirectionalNodeConstIterator &&) noexcept -> AbstractBidirectionalNodeConstIterator &
         ..public methods..
