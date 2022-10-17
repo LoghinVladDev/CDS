@@ -1,0 +1,185 @@
+@startuml
+
+!includesub IteratorModel.puml!public_declaration
+!includesub NodeModel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef NODE_ITERATOR_PUBLIC
+!define NODE_ITERATOR_PUBLIC
+
+namespace cds {
+
+    class UnidirectionalNodeIterator <E> implements cds.meta.ForwardIterator {
+        ..fields..
+        - {field} _pCurrentNode : cds.__hidden.__impl.__UnidirectionalNode <E> *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__UnidirectionalNode <E> *
+        ..base methods..
+        + {method} UnidirectionalNodeIterator () noexcept
+        + {method} UnidirectionalNodeIterator (cds.__hidden.__impl.__UnidirectionalNode <E> *, cds.__hidden.__impl.__UnidirectionalNode <E> *) noexcept
+        + {method} UnidirectionalNodeIterator (UnidirectionalNodeIterator const &) noexcept
+        + {method} UnidirectionalNodeIterator (UnidirectionalNodeIterator &&) noexcept
+        + {method} ~UnidirectionalNodeIterator () noexcept
+        + {method} operator = (UnidirectionalNodeIterator const &) noexcept -> UnidirectionalNodeIterator &
+        + {method} operator = (UnidirectionalNodeIterator &&) noexcept -> UnidirectionalNodeIterator &
+        ..public methods..
+        + {method} operator * () const noexcept -> E &
+        + {method} operator -> () const noexcept -> E *
+        + {method} operator == (UnidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator != (UnidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> UnidirectionalNodeIterator &
+        + {method} operator ++ (int) noexcept -> UnidirectionalNodeIterator
+        + {method} operator -- () noexcept -> UnidirectionalNodeIterator &
+        + {method} operator -- (int) noexcept -> UnidirectionalNodeIterator
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__UnidirectionalNode "2" --o "1" UnidirectionalNodeIterator
+
+    class UnidirectionalNodeConstIterator <E> implements cds.meta.ForwardIterator {
+        ..fields..
+        - {field} _pCurrentNode : cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        ..base methods..
+        + {method} UnidirectionalNodeConstIterator () noexcept
+        + {method} UnidirectionalNodeConstIterator (cds.__hidden.__impl.__UnidirectionalNode <E> const *, cds.__hidden.__impl.__UnidirectionalNode <E> const *) noexcept
+        + {method} UnidirectionalNodeConstIterator (UnidirectionalNodeConstIterator const &) noexcept
+        + {method} UnidirectionalNodeConstIterator (UnidirectionalNodeConstIterator &&) noexcept
+        + {method} ~UnidirectionalNodeConstIterator () noexcept
+        + {method} operator = (UnidirectionalNodeConstIterator const &) noexcept -> UnidirectionalNodeConstIterator &
+        + {method} operator = (UnidirectionalNodeConstIterator &&) noexcept -> UnidirectionalNodeConstIterator &
+        ..public methods..
+        + {method} operator * () const noexcept -> E const &
+        + {method} operator -> () const noexcept -> E const *
+        + {method} operator == (UnidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator != (UnidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> UnidirectionalNodeConstIterator &
+        + {method} operator ++ (int) noexcept -> UnidirectionalNodeConstIterator
+        + {method} operator -- () noexcept -> UnidirectionalNodeConstIterator &
+        + {method} operator -- (int) noexcept -> UnidirectionalNodeConstIterator
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__UnidirectionalNode "2" --o "1" UnidirectionalNodeConstIterator
+
+    abstract class AbstractBidirectionalNodeIterator <E> implements cds.meta.BidirectionalIterator {
+        ..fields..
+        - {field} _pCurrentNode : cds.__hidden.__impl.__BidirectionalNode <E> *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__BidirectionalNode <E> *
+        ..base methods..
+        # {method} AbstractBidirectionalNodeIterator () noexcept
+        # {method} AbstractBidirectionalNodeIterator (cds.__hidden.__impl.__BidirectionalNode <E> *, cds.__hidden.__impl.__BidirectionalNode <E> *) noexcept
+        # {method} AbstractBidirectionalNodeIterator (AbstractBidirectionalNodeIterator const &) noexcept
+        # {method} AbstractBidirectionalNodeIterator (AbstractBidirectionalNodeIterator &&) noexcept
+        + {method} ~AbstractBidirectionalNodeIterator () noexcept
+        # {method} operator = (AbstractBidirectionalNodeIterator const &) noexcept -> AbstractBidirectionalNodeIterator &
+        # {method} operator = (AbstractBidirectionalNodeIterator &&) noexcept -> AbstractBidirectionalNodeIterator &
+        ..public methods..
+        + {method} operator * () const noexcept -> E &
+        + {method} operator -> () const noexcept -> E *
+        + {method} operator == (AbstractBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator != (AbstractBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__BidirectionalNode "2" --o "1" AbstractBidirectionalNodeIterator
+
+    abstract class AbstractBidirectionalNodeConstIterator <E> implements cds.meta.BidirectionalIterator {
+        ..fields..
+        - {field} _pCurrentNode : cds.__hidden.__impl.__BidirectionalNode <E> const *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__BidirectionalNode <E> const *
+        ..base methods..
+        # {method} AbstractBidirectionalNodeConstIterator () noexcept
+        # {method} AbstractBidirectionalNodeConstIterator (cds.__hidden.__impl.__BidirectionalNode <E> const *, cds.__hidden.__impl.__BidirectionalNode <E> const *) noexcept
+        # {method} AbstractBidirectionalNodeConstIterator (AbstractBidirectionalNodeConstIterator const &) noexcept
+        # {method} AbstractBidirectionalNodeConstIterator (AbstractBidirectionalNodeConstIterator &&) noexcept
+        + {method} ~AbstractBidirectionalNodeConstIterator () noexcept
+        # {method} operator = (AbstractBidirectionalNodeConstIterator const &) noexcept -> AbstractBidirectionalNodeConstIterator &
+        # {method} operator = (AbstractBidirectionalNodeConstIterator &&) noexcept -> AbstractBidirectionalNodeConstIterator &
+        ..public methods..
+        + {method} operator * () const noexcept -> E const &
+        + {method} operator -> () const noexcept -> E const *
+        + {method} operator == (AbstractBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator != (AbstractBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__BidirectionalNode "2" --o "1" AbstractBidirectionalNodeConstIterator
+
+    class ForwardBidirectionalNodeIterator extends AbstractBidirectionalNodeIterator {
+        ..base methods..
+        + {method} ForwardBidirectionalNodeIterator () noexcept
+        + {method} ForwardBidirectionalNodeIterator (cds.__hidden.__impl.__BidirectionalNode <E> *, cds.__hidden.__impl.__BidirectionalNode <E> *) noexcept
+        + {method} ForwardBidirectionalNodeIterator (ForwardBidirectionalNodeIterator const &) noexcept
+        + {method} ForwardBidirectionalNodeIterator (ForwardBidirectionalNodeIterator &&) noexcept
+        + {method} ~ForwardBidirectionalNodeIterator () noexcept
+        + {method} operator = (ForwardBidirectionalNodeIterator const &) noexcept -> ForwardBidirectionalNodeIterator &
+        + {method} operator = (ForwardBidirectionalNodeIterator &&) noexcept -> ForwardBidirectionalNodeIterator &
+        ..public methods..
+        + {method} operator == (ForwardBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator != (ForwardBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> ForwardBidirectionalNodeIterator &
+        + {method} operator ++ (int) noexcept -> ForwardBidirectionalNodeIterator
+        + {method} operator -- () noexcept -> ForwardBidirectionalNodeIterator &
+        + {method} operator -- (int) noexcept -> ForwardBidirectionalNodeIterator
+    }
+
+    class BackwardBidirectionalNodeIterator extends AbstractBidirectionalNodeIterator {
+        ..base methods..
+        + {method} BackwardBidirectionalNodeIterator () noexcept
+        + {method} BackwardBidirectionalNodeIterator (cds.__hidden.__impl.__BidirectionalNode <E> *, cds.__hidden.__impl.__BidirectionalNode <E> *) noexcept
+        + {method} BackwardBidirectionalNodeIterator (BackwardBidirectionalNodeIterator const &) noexcept
+        + {method} BackwardBidirectionalNodeIterator (BackwardBidirectionalNodeIterator &&) noexcept
+        + {method} ~BackwardBidirectionalNodeIterator () noexcept
+        + {method} operator = (BackwardBidirectionalNodeIterator const &) noexcept -> BackwardBidirectionalNodeIterator &
+        + {method} operator = (BackwardBidirectionalNodeIterator &&) noexcept -> BackwardBidirectionalNodeIterator &
+        ..public methods..
+        + {method} operator == (BackwardBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator != (BackwardBidirectionalNodeIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> BackwardBidirectionalNodeIterator &
+        + {method} operator ++ (int) noexcept -> BackwardBidirectionalNodeIterator
+        + {method} operator -- () noexcept -> BackwardBidirectionalNodeIterator &
+        + {method} operator -- (int) noexcept -> BackwardBidirectionalNodeIterator
+    }
+
+    class ForwardBidirectionalNodeConstIterator extends AbstractBidirectionalNodeConstIterator {
+        ..base methods..
+        + {method} ForwardBidirectionalNodeConstIterator () noexcept
+        + {method} ForwardBidirectionalNodeConstIterator (cds.__hidden.__impl.__BidirectionalNode <E> const *, cds.__hidden.__impl.__BidirectionalNode <E> const *) noexcept
+        + {method} ForwardBidirectionalNodeConstIterator (ForwardBidirectionalNodeConstIterator const &) noexcept
+        + {method} ForwardBidirectionalNodeConstIterator (ForwardBidirectionalNodeConstIterator &&) noexcept
+        + {method} ~ForwardBidirectionalNodeConstIterator () noexcept
+        + {method} operator = (ForwardBidirectionalNodeConstIterator const &) noexcept -> ForwardBidirectionalNodeConstIterator &
+        + {method} operator = (ForwardBidirectionalNodeConstIterator &&) noexcept -> ForwardBidirectionalNodeConstIterator &
+        ..public methods..
+        + {method} operator == (ForwardBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator != (ForwardBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> ForwardBidirectionalNodeConstIterator &
+        + {method} operator ++ (int) noexcept -> ForwardBidirectionalNodeConstIterator
+        + {method} operator -- () noexcept -> ForwardBidirectionalNodeConstIterator &
+        + {method} operator -- (int) noexcept -> ForwardBidirectionalNodeConstIterator
+    }
+
+    class BackwardBidirectionalNodeConstIterator extends AbstractBidirectionalNodeConstIterator {
+        ..base methods..
+        + {method} BackwardBidirectionalNodeConstIterator () noexcept
+        + {method} BackwardBidirectionalNodeConstIterator (cds.__hidden.__impl.__BidirectionalNode <E> const *, cds.__hidden.__impl.__BidirectionalNode <E> const *) noexcept
+        + {method} BackwardBidirectionalNodeConstIterator (BackwardBidirectionalNodeConstIterator const &) noexcept
+        + {method} BackwardBidirectionalNodeConstIterator (BackwardBidirectionalNodeConstIterator &&) noexcept
+        + {method} ~BackwardBidirectionalNodeConstIterator () noexcept
+        + {method} operator = (BackwardBidirectionalNodeConstIterator const &) noexcept -> BackwardBidirectionalNodeConstIterator &
+        + {method} operator = (BackwardBidirectionalNodeConstIterator &&) noexcept -> BackwardBidirectionalNodeConstIterator &
+        ..public methods..
+        + {method} operator == (BackwardBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator != (BackwardBidirectionalNodeConstIterator const &) const noexcept -> bool
+        + {method} operator ++ () noexcept -> BackwardBidirectionalNodeConstIterator &
+        + {method} operator ++ (int) noexcept -> BackwardBidirectionalNodeConstIterator
+        + {method} operator -- () noexcept -> BackwardBidirectionalNodeConstIterator &
+        + {method} operator -- (int) noexcept -> BackwardBidirectionalNodeConstIterator
+    }
+
+}
+
+!endif
+!endsub
+
+@enduml
