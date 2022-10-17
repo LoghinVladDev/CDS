@@ -2,21 +2,21 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
-#define __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "AbstractDelegateIterator.hpp"
 #include "AbstractDelegateWrapperIterator.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __ForwardDelegateWrapperIterator < __ElementType > :: __ForwardDelegateWrapperIterator () noexcept = default;
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __ForwardDelegateWrapperIterator < __ElementType > :: __ForwardDelegateWrapperIterator (
                     Object                                          const * pOwner,
                     __AbstractDelegateIterator < __ElementType >          * pDelegate
@@ -30,7 +30,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __ForwardDelegateWrapperIterator < __ElementType > :: __ForwardDelegateWrapperIterator (
                     __ForwardDelegateWrapperIterator const & iterator
             ) noexcept :
@@ -40,7 +40,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __ForwardDelegateWrapperIterator < __ElementType > :: __ForwardDelegateWrapperIterator (
                     __ForwardDelegateWrapperIterator && iterator
             ) noexcept :
@@ -50,11 +50,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __ForwardDelegateWrapperIterator < __ElementType > :: ~__ForwardDelegateWrapperIterator () noexcept = default;
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __ForwardDelegateWrapperIterator < __ElementType > :: operator = (
                     __ForwardDelegateWrapperIterator const & iterator
             ) noexcept -> __ForwardDelegateWrapperIterator & {
@@ -64,7 +64,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __ForwardDelegateWrapperIterator < __ElementType > :: operator = (
                     __ForwardDelegateWrapperIterator && iterator
             ) noexcept -> __ForwardDelegateWrapperIterator & {
@@ -74,7 +74,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __ForwardDelegateWrapperIterator < __ElementType > :: operator == (
                     __ForwardDelegateWrapperIterator const & iterator
             ) const noexcept -> bool {
@@ -84,7 +84,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __ForwardDelegateWrapperIterator < __ElementType > :: operator != (
                     __ForwardDelegateWrapperIterator const & iterator
             ) const noexcept -> bool {
@@ -94,7 +94,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __ForwardDelegateWrapperIterator < __ElementType > :: operator ++ () noexcept -> __ForwardDelegateWrapperIterator & {
 
                 /* Request an iterator advance in the forward direction */
@@ -102,7 +102,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __ForwardDelegateWrapperIterator < __ElementType > :: operator * () const noexcept -> ElementType & {
 
                 /* Request the stored value */
@@ -110,15 +110,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __ForwardDelegateWrapperIterator < __ElementType > :: operator -> () const noexcept -> ElementType * {
 
                 /* Request the address of the stored value */
                 return & ( this->value() );
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ */

@@ -2,18 +2,18 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_ABSTRACT_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
-#define __CDS_SHARED_ABSTRACT_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ABSTRACT_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ABSTRACT_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __AbstractDelegateWrapperIterator < __ElementType > :: __AbstractDelegateWrapperIterator () noexcept = default;
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __AbstractDelegateWrapperIterator < __ElementType > :: __AbstractDelegateWrapperIterator (
                     Object                                          const * pOwner,
                     __AbstractDelegateIterator < __ElementType >          * pDelegate
@@ -25,7 +25,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __AbstractDelegateWrapperIterator < __ElementType > :: __AbstractDelegateWrapperIterator (
                     __AbstractDelegateWrapperIterator const & iterator
             ) noexcept :
@@ -36,7 +36,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __AbstractDelegateWrapperIterator < __ElementType > :: __AbstractDelegateWrapperIterator (
                     __AbstractDelegateWrapperIterator && iterator
             ) noexcept :
@@ -47,7 +47,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __AbstractDelegateWrapperIterator < __ElementType > :: ~__AbstractDelegateWrapperIterator () noexcept {
 
                 /* Destructor releases ownership of the wrapped abstract delegate */
@@ -55,7 +55,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __AbstractDelegateWrapperIterator < __ElementType > :: of (
                     Object const * pObject
             ) const noexcept -> bool {
@@ -65,7 +65,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: advance (
                     __IteratorAdvanceDirection direction
             ) noexcept -> __AbstractDelegateWrapperIterator & {
@@ -76,7 +76,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: equals (
                     __AbstractDelegateWrapperIterator const & iterator
             ) const noexcept -> bool {
@@ -88,7 +88,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: valid () const noexcept -> bool {
 
                 /* Determine validity by owner existence and delegate validity */
@@ -98,7 +98,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: value () const noexcept -> __ElementType & {
 
                 /* Obtain value from delegate */
@@ -106,7 +106,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __AbstractDelegateWrapperIterator < __ElementType > :: copy (
                     __AbstractDelegateWrapperIterator const & iterator
             ) noexcept -> __AbstractDelegateWrapperIterator & {
@@ -127,7 +127,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __AbstractDelegateWrapperIterator < __ElementType > :: move (
                     __AbstractDelegateWrapperIterator && iterator
             ) noexcept -> __AbstractDelegateWrapperIterator & {
@@ -147,8 +147,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return * this;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ABSTRACT_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__ */
