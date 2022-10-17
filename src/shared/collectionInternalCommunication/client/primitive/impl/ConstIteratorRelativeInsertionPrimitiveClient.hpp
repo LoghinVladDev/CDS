@@ -126,7 +126,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 
@@ -175,7 +175,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace after it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 
@@ -224,7 +224,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 
@@ -279,7 +279,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace after it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 
@@ -492,7 +492,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 
@@ -550,7 +550,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
-                if ( ! iterator.of ( pReceiver ) || ! iterator.valid() ) {
+                if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
                     return false;
                 }
 

@@ -310,7 +310,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != e ) ) {
+            if ( ! static_cast < bool > (it) || it == underTest.end() || ( * it != e ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;
@@ -345,7 +345,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != e ) ) {
+            if ( ! static_cast < bool > (it) || it == underTest.end() || ( * it != e ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;
@@ -380,7 +380,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != e ) ) {
+            if ( ! static_cast < bool > (it) || it == underTest.end() || ( * it != e ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;
@@ -415,7 +415,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != String(e) ) ) {
+            if ( ! static_cast < bool > (it) || it == underTest.end() || ( * it != String(e) ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;
@@ -450,7 +450,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != String(e) ) ) {
+            if ( ! static_cast <bool> (it) || it == underTest.end() || ( * it != String(e) ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;
@@ -485,7 +485,7 @@ auto SetTest :: execute () noexcept -> bool {
 
         for ( auto e : { 1, 2, 3, 4, 5 } ) {
             auto it = underTest.find ( e );
-            if ( ! it.valid() || it == underTest.end() || ( * it != String(e) ) ) {
+            if ( ! static_cast <bool> (it) || it == underTest.end() || ( * it != String(e) ) ) {
                 this->logError ( "'STC-00052-FU-FindUniqueIn-CPP20' failed" );
                 allOk = false;
                 break;

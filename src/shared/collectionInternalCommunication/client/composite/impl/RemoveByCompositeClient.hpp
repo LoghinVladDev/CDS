@@ -248,7 +248,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* if iterator found ( is valid ), call primitive and return result. False otherwise */
-                return toRemove.valid() && pIterable->remove ( toRemove );
+                return static_cast < bool > ( toRemove ) && pIterable->remove ( toRemove );
             }
 
 
@@ -287,7 +287,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* if iterator found ( is valid ), call primitive and return result. False otherwise */
-                return toRemove.valid() && pIterable->remove ( toRemove );
+                return static_cast < bool > ( toRemove ) && pIterable->remove ( toRemove );
             }
 
 

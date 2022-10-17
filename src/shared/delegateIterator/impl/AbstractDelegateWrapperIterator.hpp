@@ -89,7 +89,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: valid () const noexcept -> bool {
+            __CDS_cpplang_ConstexprPureAbstract __AbstractDelegateWrapperIterator < __ElementType > :: operator bool () const noexcept {
 
                 /* Determine validity by owner existence and delegate validity */
                 return
@@ -99,10 +99,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: value () const noexcept -> __ElementType & {
+            __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {
 
                 /* Obtain value from delegate */
                 return this->_pDelegate->value();
+            }
+
+
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprPureAbstract auto __AbstractDelegateWrapperIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
+
+                /* Obtain address of value from delegate */
+                return & ( this->_pDelegate->value() );
             }
 
 

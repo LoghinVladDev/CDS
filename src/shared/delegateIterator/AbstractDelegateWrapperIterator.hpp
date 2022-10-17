@@ -136,7 +136,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 virtual ~__AbstractDelegateWrapperIterator() noexcept;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
+            protected: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to verify if iterator was obtained from the given Object
                  * @param [in] pObject : Object cptr = Address to an Immutable Object
@@ -173,29 +173,39 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto equals ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __AbstractDelegateWrapperIterator const & iterator
                 ) const noexcept -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
-                 * @brief Validity Function. Checks if an iterator has an abstract wrapped iterator and it is in bounds.
+                 * @brief Validity Check through bool cast. Checks if an iterator has an abstract wrapped iterator and it is in bounds.
                  * @exceptsafe
                  * @return bool = true if iterator is valid, false otherwise
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_Explicit __CDS_cpplang_ConstexprPureAbstract operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
-                 * @brief Value Acquisition Function. Will acquire value at given iterator.
+                 * @brief Dereference Operator. Will acquire value at given iterator.
                  * @exceptsafe
                  * @return __ElementType ref = Reference to element at iterator
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
-                 * @protected
+                 * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> __ElementType &;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> __ElementType &;
+
+            public: /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Address Member Operator. Will acquire address of element at given iterator.
+                 * @exceptsafe
+                 * @return __ElementType ptr = Pointer to element at iterator
+                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00057-IT-addressOperator }
+                 * @public
+                 */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator -> () const noexcept -> __ElementType *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

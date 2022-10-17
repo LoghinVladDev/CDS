@@ -279,7 +279,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 

@@ -179,25 +179,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> __BidirectionalDelegateWrapperIterator &;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Dereference Operator. Will acquire value at given iterator.
-                 * @exceptsafe
-                 * @return __ElementType ref = Reference to element at iterator
-                 * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: All
-                 * @public
-                 */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType &;
-
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Address Member Operator. Will acquire address of element at given iterator.
-                 * @exceptsafe
-                 * @return __ElementType ptr = Pointer to element at iterator
-                 * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: All
-                 * @public
-                 */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto operator -> () const noexcept -> ElementType *;
             };
 
         } /* namespace __impl */

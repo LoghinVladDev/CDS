@@ -109,22 +109,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return reinterpret_cast < __BidirectionalDelegateWrapperIterator & > ( this->advance ( __IteratorAdvanceDirection :: __iad_backward ) );
             }
 
-
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprPureAbstract auto __BidirectionalDelegateWrapperIterator < __ElementType > :: operator * () const noexcept -> ElementType & {
-
-                /* Request the stored value */
-                return this->value();
-            }
-
-
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprPureAbstract auto __BidirectionalDelegateWrapperIterator < __ElementType > :: operator -> () const noexcept -> ElementType * {
-
-                /* Request the address of the stored value */
-                return & ( this->value() );
-            }
-
         } /* namespace __impl */
     } /* namespace __hidden */
 } /* namespace cds */
