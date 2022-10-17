@@ -2,14 +2,14 @@
  * Created by loghin on 17/07/22.
  */
 
-#ifndef __CDS_SHARED_NODE_ITERATOR_HPP__
-#define __CDS_SHARED_NODE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_NODE_ITERATOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_NODE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "IteratorModel.hpp"
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief Partial Pre-Declaration of __SingleLinkedList, as it requires private values
@@ -19,9 +19,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              */
             template <
-                    typename __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: utility :: ComparisonFunction < __ElementType >
-            > class __SingleLinkedList;      /* NOLINT(bugprone-reserved-identifier) */
+            > class __SingleLinkedList;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
             /**
@@ -32,12 +32,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              */
             template <
-                    typename __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: utility :: ComparisonFunction < __ElementType >
-            > class __DoubleLinkedList;      /* NOLINT(bugprone-reserved-identifier) */
+            > class __DoubleLinkedList;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
 
     /**
@@ -49,10 +49,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: TBA, Group: TBA, Test Cases: TBA
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class UnidirectionalNodeIterator : public meta :: ForwardIterator {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Partial Pre-Declaration of __SingleLinkedList, as it requires private values
          * @tparam __ElementType is the type of the node data stored in the hash table
@@ -61,39 +61,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                    /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class cds :: __hidden :: __impl :: __SingleLinkedList;     /* NOLINT(bugprone-reserved-identifier) */
+        > friend class cds :: __hidden :: __impl :: __SingleLinkedList;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @private
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @private
          */
         using Node = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the list
          * @private
          */
         Node * _pCurrentNode    { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the list
          * @private
          */
         Node * _pPreviousNode   { nullptr };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -103,7 +103,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr UnidirectionalNodeIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
@@ -113,12 +113,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @pulbic
          */
-        constexpr UnidirectionalNodeIterator (
+        __CDS_MaybeUnused constexpr UnidirectionalNodeIterator (
                 Node * pPreviousNode,
                 Node * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
@@ -131,7 +131,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : UnidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
@@ -144,7 +144,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @public
+         */
+        ~UnidirectionalNodeIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
@@ -154,11 +164,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 UnidirectionalNodeIterator const & iterator
         ) noexcept -> UnidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : UnidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
@@ -168,11 +178,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 UnidirectionalNodeIterator && iterator
         ) noexcept -> UnidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -183,7 +193,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -194,7 +204,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -208,7 +218,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : UnidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -222,7 +232,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -233,7 +243,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -244,7 +254,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -253,7 +263,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 
@@ -266,10 +276,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: TBA, Group: TBA, Test Cases: TBA
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class UnidirectionalNodeConstIterator : public meta :: ForwardIterator {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Partial Pre-Declaration of __SingleLinkedList, as it requires private values
          * @tparam __ElementType is the type of the node data stored in the hash table
@@ -278,39 +288,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class cds :: __hidden :: __impl :: __SingleLinkedList; /* NOLINT(bugprone-reserved-identifier) */
+        > friend class cds :: __hidden :: __impl :: __SingleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @private
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @private
          */
         using Node = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the list
          * @private
          */
         Node const * _pCurrentNode    { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the list
          * @private
          */
         Node const * _pPreviousNode   { nullptr };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -320,7 +330,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr UnidirectionalNodeConstIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
@@ -330,12 +340,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @pulbic
          */
-        constexpr UnidirectionalNodeConstIterator (
+        __CDS_MaybeUnused constexpr UnidirectionalNodeConstIterator (
                 Node const * pPreviousNode,
                 Node const * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
@@ -348,7 +358,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeConstIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
@@ -361,7 +371,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeConstIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: TBA, Group: TBA, Test Cases: TBA
+         * @public
+         */
+        ~UnidirectionalNodeConstIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
@@ -371,11 +391,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 UnidirectionalNodeConstIterator const & iterator
         ) noexcept -> UnidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
@@ -385,11 +405,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 UnidirectionalNodeConstIterator && iterator
         ) noexcept -> UnidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -400,7 +420,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -411,7 +431,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -425,7 +445,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : UnidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -439,7 +459,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 UnidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -450,7 +470,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> UnidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -461,7 +481,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeConstIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -470,7 +490,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 
@@ -482,10 +502,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class AbstractBidirectionalNodeIterator : public meta :: BidirectionalIterator {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Partial Pre-Declaration of __DoubleLinkedList, as it requires private values
          * @tparam __ElementType is the type of the node data stored in the hash table
@@ -493,39 +513,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier) */
+        > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @protected
          */
         using Node = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the list
          * @protected
          */
-        Node * _pCurrentNode    { nullptr };
+        Node * _pCurrentNode    { nullptr }; /* NOLINT(*-non-private-member-variables-in-classes) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the list
          * @protected
          */
-        Node * _pPreviousNode   { nullptr };
+        Node * _pPreviousNode   { nullptr }; /* NOLINT(*-non-private-member-variables-in-classes) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -535,7 +555,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr AbstractBidirectionalNodeIterator () noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
@@ -550,7 +570,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node * pCurrentNode
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
@@ -563,7 +583,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeIterator const & iterator
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : AbstractBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
@@ -576,7 +596,43 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeIterator && iterator
         ) noexcept;
 
-    public:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        ~AbstractBidirectionalNodeIterator () noexcept = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Assignment Copy Operator, constexpr
+         * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        auto operator = (
+                AbstractBidirectionalNodeIterator const &
+        ) noexcept -> AbstractBidirectionalNodeIterator & = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Assignment Move Operator, constexpr
+         * @param [in, out] iterator : AbstractBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        auto operator = (
+                AbstractBidirectionalNodeIterator &&
+        ) noexcept -> AbstractBidirectionalNodeIterator & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -587,7 +643,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -598,7 +654,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -612,7 +668,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : AbstractBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -626,7 +682,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -635,7 +691,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 
@@ -647,10 +703,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class AbstractBidirectionalNodeConstIterator : public meta :: BidirectionalIterator {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Partial Pre-Declaration of __DoubleLinkedList, as it requires private values
          * @tparam __ElementType is the type of the node data stored in the hash table
@@ -658,39 +714,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier) */
+        > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @protected
          */
         using Node = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the list
          * @protected
          */
-        Node const * _pCurrentNode    { nullptr };
+        Node const * _pCurrentNode    { nullptr }; /* NOLINT(*-non-private-member-variables-in-classes) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the list
          * @protected
          */
-        Node const * _pPreviousNode   { nullptr };
+        Node const * _pPreviousNode   { nullptr }; /* NOLINT(*-non-private-member-variables-in-classes) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -700,7 +756,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr AbstractBidirectionalNodeConstIterator () noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
@@ -715,7 +771,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node const * pCurrentNode
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
@@ -728,7 +784,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeConstIterator const & iterator
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : UnidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
@@ -741,7 +797,43 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeConstIterator && iterator
         ) noexcept;
 
-    public:
+    public:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        ~AbstractBidirectionalNodeConstIterator () noexcept = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Assignment Copy Operator, constexpr
+         * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
+         * @exceptsafe
+         *
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        auto operator = (
+                AbstractBidirectionalNodeConstIterator const &
+        ) noexcept -> AbstractBidirectionalNodeConstIterator & = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Assignment Move Operator, constexpr
+         * @param [in, out] iterator : AbstractBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
+         * @exceptsafe
+         *
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @protected
+         */
+        auto operator = (
+                AbstractBidirectionalNodeConstIterator &&
+        ) noexcept -> AbstractBidirectionalNodeConstIterator & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -752,7 +844,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -763,7 +855,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -777,7 +869,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : AbstractBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -791,7 +883,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -800,7 +892,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 
@@ -813,24 +905,24 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class ForwardBidirectionalNodeIterator : public AbstractBidirectionalNodeIterator < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @private
          */
         using typename AbstractBidirectionalNodeIterator < __ElementType > :: Node;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -840,7 +932,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr ForwardBidirectionalNodeIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
@@ -855,7 +947,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
@@ -868,7 +960,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : ForwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
@@ -881,7 +973,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~ForwardBidirectionalNodeIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
@@ -891,11 +993,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 ForwardBidirectionalNodeIterator const & iterator
         ) noexcept -> ForwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : ForwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
@@ -905,11 +1007,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 ForwardBidirectionalNodeIterator && iterator
         ) noexcept -> ForwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -923,7 +1025,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : ForwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -937,7 +1039,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -948,7 +1050,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -959,7 +1061,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Decrement Operator. Will advance backward one position and then return
          * @exceptsafe
@@ -970,7 +1072,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance backward the current one
          * @exceptsafe
@@ -992,24 +1094,24 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class ForwardBidirectionalNodeConstIterator : public AbstractBidirectionalNodeConstIterator < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @private
          */
         using typename AbstractBidirectionalNodeConstIterator < __ElementType > :: Node;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -1019,7 +1121,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr ForwardBidirectionalNodeConstIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
@@ -1034,7 +1136,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node const * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
@@ -1047,7 +1149,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeConstIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
@@ -1060,7 +1162,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeConstIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~ForwardBidirectionalNodeConstIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
@@ -1070,11 +1182,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 ForwardBidirectionalNodeConstIterator const & iterator
         ) noexcept -> ForwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : ForwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
@@ -1084,11 +1196,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 ForwardBidirectionalNodeConstIterator && iterator
         ) noexcept -> ForwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -1102,7 +1214,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : ForwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -1116,7 +1228,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ForwardBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -1127,7 +1239,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -1138,7 +1250,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ForwardBidirectionalNodeConstIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Decrement Operator. Will advance backward one position and then return
          * @exceptsafe
@@ -1149,7 +1261,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ForwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance backward the current one
          * @exceptsafe
@@ -1171,24 +1283,24 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: TBA, Group: TBA, Test Cases: TBA
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class BackwardBidirectionalNodeIterator : public AbstractBidirectionalNodeIterator < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @private
          */
         using typename AbstractBidirectionalNodeIterator < __ElementType > :: Node;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -1198,7 +1310,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr BackwardBidirectionalNodeIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode ptr = address to the node previous to the node containing the current element
@@ -1213,7 +1325,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to the iterator to acquire the values from
@@ -1226,7 +1338,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : BackwardBidirectionalNodeIterator mref = Move Reference to the iterator to move the values from
@@ -1239,7 +1351,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~BackwardBidirectionalNodeIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to an iterator to copy the values value from
@@ -1249,11 +1371,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 BackwardBidirectionalNodeIterator const & iterator
         ) noexcept -> BackwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : BackwardBidirectionalNodeIterator mref = Move Reference to an iterator to move the values value from
@@ -1263,11 +1385,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 BackwardBidirectionalNodeIterator && iterator
         ) noexcept -> BackwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -1281,7 +1403,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : BackwardBidirectionalNodeIterator cref = Constant Reference to another iterator to compare this one to
@@ -1295,7 +1417,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -1306,7 +1428,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -1317,7 +1439,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Decrement Operator. Will advance backward one position and then return
          * @exceptsafe
@@ -1328,7 +1450,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance backward the current one
          * @exceptsafe
@@ -1350,24 +1472,24 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: TBA, Group: TBA, Test Cases: TBA
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class BackwardBidirectionalNodeConstIterator : public AbstractBidirectionalNodeConstIterator < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the __ElementType template parameter
          * @public
          */
         using ElementType = __ElementType;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the Node Type.
          * @private
          */
         using typename AbstractBidirectionalNodeConstIterator < __ElementType > :: Node;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -1377,7 +1499,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr BackwardBidirectionalNodeConstIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pPreviousNode : DataNode cptr = address to the immutable node previous to the node containing the current element
@@ -1392,7 +1514,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Node const * pCurrentNode
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to the iterator to acquire the values from
@@ -1405,7 +1527,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeConstIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to the iterator to move the values from
@@ -1418,7 +1540,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeConstIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         *
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~BackwardBidirectionalNodeConstIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to an iterator to copy the values value from
@@ -1428,11 +1560,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 BackwardBidirectionalNodeConstIterator const & iterator
         ) noexcept -> BackwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : BackwardBidirectionalNodeConstIterator mref = Move Reference to an iterator to move the values value from
@@ -1442,11 +1574,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(cppcoreguidelines-c-copy-assignment-signature, misc-unconventional-assign-operator) */
                 BackwardBidirectionalNodeConstIterator && iterator
         ) noexcept -> BackwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -1460,7 +1592,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : BackwardBidirectionalNodeConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -1474,7 +1606,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 BackwardBidirectionalNodeConstIterator < __ElementType > const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance backward one position and then return
          * @exceptsafe
@@ -1485,7 +1617,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance backward the current one
          * @exceptsafe
@@ -1496,7 +1628,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BackwardBidirectionalNodeConstIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Decrement Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -1507,7 +1639,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BackwardBidirectionalNodeConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -1519,6 +1651,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BackwardBidirectionalNodeConstIterator;
     };
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_NODE_ITERATOR_HPP__ */

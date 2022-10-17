@@ -2,20 +2,20 @@
  * Created by loghin on 6/27/22.
  */
 
-#ifndef __CDS_SHARED_ITERATOR_FIND_IMPL_HPP__
-#define __CDS_SHARED_ITERATOR_FIND_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ITERATOR_FIND_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ITERATOR_FIND_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprConditioned auto __findOf (                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprConditioned auto __findOf (                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType                      const & begin,
                     __IteratorType                      const & end,
                     Size                                        count,
@@ -41,11 +41,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprConditioned auto __findFirstOf (                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprConditioned auto __findFirstOf (                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType                      const & begin,
                     __IteratorType                      const & end,
                     __IterableType                      const & from
@@ -68,11 +68,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprConditioned auto __findLastOf (                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprConditioned auto __findLastOf (                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType                      const & begin,
                     __IteratorType                      const & end,
                     __IterableType                      const & from
@@ -98,12 +98,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprConditioned auto __findAllOf (                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template < typename ... > class                         __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __IterableType, __ElementType >    __containsFunction  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprConditioned auto __findAllOf (                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType                      const & begin,
                     __IteratorType                      const & end,
                     __CollectionType < __IteratorType >       & storeIn,
@@ -125,8 +125,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return storeIn;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ITERATOR_FIND_IMPL_HPP__ */

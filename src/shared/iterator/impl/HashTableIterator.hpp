@@ -2,12 +2,12 @@
  * Created by loghin on 27/07/22.
  */
 
-#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__
-#define __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprConditioned auto HashTableIterator < __ElementType > :: advanceBucket () noexcept -> void {
 
         /* If current Node is null, end of bucket list reached, reset previous node */
@@ -31,11 +31,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableIterator < __ElementType > :: HashTableIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprConditioned HashTableIterator < __ElementType > :: HashTableIterator (
             DataNode ** pListArray,
             Size        bucketCount
@@ -50,7 +50,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableIterator < __ElementType > :: HashTableIterator (
             DataNode ** pListArray,
             Size        bucketCount,
@@ -68,7 +68,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableIterator < __ElementType > :: HashTableIterator (
             HashTableIterator const & iterator
     ) noexcept :
@@ -82,7 +82,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableIterator < __ElementType > :: HashTableIterator (
             HashTableIterator && iterator
     ) noexcept :
@@ -96,7 +96,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableIterator < __ElementType > :: operator = (
             HashTableIterator const & iterator
     ) noexcept -> HashTableIterator & {
@@ -117,7 +117,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableIterator < __ElementType > :: operator = (
             HashTableIterator && iterator
     ) noexcept -> HashTableIterator & {
@@ -138,7 +138,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: listArray () const noexcept -> DataNode ** {
 
         /* return the bucket list */
@@ -146,7 +146,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: bucketCount () const noexcept -> Size {
 
         /* return the bucket list size */
@@ -154,7 +154,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: bucketIndex () const noexcept -> Size {
 
         /* return the bucket index */
@@ -162,7 +162,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: currentNode () const noexcept -> DataNode * {
 
         /* return the current node */
@@ -170,7 +170,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: previousNode () const noexcept -> DataNode * {
 
         /* return the previous node */
@@ -178,7 +178,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableIterator < __ElementType > :: operator ++ () noexcept -> HashTableIterator & {
 
         /* if bucket list is completely parsed, do nothing */
@@ -200,7 +200,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableIterator < __ElementType > :: operator ++ (int) noexcept -> HashTableIterator {
 
         /* copy, advance current, return copy */
@@ -210,7 +210,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {
 
         /* acquire value from current node */
@@ -218,7 +218,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
 
         /* acquire address of element from current node */
@@ -226,7 +226,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: operator != (
             HashTableIterator const & iterator
     ) const noexcept -> bool {
@@ -236,7 +236,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableIterator < __ElementType > :: operator == (
             HashTableIterator const & iterator
     ) const noexcept -> bool {
@@ -252,7 +252,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterators valid if current node is valid */
@@ -260,7 +260,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprConditioned auto HashTableConstIterator < __ElementType > :: advanceBucket () noexcept -> void {
 
         /* If current Node is null, end of bucket list reached, reset previous node */
@@ -284,11 +284,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableConstIterator < __ElementType > :: HashTableConstIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprConditioned HashTableConstIterator < __ElementType > :: HashTableConstIterator (
             DataNode    const * const * pListArray,
             Size                        bucketCount
@@ -303,7 +303,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprConditioned HashTableConstIterator < __ElementType > :: HashTableConstIterator (
             DataNode    const * const * pListArray,
             Size                        bucketCount,
@@ -321,7 +321,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableConstIterator < __ElementType > :: HashTableConstIterator (
             HashTableConstIterator const & iterator
     ) noexcept :
@@ -335,7 +335,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableConstIterator < __ElementType > :: HashTableConstIterator (
             HashTableConstIterator && iterator
     ) noexcept :
@@ -349,7 +349,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableConstIterator < __ElementType > :: operator = (
             HashTableConstIterator const & iterator
     ) noexcept -> HashTableConstIterator & {
@@ -370,7 +370,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableConstIterator < __ElementType > :: operator = (
             HashTableConstIterator && iterator
     ) noexcept -> HashTableConstIterator & {
@@ -391,7 +391,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: listArray () const noexcept -> DataNode const * const * {
 
         /* return the bucket list */
@@ -399,7 +399,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: bucketCount () const noexcept -> Size {
 
         /* return the bucket list size */
@@ -407,7 +407,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: bucketIndex () const noexcept -> Size {
 
         /* return the bucket index */
@@ -415,7 +415,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: currentNode () const noexcept -> DataNode const * {
 
         /* return the current node */
@@ -423,7 +423,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: previousNode () const noexcept -> DataNode const * {
 
         /* return the previous node */
@@ -431,7 +431,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableConstIterator < __ElementType > :: operator ++ () noexcept -> HashTableConstIterator & {
 
         /* if bucket list is completely parsed, do nothing */
@@ -453,7 +453,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto HashTableConstIterator < __ElementType > :: operator ++ (int) noexcept -> HashTableConstIterator {
 
         /* copy, advance current, return copy */
@@ -463,7 +463,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: operator * () const noexcept -> __ElementType const & {
 
         /* acquire value from current node */
@@ -471,7 +471,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: operator -> () const noexcept -> __ElementType const * {
 
         /* acquire address of element from current node */
@@ -479,7 +479,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: operator != (
             HashTableConstIterator const & iterator
     ) const noexcept -> bool {
@@ -489,7 +489,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto HashTableConstIterator < __ElementType > :: operator == (
             HashTableConstIterator const & iterator
     ) const noexcept -> bool {
@@ -505,13 +505,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr HashTableConstIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterators valid if current node is valid */
         return this->_pCurrentNode != nullptr;
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_HASH_TABLE_ITERATOR_IMPL_HPP__ */

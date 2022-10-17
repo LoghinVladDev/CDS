@@ -2,108 +2,108 @@
  * Created by loghin on 18/09/22.
  */
 
-#ifndef __CDS_SHARED_ITEARTOR_SORT_IMPL_HPP__
-#define __CDS_SHARED_ITEARTOR_SORT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ITERATOR_SORT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ITERATOR_SORT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            namespace __helpers { /* NOLINT(bugprone-reserved-identifier) */
+            namespace __helpers { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #if defined (__CDS_compiler_gcc) || defined (__CDS_compiler_clang) || defined(__CDS_compiler_MinGW)
 
-                constexpr auto __lg ( sint32 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier) */
+                constexpr auto __lg ( sint32 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     return (uint8) sizeof ( sint32 ) * 8U - 1U - __builtin_clz(n);
                 }
 
-                constexpr auto __lg ( uint32 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier) */
+                constexpr auto __lg ( uint32 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     return (uint8) sizeof ( uint32 ) * 8U - 1U - __builtin_clz(n);
                 }
 
-                constexpr auto __lg ( sint64 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier) */
+                constexpr auto __lg ( sint64 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     return (uint8) sizeof ( sint64 ) * 8U - 1U - __builtin_clzll(n);
                 }
 
-                constexpr auto __lg ( uint64 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier) */
+                constexpr auto __lg ( uint64 n ) noexcept -> uint8 {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     return (uint8) sizeof ( uint64 ) * 8U - 1U - __builtin_clzll(n);
                 }
 
 #else
 
-                inline auto __lg ( sint32 n ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier) */
+                inline auto __lg ( sint32 number ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     constexpr static uint32 const bases[]   = { 0x0U, 0x00000002U, 0x0000000CU, 0x000000F0U, 0x0000FF00U, 0xFFFF0000U };
                     constexpr static uint8  const counts[]  = { 0x0U, 0x01U, 0x02U, 0x04U, 0x08U, 0x10U, 0x20U };
 
-                    uint8 r = 0U;
-                    for ( uint32 i = 5; i > 0; -- i ) {
-                        if ( n & bases[i] ) {
-                            n >>= counts [i];
-                            r |=  counts [i];
+                    uint8 result = 0U;                                          /* NOLINT(*-init-variables) */
+                    for ( uint32 baseIndex = 5; baseIndex > 0; -- baseIndex ) { /* NOLINT(*-init-variables, *-infinite-loop) */
+                        if ( number & bases[baseIndex] ) {
+                            number >>= counts [baseIndex];
+                            result |=  counts [baseIndex];
                         }
                     }
 
-                    return r;
+                    return result;
                 }
 
-                inline auto __lg ( uint32 n ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier) */
+                inline auto __lg ( uint32 number ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     constexpr static uint32 const bases[]   = { 0x0U, 0x00000002U, 0x0000000CU, 0x000000F0U, 0x0000FF00U, 0xFFFF0000U };
                     constexpr static uint8  const counts[]  = { 0x0U, 0x01U, 0x02U, 0x04U, 0x08U, 0x10U };
 
-                    uint8 r = 0U;
-                    for ( uint32 i = 5; i > 0; -- i ) {
-                        if ( n & bases[i] ) {
-                            n >>= counts [i];
-                            r |=  counts [i];
+                    uint8 result = 0U;                                          /* NOLINT(*-init-variables) */
+                    for ( uint32 baseIndex = 5; baseIndex > 0; -- baseIndex ) { /* NOLINT(*-init-variables, *-infinite-loop) */
+                        if ( number & bases[baseIndex] ) {
+                            number >>= counts [baseIndex];
+                            result |=  counts [baseIndex];
                         }
                     }
 
-                    return r;
+                    return result;
                 }
 
-                inline auto __lg ( sint64 n ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier) */
+                inline auto __lg ( sint64 number ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     constexpr static uint64 const bases[]   = { 0x0U, 0x0000000000000002U, 0x000000000000000CU, 0x00000000000000F0U, 0x000000000000FF00U, 0x00000000FFFF0000U, 0xFFFFFFFF00000000 };
                     constexpr static uint8  const counts[]  = { 0x0U, 0x01U, 0x02U, 0x04U, 0x08U, 0x10U, 0x20U };
 
-                    uint8 r = 0x0U;
-                    for ( uint32 i = 6; i > 0; -- i ) {
-                        if ( n & bases[i] ) {
-                            n >>= counts [i];
-                            r |=  counts [i];
+                    uint8 result = 0x0U;                                        /* NOLINT(*-init-variables) */
+                    for ( uint32 baseIndex = 6; baseIndex > 0; -- baseIndex ) { /* NOLINT(*-init-variables, *-infinite-loop) */
+                        if ( number & bases[baseIndex] ) {
+                            number >>= counts [baseIndex];
+                            result |=  counts [baseIndex];
                         }
                     }
 
-                    return r;
+                    return result;
                 }
 
-                inline auto __lg ( uint64 n ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier) */
+                inline auto __lg ( uint64 number ) noexcept -> uint8 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     constexpr static uint64 const bases[]   = { 0x0U, 0x0000000000000002U, 0x000000000000000CU, 0x00000000000000F0U, 0x000000000000FF00U, 0x00000000FFFF0000U, 0xFFFFFFFF00000000 };
                     constexpr static uint8  const counts[]  = { 0x0U, 0x01U, 0x02U, 0x04U, 0x08U, 0x10U, 0x20U };
 
-                    uint8 r = 0x0U;
-                    for ( uint32 i = 6; i > 0; -- i ) {
-                        if ( n & bases[i] ) {
-                            n >>= counts [i];
-                            r |=  counts [i];
+                    uint8 result = 0x0U;                                        /* NOLINT(*-init-variables) */
+                    for ( uint32 baseIndex = 6; baseIndex > 0; -- baseIndex ) { /* NOLINT(*-init-variables, *-infinite-loop) */
+                        if ( number & bases[baseIndex] ) {
+                            number >>= counts [baseIndex];
+                            result |=  counts [baseIndex];
                         }
                     }
 
-                    return r;
+                    return result;
                 }
 
 #endif
 
                 template <
-                        typename __T,                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __T,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveAssignable < __T > () &&
                                 cds :: meta :: isMoveConstructible < __T > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __T & left,
                         __T & right
                 ) noexcept -> void {
@@ -115,12 +115,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __T,                                   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __T,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMoveAssignable < __T > () ||
                                 ! cds :: meta :: isMoveConstructible < __T > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __T & left,
                         __T & right
                 ) noexcept -> void {
@@ -131,11 +131,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 template <
-                        typename __T,                                       /* NOLINT(bugprone-reserved-identifier) */
+                        typename __T,                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveAssignable < __T > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __assign (   /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto __assign (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __T & left,
                         __T & right
                 ) noexcept -> void {
@@ -145,11 +145,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __T,                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __T,                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMoveAssignable < __T > ()
                         > = 0
-                > __CDS_cpplang_ConstexprNonLiteralReturn auto __assign (       /* NOLINT(bugprone-reserved-identifier) */
+                > __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto __assign (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __T & left,
                         __T & right
                 ) noexcept -> void {
@@ -157,14 +157,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     left = right;
                 }
 
-            }
+            } /* namespace __helpers */
 
-            namespace __heapSortHelpers { /* NOLINT(bugprone-reserved-identifier) */
+            namespace __heapSortHelpers { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 template <
-                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-                > inline auto __repairHeap (                    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > inline auto __repairHeap (                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __RandomAccessIteratorType          root,
                         __RandomAccessIteratorType  const & begin,
                         __RandomAccessIteratorType  const & end,
@@ -197,9 +197,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 template <
-                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-                > inline auto __heapifyInPlace (                /* NOLINT(bugprone-reserved-identifier) */
+                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > inline auto __heapifyInPlace (                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __RandomAccessIteratorType  const & begin,
                         __RandomAccessIteratorType  const & end,
                         __Comparator                const & comparator
@@ -215,9 +215,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-                > inline auto __deHeapifyInPlace (              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > inline auto __deHeapifyInPlace (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __RandomAccessIteratorType  const & begin,
                         __RandomAccessIteratorType          last,
                         __Comparator                const & comparator
@@ -232,20 +232,20 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     }
                 }
 
-            }
+            } /* namespace __heapSortHelpers */
 
-            namespace __introSortHelpers { /* NOLINT(bugprone-reserved-identifier) */
+            namespace __introSortHelpers { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #if !defined (__CDS_compiler_MinGW)
 
                 template <
-                        typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
-                        Size                                                                __threshold,                /* NOLINT(bugprone-reserved-identifier) */
-                        __SortFunction < __RandomAccessIteratorType, __Comparator >         __atThreshold,              /* NOLINT(bugprone-reserved-identifier) */
-                        __SortFunction < __RandomAccessIteratorType, __Comparator >         __atDepth,                  /* NOLINT(bugprone-reserved-identifier) */
-                        __PartitionFunction < __RandomAccessIteratorType, __Comparator >    __partition                 /* NOLINT(bugprone-reserved-identifier) */
-                > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        Size                                                                __threshold,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __SortFunction < __RandomAccessIteratorType, __Comparator >         __atThreshold,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __SortFunction < __RandomAccessIteratorType, __Comparator >         __atDepth,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __PartitionFunction < __RandomAccessIteratorType, __Comparator >    __partition                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __RandomAccessIteratorType  const & begin,
                         __RandomAccessIteratorType  const & end,
                         __Comparator                const & comparator,
@@ -285,10 +285,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 #else
 
                 template <
-                        typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
-                        Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier) */
-                > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __RandomAccessIteratorType  const & begin,
                         __RandomAccessIteratorType  const & end,
                         __Comparator                const & comparator,
@@ -321,12 +321,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #endif
 
-            }
+            } /* namespace __introSortHelpers */
 
             template <
-                    typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __heapSort (                      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __heapSort (                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RandomAccessIteratorType  const & begin,
                     __RandomAccessIteratorType  const & end,
                     __Comparator                const & comparator
@@ -338,9 +338,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __BidirectionalIteratorType,   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __insertionSort (                 /* NOLINT(bugprone-reserved-identifier) */
+                    typename __BidirectionalIteratorType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __insertionSort (                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __BidirectionalIteratorType const & begin,
                     __BidirectionalIteratorType const & end,
                     __Comparator                const & comparator
@@ -363,13 +363,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 #if ! defined(__CDS_compiler_MinGW)
 
             template <
-                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
-                    Size                                                                __threshold,                /* NOLINT(bugprone-reserved-identifier) */
-                    __SortFunction < __RandomAccessIteratorType, __Comparator >         __atThreshold,              /* NOLINT(bugprone-reserved-identifier) */
-                    __SortFunction < __RandomAccessIteratorType, __Comparator >         __atDepth,                  /* NOLINT(bugprone-reserved-identifier) */
-                    __PartitionFunction < __RandomAccessIteratorType, __Comparator >    __partition                 /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    Size                                                                __threshold,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __SortFunction < __RandomAccessIteratorType, __Comparator >         __atThreshold,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __SortFunction < __RandomAccessIteratorType, __Comparator >         __atDepth,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __PartitionFunction < __RandomAccessIteratorType, __Comparator >    __partition                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RandomAccessIteratorType  const & begin,
                     __RandomAccessIteratorType  const & end,
                     __Comparator                const & comparator
@@ -393,10 +393,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 #else
 
             template <
-                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier) */
-                    Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __Comparator,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    Size                                                                __threshold                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __introSort (                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RandomAccessIteratorType  const & begin,
                     __RandomAccessIteratorType  const & end,
                     __Comparator                const & comparator
@@ -418,9 +418,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __Comparator                /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __m3Partition (                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __RandomAccessIteratorType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __Comparator                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __m3Partition (                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RandomAccessIteratorType  const & begin,
                     __RandomAccessIteratorType  const & end,
                     __Comparator                const & comparator
@@ -446,8 +446,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto piv = right;
 
                 for ( ;; ) {
-                    while ( left < right && comparator ( * ( ++ left ), * piv ) );
-                    while ( left < right && comparator ( * piv, * ( -- right ) ) );
+                    while ( left < right && comparator ( * ( ++ left ), * piv ) )   { /* nothing done, updated in condition */ }
+                    while ( left < right && comparator ( * piv, * ( -- right ) ) )  { /* nothing done, updated in condition */ }
                     if ( left < right ) { __helpers :: __swap ( * left, * right ); }
                     else { break; }
                 }
@@ -456,14 +456,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return left;
             }
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
 
     template <
-            typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-    > inline auto heapSort (                        /* NOLINT(bugprone-reserved-identifier) */
+            typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused inline auto heapSort (                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __RandomAccessIteratorType  const & begin,
             __RandomAccessIteratorType  const & end,
             __Comparator                const & comparator
@@ -478,9 +478,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template <
-            typename __BidirectionalIteratorType,   /* NOLINT(bugprone-reserved-identifier) */
-            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-    > inline auto insertionSort (                   /* NOLINT(bugprone-reserved-identifier) */
+            typename __BidirectionalIteratorType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused inline auto insertionSort (                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BidirectionalIteratorType const & begin,
             __BidirectionalIteratorType const & end,
             __Comparator                const & comparator
@@ -495,9 +495,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template <
-            typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier) */
-    > inline auto introSort (                       /* NOLINT(bugprone-reserved-identifier) */
+            typename __RandomAccessIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Comparator                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused inline auto introSort (                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __RandomAccessIteratorType  const & begin,
             __RandomAccessIteratorType  const & end,
             __Comparator                const & comparator
@@ -508,7 +508,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         return __hidden :: __impl :: __introSort <
                 __RandomAccessIteratorType,
                 __Comparator,
-                16U,
+                16U, /* NOLINT(*-magic-numbers) */
                 & cds :: __hidden :: __impl :: __insertionSort < __RandomAccessIteratorType, __Comparator >,
                 & cds :: __hidden :: __impl :: __heapSort < __RandomAccessIteratorType, __Comparator >,
                 & cds :: __hidden :: __impl :: __m3Partition < __RandomAccessIteratorType, __Comparator >
@@ -523,7 +523,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         return __hidden :: __impl :: __introSort <
                 __RandomAccessIteratorType,
                 __Comparator,
-                16U
+                16U /* NOLINT(*-magic-numbers) */
         > (
                 begin,
                 end,
@@ -533,6 +533,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 #endif
 
     }
-}
+} /* namespace cds */
 
-#endif /* __CDS_SHARED_ITEARTOR_SORT_IMPL_HPP__ */
+#endif /* __CDS_SHARED_ITERATOR_SORT_IMPL_HPP__ */
