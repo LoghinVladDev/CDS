@@ -1,0 +1,67 @@
+@startuml
+
+!includesub ../../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef BOUNDARY_INSERTION_PUBLIC
+!define BOUNDARY_INSERTION_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __BoundaryInsertionPrimitiveClient <R, E, RV> {
+                + {method} pushFront (E const &) throws except(E(E const &)) -> RV &
+                + {method} pushFront (E &&) throws except(E(E &&)) -> RV &
+                + {method} pushBack (E const &) throws except(E(E const &)) -> RV &
+                + {method} pushBack (E &&) throws except(E(E &&)) -> RV &
+                + {method} <__Args ...> emplaceFront (__Args && ...) throws except(E(__Args && ...)) -> RV &
+                + {method} <__Args ...> emplaceBack (__Args && ...) throws except(E(__Args && ...)) -> RV &
+                + {method} <__Args ...> pushFrontAll (__Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> RV &
+                + {method} <__Args ...> pushBackAll (__Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> RV &
+                + {method} <__Iterable> pushFrontAllOf (__Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> RV &
+                + {method} <__Iterable> pushBackAllOf (__Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> RV &
+                + {method} pushFrontAllOf (std::initializer_list <E>) throws except(E(E const &)) -> RV &
+                + {method} pushBackAllOf (std::initializer_list <E>) throws except(E(E const &)) -> RV &
+                + {method} <__Iterator> pushFrontAllOf (__Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> RV &
+                + {method} <__Iterator> pushBackAllOf (__Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> RV &
+                + {method} <strike>append</strike> (E const &) throws except(E(E const &)) -> RV &
+                + {method} <strike>append</strike> (E &&) throws except(E(E &&)) -> RV &
+                + {method} <strike>prepend</strike> (E const &) throws except(E(E const &)) -> RV &
+                + {method} <strike>prepend</strike> (E &&) throws except(E(E &&)) -> RV &
+            }
+
+            interface __LocalBoundaryInsertionPrimitiveClient <R, E, RV> {
+                + {method} pushFront (E const &) throws except(E(E const &)) -> RV &
+                + {method} pushFront (E &&) throws except(E(E &&)) -> RV &
+                + {method} pushBack (E const &) throws except(E(E const &)) -> RV &
+                + {method} pushBack (E &&) throws except(E(E &&)) -> RV &
+                + {method} <__Args ...> emplaceFront (__Args && ...) throws except(E(__Args && ...)) -> RV &
+                + {method} <__Args ...> emplaceBack (__Args && ...) throws except(E(__Args && ...)) -> RV &
+                + {method} <__Args ...> pushFrontAll (__Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> RV &
+                + {method} <__Args ...> pushBackAll (__Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> RV &
+                + {method} <__Iterable> pushFrontAllOf (__Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> RV &
+                + {method} <__Iterable> pushBackAllOf (__Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> RV &
+                + {method} pushFrontAllOf (std::initializer_list <E>) throws except(E(E const &)) -> RV &
+                + {method} pushBackAllOf (std::initializer_list <E>) throws except(E(E const &)) -> RV &
+                + {method} <__Iterator> pushFrontAllOf (__Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> RV &
+                + {method} <__Iterator> pushBackAllOf (__Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> RV &
+                + {method} <strike>append</strike> (E const &) throws except(E(E const &)) -> RV &
+                + {method} <strike>append</strike> (E &&) throws except(E(E &&)) -> RV &
+                + {method} <strike>prepend</strike> (E const &) throws except(E(E const &)) -> RV &
+                + {method} <strike>prepend</strike> (E &&) throws except(E(E &&)) -> RV &
+            }
+
+            note "Requests direct dispatcher-standard calls" as BIPCLocalHint
+            note "Requests handlers to call through Channel" as BIPCHint
+            BIPCLocalHint - __LocalBoundaryInsertionPrimitiveClient
+            BIPCHint - __BoundaryInsertionPrimitiveClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

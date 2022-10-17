@@ -1,0 +1,39 @@
+@startuml
+
+!includesub ../../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef CONST_REMOVE_PUBLIC
+!define CONST_REMOVE_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __RemoveOfCompositeClient <R, E, I, Predicate<I, E>>
+
+            interface __AbstractConstIteratorRemovePrimitiveClient <R, E> {
+                + {method} remove (AbstractConstIterator const &) noexcept -> bool
+                + {method} removeAll (AbstractConstIterator const *, Size) noexcept -> Size
+            }
+
+            interface __LocalConstIteratorRemovePrimitiveClient <R, E, I> {
+                + {method} remove (I const &) noexcept -> bool
+                + {method} removeAll (I const *, Size) noexcept -> Size
+            }
+
+            note "Requests direct dispatcher-standard calls" as LCIRPCLocalHint
+            note "Requests handlers to call through Channel" as ACIRPCHint
+            LCIRPCLocalHint - __LocalConstIteratorRemovePrimitiveClient
+            ACIRPCHint - __AbstractConstIteratorRemovePrimitiveClient
+
+            __AbstractConstIteratorRemovePrimitiveClient "allows private access to" .. __RemoveOfCompositeClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

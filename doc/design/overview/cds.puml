@@ -7,7 +7,9 @@
 !include ../subsets/shared/iterator/AddressIterator.puml
 
 !include ../subsets/shared/collectionCommunication/RequestType.puml
+
 !include ../subsets/shared/collectionCommunication/channel/Channel.puml
+
 !include ../subsets/shared/collectionCommunication/server/CollectionServerDispatcher.puml
 !include ../subsets/shared/collectionCommunication/server/ListServer.puml
 !include ../subsets/shared/collectionCommunication/server/ListServerDispatcher.puml
@@ -17,5 +19,19 @@
 !include ../subsets/shared/collectionCommunication/server/MutableCollectionServerDispatcher.puml
 !include ../subsets/shared/collectionCommunication/server/SetServer.puml
 !include ../subsets/shared/collectionCommunication/server/SetServerDispatcher.puml
+
+!include ../subsets/shared/collectionCommunication/client/primitive/BoundaryInsertionPrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/FindUniqueMutablePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/IndexedOperationsPrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/IteratorRelativeInsertionPrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/IteratorRemovePrimitiveClient.puml
+!include ../subsets/shared/collectionCommunication/client/primitive/RandomInsertionPrimitiveClient.puml
 
 @enduml

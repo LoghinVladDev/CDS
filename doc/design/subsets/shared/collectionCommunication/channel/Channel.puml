@@ -7,6 +7,9 @@
 !define COLLECTION_COMMUNICATION_CHANNEL_PUBLIC
 
 namespace cds {
+
+    abstract class Object
+
     namespace __hidden {
         namespace __impl {
 
