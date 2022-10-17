@@ -15,9 +15,9 @@ namespace cds {
                 + {method} end () noexcept -> Iterator
             }
 
-            interface __LocalDelegateForwardIterablePrimitiveClient <R, I> {
-                + {method} begin () noexcept -> I
-                + {method} end () noexcept -> I
+            interface __LocalDelegateForwardIterablePrimitiveClient <R, IT> {
+                + {method} begin () noexcept -> IT
+                + {method} end () noexcept -> IT
             }
 
             note "Requests direct dispatcher-standard calls" as DFIPCLocalHint

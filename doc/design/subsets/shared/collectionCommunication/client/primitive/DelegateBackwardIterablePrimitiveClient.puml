@@ -15,9 +15,9 @@ namespace cds {
                 + {method} rend () noexcept -> ReverseIterator
             }
 
-            interface __LocalDelegateBackwardIterablePrimitiveClient <R, I> {
-                + {method} rbegin () noexcept -> I
-                + {method} rend () noexcept -> I
+            interface __LocalDelegateBackwardIterablePrimitiveClient <R, RIT> {
+                + {method} rbegin () noexcept -> RIT
+                + {method} rend () noexcept -> RIT
             }
 
             note "Requests direct dispatcher-standard calls" as DBIPCLocalHint

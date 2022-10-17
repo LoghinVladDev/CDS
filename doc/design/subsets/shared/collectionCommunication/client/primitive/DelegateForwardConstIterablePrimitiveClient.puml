@@ -17,11 +17,11 @@ namespace cds {
                 + {method} cend () const noexcept -> ConstIterator
             }
 
-            interface __LocalDelegateForwardConstIterablePrimitiveClient <R, I> {
-                + {method} begin () const noexcept -> I
-                + {method} end () const noexcept -> I
-                + {method} cbegin () const noexcept -> I
-                + {method} cend () const noexcept -> I
+            interface __LocalDelegateForwardConstIterablePrimitiveClient <R, CIT> {
+                + {method} begin () const noexcept -> CIT
+                + {method} end () const noexcept -> CIT
+                + {method} cbegin () const noexcept -> CIT
+                + {method} cend () const noexcept -> CIT
             }
 
             note "Requests direct dispatcher-standard calls" as DFCIPCLocalHint

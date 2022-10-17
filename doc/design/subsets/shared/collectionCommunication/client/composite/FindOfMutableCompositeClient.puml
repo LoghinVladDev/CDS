@@ -1,0 +1,45 @@
+@startuml
+
+!includesub ../primitive/DelegateForwardIterablePrimitiveClient.puml!public_declaration
+
+!startsub public_declaration
+!ifndef FIND_OF_PUBLIC
+!define FIND_OF_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardIterablePrimitiveClient
+            interface __LocalDelegateForwardIterablePrimitiveClient
+
+            interface __FindOfMutableCompositeClient <R, E, IT, I, BiPredicate <I, E>, BiPredicate <I, E>> {
+                + {method} <C<...>> findOf (Size, C <IT> &, I const &) noexcept -> C <IT> &
+                + {method} <C<...>> findOf (Size, I const &) noexcept -> C <IT>
+                + {method} findFirstOf (I const &) noexcept -> IT
+                + {method} findLastFirstOf (I const &) noexcept -> IT
+                + {method} <C<...>> findAllOf (C <IT> &, I const &) noexcept -> C <IT> &
+                + {method} <C<...>> findAllOf (I const &) noexcept -> C <IT>
+
+                + {method} <C<...>> findNotOf (Size, C <IT> &, I const &) noexcept -> C <IT> &
+                + {method} <C<...>> findNotOf (Size, I const &) noexcept -> C <IT>
+                + {method} findFirstNotOf (I const &) noexcept -> IT
+                + {method} findLastFirstNotOf (I const &) noexcept -> IT
+                + {method} <C<...>> findAllNotOf (C <IT> &, I const &) noexcept -> C <IT> &
+                + {method} <C<...>> findAllNotOf (I const &) noexcept -> C <IT>
+            }
+
+            class __LocalFindOfMutableCompositeClient <R, E, IT, I, BiPredicate <I, E>, BiPredicate <I, E>> << (T, #aa9999) >>
+            __FindOfMutableCompositeClient .. "is " __LocalFindOfMutableCompositeClient
+            __DelegateForwardIterablePrimitiveClient .. "uses" __FindOfMutableCompositeClient
+            __LocalDelegateForwardIterablePrimitiveClient ... "uses" __LocalFindOfMutableCompositeClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

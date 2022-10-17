@@ -1,0 +1,45 @@
+@startuml
+
+!includesub ../primitive/DelegateForwardConstIterablePrimitiveClient.puml!public_declaration
+
+!startsub public_declaration
+!ifndef INDICES_OF_PUBLIC
+!define INDICES_OF_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardConstIterablePrimitiveClient
+            interface __LocalDelegateForwardConstIterablePrimitiveClient
+
+            interface __IndicesOfCompositeClient <R, E, I, BiPredicate <I, E>> {
+                + {method} <C> indicesOfFrom (Size, C &, I const &) const noexcept -> C &
+                + {method} <C <...>> indicesOfFrom (Size, I const &) const noexcept -> C <Index>
+                + {method} firstIndexOfFrom (I const &) const noexcept -> Index
+                + {method} lastIndexOfFrom (I const &) const noexcept -> Index
+                + {method} <C> allIndicesOfFrom (C &, I const &) const noexcept -> C &
+                + {method} <C <...>> allIndicesOfFrom (I const &) const noexcept -> C <Index>
+
+                + {method} <C> indicesOfNotFrom (Size, C &, I const &) const noexcept -> C &
+                + {method} <C <...>> indicesOfNotFrom (Size, I const &) const noexcept -> C <Index>
+                + {method} firstIndexOfNotFrom (I const &) const noexcept -> Index
+                + {method} lastIndexOfNotFrom (I const &) const noexcept -> Index
+                + {method} <C> allIndicesOfNotFrom (C &, I const &) const noexcept -> C &
+                + {method} <C <...>> allIndicesOfNotFrom (I const &) const noexcept -> C <Index>
+            }
+
+            class __LocalIndicesOfCompositeClient <R, E> << (T, #aa9999) >>
+            __IndicesOfCompositeClient .. "is " __LocalIndicesOfCompositeClient
+            __DelegateForwardConstIterablePrimitiveClient .. "uses" __IndicesOfCompositeClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ... "uses" __LocalIndicesOfCompositeClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

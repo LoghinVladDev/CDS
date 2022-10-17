@@ -1,0 +1,38 @@
+@startuml
+
+!includesub ../primitive/DelegateForwardConstIterablePrimitiveClient.puml!public_declaration
+
+!startsub public_declaration
+!ifndef INDICES_BY_PUBLIC
+!define INDICES_BY_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardConstIterablePrimitiveClient
+            interface __LocalDelegateForwardConstIterablePrimitiveClient
+
+            interface __IndicesByCompositeClient <R, E> {
+                + {method} <C, P> indicesOfThat (Size, C &, P const &) const throws(except(P::operator()(E const &))) -> C &
+                + {method} <C <...>, P> indicesOfThat (Size, P const &) const throws(except(P::operator()(E const &))) -> C <Index>
+                + {method} <P> firstIndexOfThat (P const &) const throws(except(P::operator()(E const &))) -> Index
+                + {method} <P> lastIndexOfThat (P const &) const throws(except(P::operator()(E const &))) -> Index
+                + {method} <C, P> allIndicesOfThat (C &, P const &) const throws(except(P::operator()(E const &))) -> C &
+                + {method} <C <...>, P> allIndicesOfThat (P const &) const throws(except(P::operator()(E const &))) -> C <Index>
+            }
+
+            class __LocalIndicesByCompositeClient <R, E> << (T, #aa9999) >>
+            __IndicesByCompositeClient .. "is " __LocalIndicesByCompositeClient
+            __DelegateForwardConstIterablePrimitiveClient .. "uses" __IndicesByCompositeClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ... "uses" __LocalIndicesByCompositeClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

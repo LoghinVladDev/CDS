@@ -1,0 +1,18 @@
+@startuml
+
+!startsub public_declaration
+!ifndef COLLECTION_PUBLIC
+!define COLLECTION_PUBLIC
+
+namespace cds {
+
+    abstract class Collection {
+
+    }
+
+}
+
+!endif
+!endsub
+
+@enduml

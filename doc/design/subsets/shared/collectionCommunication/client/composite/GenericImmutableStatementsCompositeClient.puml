@@ -1,0 +1,42 @@
+@startuml
+
+!includesub ../primitive/DelegateForwardConstIterablePrimitiveClient.puml!public_declaration
+
+!startsub public_declaration
+!ifndef GENERIC_CONST_STMT_PUBLIC
+!define GENERIC_CONST_STMT_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardConstIterablePrimitiveClient
+            interface __LocalDelegateForwardConstIterablePrimitiveClient
+
+            interface __GenericImmutableStatementsCompositeClient <R, E> {
+                + {method} <A> forEach (A const &) const throws(except(A::operator()(E const &))) -> void
+                + {method} <P> some (Size, [P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> atLeast (Size, [P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> atMost (Size, [P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> moreThan (Size, [P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> fewerThan (Size, [P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> count ([P const &]) const throws(except(P::operator()(E const &))) -> Size
+                + {method} <P> any ([P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> all ([P const &]) const throws(except(P::operator()(E const &))) -> bool
+                + {method} <P> none ([P const &]) const throws(except(P::operator()(E const &))) -> bool
+            }
+
+            class __LocalGenericImmutableStatementsCompositeClient <R, E> << (T, #aa9999) >>
+            __GenericImmutableStatementsCompositeClient .. "is " __LocalGenericImmutableStatementsCompositeClient
+            __DelegateForwardConstIterablePrimitiveClient .. "uses" __GenericImmutableStatementsCompositeClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ... "uses" __LocalGenericImmutableStatementsCompositeClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

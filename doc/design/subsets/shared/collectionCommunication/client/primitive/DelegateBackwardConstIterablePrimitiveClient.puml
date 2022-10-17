@@ -17,11 +17,11 @@ namespace cds {
                 + {method} crend () const noexcept -> ConstReverseIterator
             }
 
-            interface __LocalDelegateBackwardConstIterablePrimitiveClient <R, I> {
-                + {method} rbegin () const noexcept -> I
-                + {method} rend () const noexcept -> I
-                + {method} crbegin () const noexcept -> I
-                + {method} crend () const noexcept -> I
+            interface __LocalDelegateBackwardConstIterablePrimitiveClient <R, CRIT> {
+                + {method} rbegin () const noexcept -> CRIT
+                + {method} rend () const noexcept -> CRIT
+                + {method} crbegin () const noexcept -> CRIT
+                + {method} crend () const noexcept -> CRIT
             }
 
             note "Requests direct dispatcher-standard calls" as DBCIPCLocalHint

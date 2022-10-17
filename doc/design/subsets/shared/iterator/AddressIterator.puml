@@ -103,9 +103,7 @@ namespace cds {
 
 namespace cds {
 
-    class AddressIterator <__ElementType, reverse> << (T, #aa9999) >> {
-
-    }
+    class AddressIterator <__ElementType, reverse> << (T, #aa9999) >>
 
     ForwardAddressIterator .. "is when reverse is false" AddressIterator
     BackwardAddressIterator .. "is when reverse is true" AddressIterator
