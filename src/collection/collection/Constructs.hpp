@@ -2,8 +2,8 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_COLLECTION_CONSTRUCTS_HPP__
-#define __CDS_COLLECTION_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_COLLECTION_CONSTRUCTS_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_COLLECTION_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
@@ -11,11 +11,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
      * @brief Pre-declaration of the Collection class
      * @namespace cds
      */
-    template < typename > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Collection;
 
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief Function passed to client to check if a given collection element contains a received value element
@@ -28,8 +28,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-            __CDS_OptimalInline auto __collectionContains ( /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_OptimalInline auto __collectionContains ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: Collection < __ElementType > const & collection,
                         __ElementType                       const & element
             ) noexcept -> bool;
@@ -45,8 +45,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-            __CDS_OptimalInline auto __collectionNotContains (  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_OptimalInline auto __collectionNotContains (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: Collection < __ElementType > const & collection,
                         __ElementType                       const & element
             ) noexcept -> bool;
@@ -65,9 +65,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_OptimalInline auto __initializerListContains (              /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_OptimalInline auto __initializerListContains (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                         std :: initializer_list < __ElementType >   const & list,
                         __ElementType                               const & element
             ) noexcept -> bool;
@@ -86,9 +86,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_OptimalInline auto __initializerListNotContains (           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_OptimalInline auto __initializerListNotContains (           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                         std :: initializer_list < __ElementType >   const & list,
                         __ElementType                               const & element
             ) noexcept -> bool;
@@ -100,8 +100,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionCommunicationChannel =    /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionCommunicationChannel =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __CollectionInternalCommunicationChannel <
                             cds :: Collection < __ElementType >,
                             __ElementType
@@ -114,8 +114,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionDelegateForwardConstIterableClient =  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionDelegateForwardConstIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __DelegateForwardConstIterablePrimitiveClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -129,8 +129,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionConstIteratorRemoveClient =   /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionConstIteratorRemoveClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __AbstractConstIteratorRemovePrimitiveClient <
                             cds :: Collection < __ElementType >,
                             __ElementType
@@ -143,8 +143,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionRandomInsertionClient =   /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionRandomInsertionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RandomInsertionPrimitiveClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -158,8 +158,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionContainsOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionContainsOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ContainsOfCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -174,8 +174,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionContainsOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionContainsOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ContainsOfCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -190,8 +190,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindOfImmutableCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -208,8 +208,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindOfImmutableCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -226,8 +226,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionFindByClient =    /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionFindByClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindByImmutableCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -241,8 +241,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionRemoveOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionRemoveOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RemoveOfCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -257,8 +257,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionRemoveOfInitializerListClient =   /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionRemoveOfInitializerListClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RemoveOfCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType,
@@ -273,8 +273,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionRemoveByClient =  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionRemoveByClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __RemoveByCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType
@@ -287,15 +287,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-            using __CollectionGenericStatementsClient = /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __CollectionGenericStatementsClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericImmutableStatementsCompositeClient <
                             cds :: Collection < __ElementType >,
                             __ElementType
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_COLLECTION_CONSTRUCTS_HPP__ */

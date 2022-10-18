@@ -2,12 +2,12 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_COLLECTION_IMPL_HPP__
-#define __CDS_COLLECTION_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_COLLECTION_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_COLLECTION_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief Function used to insert a pack of values into a collection via forwarding pack expansion. This is the final call of the chain
@@ -20,9 +20,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename __LastType     /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __collectionAdd ( /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __LastType                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused inline auto __collectionAdd (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     Collection < __ElementType >    & collection,
                     __LastType                     && element
             ) noexcept -> void {
@@ -45,10 +45,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename     __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __collectionAdd (         /* NOLINT(bugprone-reserved-identifier) */
+                    typename     __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename     __FirstType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __RemainingTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __collectionAdd (         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     Collection < __ElementType >     &      collection,
                     __FirstType                     &&      firstElement,
                     __RemainingTypes                && ...  remainingElements
@@ -61,30 +61,30 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __collectionAdd ( collection, std :: forward < __RemainingTypes > ( remainingElements ) ... );
             }
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr Collection < __ElementType > :: Collection () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr Collection < __ElementType > :: Collection (
             Collection const & collection
     ) noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr Collection < __ElementType > :: Collection (
             Collection && collection
     ) noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprDestructor Collection < __ElementType > :: ~Collection () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
         /* A collection is empty if the size is equal to 0 */
@@ -92,7 +92,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr Collection < __ElementType > :: operator bool () const noexcept {
 
         /* Operation equivalent to empty */
@@ -100,7 +100,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Collection < __ElementType > :: toString () const noexcept -> String {
 
         /* Default toString implementation, store 'Collection at 0x....'. Use a stringstream for simplicity */
@@ -112,7 +112,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     auto Collection < __ElementType > :: hash () const noexcept -> Size {
 
         /* Default Collection hash computation formula :
@@ -128,7 +128,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     auto Collection < __ElementType > :: equals (
             Object const & object
     ) const noexcept -> bool {
@@ -169,7 +169,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Collection < __ElementType > :: contains (
             ElementType const & element
     ) const noexcept -> bool {
@@ -187,7 +187,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         return false;
     }
 
-}
+} /* namespace cds */
 
 
 #endif /* __CDS_COLLECTION_IMPL_HPP__ */

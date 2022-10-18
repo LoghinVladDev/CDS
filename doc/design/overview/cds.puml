@@ -52,5 +52,6 @@
 
 !include ../subsets/shared/iterator/Iterator.puml
 !include ../subsets/shared/delegateIterator/DelegateIteratorAll.puml
+!include ../subsets/shared/collectionImplementation/CollectionImplementation.puml
 
 @enduml
