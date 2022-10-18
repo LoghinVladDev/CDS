@@ -455,6 +455,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @param [in, out] pBucket : __NodeType ptr ptr = Address to the head of the list ( therefore, address as well ) to emplace the node in
                  * @param [in] pNode : __NodeType ptr = Address to the node to be emplaced in the bucket
                  * @exceptsafe
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
@@ -520,24 +521,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @brief Function used to allocate memory for a new node. It will NOT initialize the __ElementType data
                  * @exceptsafe
                  * @return __NodeType ptr = Address to the newly created node
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_NoDiscard auto __ht_allocateNode () const noexcept -> __NodeType *;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard static auto __ht_allocateNode () noexcept -> __NodeType *;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to free the memory used by a node, including destroying the __ElementType data prior to free of memory
                  * @param [in] pNode : __NodeType ptr = Address to the node to be freed
                  * @exceptsafe
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __ht_freeNode (                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static auto __ht_freeNode (                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __NodeType * pNode
-                ) const noexcept -> void;
+                ) noexcept -> void;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

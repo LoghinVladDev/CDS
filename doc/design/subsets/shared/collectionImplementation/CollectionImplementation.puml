@@ -1,8 +1,11 @@
 @startuml
 
 !startsub public_declaration
-!ifndef DLL_BASE_PUBLIC
-!define DLL_BASE_PUBLIC
+!ifndef COL_IMPL_PUBLIC
+!define COL_IMPL_PUBLIC
+
+!includesub ArrayBase.puml!public_declaration
+!includesub DoubleLinkedList.puml!public_declaration
 
 !endif
 !endsub

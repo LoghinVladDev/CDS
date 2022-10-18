@@ -10,9 +10,6 @@
 
 namespace cds {
 
-    abstract class AbstractBidirectionalNodeIterator
-    abstract class AbstractBidirectionalNodeConstIterator
-
     namespace __hidden {
         namespace __impl {
 
@@ -72,7 +69,7 @@ namespace cds {
                 # {method} __dll_removeIterator (cds::AbstractBidirectionalNodeIterator <E> const &) noexcept -> bool
                 # {method} __dll_removeConstIterator (cds::AbstractBidirectionalNodeConstIterator <E const> const &) noexcept -> bool
                 # {method} __dll_removeIteratorArray (cds::AbstractBidirectionalNodeIterator <E> const * const *, Size) noexcept -> Size
-                # {method} __dll_removeConstIteratorArray (cds::AbstractBidirectionalNodeConstIterator <E const> const * const *) noexcept -> Size
+                # {method} __dll_removeConstIteratorArray (cds::AbstractBidirectionalNodeConstIterator <E const> const * const *, Size) noexcept -> Size
             }
 
             class __DoubleLinkedList::__dll_Iterator << (T, #aa9999) >>

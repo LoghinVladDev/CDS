@@ -12,6 +12,8 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
+            interface __SetServer
+
             interface __SetServerDispatcher <S, I, E, ACIT, CIT, \ncbegin(), cend(), new(), removeConst(),\n removeConstArray(), findConst()> extends __CollectionServerDispatcher {
                 # {method} __findConst (E const &) const noexcept -> __AbstractDelegateIterator <E const> *
                 # {method} __findConstLocal (E const &) const noexcept -> CIT

@@ -9,8 +9,6 @@
 
 namespace cds {
 
-    abstract class AbstractAddressIterator
-
     namespace __hidden {
         namespace __impl {
 
@@ -66,7 +64,7 @@ namespace cds {
                 # {method} __ab_removeIterator (cds::AbstractAddressIterator <E> const &) noexcept -> bool
                 # {method} __ab_removeConstIterator (cds::AbstractAddressIterator <E const> const &) noexcept -> bool
                 # {method} __ab_removeIteratorArray (cds::AbstractAddressIterator <E> const * const *, Size) noexcept -> Size
-                # {method} __ab_removeConstIteratorArray (cds::AbstractAddressIterator <E const> const * const *) noexcept -> Size
+                # {method} __ab_removeConstIteratorArray (cds::AbstractAddressIterator <E const> const * const *, Size) noexcept -> Size
             }
 
             class __ArrayBase::__ab_Iterator << (T, #aa9999) >>

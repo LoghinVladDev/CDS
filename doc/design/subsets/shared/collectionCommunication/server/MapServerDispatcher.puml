@@ -12,6 +12,8 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
+            interface __MapServer
+
             interface __MapServerDispatcher <S, I, E, K, AIT, ACIT, IT, CIT, \nbegin(), end(),cbegin(), cend(), \nnew(), remove(), removeConst(), \nremoveArray(), removeConstArray(), \nfind(), findConst()> extends __MutableCollectionServerDispatcher {
                 # {method} __find (K const &) noexcept -> __AbstractDelegateIterator <E> *
                 # {method} __findConst (K const &) const noexcept -> __AbstractDelegateIterator <E const> *
