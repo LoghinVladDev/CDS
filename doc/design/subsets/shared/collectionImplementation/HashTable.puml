@@ -30,8 +30,8 @@ namespace cds {
                 - {method} __ht_bucket (Size) const noexcept -> __NodeType const *
                 - {method} __ht_allocateBuckets (Size) noexcept -> void
                 - {method} __ht_freeBuckets () noexcept -> void
-                - {method} {static} __ht_allocateNode () noexcept -> void
-                - {method} {static} __ht_freeNode () noexcept -> void
+                - {method} {static} __ht_allocateNode () noexcept -> __NodeType *
+                - {method} {static} __ht_freeNode (__NodeType *) noexcept -> void
                 ..property methods..
                 # {method} __ht_clear () noexcept -> void
                 # {method} __ht_empty () const noexcept -> bool
