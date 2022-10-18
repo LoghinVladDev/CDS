@@ -12,6 +12,8 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
+            interface __ListServer
+
             interface __ListServerDispatcher <S, I, E, AIT, ACIT, IT, CIT, RIT, CRIT, \nbegin(), end(), cbegin(), cend(), \nrbegin(), rend(), crbegin(), crend(), \nnew(), newFront(), newBack(), newFrontArray(), \nnewBackArray(), newBefore(), newBeforeConst(), \nnewAfter(), newAfterConst(), newBeforeArray(), \nnewBeforeConstArray(), newAfterArray(), \nnewAfterConstArray(), remove(), removeConst(), \nremoveArray(), removeConstArray()> extends __MutableCollectionServerDispatcher {
                 # {method} __rbegin () noexcept -> __AbstractDelegateIterator <E> *
                 # {method} __rend () noexcept -> __AbstractDelegateIterator <E> *

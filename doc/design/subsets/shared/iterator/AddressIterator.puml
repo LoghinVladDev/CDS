@@ -6,6 +6,8 @@
 !ifndef ADDRESS_ITERATOR_PUBLIC
 !define ADDRESS_ITERATOR_PUBLIC
 
+interface cds.meta.RandomAccessIterator
+
 namespace cds {
 
     abstract class AbstractAddressIterator <__ElementType> {
