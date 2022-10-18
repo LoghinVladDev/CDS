@@ -1,0 +1,10 @@
+@startuml
+
+!startsub public_declaration
+!ifndef DLL_BASE_PUBLIC
+!define DLL_BASE_PUBLIC
+
+!endif
+!endsub
+
+@enduml

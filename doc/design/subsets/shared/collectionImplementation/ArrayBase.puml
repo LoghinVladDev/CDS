@@ -25,7 +25,7 @@ namespace cds {
                 ..property methods..
                 # {method} __ab_clear (bool) noexcept -> void
                 # {method} __ab_size () const noexcept -> Size
-                # {method} __ab_remove (Index) const noexcept -> Size
+                # {method} __ab_remove (Index) const noexcept -> void
                 # {method} __ab_get (Index) noexcept -> E *
                 # {method} __ab_get (Index) const noexcept -> E const *
                 # {method} __ab_newAt (Index) noexcept -> E *
