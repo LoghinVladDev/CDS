@@ -141,7 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable <
+            > constexpr __HashTable <
                     __ElementType,
                     __KeyType,
                     __KeyHasher,
@@ -151,10 +151,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __nodeDestructor
             > :: __HashTable (
                     __HashTable && hashTable
-            ) noexcept {
+            ) noexcept :
+                    _pBucketArray ( cds :: exchange ( hashTable._pBucketArray, nullptr ) ),
+                    _bucketCount ( cds :: exchange ( hashTable._bucketCount, 0ULL ) ),
+                    _size ( cds :: exchange ( hashTable._size, 0ULL ) ),
+                    _rehash ( std :: move ( hashTable._rehash ) ),
+                    _hasher ( std :: move ( hashTable._hasher ) ) {
 
-                /* initialize by move cleared, since hash table is at construction */
-                this->__ht_moveCleared ( std :: move ( hashTable ) );
             }
 
 

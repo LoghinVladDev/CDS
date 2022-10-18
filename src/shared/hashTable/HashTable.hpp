@@ -202,6 +202,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __CopyFunction  const & copyFunction
                 ) noexcept;
 
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Copy Constructor, deleted
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @exceptsafe
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                __HashTable (
+                        __HashTable const & /* hashTable */
+                ) noexcept = delete;
+
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Move constructor, using given hash table
@@ -212,9 +225,47 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
+                constexpr __HashTable (
                         __HashTable && hashTable
                 ) noexcept;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Destructor
+                 * @exceptsafe
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                ~__HashTable () noexcept = default;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Copy Assignment Operator, deleted
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @exceptsafe
+                 * @return __HashTable ref = Reference to the modified object
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __HashTable const & /* hashTable */
+                ) noexcept -> __HashTable = delete;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Move Assignment Operator, deleted
+                 * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
+                 * @exceptsafe
+                 * @return __HashTable ref = Reference to the modified object
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __HashTable && /* hashTable */
+                ) noexcept -> __HashTable = delete;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -437,7 +488,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_NoDiscard constexpr auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size hash
                 ) const noexcept -> __NodeType * const &;
 
