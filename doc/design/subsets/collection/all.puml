@@ -1,0 +1,19 @@
+@startuml
+
+!include Collection.puml
+
+!startsub public_declaration
+!ifndef COLLECTION_ALL_PUBLIC
+!define COLLECTION_ALL_PUBLIC
+
+!includesub Collection.puml!public_declaration
+
+!endif
+!endsub
+
+!startsub private
+remove cds.__hidden.__impl.__*Local*
+remove *LocalHint*
+!endsub
+
+@enduml

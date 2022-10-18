@@ -22,6 +22,20 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
+            interface __CollectionInternalCommunicationChannel
+            interface __DelegateForwardConstIterablePrimitiveClient
+            interface __AbstractConstIteratorRemovePrimitiveClient
+            interface __RandomInsertionPrimitiveClient
+            interface __ContainsOfCompositeClient
+            interface __ContainsOfCompositeClient
+            interface __FindOfImmutableCompositeClient
+            interface __FindOfImmutableCompositeClient
+            interface __FindByImmutableCompositeClient
+            interface __RemoveOfCompositeClient
+            interface __RemoveOfCompositeClient
+            interface __RemoveByCompositeClient
+            interface __GenericImmutableStatementsCompositeClient
+
             interface __CollectionFunctions <E, BiPredicate <E, E>> {
                 # {method} {static} __cf_equals (E const &, E const &) const noexcept -> bool
             }

@@ -1,6 +1,8 @@
 @startuml
 
 !startsub public_declaration
+!ifndef CDS_OBJ_PUB
+!define CDS_OBJ_PUB
 
 namespace cds {
 
@@ -24,6 +26,7 @@ namespace cds {
 
 }
 
+!endif
 !endsub
 
 @enduml
