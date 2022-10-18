@@ -2,12 +2,12 @@
  * Created by loghin on 7/5/22.
  */
 
-#ifndef __CDS_SHARED_ARRAY_BASE_HPP__
-#define __CDS_SHARED_ARRAY_BASE_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ARRAY_BASE_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ARRAY_BASE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @class Base implementation class for array-based objects
@@ -24,68 +24,68 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-            > class __ArrayBase {                                                   /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __ArrayBase {                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for template parameter __ElementType
                  * @protected
                  */
                 using ElementType = __ElementType;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Starting and Minimum capacity for front and back allocation sizes
                  * @static
                  * @private
                  */
-                static Size const __ab_minCapacity = 32ULL; /* NOLINT(bugprone-reserved-identifier) */
+                static Size const __ab_minCapacity = 32ULL; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for forward mutable iterator
                  * @public
                  */
-                using __ab_Iterator                      = ForwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                using __ab_Iterator                      = ForwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for forward immutable iterator
                  * @public
                  */
-                using __ab_ConstIterator                 = ForwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
+                using __ab_ConstIterator                 = ForwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for backward mutable iterator
                  * @public
                  */
-                using __ab_ReverseIterator               = BackwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                using __ab_ReverseIterator               = BackwardAddressIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for backward immutable iterator
                  * @public
                  */
-                using __ab_ConstReverseIterator          = BackwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier) */
+                using __ab_ConstReverseIterator          = BackwardAddressIterator < __ElementType const >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @class Dispatcher to this class' implementation
                  * @implements __ListServerDispatcher
                  * @public
                  */
-                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
-                class __Dispatcher;                 /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                class __Dispatcher;                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @struct Container for the elements required by the array
                  * @private
                  */
-                struct __ArrayImplDataContainer { /* NOLINT(bugprone-reserved-identifier) */
+                struct __ArrayImplDataContainer { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     /** @brief Pointer to the data buffer */
                     __ElementType * _pBuffer            { nullptr };
@@ -109,14 +109,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size            _backNextCapacity   { 0ULL };
                 };
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Pointer to the data required for the array
                  * @private
                  */
                 __ArrayImplDataContainer * _pData { nullptr };
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Default Constructor, constexpr
                  * @exceptsafe
@@ -127,7 +127,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 constexpr __ArrayBase () noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Copy Constructor
                  * @param [in] array : __ArrayBase cref = Constant Reference to an Array to copy the data from
@@ -141,7 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArrayBase const & array
                 ) noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Move Constructor, constexpr
                  * @param [in, out] array : __ArrayBase mref = Move Reference to an array to release and acquire the data from
@@ -155,7 +155,48 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArrayBase && array
                 ) noexcept;
 
-            protected:
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Destructor, constexpr
+                 * @exceptsafe
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                ~__ArrayBase () noexcept = default;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Deleted Copy Assignment Operator, constexpr
+                 * @param [in] array : __ArrayBase cref = Constant Reference to an Array to copy the data from
+                 * @exceptsafe
+                 * @return __ArrayBase ref = Reference to the modified object
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                auto operator = (
+                        __ArrayBase const &
+                ) noexcept -> __ArrayBase & = delete;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Deleted Copy Assignment Operator, constexpr
+                 * @param [in, out] array : __ArrayBase mref = Move Reference to an array to release and acquire the data from
+                 * @exceptsafe
+                 * @return __ArrayBase ref = Reference to the modified object
+                 *
+                 * @test Suite: CTS-00001, Group: All, Test Cases: All
+                 * @test Suite: MCTS-00001, Group: All, Test Cases: All
+                 * @protected
+                 */
+                auto operator = (
+                        __ArrayBase &&
+                ) noexcept -> __ArrayBase & = delete;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to clear either the contents of the buffer, or purge the whole array data
                  * @param [in] destroyBuffer : bool = if true, will purge the whole memory array data, otherwise, will only clear the buffer
@@ -165,11 +206,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                auto __ab_clear ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_clear ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         bool destroyBuffer
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the number of elements in the array
                  * @exceptsafe
@@ -178,9 +219,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove an element at a given index
                  * @param [in] index : Index = index of the element to be removed
@@ -189,11 +230,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_remove ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Index index
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove an element at a given iterator
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to an iterator indicating to the element to be removed
@@ -203,11 +244,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_removeIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_removeIterator ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove an element at a given const iterator
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to an iterator indicating to the element to be removed
@@ -217,11 +258,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_removeConstIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_removeConstIterator ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove multiple elements at a given number of iterators
                  * @param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to iterators
@@ -232,12 +273,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_removeIteratorArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType >   const * const * ppIterators,
                         Size                                                        iteratorCount
                 ) noexcept -> Size;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove multiple elements at a given number of const iterators
                  * @param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to const iterators
@@ -248,12 +289,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_removeConstIteratorArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const * const * ppIterators,
                         Size                                                            iteratorCount
                 ) noexcept -> Size;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an address to the element located at given index
                  * @param [in] index : Index = index of the element to acquire the address of
@@ -263,11 +304,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_get ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_get ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         Index index
                 ) noexcept -> ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an address to the element located at given index
                  * @param [in] index : Index = index of the element to acquire the address of
@@ -277,11 +318,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_get ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_get ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
                         Index index
                 ) const noexcept -> ElementType const *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate and return the address of the newly created element space in the front of the array
                  * @exceptsafe
@@ -290,9 +331,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ab_newFront () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ab_newFront () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate and return the address of the newly created element space in the back of the array
                  * @exceptsafe
@@ -301,9 +342,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ab_newBack () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ab_newBack () noexcept -> ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a number of elements at the front of the array, and return the addresses of each
                  * individual memory space in a given array
@@ -314,12 +355,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newFrontArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newFrontArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                count,
                         __ElementType    ** ppElements
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a number of elements at the back of the array, and return the addresses of each
                  * individual memory space in a given array
@@ -330,12 +371,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newBackArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newBackArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                count,
                         __ElementType    ** ppElements
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element, regardless of the location, and return the memory address
                  * @param [in] pReferenceElement : __ElementType cptr = Address to an Immutable Reference comparison element. Unused in array since no restriction for added values exists
@@ -346,12 +387,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newAddress ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ElementType const * pReferenceElement,
                         bool                * pNewElementCreated
                 ) noexcept -> ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element at a given index. Will move elements, starting with the given index, to the right
                  * @param index : Index = index to create the element at
@@ -361,11 +402,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ab_newAt ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ab_newAt ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Index index
                 ) noexcept -> ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a given number of elements at a given index. Will move elements, starting with the given index, to the right
                  * @param [in] index : Index = index to create the element spaces at
@@ -376,13 +417,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newArrayAt ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newArrayAt ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Index               index,
                         Size                count,
                         __ElementType    ** ppElements
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element before a given iterator. Will move elements, starting with the given iterator element, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate an element space before
@@ -392,11 +433,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newBefore ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newBefore ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element before a given const iterator. Will move elements, starting with the given iterator element, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate an element space before
@@ -406,11 +447,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newBeforeConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newBeforeConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element after a given iterator. Will move elements, starting after the given iterator element, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate an element space after
@@ -420,11 +461,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newAfter ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newAfter ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element after a given const iterator. Will move elements, starting after the given iterator element, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate an element space after
@@ -434,11 +475,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newAfterConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newAfterConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a given number of elements before a given iterator. Will move elements, starting with the given iterator, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate the element spaces before
@@ -450,13 +491,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newBeforeArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newBeforeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType >   const & iterator,
                         Size                                                count,
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a given number of elements before a given const iterator. Will move elements, starting with the given iterator, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate the element spaces before
@@ -468,13 +509,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newBeforeArrayConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const & iterator,
                         Size                                                    count,
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a given number of elements after a given iterator. Will move elements, starting after the given iterator, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate the element spaces after
@@ -486,13 +527,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newAfterArray ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newAfterArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType >   const & iterator,
                         Size                                                count,
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for a given number of elements after a given const iterator. Will move elements, starting after the given iterator, to the right
                  * @param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate the element spaces after
@@ -504,13 +545,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_newAfterArrayConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         AbstractAddressIterator < __ElementType const > const & iterator,
                         Size                                                    count,
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to initialize the array data at first use
                  * @exceptsafe
@@ -519,9 +560,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @private
                  */
-                auto __ab_init () noexcept -> void; /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_init () noexcept -> void; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable forward iterator referencing the first element
                  * @excetpsafe
@@ -530,9 +571,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_begin () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_begin () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable forward iterator referencing the space after the last element
                  * @excetpsafe
@@ -541,9 +582,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_end () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_end () noexcept -> __ab_Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable forward iterator referencing the first element
                  * @excetpsafe
@@ -552,9 +593,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_cbegin () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_cbegin () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable forward iterator referencing the space after the last element
                  * @excetpsafe
@@ -563,9 +604,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_cend () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_cend () const noexcept -> __ab_ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable backward iterator referencing the last element
                  * @excetpsafe
@@ -574,9 +615,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rbegin () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rbegin () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable backward iterator referencing the space before the first element
                  * @excetpsafe
@@ -585,9 +626,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rend () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_rend () noexcept -> __ab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable backward iterator referencing the last element
                  * @excetpsafe
@@ -596,9 +637,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_crbegin () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_crbegin () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable backward iterator referencing the space before the first element
                  * @excetpsafe
@@ -607,9 +648,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_crend () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_crend () const noexcept -> __ab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the address of the buffer, offset from the first element
                  * @exceptsafe
@@ -618,9 +659,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ab_data () const noexcept -> __ElementType const *; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ab_data () const noexcept -> __ElementType const *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the address of the buffer, offset from the first element
                  * @exceptsafe
@@ -629,9 +670,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_data () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_data () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to resize the element space to a given size. It will initialize the empty space with a default constructor
                  * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is default constructible
@@ -642,15 +683,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isDefaultConstructible < __TElementType > ()
                         > = 0
-                > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size size
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to resize the element space to a given size. It will initialize the empty space with the received value
                  * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is copy constructible
@@ -662,16 +703,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
-                > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ab_resize (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                    size,
                         __ElementType   const & defaultValue
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to shrink the array to the given size. Will not do anything if given a size greater than actual
                  * @param [in] size : Size = new size of the array
@@ -680,11 +721,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_shrink (                                 /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_shrink (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size size
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to enlarge, but not initialize the elements, the array to the given size. New space will NOT be initialized
                  * @param [in] size : Size = new size of the array
@@ -693,11 +734,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_reserve (                                /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_reserve (                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size size
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to clear the current contents and copy the data from a received array.
                  * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is copy constructible
@@ -708,15 +749,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
-                > auto __ab_copy (                                   /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ab_copy (                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ArrayBase const & array
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to clear the current contents and move the data from a received array.
                  * @param [in, out] array : __ArrayBase mref = Move Reference to an array to acquire and release the data from
@@ -725,11 +766,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ab_move ( /* NOLINT(bugprone-reserved-identifier) */
+                auto __ab_move ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ArrayBase && array
                 ) noexcept -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to copy the data from a received array. It will NOT clear the array prior to copying
                  * @tparam __TElementType is an alias for __ElementType used to invoke substitution, enabling the function only if __ElementType is copy constructible
@@ -740,15 +781,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @private
                  */
                 template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         > = 0
-                > auto __ab_copyCleared (                            /* NOLINT(bugprone-reserved-identifier) */
+                > auto __ab_copyCleared (                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ArrayBase const & array
                 ) noexcept -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to move the data from a received array. It will NOT clear the array prior to copying
                  * @param [in, out] array : __ArrayBase mref = Move Reference to an array to acquire and release the data from
@@ -757,11 +798,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_moveCleared (  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ab_moveCleared (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ArrayBase && array
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to compare the current array to a given array
                  * @param [in] array : __ArrayBase cref = Constant Reference to an array to compare the current one to
@@ -771,14 +812,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ab_equals (  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ab_equals (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __ArrayBase const & array
                 ) const noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier) */
-                > auto __ab_sort (                                                                              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > auto __ab_sort (                                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
                 ) noexcept -> void;
 
@@ -786,10 +827,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ElementType,                                         /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __ElementType > __equals /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ComparisonFunction < __ElementType > __equals /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __ServerType                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __ArrayBase <
                     __ElementType,
                     __equals
@@ -831,8 +872,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             & __ArrayBase < __ElementType, __equals > :: __ab_removeConstIteratorArray
                     > {};
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ARRAY_BASE_HPP__ */

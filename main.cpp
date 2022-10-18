@@ -1,9 +1,9 @@
 #include <CDS/Array>
 #include <CDS/LinkedList>
 #include <CDS/HashSet>
-#include <CDS/OrderedSet>
-#include <CDS/UnorderedSet>
+#include <CDS/LinkedHashSet>
 #include <CDS/HashMap>
+#include <CDS/LinkedHashMap>
 
 using namespace cds;
 
@@ -143,6 +143,7 @@ int main () {
     cds :: HashSet < Copy > hslf;
     cds :: HashSet < Default > hslg;
     cds :: HashSet < None > hslh;
+
     cds :: HashSet < DefaultCopyMove > const hslac;
     cds :: HashSet < DefaultCopy > const hslbc;
     cds :: HashSet < DefaultMove > const hslcc;
@@ -152,23 +153,6 @@ int main () {
     cds :: HashSet < Default > const hslgc;
     cds :: HashSet < None > const hslhc;
 
-    cds :: UnorderedSet < DefaultCopyMove > usla;
-    cds :: UnorderedSet < DefaultCopy > uslb;
-    cds :: UnorderedSet < DefaultMove > uslc;
-    cds :: UnorderedSet < CopyMove > usld;
-    cds :: UnorderedSet < Move > usle;
-    cds :: UnorderedSet < Copy > uslf;
-    cds :: UnorderedSet < Default > uslg;
-    cds :: UnorderedSet < None > uslh;
-    cds :: UnorderedSet < DefaultCopyMove > const uslac;
-    cds :: UnorderedSet < DefaultCopy > const uslbc;
-    cds :: UnorderedSet < DefaultMove > const uslcc;
-    cds :: UnorderedSet < CopyMove > const usldc;
-    cds :: UnorderedSet < Move > const uslec;
-    cds :: UnorderedSet < Copy > const uslfc;
-    cds :: UnorderedSet < Default > const uslgc;
-    cds :: UnorderedSet < None > const uslhc;
-
     cds :: HashMap < DefaultCopyMove, DefaultCopyMove > hmla;
     cds :: HashMap < DefaultCopy, DefaultCopy > hmlb;
     cds :: HashMap < DefaultMove, DefaultMove > hmlc;
@@ -177,6 +161,7 @@ int main () {
     cds :: HashMap < Copy, Copy > hmlf;
     cds :: HashMap < Default, Default > hmlg;
     cds :: HashMap < None, None > hmlh;
+
     cds :: HashMap < DefaultCopyMove, DefaultCopyMove > const hmlac;
     cds :: HashMap < DefaultCopy, DefaultCopy > const hmlbc;
     cds :: HashMap < DefaultMove, DefaultMove > const hmlcc;
@@ -186,23 +171,41 @@ int main () {
     cds :: HashMap < Default, Default > const hmlgc;
     cds :: HashMap < None, None > const hmlhc;
 
+    cds :: LinkedHashSet < DefaultCopyMove > lhsla;
+    cds :: LinkedHashSet < DefaultCopy > lhslb;
+    cds :: LinkedHashSet < DefaultMove > lhslc;
+    cds :: LinkedHashSet < CopyMove > lhsld;
+    cds :: LinkedHashSet < Move > lhsle;
+    cds :: LinkedHashSet < Copy > lhslf;
+    cds :: LinkedHashSet < Default > lhslg;
+    cds :: LinkedHashSet < None > lhslh;
 
-    cds :: OrderedSet < DefaultCopyMove, FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > osla;
-    cds :: OrderedSet < DefaultCopy, FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > oslb;
-    cds :: OrderedSet < DefaultMove, FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > oslc;
-    cds :: OrderedSet < CopyMove, FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > osld;
-    cds :: OrderedSet < Move, FunctionComparator < Move, & cds :: meta :: equals < Move > > > osle;
-    cds :: OrderedSet < Copy, FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > oslf;
-    cds :: OrderedSet < Default, FunctionComparator < Default, & cds :: meta :: equals < Default > > > oslg;
-    cds :: OrderedSet < None, FunctionComparator < None, & cds :: meta :: equals < None > > > oslh;
-    cds :: OrderedSet < DefaultCopyMove, FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > const oslac;
-    cds :: OrderedSet < DefaultCopy, FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > const oslbc;
-    cds :: OrderedSet < DefaultMove, FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > const oslcc;
-    cds :: OrderedSet < CopyMove, FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > const osldc;
-    cds :: OrderedSet < Move, FunctionComparator < Move, & cds :: meta :: equals < Move > > > const oslec;
-    cds :: OrderedSet < Copy, FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > const oslfc;
-    cds :: OrderedSet < Default, FunctionComparator < Default, & cds :: meta :: equals < Default > > > const oslgc;
-    cds :: OrderedSet < None, FunctionComparator < None, & cds :: meta :: equals < None > > > const oslhc;
+    cds :: LinkedHashSet < DefaultCopyMove > const lhslac;
+    cds :: LinkedHashSet < DefaultCopy > const lhslbc;
+    cds :: LinkedHashSet < DefaultMove > const lhslcc;
+    cds :: LinkedHashSet < CopyMove > const lhsldc;
+    cds :: LinkedHashSet < Move > const lhslec;
+    cds :: LinkedHashSet < Copy > const lhslfc;
+    cds :: LinkedHashSet < Default > const lhslgc;
+    cds :: LinkedHashSet < None > const lhslhc;
+
+    cds :: LinkedHashMap < DefaultCopyMove, DefaultCopyMove > lhmla;
+    cds :: LinkedHashMap < DefaultCopy, DefaultCopy > lhmlb;
+    cds :: LinkedHashMap < DefaultMove, DefaultMove > lhmlc;
+    cds :: LinkedHashMap < CopyMove, CopyMove > lhmld;
+    cds :: LinkedHashMap < Move, Move > lhmle;
+    cds :: LinkedHashMap < Copy, Copy > lhmlf;
+    cds :: LinkedHashMap < Default, Default > lhmlg;
+    cds :: LinkedHashMap < None, None > lhmlh;
+
+    cds :: LinkedHashMap < DefaultCopyMove, DefaultCopyMove > const lhmlac;
+    cds :: LinkedHashMap < DefaultCopy, DefaultCopy > const lhmlbc;
+    cds :: LinkedHashMap < DefaultMove, DefaultMove > const lhmlcc;
+    cds :: LinkedHashMap < CopyMove, CopyMove > const lhmldc;
+    cds :: LinkedHashMap < Move, Move > const lhmlec;
+    cds :: LinkedHashMap < Copy, Copy > const lhmlfc;
+    cds :: LinkedHashMap < Default, Default > const lhmlgc;
+    cds :: LinkedHashMap < None, None > const lhmlhc;
 
     cds :: Array < int > arr = { 5, 4, 3, 2, 1 };
     cds :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
@@ -223,7 +226,7 @@ int main () {
 //    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
 //    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
 
-arrc.findLast ( [](int v){return true;} );
+arrc.findLastThat ( [](int v){return true;} );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
 * arr.begin() = 3;
 //    arr.insertBefore ( arr.begin(), 3 );

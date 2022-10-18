@@ -117,8 +117,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 template <
                         typename __T,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
-                                ! cds :: meta :: isMoveAssignable < __T > () ||
-                                ! cds :: meta :: isMoveConstructible < __T > ()
+                                ( ! cds :: meta :: isMoveAssignable < __T > () ||
+                                ! cds :: meta :: isMoveConstructible < __T > () ) &&
+                                cds :: meta :: isCopyAssignable < __T > () &&
+                                cds :: meta :: isCopyConstructible < __T > ()
                         > = 0
                 > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __T & left,
@@ -128,6 +130,40 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __T auxiliary   = left;
                     left            = right;
                     right           = auxiliary;
+                }
+
+
+                template <
+                        typename __T,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        cds :: meta :: EnableIf <
+                                ( ! cds :: meta :: isMoveAssignable < __T > () ||
+                                ! cds :: meta :: isMoveConstructible < __T > () ) &&
+                                ( ! cds :: meta :: isCopyAssignable < __T > () ||
+                                ! cds :: meta :: isCopyConstructible < __T > () )
+                        > = 0
+                > __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __T & left,
+                        __T & right
+                ) noexcept -> void {
+
+                    cds :: __hidden :: __impl :: __allocation :: __RawContainer < __T > auxiliary;
+                    (void) std :: memcpy (
+                            reinterpret_cast < void * > ( & auxiliary.data() ),
+                            reinterpret_cast < void const * > ( & left ),
+                            sizeof ( __T )
+                    );
+
+                    (void) std :: memcpy (
+                            reinterpret_cast < void * > ( & left ),
+                            reinterpret_cast < void const * > ( & right ),
+                            sizeof ( __T )
+                    );
+
+                    (void) std :: memcpy (
+                            reinterpret_cast < void * > ( & right ),
+                            reinterpret_cast < void const * > ( & auxiliary.data() ),
+                            sizeof ( __T )
+                    );
                 }
 
                 template <

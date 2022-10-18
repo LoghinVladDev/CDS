@@ -53,7 +53,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex == __index > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex == __index > > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_NonConstConstexprMemberFunction auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: get () noexcept -> __CurrentType & {
 
                 return this->data;
@@ -61,7 +61,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex != __index > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex != __index > > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_NonConstConstexprMemberFunction auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: get () noexcept -> typename __hidden :: __impl :: __TypeAt < __requestedIndex - __index, __CurrentType, __RemainingTypes ... > :: Type & {
 
                 return this-> __TupleNode < __index + 1, __RemainingTypes ... > :: template get < __requestedIndex > ();
@@ -69,7 +69,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex == __index > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex == __index > > // NOLINT(bugprone-reserved-identifier)
             constexpr auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: get () const noexcept -> __CurrentType const & {
 
                 return this->data;
@@ -77,7 +77,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex != __index > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex != __index > > // NOLINT(bugprone-reserved-identifier)
             constexpr auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: get () const noexcept -> typename __hidden :: __impl :: __TypeAt < __requestedIndex - __index, __CurrentType, __RemainingTypes ... > :: Type const & {
 
                 return this-> __TupleNode < __index + 1U, __RemainingTypes ... > :: template get < __requestedIndex > ();
@@ -107,7 +107,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __size, meta :: EnableIf < __size == 0 > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __size, cds :: meta :: EnableIf < __size == 0 > > // NOLINT(bugprone-reserved-identifier)
             auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: toString (
                     std :: ostream & out
             ) const noexcept -> void {
@@ -117,7 +117,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < uint32 __index, typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
-            template < uint32 __size, meta :: EnableIf < __size != 0 > > // NOLINT(bugprone-reserved-identifier)
+            template < uint32 __size, cds :: meta :: EnableIf < __size != 0 > > // NOLINT(bugprone-reserved-identifier)
             auto __TupleNode < __index, __CurrentType, __RemainingTypes ... > :: toString (
                     std :: ostream & out
             ) const noexcept -> void {
