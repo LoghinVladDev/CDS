@@ -119,32 +119,32 @@ namespace cds {
             __LocalFindOfMutableCompositeClient "is"    ..........                        __ArrayFindOfCollectionClient
             __LocalFindOfMutableCompositeClient "is"    ..........                        __ArrayFindOfInitializerListClient
             __LocalFindOfImmutableCompositeClient "is"  ..........                        __ArrayFindConstOfCollectionClient
-            __LocalFindOfImmutableCompositeClient "is"  ..........                        __ArrayFindConstOfInitializerListClient
-            __LocalFindByMutableCompositeClient "is"    ..........                        __ArrayFindByClient
-            __LocalFindByImmutableCompositeClient "is"  ..........                        __ArrayFindConstByClient
-            __LocalIteratorRemovePrimitiveClient "is"   ..........                        __ArrayIteratorRemoveClient
-            __LocalConstIteratorRemovePrimitiveClient "is"  ..........                    __ArrayConstIteratorRemoveClient
-            __LocalRemoveOfCompositeClient "is" ..........                                __ArrayRemoveOfCollectionClient
-            __LocalRemoveOfCompositeClient "is" ..........                                __ArrayRemoveOfInitializerListClient
-            __LocalRemoveByCompositeClient "is" ..........                                __ArrayRemoveByClient
+            __LocalFindOfImmutableCompositeClient "is"  .......                        __ArrayFindConstOfInitializerListClient
+            __LocalFindByMutableCompositeClient "is"    ......                        __ArrayFindByClient
+            __LocalFindByImmutableCompositeClient "is"  .......                        __ArrayFindConstByClient
+            __LocalIteratorRemovePrimitiveClient "is"   ......                        __ArrayIteratorRemoveClient
+            __LocalConstIteratorRemovePrimitiveClient "is"  ......                    __ArrayConstIteratorRemoveClient
+            __LocalRemoveOfCompositeClient "is" ......                                __ArrayRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient "is" .......                                __ArrayRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient "is" ......                                __ArrayRemoveByClient
 
-            __LocalGenericMutableStatementsCompositeClient "is" ..........                __ArrayGenericStatementsClient
-            __LocalGenericImmutableStatementsCompositeClient "is"   ..........            __ArrayGenericConstStatementsClient
-            __LocalReplaceCompositeClient "is"  ..........                                __ArrayReplaceClient
-            __LocalReplaceOfCompositeClient "is"    ..........                            __ArrayReplaceOfCollectionClient
-            __LocalReplaceOfCompositeClient "is"    ..........                            __ArrayReplaceOfInitializerListClient
-            __LocalReplaceByCompositeClient "is"    ..........                            __ArrayReplaceByClient
-            __LocalIndexedOperationsPrimitiveClient "is"    ..........                    __ArrayIndexedOperationsClient
-            __LocalIndicesCompositeClient "is"  ..........                                __ArrayIndicesClient
-            __LocalIndicesOfCompositeClient "is"    ..........                            __ArrayIndicesOfCollectionClient
-            __LocalIndicesOfCompositeClient "is"    ..........                            __ArrayIndicesOfInitializerListClient
-            __LocalIndicesByCompositeClient "is"    ..........                            __ArrayIndicesByClient
-            __LocalContainsOfCompositeClient "is"   ..........                            __ArrayContainsOfCollectionClient
-            __LocalContainsOfCompositeClient "is"   ..........                            __ArrayContainsOfInitializerListClient
-            __LocalDelegateForwardIterablePrimitiveClient "is"  ..........                __ArrayDelegateForwardIterableClient
-            __LocalDelegateForwardConstIterablePrimitiveClient "is" ..........            __ArrayDelegateForwardConstIterableClient
-            __LocalDelegateBackwardIterablePrimitiveClient "is" ..........                __ArrayDelegateBackwardIterableClient
-            __LocalDelegateBackwardConstIterablePrimitiveClient "is"    ..........        __ArrayDelegateBackwardConstIterableClient
+            __LocalGenericMutableStatementsCompositeClient "is" ......                __ArrayGenericStatementsClient
+            __LocalGenericImmutableStatementsCompositeClient "is"   .......            __ArrayGenericConstStatementsClient
+            __LocalReplaceCompositeClient "is"  .......                                __ArrayReplaceClient
+            __LocalReplaceOfCompositeClient "is"    .......                            __ArrayReplaceOfCollectionClient
+            __LocalReplaceOfCompositeClient "is"    ......                            __ArrayReplaceOfInitializerListClient
+            __LocalReplaceByCompositeClient "is"    ......                            __ArrayReplaceByClient
+            __LocalIndexedOperationsPrimitiveClient "is"    ......                    __ArrayIndexedOperationsClient
+            __LocalIndicesCompositeClient "is"  .......                                __ArrayIndicesClient
+            __LocalIndicesOfCompositeClient "is"    .....                            __ArrayIndicesOfCollectionClient
+            __LocalIndicesOfCompositeClient "is"    ......                            __ArrayIndicesOfInitializerListClient
+            __LocalIndicesByCompositeClient "is"    .....                            __ArrayIndicesByClient
+            __LocalContainsOfCompositeClient "is"   ......                            __ArrayContainsOfCollectionClient
+            __LocalContainsOfCompositeClient "is"   .....                            __ArrayContainsOfInitializerListClient
+            __LocalDelegateForwardIterablePrimitiveClient "is"  .......                __ArrayDelegateForwardIterableClient
+            __LocalDelegateForwardConstIterablePrimitiveClient "is" ......            __ArrayDelegateForwardConstIterableClient
+            __LocalDelegateBackwardIterablePrimitiveClient "is" ......                __ArrayDelegateBackwardIterableClient
+            __LocalDelegateBackwardConstIterablePrimitiveClient "is"    ......        __ArrayDelegateBackwardConstIterableClient
 
         }
     }
