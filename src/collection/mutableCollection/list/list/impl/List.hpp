@@ -2,36 +2,36 @@
  * Created by loghin on 6/27/22.
  */
 
-#ifndef __CDS_LIST_IMPL_HPP__
-#define __CDS_LIST_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_LIST_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_LIST_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     Index const List < __ElementType > :: invalidIndex;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr List < __ElementType > :: List () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr List < __ElementType > :: List (
             List const & list
     ) noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr List < __ElementType > :: List (
             List && list
     ) noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprDestructor List < __ElementType > :: ~List () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     auto List < __ElementType > :: toString () const noexcept -> String {
 
         /* List represented by values enclosed in square brackets. If Empty, return bracket set */
@@ -60,7 +60,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto List < __ElementType > :: circularAdjustedIndex (
             Index index
     ) const noexcept -> Index {
@@ -79,6 +79,6 @@ namespace cds {
         return index;
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_LIST_IMPL_HPP__ */
