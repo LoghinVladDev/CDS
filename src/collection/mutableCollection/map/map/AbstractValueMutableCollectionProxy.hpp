@@ -57,6 +57,9 @@ namespace cds {
     public:
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override;
 
+    public:
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
     protected:
         auto __newAddress ( /* NOLINT(bugprone-reserved-identifier) */
                 __ValueType const * pReferenceKey,

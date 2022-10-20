@@ -53,6 +53,18 @@ namespace cds {
         return this->map()->size();
     }
 
+
+    template <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto Map <
+            __KeyType,
+            __ValueType
+    > :: AbstractEntryMutableCollectionProxy :: toString () const noexcept -> String {
+
+        return this->map()->toString();
+    }
+
 }
 
 #endif /* __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_IMPL_HPP__ */
