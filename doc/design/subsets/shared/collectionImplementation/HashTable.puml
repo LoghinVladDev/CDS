@@ -66,8 +66,8 @@ namespace cds {
             class __HashTable::__ht_Iterator << (T, #aa9999) >>
             class __HashTable::__ht_ConstIterator << (T, #aa9999) >>
             class __HashTable::__NodeType << (T, #aa9999) >>
-            class __HashTable::__SetDispatcher <S> implements __SetServerDispatcher
-            class __HashTable::__MapDispatcher <S> implements __MapServerDispatcher
+            interface __HashTable::__SetDispatcher <S> extends __SetServerDispatcher
+            interface __HashTable::__MapDispatcher <S> extends __MapServerDispatcher
 
             __HashTable::__ht_Iterator "is nested in" .. __HashTable
             __HashTable::__ht_ConstIterator "is nested in" .. __HashTable

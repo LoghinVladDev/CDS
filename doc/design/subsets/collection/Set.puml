@@ -28,7 +28,7 @@ namespace cds {
         # {method} Set () noexcept
         # {method} Set (Set const &) noexcept
         # {method} Set (Set &&) noexcept
-        # {method} {abstract} ~Set () noexcept
+        + {method} {abstract} ~Set () noexcept
         ..public methods..
         + {method} toString () const noexcept -> String
         + {method} {abstract} remove (E const &) noexcept -> bool

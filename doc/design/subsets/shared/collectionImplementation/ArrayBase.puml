@@ -71,7 +71,7 @@ namespace cds {
             class __ArrayBase::__ab_ConstIterator << (T, #aa9999) >>
             class __ArrayBase::__ab_ReverseIterator << (T, #aa9999) >>
             class __ArrayBase::__ab_ConstReverseIterator << (T, #aa9999) >>
-            class __ArrayBase::__Dispatcher <S> implements __ListServerDispatcher
+            interface __ArrayBase::__Dispatcher <S> extends __ListServerDispatcher
 
             class __ArrayBase::__ArrayImplDataContainer {
                 + {field} _pBuffer : E *

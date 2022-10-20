@@ -67,7 +67,7 @@ namespace cds {
         # {method} Map () noexcept
         # {method} Map (Map const &) noexcept
         # {method} Map (Map &&) noexcept
-        # {method} {abstract} ~Map () noexcept
+        + {method} {abstract} ~Map () noexcept
         ..public methods..
         + {method} {abstract} keys () const noexcept -> Set <K const> const &
         + {method} {abstract} keys () noexcept -> Set <K const> &

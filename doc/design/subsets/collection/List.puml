@@ -87,7 +87,7 @@ namespace cds {
         # {method} List () noexcept
         # {method} List (List const &) noexcept
         # {method} List (List &&) noexcept
-        # {method} {abstract} ~List () noexcept
+        + {method} {abstract} ~List () noexcept
         ..public methods..
         + {method} toString () const noexcept -> String
         + {method} {abstract} popFront () noexcept -> void

@@ -51,7 +51,7 @@ namespace cds {
         # {method} MutableCollection () noexcept
         # {method} MutableCollection (MutableCollection const &) noexcept
         # {method} MutableCollection (MutableCollection &&) noexcept
-        # {method} {abstract} ~MutableCollection () noexcept
+        + {method} {abstract} ~MutableCollection () noexcept
         ..public methods..
         + {method} toString () const noexcept -> String
     }

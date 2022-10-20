@@ -76,7 +76,7 @@ namespace cds {
         # {method} Collection () noexcept
         # {method} Collection (Collection const &) noexcept
         # {method} Collection (Collection &&) noexcept
-        # {method} {abstract} ~Collection () noexcept
+        + {method} {abstract} ~Collection () noexcept
         ..public methods..
         + {method} {abstract} size () const noexcept -> Size
         + {method} empty () const noexcept -> bool

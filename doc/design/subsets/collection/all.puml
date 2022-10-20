@@ -11,6 +11,7 @@
 !includesub Set.puml!public_declaration
 !includesub Map.puml!public_declaration
 !includesub List.puml!public_declaration
+!includesub Array.puml!public_declaration
 
 !endif
 !endsub

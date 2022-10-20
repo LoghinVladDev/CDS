@@ -77,7 +77,7 @@ namespace cds {
             class __DoubleLinkedList::__dll_ReverseIterator << (T, #aa9999) >>
             class __DoubleLinkedList::__dll_ConstReverseIterator << (T, #aa9999) >>
             class __DoubleLinkedList::__NodeType << (T, #aa9999) >>
-            class __DoubleLinkedList::__Dispatcher <S> implements __ListServerDispatcher
+            interface __DoubleLinkedList::__Dispatcher <S> extends __ListServerDispatcher
 
             __DoubleLinkedList::__dll_Iterator "is nested in" .. __DoubleLinkedList
             __DoubleLinkedList::__dll_ConstIterator "is nested in" .. __DoubleLinkedList
