@@ -22,6 +22,7 @@ namespace cds {
         }
     }
 
+    abstract class Collection <E>
     abstract class Set <E> extends Collection implements cds.__hidden.__impl.__SetFindUniqueClient {
         ..base methods..
         # {method} Set () noexcept
@@ -30,7 +31,7 @@ namespace cds {
         # {method} {abstract} ~Set () noexcept
         ..public methods..
         + {method} toString () const noexcept -> String
-        + {method} remove (E const &) noexcept -> bool
+        + {method} {abstract} remove (E const &) noexcept -> bool
     }
 
 }

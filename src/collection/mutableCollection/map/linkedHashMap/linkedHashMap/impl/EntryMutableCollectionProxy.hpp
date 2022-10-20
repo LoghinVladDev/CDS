@@ -95,7 +95,7 @@ namespace cds {
             bool            * pIsNew
     ) noexcept -> EntryType * {
 
-        return this->template map < LinkedHashMapBase > ()->__ht_new (
+        return this->template map < LinkedHashMapBase > ()->__newAddress (
                 pReferenceElement,
                 pIsNew
         );

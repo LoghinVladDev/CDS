@@ -45,6 +45,7 @@ namespace cds {
         }
     }
 
+    abstract class Collection <E>
     abstract class MutableCollection <E> extends Collection implements cds.__hidden.__impl.__MutableCollectionDelegateForwardIterableClient, cds.__hidden.__impl.__MutableCollectionIteratorRemoveClient, cds.__hidden.__impl.__MutableCollectionRandomInsertionClient, cds.__hidden.__impl.__MutableCollectionFindOfCollectionClient, cds.__hidden.__impl.__MutableCollectionFindOfInitializerListClient, cds.__hidden.__impl.__MutableCollectionFindByClient, cds.__hidden.__impl.__MutableCollectionGenericStatementsClient {
         ..base methods..
         # {method} MutableCollection () noexcept
