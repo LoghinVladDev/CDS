@@ -287,7 +287,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -298,7 +298,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -342,7 +342,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_cbegin () const noexcept -> __ht_ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard constexpr auto __ht_cbegin () const noexcept -> __ht_ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -353,7 +353,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
