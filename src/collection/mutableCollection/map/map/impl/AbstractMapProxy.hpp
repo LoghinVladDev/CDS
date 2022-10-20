@@ -2,15 +2,15 @@
  * Created by loghin on 14/08/22.
  */
 
-#ifndef __CDS_MAP_ABSTRACT_MAP_PROXY_IMPL_HPP__
-#define __CDS_MAP_ABSTRACT_MAP_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_MAP_ABSTRACT_MAP_PROXY_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_MAP_ABSTRACT_MAP_PROXY_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > constexpr Map <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused constexpr Map <
             __KeyType,
             __ValueType
     > :: AbstractMapProxy :: AbstractMapProxy (
@@ -22,9 +22,9 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > constexpr Map <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused constexpr Map <
             __KeyType,
             __ValueType
     > :: AbstractMapProxy :: AbstractMapProxy (
@@ -36,9 +36,9 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > constexpr Map <
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_MaybeUnused constexpr Map <
             __KeyType,
             __ValueType
     > :: AbstractMapProxy :: AbstractMapProxy (
@@ -50,10 +50,10 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __DerivedType  /* NOLINT(bugprone-reserved-identifier) */
+            typename __DerivedType  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto Map <
             __KeyType,
             __ValueType
@@ -64,10 +64,10 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __DerivedType  /* NOLINT(bugprone-reserved-identifier) */
+            typename __DerivedType  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto Map <
             __KeyType,
             __ValueType
@@ -76,6 +76,6 @@ namespace cds {
         return reinterpret_cast < __DerivedType const * > ( this->_pMap );
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_MAP_ABSTRACT_MAP_PROXY_IMPL_HPP__ */
