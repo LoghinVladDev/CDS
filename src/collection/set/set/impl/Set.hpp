@@ -2,16 +2,16 @@
  * Created by loghin on 09/08/22.
  */
 
-#ifndef __CDS_SET_IMPL_HPP__
-#define __CDS_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SET_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
     
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
-            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Set <
             __ElementType,
             __enabler
@@ -19,10 +19,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
-            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Set <
             __ElementType,
             __enabler
@@ -36,10 +36,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
-            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Set <
             __ElementType,
             __enabler
@@ -53,10 +53,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
-            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprDestructor Set <
             __ElementType,
             __enabler
@@ -64,10 +64,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
-            > __enabler                 /* NOLINT(bugprone-reserved-identifier) */
+            > __enabler                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > auto Set <
             __ElementType,
             __enabler
@@ -99,6 +99,6 @@ namespace cds {
         return asString;
     }
     
-}
+} /* namespace cds */
 
 #endif /* __CDS_SET_IMPL_HPP__ */

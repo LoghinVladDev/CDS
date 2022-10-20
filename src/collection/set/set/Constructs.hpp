@@ -2,8 +2,8 @@
  * Created by loghin on 7/23/2022.
  */
 
-#ifndef __CDS_SET_CONSTRUCTS_HPP__
-#define __CDS_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SET_CONSTRUCTS_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
@@ -17,7 +17,7 @@ namespace cds {
          * @namespace cds :: meta
          * @public
          */
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isValidSetElement () noexcept -> bool {
 
             /* either == is possible, or is derived from cds :: Object and has Object :: equals */
@@ -26,21 +26,21 @@ namespace cds {
                     cds :: meta :: isDerivedFrom < __ElementType, cds :: Object > ();
         }
 
-    }
+    } /* namespace meta */
 
     /**
      * @class Set pre-declaration
      * @tparam __ElementType is the type of the elements enclosed in the set
      */
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isValidSetElement < __ElementType > ()
             > = 0
     > class Set;
 
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @typedef Alias used by Set to implement the Find Unique Client
@@ -50,11 +50,11 @@ namespace cds {
              * @internal library-private
              */
             template <
-                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isValidSetElement < __ElementType > ()
-                    > __enabler = 0         /* NOLINT(bugprone-reserved-identifier) */
-            > using __SetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
+                    > __enabler = 0         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __SetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindUniqueImmutablePrimitiveClient <
                             cds :: Set < __ElementType, __enabler >,
                             __ElementType,
@@ -62,8 +62,8 @@ namespace cds {
                             false
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SET_CONSTRUCTS_HPP__ */
