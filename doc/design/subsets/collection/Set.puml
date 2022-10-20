@@ -24,19 +24,13 @@ namespace cds {
 
     abstract class Set <E> extends Collection implements cds.__hidden.__impl.__SetFindUniqueClient {
         ..base methods..
-        # {method} Collection () noexcept
-        # {method} Collection (Collection const &) noexcept
-        # {method} Collection (Collection &&) noexcept
-        # {method} {abstract} ~Collection () noexcept
+        # {method} Set () noexcept
+        # {method} Set (Set const &) noexcept
+        # {method} Set (Set &&) noexcept
+        # {method} {abstract} ~Set () noexcept
         ..public methods..
-        + {method} {abstract} size () const noexcept -> Size
-        + {method} empty () const noexcept -> bool
-        + {method} operator bool () const noexcept
         + {method} toString () const noexcept -> String
-        + {method} hash () const noexcept -> Size
-        + {method} equals (Object const &) const noexcept -> bool
-        + {method} {abstract} clear () noexcept -> void
-        + {method} contains (E const &) const noexcept -> bool
+        + {method} remove (E const &) noexcept -> bool
     }
 
 }
