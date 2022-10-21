@@ -43,8 +43,8 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
-            class __LinkedListBase
-            interface __LinkedListBase::__Dispatcher
+            class __DoubleLinkedList
+            interface __DoubleLinkedList::__Dispatcher
             interface __ListServer
             interface __LocalRandomInsertionPrimitiveClient
             interface __LocalBoundaryInsertionPrimitiveClient
@@ -109,8 +109,8 @@ namespace cds {
             class __LinkedListDelegateBackwardIterableClient <E> << (T, #aa9999) >>
             class __LinkedListDelegateBackwardConstIterableClient <E> << (T, #aa9999) >>
 
-            __LinkedListBase "is"    .....                                                __LinkedListImplementation
-            __LinkedListBase::__Dispatcher "is"  ......                                    __LinkedListDispatcher
+            __DoubleLinkedList "is"    .....                                                __LinkedListImplementation
+            __DoubleLinkedList::__Dispatcher "is"  ......                                    __LinkedListDispatcher
             __ListServer "is"   ......                                                __LinkedListServer
             __LocalRandomInsertionPrimitiveClient "is"  ........                        __LinkedListRandomInsertionClient
             __LocalBoundaryInsertionPrimitiveClient "is"    .........                    __LinkedListBoundaryInsertionClient

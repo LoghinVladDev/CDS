@@ -1,0 +1,130 @@
+@startuml
+
+!includesub Set.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/RandomInsertionPrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/composite/ContainsOfCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/GenericImmutableStatementsCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindOfImmutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindByImmutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/RemoveByCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/RemoveOfCompositeClient.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/server/SetServer.puml!public_declaration
+!includesub ../shared/collectionCommunication/server/SetServerDispatcher.puml!public_declaration
+!includesub ../shared/collectionImplementation/HashTable.puml!public_declaration
+
+!startsub public_declaration
+!ifndef HASH_SET_PUBLIC
+!define HASH_SET_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            class __HashTable
+            interface __HashTable::__SetDispatcher
+            interface __HashSetServer
+            interface __LocalRandomInsertionPrimitiveClient
+            interface __LocalFindOfImmutableCompositeClient
+            interface __LocalFindByImmutableCompositeClient
+            interface __LocalConstIteratorRemovePrimitiveClient
+            interface __LocalRemoveOfCompositeClient
+            interface __LocalRemoveByCompositeClient
+            interface __LocalGenericImmutableStatementsCompositeClient
+            interface __LocalContainsOfCompositeClient
+            interface __LocalDelegateForwardConstIterablePrimitiveClient
+
+            class __HashSetImplementation <E> << (T, #aa9999) >>
+            class __HashSetDispatcher <E> << (T, #aa9999) >>
+            class __HashSetServer <E> << (T, #aa9999) >>
+            class __HashSetRandomInsertionClient <E> << (T, #aa9999) >>
+            class __HashSetFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashSetFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashSetFindByClient <E> << (T, #aa9999) >>
+            class __HashSetIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashSetRemoveOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashSetRemoveOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashSetRemoveByClient <E> << (T, #aa9999) >>
+            class __HashSetGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashSetContainsOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashSetContainsOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashSetDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+
+            __HashTable "is"    .....                                                __HashSetImplementation
+            __HashTable::__SetDispatcher "is"  ......                                    __HashSetDispatcher
+            __ListServer "is"   ......                                                __HashSetServer
+            __LocalRandomInsertionPrimitiveClient "is"  ........                        __HashSetRandomInsertionClient
+            __LocalFindOfImmutableCompositeClient "is"  ........                        __HashSetFindOfCollectionClient
+            __LocalFindOfImmutableCompositeClient "is"  .........                        __HashSetFindOfInitializerListClient
+            __LocalFindByImmutableCompositeClient "is"  .........                        __HashSetFindByClient
+            __LocalConstIteratorRemovePrimitiveClient "is"  .........                    __HashSetIteratorRemoveClient
+            __LocalRemoveOfCompositeClient "is" ........                                __HashSetRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient "is" .........                                __HashSetRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient "is" ........                                __HashSetRemoveByClient
+
+            __LocalGenericImmutableStatementsCompositeClient "is"   ........            __HashSetGenericStatementsClient
+            __LocalContainsOfCompositeClient "is"   ........                            __HashSetContainsOfCollectionClient
+            __LocalContainsOfCompositeClient "is"   .........                            __HashSetContainsOfInitializerListClient
+            __LocalDelegateForwardConstIterablePrimitiveClient "is" .........            __HashSetDelegateForwardConstIterableClient
+
+        }
+    }
+
+
+    abstract class Set <E>
+    class HashSet <E, [H]> extends Set, cds.__hidden.__impl.__HashSetImplementation implements cds.__hidden.__impl.__HashSetDispatcher, cds.__hidden.__impl.__HashSetServer, cds.__hidden.__impl.__HashSetRandomInsertionClient, cds.__hidden.__impl.__HashSetFindOfCollectionClient, cds.__hidden.__impl.__HashSetFindOfInitializerListClient, cds.__hidden.__impl.__HashSetFindByClient, cds.__hidden.__impl.__HashSetIteratorRemoveClient, cds.__hidden.__impl.__HashSetRemoveOfCollectionClient, cds.__hidden.__impl.__HashSetRemoveOfInitializerListClient, cds.__hidden.__impl.__HashSetRemoveByClient, cds.__hidden.__impl.__HashSetGenericStatementsClient, cds.__hidden.__impl.__HashSetContainsOfCollectionClient, cds.__hidden.__impl.__HashSetContainsOfInitializerListClient, cds.__hidden.__impl.__HashSetDelegateForwardConstIterableClient {
+        ..base methods..
+        + {method} HashSet () noexcept
+        + {method} HashSet (HashSet const &) noexcept
+        + {method} HashSet (HashSet &&) noexcept
+        + {method} HashSet (H const &) noexcept
+        + {method} <IT> HashSet (IT const &, IT const &, [Size]) noexcept
+        + {method} <IT> HashSet (H const &, IT const &, IT const &, [Size]) noexcept
+        + {method} HashSet (std::initializer_list<E> const &) noexcept
+        + {method} HashSet (H const &, std::initializer_list<E> const &) noexcept
+        + {method} < I> HashSet (I const &) noexcept
+        + {method} < I> HashSet (H const &, I const &) noexcept
+        + {method} ~HashSet () noexcept
+        + {method} operator = (HashSet const &) noexcept -> HashSet &
+        + {method} operator = (HashSet &&) noexcept -> HashSet &
+        + {method} operator = (std::initializer_list<E> const &) noexcept -> HashSet &
+        + {method} < I> operator = (I const &) noexcept -> HashSet &
+        ..public methods..
+        + {method} operator == (LinkedList const &) const noexcept -> bool
+        + {method} operator != (LinkedList const &) const noexcept -> bool
+        + {method} sequence () noexcept -> Sequence <HashSet <E>>
+        + {method} sequence () const noexcept -> Sequence <HashSet <E> const>
+    }
+
+}
+
+!endif
+!endsub
+
+!startsub private
+remove cds.__hidden.__impl.__BoundaryInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractConstIteratorRelativeInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractIteratorRelativeInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractConstIteratorRemovePrimitiveClient
+remove cds.__hidden.__impl.__AbstractIteratorRemovePrimitiveClient
+remove cds.__hidden.__impl.__DelegateForwardIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateForwardConstIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
+remove cds.__hidden.__impl.__IndexedOperationsPrimitiveClient
+remove cds.__hidden.__impl.__RandomInsertionPrimitiveClient
+remove cds.__hidden.__impl.__List*Client*
+remove *CHint*
+
+abstract class cds.Collection extends cds.__hidden.__impl.__CollectionInternalCommunicationChannel
+abstract class cds.MutableCollection extends cds.Collection
+
+!endsub
+
+@enduml
