@@ -387,7 +387,7 @@ namespace cds {
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr HashSet (
+        __CDS_Explicit constexpr HashSet (
                 __Hasher const & hasher
         ) noexcept;
 

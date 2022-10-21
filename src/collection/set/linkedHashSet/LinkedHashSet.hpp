@@ -428,6 +428,11 @@ namespace cds {
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Explicit constexpr LinkedHashSet (
+                __Hasher const & hasher
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         template <
                 typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */

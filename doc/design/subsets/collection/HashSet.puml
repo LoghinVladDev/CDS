@@ -29,7 +29,7 @@ namespace cds {
 
             class __HashTable
             interface __HashTable::__SetDispatcher
-            interface __HashSetServer
+            interface __SetServer
             interface __LocalRandomInsertionPrimitiveClient
             interface __LocalFindOfImmutableCompositeClient
             interface __LocalFindByImmutableCompositeClient
@@ -58,7 +58,7 @@ namespace cds {
 
             __HashTable "is"    .....                                                __HashSetImplementation
             __HashTable::__SetDispatcher "is"  ......                                    __HashSetDispatcher
-            __ListServer "is"   ......                                                __HashSetServer
+            __SetServer "is"   ......                                                __HashSetServer
             __LocalRandomInsertionPrimitiveClient "is"  ........                        __HashSetRandomInsertionClient
             __LocalFindOfImmutableCompositeClient "is"  ........                        __HashSetFindOfCollectionClient
             __LocalFindOfImmutableCompositeClient "is"  .........                        __HashSetFindOfInitializerListClient
@@ -96,8 +96,8 @@ namespace cds {
         + {method} operator = (std::initializer_list<E> const &) noexcept -> HashSet &
         + {method} < I> operator = (I const &) noexcept -> HashSet &
         ..public methods..
-        + {method} operator == (LinkedList const &) const noexcept -> bool
-        + {method} operator != (LinkedList const &) const noexcept -> bool
+        + {method} operator == (HashSet const &) const noexcept -> bool
+        + {method} operator != (HashSet const &) const noexcept -> bool
         + {method} sequence () noexcept -> Sequence <HashSet <E>>
         + {method} sequence () const noexcept -> Sequence <HashSet <E> const>
     }
@@ -119,7 +119,7 @@ remove cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
 remove cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
 remove cds.__hidden.__impl.__IndexedOperationsPrimitiveClient
 remove cds.__hidden.__impl.__RandomInsertionPrimitiveClient
-remove cds.__hidden.__impl.__List*Client*
+remove cds.__hidden.__impl.__Set*Client*
 remove *CHint*
 
 abstract class cds.Collection extends cds.__hidden.__impl.__CollectionInternalCommunicationChannel
