@@ -39,6 +39,7 @@ namespace cds {
             interface __LocalGenericImmutableStatementsCompositeClient
             interface __LocalContainsOfCompositeClient
             interface __LocalDelegateForwardConstIterablePrimitiveClient
+            interface __LocalFindUniqueImmutablePrimitiveClient
 
             class __HashSetImplementation <E> << (T, #aa9999) >>
             class __HashSetDispatcher <E> << (T, #aa9999) >>
@@ -55,6 +56,7 @@ namespace cds {
             class __HashSetContainsOfCollectionClient <E> << (T, #aa9999) >>
             class __HashSetContainsOfInitializerListClient <E> << (T, #aa9999) >>
             class __HashSetDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+            class __HashSetFindUniqueClient <E> << (T, #aa9999) >>
 
             __HashTable "is"    .....                                                __HashSetImplementation
             __HashTable::__SetDispatcher "is"  ......                                    __HashSetDispatcher
@@ -72,13 +74,14 @@ namespace cds {
             __LocalContainsOfCompositeClient "is"   ........                            __HashSetContainsOfCollectionClient
             __LocalContainsOfCompositeClient "is"   .........                            __HashSetContainsOfInitializerListClient
             __LocalDelegateForwardConstIterablePrimitiveClient "is" .........            __HashSetDelegateForwardConstIterableClient
+            __LocalFindUniqueImmutablePrimitiveClient "is" .........            __HashSetFindUniqueClient
 
         }
     }
 
 
     abstract class Set <E>
-    class HashSet <E, [H]> extends Set, cds.__hidden.__impl.__HashSetImplementation implements cds.__hidden.__impl.__HashSetDispatcher, cds.__hidden.__impl.__HashSetServer, cds.__hidden.__impl.__HashSetRandomInsertionClient, cds.__hidden.__impl.__HashSetFindOfCollectionClient, cds.__hidden.__impl.__HashSetFindOfInitializerListClient, cds.__hidden.__impl.__HashSetFindByClient, cds.__hidden.__impl.__HashSetIteratorRemoveClient, cds.__hidden.__impl.__HashSetRemoveOfCollectionClient, cds.__hidden.__impl.__HashSetRemoveOfInitializerListClient, cds.__hidden.__impl.__HashSetRemoveByClient, cds.__hidden.__impl.__HashSetGenericStatementsClient, cds.__hidden.__impl.__HashSetContainsOfCollectionClient, cds.__hidden.__impl.__HashSetContainsOfInitializerListClient, cds.__hidden.__impl.__HashSetDelegateForwardConstIterableClient {
+    class HashSet <E, [H]> extends Set, cds.__hidden.__impl.__HashSetImplementation implements cds.__hidden.__impl.__HashSetDispatcher, cds.__hidden.__impl.__HashSetServer, cds.__hidden.__impl.__HashSetRandomInsertionClient, cds.__hidden.__impl.__HashSetFindOfCollectionClient, cds.__hidden.__impl.__HashSetFindOfInitializerListClient, cds.__hidden.__impl.__HashSetFindByClient, cds.__hidden.__impl.__HashSetIteratorRemoveClient, cds.__hidden.__impl.__HashSetRemoveOfCollectionClient, cds.__hidden.__impl.__HashSetRemoveOfInitializerListClient, cds.__hidden.__impl.__HashSetRemoveByClient, cds.__hidden.__impl.__HashSetGenericStatementsClient, cds.__hidden.__impl.__HashSetContainsOfCollectionClient, cds.__hidden.__impl.__HashSetContainsOfInitializerListClient, cds.__hidden.__impl.__HashSetDelegateForwardConstIterableClient, cds.__hidden.__impl.__HashSetFindUniqueClient {
         ..base methods..
         + {method} HashSet () noexcept
         + {method} HashSet (HashSet const &) noexcept

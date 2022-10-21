@@ -1,0 +1,379 @@
+@startuml
+
+!includesub Map.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/IteratorRemovePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/RandomInsertionPrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/FindUniqueMutablePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/composite/ContainsOfCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/GenericMutableStatementsCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/GenericImmutableStatementsCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindOfImmutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindOfMutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindByImmutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindByMutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/RemoveByCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/RemoveOfCompositeClient.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/server/MapServer.puml!public_declaration
+!includesub ../shared/collectionCommunication/server/SetServer.puml!public_declaration
+!includesub ../shared/collectionCommunication/server/MutableCollectionServer.puml!public_declaration
+!includesub ../shared/collectionCommunication/server/MapServerDispatcher.puml!public_declaration
+!includesub ../shared/collectionImplementation/HashTable.puml!public_declaration
+
+!startsub public_declaration
+!ifndef HASH_MAP_PUBLIC
+!define HASH_MAP_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            class __HashTable
+            interface __HashTable::__Dispatcher
+            interface __MapServer
+            interface __LocalRandomInsertionPrimitiveClient
+            interface __LocalIteratorRelativeInsertionPrimitiveClient
+            interface __LocalConstIteratorRelativeInsertionPrimitiveClient
+            interface __LocalFindOfMutableCompositeClient
+            interface __LocalFindOfImmutableCompositeClient
+            interface __LocalFindByMutableCompositeClient
+            interface __LocalFindByImmutableCompositeClient
+            interface __LocalIteratorRemovePrimitiveClient
+            interface __LocalConstIteratorRemovePrimitiveClient
+            interface __LocalRemoveOfCompositeClient
+            interface __LocalRemoveByCompositeClient
+            interface __LocalGenericMutableStatementsCompositeClient
+            interface __LocalGenericImmutableStatementsCompositeClient
+            interface __LocalContainsOfCompositeClient
+            interface __LocalDelegateForwardIterablePrimitiveClient
+            interface __LocalDelegateForwardConstIterablePrimitiveClient
+            interface __LocalFindUniqueImmutablePrimitiveClient
+            interface __LocalFindUniqueMutablePrimitiveClient
+
+            class __HashMapImplementation <E> << (T, #aa9999) >>
+            class __HashMapDispatcher <E> << (T, #aa9999) >>
+            class __HashMapServer <E> << (T, #aa9999) >>
+            class __HashMapRandomInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapIteratorRelativeInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapConstIteratorRelativeInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapFindConstOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapFindConstOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapFindByClient <E> << (T, #aa9999) >>
+            class __HashMapFindConstByClient <E> << (T, #aa9999) >>
+            class __HashMapIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapConstIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapRemoveOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapRemoveOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapRemoveByClient <E> << (T, #aa9999) >>
+            class __HashMapGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapGenericConstStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapContainsOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapContainsOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapDelegateForwardIterableClient <E> << (T, #aa9999) >>
+            class __HashMapDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+            class __HashMapFindUniqueClient <E> << (T, #aa9999) >>
+            class __HashMapFindUniqueConstClient <E> << (T, #aa9999) >>
+
+            __HashTable "is"    .......                                                __HashMapImplementation
+            __HashTable::__Dispatcher "is"  .....                                    __HashMapDispatcher
+            __MapServer "is"   ........                                                __HashMapServer
+            __LocalRandomInsertionPrimitiveClient "is"  .......                        __HashMapRandomInsertionClient
+            __LocalIteratorRelativeInsertionPrimitiveClient "is"    .......            __HashMapIteratorRelativeInsertionClient
+            __LocalConstIteratorRelativeInsertionPrimitiveClient "is"   .......        __HashMapConstIteratorRelativeInsertionClient
+            __LocalFindOfMutableCompositeClient "is"    .......                        __HashMapFindOfCollectionClient
+            __LocalFindOfMutableCompositeClient "is"    .......                        __HashMapFindOfInitializerListClient
+            __LocalFindOfImmutableCompositeClient "is"  .......                        __HashMapFindConstOfCollectionClient
+            __LocalFindOfImmutableCompositeClient "is"  ....                        __HashMapFindConstOfInitializerListClient
+            __LocalFindByMutableCompositeClient "is"    ......                        __HashMapFindByClient
+            __LocalFindByImmutableCompositeClient "is"  ....                        __HashMapFindConstByClient
+            __LocalIteratorRemovePrimitiveClient "is"   ........                        __HashMapIteratorRemoveClient
+            __LocalConstIteratorRemovePrimitiveClient "is"  ...                    __HashMapConstIteratorRemoveClient
+            __LocalRemoveOfCompositeClient "is" ...                                __HashMapRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient "is" ....                                __HashMapRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient "is" ...                                __HashMapRemoveByClient
+
+            __LocalGenericMutableStatementsCompositeClient "is" ...                __HashMapGenericStatementsClient
+            __LocalGenericImmutableStatementsCompositeClient "is"   ....            __HashMapGenericConstStatementsClient
+            __LocalContainsOfCompositeClient "is"   ...                            __HashMapContainsOfCollectionClient
+            __LocalContainsOfCompositeClient "is"   ....                            __HashMapContainsOfInitializerListClient
+            __LocalDelegateForwardIterablePrimitiveClient "is"  ....                __HashMapDelegateForwardIterableClient
+            __LocalDelegateForwardConstIterablePrimitiveClient "is" ....            __HashMapDelegateForwardConstIterableClient
+            __LocalFindUniqueImmutablePrimitiveClient "is" .....            __HashMapFindUniqueConstClient
+            __LocalFindUniqueMutablePrimitiveClient "is" .....            __HashMapFindUniqueClient
+
+        }
+    }
+
+    abstract class Map <K, V>
+    class HashMap <K, V, [H]> extends cds.__hidden.__impl.__HashMapImplementation implements cds.__hidden.__impl.__HashMapDispatcher, cds.__hidden.__impl.__HashMapServer, cds.__hidden.__impl.__HashMapRandomInsertionClient, cds.__hidden.__impl.__HashMapIteratorRelativeInsertionClient, cds.__hidden.__impl.__HashMapConstIteratorRelativeInsertionClient, cds.__hidden.__impl.__HashMapFindOfCollectionClient, cds.__hidden.__impl.__HashMapFindOfInitializerListClient, cds.__hidden.__impl.__HashMapFindConstOfCollectionClient, cds.__hidden.__impl.__HashMapFindConstOfInitializerListClient, cds.__hidden.__impl.__HashMapFindByClient, cds.__hidden.__impl.__HashMapFindConstByClient, cds.__hidden.__impl.__HashMapIteratorRemoveClient, cds.__hidden.__impl.__HashMapConstIteratorRemoveClient, cds.__hidden.__impl.__HashMapRemoveOfCollectionClient, cds.__hidden.__impl.__HashMapRemoveOfInitializerListClient, cds.__hidden.__impl.__HashMapRemoveByClient, cds.__hidden.__impl.__HashMapGenericStatementsClient, cds.__hidden.__impl.__HashMapGenericConstStatementsClient, cds.__hidden.__impl.__HashMapContainsOfCollectionClient, cds.__hidden.__impl.__HashMapContainsOfInitializerListClient, cds.__hidden.__impl.__HashMapDelegateForwardIterableClient, cds.__hidden.__impl.__HashMapDelegateForwardConstIterableClient, cds.__hidden.__impl.__HashMapFindUniqueClient, cds.__hidden.__impl.__HashMapFindUniqueConstClient  {
+        ..base methods..
+        + {method} HashMap () noexcept
+        + {method} HashMap (HashMap const &) noexcept
+        + {method} HashMap (HashMap &&) noexcept
+        + {method} HashMap (H const &) noexcept
+        + {method} <IT> HashMap (IT const &, IT const &, [Size]) noexcept
+        + {method} <IT> HashMap (H const &, IT const &, IT const &, [Size]) noexcept
+        + {method} HashMap (std::initializer_list <MapEntry <K, V>> const &) noexcept
+        + {method} HashMap (H const &, std::initializer_list <MapEntry <K, V>> const &) noexcept
+        + {method} < I> HashMap (I const &) noexcept
+        + {method} < I> HashMap (H const &, I const &) noexcept
+        + {method} ~HashMap () noexcept
+        + {method} operator = (HashMap const &) noexcept -> HashMap &
+        + {method} operator = (HashMap &&) noexcept -> HashMap &
+        + {method} operator = (std::initializer_list <MapEntry <K, V>> const &) noexcept -> HashMap &
+        + {method} < I> operator = (I const &) noexcept -> HashMap &
+        - {method} entryAt (K const &, bool *) noexcept -> MapEntry <K, V> *
+        - {method} entryAt (K const &) const noexcept -> MapEntry <K, V> const *
+        ..public methods..
+        + {method} operator == (HashMap const &) const noexcept -> bool
+        + {method} operator != (HashMap const &) const noexcept -> bool
+        + {method} sequence () noexcept -> Sequence <HashMap <K, V, H>>
+        + {method} sequence () const noexcept -> Sequence <HashMap <K, V, H> const>
+        + {method} keys () const noexcept -> KeySetProxy const &
+        + {method} keys () noexcept -> KeySetProxy &
+        + {method} values () const noexcept -> ValueMutableCollectionProxy const &
+        + {method} values () noexcept -> ValueMutableCollectionProxy &
+        + {method} entries () const noexcept -> EntryMutableCollectionProxy const &
+        + {method} entries () noexcept -> EntryMutableCollectionProxy &
+    }
+
+    Map ---|> HashMap
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __SetServer
+            class __HashMapKeyProxyServer <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyRandomInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyFindByClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyRemoveOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyRemoveOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyRemoveByClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyFindUniqueClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyContainsOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyContainsOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapKeyProxyDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+
+            __SetServer ...... "is" __HashMapKeyProxyServer
+            __LocalRandomInsertionPrimitiveClient ...... "is" __HashMapKeyProxyRandomInsertionClient
+            __LocalConstIteratorRemovePrimitiveClient ...... "is" __HashMapKeyProxyIteratorRemoveClient
+            __LocalFindOfImmutableCompositeClient ...... "is" __HashMapKeyProxyFindOfCollectionClient
+            __LocalFindOfImmutableCompositeClient ...... "is" __HashMapKeyProxyFindOfInitializerListClient
+            __LocalFindByImmutableCompositeClient ...... "is" __HashMapKeyProxyFindByClient
+            __LocalRemoveOfCompositeClient ...... "is" __HashMapKeyProxyRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient ...... "is" __HashMapKeyProxyRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient ...... "is" __HashMapKeyProxyRemoveByClient
+            __LocalGenericImmutableStatementsCompositeClient ...... "is" __HashMapKeyProxyGenericStatementsClient
+            __LocalFindUniqueImmutablePrimitiveClient ...... "is" __HashMapKeyProxyFindUniqueClient
+            __LocalContainsOfCompositeClient ...... "is" __HashMapKeyProxyContainsOfCollectionClient
+            __LocalContainsOfCompositeClient ... "is" __HashMapKeyProxyContainsOfInitializerListClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ...... "is" __HashMapKeyProxyDelegateForwardConstIterableClient
+
+        }
+    }
+
+
+    class HashMap::KeySetProxy extends Map::AbstractKeySetProxy implements cds.__hidden.__impl.__HashMapKeyProxyRandomInsertionClient, cds.__hidden.__impl.__HashMapKeyProxyIteratorRemoveClient, cds.__hidden.__impl.__HashMapKeyProxyFindOfCollectionClient, cds.__hidden.__impl.__HashMapKeyProxyFindOfInitializerListClient, cds.__hidden.__impl.__HashMapKeyProxyFindByClient, cds.__hidden.__impl.__HashMapKeyProxyRemoveOfCollectionClient, cds.__hidden.__impl.__HashMapKeyProxyRemoveOfInitializerListClient, cds.__hidden.__impl.__HashMapKeyProxyRemoveByClient, cds.__hidden.__impl.__HashMapKeyProxyGenericStatementsClient, cds.__hidden.__impl.__HashMapKeyProxyFindUniqueClient, cds.__hidden.__impl.__HashMapKeyProxyContainsOfCollectionClient, cds.__hidden.__impl.__HashMapKeyProxyContainsOfInitializerListClient, cds.__hidden.__impl.__HashMapKeyProxyDelegateForwardConstIterableClient {
+        ..base methods..
+        # {method} KeySetProxy (HashMap *) noexcept
+        + {method} ~KeySetProxy () noexcept
+        ..required by local clients, manual dispatcher..
+        - {method} __cbegin () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <K const> *
+        - {method} __cend () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <K const> *
+        - {method} __cbeginLocal () const noexcept -> ConstIterator
+        - {method} __cendLocal () const noexcept -> ConstIterator
+        - {method} __removeConst (ConstIterator const *) noexcept -> bool
+        - {method} __removeConstArray (ConstIterator const * const *, Size) noexcept -> Size
+        - {method} __findConst (K const &) const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <K const> *
+        - {method} __findConstLocal (K const &) const noexcept -> ConstIterator
+        ..other methods..
+        - {method} __equals (KeySetProxy const &) const noexcept -> bool
+        + {method} operator == (KeySetProxy const &) const noexcept -> bool
+        + {method} operator != (KeySetProxy const &) const noexcept -> bool
+    }
+
+    HashMap .. "is nested in" HashMap::KeySetProxy
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __MutableCollectionServer
+            class __HashMapValueProxyServer <E> << (T, #aa9999) >>
+            class __HashMapValueProxyRandomInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyConstIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyFindOfConstCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyFindOfConstInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyFindByClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyConstFindByClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyRemoveOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyRemoveOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyRemoveByClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyConstGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyContainsOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyContainsOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyDelegateForwardIterableClient <E> << (T, #aa9999) >>
+            class __HashMapValueProxyDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+
+            __MutableCollectionServer ........ "is" __HashMapValueProxyServer
+            __LocalRandomInsertionPrimitiveClient ........ "is" __HashMapValueProxyRandomInsertionClient
+            __LocalIteratorRemovePrimitiveClient ........ "is" __HashMapValueProxyIteratorRemoveClient
+            __LocalConstIteratorRemovePrimitiveClient ...... "is" __HashMapValueProxyConstIteratorRemoveClient
+            __LocalFindOfMutableCompositeClient ........ "is" __HashMapValueProxyFindOfCollectionClient
+            __LocalFindOfMutableCompositeClient ........ "is" __HashMapValueProxyFindOfInitializerListClient
+            __LocalFindByMutableCompositeClient ........ "is" __HashMapValueProxyFindByClient
+            __LocalFindOfImmutableCompositeClient ... "is" __HashMapValueProxyFindOfConstCollectionClient
+            __LocalFindOfImmutableCompositeClient ... "is" __HashMapValueProxyFindOfConstInitializerListClient
+            __LocalFindByImmutableCompositeClient ..... "is" __HashMapValueProxyConstFindByClient
+            __LocalRemoveOfCompositeClient ........ "is" __HashMapValueProxyRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient ...... "is" __HashMapValueProxyRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient ........ "is" __HashMapValueProxyRemoveByClient
+            __LocalGenericMutableStatementsCompositeClient ........ "is" __HashMapValueProxyGenericStatementsClient
+            __LocalGenericImmutableStatementsCompositeClient ........ "is" __HashMapValueProxyConstGenericStatementsClient
+            __LocalContainsOfCompositeClient ........ "is" __HashMapValueProxyContainsOfCollectionClient
+            __LocalContainsOfCompositeClient ........ "is" __HashMapValueProxyContainsOfInitializerListClient
+            __LocalDelegateForwardIterablePrimitiveClient ........ "is" __HashMapValueProxyDelegateForwardIterableClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ........ "is" __HashMapValueProxyDelegateForwardConstIterableClient
+
+        }
+    }
+
+    class HashMap::ValueMutableCollectionProxy extends Map::AbstractValueMutableCollectionProxy implements cds.__hidden.__impl.__HashMapValueProxyServer, cds.__hidden.__impl.__HashMapValueProxyRandomInsertionClient, cds.__hidden.__impl.__HashMapValueProxyIteratorRemoveClient, cds.__hidden.__impl.__HashMapValueProxyConstIteratorRemoveClient, cds.__hidden.__impl.__HashMapValueProxyFindOfCollectionClient, cds.__hidden.__impl.__HashMapValueProxyFindOfInitializerListClient, cds.__hidden.__impl.__HashMapValueProxyFindByClient, cds.__hidden.__impl.__HashMapValueProxyFindOfConstCollectionClient, cds.__hidden.__impl.__HashMapValueProxyFindOfConstInitializerListClient, cds.__hidden.__impl.__HashMapValueProxyConstFindByClient, cds.__hidden.__impl.__HashMapValueProxyRemoveOfCollectionClient, cds.__hidden.__impl.__HashMapValueProxyRemoveOfInitializerListClient, cds.__hidden.__impl.__HashMapValueProxyRemoveByClient, cds.__hidden.__impl.__HashMapValueProxyGenericStatementsClient, cds.__hidden.__impl.__HashMapValueProxyConstGenericStatementsClient, cds.__hidden.__impl.__HashMapValueProxyContainsOfCollectionClient, cds.__hidden.__impl.__HashMapValueProxyContainsOfInitializerListClient, cds.__hidden.__impl.__HashMapValueProxyDelegateForwardIterableClient, cds.__hidden.__impl.__HashMapValueProxyDelegateForwardConstIterableClient {
+        ..base methods..
+        # {method} ValueMutableCollectionProxy (HashMap *) noexcept
+        + {method} ~ValueMutableCollectionProxy () noexcept
+        ..required by local clients, manual dispatcher..
+        - {method} __begin () noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <V> *
+        - {method} __end () noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <V> *
+        - {method} __cbegin () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <V const> *
+        - {method} __cend () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <V const> *
+        - {method} __beginLocal () noexcept -> Iterator
+        - {method} __endLocal () noexcept -> Iterator
+        - {method} __cbeginLocal () const noexcept -> ConstIterator
+        - {method} __cendLocal () const noexcept -> ConstIterator
+        - {method} __remove (Iterator const *) noexcept -> bool
+        - {method} __removeConst (ConstIterator const *) noexcept -> bool
+        - {method} __removeArray (Iterator const * const *, Size) noexcept -> Size
+        - {method} __removeConstArray (ConstIterator const * const *, Size) noexcept -> Size
+        ..other methods..
+        - {method} __equals (ValueMutableCollectionProxy const &) const noexcept -> bool
+        + {method} operator == (ValueMutableCollectionProxy const &) const noexcept -> bool
+        + {method} operator != (ValueMutableCollectionProxy const &) const noexcept -> bool
+    }
+
+    HashMap .. "is nested in" HashMap::ValueMutableCollectionProxy
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __MutableCollectionServer
+            class __HashMapEntryProxyServer <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyRandomInsertionClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyConstIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyFindOfConstCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyFindOfConstInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyFindByClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyConstFindByClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyRemoveOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyRemoveOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyRemoveByClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyConstGenericStatementsClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyContainsOfCollectionClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyContainsOfInitializerListClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyDelegateForwardIterableClient <E> << (T, #aa9999) >>
+            class __HashMapEntryProxyDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+
+            __MutableCollectionServer ...... "is" __HashMapEntryProxyServer
+            __LocalRandomInsertionPrimitiveClient ... "is" __HashMapEntryProxyRandomInsertionClient
+            __LocalIteratorRemovePrimitiveClient ........ "is" __HashMapEntryProxyIteratorRemoveClient
+            __LocalConstIteratorRemovePrimitiveClient ........ "is" __HashMapEntryProxyConstIteratorRemoveClient
+            __LocalFindOfMutableCompositeClient ..... "is" __HashMapEntryProxyFindOfCollectionClient
+            __LocalFindOfMutableCompositeClient ...... "is" __HashMapEntryProxyFindOfInitializerListClient
+            __LocalFindByMutableCompositeClient ........ "is" __HashMapEntryProxyFindByClient
+            __LocalFindOfImmutableCompositeClient ........ "is" __HashMapEntryProxyFindOfConstCollectionClient
+            __LocalFindOfImmutableCompositeClient ...... "is" __HashMapEntryProxyFindOfConstInitializerListClient
+            __LocalFindByImmutableCompositeClient ........ "is" __HashMapEntryProxyConstFindByClient
+            __LocalRemoveOfCompositeClient ........ "is" __HashMapEntryProxyRemoveOfCollectionClient
+            __LocalRemoveOfCompositeClient ........ "is" __HashMapEntryProxyRemoveOfInitializerListClient
+            __LocalRemoveByCompositeClient ........ "is" __HashMapEntryProxyRemoveByClient
+            __LocalGenericMutableStatementsCompositeClient ........ "is" __HashMapEntryProxyGenericStatementsClient
+            __LocalGenericImmutableStatementsCompositeClient ....... "is" __HashMapEntryProxyConstGenericStatementsClient
+            __LocalContainsOfCompositeClient ....... "is" __HashMapEntryProxyContainsOfCollectionClient
+            __LocalContainsOfCompositeClient ........ "is" __HashMapEntryProxyContainsOfInitializerListClient
+            __LocalDelegateForwardIterablePrimitiveClient ........ "is" __HashMapEntryProxyDelegateForwardIterableClient
+            __LocalDelegateForwardConstIterablePrimitiveClient ...... "is" __HashMapEntryProxyDelegateForwardConstIterableClient
+
+        }
+    }
+
+    class HashMap::EntryMutableCollectionProxy extends Map::AbstractEntryMutableCollectionProxy implements cds.__hidden.__impl.__HashMapEntryProxyServer, cds.__hidden.__impl.__HashMapEntryProxyRandomInsertionClient, cds.__hidden.__impl.__HashMapEntryProxyIteratorRemoveClient, cds.__hidden.__impl.__HashMapEntryProxyConstIteratorRemoveClient, cds.__hidden.__impl.__HashMapEntryProxyFindOfCollectionClient, cds.__hidden.__impl.__HashMapEntryProxyFindOfInitializerListClient, cds.__hidden.__impl.__HashMapEntryProxyFindByClient, cds.__hidden.__impl.__HashMapEntryProxyFindOfConstCollectionClient, cds.__hidden.__impl.__HashMapEntryProxyFindOfConstInitializerListClient, cds.__hidden.__impl.__HashMapEntryProxyConstFindByClient, cds.__hidden.__impl.__HashMapEntryProxyRemoveOfCollectionClient, cds.__hidden.__impl.__HashMapEntryProxyRemoveOfInitializerListClient, cds.__hidden.__impl.__HashMapEntryProxyRemoveByClient, cds.__hidden.__impl.__HashMapEntryProxyGenericStatementsClient, cds.__hidden.__impl.__HashMapEntryProxyConstGenericStatementsClient, cds.__hidden.__impl.__HashMapEntryProxyContainsOfCollectionClient, cds.__hidden.__impl.__HashMapEntryProxyContainsOfInitializerListClient, cds.__hidden.__impl.__HashMapEntryProxyDelegateForwardIterableClient, cds.__hidden.__impl.__HashMapEntryProxyDelegateForwardConstIterableClient {
+        ..base methods..
+        # {method} EntryMutableCollectionProxy (HashMap *) noexcept
+        + {method} ~EntryMutableCollectionProxy () noexcept
+        ..required by local clients, manual dispatcher..
+        - {method} __begin () noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <MapEntry <K, V>> *
+        - {method} __end () noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <MapEntry <K, V>> *
+        - {method} __cbegin () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <MapEntry <K, V> const> *
+        - {method} __cend () const noexcept -> cds::__hidden::__impl::__AbstractDelegateIterator <MapEntry <K, V> const> *
+        - {method} __beginLocal () noexcept -> Iterator
+        - {method} __endLocal () noexcept -> Iterator
+        - {method} __cbeginLocal () const noexcept -> ConstIterator
+        - {method} __cendLocal () const noexcept -> ConstIterator
+        - {method} __remove (Iterator const *) noexcept -> bool
+        - {method} __removeConst (ConstIterator const *) noexcept -> bool
+        - {method} __removeArray (Iterator const * const *, Size) noexcept -> Size
+        - {method} __removeConstArray (ConstIterator const * const *, Size) noexcept -> Size
+        ..other methods..
+        - {method} __equals (EntryMutableCollectionProxy const &) const noexcept -> bool
+        + {method} operator == (EntryMutableCollectionProxy const &) const noexcept -> bool
+        + {method} operator != (EntryMutableCollectionProxy const &) const noexcept -> bool
+    }
+
+    HashMap .. "is nested in" HashMap::EntryMutableCollectionProxy
+
+}
+
+!endif
+!endsub
+
+!startsub private
+remove cds.__hidden.__impl.__BoundaryInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractConstIteratorRelativeInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractIteratorRelativeInsertionPrimitiveClient
+remove cds.__hidden.__impl.__AbstractConstIteratorRemovePrimitiveClient
+remove cds.__hidden.__impl.__AbstractIteratorRemovePrimitiveClient
+remove cds.__hidden.__impl.__DelegateForwardIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateForwardConstIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateBackwardIterablePrimitiveClient
+remove cds.__hidden.__impl.__DelegateBackwardConstIterablePrimitiveClient
+remove cds.__hidden.__impl.__IndexedOperationsPrimitiveClient
+remove cds.__hidden.__impl.__RandomInsertionPrimitiveClient
+remove cds.__hidden.__impl.__List*Client*
+remove *CHint*
+
+abstract class cds.Collection extends cds.__hidden.__impl.__CollectionInternalCommunicationChannel
+abstract class cds.MutableCollection extends cds.Collection
+
+!endsub
+
+@enduml

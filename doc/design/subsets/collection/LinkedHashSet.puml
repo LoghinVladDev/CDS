@@ -39,6 +39,7 @@ namespace cds {
             interface __LocalGenericImmutableStatementsCompositeClient
             interface __LocalContainsOfCompositeClient
             interface __LocalDelegateForwardConstIterablePrimitiveClient
+            interface __LocalFindUniqueImmutablePrimitiveClient
 
             class __LinkedHashSetHashTableImplementation <E> << (T, #aa9999) >>
             class __LinkedHashSetLinkedListImplementation <E> << (T, #aa9999) >>
@@ -55,6 +56,7 @@ namespace cds {
             class __LinkedHashSetContainsOfCollectionClient <E> << (T, #aa9999) >>
             class __LinkedHashSetContainsOfInitializerListClient <E> << (T, #aa9999) >>
             class __LinkedHashSetDelegateForwardConstIterableClient <E> << (T, #aa9999) >>
+            class __LinkedHashSetFindUniqueClient <E> << (T, #aa9999) >>
 
             __HashTable "is"    .....                                                __LinkedHashSetHashTableImplementation
             __SingleLinkedList "is"    .....                                                __LinkedHashSetLinkedListImplementation
@@ -66,19 +68,20 @@ namespace cds {
             __LocalConstIteratorRemovePrimitiveClient "is"  .........                    __LinkedHashSetIteratorRemoveClient
             __LocalRemoveOfCompositeClient "is" ........                                __LinkedHashSetRemoveOfCollectionClient
             __LocalRemoveOfCompositeClient "is" .........                                __LinkedHashSetRemoveOfInitializerListClient
-            __LocalRemoveByCompositeClient "is" ........                                __LinkedHashSetRemoveByClient
+            __LocalFindUniqueImmutablePrimitiveClient "is" ........                                __LinkedHashSetRemoveByClient
 
             __LocalGenericImmutableStatementsCompositeClient "is"   ........            __LinkedHashSetGenericStatementsClient
             __LocalContainsOfCompositeClient "is"   ........                            __LinkedHashSetContainsOfCollectionClient
             __LocalContainsOfCompositeClient "is"   .........                            __LinkedHashSetContainsOfInitializerListClient
             __LocalDelegateForwardConstIterablePrimitiveClient "is" .........            __LinkedHashSetDelegateForwardConstIterableClient
+            __LocalDelegateForwardConstIterablePrimitiveClient "is" .........            __LinkedHashSetFindUniqueClient
 
         }
     }
 
 
     abstract class Set <E>
-    class LinkedHashSet <E, [H]> extends Set, cds.__hidden.__impl.__LinkedHashSetHashTableImplementation, cds.__hidden.__impl.__LinkedHashSetLinkedListImplementation implements cds.__hidden.__impl.__LinkedHashSetServer, cds.__hidden.__impl.__LinkedHashSetRandomInsertionClient, cds.__hidden.__impl.__LinkedHashSetFindOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetFindOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetFindByClient, cds.__hidden.__impl.__LinkedHashSetIteratorRemoveClient, cds.__hidden.__impl.__LinkedHashSetRemoveOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetRemoveOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetRemoveByClient, cds.__hidden.__impl.__LinkedHashSetGenericStatementsClient, cds.__hidden.__impl.__LinkedHashSetContainsOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetContainsOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetDelegateForwardConstIterableClient {
+    class LinkedHashSet <E, [H]> extends Set, cds.__hidden.__impl.__LinkedHashSetHashTableImplementation, cds.__hidden.__impl.__LinkedHashSetLinkedListImplementation implements cds.__hidden.__impl.__LinkedHashSetServer, cds.__hidden.__impl.__LinkedHashSetRandomInsertionClient, cds.__hidden.__impl.__LinkedHashSetFindOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetFindOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetFindByClient, cds.__hidden.__impl.__LinkedHashSetIteratorRemoveClient, cds.__hidden.__impl.__LinkedHashSetRemoveOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetRemoveOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetRemoveByClient, cds.__hidden.__impl.__LinkedHashSetGenericStatementsClient, cds.__hidden.__impl.__LinkedHashSetContainsOfCollectionClient, cds.__hidden.__impl.__LinkedHashSetContainsOfInitializerListClient, cds.__hidden.__impl.__LinkedHashSetDelegateForwardConstIterableClient, cds.__hidden.__impl.__LinkedHashSetFindUniqueClient {
         ..base methods..
         + {method} LinkedHashSet () noexcept
         + {method} LinkedHashSet (LinkedHashSet const &) noexcept
