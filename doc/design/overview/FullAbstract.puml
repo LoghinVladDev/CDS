@@ -1,0 +1,44 @@
+@startuml
+
+namespace cds {
+    abstract class Object {
+    }
+
+    class String extends Object {
+    }
+
+    abstract class Collection <E> extends Object {
+    }
+
+    abstract class MutableCollection <E> extends Collection {
+    }
+
+    abstract class Set <E> extends Collection {
+    }
+
+    abstract class List <E> extends MutableCollection {
+    }
+
+    class HashSet <E, [H]> extends Set {
+    }
+
+    class LinkedHashSet <E, [H]> extends Set {
+    }
+
+    class Array <E> extends List {
+    }
+
+    class LinkedList <E> extends List {
+    }
+
+    abstract class Map <K, V> extends MutableCollection {
+    }
+
+    class HashMap <K, V, [H]> extends Map {
+    }
+
+    class LinkedHashMap <K, V, [H]> extends Map {
+    }
+}
+
+@enduml
