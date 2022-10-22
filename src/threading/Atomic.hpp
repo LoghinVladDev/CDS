@@ -1,144 +1,680 @@
-//
-// Created by loghin on 30.03.2021.
-//
+/*
+ * Created by loghin on 30.03.2021.
+ */
 
-#ifndef CDS_ATOMIC_HPP
-#define CDS_ATOMIC_HPP
+#ifndef __CDS_ATOMIC_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_ATOMIC_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Object>
-#include <CDS/Mutex>
+#include <CDS/meta/TypeTraits>
+#include <atomic>
 
-#include <sstream>
+#include "atomic/Config.hpp"
 
 namespace cds {
 
-    template < typename T >
-    class Atomic : public Object {
-    protected:
-        using DataType = T;
-
-        Mutex    mutable _access; // NOLINT(clion-misra-cpp2008-11-0-1)
-        DataType         _data; // NOLINT(clion-misra-cpp2008-11-0-1)
-    public:
-
-        Atomic () noexcept = default;
-
-        Atomic (Atomic const & obj) noexcept { this->set(obj.get()); }
-
-        Atomic (Atomic && obj) noexcept {
-            if ( obj._access.tryLock() ) {
-                this->set(obj._data);
-                obj._access.unlock();
-            } else {
-                this->_data = obj._data;
-                this->_access.lock();
-            }
-        }
-
-        Atomic (DataType const & value) noexcept { // NOLINT(google-explicit-constructor)
-            this->set(value);
-        }
-
-        __CDS_OptimalInline auto get () const noexcept -> T {
-            this->_access.lock();
-            auto value = this->_data;
-            this->_access.unlock();
-
-            return value;
-        }
-
-        __CDS_OptimalInline auto set ( DataType const & value ) noexcept -> void {
-            this->_access.lock();
-            this->_data = value;
-            this->_access.unlock();
-        }
-
-        __CDS_OptimalInline Atomic & operator = ( Atomic const & obj ) noexcept {
-            if ( this == & obj ) {
-                return * this;
-            }
-
-            this->set( obj.get() );
-
-            return * this;
-        }
-
-        Atomic & operator = ( Atomic && obj ) noexcept {
-            if ( this == & obj ) {
-                return * this;
-            }
-
-            if ( obj._access.tryLock() ) {
-                this->set(obj._data);
-                obj._access.unlock();
-            } else {
-                this->_data = obj._data;
-                this->_access.lock();
-            }
-
-            return * this;
-        }
-
-        __CDS_OptimalInline virtual Atomic & operator = ( DataType const & value ) noexcept {
-            this->set(value );
-
-            return * this;
-        }
-
-        __CDS_OptimalInline Atomic & operator = ( DataType && value ) noexcept {
-            this->set ( std::move (value ) );
-
-            return * this;
-        }
-
-        __CDS_OptimalInline auto operator == ( Atomic const & value ) const noexcept -> bool {
-            return this->get() == value.get();
-        }
-
-        __CDS_OptimalInline auto operator == ( DataType const & value ) const noexcept -> bool {
-            return this->get() == value;
-        }
-
-        __CDS_OptimalInline auto operator != ( Atomic const & value ) const noexcept -> bool {
-            return this->get() != value.get();
-        }
-
-        __CDS_OptimalInline auto operator != ( DataType const & value ) const noexcept -> bool {
-            return this->get() != value;
-        }
-
-        __CDS_OptimalInline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
-            return this->get();
-        }
-
-        __CDS_NoDiscard auto toString () const noexcept -> String override {
-            std::stringstream stringStream;
-
-            stringStream
-                << "Atomic{"
-                << "data=" << this->_data
-                << ", accessLock" << this->_access.toString().cStr()
-                << "}";
-
-            return stringStream.str();
-        }
-
-        __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
-            if ( this == & object ) {
-                return true;
-            }
-
-            auto pAtomic = dynamic_cast < Atomic < T > const * > ( & object );
-            if (pAtomic == nullptr ) {
-                return false;
-            }
-
-            return pAtomic->get() == this->get();
-        }
+    enum class AtomicMemoryOrder {
+        relaxed                 = static_cast < int > ( std :: memory_order :: relaxed ),
+        consume                 = static_cast < int > ( std :: memory_order :: consume ),
+        acquire                 = static_cast < int > ( std :: memory_order :: acquire ),
+        release                 = static_cast < int > ( std :: memory_order :: release ),
+        acquireRelease          = static_cast < int > ( std :: memory_order :: acq_rel ),
+        sequentiallyConsistent  = static_cast < int > ( std :: memory_order :: seq_cst )
     };
 
-}
+    class AtomicFlag : public Object {
 
-__CDS_Meta_RegisterParseTemplateType(Atomic) // NOLINT(clion-misra-cpp2008-8-0-1)
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
+    private:
+        using BaseType = std :: atomic_flag;
+#endif
 
-#endif //CDS_ATOMIC_HPP
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
+    private:
+        using BaseType = std :: atomic < bool >;
+#endif
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        BaseType _atomicFlag;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr AtomicFlag () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        AtomicFlag (
+                AtomicFlag const &
+        ) = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        AtomicFlag (
+                AtomicFlag &&
+        ) = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~AtomicFlag() noexcept override = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                AtomicFlag const &
+        ) = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                AtomicFlag &&
+        ) = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto clear () noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto clear (
+                AtomicMemoryOrder order
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto set () noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto set (
+                AtomicMemoryOrder order
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto get () const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto get (
+                AtomicMemoryOrder order
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_Implicit operator bool () const noexcept; /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString (
+                AtomicMemoryOrder order
+        ) const noexcept -> String;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object              const & object,
+                AtomicMemoryOrder           order
+        ) const noexcept -> bool;
+    };
+
+
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class Atomic : public Object {      /* NOLINT(*-special-member-functions) */
+
+        static_assert (
+                cds :: meta :: isTriviallyCopyable < __ElementType > () &&
+                cds :: meta :: isCopyConstructible < __ElementType > () &&
+                cds :: meta :: isCopyAssignable < __ElementType > () &&
+                cds :: meta :: isMoveConstructible < __ElementType > () &&
+                cds :: meta :: isMoveAssignable < __ElementType > (),
+
+                "Incompatible atomic type"
+        );
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        std :: atomic < __ElementType > _data;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Atomic () noexcept ( noexcept ( __ElementType () ) ) = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
+                Atomic const & atomic
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
+                Atomic              const & atomic,
+                AtomicMemoryOrder           order
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
+                Atomic              const & atomic,
+                AtomicMemoryOrder           loadOrder,
+                AtomicMemoryOrder           storeOrder
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic ( /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+                __ElementType value
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
+                __ElementType               value,
+                AtomicMemoryOrder           order
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~Atomic() noexcept override = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                Atomic const & atomic
+        ) noexcept -> Atomic &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                __ElementType value
+        ) noexcept -> Atomic &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto get () const noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto get (
+                AtomicMemoryOrder order
+        ) const noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto set (
+                __ElementType       value
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto set (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_Implicit constexpr operator __ElementType () const noexcept; /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType & expected,
+                __ElementType   desired
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   order
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   success,
+                AtomicMemoryOrder   failure
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType & expected,
+                __ElementType   desired
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   order
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   success,
+                AtomicMemoryOrder   failure
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenAdd (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenAdd (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenSubtract (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenSubtract (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseAnd (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseAnd (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseOr (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseOr (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseXor (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseXor (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator += (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator &= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator |= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ^= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash (
+                AtomicMemoryOrder order
+        ) const noexcept -> Size;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString (
+                AtomicMemoryOrder order
+        ) const noexcept -> String;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object              const & object,
+                AtomicMemoryOrder           order
+        ) const noexcept -> bool;
+    };
+
+
+#if __CDS_atomic_ref_implementation != __CDS_atomic_ref_unavailable
+
+    template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class AtomicReference : public Object { /* NOLINT(*-special-member-functions) */
+
+        static_assert (
+                cds :: meta :: isTriviallyCopyable < __ElementType > () &&
+                cds :: meta :: isCopyConstructible < __ElementType > () &&
+                cds :: meta :: isCopyAssignable < __ElementType > () &&
+                cds :: meta :: isMoveConstructible < __ElementType > () &&
+                cds :: meta :: isMoveAssignable < __ElementType > (),
+
+                "Incompatible atomic type"
+        );
+
+#if __CDS_atomic_ref_implementation == __CDS_atomic_ref_stl_atomic_ref_implementation
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        std :: atomic_ref < __ElementType > _data;
+#endif
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr AtomicReference () = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit constexpr AtomicReference ( /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+                __ElementType & value
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr AtomicReference (
+                AtomicReference const & atomic
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~AtomicReference() noexcept override = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                __ElementType & value
+        ) noexcept -> AtomicReference &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr auto operator = (
+                AtomicReference const & atomic
+        ) noexcept -> AtomicReference & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto get () const noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto get (
+                AtomicMemoryOrder order
+        ) const noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto set (
+                __ElementType       value
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto set (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_Implicit constexpr operator __ElementType () const noexcept; /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType & expected,
+                __ElementType   desired
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   order
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeWeak (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   success,
+                AtomicMemoryOrder   failure
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType & expected,
+                __ElementType   desired
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   order
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto compareExchangeStrong (
+                __ElementType     & expected,
+                __ElementType       desired,
+                AtomicMemoryOrder   success,
+                AtomicMemoryOrder   failure
+        ) noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenAdd (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenAdd (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenSubtract (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenSubtract (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseAnd (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseAnd (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseOr (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseOr (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseXor (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getThenBitwiseXor (
+                __ElementType       value,
+                AtomicMemoryOrder   order
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                meta :: EnableIf <
+                        meta :: isIntegral < __ElementType > () ||
+                        meta :: isBasicPointer < __ElementType > ()
+                > = 0
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator += (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator &= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator |= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ^= (
+                __ElementType       value
+        ) noexcept -> __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash (
+                AtomicMemoryOrder order
+        ) const noexcept -> Size;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString (
+                AtomicMemoryOrder order
+        ) const noexcept -> String;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object              const & object,
+                AtomicMemoryOrder           order
+        ) const noexcept -> bool;
+    };
+
+#endif
+
+} /* namespace cds */
+
+#include "atomic/impl/Atomic.hpp"
+#include "atomic/impl/CTAD.hpp"
+
+#endif /* __CDS_ATOMIC_HPP__ */

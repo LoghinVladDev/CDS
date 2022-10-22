@@ -226,6 +226,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             struct __IsCopyConstructible : __BoolConstant < std :: is_copy_constructible < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
+             * @brief Meta-type implementation used to check if a given type can be copied trivially ( public fields, no copy operator specialization )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsTriviallyCopyable : __BoolConstant < std :: is_trivially_copyable < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
              * @brief Meta-type implementation used to check if a given type can be constructed by move ( has move constructor )
              * @tparam __T is the type checked
              */
@@ -816,6 +823,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isDefaultConstructible () noexcept -> bool {
             return __impl :: __IsDefaultConstructible < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be copied trivially ( public fields, no copy operator specialization )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isTriviallyCopyable () noexcept -> bool {
+            return __impl :: __IsTriviallyCopyable < __Type > :: value;
         }
 
         /**

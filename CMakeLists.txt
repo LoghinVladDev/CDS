@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(CDS)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -186,7 +186,7 @@ endif()
 cmake_minimum_required(VERSION 3.16)
 project(CDS)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 macro(test_suite)
     set(
