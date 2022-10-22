@@ -9,6 +9,8 @@
 #include <CDS/meta/TypeTraits>
 #include <atomic>
 
+#include "atomic/Config.hpp"
+
 namespace cds {
 
     enum class AtomicMemoryOrder {
@@ -22,16 +24,14 @@ namespace cds {
 
     class AtomicFlag : public Object {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
-
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
     private:
         using BaseType = std :: atomic_flag;
+#endif
 
-#else
-
-        private:
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
+    private:
         using BaseType = std :: atomic < bool >;
-
 #endif
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
@@ -943,6 +943,6 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "impl/Atomic.hpp"
+#include "atomic/impl/Atomic.hpp"
 
 #endif /* __CDS_ATOMIC_HPP__ */

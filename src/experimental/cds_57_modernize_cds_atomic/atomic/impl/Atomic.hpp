@@ -9,9 +9,11 @@ namespace cds {
 
     inline auto AtomicFlag :: clear () noexcept -> void {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         this->_atomicFlag.clear ();
-#else
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
         this->_atomicFlag.store ( false );
 #endif
 
@@ -22,9 +24,11 @@ namespace cds {
             AtomicMemoryOrder order
     ) noexcept -> void {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         this->_atomicFlag.clear ( static_cast < std :: memory_order > ( order ) );
-#else
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
         this->_atomicFlag.store ( false, static_cast < std :: memory_order > ( order ) );
 #endif
 
@@ -33,9 +37,11 @@ namespace cds {
 
     inline auto AtomicFlag :: set () noexcept -> bool {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         return this->_atomicFlag.test_and_set ();
-#else
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
         return this->_atomicFlag.exchange ( true );
 #endif
 
@@ -46,9 +52,11 @@ namespace cds {
             AtomicMemoryOrder order
     ) noexcept -> bool {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         return this->_atomicFlag.test_and_set ( static_cast < std :: memory_order > ( order ) );
-#else
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
         return this->_atomicFlag.exchange ( true, static_cast < std :: memory_order > ( order ) );
 #endif
 
@@ -57,10 +65,12 @@ namespace cds {
 
     inline auto AtomicFlag :: get () const noexcept -> bool {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         return this->_atomicFlag.test ();
-#else
-        return this->_atomicFlag.load ( true );
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
+        return this->_atomicFlag.load ();
 #endif
 
     }
@@ -70,9 +80,11 @@ namespace cds {
             AtomicMemoryOrder order
     ) const noexcept -> bool {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_flag_implementation
         return this->_atomicFlag.test ( static_cast < std :: memory_order > ( order ) );
-#else
+#endif
+
+#if __CDS_atomic_flag_implementation == __CDS_atomic_flag_stl_atomic_implementation
         return this->_atomicFlag.load ( static_cast < std :: memory_order > ( order ) );
 #endif
 
