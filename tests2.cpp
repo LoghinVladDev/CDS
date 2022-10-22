@@ -4,6 +4,7 @@
 #include <CDS/LinkedHashSet>
 #include <CDS/Array>
 #include <CDS/LinkedList>
+#include <CDS/Atomic>
 
 int main () {
 
