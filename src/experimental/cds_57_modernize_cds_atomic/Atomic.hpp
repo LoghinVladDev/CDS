@@ -115,7 +115,7 @@ namespace cds {
 
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class Atomic : public Object {
+    class Atomic : public Object {      /* NOLINT(*-special-member-functions) */
 
         static_assert (
                 cds :: meta :: isTriviallyCopyable < __ElementType > () &&
@@ -131,35 +131,35 @@ namespace cds {
         std :: atomic < __ElementType > _data;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Atomic () noexcept ( noexcept ( __ElementType () ) );
+        constexpr Atomic () noexcept ( noexcept ( __ElementType () ) ) = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
                 Atomic const & atomic
-        ) noexcept ( noexcept ( __ElementType ( cds :: meta :: referenceOf < __ElementType const > () ) ) );
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
-                Atomic && atomic
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
                 Atomic              const & atomic,
                 AtomicMemoryOrder           order
-        ) noexcept ( noexcept ( __ElementType ( cds :: meta :: referenceOf < __ElementType const > () ) ) );
+        ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
                 Atomic              const & atomic,
                 AtomicMemoryOrder           loadOrder,
                 AtomicMemoryOrder           storeOrder
-        ) noexcept ( noexcept ( __ElementType ( cds :: meta :: referenceOf < __ElementType const > () ) ) );
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic ( /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+                __ElementType value
+        ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConstructorNonEmptyBody Atomic (
-                Atomic              && atomic,
-                AtomicMemoryOrder      exchangeOrder
+                __ElementType               value,
+                AtomicMemoryOrder           order
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -172,7 +172,7 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                Atomic && atomic
+                __ElementType value
         ) noexcept -> Atomic &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -195,7 +195,12 @@ namespace cds {
         ) noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_Implicit constexpr operator __ElementType () const noexcept;
+        __CDS_NoDiscard __CDS_Implicit constexpr operator __ElementType () const noexcept; /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType       value
+        ) noexcept -> __ElementType;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
@@ -944,5 +949,6 @@ namespace cds {
 } /* namespace cds */
 
 #include "atomic/impl/Atomic.hpp"
+#include "atomic/impl/CTAD.hpp"
 
 #endif /* __CDS_ATOMIC_HPP__ */
