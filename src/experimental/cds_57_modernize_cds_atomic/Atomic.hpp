@@ -64,37 +64,37 @@ namespace cds {
         ) = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto clear () noexcept -> void;
+        auto clear () noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto clear (
+        auto clear (
                 AtomicMemoryOrder order
         ) noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto set () noexcept -> bool;
+        auto set () noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto set (
+        auto set (
                 AtomicMemoryOrder order
         ) noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto get () const noexcept -> bool;
+        __CDS_NoDiscard auto get () const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto get (
+        __CDS_NoDiscard auto get (
                 AtomicMemoryOrder order
         ) const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Implicit operator bool () const noexcept; /* NOLINT(google-explicit-constructor, hicpp-explicit-conversions) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto equals (
@@ -105,11 +105,6 @@ namespace cds {
         __CDS_NoDiscard auto toString (
                 AtomicMemoryOrder order
         ) const noexcept -> String;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash (
-                AtomicMemoryOrder order
-        ) const noexcept -> Size;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto equals (
@@ -947,5 +942,7 @@ namespace cds {
     };
 
 } /* namespace cds */
+
+#include "impl/Atomic.hpp"
 
 #endif /* __CDS_ATOMIC_HPP__ */
