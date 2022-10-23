@@ -6,6 +6,8 @@
 #include <CDS/LinkedList>
 #include <CDS/threading/Atomic>
 #include <CDS/threading/Mutex>
+#include <CDS/threading/Lock>
+#include <mutex>
 
 int main () {
 
