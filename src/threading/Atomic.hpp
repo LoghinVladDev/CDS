@@ -47,7 +47,7 @@ namespace cds {
         BaseType _atomicFlag;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr AtomicFlag () noexcept = default;
+        AtomicFlag () noexcept = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         AtomicFlag (
@@ -65,12 +65,12 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 AtomicFlag const &
-        ) = delete;
+        ) -> AtomicFlag & = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 AtomicFlag &&
-        ) = delete;
+        ) -> AtomicFlag & = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto clear () noexcept -> void;
