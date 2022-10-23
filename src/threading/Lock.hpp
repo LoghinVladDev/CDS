@@ -161,7 +161,7 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "lock/impl/Lock.hpp"
+#include "lock/impl/Lock.hpp" /* NOLINT(llvm-include-order) */
 #include "lock/impl/CTAD.hpp"
 
 #endif /* __CDS_LOCK_HPP__ */

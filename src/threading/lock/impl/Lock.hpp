@@ -5,31 +5,31 @@
 #ifndef __CDS_LOCK_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_LOCK_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
-    namespace __hidden {
-        namespace __impl {
+    namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    Size         __currentIndex,
-                    typename ... __LockTypes,
+                    Size         __currentIndex,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __LockTypes,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             __currentIndex >= sizeof ... ( __LockTypes )
                     > = 0
-            > auto __groupLockApply (
-                    cds :: Tuple < __LockTypes & ... > & locks
+            > auto __groupLockApply (               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: Tuple < __LockTypes & ... > & /* locks */
             ) noexcept -> void {
 
             }
 
 
             template <
-                    Size         __currentIndex,
-                    typename ... __LockTypes,
+                    Size         __currentIndex,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __LockTypes,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             __currentIndex < sizeof ... ( __LockTypes )
                     > = 0
-            > auto __groupLockApply (
+            > auto __groupLockApply (               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: Tuple < __LockTypes & ... > & locks
             ) noexcept -> void {
 
@@ -39,25 +39,25 @@ namespace cds {
 
 
             template <
-                    Size         __currentIndex,
-                    typename ... __LockTypes,
+                    Size         __currentIndex,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __LockTypes,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             __currentIndex >= sizeof ... ( __LockTypes )
                     > = 0
-            > auto __groupLockRemove (
-                    cds :: Tuple < __LockTypes & ... > & locks
+            > auto __groupLockRemove (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: Tuple < __LockTypes & ... > & /* locks */
             ) noexcept -> void {
 
             }
 
 
             template <
-                    Size         __currentIndex,
-                    typename ... __LockTypes,
+                    Size         __currentIndex,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __LockTypes,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             __currentIndex < sizeof ... ( __LockTypes )
                     > = 0
-            > auto __groupLockRemove (
+            > auto __groupLockRemove (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: Tuple < __LockTypes & ... > & locks
             ) noexcept -> void {
 
@@ -65,8 +65,8 @@ namespace cds {
                 __groupLockRemove < __currentIndex + 1, __LockTypes ... > ( locks );
             }
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
     template < typename __LockedObjectType >
     __CDS_OptimalInline Lock < __LockedObjectType > :: Lock (
