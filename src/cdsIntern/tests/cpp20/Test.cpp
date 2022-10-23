@@ -48,7 +48,7 @@ static Test::TerminalColor bold (Test::TerminalColor::Modifier::ENABLE_BOLD );
 #include <iostream>
 #include <cstdio>
 #include <cstdarg>
-#include <CDS/Mutex>
+#include <CDS/threading/Mutex>
 
 static Mutex printLock;
 
