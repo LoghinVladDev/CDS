@@ -1,1 +1,2 @@
+#warning Deprecated, use CDS/threading/Mutex
 #include "../../src/threading/Mutex.hpp"

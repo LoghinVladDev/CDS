@@ -4,7 +4,8 @@
 #include <CDS/LinkedHashSet>
 #include <CDS/Array>
 #include <CDS/LinkedList>
-#include <CDS/Atomic>
+#include <CDS/threading/Atomic>
+#include <CDS/threading/Mutex>
 
 int main () {
 
