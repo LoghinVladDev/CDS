@@ -124,7 +124,7 @@ namespace cds {
     class GroupLock : public Object {
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        Tuple < __LockedObjects & ... > locks;
+        Tuple < __LockedObjects & ... > _locks;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         GroupLock () noexcept = delete;
@@ -146,15 +146,6 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = ( GroupLock && ) noexcept -> GroupLock & = delete;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto lock () noexcept -> void;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto tryLock () noexcept -> bool;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto unlock () noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto equals (

@@ -83,5 +83,17 @@ int main () {
         l.lock();
     }
 
+    Mutex m1;
+    Mutex m2;
+    Mutex m3;
+
+    {
+        GroupLock g (m1, m2);
+    }
+
+    {
+        GroupLock g (m1, m2, m3);
+    }
+
     return 0;
 }

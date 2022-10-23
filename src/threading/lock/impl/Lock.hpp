@@ -7,6 +7,67 @@
 
 namespace cds {
 
+    namespace __hidden {
+        namespace __impl {
+
+            template <
+                    Size         __currentIndex,
+                    typename ... __LockTypes,
+                    cds :: meta :: EnableIf <
+                            __currentIndex >= sizeof ... ( __LockTypes )
+                    > = 0
+            > auto __groupLockApply (
+                    cds :: Tuple < __LockTypes & ... > & locks
+            ) noexcept -> void {
+
+            }
+
+
+            template <
+                    Size         __currentIndex,
+                    typename ... __LockTypes,
+                    cds :: meta :: EnableIf <
+                            __currentIndex < sizeof ... ( __LockTypes )
+                    > = 0
+            > auto __groupLockApply (
+                    cds :: Tuple < __LockTypes & ... > & locks
+            ) noexcept -> void {
+
+                locks.template get < __currentIndex > ().lock();
+                __groupLockApply < __currentIndex + 1, __LockTypes ... > ( locks );
+            }
+
+
+            template <
+                    Size         __currentIndex,
+                    typename ... __LockTypes,
+                    cds :: meta :: EnableIf <
+                            __currentIndex >= sizeof ... ( __LockTypes )
+                    > = 0
+            > auto __groupLockRemove (
+                    cds :: Tuple < __LockTypes & ... > & locks
+            ) noexcept -> void {
+
+            }
+
+
+            template <
+                    Size         __currentIndex,
+                    typename ... __LockTypes,
+                    cds :: meta :: EnableIf <
+                            __currentIndex < sizeof ... ( __LockTypes )
+                    > = 0
+            > auto __groupLockRemove (
+                    cds :: Tuple < __LockTypes & ... > & locks
+            ) noexcept -> void {
+
+                locks.template get < __currentIndex > ().unlock();
+                __groupLockRemove < __currentIndex + 1, __LockTypes ... > ( locks );
+            }
+
+        }
+    }
+
     template < typename __LockedObjectType >
     __CDS_OptimalInline Lock < __LockedObjectType > :: Lock (
             __LockedObjectType & lock
@@ -115,6 +176,54 @@ namespace cds {
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: hash () const noexcept -> Size {
 
         return this->_pLock->hash ();
+    }
+
+
+    template < typename ... __LockedObjects >
+    __CDS_OptimalInline GroupLock < __LockedObjects ... > :: GroupLock (
+            __LockedObjects & ... locks
+    ) noexcept : _locks ( std :: forward < __LockedObjects & > ( locks ) ... ) {
+
+        __hidden :: __impl :: __groupLockApply < 0U, __LockedObjects ... > ( this->_locks );
+    }
+
+
+    template < typename ... __LockedObjects >
+    __CDS_OptimalInline GroupLock < __LockedObjects ... > :: ~GroupLock () noexcept {
+
+        __hidden :: __impl :: __groupLockRemove < 0U, __LockedObjects ... > ( this->_locks );
+    }
+
+
+    template < typename ... __LockedObjects >
+    __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: hash () const noexcept -> Size {
+
+        return this->_locks.hash();
+    }
+
+
+    template < typename ... __LockedObjects >
+    __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: toString () const noexcept -> String {
+
+        return "GroupLock over " + this->_locks.toString();
+    }
+
+
+    template < typename ... __LockedObjects >
+    __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: equals (
+            Object const & object
+    ) const noexcept -> bool {
+
+        if ( this == & object ) {
+            return true;
+        }
+
+        auto pGroupLock = dynamic_cast < decltype (this) > ( & object );
+        if ( pGroupLock == nullptr ) {
+            return false;
+        }
+
+        return this->_locks.equals ( pGroupLock->_locks );
     }
 
 } /* namespace cds */
