@@ -6,6 +6,8 @@
 #include <CDS/LinkedList>
 #include <CDS/threading/Atomic>
 #include <CDS/threading/Mutex>
+#include <CDS/threading/Lock>
+#include <mutex>
 
 int main () {
 
@@ -57,6 +59,41 @@ int main () {
     Mutex m;
     m.lock();
     m.unlock();
+
+    {
+        Lock l (m);
+    }
+
+    {
+        Lock l (m);
+    }
+
+    {
+        DeferredLock l (m);
+    }
+
+    {
+        DeferredLock l (m);
+        l.lock();
+        l.unlock();
+    }
+
+    {
+        DeferredLock l (m);
+        l.lock();
+    }
+
+    Mutex m1;
+    Mutex m2;
+    Mutex m3;
+
+    {
+        GroupLock g (m1, m2);
+    }
+
+    {
+        GroupLock g (m1, m2, m3);
+    }
 
     return 0;
 }

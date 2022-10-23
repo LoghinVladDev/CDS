@@ -42,7 +42,7 @@ namespace cds {
         /* Reused from Collection */
         /* Default toString implementation, store 'Mutex at 0x....'. Use a stringstream for simplicity */
         std :: stringstream oss;
-        oss << "Collection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "Mutex at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
 
         /* converted to std :: string, and to cds :: String afterwards */
         return oss.str();
@@ -52,27 +52,6 @@ namespace cds {
     inline auto Mutex :: hash () const noexcept -> Size {
 
         return reinterpret_cast < Size > ( & this->_handle );
-    }
-
-
-    inline auto Mutex :: equals (
-            Object const & object
-    ) const noexcept -> bool {
-
-        if ( this == & object ) {
-            return true;
-        }
-
-        auto pMutex = dynamic_cast < decltype (this) > ( & object );
-        if ( pMutex == nullptr ) {
-            return false;
-        }
-
-        return std :: memcmp (
-                & pMutex->_handle,
-                & pMutex->_handle,
-                sizeof ( cds :: __hidden :: __impl :: __MutexPlatformHandleType )
-        ) == 0;
     }
 
 } /* namespace cds */
