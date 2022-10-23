@@ -14,12 +14,21 @@
 namespace cds {
 
     enum class AtomicMemoryOrder {
-        relaxed                 = static_cast < int > ( std :: memory_order :: relaxed ),
-        consume                 = static_cast < int > ( std :: memory_order :: consume ),
-        acquire                 = static_cast < int > ( std :: memory_order :: acquire ),
-        release                 = static_cast < int > ( std :: memory_order :: release ),
-        acquireRelease          = static_cast < int > ( std :: memory_order :: acq_rel ),
-        sequentiallyConsistent  = static_cast < int > ( std :: memory_order :: seq_cst )
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+        Relaxed                 = static_cast < int > ( std :: memory_order :: relaxed ),
+        Consume                 = static_cast < int > ( std :: memory_order :: consume ),
+        Acquire                 = static_cast < int > ( std :: memory_order :: acquire ),
+        Release                 = static_cast < int > ( std :: memory_order :: release ),
+        AcquireRelease          = static_cast < int > ( std :: memory_order :: acq_rel ),
+        SequentiallyConsistent  = static_cast < int > ( std :: memory_order :: seq_cst )
+#else
+        Relaxed                 = static_cast < int > ( std :: memory_order :: memory_order_relaxed ),
+        Consume                 = static_cast < int > ( std :: memory_order :: memory_order_consume ),
+        Acquire                 = static_cast < int > ( std :: memory_order :: memory_order_acquire ),
+        Release                 = static_cast < int > ( std :: memory_order :: memory_order_release ),
+        AcquireRelease          = static_cast < int > ( std :: memory_order :: memory_order_acq_rel ),
+        SequentiallyConsistent  = static_cast < int > ( std :: memory_order :: memory_order_seq_cst )
+#endif
     };
 
     class AtomicFlag : public Object {

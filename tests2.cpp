@@ -28,8 +28,8 @@ int main () {
     std :: cout << adef << '\n';
     std :: cout << cdef << '\n';
 
-    Atomic c1def (cdef, AtomicMemoryOrder::sequentiallyConsistent);
-    Atomic c2def (cdef, AtomicMemoryOrder::sequentiallyConsistent, AtomicMemoryOrder::sequentiallyConsistent);
+    Atomic c1def (cdef, AtomicMemoryOrder::SequentiallyConsistent);
+    Atomic c2def (cdef, AtomicMemoryOrder::SequentiallyConsistent, AtomicMemoryOrder::SequentiallyConsistent);
     std :: cout << c1def << '\n';
     std :: cout << c2def << '\n';
     Atomic c3def (c1def);
@@ -39,14 +39,14 @@ int main () {
     c2def = c1def;
     std :: cout << c2def << '\n';
     std :: cout << c2def.get() << '\n';
-    std :: cout << c2def.get(AtomicMemoryOrder::sequentiallyConsistent) << '\n';
+    std :: cout << c2def.get(AtomicMemoryOrder::SequentiallyConsistent) << '\n';
     c2def.set(7);
     std :: cout << c2def << '\n';
-    c2def.set(9, AtomicMemoryOrder::sequentiallyConsistent);
+    c2def.set(9, AtomicMemoryOrder::SequentiallyConsistent);
     std :: cout << c2def << '\n';
     std :: cout << c2def.exchange (1) << '\n';
     std :: cout << c2def << '\n';
-    std :: cout << c2def.exchange (3, AtomicMemoryOrder::sequentiallyConsistent) << '\n';
+    std :: cout << c2def.exchange (3, AtomicMemoryOrder::SequentiallyConsistent) << '\n';
     std :: cout << c2def << '\n';
     std :: cout << c2def.getThenAdd(15) << '\n';
     std :: cout << c2def << '\n';
@@ -54,6 +54,9 @@ int main () {
     std :: cout << c2def << '\n';
     std :: cout << c2def.hash() << '\n';
 
+    Mutex m;
+    m.lock();
+    m.unlock();
 
     return 0;
 }
