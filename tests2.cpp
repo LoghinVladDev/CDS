@@ -68,5 +68,20 @@ int main () {
         Lock l (m);
     }
 
+    {
+        DeferredLock l (m);
+    }
+
+    {
+        DeferredLock l (m);
+        l.lock();
+        l.unlock();
+    }
+
+    {
+        DeferredLock l (m);
+        l.lock();
+    }
+
     return 0;
 }

@@ -19,22 +19,32 @@ namespace cds {
         Lock () noexcept = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        Lock ( Lock const & ) noexcept = delete;
+        Lock (
+                Lock const &
+        ) noexcept = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        Lock ( Lock && ) noexcept = delete;
+        Lock (
+                Lock &&
+        ) noexcept = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Explicit Lock ( __LockedObjectType & lock ) noexcept;
+        __CDS_Explicit Lock (
+                __LockedObjectType & lock
+        ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         ~Lock () noexcept override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = ( Lock const & ) noexcept -> Lock & = delete;
+        auto operator = (
+                Lock const &
+        ) noexcept -> Lock & = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = ( Lock && ) noexcept -> Lock & = delete;
+        auto operator = (
+                Lock &&
+        ) noexcept -> Lock & = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -49,31 +59,50 @@ namespace cds {
 
 
     template < typename __LockedObjectType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class DeferredLock : public Object {     /* NOLINT(*-special-member-functions) */
+    class DeferredLock : public Object {
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __LockedObjectType * pLock;
+        __LockedObjectType * _pLock;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        bool                 _used {false};
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         DeferredLock () noexcept = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        DeferredLock ( DeferredLock const & ) noexcept;
+        DeferredLock (
+                DeferredLock const & /* lock */
+        ) noexcept = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Explicit DeferredLock ( __LockedObjectType & lock ) noexcept;
+        DeferredLock (
+                DeferredLock && /* lock */
+        ) noexcept = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Explicit DeferredLock (
+                __LockedObjectType & lock
+        ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         ~DeferredLock () noexcept override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = ( DeferredLock const & ) noexcept -> DeferredLock &;
+        auto operator = (
+                DeferredLock const & /* lock */
+        ) noexcept -> DeferredLock & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                DeferredLock && /* lock */
+        ) noexcept -> DeferredLock & = delete;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto lock () noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto tryLock () noexcept -> bool;
+        __CDS_NoDiscard auto tryLock () noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto unlock () noexcept -> void;
