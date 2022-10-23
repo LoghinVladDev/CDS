@@ -56,11 +56,6 @@ namespace cds {
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
-
-    public:     /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto equals (
-                Object const & object
-        ) const noexcept -> bool override;
     };
 
 } /* namespace cds */

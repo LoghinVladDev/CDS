@@ -13,7 +13,7 @@ namespace cds {
     class Lock : public Object {
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __LockedObjectType & lock; /* NOLINT(*-avoid-const-or-ref-data-members) */
+        __LockedObjectType & _lock; /* NOLINT(*-avoid-const-or-ref-data-members) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         Lock () noexcept = delete;
@@ -35,11 +35,6 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = ( Lock && ) noexcept -> Lock & = delete;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto equals (
-                Object const & object
-        ) const noexcept -> bool override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;

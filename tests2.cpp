@@ -60,5 +60,13 @@ int main () {
     m.lock();
     m.unlock();
 
+    {
+        Lock l (m);
+    }
+
+    {
+        Lock l (m);
+    }
+
     return 0;
 }
