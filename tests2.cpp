@@ -7,10 +7,15 @@
 #include <CDS/threading/Atomic>
 #include <CDS/threading/Mutex>
 #include <CDS/threading/Lock>
+#include <CDS/threading/Thread>
 #include <mutex>
+#include <thread>
+#include <pthread.h>
+
 
 int main () {
 
+std::stop_token stopToken;
     using namespace cds;
 
     AtomicFlag f;
