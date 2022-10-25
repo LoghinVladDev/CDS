@@ -11,7 +11,7 @@
 #include <mutex>
 #include <thread>
 #include <pthread.h>
-
+#include <functional>
 
 int main () {
 
@@ -109,38 +109,23 @@ std::stop_token stopToken;
     run1.start();
     run1.join();
 
-    using namespace cds;
 
-    int index = 0;
-    Array <Runnable <Function <void()>>> threads;
-    threads.pushBackAll (
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; },
-            [&cout = m1, i = ++ index]{ GroupLock l(cout); std :: cout << "Thread " << i << '\n'; }
-    );
+    std :: function <float(int)> * f123 = new std :: function ( [](int a) { return a + 0.5f; } );
+    auto f234 = * f123;
+    delete f123;
 
-    threads.forEach([](auto & th) {th.start();});
-    threads.forEach([](auto & th) {th.join();});
+    class A {
+    public:
+        A() noexcept = default;
+        auto operator ()(int a) {return a * 2.5f;}
+    };
+
+    A * a341515 = new A();
+    std :: function f65 = * a341515;
+    delete a341515;
+
+    std :: cout << f234(5) << '\n';
+    std :: cout << f65(3) << '\n';
 
     return 0;
 }
