@@ -11,7 +11,7 @@
 #include <mutex>
 #include <thread>
 #include <pthread.h>
-
+#include <functional>
 
 int main () {
 
@@ -141,6 +141,36 @@ std::stop_token stopToken;
 
     threads.forEach([](auto & th) {th.start();});
     threads.forEach([](auto & th) {th.join();});
+
+
+    std :: function <float(int)> * f123 = new std :: function ( [](int a) { return a + 0.5f; } );
+    cds :: Function <float(int)> * f123c = new cds :: Function <float(int)> ( [](int a) { return a + 0.5f; } );
+    auto f234 = * f123;
+    auto f234c = * f123c;
+    delete f123;
+    delete f123c;
+
+    class A {
+    public:
+        A() noexcept = default;
+        A(A const&) noexcept = default;
+        A(A &&) noexcept = delete;
+        auto operator ()(int a) const {return a * 2.5f;}
+    };
+
+    A b123;
+
+    A * a341515 = new A();
+    std :: function f65 = * a341515;
+    cds :: Function <float(int)> f65c = * a341515;
+    delete a341515;
+
+    std :: cout << f234(5) << '\n';
+    std :: cout << f65(3) << '\n';
+    std :: cout << f234c(5) << '\n';
+    std :: cout << f65c(3) << '\n';
+
+//    std :: function <float(A)> f0 = [](A a) { return a(3); };
 
     return 0;
 }
