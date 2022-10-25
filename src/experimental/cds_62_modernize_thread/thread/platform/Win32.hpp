@@ -59,7 +59,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ThreadPlatformHandleType const * pThreadHandle
             ) noexcept -> void {
 
-                TerminateThread ( pThreadHandle->_handle, 0 );
+                if ( pThread->_handle != nullptr ) {
+                    TerminateThread ( pThreadHandle->_handle, 0 );
+                    pThread->_handle = nullptr;
+                }
             }
 
 
@@ -67,7 +70,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ThreadPlatformHandleType const * pThreadHandle
             ) noexcept -> void {
 
-                WaitForSingleObject ( pThreadHandle->_handle, INFINITE );
+                if ( pThread->_handle != nullptr ) {
+                    WaitForSingleObject ( pThreadHandle->_handle, INFINITE );
+                    pThread->_handle = nullptr;
+                }
             }
 
 
@@ -75,7 +81,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ThreadPlatformHandleType const * pThreadHandle
             ) noexcept -> void {
 
-                CloseHandle ( pThreadHandle->_handle );
+                if ( pThread->_handle != nullptr ) {
+                    CloseHandle ( pThreadHandle->_handle );
+                    pThread->_handle = nullptr;
+                }
             }
 
 

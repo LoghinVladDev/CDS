@@ -12,8 +12,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            using __ThreadPlatformHandleType    = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ThreadPlatformIdType        = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformHandleType            = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformIdType                = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformFunctionReturnType    = void *;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            constexpr __ThreadPlatformFunctionReturnType const __threadPlatformFunctionReturn = nullptr;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ThreadLaunchFunction >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             inline auto __threadPlatformLaunch (            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -39,26 +42,35 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             inline auto __threadPlatformKill (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                pthread_cancel ( * pThreadHandle );
+                if ( * pThreadHandle != 0ULL ) {
+                    pthread_cancel ( * pThreadHandle );
+                    * pThreadHandle = 0ULL;
+                }
             }
 
 
             inline auto __threadPlatformJoin (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                pthread_join ( * pThreadHandle, nullptr );
+                if ( * pThreadHandle != 0ULL ) {
+                    pthread_join ( * pThreadHandle, nullptr );
+                    * pThreadHandle = 0ULL;
+                }
             }
 
 
             inline auto __threadPlatformDetach (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                pthread_detach ( * pThreadHandle );
+                if ( * pThreadHandle != 0ULL ) {
+                    pthread_detach ( * pThreadHandle );
+                    * pThreadHandle = 0ULL;
+                }
             }
 
 
