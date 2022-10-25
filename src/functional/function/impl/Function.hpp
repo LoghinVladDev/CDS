@@ -25,8 +25,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes         && ... arguments
                 ) noexcept (false) -> __ReturnType {
 
-                    auto const castedFunction = static_cast < __FunctionSignature > ( function );
-                    return castedFunction ( std :: forward < __ArgumentTypes > ( arguments ) ... );
+                    return reinterpret_cast < cds :: meta :: Decay < __FunctionSignature > > ( function ) (
+                            std :: forward < __ArgumentTypes > ( arguments ) ...
+                    );
                 }
 
 
@@ -38,8 +39,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                constexpr static auto __clear ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __GenericConstFunctionObject /* function */
+                __CDS_cpplang_ConstexprNonLiteralReturn static auto __clear ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __GenericFunctionObject /* function */
                 ) noexcept -> void {
 
                     /* do nothing */
@@ -55,9 +56,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                constexpr static auto __adapterGroup () noexcept -> __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static auto __adapterGroup () noexcept -> __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                    constexpr static __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const adapterGroup = {
+                    static __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const adapterGroup = {
                             & __FunctionAdapter :: __invoke,
                             & __FunctionAdapter :: __copy,
                             & __FunctionAdapter :: __clear,
@@ -72,12 +73,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __Functor, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             struct __FunctorAdapter < __ReturnType ( __ArgumentTypes ... ), __Functor > {           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                constexpr static auto __invoke ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline static auto __invoke ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __GenericFunctionObject        function,
                         __ArgumentTypes         && ... arguments
                 ) noexcept (false) -> __ReturnType {
 
-                    constexpr static auto const pMemberCallOperator = & __Functor :: operator ();
+                    static auto const pMemberCallOperator = & __Functor :: operator ();
                     return
                             ( ( static_cast < __Functor * > ( function ) ) ->* pMemberCallOperator ) (
                                     std :: forward < __ArgumentTypes > ( arguments ) ...
@@ -118,9 +119,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                constexpr static auto __adapterGroup () noexcept -> __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline static auto __adapterGroup () noexcept -> __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                    constexpr static __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const adapterGroup = {
+                    static __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const adapterGroup = {
                             & __FunctorAdapter :: __invoke,
                             & __FunctorAdapter :: __copy,
                             & __FunctorAdapter :: __clear,
@@ -149,7 +150,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __FirstType, typename ... __RemainingTypes, cds :: meta :: EnableIf < sizeof ... (__RemainingTypes) >= 1 > = 0 >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             inline auto __functionToStringTypeReduce () noexcept -> String {                                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                return cds :: meta :: Type < __FirstType > :: name () + ", " + __functionToStringTypeReduce < __RemainingTypes ... > ();
+                return String ( cds :: meta :: Type < __FirstType > :: name () ) + ", " + __functionToStringTypeReduce < __RemainingTypes ... > ();
             }
 
         } /* namespace __impl */
@@ -160,7 +161,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
-    constexpr Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
             Function const & function
     ) noexcept :
             _adapterGroup ( function._adapterGroup ) {
@@ -183,10 +184,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
     template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >
-    constexpr Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
             __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
     ) noexcept :
-            _functionObject ( function ) {
+            _functionObject ( reinterpret_cast < __hidden :: __impl :: __GenericFunctionObject > ( function ) ) {
 
         this->_adapterGroup = cds :: __hidden :: __impl :: __FunctionAdapter <
                 __ReturnType ( __ArgumentTypes ... ),
@@ -197,7 +198,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
     template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >
-    constexpr Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
             __Functor const & functor
     ) noexcept {
 
@@ -275,7 +276,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             this->_adapterGroup->_clear ( this->_functionObject );
         }
 
-        this->_functionObject   = function;
+        this->_functionObject   = reinterpret_cast < __hidden :: __impl :: __GenericFunctionObject > ( function );
         this->_adapterGroup     = cds :: __hidden :: __impl :: __FunctionAdapter <
                 __ReturnType ( __ArgumentTypes ... ),
                 __ReceivedReturnType ( __ReceivedArgumentTypes ... )
@@ -310,7 +311,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
-    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator () (
+    __CDS_cpplang_ConstexprConditioned auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator () (
             __ArgumentTypes ... arguments
     ) const noexcept (false) -> __ReturnType {
 

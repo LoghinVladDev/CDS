@@ -28,7 +28,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __functionAdapterCopyHelper (                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericConstFunctionObject /* function */
-            ) noexcept (false) -> __GenericFunctionObject {
+            ) noexcept -> __GenericFunctionObject {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -37,10 +37,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             }
 
 
-            template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr auto __functionAdapterClearHelper (                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprConstructorNonEmptyBody auto __functionAdapterClearHelper (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericFunctionObject /* function */
-            ) noexcept (false) -> void {
+            ) noexcept -> void {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -52,7 +52,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             constexpr auto __functionAdapterCompareHelper (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericConstFunctionObject /* leftFunction */,
                     __GenericConstFunctionObject /* rightFunction */
-            ) noexcept (false) -> bool {
+            ) noexcept -> bool {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return

@@ -422,7 +422,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 struct __Decay < __T, false, true > {
-                    using Type = typename __AddPointer < __T > :: Type *;
+                    using Type = typename __AddPointer < __T > :: Type;
                 };
             } /* namespace __decayImpl */
 

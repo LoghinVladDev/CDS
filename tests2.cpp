@@ -170,6 +170,8 @@ std::stop_token stopToken;
     std :: cout << f234c(5) << '\n';
     std :: cout << f65c(3) << '\n';
 
+    cds :: meta :: Decay < int(float) > pfn ;
+
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 
     return 0;

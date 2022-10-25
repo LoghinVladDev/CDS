@@ -27,7 +27,7 @@ namespace cds {
         constexpr Function () noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Function (
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody Function (
                 Function const & function
         ) noexcept;
 
@@ -38,13 +38,13 @@ namespace cds {
 
     public:                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        __CDS_Implicit constexpr Function (                                                 /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
+        __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Function (                                                 /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
                 __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
         ) noexcept;
 
     public:                                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > = 0 >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        __CDS_Implicit constexpr Function (                                                                                 /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
+        __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Function (                                                                                 /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
                 __Functor const & functor
         ) noexcept;
 
@@ -74,7 +74,7 @@ namespace cds {
         ) noexcept -> Function &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr auto operator () (
+        __CDS_cpplang_ConstexprConditioned auto operator () (
                 __ArgumentTypes ... arguments
         ) const noexcept (false) -> __ReturnType;
 
