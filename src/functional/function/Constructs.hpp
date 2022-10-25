@@ -16,7 +16,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             constexpr auto __functionAdapterInvokeHelper (                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericFunctionObject            /* function */,
                     __ArgumentTypes             && ... /* arguments */
-            ) noexcept -> __ReturnType {
+            ) noexcept (false) -> __ReturnType {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -25,10 +25,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             }
 
 
-            template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr auto __functionAdapterCopyHelper (                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __functionAdapterCopyHelper (                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericConstFunctionObject /* function */
-            ) noexcept -> __GenericFunctionObject {
+            ) noexcept (false) -> __GenericFunctionObject {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -37,10 +37,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             }
 
 
-            template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr auto __functionAdapterClearHelper (                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __functionAdapterClearHelper (                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericFunctionObject /* function */
-            ) noexcept -> void {
+            ) noexcept (false) -> void {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -48,11 +48,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces, bugpro
             }
 
 
-            template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr auto __functionAdapterCompareHelper (                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename /* __ReturnType */, typename ... /* __ArgumentTypes */ >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __functionAdapterCompareHelper (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __GenericConstFunctionObject /* leftFunction */,
                     __GenericConstFunctionObject /* rightFunction */
-            ) noexcept -> bool {
+            ) noexcept (false) -> bool {
 
                 /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                  * a used function, when it is only declared for SFINAE purposes. It will still return

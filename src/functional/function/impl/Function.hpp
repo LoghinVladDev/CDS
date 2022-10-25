@@ -11,19 +11,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __Signature, typename __FunctionSignature > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            struct __FunctionAdapter {};                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FunctionAdapter {};                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __Signature, typename __Functor >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            struct __FunctorAdapter;                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Signature, typename __Functor >           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FunctorAdapter;                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
-            template < typename __FunctionSignature, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            struct __FunctionAdapter < __ReturnType ( __ArgumentTypes ... ), __FunctionSignature > { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FunctionSignature, typename __ReturnType, typename ... __ArgumentTypes >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FunctionAdapter < __ReturnType ( __ArgumentTypes ... ), __FunctionSignature > {        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 constexpr static auto __invoke (                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __GenericFunctionObject        function,
                         __ArgumentTypes         && ... arguments
-                ) noexcept -> __ReturnType {
+                ) noexcept (false) -> __ReturnType {
 
                     auto const castedFunction = static_cast < __FunctionSignature > ( function );
                     return castedFunction ( std :: forward < __ArgumentTypes > ( arguments ) ... );
@@ -46,9 +46,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                constexpr static auto __compare (                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __GenericConstFunctionObject leftFunction,
-                        __GenericConstFunctionObject rightFunction
+                constexpr static auto __compare (                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __GenericConstFunctionObject leftFunction,  /* NOLINT(bugprone-easily-swappable-parameters) */
+                        __GenericConstFunctionObject rightFunction  /* NOLINT(bugprone-easily-swappable-parameters) */
                 ) noexcept -> bool {
 
                     return leftFunction == rightFunction;
@@ -72,10 +72,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __Functor, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             struct __FunctorAdapter < __ReturnType ( __ArgumentTypes ... ), __Functor > {           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                constexpr static auto __invoke (                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                constexpr static auto __invoke ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __GenericFunctionObject        function,
                         __ArgumentTypes         && ... arguments
-                ) noexcept -> __ReturnType {
+                ) noexcept (false) -> __ReturnType {
 
                     constexpr static auto const pMemberCallOperator = & __Functor :: operator ();
                     return
@@ -105,9 +105,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                __CDS_OptimalInline static auto __compare (                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __GenericConstFunctionObject leftFunction,
-                        __GenericConstFunctionObject rightFunction
+                __CDS_OptimalInline static auto __compare (         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __GenericConstFunctionObject leftFunction,  /* NOLINT(bugprone-easily-swappable-parameters) */
+                        __GenericConstFunctionObject rightFunction  /* NOLINT(bugprone-easily-swappable-parameters) */
                 ) noexcept -> bool {
 
                     return std :: memcmp (
@@ -132,6 +132,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             };
 
 
+            template < typename ... __NoTypes, cds :: meta :: EnableIf < sizeof ... (__NoTypes) == 0 > = 0 >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            inline auto __functionToStringTypeReduce () noexcept -> String {                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                return "";
+            }
+
+
             template < typename __LastType >                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             inline auto __functionToStringTypeReduce () noexcept -> String {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
@@ -140,7 +147,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __FirstType, typename ... __RemainingTypes, cds :: meta :: EnableIf < sizeof ... (__RemainingTypes) >= 1 > = 0 >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            inline auto __functionToStringTypeReduce () noexcept -> String {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            inline auto __functionToStringTypeReduce () noexcept -> String {                                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 return cds :: meta :: Type < __FirstType > :: name () + ", " + __functionToStringTypeReduce < __RemainingTypes ... > ();
             }
