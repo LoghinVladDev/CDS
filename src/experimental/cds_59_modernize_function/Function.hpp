@@ -5,19 +5,26 @@
 #ifndef __CDS_FUNCTION_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_FUNCTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Object>
+#include <CDS/Object>               /* NOLINT(llvm-include-order) */
+#include "function/Constructs.hpp"
 
 namespace cds {
 
-    template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __Signature >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Function : public Object {};
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Function < __ReturnType ( __ArgumentTypes ... ) > : public Object {
 
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        cds :: __hidden :: __impl :: __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * _adapterGroup     { nullptr };
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        cds :: __hidden :: __impl :: __GenericFunctionObject                                              _functionObject   { nullptr };
+
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Function () noexcept = delete;
+        constexpr Function () noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr Function (
@@ -45,29 +52,31 @@ namespace cds {
         ~Function() noexcept override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 Function const & function
         ) noexcept -> Function &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 Function && function
         ) noexcept -> Function &;
 
     public:                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
         ) noexcept -> Function &;
 
     public:                                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > = 0 >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 __Functor const & functor
         ) noexcept -> Function &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr auto operator () ( __ArgumentTypes ... ) const noexcept -> __ReturnType;
+        constexpr auto operator () (
+                __ArgumentTypes ... arguments
+        ) const noexcept (false) -> __ReturnType;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -82,5 +91,7 @@ namespace cds {
     };
 
 } /* namespace cds */
+
+#include "function/impl/Function.hpp"
 
 #endif /* __CDS_FUNCTION_HPP__ */
