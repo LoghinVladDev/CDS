@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 26/10/22.
  */
 
@@ -81,10 +81,88 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 & __hidden :: __impl :: __supplierFunctionHint < __SuppliedType >
         );
 
+
+        template < typename __ConsumerFunctionType, __ConsumerFunctionType __consumerFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct DecoratedConsumer {};
+
+
+        template < typename __PredicateFunctionType, __PredicateFunctionType __predicateFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct DecoratedPredicate {};
+
+
+        template < typename __MapperFunctionType, __MapperFunctionType __mapperFunction >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct DecoratedMapper {};
+
+
+        template < typename __SupplierFunctionType, __SupplierFunctionType __supplierFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct DecoratedSupplier {};
+
+
+        template <
+                typename                    __ConsumerFunctionType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __ConsumerFunctionType      __consumerFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                ... __ConsumerArgumentTypes /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedConsumer < void (*) ( __ConsumerArgumentTypes ... ), __consumerFunction > {
+
+            __CDS_cpplang_ConstexprNonLiteralReturn auto operator () (
+                    __ConsumerArgumentTypes ... arguments
+            ) const noexcept ( noexcept ( __consumerFunction ( std :: forward < __ConsumerArgumentTypes > ( arguments ) ... ) ) ) -> void {
+
+                __consumerFunction ( std :: forward < __ConsumerArgumentTypes > ( arguments ) ... );
+            }
+        };
+
+
+        template <
+                typename                    __PredicateFunctionType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __PredicateFunctionType     __predicateFunction,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                ... __PredicateArgumentTypes    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedPredicate < bool (*) ( __PredicateArgumentTypes ... ), __predicateFunction > {
+
+            __CDS_NoDiscard constexpr auto operator () (
+                    __PredicateArgumentTypes ... arguments
+            ) const noexcept ( noexcept ( __predicateFunction ( std :: forward < __PredicateArgumentTypes > ( arguments ) ... ) ) ) -> bool {
+
+                return __predicateFunction ( std :: forward < __PredicateArgumentTypes > ( arguments ) ... );
+            }
+        };
+
+
+        template <
+                typename                    __MapperFunctionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __MapperFunctionType        __mapperFunction,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                    __MapperReturnType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                ... __MapperArgumentTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedMapper < __MapperReturnType (*) ( __MapperArgumentTypes ... ), __mapperFunction > {
+
+            __CDS_NoDiscard constexpr auto operator () (
+                    __MapperArgumentTypes ... arguments
+            ) const noexcept ( noexcept ( __mapperFunction ( std :: forward < __MapperArgumentTypes > ( arguments ) ... ) ) ) -> __MapperReturnType {
+
+                return __mapperFunction ( std :: forward < __MapperArgumentTypes > ( arguments ) ... );
+            }
+        };
+
+
+        template <
+                typename                    __SupplierFunctionType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __SupplierFunctionType      __supplierFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                    __SupplierReturnType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedSupplier < __SupplierReturnType (*) (), __supplierFunction > {
+
+            __CDS_NoDiscard constexpr auto operator () () const noexcept ( noexcept ( __supplierFunction () ) ) -> __SupplierReturnType {
+
+                return __supplierFunction ();
+            }
+        };
+
     } /* namespace functional */
 } /* namespace cds */
 
-#if defined (__CDS_FUNCTION_HPP__)
+#endif /* __CDS_FUNCTIONAL_INTERFACE_HPP__ */
+
+#if defined (__CDS_FUNCTION_HPP__) && ! defined (__CDS_FUNCTION_FUNCTIONAL_INTERFACES_HPP__)
+#define __CDS_FUNCTION_FUNCTIONAL_INTERFACES_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace functional {
@@ -105,5 +183,3 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 } /* namespace cds */
 
 #endif
-
-#endif /* __CDS_FUNCTIONAL_INTERFACE_HPP__ */

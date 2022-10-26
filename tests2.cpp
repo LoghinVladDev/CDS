@@ -25,6 +25,23 @@ auto timed ( cds :: String const & message, F const & block ) {
     std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 int f2(int a) {return a * 2;}
+
+void gC(int a, float b, cds :: String const & c) {
+    std :: cout << a << '\n' << b << '\n' << c << '\n';
+}
+
+bool gP (int a, int b, float c, float d, cds :: String const & e, cds :: String const & f) {
+    return a== b && c == d && e == f;
+}
+
+cds :: String gM ( int a, float b, int c, cds :: String const & d, float e ) {
+    return cds :: String () + a + b + c + d + e;
+}
+
+cds :: String gS () {
+    return "test";
+}
+
 int main () {
 
 std::stop_token stopToken;
@@ -114,7 +131,6 @@ std::stop_token stopToken;
 
     Runnable run1 = []{
         std :: cout << "test\n";
-        sleep(1);
         std :: cout << "test2\n";
     };
 
@@ -184,7 +200,7 @@ std::stop_token stopToken;
 
     cds :: meta :: Decay < int(float) > pfn;
 
-    long long calls = 1'000'000'000;
+    long long calls = 1'000'000;
 
     timed( "std::function", [calls] {
         std :: function < int(int) > f = f2;
@@ -259,6 +275,24 @@ std::stop_token stopToken;
     std :: cout << int3ToString(3, 4, 5) << '\n';
 
     intPrinter (4);
+
+    DecoratedMapper < decltype ( & f2 ), & f2 > mapper;
+    std :: cout << mapper (2) << '\n';
+
+
+    DecoratedConsumer < decltype ( & gC ), & gC > cons1;
+    DecoratedPredicate < decltype ( & gP ), & gP > pred1;
+    DecoratedMapper < decltype ( & gM ), & gM > map1;
+    DecoratedSupplier < decltype ( & gS ), & gS > sup1;
+
+    cons1 ( 3, 5.4f, "testString" );
+    std :: cout << pred1 ( 2, 2, 5.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 1, 2, 5.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 2, 2, 4.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 2, 2, 5.4f, 5.4f, "test2", "test" ) << '\n';
+    std :: cout << map1 ( 1, 1.1f, 1, "1", 1.1f ) << '\n';
+    std :: cout << sup1 () << '\n';
+
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 

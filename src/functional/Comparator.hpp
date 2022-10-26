@@ -1,9 +1,9 @@
-//
-// Created by loghin on 10.11.2021.
-//
+/*
+ * Created by loghin on 10.11.2021.
+ */
 
-#ifndef CDS_COMPARATOR_HPP
-#define CDS_COMPARATOR_HPP
+#ifndef __CDS_COMPARATOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_COMPARATOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Compiler>
 #include "../shared/impl/generalPredicates.hpp"
@@ -41,4 +41,4 @@ namespace cds {
 
 }
 
-#endif //CDS_COMPARATOR_HPP
+#endif /* __CDS_COMPARATOR_HPP__ */
