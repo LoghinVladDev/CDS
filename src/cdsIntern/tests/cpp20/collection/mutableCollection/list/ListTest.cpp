@@ -147,7 +147,7 @@ template <
     lref.popBack();
 
     try {
-        lref.front();
+        (void) lref.front();
         pTestLib->logError( "'LTC-00110-MF-frontThrow-CPP20' failed" );
         return false;
     } catch ( cds :: Exception const & ) {
@@ -156,7 +156,7 @@ template <
 
     /* ListTestCase-MemberFunctions-backThrow-CPP20 : LTC-00111-MF-backThrow-CPP20 */
     try {
-        lref.back();
+        (void) lref.back();
         pTestLib->logError( "'LTC-00111-MF-backThrow-CPP20' failed" );
         return false;
     } catch ( cds :: Exception const & ) {
@@ -166,7 +166,7 @@ template <
     /* ListTestCase-MemberFunctions-getThrow-CPP20 : LTC-00112-MF-getThrow-CPP20 */
     for ( int i = 0; i < valuesLessThan6.size(); ++ i ) {
         try {
-            lref.get(i);
+            (void) lref.get(i);
             pTestLib->logError( "'LTC-00112-MF-getThrow-CPP20' failed" );
             return false;
         } catch ( cds :: Exception const & ) {
