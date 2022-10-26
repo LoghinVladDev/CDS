@@ -9,8 +9,8 @@ namespace cds {
 
 #if defined(__CDS_MUTEX_HPP__)
 
-    Lock ( Mutex ) -> Lock < Mutex >;
-    DeferredLock ( Mutex ) -> DeferredLock < Mutex >;
+    Lock ( Mutex & ) -> Lock < Mutex >;
+    DeferredLock ( Mutex & ) -> DeferredLock < Mutex >;
 
 #endif
 

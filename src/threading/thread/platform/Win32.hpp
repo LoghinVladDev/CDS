@@ -19,7 +19,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 LPVOID  _threadSharedData;
             };
 
-            using __ThreadPlatformIdType        = DWORD;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformIdType                = DWORD;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformFunctionReturnType    = DWORD;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            constexpr __ThreadPlatformFunctionReturnType const __threadPlatformFunctionReturn = 0;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ThreadLaunchFunction >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             inline auto __threadPlatformLaunch (            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -56,34 +59,34 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             inline auto __threadPlatformKill (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                if ( pThread->_handle != nullptr ) {
+                if ( pThreadHandle->_handle != nullptr ) {
                     TerminateThread ( pThreadHandle->_handle, 0 );
-                    pThread->_handle = nullptr;
+                    pThreadHandle->_handle = nullptr;
                 }
             }
 
 
             inline auto __threadPlatformJoin (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                if ( pThread->_handle != nullptr ) {
+                if ( pThreadHandle->_handle != nullptr ) {
                     WaitForSingleObject ( pThreadHandle->_handle, INFINITE );
-                    pThread->_handle = nullptr;
+                    pThreadHandle->_handle = nullptr;
                 }
             }
 
 
             inline auto __threadPlatformDetach (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ThreadPlatformHandleType const * pThreadHandle
+                    __ThreadPlatformHandleType * pThreadHandle
             ) noexcept -> void {
 
-                if ( pThread->_handle != nullptr ) {
+                if ( pThreadHandle->_handle != nullptr ) {
                     CloseHandle ( pThreadHandle->_handle );
-                    pThread->_handle = nullptr;
+                    pThreadHandle->_handle = nullptr;
                 }
             }
 
