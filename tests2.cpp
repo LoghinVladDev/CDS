@@ -12,6 +12,7 @@
 #include <thread>
 #include <pthread.h>
 #include <functional>
+#include "src/functional/FunctionalInterface.hpp"
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -221,6 +222,43 @@ std::stop_token stopToken;
     };
 
     std :: cout << fact () << '\n';
+
+    using namespace cds :: functional;
+
+    Supplier < int > sint = []() { return 5; };
+    Predicate < int > isEven = [](int e) { return e % 2 == 0; };
+    Predicate < int, int, int, int > all4Even = [](
+            int a, int b,
+            int c, int d
+    ) {
+        return
+                a % 2 == 0 && b % 2 == 0 &&
+                c % 2 == 0 && d % 2 == 0;
+    };
+
+    Mapper < int, double > intToDoubleAndTimes3half = [] (int a) {
+        return a * 3.5;
+    };
+
+    Mapper < String, int, int, int > int3ToString  = [] (int a, int b, int c) {
+        return String() + a + b + c;
+    };
+
+    Consumer < int > intPrinter = [](int a) { std :: cout << a << '\n'; };
+
+    std :: cout << sint() << '\n';
+    std :: cout << isEven(3) << '\n';
+    std :: cout << isEven(4) << '\n';
+    std :: cout << all4Even(1, 1, 1, 1) << '\n';
+    std :: cout << all4Even(2, 1, 1, 1) << '\n';
+    std :: cout << all4Even(1, 2, 1, 1) << '\n';
+    std :: cout << all4Even(1, 1, 2, 1) << '\n';
+    std :: cout << all4Even(1, 1, 1, 2) << '\n';
+    std :: cout << all4Even(2, 2, 2, 2) << '\n';
+    std :: cout << intToDoubleAndTimes3half(3) << '\n';
+    std :: cout << int3ToString(3, 4, 5) << '\n';
+
+    intPrinter (4);
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 

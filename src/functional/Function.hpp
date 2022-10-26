@@ -92,7 +92,8 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "function/impl/Function.hpp"
+#include "function/impl/Function.hpp" /* NOLINT(llvm-include-order) */
 #include "function/impl/CTAD.hpp"
+#include "FunctionalInterface.hpp"
 
 #endif /* __CDS_FUNCTION_HPP__ */
