@@ -5,6 +5,8 @@
 #ifndef __CDS_SHARED_GENERAL_PREDICATES_HPP__
 #define __CDS_SHARED_GENERAL_PREDICATES_HPP__
 
+#include <CDS/meta/TypeTraits>
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace predicates {
 

@@ -2,8 +2,8 @@
  * Created by loghin on 15.01.2021.
  */
 
-#ifndef __CDS_LINKED_LIST_HPP__
-#define __CDS_LINKED_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_LINKED_LIST_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_LINKED_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/List>
 
@@ -13,7 +13,7 @@
 
 #include "../../../../shared/iterator/NodeIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
+#include "../../../../shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"   /* NOLINT(llvm-include-order) */
 #include "../../../../shared/collectionInternalCommunication/server/ListServer.hpp"
 
 #include "../../../../shared/delegateIterator/AbstractDelegateIterator.hpp"
@@ -26,7 +26,7 @@
 
 namespace cds {
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class LinkedList :
             public List < __ElementType >,
             protected __hidden :: __impl :: __LinkedListServer < __ElementType >,
@@ -65,316 +65,798 @@ namespace cds {
             public __hidden :: __impl :: __LinkedListDelegateBackwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __LinkedListDelegateBackwardConstIterableClient < __ElementType > {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         template < typename, typename >
-        friend class __hidden :: __impl :: __ListServer; /* NOLINT(bugprone-reserved-identifier) */
+        friend class __hidden :: __impl :: __ListServer; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:  using Implementation                        = __hidden :: __impl :: __LinkedListImplementation < __ElementType >;
-    protected:  using Server                                = __hidden :: __impl :: __LinkedListServer < __ElementType >;
-    protected:  using RandomInsertionClient                 = __hidden :: __impl :: __LinkedListRandomInsertionClient < __ElementType >;
-    protected:  using BoundaryInsertionClient               = __hidden :: __impl :: __LinkedListBoundaryInsertionClient < __ElementType >;
-    protected:  using IteratorRelativeInsertionClient       = __hidden :: __impl :: __LinkedListIteratorRelativeInsertionClient < __ElementType >;
-    protected:  using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __LinkedListConstIteratorRelativeInsertionClient < __ElementType >;
-    protected:  using FindOfCollectionClient                = __hidden :: __impl :: __LinkedListFindOfCollectionClient < __ElementType >;
-    protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __LinkedListFindOfInitializerListClient < __ElementType >;
-    protected:  using FindConstOfCollectionClient           = __hidden :: __impl :: __LinkedListFindConstOfCollectionClient < __ElementType >;
-    protected:  using FindConstOfInitializerListClient      = __hidden :: __impl :: __LinkedListFindConstOfInitializerListClient < __ElementType >;
-    protected:  using FindByClient                          = __hidden :: __impl :: __LinkedListFindByClient < __ElementType >;
-    protected:  using FindConstByClient                     = __hidden :: __impl :: __LinkedListFindConstByClient < __ElementType >;
-    protected:  using IteratorRemoveClient                  = __hidden :: __impl :: __LinkedListIteratorRemoveClient < __ElementType >;
-    protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __LinkedListConstIteratorRemoveClient < __ElementType >;
-    protected:  using RemoveOfCollectionClient              = __hidden :: __impl :: __LinkedListRemoveOfCollectionClient < __ElementType >;
-    protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __LinkedListRemoveOfInitializerListClient < __ElementType >;
-    protected:  using RemoveByClient                        = __hidden :: __impl :: __LinkedListRemoveByClient < __ElementType >;
-    protected:  using GenericStatementsClient               = __hidden :: __impl :: __LinkedListGenericStatementsClient < __ElementType >;
-    protected:  using GenericConstStatementsClient          = __hidden :: __impl :: __LinkedListGenericConstStatementsClient < __ElementType >;
-    protected:  using ReplaceClient                         = __hidden :: __impl :: __LinkedListReplaceClient < __ElementType >;
-    protected:  using ReplaceOfCollectionClient             = __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >;
-    protected:  using ReplaceOfInitializerListClient        = __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >;
-    protected:  using ReplaceByClient                       = __hidden :: __impl :: __LinkedListReplaceByClient < __ElementType >;
-    protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __LinkedListContainsOfCollectionClient < __ElementType >;
-    protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __LinkedListContainsOfInitializerListClient < __ElementType >;
-    protected:  using IndexedOperationsClient               = __hidden :: __impl :: __LinkedListIndexedOperationsClient < __ElementType >;
-    protected:  using IndicesClient                         = __hidden :: __impl :: __LinkedListIndicesClient < __ElementType >;
-    protected:  using IndicesOfCollectionClient             = __hidden :: __impl :: __LinkedListIndicesOfCollectionClient < __ElementType >;
-    protected:  using IndicesOfInitializerListClient        = __hidden :: __impl :: __LinkedListIndicesOfInitializerListClient < __ElementType >;
-    protected:  using IndicesByClient                       = __hidden :: __impl :: __LinkedListIndicesByClient < __ElementType >;
-    protected:  using DelegateForwardIterableClient         = __hidden :: __impl :: __LinkedListDelegateForwardIterableClient < __ElementType >;
-    protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __LinkedListDelegateForwardConstIterableClient < __ElementType >;
-    protected:  using DelegateBackwardIterableClient        = __hidden :: __impl :: __LinkedListDelegateBackwardIterableClient < __ElementType >;
-    protected:  using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __LinkedListDelegateBackwardConstIterableClient < __ElementType >;
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using Implementation                        = __hidden :: __impl :: __LinkedListImplementation < __ElementType >;
 
-    private:    friend BoundaryInsertionClient;
-    private:    friend RandomInsertionClient;
-    private:    friend IteratorRemoveClient;
-    private:    friend ConstIteratorRemoveClient;
-    private:    friend IteratorRelativeInsertionClient;
-    private:    friend ConstIteratorRelativeInsertionClient;
-    private:    friend IndexedOperationsClient;
-    private:    friend DelegateForwardIterableClient;
-    private:    friend DelegateForwardConstIterableClient;
-    private:    friend DelegateBackwardIterableClient;
-    private:    friend DelegateBackwardConstIterableClient;
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using Server                                = __hidden :: __impl :: __LinkedListServer < __ElementType >;
 
-    public: using ElementType                   = __ElementType;
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient                 = __hidden :: __impl :: __LinkedListRandomInsertionClient < __ElementType >;
 
-    protected:  using ListBase                  = List < __ElementType >;
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient               = __hidden :: __impl :: __LinkedListBoundaryInsertionClient < __ElementType >;
 
-    protected:  using typename ListBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
-    protected:  using typename ListBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient       = __hidden :: __impl :: __LinkedListIteratorRelativeInsertionClient < __ElementType >;
 
-    public:     using typename DelegateForwardIterableClient :: Iterator;
-    public:     using typename DelegateForwardConstIterableClient :: ConstIterator;
-    public:     using typename DelegateBackwardIterableClient :: ReverseIterator;
-    public:     using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __LinkedListConstIteratorRelativeInsertionClient < __ElementType >;
 
-    private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier) */
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient                = __hidden :: __impl :: __LinkedListFindOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient           = __hidden :: __impl :: __LinkedListFindOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient           = __hidden :: __impl :: __LinkedListFindConstOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient      = __hidden :: __impl :: __LinkedListFindConstOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindByClient                          = __hidden :: __impl :: __LinkedListFindByClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstByClient                     = __hidden :: __impl :: __LinkedListFindConstByClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRemoveClient                  = __hidden :: __impl :: __LinkedListIteratorRemoveClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRemoveClient             = __hidden :: __impl :: __LinkedListConstIteratorRemoveClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient              = __hidden :: __impl :: __LinkedListRemoveOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient         = __hidden :: __impl :: __LinkedListRemoveOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveByClient                        = __hidden :: __impl :: __LinkedListRemoveByClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient               = __hidden :: __impl :: __LinkedListGenericStatementsClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient          = __hidden :: __impl :: __LinkedListGenericConstStatementsClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient                         = __hidden :: __impl :: __LinkedListReplaceClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient             = __hidden :: __impl :: __LinkedListReplaceOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient        = __hidden :: __impl :: __LinkedListReplaceOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient                       = __hidden :: __impl :: __LinkedListReplaceByClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfCollectionClient            = __hidden :: __impl :: __LinkedListContainsOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfInitializerListClient       = __hidden :: __impl :: __LinkedListContainsOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IndexedOperationsClient               = __hidden :: __impl :: __LinkedListIndexedOperationsClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient                         = __hidden :: __impl :: __LinkedListIndicesClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient             = __hidden :: __impl :: __LinkedListIndicesOfCollectionClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient        = __hidden :: __impl :: __LinkedListIndicesOfInitializerListClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient                       = __hidden :: __impl :: __LinkedListIndicesByClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardIterableClient         = __hidden :: __impl :: __LinkedListDelegateForwardIterableClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardConstIterableClient    = __hidden :: __impl :: __LinkedListDelegateForwardConstIterableClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardIterableClient        = __hidden :: __impl :: __LinkedListDelegateBackwardIterableClient < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __LinkedListDelegateBackwardConstIterableClient < __ElementType >;
+
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend BoundaryInsertionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RandomInsertionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend IteratorRemoveClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend ConstIteratorRemoveClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend IteratorRelativeInsertionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend ConstIteratorRelativeInsertionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend IndexedOperationsClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend DelegateForwardIterableClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend DelegateForwardConstIterableClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend DelegateBackwardIterableClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend DelegateBackwardConstIterableClient;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ElementType                   = __ElementType;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using ListBase                  = List < __ElementType >;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using typename ListBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        using typename ListBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using typename DelegateForwardIterableClient :: Iterator;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using typename DelegateForwardConstIterableClient :: ConstIterator;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using typename DelegateBackwardIterableClient :: ReverseIterator;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
+
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
-    private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier) */
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
-    public:     using DelegateForwardIterableClient :: begin;
-    public:     using DelegateForwardIterableClient :: end;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardIterableClient :: begin;
 
-    public:     using DelegateForwardConstIterableClient :: begin;
-    public:     using DelegateForwardConstIterableClient :: end;
-    public:     using DelegateForwardConstIterableClient :: cbegin;
-    public:     using DelegateForwardConstIterableClient :: cend;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardIterableClient :: end;
 
-    public:     using DelegateBackwardIterableClient :: rbegin;
-    public:     using DelegateBackwardIterableClient :: rend;
 
-    public:     using DelegateBackwardConstIterableClient :: rbegin;
-    public:     using DelegateBackwardConstIterableClient :: rend;
-    public:     using DelegateBackwardConstIterableClient :: crbegin;
-    public:     using DelegateBackwardConstIterableClient :: crend;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardConstIterableClient :: begin;
 
-    public:     using RandomInsertionClient :: insert;
-    public:     using RandomInsertionClient :: insertAll;
-    public:     using RandomInsertionClient :: insertAllOf;
-    public:     using RandomInsertionClient :: add;
-    public:     using RandomInsertionClient :: addAll;
-    public:     using RandomInsertionClient :: addAllOf;
-    public:     using RandomInsertionClient :: emplace;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardConstIterableClient :: end;
 
-    public:     using BoundaryInsertionClient :: pushBack;
-    public:     using BoundaryInsertionClient :: pushBackAll;
-    public:     using BoundaryInsertionClient :: pushBackAllOf;
-    public:     using BoundaryInsertionClient :: pushFront;
-    public:     using BoundaryInsertionClient :: pushFrontAll;
-    public:     using BoundaryInsertionClient :: pushFrontAllOf;
-    public:     using BoundaryInsertionClient :: append;
-    public:     using BoundaryInsertionClient :: prepend;
-    public:     using BoundaryInsertionClient :: emplaceBack;
-    public:     using BoundaryInsertionClient :: emplaceFront;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardConstIterableClient :: cbegin;
 
-    public:     using IteratorRelativeInsertionClient :: insertBefore;
-    public:     using IteratorRelativeInsertionClient :: insertAllBefore;
-    public:     using IteratorRelativeInsertionClient :: insertAllOfBefore;
-    public:     using IteratorRelativeInsertionClient :: emplaceBefore;
-    public:     using IteratorRelativeInsertionClient :: insertAfter;
-    public:     using IteratorRelativeInsertionClient :: insertAllAfter;
-    public:     using IteratorRelativeInsertionClient :: insertAllOfAfter;
-    public:     using IteratorRelativeInsertionClient :: emplaceAfter;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateForwardConstIterableClient :: cend;
 
-    public:     using ConstIteratorRelativeInsertionClient :: insertBefore;
-    public:     using ConstIteratorRelativeInsertionClient :: insertAllBefore;
-    public:     using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
-    public:     using ConstIteratorRelativeInsertionClient :: emplaceBefore;
-    public:     using ConstIteratorRelativeInsertionClient :: insertAfter;
-    public:     using ConstIteratorRelativeInsertionClient :: insertAllAfter;
-    public:     using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
-    public:     using ConstIteratorRelativeInsertionClient :: emplaceAfter;
 
-    public:     using FindOfCollectionClient :: findOf;
-    public:     using FindOfCollectionClient :: findFirstOf;
-    public:     using FindOfCollectionClient :: findLastOf;
-    public:     using FindOfCollectionClient :: findAllOf;
-    public:     using FindOfCollectionClient :: findNotOf;
-    public:     using FindOfCollectionClient :: findFirstNotOf;
-    public:     using FindOfCollectionClient :: findLastNotOf;
-    public:     using FindOfCollectionClient :: findAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardIterableClient :: rbegin;
 
-    public:     using FindOfInitializerListClient :: findOf;
-    public:     using FindOfInitializerListClient :: findFirstOf;
-    public:     using FindOfInitializerListClient :: findLastOf;
-    public:     using FindOfInitializerListClient :: findAllOf;
-    public:     using FindOfInitializerListClient :: findNotOf;
-    public:     using FindOfInitializerListClient :: findFirstNotOf;
-    public:     using FindOfInitializerListClient :: findLastNotOf;
-    public:     using FindOfInitializerListClient :: findAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardIterableClient :: rend;
 
-    public:     using FindConstOfCollectionClient :: findOf;
-    public:     using FindConstOfCollectionClient :: findFirstOf;
-    public:     using FindConstOfCollectionClient :: findLastOf;
-    public:     using FindConstOfCollectionClient :: findAllOf;
-    public:     using FindConstOfCollectionClient :: findNotOf;
-    public:     using FindConstOfCollectionClient :: findFirstNotOf;
-    public:     using FindConstOfCollectionClient :: findLastNotOf;
-    public:     using FindConstOfCollectionClient :: findAllNotOf;
 
-    public:     using FindConstOfInitializerListClient :: findOf;
-    public:     using FindConstOfInitializerListClient :: findFirstOf;
-    public:     using FindConstOfInitializerListClient :: findLastOf;
-    public:     using FindConstOfInitializerListClient :: findAllOf;
-    public:     using FindConstOfInitializerListClient :: findNotOf;
-    public:     using FindConstOfInitializerListClient :: findFirstNotOf;
-    public:     using FindConstOfInitializerListClient :: findLastNotOf;
-    public:     using FindConstOfInitializerListClient :: findAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardConstIterableClient :: rbegin;
 
-    public:     using FindByClient :: findThat;
-    public:     using FindByClient :: findFirstThat;
-    public:     using FindByClient :: findLastThat;
-    public:     using FindByClient :: findAllThat;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardConstIterableClient :: rend;
 
-    public:     using FindConstByClient :: findThat;
-    public:     using FindConstByClient :: findFirstThat;
-    public:     using FindConstByClient :: findLastThat;
-    public:     using FindConstByClient :: findAllThat;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardConstIterableClient :: crbegin;
 
-    public:     using RemoveOfCollectionClient :: removeOf;
-    public:     using RemoveOfCollectionClient :: removeFirstOf;
-    public:     using RemoveOfCollectionClient :: removeLastOf;
-    public:     using RemoveOfCollectionClient :: removeAllOf;
-    public:     using RemoveOfCollectionClient :: removeNotOf;
-    public:     using RemoveOfCollectionClient :: removeFirstNotOf;
-    public:     using RemoveOfCollectionClient :: removeLastNotOf;
-    public:     using RemoveOfCollectionClient :: removeAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using DelegateBackwardConstIterableClient :: crend;
 
-    public:     using RemoveOfInitializerListClient :: removeOf;
-    public:     using RemoveOfInitializerListClient :: removeFirstOf;
-    public:     using RemoveOfInitializerListClient :: removeLastOf;
-    public:     using RemoveOfInitializerListClient :: removeAllOf;
-    public:     using RemoveOfInitializerListClient :: removeNotOf;
-    public:     using RemoveOfInitializerListClient :: removeFirstNotOf;
-    public:     using RemoveOfInitializerListClient :: removeLastNotOf;
-    public:     using RemoveOfInitializerListClient :: removeAllNotOf;
 
-    public:     using RemoveByClient :: removeThat;
-    public:     using RemoveByClient :: removeFirstThat;
-    public:     using RemoveByClient :: removeLastThat;
-    public:     using RemoveByClient :: removeAllThat;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: insert;
 
-    public:     using GenericStatementsClient :: forEach;
-    public:     using GenericStatementsClient :: some;
-    public:     using GenericStatementsClient :: atLeast;
-    public:     using GenericStatementsClient :: atMost;
-    public:     using GenericStatementsClient :: moreThan;
-    public:     using GenericStatementsClient :: fewerThan;
-    public:     using GenericStatementsClient :: count;
-    public:     using GenericStatementsClient :: any;
-    public:     using GenericStatementsClient :: all;
-    public:     using GenericStatementsClient :: none;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: insertAll;
 
-    public:     using GenericConstStatementsClient :: forEach;
-    public:     using GenericConstStatementsClient :: some;
-    public:     using GenericConstStatementsClient :: atLeast;
-    public:     using GenericConstStatementsClient :: atMost;
-    public:     using GenericConstStatementsClient :: moreThan;
-    public:     using GenericConstStatementsClient :: fewerThan;
-    public:     using GenericConstStatementsClient :: count;
-    public:     using GenericConstStatementsClient :: any;
-    public:     using GenericConstStatementsClient :: all;
-    public:     using GenericConstStatementsClient :: none;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: insertAllOf;
 
-    public:     using ContainsOfCollectionClient :: containsAnyOf;
-    public:     using ContainsOfCollectionClient :: containsAnyNotOf;
-    public:     using ContainsOfCollectionClient :: containsAllOf;
-    public:     using ContainsOfCollectionClient :: containsNoneOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: add;
 
-    public:     using ContainsOfInitializerListClient :: containsAnyOf;
-    public:     using ContainsOfInitializerListClient :: containsAnyNotOf;
-    public:     using ContainsOfInitializerListClient :: containsAllOf;
-    public:     using ContainsOfInitializerListClient :: containsNoneOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: addAll;
 
-    public:     using ReplaceClient :: replace;
-    public:     using ReplaceClient :: replaceFirst;
-    public:     using ReplaceClient :: replaceLast;
-    public:     using ReplaceClient :: replaceAll;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: addAllOf;
 
-    public:     using ReplaceOfCollectionClient :: replaceOf;
-    public:     using ReplaceOfCollectionClient :: replaceFirstOf;
-    public:     using ReplaceOfCollectionClient :: replaceLastOf;
-    public:     using ReplaceOfCollectionClient :: replaceAllOf;
-    public:     using ReplaceOfCollectionClient :: replaceNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceFirstNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceLastNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RandomInsertionClient :: emplace;
 
-    public:     using ReplaceOfInitializerListClient :: replaceOf;
-    public:     using ReplaceOfInitializerListClient :: replaceFirstOf;
-    public:     using ReplaceOfInitializerListClient :: replaceLastOf;
-    public:     using ReplaceOfInitializerListClient :: replaceAllOf;
-    public:     using ReplaceOfInitializerListClient :: replaceNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceFirstNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceLastNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceAllNotOf;
 
-    public:     using ReplaceByClient :: replaceThat;
-    public:     using ReplaceByClient :: replaceFirstThat;
-    public:     using ReplaceByClient :: replaceLastThat;
-    public:     using ReplaceByClient :: replaceAllThat;
-    public:     using ReplaceByClient :: replaceThatBy;
-    public:     using ReplaceByClient :: replaceFirstThatBy;
-    public:     using ReplaceByClient :: replaceLastThatBy;
-    public:     using ReplaceByClient :: replaceAllThatBy;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushBack;
 
-    public:     using IndexedOperationsClient :: sub;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushBackAll;
 
-    public:     using IndicesClient :: indicesOf;
-    public:     using IndicesClient :: firstIndexOf;
-    public:     using IndicesClient :: lastIndexOf;
-    public:     using IndicesClient :: allIndicesOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushBackAllOf;
 
-    public:     using IndicesOfCollectionClient :: indicesOfFrom;
-    public:     using IndicesOfCollectionClient :: firstIndexOfFrom;
-    public:     using IndicesOfCollectionClient :: lastIndexOfFrom;
-    public:     using IndicesOfCollectionClient :: allIndicesOfFrom;
-    public:     using IndicesOfCollectionClient :: indicesOfNotFrom;
-    public:     using IndicesOfCollectionClient :: firstIndexOfNotFrom;
-    public:     using IndicesOfCollectionClient :: lastIndexOfNotFrom;
-    public:     using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushFront;
 
-    public:     using IndicesOfInitializerListClient :: indicesOfFrom;
-    public:     using IndicesOfInitializerListClient :: firstIndexOfFrom;
-    public:     using IndicesOfInitializerListClient :: lastIndexOfFrom;
-    public:     using IndicesOfInitializerListClient :: allIndicesOfFrom;
-    public:     using IndicesOfInitializerListClient :: indicesOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushFrontAll;
 
-    public:     using IndicesByClient :: indicesOfThat;
-    public:     using IndicesByClient :: firstIndexOfThat;
-    public:     using IndicesByClient :: lastIndexOfThat;
-    public:     using IndicesByClient :: allIndicesOfThat;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: pushFrontAllOf;
 
-    public:     using IteratorRemoveClient :: remove;
-    public:     using ConstIteratorRemoveClient :: remove;
-    public:     using List < __ElementType > :: remove;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: append;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: prepend;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: emplaceBack;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using BoundaryInsertionClient :: emplaceFront;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertAllBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertAllOfBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: emplaceBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertAfter;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertAllAfter;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: insertAllOfAfter
+        ;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRelativeInsertionClient :: emplaceAfter;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertAllBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: emplaceBefore;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertAfter;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertAllAfter;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRelativeInsertionClient :: emplaceAfter;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfCollectionClient :: findAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindOfInitializerListClient :: findAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfCollectionClient :: findAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstOfInitializerListClient :: findAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindByClient :: findThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindByClient :: findFirstThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindByClient :: findLastThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindByClient :: findAllThat;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstByClient :: findThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstByClient :: findFirstThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstByClient :: findLastThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using FindConstByClient :: findAllThat;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfCollectionClient :: removeAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveOfInitializerListClient :: removeAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveByClient :: removeThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveByClient :: removeFirstThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveByClient :: removeLastThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using RemoveByClient :: removeAllThat;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: forEach;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: some;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: atLeast;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: atMost;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: moreThan;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: fewerThan;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: count;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: any;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: all;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericStatementsClient :: none;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: forEach;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: some;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: atLeast;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: atMost;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: moreThan;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: fewerThan;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: count;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: any;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: all;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using GenericConstStatementsClient :: none;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfCollectionClient :: containsAnyOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfCollectionClient :: containsAnyNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfCollectionClient :: containsAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfCollectionClient :: containsNoneOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfInitializerListClient :: containsAnyOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfInitializerListClient :: containsAnyNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfInitializerListClient :: containsAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ContainsOfInitializerListClient :: containsNoneOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replace;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceFirst;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceLast;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceAll;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceFirstThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceLastThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceAllThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceFirstThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceLastThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceAllThatBy;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndexedOperationsClient :: sub;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: indicesOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: firstIndexOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: lastIndexOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: allIndicesOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: indicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: firstIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: lastIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: allIndicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: indicesOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: indicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: firstIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: lastIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: allIndicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: indicesOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: indicesOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: firstIndexOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: lastIndexOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: allIndicesOfThat;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRemoveClient :: remove;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRemoveClient :: remove;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using List < __ElementType > :: remove;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr LinkedList () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         LinkedList ( /* NOLINT(google-explicit-constructor) */
                 LinkedList const & list
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr LinkedList (
                 LinkedList && list
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         template <
-                typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
+                typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 > = 0
@@ -384,9 +866,9 @@ namespace cds {
                 Size                   count = 0ULL
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         template <
-                typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+                typename __TElementType = __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TElementType > ()
                 > = 0
@@ -394,111 +876,111 @@ namespace cds {
                 std :: initializer_list < __ElementType > const & initializerList
         ) noexcept;
 
-    public:
-        template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_Explicit LinkedList (
                 __IterableType const & iterable
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         ~LinkedList () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 LinkedList const & list
         ) noexcept -> LinkedList &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
-                LinkedList && array
+                LinkedList && list
         ) noexcept -> LinkedList &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 std :: initializer_list < __ElementType > const & initializerList
         ) noexcept -> LinkedList &;
 
-    public:
-        template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier) */
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         auto operator = (
                 __IterableType const & iterable
         ) noexcept -> LinkedList &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
                 LinkedList const & list
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                 LinkedList const & list
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto clear () noexcept -> void override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto popFront () noexcept -> void override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto popBack () noexcept -> void override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () const noexcept (false) -> ElementType const & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () noexcept (false) -> ElementType & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () const noexcept (false) -> ElementType const & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
                 Index index
         ) noexcept (false) -> ElementType & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
                 Index index
         ) const noexcept (false) -> ElementType const & override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto removeAt (
                 Index index
         ) noexcept -> bool override;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         auto sort (
                 cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator
         ) noexcept -> void override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         template <
-                typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier) */
+                typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         > auto sort (
                 __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto sequence () & noexcept -> Sequence < LinkedList < __ElementType > >;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto sequence () && noexcept -> Sequence < LinkedList < __ElementType > >;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < LinkedList < __ElementType > const >;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < LinkedList < __ElementType > const >;
     };
 
-}
+} /* namespace cds */
 
 
 #include "../../../../shared/iterator/impl/NodeIterator.hpp"
@@ -513,7 +995,10 @@ namespace cds {
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
-#include "linkedList/impl/LinkedList.hpp"
+#include "linkedList/impl/LinkedList.hpp" /* NOLINT(llvm-include-order) */
 #include "linkedList/impl/CTAD.hpp"
+
+#include "../../../../shared/collection/FunctionalConstructors.hpp"
+#include "../../../../shared/collection/impl/FunctionalConstructors.hpp"
 
 #endif /* __CDS_LINKED_LIST_HPP__ */

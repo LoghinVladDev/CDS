@@ -1,0 +1,28 @@
+@startuml
+
+!startsub public_declaration
+!ifndef COLLECTION_SERVER_DISPATCHER_PUBLIC
+!define COLLECTION_SERVER_DISPATCHER_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __CollectionServerDispatcher <S, I, E, ACIT, CIT, \ncbegin(), cend(), new(), \nremoveConst(), removeConstArray()> {
+                # {method} __cbegin () const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __cend () const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __cbeginLocal () const noexcept -> __CIT
+                # {method} __cbeginEnd () const noexcept -> __CIT
+                # {method} __newAddress (E const *, bool *) noexcept -> E *
+                # {method} __removeConst (ACIT const *) noexcept -> bool
+                # {method} __removeConstArray (ACIT const * const *, Size) noexcept -> Size
+            }
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

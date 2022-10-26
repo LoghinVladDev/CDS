@@ -2,8 +2,8 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_ADDRESS_ITERATOR_HPP_IMPL__
-#define __CDS_SHARED_ADDRESS_ITERATOR_HPP_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ADDRESS_ITERATOR_HPP_IMPL__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ADDRESS_ITERATOR_HPP_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
@@ -588,6 +588,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         return this->_currentAddress >= iterator._currentAddress;
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ADDRESS_ITERATOR_HPP_IMPL__ */

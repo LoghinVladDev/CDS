@@ -2,16 +2,16 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __AbstractConstIteratorRemovePrimitiveClient <
                     __ReceiverType,
                     __ElementType
@@ -19,7 +19,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     AbstractConstIterator const & iterator
             ) noexcept -> bool {
 
-                using __ReceiverRemoveConstIteratorHandlerType  = bool ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverRemoveConstIteratorHandlerType  = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
                 auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* Since iterator is abstract, it is compatible with Collection Ownership -> has 'of' function. Check for ownership. If not owned, removal unsuccessful */
@@ -41,8 +41,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __AbstractConstIteratorRemovePrimitiveClient <
                     __ReceiverType,
                     __ElementType
@@ -51,11 +51,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size                          iteratorCount
             ) noexcept -> Size {
 
-                using __ReceiverRemoveConstIteratorArrayHandlerType = Size ( __ReceiverType :: * ) ( __GenericIterator const *, Size );
-                using __ReceiverRemoveConstIteratorHandlerType      = bool ( __ReceiverType :: * ) ( __GenericIterator );
+                using __ReceiverRemoveConstIteratorArrayHandlerType = Size ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * const *, Size );
+                using __ReceiverRemoveConstIteratorHandlerType      = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
 
                 auto pReceiver                  = reinterpret_cast < __ReceiverType * > ( this );
-                auto genericIteratorArray       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __GenericIterator > ( iteratorCount );
+                auto genericIteratorArray       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < cds :: meta :: Iterator const * > ( iteratorCount );
                 Size genericIteratorArraySize   = 0ULL;
                 Size removedIteratorCount       = 0ULL;
 
@@ -99,9 +99,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __LocalConstIteratorRemovePrimitiveClient <
                     __ReceiverType,
                     __ElementType,
@@ -116,9 +116,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __LocalConstIteratorRemovePrimitiveClient <
                     __ReceiverType,
                     __ElementType,
@@ -146,8 +146,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return 0ULL;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_IMPL_HPP__ */

@@ -2,8 +2,8 @@
  * Created by loghin on 15.01.2021.
  */
 
-#ifndef __CDS_SET_HPP__
-#define __CDS_SET_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SET_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SET_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Collection>
 
@@ -29,13 +29,13 @@ namespace cds {
      * @public
      */
     template <
-            typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-            cds :: meta :: EnableIf < cds :: meta :: isValidSetElement < __ElementType > () >   __enabler       /* NOLINT(bugprone-reserved-identifier) */
+            typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf < cds :: meta :: isValidSetElement < __ElementType > () >   __enabler       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > class Set :
             public Collection < __ElementType >,
             public __hidden :: __impl :: __SetFindUniqueClient < __ElementType, __enabler > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef public alias for __ElementType, the type of the contained elements,
          * publicly accessible, useful in sfinae statements - decltype ( Set ) :: ElementType
@@ -43,35 +43,35 @@ namespace cds {
          */
         using ElementType       = __ElementType;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @typedef protected alias for Collection \< __ElementType \> base extened class - providing immutable iterable properties
+         * @typedef protected alias for Collection \< __ElementType \> base extended class - providing immutable iterable properties
          * @protected
          */
         using CollectionBase    = Collection < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __SetFindUniqueClient base interface - Find by Unique Element - compatible due to unique elements constraint
          * @protected
          */
         using FindUniqueClient  = __hidden :: __impl :: __SetFindUniqueClient < __ElementType, __enabler >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename CollectionBase :: __GenericHandler;      /* NOLINT(bugprone-reserved-identifier) */
+        using typename CollectionBase :: __GenericHandler;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename CollectionBase :: __GenericConstHandler; /* NOLINT(bugprone-reserved-identifier) */
+        using typename CollectionBase :: __GenericConstHandler; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor
          * @exceptsafe
@@ -80,7 +80,7 @@ namespace cds {
          */
         constexpr Set () noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor
          * @param [in] set : Set cref = Constant Reference to a Set to copy data from
@@ -92,7 +92,7 @@ namespace cds {
                 Set const & set
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor
          * @param [in, out] set : Set mref = Move Reference to a Set to acquire and release the data from
@@ -104,7 +104,7 @@ namespace cds {
                 Set && set
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Destructor
          * @exceptsafe
@@ -113,7 +113,35 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor ~Set () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Copy Assignment Operator
+         * @param [in] set : Set cref = Constant Reference to a set to copy data from
+         * @exceptsafe
+         * @return Set ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                Set const &
+        ) noexcept -> Set & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Move Assignment Operator
+         * @param [in, out] set : Set mref = Move Reference to a set to move data from
+         * @exceptsafe
+         * @return Set ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                Set &&
+        ) noexcept -> Set & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit find function inherited from FindUniqueClient interface.
          * @test Suite: STS-00001, Group: STS-00050-FU, Test Cases: {
@@ -124,7 +152,7 @@ namespace cds {
          */
         using FindUniqueClient :: find;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief String conversion function, used to obtain String representation of the Set
          * @exceptsafe
@@ -134,7 +162,7 @@ namespace cds {
          */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to clear the set, removing all elements from it
          * @exceptsafe
@@ -143,7 +171,7 @@ namespace cds {
          */
         auto clear () noexcept -> void override = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to remove an element from the Set by direct value reference
          * @param [in] element : __ElementType cref = Constant Reference to the element to remove
@@ -161,7 +189,7 @@ namespace cds {
                 __ElementType const & element
         ) noexcept -> bool = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to check if the collection contains the requested element.
          * Overridden by Set due to Set :: contains being faster than iteration, standard Collection :: contains implementation
@@ -175,7 +203,7 @@ namespace cds {
         ) const noexcept -> bool override = 0;
     };
 
-}
+} /* namespace cds */
 
 #include "../../shared/collectionInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
 

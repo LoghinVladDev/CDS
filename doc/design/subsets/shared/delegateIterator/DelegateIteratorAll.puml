@@ -1,0 +1,21 @@
+@startuml
+
+!include AbstractDelegateIterator.puml
+!include IteratorAdvanceDirection.puml
+!include AbstractDelegateWrapperIterator.puml
+
+!startsub public_declaration
+!ifndef DEL_IT_ALL
+!define DEL_IT_ALL
+
+!include AbstractDelegateIterator.puml
+!include IteratorAdvanceDirection.puml
+!include DelegateIterator.puml
+!include BidirectionalDelegateWrapperIterator.puml
+!include ForwardDelegateWrapperIterator.puml
+!includesub AbstractDelegateWrapperIterator.puml!public_declaration
+
+!endif
+!endsub
+
+@enduml

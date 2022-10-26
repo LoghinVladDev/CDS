@@ -2,21 +2,21 @@
  * Created by loghin on 10/08/22.
  */
 
-#ifndef __CDS_HASH_SET_CONSTRUCTS_HPP__
-#define __CDS_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_HASH_SET_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
     template <
-            typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > > /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher = WrapperHasher < __ElementType, Hash < __ElementType > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > class HashSet;
 
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-            constexpr auto __hashSetKeyExtractor (  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __hashSetKeyExtractor (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ElementType const & element
             ) noexcept -> __ElementType const & {
 
@@ -24,8 +24,8 @@ namespace cds {
             }
 
 
-            template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier) */
-            __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetCopyConstructor ( /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetCopyConstructor ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ElementType       & destination,
                     __ElementType const & source
             ) noexcept -> void {
@@ -34,8 +34,8 @@ namespace cds {
             }
 
 
-            template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
-            __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetDestructor (  /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprNonLiteralReturn auto __hashSetDestructor (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ElementType & element
             ) noexcept -> void {
 
@@ -44,9 +44,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetImplementation =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetImplementation =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __HashTable <
                             __ElementType,
                             __ElementType,
@@ -59,9 +59,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetDispatcher =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetDispatcher =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __HashSetImplementation <
                             __ElementType,
                             __Hasher
@@ -74,9 +74,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetServer =       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetServer =       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __SetServer <
                             cds :: HashSet <
                                     __ElementType,
@@ -87,9 +87,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRandomInsertionPrimitiveClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -101,9 +101,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalConstIteratorRemovePrimitiveClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -115,9 +115,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -132,9 +132,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetFindOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -149,9 +149,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetFindByClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetFindByClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindByImmutableCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -163,9 +163,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -178,9 +178,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetRemoveOfInitializerListClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -193,9 +193,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetRemoveByClient =       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveByCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -206,9 +206,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalGenericImmutableStatementsCompositeClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -219,9 +219,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetFindUniqueClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindUniqueImmutablePrimitiveClient <
                             cds :: HashSet <
                                     __ElementType,
@@ -233,9 +233,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: HashSet < __ElementType, __Hasher >,
                             __ElementType,
@@ -245,9 +245,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: HashSet < __ElementType, __Hasher >,
                             __ElementType,
@@ -260,16 +260,16 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashSetDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashSetDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalDelegateForwardConstIterablePrimitiveClient <
                             cds :: HashSet < __ElementType, __Hasher >,
                             typename __HashSetImplementation < __ElementType, __Hasher > :: __ht_ConstIterator
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_HASH_SET_CONSTRUCTS_HPP__ */

@@ -1,13 +1,13 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 27/07/22.
  */
 
-#ifndef __CDS_SHARED_HASH_TABLE_HPP__
-#define __CDS_SHARED_HASH_TABLE_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_HASH_TABLE_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_HASH_TABLE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @class Base implementation class for hashtable-based objects
@@ -35,103 +35,103 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
-            > class __HashTable {                                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __HashTable {                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for template parameter __ElementType
                  * @protected
                  */
-                using ElementType           = __ElementType;    /* NOLINT(bugprone-reserved-identifier) */
+                using ElementType           = __ElementType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for template parameter __KeyType
                  * @protected
                  */
-                using KeyType               = __KeyType;        /* NOLINT(bugprone-reserved-identifier) */
+                using KeyType               = __KeyType;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for template parameter __KeyHasher
                  * @protected
                  */
-                using KeyHasher             = __KeyHasher;      /* NOLINT(bugprone-reserved-identifier) */
+                using KeyHasher             = __KeyHasher;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for template parameter __RehashPolicy
                  * @protected
                  */
-                using RehashPolicy          = __RehashPolicy;   /* NOLINT(bugprone-reserved-identifier) */
+                using RehashPolicy          = __RehashPolicy;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for forward mutable iterator
                  * @public
                  */
-                using __ht_Iterator         = HashTableIterator < __ElementType >;      /* NOLINT(bugprone-reserved-identifier) */
+                using __ht_Iterator         = HashTableIterator < __ElementType >;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for forward immutable iterator
                  * @public
                  */
-                using __ht_ConstIterator    = HashTableConstIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                using __ht_ConstIterator    = HashTableConstIterator < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @class Dispatcher to this class' set-type implementation
                  * @implements __SetServerDispatcher
                  * @public
                  */
-                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
-                class __SetDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                class __SetDispatcher;              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @class Dispatcher to this class' map-type implementation
                  * @implements __MapServerDispatcher
                  * @public
                  */
-                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier) */
-                class __MapDispatcher;              /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                class __MapDispatcher;              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for a bucket node type. Uses standard unidirectional node
                  * @private
                  */
-                using __NodeType    = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >; /* NOLINT(bugprone-reserved-identifier) */
+                using __NodeType    = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /** @brief Number of allocated buckets */
                 Size                                    _bucketCount    { 0ULL };
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /** @brief Number of total enclosed element count */
                 Size                                    _size           { 0ULL };
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /** @brief Pointer to the bucket array. */
                 __NodeType                           ** _pBucketArray   { nullptr };
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /** @brief The Key Hasher. Functor object, preferably, no address allocated. */
-                __CDS_NoUniqueAddress __KeyHasher       _hasher;
+                __CDS_NoUniqueAddress __KeyHasher       _hasher;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /** @brief The Rehash Policy. Functor object, preferably, no address allocated. */
-                __CDS_NoUniqueAddress __RehashPolicy    _rehash;
+                __CDS_NoUniqueAddress __RehashPolicy    _rehash;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Default Constructor, constexpr
                  * @exceptsafe
@@ -142,7 +142,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 constexpr __HashTable() noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Initialization constructor, using given key hasher
                  * @param [in] keyHasher : __KeyHasher cref = Constant Reference to key hasher to be used
@@ -155,7 +155,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __KeyHasher const & keyHasher
                 ) noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Initialization constructor, using given rehash policy
                  * @param [in] rehashPolicy : __RehashPolicy cref = Constant Reference to rehash policy to be used
@@ -168,7 +168,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __RehashPolicy const & rehashPolicy
                 ) noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Initialization constructor, using given key hasher and rehash policy
                  * @param [in] keyHasher : __KeyHasher cref = Constant Reference to key hasher to be used
@@ -183,7 +183,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __RehashPolicy  const & rehashPolicy
                 ) noexcept;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Copy constructor, using given hash table and node copy function
                  * @tparam __CopyFunction is the type of the copy functor to be used
@@ -196,13 +196,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __CopyFunction /* NOLINT(bugprone-reserved-identifier) */
+                        typename __CopyFunction /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_Implicit __HashTable (  /* NOLINT(google-explicit-constructor) */
                         __HashTable     const & hashTable,
                         __CopyFunction  const & copyFunction
                 ) noexcept;
 
-            protected:
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Copy Constructor, deleted
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @exceptsafe
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                __HashTable (
+                        __HashTable const & /* hashTable */
+                ) noexcept = delete;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Move constructor, using given hash table
                  * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
@@ -212,11 +225,49 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                __CDS_cpplang_ConstexprConstructorNonEmptyBody __HashTable (
+                constexpr __HashTable (
                         __HashTable && hashTable
                 ) noexcept;
 
-            protected:
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Destructor
+                 * @exceptsafe
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                ~__HashTable () noexcept = default;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Copy Assignment Operator, deleted
+                 * @param [in] hashTable : __HashTable cref = Constant Reference to the hash table to copy data from
+                 * @exceptsafe
+                 * @return __HashTable ref = Reference to the modified object
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __HashTable const & /* hashTable */
+                ) noexcept -> __HashTable = delete;
+
+            public:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Move Assignment Operator, deleted
+                 * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
+                 * @exceptsafe
+                 * @return __HashTable ref = Reference to the modified object
+                 *
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __HashTable && /* hashTable */
+                ) noexcept -> __HashTable = delete;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to purge the hash table data
                  * @exceptsafe
@@ -225,9 +276,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                auto __ht_clear () noexcept -> void;    /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_clear () noexcept -> void;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the number of elements in the hash table
                  * @exceptsafe
@@ -236,9 +287,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to check if the hash table is empty
                  * @exceptsafe
@@ -247,9 +298,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the number of buckets
                  * @exceptsafe
@@ -258,9 +309,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_bucketCount () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __ht_bucketCount () const noexcept -> Size;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable forward iterator referencing the first element
                  * @excetpsafe
@@ -269,9 +320,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> __ht_Iterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> __ht_Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable forward iterator referencing the space after the last element
                  * @excetpsafe
@@ -280,9 +331,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> __ht_Iterator;   /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> __ht_Iterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable forward iterator referencing the first element
                  * @excetpsafe
@@ -291,9 +342,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_cbegin () const noexcept -> __ht_ConstIterator; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ht_cbegin () const noexcept -> __ht_ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable forward iterator referencing the space after the last element
                  * @excetpsafe
@@ -302,9 +353,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ht_cend () const noexcept -> __ht_ConstIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element based on its key and return the memory address. Function is intended
                  * as an adapter to __ht_get, after the key has been extracted from pReferenceElement
@@ -316,12 +367,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_new ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ht_new ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ElementType const * pReferenceElement,
                         bool                * pNewElementCreated
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate space for an element based on the given key
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to check if a new element can be created
@@ -332,12 +383,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_get ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ht_get ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __KeyType const & key,
                         bool            * pIsNew
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable address of the node with the given key
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the element with
@@ -347,11 +398,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_getConst (    /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_getConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a mutable address of the node with the given key. Unlike '__ht_get',
                  * '__ht_at' will not allocate new space, if key does not exist
@@ -362,11 +413,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_at (                         /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_MaybeUnused auto __ht_at ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __KeyType const & key
                 ) noexcept -> __ElementType *;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an immutable address of the node with the given key
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the element with
@@ -376,11 +427,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_atConst (                         /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_MaybeUnused auto __ht_atConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to rehash the hash table - increase the bucket buffer and relocate all newly misplaced nodes ( since remainder class value will increase )
                  * @param [in] bucketCount : Size = next number of buckets determined by the rehash policy
@@ -392,28 +443,29 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __ht_rehash (                     /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_rehash (                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size                bucketCount,
                         Size                hashValueOfNewNode,
                         __NodeType  const * pNewEmptyNode
                 ) noexcept -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to relocate a node to a different given bucket. Used in rehashing
                  * @param [in, out] pBucket : __NodeType ptr ptr = Address to the head of the list ( therefore, address as well ) to emplace the node in
                  * @param [in] pNode : __NodeType ptr = Address to the node to be emplaced in the bucket
                  * @exceptsafe
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                static auto __ht_rehashEmplace (       /* NOLINT(bugprone-reserved-identifier) */
+                static auto __ht_rehashEmplace (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __NodeType ** pBucket,
                         __NodeType  * pNode
                 ) noexcept -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the mutable bucket at the given hash value. It will safely truncate the hash value to the current bucket count, which is also called the 'remainder class'
                  * @param [in] hash : Size = the hash used to identify intended bucket to be acquired
@@ -423,11 +475,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size hash
                 ) noexcept -> __NodeType * &;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the immutable bucket at the given hash value. It will safely truncate the hash value to the current bucket count, which is also called the 'remainder class'
                  * @param [in] hash : Size = the hash used to identify intended bucket to be acquired
@@ -437,11 +489,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_NoDiscard constexpr auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __ht_bucket (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size hash
                 ) const noexcept -> __NodeType * const &;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate a requested number of buckets. It will keep the current existing contents, but not rehash any elements
                  * @param [in] bucketCount : Size = the number of requested buckets
@@ -450,11 +502,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __ht_allocateBuckets (                                    /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_allocateBuckets (                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Size bucketCount
                 ) noexcept -> void;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to free the bucket array. It will NOT clear the buckets before
                  * @exceptsafe
@@ -462,33 +514,35 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __ht_freeBuckets () noexcept -> void;                     /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_freeBuckets () noexcept -> void;                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to allocate memory for a new node. It will NOT initialize the __ElementType data
                  * @exceptsafe
                  * @return __NodeType ptr = Address to the newly created node
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                __CDS_NoDiscard auto __ht_allocateNode () const noexcept -> __NodeType *;      /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard static auto __ht_allocateNode () noexcept -> __NodeType *;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to free the memory used by a node, including destroying the __ElementType data prior to free of memory
                  * @param [in] pNode : __NodeType ptr = Address to the node to be freed
                  * @exceptsafe
+                 * @static
                  *
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @private
                  */
-                auto __ht_freeNode (                                           /* NOLINT(bugprone-reserved-identifier) */
+                static auto __ht_freeNode (                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __NodeType * pNode
-                ) const noexcept -> void;
+                ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove a node based on a given key
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to acquire the node with
@@ -498,16 +552,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __KeyType const & key
                 ) noexcept -> bool;
 
-            protected:
-                auto __ht_removeGetPtr (                                             /* NOLINT(bugprone-reserved-identifier) */
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                auto __ht_removeGetPtr (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __KeyType const & key
                 ) noexcept -> __ElementType *;
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove a node based on the bucket index, the node itself and the node before it, if applicable
                  * @param [in] pPreviousNode : __NodeType cptr = Address to the immutable node previous to the removed node
@@ -519,13 +573,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_remove (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __NodeType  const * pPreviousNode,
                         __NodeType  const * pCurrentNode,
                         Size                bucketIndex
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove a node based on a given iterator. It will acquire the bucket index, the current and previous node and remove the node using these
                  * @param [in] iterator : __ht_Iterator cref = Constant Reference to a mutable forward iterator
@@ -535,11 +589,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_removeIterator (                                             /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_removeIterator (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ht_Iterator const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove a node based on a given const iterator. It will acquire the bucket index, the current and previous node and remove the node using these
                  * @param [in] iterator : __ht_ConstIterator cref = Constant Reference to an immutable forward iterator
@@ -549,11 +603,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_removeIteratorConst (                                         /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_removeIteratorConst (                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ht_ConstIterator const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove multiple nodes based on a given iterator array. It will acquire the bucket index, the current and previous node from each iterator and remove the nodes using these
                  * @param [in] ppIterators : __ht_Iterator cptr cptr = Address to an immutable array of addresses to immutable forward mutable iterators
@@ -564,12 +618,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_removeIteratorArray (                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ht_Iterator   const * const * ppIterators,
                         Size                            iteratorCount
                 ) noexcept -> Size;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to remove multiple nodes based on a given const iterator array. It will acquire the bucket index, the current and previous node from each iterator and remove the nodes using these
                  * @param [in] ppIterators : __ht_ConstIterator cptr cptr = Address to an immutable array of addresses to immutable forward immutable iterators
@@ -580,12 +634,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_removeConstIteratorArray (                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ht_ConstIterator  const * const * ppIterators,
                         Size                                iteratorCount
                 ) noexcept -> Size;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to clear the current contents and copy the data from a received hash table.
                  * @tparam __CopyFunction is the type of the copy functor to be used
@@ -597,13 +651,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
-                > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier) */
+                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > auto __ht_copy (                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable     const & table,
                         __CopyFunction  const & copyFunction
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to ONLY copy the data from a received hash table.
                  * @tparam __CopyFunction is the type of the copy functor to be used
@@ -615,13 +669,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier) */
-                > auto __ht_copyCleared (           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __CopyFunction     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > auto __ht_copyCleared (           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable     const & table,
                         __CopyFunction  const & copyFunction
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to clear the current contents and move the data from a received hash table.
                  * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
@@ -630,11 +684,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __ht_move (    /* NOLINT(bugprone-reserved-identifier) */
+                auto __ht_move (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable && table
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to ONLY move the data from a received hash table.
                  * @param [in, out] hashTable : __HashTable mref = Move Reference to the hash table to acquire and release the data from
@@ -643,11 +697,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveCleared (   /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_moveCleared (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable && table
                 ) noexcept -> void;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire an iterator to the node identified by given key. Will return end() if key does not exist in any node
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to find the desired node
@@ -657,11 +711,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_findIterator ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ht_findIterator ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __KeyType const & key
                 ) noexcept -> __ht_Iterator;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire a const iterator to the node identified by given key. Will return cend() if key does not exist in any node
                  * @param [in] key : __KeyType cref = Constant Reference to a key to be used to find the desired node
@@ -671,11 +725,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard auto __ht_findIteratorConst ( /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard auto __ht_findIteratorConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __KeyType const & key
                 ) const noexcept -> __ht_ConstIterator;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to compare the current hash table to a given hash table
                  * @param [in] table : __HashTable cref = Constant Reference to a hash table to compare the current one to
@@ -686,22 +740,22 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @protected
                  */
                 template <
-                        cds :: utility :: ComparisonFunction < __ElementType > __comparator /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_equals (                                        /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __ElementType > __comparator /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_equals (                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable const & table
                 ) const noexcept -> bool;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_HASH_TABLE_HPP__ */
 
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 /**
 * This is outside of the include guards, but with reasoning.
@@ -712,18 +766,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 */
 
 #if defined ( __CDS_SHARED_SET_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_SHARED_HASH_TABLE_HPP__)
-#define __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_HASH_TABLE_SET_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __HashTable <
                     __ElementType,
                     __KeyType,
@@ -807,18 +861,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
 #if defined ( __CDS_SHARED_MAP_SERVER_DISPATCHER_HPP__ ) && ! defined ( __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ ) && defined (__CDS_SHARED_HASH_TABLE_HPP__)
-#define __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_HASH_TABLE_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                            __ServerType        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __HashTable <
                     __ElementType,
                     __KeyType,
@@ -948,6 +1002,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #endif
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */

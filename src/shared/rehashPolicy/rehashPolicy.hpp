@@ -1,22 +1,22 @@
-//
-// Created by loghin on 6/20/22.
-//
+/*
+ * Created by loghin on 6/20/22.
+ */
 
-#ifndef __CDS_SHARED_REHASH_POLICY_HPP__
-#define __CDS_SHARED_REHASH_POLICY_HPP__
+#ifndef __CDS_SHARED_REHASH_POLICY_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_REHASH_POLICY_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
-    namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __SizeType > // NOLINT(bugprone-reserved-identifier)
-            struct __RehashResult { // NOLINT(bugprone-reserved-identifier)
+            template < typename __SizeType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __RehashResult {             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __SizeType  _size;
                 bool        _required;
             };
 
-            template < typename __SizeType, bool __hasLoadFactor > // NOLINT(bugprone-reserved-identifier)
-            class __RehashPolicy { // NOLINT(bugprone-reserved-identifier)
+            template < typename __SizeType, bool __hasLoadFactor >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __RehashPolicy {                                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             public:
                 using SizeType = __SizeType;
@@ -25,8 +25,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 constexpr static bool hasLoadFactor = false;
             };
 
-            template < typename __BaseType = uint32 >                                   // NOLINT(bugprone-reserved-identifier)
-            class __PrimeRehashPolicy : public __RehashPolicy < __BaseType, true > {    // NOLINT(bugprone-reserved-identifier)
+            template < typename __BaseType = uint32 >                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __PrimeRehashPolicy : public __RehashPolicy < __BaseType, true > {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:
                 __BaseType _loadFactor;
@@ -96,7 +96,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 static __BaseType const _table [29U];
             };
 
-            template < typename __BaseType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __BaseType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseType const __PrimeRehashPolicy < __BaseType > :: _table [29U] = {
                         13U, 27U, 57U, 117U, 237U,
                         477U, 957U, 1917U, 3837U, 7677U,
@@ -112,4 +112,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_SHARED_REHASH_POLICY_HPP__
+#endif /* __CDS_SHARED_REHASH_POLICY_HPP__ */

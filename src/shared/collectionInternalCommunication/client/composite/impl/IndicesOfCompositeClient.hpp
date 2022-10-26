@@ -2,20 +2,20 @@
  * Created by loghin on 6/30/22.
  */
 
-#ifndef __CDS_SHARED_INDICES_OF_COMPOSITE_CLIENT_IMPL_HPP__
-#define __CDS_SHARED_INDICES_OF_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_INDICES_OF_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_INDICES_OF_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -49,12 +49,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -77,10 +77,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -109,10 +109,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -141,12 +141,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -179,12 +179,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -205,12 +205,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -244,12 +244,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -272,10 +272,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -304,10 +304,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -335,12 +335,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -373,12 +373,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename ... > class __CollectionType                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __IndicesOfCompositeClient <
                     __ReceiverType,
                     __ElementType,
@@ -397,8 +397,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 );
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_INDICES_OF_COMPOSITE_CLIENT_IMPL_HPP__ */

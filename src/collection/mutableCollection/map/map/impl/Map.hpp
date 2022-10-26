@@ -2,86 +2,26 @@
  * Created by loghin on 10/08/22.
  */
 
-#ifndef __CDS_MAP_IMPL_HPP__
-#define __CDS_MAP_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_MAP_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_MAP_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: keys () const noexcept -> Set < KeyType const > const & {
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto mapEntryOf (
+            __KeyType   && key,
+            __ValueType && value
+    ) noexcept ( noexcept ( MapEntry < __KeyType, __ValueType > ( std :: forward < __KeyType > ( key ), std :: forward < __ValueType > ( value ) ) ) ) -> MapEntry < __KeyType, __ValueType > {
 
-        return this->keySetProxy();
+        return MapEntry < __KeyType, __ValueType > ( std :: forward < __KeyType > ( key ), std :: forward < __ValueType > ( value ) );
     }
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: keys () noexcept -> Set < KeyType const > & {
-
-        return this->keySetProxy();
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: values () const noexcept -> MutableCollection < ValueType > const & {
-
-        return this->valueMutableCollectionProxy();
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: values () noexcept -> MutableCollection < ValueType > & {
-
-        return this->valueMutableCollectionProxy();
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: entries () const noexcept -> MutableCollection < EntryType > const & {
-
-        return this->entryMutableCollectionProxy();
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-    > __CDS_cpplang_ConstexprPureAbstract auto Map <
-            __KeyType,
-            __ValueType
-    > :: entries () noexcept -> MutableCollection < EntryType > & {
-
-        return this->entryMutableCollectionProxy();
-    }
-
-
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Map <
             __KeyType,
             __ValueType
@@ -89,8 +29,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Map <
             __KeyType,
             __ValueType
@@ -103,8 +43,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr Map <
             __KeyType,
             __ValueType
@@ -117,8 +57,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprDestructor Map <
             __KeyType,
             __ValueType
@@ -126,8 +66,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > auto Map <
             __KeyType,
             __ValueType
@@ -155,8 +95,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprOverride auto Map <
             __KeyType,
             __ValueType
@@ -169,11 +109,11 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier) */
+            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isDefaultConstructible < __TValueType > ()
             >
@@ -199,8 +139,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto Map <
             __KeyType,
             __ValueType
@@ -218,8 +158,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto Map <
             __KeyType,
             __ValueType
@@ -237,11 +177,11 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier) */
+            typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __TValueType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isDefaultConstructible < __TValueType > ()
             >
@@ -257,8 +197,8 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto Map <
             __KeyType,
             __ValueType
@@ -269,6 +209,6 @@ namespace cds {
         return this->at ( key );
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_MAP_IMPL_HPP__ */

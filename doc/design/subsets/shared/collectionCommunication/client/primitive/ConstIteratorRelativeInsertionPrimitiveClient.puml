@@ -1,0 +1,59 @@
+@startuml
+
+!includesub ../../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef CONST_RELATIVE_INSERTION_PUBLIC
+!define CONST_RELATIVE_INSERTION_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __AbstractConstIteratorRelativeInsertionPrimitiveClient <R, E> {
+                + {method} insertBefore (AbstractConstIterator const &, E const &) throws except(E(E const &)) -> bool
+                + {method} insertBefore (AbstractConstIterator const &, E &&) throws except(E(E &&)) -> bool
+                + {method} insertAfter (AbstractConstIterator const &, E const &) throws except(E(E const &)) -> bool
+                + {method} insertAfter (AbstractConstIterator const &, E &&) throws except(E(E &&)) -> bool
+                + {method} <__Args ...> emplaceBefore (AbstractConstIterator const &, __Args && ...) throws except(E(__Args && ...)) -> bool
+                + {method} <__Args ...> emplaceAfter (AbstractConstIterator const &, __Args && ...) throws except(E(__Args && ...)) -> bool
+                + {method} <__Args ...> insertAllBefore (AbstractConstIterator const &, __Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> bool
+                + {method} <__Args ...> insertAllAfter (AbstractConstIterator const &, __Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> bool
+                + {method} <__Iterable> insertAllOfBefore (AbstractConstIterator const &, __Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> bool
+                + {method} <__Iterable> insertAllOfAfter (AbstractConstIterator const &, __Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> bool
+                + {method} insertAllOfBefore (AbstractConstIterator const &, std::initializer_list <E>) throws except(E(E const &)) -> bool
+                + {method} insertAllOfAfter (AbstractConstIterator const &, std::initializer_list <E>) throws except(E(E const &)) -> bool
+                + {method} <__Iterator> insertAllOfBefore (AbstractConstIterator const &, __Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> bool
+                + {method} <__Iterator> insertAllOfAfter (AbstractConstIterator const &, __Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> bool
+            }
+
+            interface __LocalConstIteratorRelativeInsertionPrimitiveClient <R, E, I> {
+                + {method} insertBefore (I const &, E const &) throws except(E(E const &)) -> bool
+                + {method} insertBefore (I const &, E &&) throws except(E(E &&)) -> bool
+                + {method} insertAfter (I const &, E const &) throws except(E(E const &)) -> bool
+                + {method} insertAfter (I const &, E &&) throws except(E(E &&)) -> bool
+                + {method} <__Args ...> emplaceBefore (I const &, __Args && ...) throws except(E(__Args && ...)) -> bool
+                + {method} <__Args ...> emplaceAfter (I const &, __Args && ...) throws except(E(__Args && ...)) -> bool
+                + {method} <__Args ...> insertAllBefore (I const &, __Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> bool
+                + {method} <__Args ...> insertAllAfter (I const &, __Args && ...) throws except(E(AnyTypeOf(__Args ...))) -> bool
+                + {method} <__Iterable> insertAllOfBefore (I const &, __Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> bool
+                + {method} <__Iterable> insertAllOfAfter (I const &, __Iterable const &) throws except(E(ReturnOf(__Iterable::begin()) const &)) -> bool
+                + {method} insertAllOfBefore (I const &, std::initializer_list <E>) throws except(E(E const &)) -> bool
+                + {method} insertAllOfAfter (I const &, std::initializer_list <E>) throws except(E(E const &)) -> bool
+                + {method} <__Iterator> insertAllOfBefore (I const &, __Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> bool
+                + {method} <__Iterator> insertAllOfAfter (I const &, __Iterator const &, __Iterator const &, [Size]) throws except(E(ReturnOf(__Iterator::operator *()) const &)) -> bool
+            }
+
+            note "Requests direct dispatcher-standard calls" as LCIRTIPCLocalHint
+            note "Requests handlers to call through Channel" as ACIRTIPCHint
+            LCIRTIPCLocalHint - __LocalConstIteratorRelativeInsertionPrimitiveClient
+            ACIRTIPCHint - __AbstractConstIteratorRelativeInsertionPrimitiveClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

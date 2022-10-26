@@ -2,23 +2,23 @@
  * Created by loghin on 17/08/22.
  */
 
-#ifndef __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__
-#define __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Action,                              /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Action,                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Action,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __forEach (   /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __forEach (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType  const & begin,
                     __IteratorType  const & end,
                     __Action        const & action
@@ -34,15 +34,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __some (  /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __some (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count,
@@ -72,15 +72,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __atLeast (   /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_cpplang_ConstexprConditioned auto __atLeast (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count,
@@ -110,15 +110,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __atMost (    /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_cpplang_ConstexprConditioned auto __atMost (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count,
@@ -148,15 +148,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __moreThan (  /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __moreThan (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count,
@@ -169,15 +169,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __fewerThan ( /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __fewerThan ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count,
@@ -195,15 +195,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __count ( /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __count ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     __Predicate    const & predicate
@@ -227,15 +227,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __any (   /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __any (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     __Predicate    const & predicate
@@ -256,15 +256,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __all (   /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __all (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     __Predicate    const & predicate
@@ -285,15 +285,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isMemberFunctionPointer <
                                     __Predicate,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
-            > __CDS_cpplang_ConstexprConditioned auto __none (  /* NOLINT(bugprone-reserved-identifier) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __none (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     __Predicate    const & predicate
@@ -312,8 +312,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return true;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ITERATOR_MEMBER_STATEMENTS_IMPL_HPP__ */

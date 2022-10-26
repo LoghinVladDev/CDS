@@ -2,12 +2,12 @@
  * Created by loghin on 27/07/22.
  */
 
-#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__
-#define __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief Partial pre-Declaration of __HashTable, as it requires private values
@@ -18,17 +18,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: __hidden :: __impl
              */
             template <
-                    typename __ElementType,                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ElementType,                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename,
                     typename,
                     cds :: utility :: ExtractorFunction < __ElementType, __KeyType >,
                     cds :: utility :: ComparisonFunction < __KeyType >,
                     cds :: utility :: DestructorFunction < __ElementType >
-            > class __HashTable;                                                        /* NOLINT(bugprone-reserved-identifier) */
+            > class __HashTable;                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-        }
-    }
+        } /* namespace __impl */
+    } /* namespace __hidden */
 
 
     /**
@@ -40,10 +40,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class HashTableIterator : public meta :: ForwardIterator {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Pre-Declaration of __HashTable, as it requires private values
          * @tparam __TElementType is the type of the node data stored in the hash table
@@ -57,58 +57,58 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename                                                            __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: ExtractorFunction < __TElementType, __KeyType >   __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: DestructorFunction < __TElementType >             __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
-        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                            __TElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: ExtractorFunction < __TElementType, __KeyType >   __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: DestructorFunction < __TElementType >             __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the BaseIterator Node Type. Buckets are composed of Nodes
          * @private
          */
         using DataNode = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Current Bucket Index in the Bucket Array
          * @private
          */
         Size        _bucketIndex    { 0ULL };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Current Bucket Count, size of the Bucket Array
          * @private
          */
         Size        _bucketCount    { 0ULL };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the current bucket
          * @private
          */
         DataNode  * _pCurrentNode   { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the current bucket
          * @private
          */
         DataNode  * _pPreviousNode  { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of the Bucket List
          * @private
          */
         DataNode ** _pListArray     { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to advance to the next node. If next node is end of bucket list, advance to next bucket
          * @exceptsafe
@@ -118,7 +118,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -128,7 +128,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr HashTableIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
@@ -143,7 +143,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 Size        bucketCount
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pListArray : DataNode ptr ptr = address to a list of addresses of the buckets
@@ -164,7 +164,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 Size        bucketIndex
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : HashTableIterator cref = Constant Reference to the iterator to acquire the values from
@@ -177,7 +177,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : HashTableIterator mref = Move Reference to the iterator to move the values from
@@ -190,7 +190,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~HashTableIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : HashTableIterator cref = Constant Reference to an iterator to copy the values value from
@@ -200,11 +209,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(*-copy-assignment-signature, misc-unconventional-assign-operator) */
                 HashTableIterator const & iterator
         ) noexcept -> HashTableIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : HashTableIterator mref = Move Reference to an iterator to move the values value from
@@ -214,11 +223,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(*-copy-assignment-signature, misc-unconventional-assign-operator) */
                 HashTableIterator && iterator
         ) noexcept -> HashTableIterator &;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket list of the iterator
          * @exceptsafe
@@ -227,9 +236,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto listArray () const noexcept -> DataNode **;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto listArray () const noexcept -> DataNode **; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket count of the bucket list
          * @exceptsafe
@@ -238,9 +247,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto bucketCount () const noexcept -> Size;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto bucketCount () const noexcept -> Size;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket index in the bucket list
          * @exceptsafe
@@ -249,9 +258,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto bucketIndex () const noexcept -> Size;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto bucketIndex () const noexcept -> Size;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the current node
          * @exceptsafe
@@ -260,9 +269,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto currentNode () const noexcept -> DataNode *;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto currentNode () const noexcept -> DataNode *;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the previous node
          * @exceptsafe
@@ -271,9 +280,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto previousNode () const noexcept -> DataNode *;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto previousNode () const noexcept -> DataNode *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -284,7 +293,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -295,7 +304,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> HashTableIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -306,7 +315,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -317,7 +326,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
@@ -331,7 +340,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableIterator const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : HashTableIterator cref = Constant Reference to another iterator to compare this one to
@@ -345,7 +354,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableIterator const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -354,7 +363,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, MTest Cases: All
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
 
@@ -367,7 +376,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
      * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
      * @namespace cds :: experimental
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class HashTableConstIterator : public meta :: ForwardIterator {
 
     private:
@@ -384,58 +393,58 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename                                                            __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier) */
-                typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: ExtractorFunction < __TElementType, __KeyType >   __keyExtractor,     /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: utility :: DestructorFunction < __TElementType >             __nodeDestructor    /* NOLINT(bugprone-reserved-identifier) */
-        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier) */
+                typename                                                            __TElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                                                            __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: ExtractorFunction < __TElementType, __KeyType >   __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: ComparisonFunction < __KeyType >                  __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: utility :: DestructorFunction < __TElementType >             __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef Alias for the BaseIterator Node Type. Buckets are composed of Nodes
          * @private
          */
         using DataNode = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Current Bucket Index in the Bucket Array
          * @private
          */
         Size                        _bucketIndex    { 0ULL };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Current Bucket Count, size of the Bucket Array
          * @private
          */
         Size                        _bucketCount    { 0ULL };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of current Node in the current bucket
          * @private
          */
         DataNode            const * _pCurrentNode   { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of previous Node in the current bucket
          * @private
          */
         DataNode            const * _pPreviousNode  { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Address of the Bucket List
          * @private
          */
         DataNode    const * const * _pListArray     { nullptr };
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to advance to the next node. If next node is end of bucket list, advance to next bucket
          * @exceptsafe
@@ -445,7 +454,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor, constexpr
          * @exceptsafe
@@ -455,7 +464,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr HashTableConstIterator () noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
@@ -470,7 +479,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 Size                        bucketCount
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Initialization Constructor, constexpr
          * @param [in] pListArray : DataNode cptr cptr = address to an immutable list of addresses of the immutable buckets
@@ -491,7 +500,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 Size                        bucketIndex
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor, constexpr
          * @param [in] iterator : HashTableConstIterator cref = Constant Reference to the iterator to acquire the values from
@@ -504,7 +513,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableConstIterator const & iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor, constexpr
          * @param [in, out] iterator : HashTableConstIterator mref = Move Reference to the iterator to move the values from
@@ -517,7 +526,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableConstIterator && iterator
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Implicit Destructor, constexpr
+         * @exceptsafe
+         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
+         * @public
+         */
+        ~HashTableConstIterator () noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Operator, constexpr
          * @param [in] iterator : HashTableConstIterator cref = Constant Reference to an iterator to copy the values value from
@@ -527,11 +545,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(*-copy-assignment-signature, misc-unconventional-assign-operator) */
                 HashTableConstIterator const & iterator
         ) noexcept -> HashTableConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Operator, constexpr
          * @param [in, out] iterator : HashTableConstIterator mref = Move Reference to an iterator to move the values value from
@@ -541,11 +559,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( /* NOLINT(*-copy-assignment-signature, misc-unconventional-assign-operator) */
                 HashTableConstIterator && iterator
         ) noexcept -> HashTableConstIterator &;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket list of the iterator
          * @exceptsafe
@@ -554,9 +572,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto listArray () const noexcept -> DataNode const * const *;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto listArray () const noexcept -> DataNode const * const *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket count of the bucket list
          * @exceptsafe
@@ -565,9 +583,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto bucketCount () const noexcept -> Size;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto bucketCount () const noexcept -> Size;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the bucket index in the bucket list
          * @exceptsafe
@@ -576,9 +594,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto bucketIndex () const noexcept -> Size;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto bucketIndex () const noexcept -> Size;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the current node
          * @exceptsafe
@@ -587,9 +605,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto currentNode () const noexcept -> DataNode const *;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto currentNode () const noexcept -> DataNode const *;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the previous node
          * @exceptsafe
@@ -598,9 +616,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: TBA, Group: TBA, Test Cases: TBA
          * @private
          */
-        __CDS_NoDiscard constexpr auto previousNode () const noexcept -> DataNode const *;
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto previousNode () const noexcept -> DataNode const *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Prefix Increment Operator. Will advance forward one position and then return
          * @exceptsafe
@@ -611,7 +629,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableConstIterator &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Postfix Increment Operator. Will return the original iterator, and then advance forward the current one
          * @exceptsafe
@@ -622,7 +640,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> HashTableConstIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the current value the iterator is indicating to
          * @exceptsafe
@@ -633,7 +651,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to acquire the address of the value the iterator is indicating to
          * @exceptsafe
@@ -644,7 +662,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Inequality Comparison Operator
          * @param [in] iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -658,7 +676,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableConstIterator const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Equality Comparison Operator
          * @param [in] iterator : HashTableConstIterator cref = Constant Reference to another iterator to compare this one to
@@ -672,7 +690,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 HashTableConstIterator const & iterator
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Validity function, bool cast.
          * @exceptsafe
@@ -681,8 +699,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
          * @public
          */
-        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
-}
+
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__ */

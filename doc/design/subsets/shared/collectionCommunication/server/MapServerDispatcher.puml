@@ -1,0 +1,33 @@
+@startuml
+
+!includesub MapServer.puml!public_declaration
+
+!startsub public_declaration
+!ifndef MAP_SERVER_DISPATCHER_PUBLIC
+!define MAP_SERVER_DISPATCHER_PUBLIC
+
+!includesub MutableCollectionServerDispatcher.puml!public_declaration
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __MapServer
+
+            interface __MapServerDispatcher <S, I, E, K, AIT, ACIT, IT, CIT, \nbegin(), end(),cbegin(), cend(), \nnew(), remove(), removeConst(), \nremoveArray(), removeConstArray(), \nfind(), findConst()> extends __MutableCollectionServerDispatcher {
+                # {method} __find (K const &) noexcept -> __AbstractDelegateIterator <E> *
+                # {method} __findConst (K const &) const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __findLocal (K const &) noexcept -> IT
+                # {method} __findConstLocal (K const &) const noexcept -> CIT
+            }
+
+            __MapServerDispatcher "provides server-to-implementation handlers" .. cds.__hidden.__impl.__MapServer
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

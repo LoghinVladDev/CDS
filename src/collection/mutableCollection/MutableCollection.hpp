@@ -2,15 +2,15 @@
  * Created by loghin on 6/20/22.
  */
 
-#ifndef __CDS_MUTABLE_COLLECTION_HPP__
-#define __CDS_MUTABLE_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_MUTABLE_COLLECTION_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_MUTABLE_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Collection>
 
 #include "../../shared/collectionInternalCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/primitive/IteratorRemovePrimitiveClient.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/composite/GenericMutableStatementsCompositeClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/composite/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
 #include "../../shared/collectionInternalCommunication/client/composite/FindOfMutableCompositeClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/composite/FindByMutableCompositeClient.hpp"
 
@@ -37,8 +37,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @namespace cds
      * @public
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    class MutableCollection :
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class MutableCollection :           /* NOLINT(*-virtual-class-destructor) */
             public Collection < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionDelegateForwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionIteratorRemoveClient < __ElementType >,
@@ -48,7 +48,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             public __hidden :: __impl :: __MutableCollectionFindByClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionGenericStatementsClient < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef public alias for __ElementType, the type of the contained elements,
          * publicly accessible, useful in sfinae statements - decltype ( MutableCollection ) :: ElementType
@@ -56,84 +56,84 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using ElementType                       = __ElementType;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for Collection \< __ElementType \> base extended class - providing immutable iterable properties
          * @protected
          */
         using CollectionBase                    = Collection < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionDelegateForwardIterableClient base interface - providing begin / end for Abstract Mutable Iterators
          * @protected
          */
         using DelegateForwardIterableClient     = __hidden :: __impl :: __MutableCollectionDelegateForwardIterableClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionIteratorRemoveClient base interface - providing remove for Abstract Mutable Iterators
          * @protected
          */
         using IteratorRemoveClient              = __hidden :: __impl :: __MutableCollectionIteratorRemoveClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionRandomInsertionClient base interface - providing insertion functions - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
          * @protected
          */
         using RandomInsertionClient             = __hidden :: __impl :: __MutableCollectionRandomInsertionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionFindOfCollectionClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
          * @protected
          */
         using FindOfCollectionClient            = __hidden :: __impl :: __MutableCollectionFindOfCollectionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionFindOfInitializerListClient base interface - providing find-of functions with a std :: initializer_list parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
          * @protected
          */
         using FindOfInitializerListClient       = __hidden :: __impl :: __MutableCollectionFindOfInitializerListClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionFindByClient base interface - providing find-by-predicate functions - findThat / findFirstThat / findLastThat / findAllThat
          * @protected
          */
         using FindByClient                      = __hidden :: __impl :: __MutableCollectionFindByClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __MutableCollectionGenericStatementsClient base interface - providing functional-predicate functions - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
          * @protected
          */
         using GenericStatementsClient           = __hidden :: __impl :: __MutableCollectionGenericStatementsClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename CollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+        using typename CollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename CollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
+        using typename CollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef The Mutable Iterator Type, imported from Abstract Forward Iterator Client
          * @public
          */
         using typename DelegateForwardIterableClient :: Iterator;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor
          * @exceptsafe
@@ -142,7 +142,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         constexpr MutableCollection () noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor
          * @param [in] collection : MutableCollection cref = Constant Reference to a mutable collection to copy data from
@@ -154,7 +154,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 MutableCollection const & collection
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor
          * @param [in] collection : MutableCollection mref = Move Reference to a mutable collection to acquire and release the data from
@@ -166,7 +166,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 MutableCollection && collection
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Destructor
          * @exceptsafe
@@ -175,7 +175,35 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_cpplang_ConstexprDestructor ~MutableCollection () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Copy Assignment Operator
+         * @param [in] collection : MutableCollection cref = Constant Reference to a collection to copy data from
+         * @exceptsafe
+         * @return MutableCollection ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                MutableCollection const & /* collection */
+        ) noexcept -> MutableCollection & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Move Assignment Operator
+         * @param [in, out] collection : MutableCollection mref = Move Reference to a collection to move data from
+         * @exceptsafe
+         * @return MutableCollection ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                MutableCollection && /* collection */
+        ) noexcept -> MutableCollection & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from Collection base class. Forward Const Iterator begin function
          * @test Not Applicable, import of tested functionality.
@@ -183,7 +211,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: begin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from Collection base class. Forward Const Iterator end function
          * @test Not Applicable, import of tested functionality.
@@ -191,7 +219,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: end;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from Collection. Forward Const Iterator begin function
          * @test Not Applicable, import of tested functionality.
@@ -199,7 +227,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: cbegin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from Collection. Forward Const Iterator end function
          * @test Not Applicable, import of tested functionality.
@@ -207,7 +235,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: cend;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from DelegateForwardIterableClient interface.
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: {
@@ -222,7 +250,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using DelegateForwardIterableClient :: begin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit end function inherited from DelegateForwardIterableClient interface.
          * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: {
@@ -237,7 +265,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using DelegateForwardIterableClient :: end;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit remove ( ConstIterator ) call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -245,7 +273,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: remove;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit remove ( Iterator ) call, inherited from IteratorPrimitiveClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00350-RAIT, Test Cases: {
@@ -259,7 +287,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using IteratorRemoveClient :: remove;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit forEach immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -267,7 +295,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: forEach;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit some immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -275,7 +303,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: some;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit atLeast immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -283,7 +311,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: atLeast;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit atMost immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -291,7 +319,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: atMost;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit moreThan immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -299,7 +327,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: moreThan;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit fewerThan immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -307,7 +335,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: fewerThan;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit count immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -315,7 +343,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: count;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit any immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -323,7 +351,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: any;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit all immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -331,7 +359,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: all;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit none immutable functional call, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -340,7 +368,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using CollectionBase :: none;
 
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit forEach mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: {
@@ -353,7 +381,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: forEach;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit some mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00136-FS-someExact, MCTC-00137-FS-someLessFalse, MCTC-00138-someMoreFalse }
@@ -362,7 +390,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: some;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit atLeast mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00132-FS-atLeastTrue, MCTC-00133-FS-atLeastCloseTrue, MCTC-00134-atLeastCloseFalse, MCTC-00135-atLeastFalse }
@@ -371,7 +399,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: atLeast;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit atMost mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00128-FS-atMostTrue, MCTC-00129-FS-atMostCloseTrue, MCTC-00130-atMostCloseFalse, MCTC-00131-atMostFalse }
@@ -380,7 +408,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: atMost;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit moreThan mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00123-FS-moreThanTrue, MCTC-00124-FS-moreThanCloseTrue, MCTC-00125-moreThanCloseFalse, MCTC-00126-moreThanFalse, MCTC-00127-moreThanCompletelyFalse }
@@ -389,7 +417,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: moreThan;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit fewerThan mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00118-FS-fewerThanTrue, MCTC-00119-FS-fewerThanCloseTrue, MCTC-00120-fewerThanCloseFalse, MCTC-00121-fewerThanFalse, MCTC-00122-fewerThanCompletelyFalse }
@@ -398,7 +426,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: fewerThan;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit count mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00113-FS-countProp1, MCTC-00114-FS-countProp2, MCTC-00115-countProp3, MCTC-00116-countProp4, MCTC-00117-countPropLbd }
@@ -407,7 +435,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: count;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit any mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00101-FS-anyNone, MCTC-00102-FS-anyOne, MCTC-00103-anyMore, MCTC-00104-anyAll }
@@ -416,7 +444,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: any;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit all mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00105-FS-allNone, MCTC-00106-FS-allOne, MCTC-00107-allMore, MCTC-00108-allAll }
@@ -425,7 +453,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: all;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit none mutable functional call, inherited from GenericStatementsClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00100-FS, Test Cases: { MCTC-00109-FS-noneNone, MCTC-00110-FS-noneOne, MCTC-00111-noneMore, MCTC-00112-noneAll }
@@ -434,7 +462,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using GenericStatementsClient :: none;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -442,7 +470,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -450,7 +478,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findFirstOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -458,7 +486,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findLastOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -466,7 +494,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findNotOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -474,7 +502,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstNotOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -482,7 +510,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findFirstNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastNotOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -490,7 +518,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findLastNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllNotOf ( Collection ) Const Iterator, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -499,7 +527,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using CollectionBase :: findAllNotOf;
 
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -522,7 +550,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -536,7 +564,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findFirstOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -550,7 +578,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findLastOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -569,7 +597,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -592,7 +620,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -606,7 +634,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findFirstNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -620,7 +648,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfCollectionClient :: findLastNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -640,7 +668,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using FindOfCollectionClient :: findAllNotOf;
 
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -663,7 +691,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -677,7 +705,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findFirstOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -691,7 +719,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findLastOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -710,7 +738,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findNotOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -733,7 +761,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstNotOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -747,7 +775,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findFirstNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastNotOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -761,7 +789,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindOfInitializerListClient :: findLastNotOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllNotOf ( InitializerList ) call, returning mutable iterators, inherited from FindOfInitializerListClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
@@ -781,7 +809,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using FindOfInitializerListClient :: findAllNotOf;
 
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findThat ( Predicate ) returning Const Iterators, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -789,7 +817,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstThat ( Predicate ) returning Const Iterators, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -797,7 +825,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findFirstThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastThat ( Predicate ) returning Const Iterators, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -805,7 +833,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using CollectionBase :: findLastThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllThat ( Predicate ) returning Const Iterators, inherited from Collection base class
          * @test Not Applicable, import of tested functionality.
@@ -814,7 +842,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using CollectionBase :: findAllThat;
 
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findThat ( Predicate ) call, returning mutable iterators, inherited from FindByClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
@@ -841,7 +869,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindByClient :: findThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findFirstThat ( Predicate ) call, returning mutable iterators, inherited from FindByClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
@@ -858,7 +886,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindByClient :: findFirstThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findLastThat ( Predicate ) call, returning mutable iterators, inherited from FindByClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
@@ -875,7 +903,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindByClient :: findLastThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit findAllThat ( Predicate ) call, returning mutable iterators, inherited from FindByClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00600-FT, Test Cases: {
@@ -898,7 +926,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using FindByClient :: findAllThat;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insert ( copy / move ) call, inherited from RandomInsertionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
@@ -909,7 +937,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: insert;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAll ( pack ) call, inherited from RandomInsertionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
@@ -919,7 +947,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: insertAll;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
@@ -933,7 +961,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: insertAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit add ( copy / move ) call, inherited from RandomInsertionClient interface
          * @deprecated 'MutableCollection :: add' has been deprecated. Use 'MutableCollection :: insert' instead
@@ -942,7 +970,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: add;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit addAll ( pack ) call, inherited from RandomInsertionClient interface
          * @deprecated 'MutableCollection :: addAll' has been deprecated. Use 'MutableCollection :: insertAll' instead
@@ -951,7 +979,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: addAll;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit addAllOf ( begin + end / iterable / initializer_list ) call, inherited from RandomInsertionClient interface
          * @deprecated 'MutableCollection :: addAllOf' has been deprecated. Use 'MutableCollection :: insertAllOf' instead
@@ -960,7 +988,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: addAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplace ( forwarded arguments ) call, inherited from RandomInsertionClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00800-RI, Test Cases: {
@@ -970,7 +998,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         using RandomInsertionClient :: emplace;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief String conversion function, used to obtain String representation of the Collection
          * @exceptsafe
@@ -980,7 +1008,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to clear the collection, removing all elements from it
          * @exceptsafe
@@ -990,14 +1018,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto clear () noexcept -> void override = 0;
     };
 
-}
+} /* namespace cds */
 
 #include "mutableCollection/impl/MutableCollection.hpp"
 
 #include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp"
+#include "../../shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
 #include "../../shared/collectionInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/composite/impl/FindByMutableCompositeClient.hpp"
 

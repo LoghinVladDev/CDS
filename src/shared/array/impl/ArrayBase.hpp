@@ -2,16 +2,16 @@
  * Created by loghin on 7/5/22.
  */
 
-#ifndef __CDS_SHARED_ARRAY_BASE_IMPL_HPP__
-#define __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > Size const __ArrayBase <
                     __ElementType,
                     __equals
@@ -19,8 +19,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __ArrayBase <
                     __ElementType,
                     __equals
@@ -28,8 +28,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline __ArrayBase <
                     __ElementType,
                     __equals
@@ -43,8 +43,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __ArrayBase <
                     __ElementType,
                     __equals
@@ -58,8 +58,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -91,8 +91,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -107,8 +107,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -143,9 +143,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         this->__ab_size() / 2ULL;
 
                 /* find information regarding where to move, from where to move and how many elements */
-                ElementType * pDestination  = nullptr;
-                ElementType * pSource       = nullptr;
-                Size          count         = 0ULL;
+                ElementType * pDestination;
+                ElementType * pSource;
+                Size          count;
 
                 /* if shifting left, destination is after front. source is previous front. count is determined by given index
                  * if shifting right, destination is front + index, source is one after destination, count is size - index */
@@ -171,8 +171,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -186,8 +186,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -201,8 +201,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -219,8 +219,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -271,8 +271,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -291,8 +291,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -329,8 +329,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -386,8 +386,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -429,8 +429,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -462,8 +462,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -495,8 +495,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -535,8 +535,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -575,8 +575,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -626,8 +626,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -676,8 +676,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -735,8 +735,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -795,8 +795,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -878,8 +878,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1014,8 +1014,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1031,8 +1031,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1048,8 +1048,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1065,8 +1065,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1082,8 +1082,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1099,8 +1099,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1116,8 +1116,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1133,8 +1133,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1150,8 +1150,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1176,8 +1176,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1202,8 +1202,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1363,8 +1363,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1524,8 +1524,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1540,8 +1540,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1556,10 +1556,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isDefaultConstructible < __TElementType > ()
                     >
@@ -1614,10 +1614,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     >
@@ -1673,8 +1673,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1688,7 +1688,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* acquire intended new back address */
-                auto pEnd = this->_pData->_pFront + size;
+                auto const pEnd = this->_pData->_pFront + size;
 
                 /* while actual back > new back */
                 while ( this->_pData->_pBack > pEnd ) {
@@ -1700,8 +1700,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1735,10 +1735,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     >
@@ -1762,10 +1762,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __TElementType,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     >
@@ -1809,9 +1809,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_OptimalInline auto __ArrayBase <
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_OptimalInline auto __ArrayBase <
                     __ElementType,
                     __equals
             > :: __ab_move (
@@ -1827,8 +1827,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_NonConstConstexprMemberFunction auto __ArrayBase <
                     __ElementType,
                     __equals
@@ -1842,9 +1842,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprConditioned auto __ArrayBase <
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __ArrayBase <
                     __ElementType,
                     __equals
             > :: __ab_equals (
@@ -1892,8 +1892,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
                     typename __Comparator
             > auto __ArrayBase <
@@ -1914,8 +1914,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 );
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ARRAY_BASE_IMPL_HPP__ */

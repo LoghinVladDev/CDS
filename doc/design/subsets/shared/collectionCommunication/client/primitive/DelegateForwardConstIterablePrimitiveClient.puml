@@ -1,0 +1,39 @@
+@startuml
+
+!includesub ../../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef FORW_CONST_PUBLIC
+!define FORW_CONST_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardConstIterablePrimitiveClient <R, E, bidirectional> {
+                + {method} begin () const noexcept -> ConstIterator
+                + {method} end () const noexcept -> ConstIterator
+                + {method} cbegin () const noexcept -> ConstIterator
+                + {method} cend () const noexcept -> ConstIterator
+            }
+
+            interface __LocalDelegateForwardConstIterablePrimitiveClient <R, CIT> {
+                + {method} begin () const noexcept -> CIT
+                + {method} end () const noexcept -> CIT
+                + {method} cbegin () const noexcept -> CIT
+                + {method} cend () const noexcept -> CIT
+            }
+
+            note "Requests direct dispatcher-standard calls" as DFCIPCLocalHint
+            note "Requests handlers to call through Channel" as DFCIPCHint
+            DFCIPCLocalHint - __LocalDelegateForwardConstIterablePrimitiveClient
+            DFCIPCHint - __DelegateForwardConstIterablePrimitiveClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

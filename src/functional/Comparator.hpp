@@ -6,7 +6,6 @@
 #define CDS_COMPARATOR_HPP
 
 #include <CDS/Compiler>
-
 #include "../shared/impl/generalPredicates.hpp"
 
 namespace cds {

@@ -2,12 +2,12 @@
  * Created by loghin on 7/3/22.
  */
 
-#ifndef __CDS_SHARED_MAP_SERVER_HPP__
-#define __CDS_SHARED_MAP_SERVER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_MAP_SERVER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_MAP_SERVER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Server-Type Class part of Collection Communication Model, to be extended in derived classes that act
@@ -34,45 +34,45 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier) */
-            > class __MapServer {               /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __MapServer {               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for a generic function of the target Collection.
                  * @private
                  */
-                using __GenericHandler      = auto ( Collection < __ElementType > :: * ) () -> void; /* NOLINT(bugprone-reserved-identifier) */
+                using __GenericHandler      = auto ( Collection < __ElementType > :: * ) () -> void; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for a generic const function of the target Collection.
                  * @private
                  */
-                using __GenericConstHandler = auto ( Collection < __ElementType > :: * ) () const -> void;  /* NOLINT(bugprone-reserved-identifier) */
+                using __GenericConstHandler = auto ( Collection < __ElementType > :: * ) () const -> void;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief routing table of the generic functions. One for each request type.
                  * @static
                  * @private
                  */
-                static __GenericHandler const __routingTable [   /* NOLINT(bugprone-reserved-identifier) */
+                static __GenericHandler const __routingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
                 ];
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief routing table of the generic const functions. One for each request type.
                  * @static
                  * @private
                  */
-                static __GenericConstHandler const __constRoutingTable [   /* NOLINT(bugprone-reserved-identifier) */
+                static __GenericConstHandler const __constRoutingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
                 ];
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the Map Server Generic Handlers, to be used in
                  *      __cicch_obtainGenericHandler in the 'interface' class ( i.e. HashMap / LinkedHashMap / TreeMap / ... )
@@ -82,9 +82,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ms_handlers () const noexcept -> __GenericHandler const *; /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ms_handlers () const noexcept -> __GenericHandler const *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to acquire the Map Server Generic Const Handlers, to be used in
                  *      __cicch_obtainGenericConstHandler in the 'interface' class ( i.e. HashMap / LinkedHashMap / TreeMap / ... )
@@ -94,11 +94,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard constexpr auto __ms_constHandlers () const noexcept -> __GenericConstHandler const *;   /* NOLINT(bugprone-reserved-identifier) */
+                __CDS_NoDiscard constexpr auto __ms_constHandlers () const noexcept -> __GenericConstHandler const *;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden  */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_MAP_SERVER_HPP__ */

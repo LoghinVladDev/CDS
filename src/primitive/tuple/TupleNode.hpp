@@ -55,19 +55,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex == __index > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex == __index > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_NonConstConstexprMemberFunction auto get () noexcept -> __CurrentType &;
 
             public:
-                template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex != __index > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex != __index > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_NonConstConstexprMemberFunction auto get () noexcept -> typename __hidden :: __impl :: __TypeAt < __requestedIndex - __index, __CurrentType, __RemainingTypes ... > :: Type &;
 
             public:
-                template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex == __index > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex == __index > = 0 > // NOLINT(bugprone-reserved-identifier)
                 constexpr auto get () const noexcept -> __CurrentType const &;
 
             public:
-                template < uint32 __requestedIndex, meta :: EnableIf < __requestedIndex != __index > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __requestedIndex, cds :: meta :: EnableIf < __requestedIndex != __index > = 0 > // NOLINT(bugprone-reserved-identifier)
                 constexpr auto get () const noexcept -> typename __hidden :: __impl :: __TypeAt < __requestedIndex - __index, __CurrentType, __RemainingTypes ... > :: Type const &;
 
             public:
@@ -81,13 +81,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool;
 
             public:
-                template < uint32 __size = sizeof ... ( __RemainingTypes ), meta :: EnableIf < __size == 0 > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __size = sizeof ... ( __RemainingTypes ), cds :: meta :: EnableIf < __size == 0 > = 0 > // NOLINT(bugprone-reserved-identifier)
                 auto toString (
                         std :: ostream & out
                 ) const noexcept -> void;
 
             public:
-                template < uint32 __size = sizeof ... ( __RemainingTypes ), meta :: EnableIf < __size != 0 > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < uint32 __size = sizeof ... ( __RemainingTypes ), cds :: meta :: EnableIf < __size != 0 > = 0 > // NOLINT(bugprone-reserved-identifier)
                 auto toString (
                         std :: ostream & out
                 ) const noexcept -> void;

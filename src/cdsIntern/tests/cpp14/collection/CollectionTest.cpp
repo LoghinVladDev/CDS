@@ -19217,7 +19217,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         ConstIterator res653;
         res653 = underTest.findFirstThat ( & String :: empty );
 
-        if ( ! res653.valid() || * ( ++ res653 ) != "word2" ) {
+        if ( ! static_cast <bool> (res653) || * ( ++ res653 ) != "word2" ) {
             this->logError( "'CTC-00653-FTMF-findFirstThatMemberFunction-CPP14' failed" );
             return;
         } else {
@@ -19228,7 +19228,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         ConstIterator res654;
         res654 = underTest.findLastThat ( & String :: empty );
 
-        if ( ! res654.valid() || * ( ++ res654 ) != "word5" ) {
+        if ( ! static_cast <bool> (res654) || * ( ++ res654 ) != "word5" ) {
             this->logError( "'CTC-00654-FTMF-findLastThatMemberFunction-CPP14' failed" );
             return;
         } else {

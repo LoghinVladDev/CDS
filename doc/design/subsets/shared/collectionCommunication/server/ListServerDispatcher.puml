@@ -1,0 +1,49 @@
+@startuml
+
+!includesub ListServer.puml!public_declaration
+
+!startsub public_declaration
+!ifndef LIST_SERVER_DISPATCHER_PUBLIC
+!define LIST_SERVER_DISPATCHER_PUBLIC
+
+!includesub MutableCollectionServerDispatcher.puml!public_declaration
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __ListServer
+
+            interface __ListServerDispatcher <S, I, E, AIT, ACIT, IT, CIT, RIT, CRIT, \nbegin(), end(), cbegin(), cend(), \nrbegin(), rend(), crbegin(), crend(), \nnew(), newFront(), newBack(), newFrontArray(), \nnewBackArray(), newBefore(), newBeforeConst(), \nnewAfter(), newAfterConst(), newBeforeArray(), \nnewBeforeConstArray(), newAfterArray(), \nnewAfterConstArray(), remove(), removeConst(), \nremoveArray(), removeConstArray()> extends __MutableCollectionServerDispatcher {
+                # {method} __rbegin () noexcept -> __AbstractDelegateIterator <E> *
+                # {method} __rend () noexcept -> __AbstractDelegateIterator <E> *
+                # {method} __crbegin () const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __crend () const noexcept -> __AbstractDelegateIterator <E const> *
+                # {method} __rbeginLocal () noexcept -> RIT
+                # {method} __rendLocal () noexcept -> RIT
+                # {method} __crbeginLocal () const noexcept -> CRIT
+                # {method} __crendLocal () const noexcept -> CRIT
+                # {method} __newFront () noexcept -> E *
+                # {method} __newBack () noexcept -> E *
+                # {method} __newFrontArray (Size, E **) noexcept -> void
+                # {method} __newBackArray (Size, E **) noexcept -> void
+                # {method} __newBefore (AIT const *) noexcept -> E *
+                # {method} __newBeforeConst (ACIT const *) noexcept -> E *
+                # {method} __newAfter (AIT const *) noexcept -> E *
+                # {method} __newAfterConst (ACIT const *) noexcept -> E *
+                # {method} __newBeforeArray (AIT const *, Size, E **) noexcept -> bool
+                # {method} __newBeforeArrayConst (ACIT const *, Size, E **) noexcept -> bool
+                # {method} __newAfterArray (AIT const *, Size, E **) noexcept -> bool
+                # {method} __newAfterArrayConst (ACIT const *, Size, E **) noexcept -> bool
+            }
+
+            __ListServerDispatcher "provides server-to-implementation handlers" .. cds.__hidden.__impl.__ListServer
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

@@ -1,0 +1,69 @@
+@startuml
+
+!includesub Collection.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/IteratorRemovePrimitiveClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/primitive/RandomInsertionPrimitiveClient.puml!public_declaration
+
+!includesub ../shared/collectionCommunication/client/composite/FindOfMutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/FindByMutableCompositeClient.puml!public_declaration
+!includesub ../shared/collectionCommunication/client/composite/GenericMutableStatementsCompositeClient.puml!public_declaration
+
+!startsub public_declaration
+!ifndef MUTABLE_COLLECTION_PUBLIC
+!define MUTABLE_COLLECTION_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            interface __DelegateForwardIterablePrimitiveClient
+            interface __AbstractIteratorRemovePrimitiveClient
+            interface __RandomInsertionPrimitiveClient
+            interface __FindOfMutableCompositeClient
+            interface __FindByMutableCompositeClient
+            interface __GenericMutableStatementsCompositeClient
+
+            class __MutableCollectionDelegateForwardIterableClient <E> << (T, #aa9999) >>
+            class __MutableCollectionIteratorRemoveClient <E> << (T, #aa9999) >>
+            class __MutableCollectionRandomInsertionClient <E> << (T, #aa9999) >>
+            class __MutableCollectionFindOfCollectionClient <E> << (T, #aa9999) >>
+            class __MutableCollectionFindOfInitializerListClient <E> << (T, #aa9999) >>
+            class __MutableCollectionFindByClient <E> << (T, #aa9999) >>
+            class __MutableCollectionGenericStatementsClient <E> << (T, #aa9999) >>
+
+            __DelegateForwardIterablePrimitiveClient ........... "is" __MutableCollectionDelegateForwardIterableClient
+            __AbstractIteratorRemovePrimitiveClient ........... "is" __MutableCollectionIteratorRemoveClient
+            __RandomInsertionPrimitiveClient ........... "is" __MutableCollectionRandomInsertionClient
+            __FindOfMutableCompositeClient .......... "is" __MutableCollectionFindOfCollectionClient
+            __FindOfMutableCompositeClient .......... "is" __MutableCollectionFindOfInitializerListClient
+            __FindByMutableCompositeClient .......... "is" __MutableCollectionFindByClient
+            __GenericMutableStatementsCompositeClient .......... "is" __MutableCollectionGenericStatementsClient
+
+        }
+    }
+
+    abstract class Collection <E>
+    abstract class MutableCollection <E> extends Collection implements cds.__hidden.__impl.__MutableCollectionDelegateForwardIterableClient, cds.__hidden.__impl.__MutableCollectionIteratorRemoveClient, cds.__hidden.__impl.__MutableCollectionRandomInsertionClient, cds.__hidden.__impl.__MutableCollectionFindOfCollectionClient, cds.__hidden.__impl.__MutableCollectionFindOfInitializerListClient, cds.__hidden.__impl.__MutableCollectionFindByClient, cds.__hidden.__impl.__MutableCollectionGenericStatementsClient {
+        ..base methods..
+        # {method} MutableCollection () noexcept
+        # {method} MutableCollection (MutableCollection const &) noexcept
+        # {method} MutableCollection (MutableCollection &&) noexcept
+        + {method} {abstract} ~MutableCollection () noexcept
+        ..public methods..
+        + {method} toString () const noexcept -> String
+    }
+
+}
+
+!endif
+!endsub
+
+!startsub private
+remove cds.__hidden.__impl.__*Local*
+remove *LocalHint*
+!endsub
+
+@enduml

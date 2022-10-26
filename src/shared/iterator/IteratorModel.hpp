@@ -2,8 +2,8 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_ITERATOR_MODEL_HPP__
-#define __CDS_ITERATOR_MODEL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_ITERATOR_MODEL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_ITERATOR_MODEL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace meta {
@@ -39,7 +39,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
          */
         struct RandomAccessIterator : BidirectionalIterator {};
 
-    }
-}
+    } /* namespace meta */
+} /* namespace cds */
 
 #endif /* __CDS_ITERATOR_MODEL_HPP__ */

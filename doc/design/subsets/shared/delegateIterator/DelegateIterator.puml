@@ -1,0 +1,39 @@
+@startuml
+
+!includesub ../iterator/IteratorModel.puml!public_declaration
+!includesub AbstractDelegateIterator.puml!public_declaration
+!includesub IteratorAdvanceDirection.puml!public_declaration
+
+!startsub public_declaration
+!ifndef DEL_IT_PUBLIC
+!define DEL_IT_PUBLIC
+
+interface cds.meta.Iterator
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            class __DelegateIterator <E, IT extends cds.meta.Iterator> extends __AbstractDelegateIterator {
+                - {field} _wrappedIterator : IT
+                ..base methods..
+                + {method} __DelegateIterator () noexcept
+                + {method} __DelegateIterator (IT const &) noexcept
+                + {method} __DelegateIterator (IT &&) noexcept
+                + {method} __DelegateIterator (__DelegateIterator const &) noexcept
+                + {method} __DelegateIterator (__DelegateIterator &&) noexcept
+                + {method} ~__DelegateIterator () noexcept
+                ..public methods..
+                + {method} iterator () const noexcept -> IT const *
+            }
+
+            __DelegateIterator "1" *-- "1" cds.meta.Iterator
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

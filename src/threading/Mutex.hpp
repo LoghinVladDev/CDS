@@ -1,226 +1,65 @@
-//
-// Created by loghin on 08.03.2021.
-//
+/*
+ * Created by loghin on 08.03.2021.
+ */
 
-#ifndef CDS_MUTEX_HPP
-#define CDS_MUTEX_HPP
+#ifndef __CDS_MUTEX_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_MUTEX_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Object>
 
-#if defined(WIN32)
-
-#if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION) && defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-#error Only one Implementation for Mutex from WINAPI can be chosen
-#endif
-
-#if !defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION) && !defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-#define MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
-#define IN_PLACE
-#endif
-
-#elif defined(__linux)
-
-#if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION) || defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-#error Linux does not support WINAPI calls
-#endif
-
-#endif
-
-#if defined(__linux)
-#include <pthread.h>
-#elif defined(WIN32)
-#include <windows.h>
-#else
-#endif
+#include "mutex/Config.hpp"
 
 namespace cds {
 
     class Mutex : public Object {
-    private:
 
-    #if defined(__linux)
-        typedef pthread_mutex_t PrimitiveMutex;
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        cds :: __hidden :: __impl :: __MutexPlatformHandleType _handle;
 
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-        typedef CRITICAL_SECTION PrimitiveMutex;
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-        typedef struct {
-            HANDLE                  handle;
-            LPSECURITY_ATTRIBUTES   pSecurityAttributes;
-        } PrimitiveMutex;
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        Mutex () noexcept;
 
-        enum class State: uint8 {
-            LOCKED = 0x01U,
-            UNLOCKED = 0x02U
-        };
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        Mutex (
+                Mutex const & /* mutex */
+        ) noexcept = delete;
 
-        __CDS_cpplang_ConstexprConditioned static auto stateToString ( State state ) noexcept -> StringLiteral {
-            switch (state) {
-                case State::LOCKED:    return "Locked"; // NOLINT(clion-misra-cpp2008-6-4-5)
-                case State::UNLOCKED:  return "Unlocked"; // NOLINT(clion-misra-cpp2008-6-4-5)
-            }
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        Mutex (
+                Mutex && mutex
+        ) noexcept = delete;
 
-            return "Undefined State";
-        }
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        ~Mutex () noexcept override;
 
-        PrimitiveMutex  handle;
-        State           state;
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Mutex const & /* mutex */
+        ) noexcept -> Mutex & = delete;
 
-    public:
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Mutex && mutex
+        ) noexcept -> Mutex & = delete;
 
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-    #define CTR_PARAM TCHAR const * pMutexName = nullptr, LPSECURITY_ATTRIBUTES pAttributes = nullptr
-    #else
-    #define CTR_PARAM
-    #endif
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        auto lock () noexcept -> void;
 
-        Mutex (CTR_PARAM) noexcept : state(State::UNLOCKED) { // NOLINT(cppcoreguidelines-pro-type-member-init)
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto tryLock () noexcept -> bool;
 
-    #if defined(__linux)
-            (void) pthread_mutex_init( & this->handle, nullptr );
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            InitializeCriticalSection( & this->handle );
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            this->handle.handle = CreateMutex ( pAttributes, FALSE, pMutexName );
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        auto unlock () noexcept -> void;
 
-        }
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-        ~Mutex () noexcept override {
-
-    #if defined(__linux)
-            (void) pthread_mutex_destroy( & this->handle );
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            DeleteCriticalSection( & this->handle );
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            CloseHandle(this->handle.handle);
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
-
-        }
-
-        auto reset (CTR_PARAM) noexcept -> void {
-    #if defined(__linux)
-            (void) pthread_mutex_destroy( & this->handle );
-            (void) pthread_mutex_init( & this->handle, nullptr );
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            DeleteCriticalSection( & this->handle );
-            InitializeCriticalSection( & this->handle );
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            CloseHandle(this->handle.handle);
-            this->handle.handle = CreateMutex ( pAttributes, FALSE, pMutexName );
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
-
-        }
-
-    #undef CTR_PARAM
-
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-    #define LOCK_EXCEPT_SPEC false
-    #else
-    #define LOCK_EXCEPT_SPEC true
-    #endif
-
-        auto lock () noexcept (LOCK_EXCEPT_SPEC) -> void {
-
-    #if defined(__linux)
-            (void) pthread_mutex_lock( & this->handle );
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            EnterCriticalSection( & this->handle );
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            auto result = WaitForSingleObject( this->handle.handle, INFINITE );
-
-            if ( result == WAIT_ABANDONED )
-                throw std::runtime_error ("Mutex Abandoned");
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
-
-            this->state = State::LOCKED;
-
-        }
-
-        auto tryLock () noexcept(LOCK_EXCEPT_SPEC) -> bool {
-
-    #if defined(__linux)
-            auto lockSuccess = pthread_mutex_trylock(& this->handle ) == 0;
-            if ( lockSuccess ) {
-                this->state = State::LOCKED;
-            }
-
-            return lockSuccess;
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            auto lockSuccess = TryEnterCriticalSection( & this->handle ) != 0;
-            if ( lockSuccess ) this->state = State::LOCKED;
-            return lockSuccess;
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            auto lockStatus = WaitForSingleObject( this->handle.handle, 0 );
-            if ( lockStatus == WAIT_OBJECT_0 ) {
-                this->state = State::LOCKED;
-                return true;
-            } else if ( lockStatus == WAIT_ABANDONED )
-                throw std::runtime_error("Mutex Abandoned");
-            return false;
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
-
-        }
-
-    #undef LOCK_EXCEPT_SPEC
-
-        auto unlock () noexcept -> void {
-
-    #if defined(__linux)
-            (void) pthread_mutex_unlock( & this->handle );
-    #elif defined(WIN32)
-    #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
-            LeaveCriticalSection( & this->handle );
-    #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
-            ReleaseMutex( this->handle.handle );
-    #endif
-    #else
-    #error Unsupported : Mutex
-    #endif
-
-            this->state = State::UNLOCKED;
-
-        }
-
-        __CDS_NoDiscard auto toString() const noexcept -> String override {
-            return String()
-                .append("Mutex { state = ")
-                .append(Mutex::stateToString(this->state)).append(" }");
-        }
+    public:     /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
     };
 
-}
+} /* namespace cds */
 
-#if defined(IN_PLACE)
-#undef IN_PLACE
-#undef MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
-#endif
+#include "mutex/impl/Mutex.hpp"
 
-__CDS_Meta_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
-
-#endif //CDS_MUTEX_HPP
+#endif /* __CDS_MUTEX_HPP__ */

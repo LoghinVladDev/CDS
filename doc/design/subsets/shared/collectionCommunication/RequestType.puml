@@ -1,0 +1,45 @@
+@startuml
+
+!startsub public_declaration
+!ifndef COLLECTION_COMMUNICATION_REQUEST_TYPE_PUBLIC
+!define COLLECTION_COMMUNICATION_REQUEST_TYPE_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            enum __CollectionInternalRequestType {
+                + {field} {static} __cirt_begin
+                + {field} {static} __cirt_end
+                + {field} {static} __cirt_rbegin
+                + {field} {static} __cirt_rend
+                + {field} {static} __cirt_remove
+                + {field} {static} __cirt_removeConst
+                + {field} {static} __cirt_removeArray
+                + {field} {static} __cirt_removeConstArray
+                + {field} {static} __cirt_newAddress
+                + {field} {static} __cirt_newFrontAddress
+                + {field} {static} __cirt_newBackAddress
+                + {field} {static} __cirt_newFrontAddressArray
+                + {field} {static} __cirt_newBackAddressArray
+                + {field} {static} __cirt_newBeforeAddress
+                + {field} {static} __cirt_newBeforeAddressConst
+                + {field} {static} __cirt_newAfterAddress
+                + {field} {static} __cirt_newAfterAddressConst
+                + {field} {static} __cirt_newBeforeAddressArray
+                + {field} {static} __cirt_newBeforeAddressArrayConst
+                + {field} {static} __cirt_newAfterAddressArray
+                + {field} {static} __cirt_newAfterAddressArrayConst
+                + {field} {static} __cirt_find
+                + {field} {static} __cirt_findConst
+                + {field} {static} __cirt_requestCountDoNotUse
+            }
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml

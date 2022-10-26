@@ -1,0 +1,89 @@
+@startuml
+
+!includesub IteratorModel.puml!public_declaration
+!includesub NodeModel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef HT_ITERATOR_PUBLIC
+!define HT_ITERATOR_PUBLIC
+
+namespace cds {
+
+    class HashTableIterator <E> implements cds.meta.ForwardIterator {
+        - {field} _bucketIndex : Size
+        - {field} _bucketCount : Size
+        - {field} _pCurrentNode : cds.__hidden.__impl.__UnidirectionalNode <E> *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__UnidirectionalNode <E> *
+        - {field} _pListArray : cds.__hidden.__impl.__UnidirectionalNode <E> **
+        ..private methods, used internally and by HashTable..
+        - {method} advanceBucket () noexcept -> void
+        - {method} listArray () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> **
+        - {method} bucketCount () const noexcept -> Size
+        - {method} bucketIndex () const noexcept -> Size
+        - {method} currentNode () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> *
+        - {method} previousNode () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> *
+        ..base methods..
+        + {method} HashTableIterator () noexcept
+        + {method} HashTableIterator (cds.__hidden.__impl.__UnidirectionalNode <E> **, Size) noexcept
+        + {method} HashTableIterator (cds.__hidden.__impl.__UnidirectionalNode <E> **, Size, \n\t\tcds.__hidden.__impl.__UnidirectionalNode <E> *, \n\t\tcds.__hidden.__impl.__UnidirectionalNode <E> *, Size) noexcept
+        + {method} HashTableIterator (HashTableIterator const &) noexcept
+        + {method} HashTableIterator (HashTableIterator &&) noexcept
+        + {method} ~HashTableIterator () noexcept
+        + {method} operator = (HashTableIterator const &) noexcept -> HashTableIterator &
+        + {method} operator = (HashTableIterator &&) noexcept -> HashTableIterator &
+        ..public methods..
+        + {method} operator ++ () noexcept -> HashTableIterator &
+        + {method} operator ++ (int) noexcept -> HashTableIterator
+        + {method} operator -- () noexcept -> HashTableIterator &
+        + {method} operator -- (int) noexcept -> HashTableIterator
+        + {method} operator * () const noexcept -> E &
+        + {method} operator -> () const noexcept -> E *
+        + {method} operator == (HashTableIterator const &) const noexcept -> bool
+        + {method} operator != (HashTableIterator const &) const noexcept -> bool
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__UnidirectionalNode "2 + [0...bucketCount]" --o "1" HashTableIterator
+
+    class HashTableConstIterator <E> implements cds.meta.ForwardIterator {
+        - {field} _bucketIndex : Size
+        - {field} _bucketCount : Size
+        - {field} _pCurrentNode : cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        - {field} _pPreviousNode : cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        - {field} _pListArray : cds.__hidden.__impl.__UnidirectionalNode <E> const * const *
+        ..private methods, used internally and by HashTable..
+        - {method} advanceBucket () noexcept -> void
+        - {method} listArray () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> const * const *
+        - {method} bucketCount () const noexcept -> Size
+        - {method} bucketIndex () const noexcept -> Size
+        - {method} currentNode () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        - {method} previousNode () const noexcept -> cds.__hidden.__impl.__UnidirectionalNode <E> const *
+        ..base methods..
+        + {method} HashTableConstIterator () noexcept
+        + {method} HashTableConstIterator (cds.__hidden.__impl.__UnidirectionalNode <E> const * const *, Size) noexcept
+        + {method} HashTableConstIterator (cds.__hidden.__impl.__UnidirectionalNode <E> const * const *, Size, \n\t\tcds.__hidden.__impl.__UnidirectionalNode <E> const *, \n\t\tcds.__hidden.__impl.__UnidirectionalNode <E> const *, Size) noexcept
+        + {method} HashTableConstIterator (HashTableConstIterator const &) noexcept
+        + {method} HashTableConstIterator (HashTableConstIterator &&) noexcept
+        + {method} ~HashTableConstIterator () noexcept
+        + {method} operator = (HashTableConstIterator const &) noexcept -> HashTableConstIterator &
+        + {method} operator = (HashTableConstIterator &&) noexcept -> HashTableConstIterator &
+        ..public methods..
+        + {method} operator ++ () noexcept -> HashTableConstIterator &
+        + {method} operator ++ (int) noexcept -> HashTableConstIterator
+        + {method} operator -- () noexcept -> HashTableConstIterator &
+        + {method} operator -- (int) noexcept -> HashTableConstIterator
+        + {method} operator * () const noexcept -> E const &
+        + {method} operator -> () const noexcept -> E const *
+        + {method} operator == (HashTableConstIterator const &) const noexcept -> bool
+        + {method} operator != (HashTableConstIterator const &) const noexcept -> bool
+        + {method} operator bool () const noexcept
+    }
+
+    cds.__hidden.__impl.__UnidirectionalNode "2 + [0...bucketCount]" --o "1" HashTableConstIterator
+
+}
+
+!endif
+!endsub
+
+@enduml

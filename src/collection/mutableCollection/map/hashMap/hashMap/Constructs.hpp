@@ -2,24 +2,24 @@
  * Created by loghin on 13/08/22.
  */
 
-#ifndef __CDS_HASH_MAP_CONSTRUCTS_HPP__
-#define __CDS_HASH_MAP_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_HASH_MAP_CONSTRUCTS_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_HASH_MAP_CONSTRUCTS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
     template <
-            typename __KeyType,                                                         /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType,                                                       /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  /* NOLINT(bugprone-reserved-identifier) */
+            typename __KeyType,                                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType,                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > class HashMap;
 
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                /* NOLINT(bugprone-reserved-identifier) */
-            > constexpr auto __hashMapKeyExtractor (    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > constexpr auto __hashMapKeyExtractor (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename Map < __KeyType, __ValueType > :: EntryType const & element
             ) noexcept -> __KeyType const & {
 
@@ -28,9 +28,9 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                                /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapCopyConstructor (   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapCopyConstructor (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename Map < __KeyType, __ValueType > :: EntryType       & destinationDataNode,
                     typename Map < __KeyType, __ValueType > :: EntryType const & sourceDataNode
             ) noexcept -> void {
@@ -40,9 +40,9 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                            /* NOLINT(bugprone-reserved-identifier) */
-            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDestructor (    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_cpplang_ConstexprNonLiteralReturn auto __hashMapDestructor (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename Map < __KeyType, __ValueType > :: EntryType & entry
             ) noexcept -> void {
 
@@ -52,11 +52,11 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
-            > constexpr auto __hashMapEquals (      /* NOLINT(bugprone-reserved-identifier) */
-                    typename Map < __KeyType, __ValueType > :: EntryType const & leftEntry,
-                    typename Map < __KeyType, __ValueType > :: EntryType const & rightEntry
+                    typename __KeyType,                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > constexpr auto __hashMapEquals (                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename Map < __KeyType, __ValueType > :: EntryType const & leftEntry, /* NOLINT(bugprone-easily-swappable-parameters) */
+                    typename Map < __KeyType, __ValueType > :: EntryType const & rightEntry /* NOLINT(bugprone-easily-swappable-parameters) */
             ) noexcept -> bool {
 
                 return
@@ -66,10 +66,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapImplementation =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapImplementation =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __HashTable <
                             typename Map < __KeyType, __ValueType > :: EntryType,
                             __KeyType,
@@ -82,10 +82,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapDispatcher =       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapDispatcher =       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __HashMapImplementation <
                             __KeyType,
                             __ValueType,
@@ -100,10 +100,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapServer =           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapServer =           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __MapServer <
                             cds :: HashMap <
                                     __KeyType,
@@ -115,10 +115,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapRandomInsertionClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapRandomInsertionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRandomInsertionPrimitiveClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -131,10 +131,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapIteratorRemoveClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalIteratorRemovePrimitiveClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -147,10 +147,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapConstIteratorRemoveClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapConstIteratorRemoveClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalIteratorRemovePrimitiveClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -163,10 +163,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -182,10 +182,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -201,10 +201,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindByClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindByClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindByMutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -217,10 +217,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindOfConstCollectionClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindOfConstCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -236,10 +236,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindOfConstInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindOfConstInitializerListClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -255,10 +255,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindByConstClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindByConstClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindByImmutableCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -271,10 +271,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindUniqueClient =     /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindUniqueClient =     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindUniqueMutablePrimitiveClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -287,10 +287,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapFindUniqueConstClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapFindUniqueConstClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindUniqueImmutablePrimitiveClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -303,10 +303,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -320,10 +320,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapRemoveOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapRemoveOfInitializerListClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -337,10 +337,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapRemoveByClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapRemoveByClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveByCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -352,10 +352,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalGenericMutableStatementsCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -367,10 +367,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapConstGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapConstGenericStatementsClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalGenericImmutableStatementsCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -382,10 +382,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -399,10 +399,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapContainsOfInitializerListClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: HashMap <
                                     __KeyType,
@@ -419,10 +419,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapDelegateForwardIterableClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalDelegateForwardIterablePrimitiveClient <
                             cds :: HashMap < __KeyType, __ValueType, __Hasher >,
                             typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator
@@ -430,17 +430,17 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType,                           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Hasher                               /* NOLINT(bugprone-reserved-identifier) */
-            > using __HashMapDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapDelegateForwardConstIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalDelegateForwardConstIterablePrimitiveClient <
                             cds :: HashMap < __KeyType, __ValueType, __Hasher >,
                             typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_HASH_MAP_CONSTRUCTS_HPP__ */

@@ -2,14 +2,14 @@
  * Created by loghin on 06/10/22.
  */
 
-#ifndef __CDS_LINKED_HASH_SET_IMPL_HPP__
-#define __CDS_LINKED_HASH_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_LINKED_HASH_SET_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_LINKED_HASH_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -22,8 +22,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -36,8 +36,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -50,8 +50,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -64,8 +64,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -76,8 +76,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -88,8 +88,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -112,8 +112,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -139,8 +139,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -169,8 +169,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -199,8 +199,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_NonConstConstexprMemberFunction auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -223,8 +223,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr LinkedHashSet <
             __ElementType,
             __Hasher
@@ -232,8 +232,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline LinkedHashSet <
             __ElementType,
             __Hasher
@@ -249,8 +249,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > constexpr LinkedHashSet <
             __ElementType,
             __Hasher
@@ -264,11 +264,25 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr LinkedHashSet <
+            __ElementType,
+            __Hasher
+    > :: LinkedHashSet (
+            __Hasher const & hasher
+    ) noexcept :
+            HashTableImplementation ( hasher ) {
+
+    }
+
+
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
@@ -289,11 +303,11 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier) */
-            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __IteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
@@ -316,10 +330,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
@@ -339,10 +353,10 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > template <
-            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __TElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
@@ -364,9 +378,9 @@ namespace cds {
 
 
     template <
-            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline LinkedHashSet <
             __ElementType,
             __Hasher
@@ -382,9 +396,9 @@ namespace cds {
 
 
     template <
-            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline LinkedHashSet <
             __ElementType,
             __Hasher
@@ -402,8 +416,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline LinkedHashSet <
             __ElementType,
             __Hasher
@@ -415,8 +429,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -441,8 +455,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -461,8 +475,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher           /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -481,9 +495,9 @@ namespace cds {
 
 
     template <
-            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
-    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > template < typename __IterableType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -506,8 +520,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -518,8 +532,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -531,8 +545,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_OptimalInline auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -546,8 +560,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprOverride auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -560,8 +574,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -578,8 +592,8 @@ namespace cds {
 
 
     template <
-            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier) */
-            typename __Hasher               /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <
             __ElementType,
             __Hasher
@@ -594,6 +608,6 @@ namespace cds {
         return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_LINKED_HASH_SET_IMPL_HPP__ */

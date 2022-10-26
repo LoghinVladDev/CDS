@@ -1,0 +1,106 @@
+@startuml
+
+!includesub ../iterator/AddressIterator.puml!public_declaration
+!includesub ../collectionCommunication/server/ListServerDispatcher.puml!public_declaration
+
+!startsub public_declaration
+!ifndef ARRAY_BASE_PUBLIC
+!define ARRAY_BASE_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            class __ArrayBase <E, BiPredicate <E, E>> {
+                - {field} {static} __ab_minCapacity : Size const
+                - {field} _pData : __ArrayImplDataContainer *
+                ..base methods..
+                # {method} __ArrayBase () noexcept
+                # {method} __ArrayBase (__ArrayBase const &) noexcept
+                # {method} __ArrayBase (__ArrayBase &&) noexcept
+                - {method} __ab_init () noexcept -> void
+                ..property methods..
+                # {method} __ab_clear (bool) noexcept -> void
+                # {method} __ab_size () const noexcept -> Size
+                # {method} __ab_remove (Index) const noexcept -> void
+                # {method} __ab_get (Index) noexcept -> E *
+                # {method} __ab_get (Index) const noexcept -> E const *
+                # {method} __ab_newAt (Index) noexcept -> E *
+                # {method} __ab_newArrayAt (Index, Size, E **) noexcept -> void
+                # {method} __ab_data () noexcept -> E *
+                # {method} __ab_data () const noexcept -> E const *
+                # {method} __ab_resize (Size, [E const &]) noexcept -> void
+                # {method} __ab_shrink (Size) noexcept -> void
+                # {method} __ab_reserve (Size) noexcept -> void
+                # {method} __ab_copy (__ArrayBase const &) noexcept -> void
+                # {method} __ab_move (__ArrayBase &&) noexcept -> void
+                # {method} __ab_copyCleared (__ArrayBase const &) noexcept -> void
+                # {method} __ab_moveCleared (__ArrayBase &&) noexcept -> void
+                # {method} __ab_equals (__ArrayBase const &) const noexcept -> bool
+                # {method} <C> __ab_sort ([C const &]) noexcept -> void
+                ..dispatcher required methods, in order..
+                # {method} __ab_begin () noexcept -> __ab_Iterator
+                # {method} __ab_end () noexcept -> __ab_Iterator
+                # {method} __ab_cbegin () const noexcept -> __ab_ConstIterator
+                # {method} __ab_cend () const noexcept -> __ab_ConstIterator
+                # {method} __ab_rbegin () noexcept -> __ab_ReverseIterator
+                # {method} __ab_rend () noexcept -> __ab_ReverseIterator
+                # {method} __ab_crbegin () const noexcept -> __ab_ConstReverseIterator
+                # {method} __ab_crend () const noexcept -> __ab_ConstReverseIterator
+                # {method} __ab_newAddress (E const *, bool *) noexcept -> E *
+                # {method} __ab_newFront () noexcept -> E *
+                # {method} __ab_newBack () noexcept -> E *
+                # {method} __ab_newFrontArray (Size, E **) noexcept -> void
+                # {method} __ab_newBackArray (Size, E **) noexcept -> void
+                # {method} __ab_newBefore (cds::AbstractAddressIterator <E> const &) noexcept -> E *
+                # {method} __ab_newBeforeConst (cds::AbstractAddressIterator <E const> const &) noexcept -> E *
+                # {method} __ab_newAfter (cds::AbstractAddressIterator <E> const &) noexcept -> E *
+                # {method} __ab_newAfterConst (cds::AbstractAddressIterator <E const> const &) noexcept -> E *
+                # {method} __ab_newBeforeArray (cds::AbstractAddressIterator <E> const &, Size, E **) noexcept -> void
+                # {method} __ab_newBeforeArrayConst (cds::AbstractAddressIterator <E const> const &, Size, E **) noexcept -> void
+                # {method} __ab_newAfterArray (cds::AbstractAddressIterator <E> const &, Size, E **) noexcept -> void
+                # {method} __ab_newAfterArrayConst (cds::AbstractAddressIterator <E const> const &, Size, E **) noexcept -> void
+                # {method} __ab_removeIterator (cds::AbstractAddressIterator <E> const &) noexcept -> bool
+                # {method} __ab_removeConstIterator (cds::AbstractAddressIterator <E const> const &) noexcept -> bool
+                # {method} __ab_removeIteratorArray (cds::AbstractAddressIterator <E> const * const *, Size) noexcept -> Size
+                # {method} __ab_removeConstIteratorArray (cds::AbstractAddressIterator <E const> const * const *, Size) noexcept -> Size
+            }
+
+            class __ArrayBase::__ab_Iterator << (T, #aa9999) >>
+            class __ArrayBase::__ab_ConstIterator << (T, #aa9999) >>
+            class __ArrayBase::__ab_ReverseIterator << (T, #aa9999) >>
+            class __ArrayBase::__ab_ConstReverseIterator << (T, #aa9999) >>
+            interface __ArrayBase::__Dispatcher <S> extends __ListServerDispatcher
+
+            class __ArrayBase::__ArrayImplDataContainer {
+                + {field} _pBuffer : E *
+                + {field} _pFront : E *
+                + {field} _pBack : E *
+                + {field} _frontCapacity : Size
+                + {field} _backCapacity : Size
+                + {field} _frontNextCapacity : Size
+                + {field} _backNextCapacity : Size
+            }
+
+            __ArrayBase::__ab_Iterator "is nested in" .. __ArrayBase
+            __ArrayBase::__ab_ConstIterator "is nested in" .. __ArrayBase
+            __ArrayBase::__ab_ReverseIterator "is nested in" .. __ArrayBase
+            __ArrayBase::__ab_ConstReverseIterator "is nested in" .. __ArrayBase
+            __ArrayBase .. "is nested in" __ArrayBase::__Dispatcher
+            __ArrayBase .. "is nested in" __ArrayBase::__ArrayImplDataContainer
+
+            cds.ForwardAddressIterator ... "is" __ArrayBase::__ab_Iterator
+            cds.ForwardAddressIterator ... "is" __ArrayBase::__ab_ConstIterator
+            cds.BackwardAddressIterator ... "is" __ArrayBase::__ab_ReverseIterator
+            cds.BackwardAddressIterator ... "is" __ArrayBase::__ab_ConstReverseIterator
+
+        }
+    }
+
+}
+
+!endif
+!endsub
+
+@enduml

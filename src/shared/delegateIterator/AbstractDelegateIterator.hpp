@@ -2,20 +2,14 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__
-#define __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "IteratorAdvanceDirection.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
-
-            /**
-             * @typedef Alias for a generic delegate iterator. Unknown, intentional, as iterator server will generate a derived delegate iterator
-             * */
-            using __GenericIterator = void const *; /* NOLINT(bugprone-reserved-identifier) */
-
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Abstract Delegate Iterator, without defined proper type, abstract only, as Collection must not know the type of delegate.
@@ -25,10 +19,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @namespace cds :: experimental :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
-            class __AbstractDelegateIterator {      /* NOLINT(bugprone-reserved-identifier) */
+            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __AbstractDelegateIterator {      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Default Constructor, constexpr
                  * @exceptsafe
@@ -37,7 +31,53 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 constexpr __AbstractDelegateIterator() noexcept;
 
-            public:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Copy Constructor, constexpr
+                 * @param iterator : __AbstractDelegateIterator cref = Constant Reference to the delegate to copy data from
+                 * @exceptsafe
+                 * @test N/A
+                 * @protected
+                 */
+                __AbstractDelegateIterator(__AbstractDelegateIterator const &) noexcept = default;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Move Constructor, constexpr
+                 * @param iterator : __AbstractDelegateIterator mref = Move Reference to the delegate to move data from
+                 * @exceptsafe
+                 * @test N/A
+                 * @protected
+                 */
+                __AbstractDelegateIterator(__AbstractDelegateIterator &&) noexcept = default;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Copy Assignment Operator, constexpr
+                 * @param iterator : __AbstractDelegateIterator cref = Constant Reference to the delegate to copy data from
+                 * @exceptsafe
+                 * @return __AbstractDelegateIterator ref = Reference to the modified object
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __AbstractDelegateIterator const & /* iterator */
+                ) noexcept -> __AbstractDelegateIterator & = default;
+
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                /**
+                 * @brief Implicit Move Assignment Operator, constexpr
+                 * @param iterator : __AbstractDelegateIterator mref = Move Reference to the delegate to move data from
+                 * @exceptsafe
+                 * @return __AbstractDelegateIterator ref = Reference to the modified object
+                 * @test N/A
+                 * @protected
+                 */
+                auto operator = (
+                        __AbstractDelegateIterator && /* iterator */
+                ) noexcept -> __AbstractDelegateIterator & = default;
+
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Virtual Destructor.
                  * @exceptsafe
@@ -46,7 +86,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_cpplang_ConstexprDestructor virtual ~__AbstractDelegateIterator() noexcept;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Advance Function. Operation will advance iterator with one position, in requested direction. Called by Wrapper
                  * @param [in] direction : __IteratorAdvanceDirection = the direction to advance the iterator in
@@ -58,7 +98,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorAdvanceDirection direction
                 ) noexcept -> void = 0;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Equality Function. Called by Wrapper
                  * @param [in] iterator : __AbstractDelegateIterator cref = Constant Reference to the Iterator to compare current Iterator to
@@ -67,11 +107,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto equals (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
                         __AbstractDelegateIterator const & iterator
                 ) const noexcept -> bool = 0;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Validity Function. Checks if delegate is valid for the base derived collection. Called by Wrapper
                  * @exceptsafe
@@ -81,17 +121,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool = 0;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to obtain the base iterator of the derived class, used in extraction of base iterator, such as Collection :: remove ( abstract ) -> Array :: remove ( base iterator )
                  * @exceptsafe
-                 * @return __GenericIterator = unknown type, pointer to iterator. To be returned by delegates and to be reinterpreted by base derived class functions
+                 * @return cds :: meta :: Iterator cptr = pointer to const iterator. To be returned by delegates and to be reinterpreted by base derived class functions
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> __GenericIterator;
+                __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> cds :: meta :: Iterator const * = 0; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a copy of the current wrapper. Called by Wrapper at copy creation
                  * @exceptsafe
@@ -101,7 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard virtual auto copy () const noexcept -> __AbstractDelegateIterator * = 0;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Value Acquisition Function. Will acquire value at given iterator. Called by Wrapper
                  * @exceptsafe
@@ -112,8 +152,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> __ElementType & = 0;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_ABSTRACT_DELEGATE_ITERATOR_HPP__ */

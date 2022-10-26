@@ -1,40 +1,40 @@
-//
-// Created by loghin on 6/3/22.
-//
+/*
+ * Created by loghin on 6/3/22.
+ */
 
-#ifndef __CDS_STRING_BASE_IMPL_HPP__
-#define __CDS_STRING_BASE_IMPL_HPP__
+#ifndef __CDS_STRING_BASE_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_STRING_BASE_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-        namespace __impl { // NOLINT(bugprone-reserved-identifier)
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, modernize-concat-nested-namespaces, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             Size const __BaseString < __CharType > :: minCapacity   = __allocation :: __minCapacity;
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             Index const __BaseString < __CharType > :: invalidIndex = StringUtils < __CharType > :: invalidIndex;
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: whitespace = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: whitespace );
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: digits = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: digits );
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: lowercaseAlphabet = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: lowercaseAlphabet );
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: uppercaseAlphabet = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: uppercaseAlphabet );
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: vowels = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: vowels );
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseStringView < __CharType > const __BaseString < __CharType > :: consonants = __BaseStringView < __CharType > ( meta :: __impl :: __StringData < __CharType > :: consonants );
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __BaseString const & string
             ) noexcept :
@@ -43,8 +43,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __BaseString < __OtherCharType > const & string
             ) noexcept :
@@ -53,7 +53,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __BaseString < __CharType > :: __BaseString (
                     __BaseString && string
             ) noexcept :
@@ -64,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     __BaseStringView < __CharType > const & string
             ) noexcept {
@@ -85,8 +85,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     __BaseStringView < __OtherCharType > const & string
             ) noexcept {
@@ -107,7 +107,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     ElementType const * pString,
                     Size                length
@@ -122,7 +122,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     ElementType const * pString
             ) noexcept :
@@ -131,8 +131,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __OtherCharType   const * pString,
                     Size                      length
@@ -147,8 +147,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __OtherCharType const * pString
             ) noexcept :
@@ -157,7 +157,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     std :: basic_string < __CharType > const & string
             ) noexcept :
@@ -166,7 +166,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     Object const & object
             ) noexcept :
@@ -175,7 +175,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     Size        length,
                     ElementType fillCharacter
@@ -197,8 +197,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     Size              length,
                     __OtherCharType   fillCharacter
@@ -211,8 +211,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __IteratorType, meta :: EnableIf < meta :: isIterator < __IteratorType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __IteratorType, meta :: EnableIf < meta :: isIterator < __IteratorType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     __IteratorType const & begin,
                     __IteratorType const & end
@@ -224,7 +224,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     std :: initializer_list < ElementType > const & initializerList
             ) noexcept :
@@ -240,8 +240,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     std :: initializer_list < __OtherCharType > const & initializerList
             ) noexcept :
@@ -257,8 +257,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     ElementType value
             ) noexcept :
@@ -271,8 +271,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     __NumericType value
             ) noexcept :
@@ -289,7 +289,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __BaseString < __CharType > :: __BaseString (
                     bool value
             ) noexcept :
@@ -307,8 +307,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __FloatingPointType value
             ) noexcept :
@@ -316,8 +316,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             }
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __AddressType, meta :: EnableIf < ! meta :: isStringCharType < __AddressType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __AddressType, meta :: EnableIf < ! meta :: isStringCharType < __AddressType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     __AddressType const * address
             ) noexcept {
@@ -329,103 +329,103 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: ~__BaseString () noexcept {
                 __allocation :: __free ( this->_pBuffer );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: begin () noexcept -> Iterator {
-                return Iterator ( this, 0 );
+                return Iterator ( this->_pBuffer );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: end () noexcept -> Iterator {
-                return Iterator ( this, static_cast < Index > ( this->_length ) );
+                return Iterator ( this->_pBuffer + this->_length );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: begin () const noexcept -> ConstIterator {
-                return ConstIterator ( this, 0 );
+                return ConstIterator ( this->_pBuffer );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: end () const noexcept -> ConstIterator {
-                return ConstIterator ( this, static_cast < Index > ( this->_length ) );
+                return ConstIterator ( this->_pBuffer + this->_length );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: cbegin () const noexcept -> ConstIterator {
-                return ConstIterator ( this, 0 );
+                return ConstIterator ( this->_pBuffer );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: cend () const noexcept -> ConstIterator {
-                return ConstIterator ( this, static_cast < Index > ( this->_length ) );
+                return ConstIterator ( this->_pBuffer + this->_length );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: rbegin () noexcept -> ReverseIterator {
-                return ReverseIterator ( this, static_cast < Index > ( this->_length ) - 1 );
+                return ReverseIterator ( this->_pBuffer + this->_length - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: rend () noexcept -> ReverseIterator {
-                return ReverseIterator ( this, -1 );
+                return ReverseIterator ( this->_pBuffer - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: rbegin () const noexcept -> ConstReverseIterator {
-                return ConstReverseIterator ( this, static_cast < Index > ( this->_length ) - 1 );
+                return ConstReverseIterator ( this->_pBuffer + this->_length - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: rend () const noexcept -> ConstReverseIterator {
-                return ConstReverseIterator ( this, -1 );
+                return ConstReverseIterator ( this->_pBuffer - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: crbegin () const noexcept -> ConstReverseIterator {
-                return ConstReverseIterator ( this, static_cast < Index > ( this->_length ) - 1 );
+                return ConstReverseIterator ( this->_pBuffer + this->_length - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseString < __CharType > :: crend () const noexcept -> ConstReverseIterator {
-                return ConstReverseIterator ( this, -1 );
+                return ConstReverseIterator ( this->_pBuffer - 1ULL );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: size () const noexcept -> Size {
                 return this->_length;
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: length () const noexcept -> Size {
                 return this->size();
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: capacity () const noexcept -> Size {
                 return this->_capacity;
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: resize (
                     Size size
             ) noexcept -> void {
@@ -447,7 +447,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: reserve (
                     Size size
             ) noexcept -> void {
@@ -460,7 +460,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: shrink (
                     Size size
             ) noexcept -> void {
@@ -477,13 +477,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: empty () const noexcept -> bool {
                 return this->_length == 0ULL;
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: clear () noexcept -> void {
 
                 if ( this->_pBuffer == nullptr ) {
@@ -495,7 +495,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: operator [] (
                     Index index
             ) noexcept (false) -> ElementType & {
@@ -504,7 +504,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator [] (
                     Index index
             ) const noexcept (false) -> ElementType {
@@ -513,7 +513,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: at (
                     Index index
             ) noexcept (false) -> ElementType & {
@@ -522,7 +522,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: at (
                     Index index
             ) const noexcept (false) -> ElementType {
@@ -531,7 +531,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: get (
                     Index index
             ) noexcept (false) -> ElementType & {
@@ -554,7 +554,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: get (
                     Index index
             ) const noexcept (false) -> ElementType {
@@ -577,7 +577,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: front () noexcept (false) -> ElementType & {
 
                 if ( this->empty() ) {
@@ -588,7 +588,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: front () const noexcept (false) -> ElementType {
 
                 if ( this->empty() ) {
@@ -599,7 +599,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: back () noexcept(false) -> ElementType & {
 
                 if ( this->empty() ) {
@@ -610,7 +610,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: back () const noexcept(false) -> ElementType {
 
                 if ( this->empty() ) {
@@ -621,49 +621,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: toStdString () const noexcept -> std :: basic_string < __CharType > {
 
                 return std :: basic_string < __CharType > ( this->_pBuffer );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: cStr () const noexcept -> ElementType const * {
 
                 return this->_pBuffer == nullptr ? meta :: __impl :: __StringData < __CharType > :: emptyString : this->_pBuffer;
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: data () noexcept -> ElementType * {
 
                 return this->_pBuffer;
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline __BaseString < __CharType > :: operator std :: basic_string < __CharType > () const noexcept {
 
                 return this->toStdString();
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __BaseString < __CharType > :: operator ElementType const * () const noexcept {
 
                 return this->cStr();
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction __BaseString < __CharType > :: operator ElementType * () noexcept {
 
                 return this->data();
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: substr (
                     Index from,
                     Index until
@@ -685,7 +685,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator () (
                     Index from,
                     Index until
@@ -695,8 +695,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __RangeType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __RangeType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator [] (
                     __RangeType const & range
             ) const noexcept -> __BaseString < __CharType > {
@@ -705,18 +705,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_OptimalInline auto __BaseString < __CharType > :: operator = ( /* NOLINT(bugprone-unhandled-self-assignment) */
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
 
-                return this->operator = ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) ); // NOLINT(misc-unconventional-assign-operator)
+                return this->operator = ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) ); /* NOLINT(misc-unconventional-assign-operator) */
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_OptimalInline auto __BaseString < __CharType > :: operator = ( /* NOLINT(bugprone-unhandled-self-assignment) */
                     __BaseString < __CharType > const & string
             ) noexcept -> __BaseString & {
 
@@ -724,7 +724,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptionalInline auto __BaseString < __CharType > :: operator = (
                     __BaseString && string
             ) noexcept -> __BaseString & {
@@ -750,7 +750,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: operator = (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
@@ -793,8 +793,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator = (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -814,8 +814,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: operator = (
                     __NumericType value
             ) noexcept -> __BaseString & {
@@ -840,7 +840,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: operator = (
                     bool value
             ) noexcept -> __BaseString & {
@@ -865,17 +865,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator = (
                     __FloatingPointType value
             ) noexcept -> __BaseString & {
 
-                return this->operator = ( std :: to_string ( value ) ); // NOLINT(misc-unconventional-assign-operator)
+                return this->operator = ( std :: to_string ( value ) ); /* NOLINT(misc-unconventional-assign-operator) */
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: equals (
                     Object const & object
             ) const noexcept -> bool {
@@ -893,8 +893,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator == (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -903,7 +903,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator == (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -912,8 +912,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator == (
                     ElementType character
             ) const noexcept -> bool {
@@ -926,7 +926,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator == (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -936,7 +936,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator == (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -946,7 +946,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator == (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -960,8 +960,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator != (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -970,7 +970,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator != (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -979,8 +979,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator != (
                     ElementType character
             ) const noexcept -> bool {
@@ -993,7 +993,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator != (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1003,7 +1003,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator != (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1013,7 +1013,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator != (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -1027,8 +1027,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator < (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -1037,7 +1037,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator < (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -1046,8 +1046,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator < (
                     ElementType character
             ) const noexcept -> bool {
@@ -1060,7 +1060,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator < (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1070,7 +1070,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator < (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1080,7 +1080,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator < (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -1090,8 +1090,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator > (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -1100,7 +1100,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator > (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -1109,8 +1109,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator > (
                     ElementType character
             ) const noexcept -> bool {
@@ -1127,7 +1127,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator > (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1137,7 +1137,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator > (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1147,7 +1147,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator > (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -1161,8 +1161,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator <= (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -1171,7 +1171,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator <= (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -1180,8 +1180,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator <= (
                     ElementType character
             ) const noexcept -> bool {
@@ -1190,7 +1190,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator <= (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1200,7 +1200,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator <= (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1210,7 +1210,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator <= (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -1220,8 +1220,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator >= (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -1229,7 +1229,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return ! ( __BaseStringView < __CharType > ( * this ) < __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
             }
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator >= (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -1238,8 +1238,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator >= (
                     ElementType character
             ) const noexcept -> bool {
@@ -1248,7 +1248,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator >= (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1258,7 +1258,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator >= (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1268,7 +1268,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto operator >= (
                     __FCharType                                      character,
                     __BaseString < __FCharType >             const & string
@@ -1278,8 +1278,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
@@ -1288,7 +1288,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     __BaseString && string
             ) noexcept -> __BaseString & {
@@ -1297,7 +1297,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
@@ -1306,8 +1306,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -1316,8 +1316,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     __NumericType value
             ) noexcept -> __BaseString & {
@@ -1326,7 +1326,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     bool value
             ) noexcept -> __BaseString & {
@@ -1335,8 +1335,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator += (
                     __FloatingPointType value
             ) noexcept -> __BaseString & {
@@ -1345,8 +1345,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __ConvertibleType && string
             ) const & noexcept -> __BaseString {
@@ -1355,7 +1355,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __BaseString && string
             ) const & noexcept -> __BaseString {
@@ -1367,7 +1367,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __BaseStringView < __CharType > const & string
             ) const & noexcept -> __BaseString {
@@ -1376,8 +1376,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     ElementType character
             ) const & noexcept -> __BaseString {
@@ -1386,8 +1386,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __NumericType value
             ) const & noexcept -> __BaseString {
@@ -1396,7 +1396,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     bool value
             ) const & noexcept -> __BaseString {
@@ -1405,8 +1405,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __FloatingPointType value
             ) const & noexcept -> __BaseString {
@@ -1415,7 +1415,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >     const & rightString
@@ -1425,7 +1425,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __ConvertibleType                    && leftString,
                     __BaseString < __FCharType >    const & rightString
@@ -1435,7 +1435,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __FCharType                             character,
                     __BaseString < __FCharType >    const & string
@@ -1445,7 +1445,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __NumericType                           value,
                     __BaseString < __FCharType >    const & string
@@ -1455,7 +1455,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     bool                               value,
                     __BaseString < __FCharType >    const & string
@@ -1465,7 +1465,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __FloatingPointType                      value,
                     __BaseString < __FCharType >     const & string
@@ -1475,8 +1475,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __ConvertibleType && string
             ) && noexcept -> __BaseString {
@@ -1485,7 +1485,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __BaseString && string
             ) && noexcept -> __BaseString {
@@ -1494,7 +1494,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __BaseStringView < __CharType > const & string
             ) && noexcept -> __BaseString {
@@ -1503,8 +1503,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     ElementType character
             ) && noexcept -> __BaseString {
@@ -1513,8 +1513,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __NumericType value
             ) && noexcept -> __BaseString {
@@ -1523,7 +1523,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     bool value
             ) && noexcept -> __BaseString {
@@ -1532,8 +1532,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator + (
                     __FloatingPointType value
             ) && noexcept -> __BaseString {
@@ -1542,7 +1542,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __BaseStringView < __FCharType > const & leftString,
                     __BaseString < __FCharType >          && rightString
@@ -1552,7 +1552,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __ConvertibleType                             && leftString,
                     __BaseString < __FCharType >                  && rightString
@@ -1562,7 +1562,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __FCharType                             character,
                     __BaseString < __FCharType >         && string
@@ -1572,7 +1572,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __NumericType                           value,
                     __BaseString < __FCharType >         && string
@@ -1582,7 +1582,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     bool                               value,
                     __BaseString < __FCharType >        && string
@@ -1592,7 +1592,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator + (
                     __FloatingPointType                    value,
                     __BaseString < __FCharType >          && string
@@ -1602,7 +1602,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: operator * (
                     int count
             ) const & noexcept -> __BaseString {
@@ -1611,7 +1611,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptionalInline auto __BaseString < __CharType > :: operator * (
                     int count
             ) && noexcept -> __BaseString {
@@ -1651,7 +1651,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto operator * (
                     int                                  count,
                     __BaseString < __FCharType > const & string
@@ -1661,7 +1661,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptionalInline auto operator * (
                     int                              count,
                     __BaseString < __FCharType >  && string
@@ -1702,8 +1702,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
@@ -1712,7 +1712,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     __BaseString && string
             ) noexcept -> __BaseString & {
@@ -1784,7 +1784,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
@@ -1813,8 +1813,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -1840,8 +1840,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     __NumericType value
             ) noexcept -> __BaseString & {
@@ -1867,7 +1867,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: append (
                     bool value
             ) noexcept -> __BaseString & {
@@ -1892,8 +1892,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: append (
                     __FloatingPointType value
             ) noexcept -> __BaseString & {
@@ -1902,8 +1902,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
@@ -1912,7 +1912,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     __BaseString && string
             ) noexcept -> __BaseString & {
@@ -1956,7 +1956,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
@@ -2012,8 +2012,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -2038,8 +2038,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     __NumericType value
             ) noexcept -> __BaseString & {
@@ -2074,7 +2074,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: prepend (
                     bool value
             ) noexcept -> __BaseString & {
@@ -2110,8 +2110,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: prepend (
                     __FloatingPointType value
             ) noexcept -> __BaseString & {
@@ -2120,7 +2120,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: contains (
                     ElementType character
             ) const noexcept -> bool {
@@ -2129,8 +2129,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: contains (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -2139,7 +2139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: contains (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -2148,9 +2148,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptionalInline auto __BaseString < __CharType > :: containsAnyOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyOf (
                     __CollectionType < ElementType > const & characters
             ) const noexcept -> bool {
 
@@ -2160,8 +2160,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyOf (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -2172,7 +2172,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -2183,9 +2183,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptionalInline auto __BaseString < __CharType > :: containsAllOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllOf (
                     __CollectionType < ElementType > const & characters
             ) const noexcept -> bool {
 
@@ -2195,8 +2195,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllOf (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -2207,7 +2207,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -2218,9 +2218,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptionalInline auto __BaseString < __CharType > :: containsAnyNotOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyNotOf (
                     __CollectionType < ElementType > const & characters
             ) const noexcept -> bool {
 
@@ -2230,8 +2230,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyNotOf (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -2242,7 +2242,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAnyNotOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -2253,9 +2253,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptionalInline auto __BaseString < __CharType > :: containsAllNotOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllNotOf (
                     __CollectionType < ElementType > const & characters
             ) const noexcept -> bool {
 
@@ -2265,9 +2265,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllNotOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllNotOf (
                     __ConvertibleType && string
             ) const noexcept -> bool {
 
@@ -2277,8 +2277,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllNotOf (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: containsAllNotOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
 
@@ -2288,8 +2288,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                          maxCount,
                     ElementType                   character,
@@ -2304,8 +2304,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                        maxCount,
                     ElementType                 character
@@ -2320,7 +2320,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findFirst (
                     ElementType character
             ) const noexcept -> Index {
@@ -2329,7 +2329,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findLast (
                     ElementType character
             ) const noexcept -> Index {
@@ -2338,8 +2338,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     ElementType                   character,
                     __CollectionType < Index >  & storeIn
@@ -2352,8 +2352,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     ElementType                 character
             ) const noexcept -> __CollectionType < Index > {
@@ -2366,8 +2366,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                                  maxCount,
                     __ConvertibleType                  && string,
@@ -2382,8 +2382,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                                  maxCount,
                     __ConvertibleType                  && string
@@ -2398,8 +2398,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: findFirst (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2410,8 +2410,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: findLast (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2422,8 +2422,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     __ConvertibleType                  && string,
                     __CollectionType < Index >          & storeIn
@@ -2436,8 +2436,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     __ConvertibleType && string
             ) const noexcept -> __CollectionType < Index > {
@@ -2450,8 +2450,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findOf (
                     Size                              maxCount,
                     __ConvertibleType              && string,
@@ -2466,8 +2466,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findOf (
                     Size                              maxCount,
                     __ConvertibleType              && string
@@ -2482,8 +2482,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findFirstOf (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2494,8 +2494,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findLastOf (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2506,8 +2506,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllOf (
                     __ConvertibleType              && string,
                     __CollectionType < Index >      & storeIn
@@ -2520,8 +2520,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllOf (
                     __ConvertibleType && string
             ) const noexcept -> __CollectionType < Index > {
@@ -2534,8 +2534,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findNotOf (
                     Size                              maxCount,
                     __ConvertibleType              && string,
@@ -2550,8 +2550,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findNotOf (
                     Size                              maxCount,
                     __ConvertibleType              && string
@@ -2566,8 +2566,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findFirstNotOf (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2578,8 +2578,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findLastNotOf (
                     __ConvertibleType && string
             ) const noexcept -> Index {
@@ -2590,8 +2590,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllNotOf (
                     __ConvertibleType              && string,
                     __CollectionType < Index >      & storeIn
@@ -2604,8 +2604,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllNotOf (
                     __ConvertibleType && string
             ) const noexcept -> __CollectionType < Index > {
@@ -2618,8 +2618,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }\
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string,
@@ -2634,8 +2634,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: find (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string
@@ -2650,7 +2650,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: findFirst (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2659,7 +2659,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString < __CharType > :: findLast (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2668,8 +2668,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     __BaseStringView < __CharType > const & string,
                     __CollectionType < Index >            & storeIn
@@ -2682,8 +2682,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAll (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> __CollectionType < Index > {
@@ -2696,8 +2696,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findOf (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string,
@@ -2712,8 +2712,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findOf (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string
@@ -2728,7 +2728,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findFirstOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2737,7 +2737,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findLastOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2746,8 +2746,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllOf (
                     __BaseStringView < __CharType > const & string,
                     __CollectionType < Index >            & storeIn
@@ -2760,8 +2760,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> __CollectionType < Index > {
@@ -2774,8 +2774,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findNotOf (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string,
@@ -2790,8 +2790,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findNotOf (
                     Size                                    maxCount,
                     __BaseStringView < __CharType > const & string
@@ -2806,7 +2806,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findFirstNotOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2815,7 +2815,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: findLastNotOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> Index {
@@ -2824,8 +2824,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllNotOf (
                     __BaseStringView < __CharType > const & string,
                     __CollectionType < Index >            & storeIn
@@ -2838,8 +2838,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: findAllNotOf (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> __CollectionType < Index > {
@@ -2852,8 +2852,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: ltrim (
                     __ConvertibleType && characters
             ) noexcept -> __BaseString & {
@@ -2862,7 +2862,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: ltrim (
                     __BaseStringView < __CharType > const & characters
             ) noexcept -> __BaseString & {
@@ -2890,7 +2890,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: ltrim (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -2918,7 +2918,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: rtrim (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -2939,8 +2939,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: rtrim (
                     __ConvertibleType && characters
             ) noexcept -> __BaseString & {
@@ -2949,7 +2949,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: rtrim (
                     __BaseStringView < __CharType > const & characters
             ) noexcept -> __BaseString & {
@@ -2970,7 +2970,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: trim (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -2979,8 +2979,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: trim (
                     __ConvertibleType && characters
             ) noexcept -> __BaseString & {
@@ -2990,7 +2990,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: trim (
                     __BaseStringView < __CharType > const & characters
             ) noexcept -> __BaseString & {
@@ -2999,8 +2999,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            auto __BaseString < __CharType > :: ljust (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused auto __BaseString < __CharType > :: ljust (
                     Size        size,
                     ElementType element
             ) noexcept -> __BaseString & {
@@ -3040,8 +3040,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            auto __BaseString < __CharType > :: rjust (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused auto __BaseString < __CharType > :: rjust (
                     Size        size,
                     ElementType element
             ) noexcept -> __BaseString & {
@@ -3067,8 +3067,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: toLower () noexcept -> __BaseString & {
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: toLower () noexcept -> __BaseString & {
 
                 for ( Size index = 0ULL; index < this->length(); ++ index ) {
                     this->_pBuffer [ index ] = StringUtils < __CharType > :: lower ( this->_pBuffer [ index ] );
@@ -3078,8 +3078,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: toUpper () noexcept -> __BaseString & {
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: toUpper () noexcept -> __BaseString & {
 
                 for ( Size index = 0ULL; index < this->length(); ++ index ) {
                     this->_pBuffer [ index ] = StringUtils < __CharType > :: upper ( this->_pBuffer [ index ] );
@@ -3089,8 +3089,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     ElementType             separator,
                     __CollectionType      & storeIn,
@@ -3105,8 +3105,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     ElementType separator,
                     Size        maxCount
@@ -3121,8 +3121,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     __ConvertibleType      && separators,
                     __CollectionType        & storeIn,
@@ -3137,8 +3137,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     __ConvertibleType      && separators,
                     Size                      maxCount
@@ -3153,8 +3153,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     __BaseStringView < __CharType > const & separators,
                     __CollectionType                      & storeIn,
@@ -3169,8 +3169,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: split (
                     __BaseStringView < __CharType > const & separators,
                     Size                                    maxCount
@@ -3185,9 +3185,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
                     __ConvertibleType      && separator,
                     __CollectionType        & storeIn,
                     Size                      maxCount
@@ -3201,9 +3201,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
                     __ConvertibleType         && separator,
                     Size                         maxCount
             ) const noexcept -> __CollectionType < __BaseString > {
@@ -3217,9 +3217,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
                     __BaseStringView < __CharType > const & separator,
                     __CollectionType                      & storeIn,
                     Size                                    maxCount
@@ -3233,9 +3233,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString < __CharType > :: splitByString (
                     __BaseStringView < __CharType > const & separator,
                     Size                                    maxCount
             ) const noexcept -> __CollectionType < __BaseString > {
@@ -3249,21 +3249,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: hash () const noexcept -> Size {
 
                 return __BaseStringView < __CharType > ( * this ).hash();
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: toString () const noexcept -> cds :: String {
 
                 return cds :: String ( this->cStr() );
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: startsWith (
                     ElementType character
             ) const noexcept -> bool {
@@ -3272,8 +3272,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: startsWith (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -3284,7 +3284,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: startsWith (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -3293,7 +3293,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr auto __BaseString < __CharType > :: endsWith (
                     ElementType character
             ) const noexcept -> bool {
@@ -3302,8 +3302,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: endsWith (
                     __ConvertibleType && string
             ) const noexcept -> bool {
@@ -3314,7 +3314,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: endsWith (
                     __BaseStringView < __CharType > const & string
             ) const noexcept -> bool {
@@ -3323,7 +3323,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removePrefix (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -3345,9 +3345,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removePrefix (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removePrefix (
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
 
@@ -3357,8 +3357,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removePrefix (
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removePrefix (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
 
@@ -3379,7 +3379,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removeSuffix (
                     ElementType character
             ) noexcept -> __BaseString & {
@@ -3393,8 +3393,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removeSuffix (
                     __ConvertibleType && string
             ) noexcept -> __BaseString & {
@@ -3405,7 +3405,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: removeSuffix (
                     __BaseStringView < __CharType > const & string
             ) noexcept -> __BaseString & {
@@ -3421,8 +3421,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: join (
                     __CollectionType < __BaseString > const & tokens,
                     __ConvertibleType                      && delimiter
@@ -3435,8 +3435,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: join (
                     __CollectionType < __BaseString > const & tokens,
                     __BaseStringView < __CharType >   const & delimiter
@@ -3504,8 +3504,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: join (
                     __CollectionType < __BaseString > const & tokens,
                     ElementType                               delimiter
@@ -3564,8 +3564,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptionalInline auto __BaseString < __CharType > :: replace (
                     Index                   from,
                     Index                   until,
@@ -3580,7 +3580,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptionalInline auto __BaseString < __CharType > :: replace (
                     Index                                   from,
                     Index                                   until,
@@ -3651,7 +3651,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: reverse () noexcept -> __BaseString & {
 
                 if ( this->length() < 2ULL ) {
@@ -3670,8 +3670,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Action > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Action > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: forEach (
                     __Action const & action
             ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) ) -> void {
@@ -3682,8 +3682,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Action > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Action > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: forEach (
                     __Action const & action
             ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void {
@@ -3694,8 +3694,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: some (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3716,8 +3716,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: some (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3738,8 +3738,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: atLeast (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3760,8 +3760,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: atLeast (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3782,8 +3782,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: atMost (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3804,8 +3804,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: atMost (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3826,8 +3826,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: moreThan (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3837,8 +3837,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: moreThan (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3848,8 +3848,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: fewerThan (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3859,8 +3859,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: fewerThan (
                     Size                  count,
                     __Predicate   const & predicate
@@ -3870,8 +3870,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: count (
                     __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
@@ -3887,8 +3887,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: count (
                     __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> Size {
@@ -3904,8 +3904,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: any (
                     __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
@@ -3920,8 +3920,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: any (
                     __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
@@ -3936,8 +3936,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: all (
                     __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
@@ -3952,8 +3952,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: all (
                     __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
@@ -3968,8 +3968,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: none (
                     __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
@@ -3984,8 +3984,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: none (
                     __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
@@ -4000,8 +4000,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: format (
                     __CharType        const * pFormat,
                     __ArgumentTypes    && ... arguments
@@ -4040,8 +4040,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __BaseString < __CharType > :: f (
                     __CharType        const * pFormat,
                     __ArgumentTypes    && ... arguments
@@ -4054,7 +4054,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto operator << (
                     std :: wostream                    & out,
                     __BaseString < __FCharType > const & obj
@@ -4064,18 +4064,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-            auto operator << (
-                    std :: ostream                     & out,
-                    __BaseString < __FCharType > const & obj
-            ) noexcept -> std :: ostream & {
-
-                return ( out << obj.cStr() );
-            }
-
 #if defined(CDS_STRING_DEBUG)
 
-            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             auto __BaseString < __CharType > :: diag () const noexcept -> __BaseString {
                 return __BaseStringView < __CharType > ( "Debug = { data = '" ) + this->_pBuffer +
                         "', length = " + this->_length +
@@ -4084,8 +4075,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #endif
 
-        }
-    }
-}
 
-#endif // __CDS_STRING_BASE_IMPL_HPP__
+            template < typename __FCharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            auto operator << (
+                    std :: ostream                     & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: ostream & {
+
+                return ( out << obj.cStr() );
+            }
+
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
+
+#endif /* __CDS_STRING_BASE_IMPL_HPP__ */

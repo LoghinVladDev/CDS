@@ -2,22 +2,22 @@
  * Created by loghin on 15.01.2021.
  */
 
-#ifndef __CDS_LIST_HPP__
-#define __CDS_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_LIST_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Function>
 #include <CDS/MutableCollection>
 
 #include "../../../shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"         /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/IteratorRelativeInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"                          /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/composite/IndicesCompositeClient.hpp"
@@ -58,8 +58,8 @@ namespace cds {
      * @namespace cds
      * @public
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    class List :
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class List :                        /* NOLINT(cppcoreguidelines-virtual-class-destructor) */
             public MutableCollection < __ElementType >,
             public __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >,
@@ -78,7 +78,7 @@ namespace cds {
             public __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ListIndicesByClient < __ElementType > {
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef public alias for __ElementType, the type of the contained elements,
          * publicly accessible, useful in sfinae statements - decltype ( List ) :: ElementType
@@ -86,168 +86,168 @@ namespace cds {
          */
         using ElementType                           = __ElementType;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for MutableCollection \< __ElementType \> base extended class - providing mutable iterable properties
          * @protected
          */
         using MutableCollectionBase = MutableCollection < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListDelegateForwardIterableClient base interface - providing begin / end for Abstract Bidirectional Mutable Iterators
          * @protected
          */
         using DelegateForwardIterableClient         = __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListDelegateBackwardIterableClient base interface - providing rbegin / rend for Abstract Bidirectional Mutable Reverse Iterators
          * @protected
          */
         using DelegateBackwardIterableClient        = __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListDelegateForwardConstIterableClient base interface - providing cbegin / cend for Abstract Bidirectional Immutable Iterators
          * @protected
          */
         using DelegateForwardConstIterableClient    = __hidden :: __impl :: __ListDelegateForwardConstIterableClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for DelegateBackwardConstIterableClient base interface - providing crbegin / crend for Abstract Bidirectional Immutable Reverse Iterators
          * @protected
          */
         using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __ListDelegateBackwardConstIterableClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListBoundaryInsertionClient base interface - providing boundary insertion functions
          * @protected
          */
         using BoundaryInsertionClient               = __hidden :: __impl :: __ListBoundaryInsertionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIteratorRelativeInsertionClient base interface - providing iterator relative insertion functions
          * @protected
          */
         using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ListIteratorRelativeInsertionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListConstIteratorRelativeInsertionClient base interface - providing const iterator relative insertion functions
          * @protected
          */
         using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIndexedOperationsClient base interface - providing index based operations
          * @protected
          */
         using IndexedOperationsClient               = __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListReplaceClient base interface - providing replace operations
          * @protected
          */
         using ReplaceClient                         = __hidden :: __impl :: __ListReplaceClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListReplaceOfCollectionClient base interface - providing replace of collection operations
          * @protected
          */
         using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListReplaceOfInitializerListClient base interface - providing replace of initializer list operations
          * @protected
          */
         using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListReplaceByClient base interface - providing replace by predicate operations
          * @protected
          */
         using ReplaceByClient                       = __hidden :: __impl :: __ListReplaceByClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIndicesClient base interface - providing index query operations
          * @protected
          */
         using IndicesClient                         = __hidden :: __impl :: __ListIndicesClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIndicesOfCollectionClient base interface - providing indices of collection elements query operations
          * @protected
          */
         using IndicesOfCollectionClient             = __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIndicesOfInitializerListClient base interface - providing indices of initializer list elements query operations
          * @protected
          */
         using IndicesOfInitializerListClient        = __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef protected alias for __ListIndicesByClient base interface - providing indices of elements validated by predicate query operations
          * @protected
          */
         using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier) */
+        using typename MutableCollectionBase :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
          * @protected
          */
-        using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier) */
+        using typename MutableCollectionBase :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for Iterator, representing a forward mutable iterator
          * @public
          */
         using typename DelegateForwardIterableClient :: Iterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for ConstIterator, representing a forward immutable iterator
          * @public
          */
         using typename DelegateForwardConstIterableClient :: ConstIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for ReverseIterator, representing a backward mutable iterator
          * @public
          */
         using typename DelegateBackwardIterableClient :: ReverseIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @typedef imported protected alias for ConstReverseIterator, representing a backward immutable iterator
          * @public
          */
         using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Public constant representing an invalid list index. Used by index functions to denote the absence of an element.
          * @static
@@ -255,7 +255,7 @@ namespace cds {
          */
         static Index const invalidIndex = -1;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Default Constructor
          * @exceptsafe
@@ -264,7 +264,7 @@ namespace cds {
          */
         constexpr List () noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Copy Constructor
          * @param [in] list : List cref = Constant Reference to a list to copy the data from
@@ -276,7 +276,7 @@ namespace cds {
                 List const & list
         ) noexcept;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Move Constructor
          * @param [in, out] list : List mref = Move Reference to a list to acquire and release the data from
@@ -288,7 +288,7 @@ namespace cds {
                 List && list
         ) noexcept;
 
-    protected:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Destructor
          * @exceptsafe
@@ -297,7 +297,35 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor ~List () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Copy Assignment Operator
+         * @param [in] list : List cref = Constant Reference to a list to copy data from
+         * @exceptsafe
+         * @return List ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                List const & /* list */
+        ) noexcept -> List & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        /**
+         * @brief Deleted Move Assignment Operator
+         * @param [in, out] list : List mref = Move Reference to a list to move data from
+         * @exceptsafe
+         * @return List ref = Reference to the modified object
+         *
+         * @test N/A
+         * @public
+         */
+        auto operator = (
+                List && /* list */
+        ) noexcept -> List & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit begin function inherited from DelegateForwardIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -312,7 +340,7 @@ namespace cds {
          */
         using DelegateForwardIterableClient :: begin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit end function inherited from DelegateForwardIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -327,7 +355,7 @@ namespace cds {
          */
         using DelegateForwardIterableClient :: end;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit reverse begin function inherited from DelegateBackwardIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -339,7 +367,7 @@ namespace cds {
          */
         using DelegateBackwardIterableClient :: rbegin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit reverse end function inherited from DelegateBackwardIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -351,7 +379,7 @@ namespace cds {
          */
         using DelegateBackwardIterableClient :: rend;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -364,7 +392,7 @@ namespace cds {
          */
         using DelegateForwardConstIterableClient :: begin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -377,7 +405,7 @@ namespace cds {
          */
         using DelegateForwardConstIterableClient :: end;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const begin function inherited from DelegateForwardConstIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -390,7 +418,7 @@ namespace cds {
          */
         using DelegateForwardConstIterableClient :: cbegin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const end function inherited from DelegateForwardConstIterableClient interface.
          * Will hide the variant inherited from MutableCollection, which is unidirectional
@@ -403,7 +431,7 @@ namespace cds {
          */
         using DelegateForwardConstIterableClient :: cend;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -414,7 +442,7 @@ namespace cds {
          */
         using DelegateBackwardConstIterableClient :: rbegin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -425,7 +453,7 @@ namespace cds {
          */
         using DelegateBackwardConstIterableClient :: rend;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const reverse begin function inherited from DelegateBackwardConstIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -436,7 +464,7 @@ namespace cds {
          */
         using DelegateBackwardConstIterableClient :: crbegin;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit const reverse end function inherited from DelegateBackwardConstIterableClient interface.
          * @test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -447,7 +475,7 @@ namespace cds {
          */
         using DelegateBackwardConstIterableClient :: crend;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushBack function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -461,7 +489,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushBack;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushBackAll function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -471,7 +499,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushBackAll;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushBackAllOf function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -485,7 +513,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushBackAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushBack function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -499,7 +527,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushFront;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushFrontAll function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -509,7 +537,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushFrontAll;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit pushFrontAllOf function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -523,7 +551,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: pushFrontAllOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceBack function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -533,7 +561,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: emplaceBack;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceFront function inherited from BoundaryInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00300-BI, Test Cases: {
@@ -543,7 +571,7 @@ namespace cds {
          */
         using BoundaryInsertionClient :: emplaceFront;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertBefore function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -576,7 +604,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllBefore function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -593,7 +621,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertAllBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllOfBefore function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -626,7 +654,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertAllOfBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAfter function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -659,7 +687,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllAfter function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -676,7 +704,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertAllAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllOfAfter function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -709,7 +737,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: insertAllOfAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceBefore function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -742,7 +770,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: emplaceBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceAfter function inherited from IteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -775,7 +803,7 @@ namespace cds {
          */
         using IteratorRelativeInsertionClient :: emplaceAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertBefore function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -808,7 +836,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllBefore function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -825,7 +853,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertAllBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllOfBefore function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -858,7 +886,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAfter function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -891,7 +919,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllAfter function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -908,7 +936,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertAllAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit insertAllOfAfter function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -941,7 +969,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceBefore function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -974,7 +1002,7 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: emplaceBefore;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit emplaceAfter function inherited from ConstIteratorRelativeInsertionClient interface.
          * @test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: {
@@ -1007,9 +1035,10 @@ namespace cds {
          */
         using ConstIteratorRelativeInsertionClient :: emplaceAfter;
 
-    public:     using IndexedOperationsClient :: sub;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndexedOperationsClient :: sub;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @inherit operator [] for index operations.
          * @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: {
@@ -1022,69 +1051,174 @@ namespace cds {
          */
         using IndexedOperationsClient :: operator[];
 
-    public:     using IndexedOperationsClient :: removeAt;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndexedOperationsClient :: removeAt;
 
-    public:     using ReplaceClient :: replace;
-    public:     using ReplaceClient :: replaceFirst;
-    public:     using ReplaceClient :: replaceLast;
-    public:     using ReplaceClient :: replaceAll;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replace;
 
-    public:     using ReplaceOfCollectionClient :: replaceOf;
-    public:     using ReplaceOfCollectionClient :: replaceFirstOf;
-    public:     using ReplaceOfCollectionClient :: replaceLastOf;
-    public:     using ReplaceOfCollectionClient :: replaceAllOf;
-    public:     using ReplaceOfCollectionClient :: replaceNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceFirstNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceLastNotOf;
-    public:     using ReplaceOfCollectionClient :: replaceAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceFirst;
 
-    public:     using ReplaceOfInitializerListClient :: replaceOf;
-    public:     using ReplaceOfInitializerListClient :: replaceFirstOf;
-    public:     using ReplaceOfInitializerListClient :: replaceLastOf;
-    public:     using ReplaceOfInitializerListClient :: replaceAllOf;
-    public:     using ReplaceOfInitializerListClient :: replaceNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceFirstNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceLastNotOf;
-    public:     using ReplaceOfInitializerListClient :: replaceAllNotOf;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceLast;
 
-    public:     using ReplaceByClient :: replaceThat;
-    public:     using ReplaceByClient :: replaceFirstThat;
-    public:     using ReplaceByClient :: replaceLastThat;
-    public:     using ReplaceByClient :: replaceAllThat;
-    public:     using ReplaceByClient :: replaceThatBy;
-    public:     using ReplaceByClient :: replaceFirstThatBy;
-    public:     using ReplaceByClient :: replaceLastThatBy;
-    public:     using ReplaceByClient :: replaceAllThatBy;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceClient :: replaceAll;
 
-    public:     using IndicesClient :: indicesOf;
-    public:     using IndicesClient :: firstIndexOf;
-    public:     using IndicesClient :: lastIndexOf;
-    public:     using IndicesClient :: allIndicesOf;
 
-    public:     using IndicesOfCollectionClient :: indicesOfFrom;
-    public:     using IndicesOfCollectionClient :: firstIndexOfFrom;
-    public:     using IndicesOfCollectionClient :: lastIndexOfFrom;
-    public:     using IndicesOfCollectionClient :: allIndicesOfFrom;
-    public:     using IndicesOfCollectionClient :: indicesOfNotFrom;
-    public:     using IndicesOfCollectionClient :: firstIndexOfNotFrom;
-    public:     using IndicesOfCollectionClient :: lastIndexOfNotFrom;
-    public:     using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceOf;
 
-    public:     using IndicesOfInitializerListClient :: indicesOfFrom;
-    public:     using IndicesOfInitializerListClient :: firstIndexOfFrom;
-    public:     using IndicesOfInitializerListClient :: lastIndexOfFrom;
-    public:     using IndicesOfInitializerListClient :: allIndicesOfFrom;
-    public:     using IndicesOfInitializerListClient :: indicesOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
-    public:     using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceFirstOf;
 
-    public:     using IndicesByClient :: indicesOfThat;
-    public:     using IndicesByClient :: firstIndexOfThat;
-    public:     using IndicesByClient :: lastIndexOfThat;
-    public:     using IndicesByClient :: allIndicesOfThat;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceLastOf;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfCollectionClient :: replaceAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceFirstOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceLastOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceAllOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceFirstNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceLastNotOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceOfInitializerListClient :: replaceAllNotOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceFirstThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceLastThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceAllThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceFirstThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceLastThatBy;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ReplaceByClient :: replaceAllThatBy;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: indicesOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: firstIndexOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: lastIndexOf;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesClient :: allIndicesOf;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: indicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: firstIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: lastIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: allIndicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: indicesOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: indicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: firstIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: lastIndexOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: allIndicesOfFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: indicesOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: indicesOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: firstIndexOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: lastIndexOfThat;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using IndicesByClient :: allIndicesOfThat;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief String conversion function, used to obtain String representation of the List
          * @exceptsafe
@@ -1094,7 +1228,7 @@ namespace cds {
          */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to clear the list, removing all elements from it
          * @exceptsafe
@@ -1103,7 +1237,7 @@ namespace cds {
          */
         auto clear () noexcept -> void override = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to remove the first element from the list, if any is present.
          * @exceptsafe
@@ -1112,7 +1246,7 @@ namespace cds {
          */
         virtual auto popFront () noexcept -> void = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to remove the last element from the list, if any is present.
          * @exceptsafe
@@ -1121,7 +1255,7 @@ namespace cds {
          */
         virtual auto popBack () noexcept -> void = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to peek at the front of the list, acquiring a mutable reference to the first enclosed element
          * @throws cds::OutOfBoundsException if list is empty
@@ -1131,7 +1265,7 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () noexcept (false) -> ElementType & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to peek at the front of the list, acquiring an immutable reference to the first enclosed element
          * @throws cds::OutOfBoundsException if list is empty
@@ -1141,7 +1275,7 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () const noexcept (false) -> ElementType const & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to peek at the back of the list, acquiring a mutable reference to the last enclosed element
          * @throws cds::OutOfBoundsException if list is empty
@@ -1151,7 +1285,7 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () noexcept (false) -> ElementType & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to peek at the last of the list, acquiring an immutable reference to the last enclosed element
          * @throws cds::OutOfBoundsException if list is empty
@@ -1161,7 +1295,7 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () const noexcept (false) -> ElementType const & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
          * @throws cds::OutOfBoundsException if list is empty
@@ -1178,7 +1312,7 @@ namespace cds {
                 Index index
         ) noexcept ( false ) -> ElementType & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to obtain an element via its index in the list. The implementation will adjust the index circularly, if given value is out of index bounds.
          * @throws cds::OutOfBoundsException if list is empty
@@ -1195,7 +1329,7 @@ namespace cds {
                 Index index
         ) const noexcept ( false ) -> ElementType const & = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to sort the elements with the requested ordering, given as parameter. Parameter must be a callable object ( function / lambda / functor ). Default ordering, if no parameter given, is ascending
          * @param comparator : cds :: Function < bool ( ElementType, ElementType ) > cref = Constant Reference to wrapped callable
@@ -1215,7 +1349,7 @@ namespace cds {
                 cds :: Function < auto ( __ElementType const &, __ElementType const & ) -> bool > const & comparator = & cds :: predicates :: lessThan < __ElementType >
         ) noexcept -> void = 0;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to remove an element from the list via given index
          * @param index : Index = index of the element to be removed
@@ -1233,7 +1367,7 @@ namespace cds {
                 Index index
         ) noexcept -> bool = 0;
 
-    protected:
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
          * @brief Function used to circularly adapt an index based on the current list bounds
          * @param index : Index = requested index to bound
@@ -1250,18 +1384,18 @@ namespace cds {
         ) const noexcept -> Index;
     };
 
-}
+} /* namespace cds */
 
 #include "../../../shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"            /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"
+#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"                             /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
 #include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"

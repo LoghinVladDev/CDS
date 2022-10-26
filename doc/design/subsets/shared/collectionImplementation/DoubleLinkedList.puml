@@ -1,0 +1,109 @@
+@startuml
+
+!includesub ../iterator/NodeIterator.puml!public_declaration
+!includesub ../iterator/NodeModel.puml!public_declaration
+!includesub ../collectionCommunication/server/ListServerDispatcher.puml!public_declaration
+
+!startsub public_declaration
+!ifndef DLL_BASE_PUBLIC
+!define DLL_BASE_PUBLIC
+
+namespace cds {
+
+    namespace __hidden {
+        namespace __impl {
+
+            class __DoubleLinkedList <E, BiPredicate <E, E>> {
+                - {field} _size : Size
+                - {field} _pFront : __NodeType *
+                - {field} _pBack : __NodeType *
+                ..base methods..
+                - {method} {static} __dll_allocateNode () noexcept -> __NodeType *
+                - {method} {static} __dll_freeNode (__NodeType *) noexcept -> void
+                # {method} __DoubleLinkedList () noexcept
+                # {method} __DoubleLinkedList (__DoubleLinkedList const &) noexcept
+                # {method} __DoubleLinkedList (__DoubleLinkedList &&) noexcept
+                ..property methods..
+                # {method} __dll_clear () noexcept -> void
+                # {method} __dll_empty () const noexcept -> bool
+                # {method} __dll_size () const noexcept -> Size
+                # {method} __dll_front () const noexcept -> E const *
+                # {method} __dll_back () const noexcept -> E const *
+                # {method} __dll_front () noexcept -> E *
+                # {method} __dll_back () noexcept -> E *
+                # {method} __dll_removeFront () noexcept -> void
+                # {method} __dll_removeBack () noexcept -> void
+                # {method} __dll_removeAt (Index) const noexcept -> void
+                # {method} __dll_get (Index) noexcept -> E *
+                # {method} __dll_get (Index) const noexcept -> E const *
+                # {method} __dll_newBetweenNodes (__NodeType const *, __NodeType const *) noexcept -> E *
+                # {method} __dll_newBetweenNodesArray (__NodeType const *, __NodeType const *, Size, E **) noexcept -> void
+                # {method} __dll_copy (__DoubleLinkedList const &) noexcept -> void
+                # {method} __dll_move (__DoubleLinkedList &&) noexcept -> void
+                # {method} __dll_copyCleared (__DoubleLinkedList const &) noexcept -> void
+                # {method} __dll_moveCleared (__DoubleLinkedList &&) noexcept -> void
+                # {method} __dll_equals (__DoubleLinkedList const &) const noexcept -> bool
+                # {method} <C> __dll_sort ([C const &]) noexcept -> void
+                ..dispatcher required methods, in order..
+                # {method} __dll_begin () noexcept -> __dll_Iterator
+                # {method} __dll_end () noexcept -> __dll_Iterator
+                # {method} __dll_cbegin () const noexcept -> __dll_ConstIterator
+                # {method} __dll_cend () const noexcept -> __dll_ConstIterator
+                # {method} __dll_rbegin () noexcept -> __dll_ReverseIterator
+                # {method} __dll_rend () noexcept -> __dll_ReverseIterator
+                # {method} __dll_crbegin () const noexcept -> __dll_ConstReverseIterator
+                # {method} __dll_crend () const noexcept -> __dll_ConstReverseIterator
+                # {method} __dll_newAddress (E const *, bool *) noexcept -> E *
+                # {method} __dll_newFront () noexcept -> E *
+                # {method} __dll_newBack () noexcept -> E *
+                # {method} __dll_newFrontArray (Size, E **) noexcept -> void
+                # {method} __dll_newBackArray (Size, E **) noexcept -> void
+                # {method} __dll_newBefore (cds::AbstractBidirectionalNodeIterator <E> const &) noexcept -> E *
+                # {method} __dll_newBeforeConst (cds::AbstractBidirectionalNodeConstIterator <E const> const &) noexcept -> E *
+                # {method} __dll_newAfter (cds::AbstractBidirectionalNodeIterator <E> const &) noexcept -> E *
+                # {method} __dll_newAfterConst (cds::AbstractBidirectionalNodeConstIterator <E const> const &) noexcept -> E *
+                # {method} __dll_newBeforeArray (cds::AbstractBidirectionalNodeIterator <E> const &, Size, E **) noexcept -> void
+                # {method} __dll_newBeforeArrayConst (cds::AbstractBidirectionalNodeConstIterator <E const> const &, Size, E **) noexcept -> void
+                # {method} __dll_newAfterArray (cds::AbstractBidirectionalNodeIterator <E> const &, Size, E **) noexcept -> void
+                # {method} __dll_newAfterArrayConst (cds::AbstractBidirectionalNodeConstIterator <E const> const &, Size, E **) noexcept -> void
+                # {method} __dll_removeIterator (cds::AbstractBidirectionalNodeIterator <E> const &) noexcept -> bool
+                # {method} __dll_removeConstIterator (cds::AbstractBidirectionalNodeConstIterator <E const> const &) noexcept -> bool
+                # {method} __dll_removeIteratorArray (cds::AbstractBidirectionalNodeIterator <E> const * const *, Size) noexcept -> Size
+                # {method} __dll_removeConstIteratorArray (cds::AbstractBidirectionalNodeConstIterator <E const> const * const *, Size) noexcept -> Size
+            }
+
+            class __DoubleLinkedList::__dll_Iterator << (T, #aa9999) >>
+            class __DoubleLinkedList::__dll_ConstIterator << (T, #aa9999) >>
+            class __DoubleLinkedList::__dll_ReverseIterator << (T, #aa9999) >>
+            class __DoubleLinkedList::__dll_ConstReverseIterator << (T, #aa9999) >>
+            class __DoubleLinkedList::__NodeType << (T, #aa9999) >>
+            interface __DoubleLinkedList::__Dispatcher <S> extends __ListServerDispatcher
+
+            __DoubleLinkedList::__dll_Iterator "is nested in" .. __DoubleLinkedList
+            __DoubleLinkedList::__dll_ConstIterator "is nested in" .. __DoubleLinkedList
+            __DoubleLinkedList::__dll_ReverseIterator "is nested in" .. __DoubleLinkedList
+            __DoubleLinkedList::__dll_ConstReverseIterator "is nested in" .. __DoubleLinkedList
+            __DoubleLinkedList::__NodeType "is nested in" .. __DoubleLinkedList
+            __DoubleLinkedList .. "is nested in" __DoubleLinkedList::__Dispatcher
+
+            cds.ForwardBidirectionalNodeIterator ... "is" __DoubleLinkedList::__dll_Iterator
+            cds.ForwardBidirectionalNodeConstIterator ... "is" __DoubleLinkedList::__dll_ConstIterator
+            cds.BackwardBidirectionalNodeIterator ... "is" __DoubleLinkedList::__dll_ReverseIterator
+            cds.BackwardBidirectionalNodeConstIterator ... "is" __DoubleLinkedList::__dll_ConstReverseIterator
+            cds.__hidden.__impl.__BidirectionalNode .. "is" __DoubleLinkedList::__NodeType
+
+        }
+    }
+
+}
+
+!endif
+!endsub
+
+!startsub private
+remove cds.Uni*
+remove cds.__hidden.__impl.__Uni*
+remove cds.__hidden.__impl.__Red*
+!endsub
+
+@enduml

@@ -2,17 +2,17 @@
  * Created by loghin on 18/07/22.
  */
 
-#ifndef __CDS_SHARED_NODE_ITERATOR_IMPL_HPP__
-#define __CDS_SHARED_NODE_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_NODE_ITERATOR_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_NODE_ITERATOR_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
             Node * pPreviousNode,
             Node * pCurrentNode
     ) noexcept :
@@ -23,8 +23,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
             UnidirectionalNodeIterator const & iterator
     ) noexcept :
             _pPreviousNode ( iterator._pPreviousNode ),
@@ -34,8 +34,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeIterator < __ElementType > :: UnidirectionalNodeIterator (
             UnidirectionalNodeIterator && iterator
     ) noexcept :
             _pPreviousNode ( cds :: exchange ( iterator._pPreviousNode, nullptr ) ),
@@ -45,7 +45,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeIterator < __ElementType > :: operator = (
             UnidirectionalNodeIterator const & iterator
     ) noexcept -> UnidirectionalNodeIterator & {
@@ -63,7 +63,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeIterator < __ElementType > :: operator = (
             UnidirectionalNodeIterator && iterator
     ) noexcept -> UnidirectionalNodeIterator & {
@@ -81,7 +81,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {
 
         /* return reference to the element at the current node */
@@ -89,7 +89,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
 
         /* return the address of the element at the current node */
@@ -97,7 +97,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeIterator < __ElementType > :: operator == (
             UnidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -111,7 +111,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeIterator < __ElementType > :: operator != (
             UnidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -121,7 +121,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeIterator < __ElementType > :: operator ++ () noexcept -> UnidirectionalNodeIterator & {
 
         /* previous node becomes the current one */
@@ -132,7 +132,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeIterator < __ElementType > :: operator ++ (int) noexcept -> UnidirectionalNodeIterator {
 
         /* make a copy of this iterator, advance current one and return copy */
@@ -143,7 +143,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr UnidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterator is valid if current node is not null */
@@ -152,12 +152,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
             Node const * pPreviousNode,
             Node const * pCurrentNode
     ) noexcept :
@@ -168,8 +168,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
             UnidirectionalNodeConstIterator const & iterator
     ) noexcept :
             _pPreviousNode ( iterator._pPreviousNode ),
@@ -179,8 +179,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_MaybeUnused constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator (
             UnidirectionalNodeConstIterator && iterator
     ) noexcept :
             _pPreviousNode ( cds :: exchange ( iterator._pPreviousNode, nullptr ) ),
@@ -190,7 +190,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeConstIterator < __ElementType > :: operator = (
             UnidirectionalNodeConstIterator const & iterator
     ) noexcept -> UnidirectionalNodeConstIterator & {
@@ -208,7 +208,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeConstIterator < __ElementType > :: operator = (
             UnidirectionalNodeConstIterator && iterator
     ) noexcept -> UnidirectionalNodeConstIterator & {
@@ -226,7 +226,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeConstIterator < __ElementType > :: operator * () const noexcept -> __ElementType const & {
 
         /* return reference to the element at the current node */
@@ -234,7 +234,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeConstIterator < __ElementType > :: operator -> () const noexcept -> __ElementType const * {
 
         /* return the address of the element at the current node */
@@ -242,7 +242,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeConstIterator < __ElementType > :: operator == (
             UnidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -256,7 +256,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto UnidirectionalNodeConstIterator < __ElementType > :: operator != (
             UnidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -266,7 +266,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeConstIterator < __ElementType > :: operator ++ () noexcept -> UnidirectionalNodeConstIterator & {
 
         /* previous node becomes the current one */
@@ -277,7 +277,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto UnidirectionalNodeConstIterator < __ElementType > :: operator ++ (int) noexcept -> UnidirectionalNodeConstIterator {
 
         /* make a copy of this iterator, advance current one and return copy */
@@ -288,7 +288,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr UnidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterator is valid if current node is not null */
@@ -297,11 +297,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeIterator < __ElementType > :: AbstractBidirectionalNodeIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeIterator < __ElementType > :: AbstractBidirectionalNodeIterator (
             Node * pPreviousNode,
             Node * pCurrentNode
@@ -313,7 +313,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeIterator < __ElementType > :: AbstractBidirectionalNodeIterator (
             AbstractBidirectionalNodeIterator const & iterator
     ) noexcept :
@@ -324,7 +324,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeIterator < __ElementType > :: AbstractBidirectionalNodeIterator (
             AbstractBidirectionalNodeIterator && iterator
     ) noexcept :
@@ -335,7 +335,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {
 
         /* return reference to the element at the current node */
@@ -343,7 +343,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
 
         /* return the address of the element at the current node */
@@ -351,7 +351,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeIterator < __ElementType > :: operator == (
             AbstractBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -365,7 +365,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeIterator < __ElementType > :: operator != (
             AbstractBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -375,7 +375,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterator is valid if current node is not null. */
@@ -384,11 +384,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: AbstractBidirectionalNodeConstIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: AbstractBidirectionalNodeConstIterator (
             Node const * pPreviousNode,
             Node const * pCurrentNode
@@ -400,7 +400,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: AbstractBidirectionalNodeConstIterator (
             AbstractBidirectionalNodeConstIterator const & iterator
     ) noexcept :
@@ -411,7 +411,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: AbstractBidirectionalNodeConstIterator (
             AbstractBidirectionalNodeConstIterator && iterator
     ) noexcept :
@@ -422,7 +422,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeConstIterator < __ElementType > :: operator * () const noexcept -> __ElementType const & {
 
         /* return reference to the element at the current node */
@@ -430,7 +430,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeConstIterator < __ElementType > :: operator -> () const noexcept -> __ElementType const * {
 
         /* return the address of the element at the current node */
@@ -438,7 +438,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeConstIterator < __ElementType > :: operator == (
             AbstractBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -452,7 +452,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AbstractBidirectionalNodeConstIterator < __ElementType > :: operator != (
             AbstractBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -462,7 +462,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
 
         /* iterator is valid if current node is not null */
@@ -471,11 +471,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator (
             Node * pPreviousNode,
             Node * pCurrentNode
@@ -489,7 +489,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator (
             ForwardBidirectionalNodeIterator const & iterator
     ) noexcept :
@@ -499,7 +499,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator (
             ForwardBidirectionalNodeIterator && iterator
     ) noexcept :
@@ -509,7 +509,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator = (
             ForwardBidirectionalNodeIterator const & iterator
     ) noexcept -> ForwardBidirectionalNodeIterator & {
@@ -527,7 +527,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator = (
             ForwardBidirectionalNodeIterator && iterator
     ) noexcept -> ForwardBidirectionalNodeIterator & {
@@ -545,7 +545,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto ForwardBidirectionalNodeIterator < __ElementType > :: operator == (
             ForwardBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -559,7 +559,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto ForwardBidirectionalNodeIterator < __ElementType > :: operator != (
             ForwardBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -569,7 +569,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator ++ () noexcept -> ForwardBidirectionalNodeIterator & {
 
         /* previous node becomes the current one */
@@ -580,7 +580,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator ++ (int) noexcept -> ForwardBidirectionalNodeIterator {
 
         /* make a copy of this iterator, advance forward current one and return copy */
@@ -591,7 +591,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator -- () noexcept -> ForwardBidirectionalNodeIterator & {
 
         /* current node becomes the previous one */
@@ -602,7 +602,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeIterator < __ElementType > :: operator -- (int) noexcept -> ForwardBidirectionalNodeIterator {
 
         /* make a copy of this iterator, advance backward current one and return copy */
@@ -613,11 +613,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeConstIterator < __ElementType > :: ForwardBidirectionalNodeConstIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeConstIterator < __ElementType > :: ForwardBidirectionalNodeConstIterator (
             Node const * pPreviousNode,
             Node const * pCurrentNode
@@ -631,7 +631,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeConstIterator < __ElementType > :: ForwardBidirectionalNodeConstIterator (
             ForwardBidirectionalNodeConstIterator const & iterator
     ) noexcept :
@@ -641,7 +641,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr ForwardBidirectionalNodeConstIterator < __ElementType > :: ForwardBidirectionalNodeConstIterator (
             ForwardBidirectionalNodeConstIterator && iterator
     ) noexcept :
@@ -651,7 +651,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator = (
             ForwardBidirectionalNodeConstIterator const & iterator
     ) noexcept -> ForwardBidirectionalNodeConstIterator & {
@@ -669,7 +669,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator = (
             ForwardBidirectionalNodeConstIterator && iterator
     ) noexcept -> ForwardBidirectionalNodeConstIterator & {
@@ -687,7 +687,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator == (
             ForwardBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -701,7 +701,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator != (
             ForwardBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -711,7 +711,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator ++ () noexcept -> ForwardBidirectionalNodeConstIterator & {
 
         /* previous node becomes the current one */
@@ -722,7 +722,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator ++ (int) noexcept -> ForwardBidirectionalNodeConstIterator {
 
         /* make a copy of this iterator, advance forward current one and return copy */
@@ -733,7 +733,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator -- () noexcept -> ForwardBidirectionalNodeConstIterator & {
 
         /* current node becomes the previous one */
@@ -744,7 +744,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardBidirectionalNodeConstIterator < __ElementType > :: operator -- (int) noexcept -> ForwardBidirectionalNodeConstIterator {
 
         /* make a copy of this iterator, advance backward current one and return copy */
@@ -755,11 +755,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeIterator < __ElementType > :: BackwardBidirectionalNodeIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeIterator < __ElementType > :: BackwardBidirectionalNodeIterator (
             Node * pPreviousNode,
             Node * pCurrentNode
@@ -773,7 +773,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeIterator < __ElementType > :: BackwardBidirectionalNodeIterator (
             BackwardBidirectionalNodeIterator const & iterator
     ) noexcept :
@@ -783,7 +783,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeIterator < __ElementType > :: BackwardBidirectionalNodeIterator (
             BackwardBidirectionalNodeIterator && iterator
     ) noexcept :
@@ -793,7 +793,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator = (
             BackwardBidirectionalNodeIterator const & iterator
     ) noexcept -> BackwardBidirectionalNodeIterator & {
@@ -811,7 +811,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator = (
             BackwardBidirectionalNodeIterator && iterator
     ) noexcept -> BackwardBidirectionalNodeIterator & {
@@ -829,7 +829,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto BackwardBidirectionalNodeIterator < __ElementType > :: operator == (
             BackwardBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -843,7 +843,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto BackwardBidirectionalNodeIterator < __ElementType > :: operator != (
             BackwardBidirectionalNodeIterator const & iterator
     ) const noexcept -> bool {
@@ -853,7 +853,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator ++ () noexcept -> BackwardBidirectionalNodeIterator & {
 
         /* previous node becomes the current one */
@@ -864,7 +864,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator ++ (int) noexcept -> BackwardBidirectionalNodeIterator {
 
         /* make a copy of this iterator, advance backward current one and return copy */
@@ -875,7 +875,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator -- () noexcept -> BackwardBidirectionalNodeIterator & {
 
         /* current node becomes the previous one */
@@ -886,7 +886,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeIterator < __ElementType > :: operator -- (int) noexcept -> BackwardBidirectionalNodeIterator {
 
         /* make a copy of this iterator, advance forward current one and return copy */
@@ -897,11 +897,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeConstIterator < __ElementType > :: BackwardBidirectionalNodeConstIterator () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeConstIterator < __ElementType > :: BackwardBidirectionalNodeConstIterator (
             Node const * pPreviousNode,
             Node const * pCurrentNode
@@ -915,7 +915,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeConstIterator < __ElementType > :: BackwardBidirectionalNodeConstIterator (
             BackwardBidirectionalNodeConstIterator const & iterator
     ) noexcept :
@@ -925,7 +925,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr BackwardBidirectionalNodeConstIterator < __ElementType > :: BackwardBidirectionalNodeConstIterator (
             BackwardBidirectionalNodeConstIterator && iterator
     ) noexcept :
@@ -935,7 +935,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator = (
             BackwardBidirectionalNodeConstIterator const & iterator
     ) noexcept -> BackwardBidirectionalNodeConstIterator & {
@@ -953,7 +953,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator = (
             BackwardBidirectionalNodeConstIterator && iterator
     ) noexcept -> BackwardBidirectionalNodeConstIterator & {
@@ -971,7 +971,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator == (
             BackwardBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -985,7 +985,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator != (
             BackwardBidirectionalNodeConstIterator const & iterator
     ) const noexcept -> bool {
@@ -995,7 +995,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator ++ () noexcept -> BackwardBidirectionalNodeConstIterator & {
 
         /* previous node becomes the current one */
@@ -1006,7 +1006,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator ++ (int) noexcept -> BackwardBidirectionalNodeConstIterator {
 
         /* make a copy of this iterator, advance backward current one and return copy */
@@ -1017,7 +1017,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator -- () noexcept -> BackwardBidirectionalNodeConstIterator & {
 
         /* current node becomes the previous one */
@@ -1028,7 +1028,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardBidirectionalNodeConstIterator < __ElementType > :: operator -- (int) noexcept -> BackwardBidirectionalNodeConstIterator {
 
         /* make a copy of this iterator, advance forward current one and return copy */
@@ -1038,6 +1038,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         return copy;
     }
 
-}
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_NODE_ITERATOR_IMPL_HPP__ */

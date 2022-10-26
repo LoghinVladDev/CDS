@@ -2,18 +2,18 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_HPP__
-#define __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @class pre-declaration of Abstract Delegate Wrapper Iterator, to be used by Remove Client as Abstract Iterator
              */
             template < typename >
-            class __AbstractDelegateWrapperIterator;    /* NOLINT(bugprone-reserved-identifier) */
+            class __AbstractDelegateWrapperIterator;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
             /**
@@ -34,47 +34,47 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType                          /* NOLINT(bugprone-reserved-identifier) */
-            > class __AbstractConstIteratorRemovePrimitiveClient {  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __AbstractConstIteratorRemovePrimitiveClient {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief friend declaration, functions from primitive client used by RemoveBy Composite Client
                  * @private
                  */
                 template < typename, typename >
-                friend class __RemoveByCompositeClient; /* NOLINT(bugprone-reserved-identifier) */
+                friend class __RemoveByCompositeClient; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief friend declaration, functions from primitive client used by RemoveOf Composite Client
                  * @private
                  */
                 template <
                         typename,
-                        typename __FElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                        typename __FIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+                        typename __FElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __FIterableType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ContainsFunction < __FIterableType, __FElementType >
-                > friend class __RemoveOfCompositeClient;   /* NOLINT(bugprone-reserved-identifier) */
+                > friend class __RemoveOfCompositeClient;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef internal alias representing the __ElementType const parameter
                  * @protected
                  */
-                using __acirc_ElementType       = /* NOLINT(bugprone-reserved-identifier) */
+                using __acirc_ElementType       = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ElementType const;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef internal alias representing the iterator parameter type
                  * @protected
                  */
-                using AbstractConstIterator     = /* NOLINT(bugprone-reserved-identifier) */
+                using AbstractConstIterator     = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __AbstractDelegateWrapperIterator < __acirc_ElementType >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to remove an element indicated to by the given iterator
                  * @param [in] iterator : AbstractConstIterator cref = Constant Reference to the iterator to be removed
@@ -95,7 +95,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         AbstractConstIterator const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
                  * @param [in] pIterators : AbstractConstIterator cptr = Address to an array of constant Abstract Const Iterator values
@@ -130,27 +130,27 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType                     /* NOLINT(bugprone-reserved-identifier) */
-            > class __LocalConstIteratorRemovePrimitiveClient { /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ReceiverType,                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __IteratorType                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __LocalConstIteratorRemovePrimitiveClient { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef internal alias representing the __ElementType const parameter
                  * @protected
                  */
-                using __acirc_ElementType       = /* NOLINT(bugprone-reserved-identifier) */
+                using __acirc_ElementType       = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ElementType const;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef internal alias representing the iterator parameter type
                  * @protected
                  */
                 using ConstIterator             = __IteratorType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to remove an element indicated to by the given iterator
                  * @param [in] iterator : ConstIterator cref = Constant Reference to the iterator to be removed
@@ -165,7 +165,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         ConstIterator const & iterator
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
                  * @param [in] pIterators : ConstIterator cptr = Address to an array of constant Const Iterator values
@@ -183,8 +183,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> Size;
             };
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_CONST_ITERATOR_REMOVE_PRIMITIVE_CLIENT_HPP__ */

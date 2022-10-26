@@ -2,14 +2,14 @@
  * Created by loghin on 6/26/22.
  */
 
-#ifndef __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_HPP__
-#define __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "../../../iterator/IteratorFind.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @interface Interface for calling findOf statements - of / firstOf / lastOf / allOf / notOf / firstNotOf / lastNotOf / allNotOf
@@ -28,22 +28,22 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
-            > class __FindOfImmutableCompositeClient {                                                  /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __FindOfImmutableCompositeClient {                                                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            private:
+            private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Private definition for __IteratorType template parameter
                  * @private
                  */
                 using ConstIterator = __IteratorType;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are also found in the given parameter iterable, until it has found a certain number of elements, specified in the 'count' parameter. Returns elements locations via iterators in a given collection.
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -65,14 +65,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto findOf (
                         Size                                        count,
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are also found in the given parameter iterable, until it has found a certain number of elements, specified in the 'count' parameter. Returns elements locations via iterators in a newly created collection.
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -93,13 +93,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findOf (
                         Size                        count,
                         __FromIterableType  const & from
                 ) const noexcept -> __CollectionType < ConstIterator >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the first element that is found in the given parameter iterable. Returns element location via iterator, if found. Otherwise, returns same as 'cend()'.
                  * @param [in] from : __FromIterableType cref = Constant Reference to locate the elements into
@@ -120,7 +120,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the last element that is found in the given parameter iterable. Returns element location via iterator, if found. Otherwise, returns same as given 'cend()' value.
                  * @param [in] from : __FromIterableType cref = Constant Reference to locate the elements into
@@ -141,7 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are also found in the given parameter iterable. Returns elements locations via iterators in a given collection
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -160,13 +160,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto findAllOf (
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are also found in the given parameter iterable. Returns elements locations via iterators in a newly created collection
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -184,12 +184,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findAllOf (
                         __FromIterableType const & from
                 ) const noexcept -> __CollectionType < ConstIterator >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are not found in the given parameter iterable, until it has found a certain number of elements, specified in the 'count' parameter. Returns elements locations via iterators in a given collection.
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -211,14 +211,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto findNotOf (
                         Size                                        count,
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the elements that are not found in the given parameter iterable, until it has found a certain number of elements, specified in the 'count' parameter. Returns elements locations via iterators in a newly created collection.
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -239,13 +239,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findNotOf (
                         Size                        count,
                         __FromIterableType  const & from
                 ) const noexcept -> __CollectionType < ConstIterator >;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the first element that is not found in the given parameter iterable. Returns element location via iterator, if found. Otherwise, returns same as 'cend()'.
                  * @param [in] from : __FromIterableType cref = Constant Reference to locate the elements into
@@ -266,7 +266,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find the last element that is not found in the given parameter iterable. Returns element location via iterator, if found. Otherwise, returns same as given 'cend()' value.
                  * @param [in] from : __FromIterableType cref = Constant Reference to locate the elements into
@@ -287,7 +287,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __FromIterableType const & from
                 ) const noexcept -> ConstIterator;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are not found in the given parameter iterable. Returns elements locations via iterators in a given collection
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -306,13 +306,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto findAllNotOf (
                         __CollectionType < ConstIterator >        & storeIn,
                         __FromIterableType                  const & from
                 ) const noexcept -> __CollectionType < ConstIterator > &;
 
-            public:
+            public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to find all the elements that are not found in the given parameter iterable. Returns elements locations via iterators in a newly created collection
                  * @tparam __CollectionType is the type of collection to return the found iterators in
@@ -330,7 +330,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier) */
+                template < template < typename ... > class __CollectionType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findAllNotOf (
                         __FromIterableType const & from
                 ) const noexcept -> __CollectionType < ConstIterator >;
@@ -354,13 +354,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier) */
-                    typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier) */
-            > using __LocalFindOfImmutableCompositeClient =                                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                    __IterableType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __IteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                    __FromIterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ContainsFunction < __FromIterableType, __ElementType >    __notContainsFunction   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalFindOfImmutableCompositeClient =                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindOfImmutableCompositeClient <
                             __IterableType,
                             __ElementType,
@@ -370,9 +370,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __notContainsFunction
                     >;
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #include "../../../iterator/impl/IteratorFind.hpp"
 

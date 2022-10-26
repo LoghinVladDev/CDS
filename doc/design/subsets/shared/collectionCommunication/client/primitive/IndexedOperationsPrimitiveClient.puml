@@ -1,0 +1,41 @@
+@startuml
+
+!includesub ../../channel/Channel.puml!public_declaration
+
+!startsub public_declaration
+!ifndef FIND_PUBLIC
+!define FIND_PUBLIC
+
+namespace cds {
+    namespace __hidden {
+        namespace __impl {
+
+            interface __IndexedOperationsPrimitiveClient <R, E> {
+                + {method} <__Collection> sub (__Collection &, Index, Index) const noexcept -> __Collection &
+                + {method} <__Collection> sub (Index, Index) const noexcept -> __Collection
+                + {method} <__Collection<...>> sub (Index, Index) const noexcept -> __Collection <Index>
+                + {method} operator [] (Index) const noexcept -> E const &
+                + {method} operator [] (Index) noexcept -> E &
+                + {method} removeAt (Collection <Index> const &) noexcept -> Size
+                + {method} removeAt (std::initializer_list <Index> const &) noexcept -> Size
+            }
+
+            interface __LocalIndexedOperationsPrimitiveClient <R, E> {
+                + {method} <__Collection> sub (__Collection &, Index, Index) const noexcept -> __Collection &
+                + {method} <__Collection> sub (Index, Index) const noexcept -> __Collection
+                + {method} <__Collection<...>> sub (Index, Index) const noexcept -> __Collection <Index>
+            }
+
+            note "Requests direct dispatcher-standard calls" as IOPCLocalHint
+            note "Requests handlers to call through Channel" as IOPCHint
+            IOPCLocalHint - __LocalIndexedOperationsPrimitiveClient
+            IOPCHint - __IndexedOperationsPrimitiveClient
+
+        }
+    }
+}
+
+!endif
+!endsub
+
+@enduml
