@@ -93,5 +93,6 @@ namespace cds {
 } /* namespace cds */
 
 #include "function/impl/Function.hpp"
+#include "function/impl/CTAD.hpp"
 
 #endif /* __CDS_FUNCTION_HPP__ */

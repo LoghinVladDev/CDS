@@ -13,6 +13,17 @@
 #include <pthread.h>
 #include <functional>
 
+template < typename F >
+auto timed ( cds :: String const & message, F const & block ) {
+
+    auto start = std :: chrono :: high_resolution_clock :: now ();
+    block ();
+    auto end = std :: chrono :: high_resolution_clock :: now ();
+    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+
+    std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
+}
+int f2(int a) {return a * 2;}
 int main () {
 
 std::stop_token stopToken;
@@ -144,7 +155,7 @@ std::stop_token stopToken;
 
 
     std :: function <float(int)> * f123 = new std :: function ( [](int a) { return a + 0.5f; } );
-    cds :: Function <float(int)> * f123c = new cds :: Function <float(int)> ( [](int a) { return a + 0.5f; } );
+    cds :: Function <float(int)> * f123c = new cds :: Function ( [](int a) { return a + 0.5f; } );
     auto f234 = * f123;
     auto f234c = * f123c;
     delete f123;
@@ -162,7 +173,7 @@ std::stop_token stopToken;
 
     A * a341515 = new A();
     std :: function f65 = * a341515;
-    cds :: Function <float(int)> f65c = * a341515;
+    cds :: Function f65c = * a341515;
     delete a341515;
 
     std :: cout << f234(5) << '\n';
@@ -170,7 +181,46 @@ std::stop_token stopToken;
     std :: cout << f234c(5) << '\n';
     std :: cout << f65c(3) << '\n';
 
-    cds :: meta :: Decay < int(float) > pfn ;
+    cds :: meta :: Decay < int(float) > pfn;
+
+    long long calls = 1'000'000'000;
+
+    timed( "std::function", [calls] {
+        std :: function < int(int) > f = f2;
+        volatile int s = 0;
+        for (long long i = 0; i < calls; ++ i) {
+            s += f(i);
+        }
+        (void) s;
+    });
+
+    timed( "cds::Function", [calls] {
+        cds :: Function < int(int) > f = f2;
+        volatile int s = 0;
+        for (long long i = 0; i < calls; ++ i) {
+            s += f(i);
+        }
+        (void) s;
+    });
+
+    timed( "standard", [calls] {
+        volatile int s = 0;
+        for (long long i = 0; i < calls; ++ i) {
+            s += f2(i);
+        }
+        (void) s;
+    });
+
+    auto fact = [n=10]{
+        cds :: Function <int(int)> fac = [&](int n){
+            if ( n == 0 ) return 1;
+            return n * fac(n-1);
+        };
+
+        return fac(n);
+    };
+
+    std :: cout << fact () << '\n';
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 
