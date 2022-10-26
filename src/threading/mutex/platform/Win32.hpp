@@ -50,7 +50,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __MutexPlatformHandleType * pMutexHandle
             ) noexcept -> bool {
 
-                return TryEnterCriticalSection ( pMutexHandle, 0 ) != 0;
+                return TryEnterCriticalSection ( pMutexHandle ) != 0;
             }
 
         } /* namespace __impl */
