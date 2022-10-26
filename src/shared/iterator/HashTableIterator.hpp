@@ -60,10 +60,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 typename                                                                    __KeyType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                                                                    __KeyHasher,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                                                                    __RehashPolicy,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                functional :: MapperFunction < __KeyType const &, __ElementType const & >   __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: MapperFunction < __KeyType const &, __TElementType const & >  __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                functional :: ConsumerFunction < __ElementType & >                          __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: ConsumerFunction < __TElementType & >                         __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > friend class cds :: __hidden :: __impl :: __HashTable;                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -399,7 +399,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 functional :: MapperFunction < __KeyType const &, __TElementType const & >  __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 functional :: ConsumerFunction < __TElementType & >                         __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > friend class cds :: __hidden :: __impl :: __HashTable;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > friend class cds :: __hidden :: __impl :: __HashTable;                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         /**
