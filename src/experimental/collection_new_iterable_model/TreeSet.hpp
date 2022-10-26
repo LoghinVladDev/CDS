@@ -279,8 +279,9 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
 #include "../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
 
+#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+
 #include "treeSet/impl/TreeSet.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #endif /* __CDS_EX_TREE_SET_HPP__ */
