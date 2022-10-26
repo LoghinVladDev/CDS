@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <functional>
 #include "src/functional/FunctionalInterface.hpp"
+#include <CDS/Sequence>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -41,6 +42,47 @@ cds :: String gM ( int a, float b, int c, cds :: String const & d, float e ) {
 cds :: String gS () {
     return "test";
 }
+
+class A {
+public:
+    A() {
+        std :: cout << "ct\n";
+    }
+
+    ~A() {
+        std :: cout << "dt\n";
+    }
+
+    A& _1() {
+        std :: cout << 1 << '\n';
+        return * this;
+    }
+
+    A& _2() {
+        std :: cout << 2 << '\n';
+        return * this;
+    }
+
+    A& _3() {
+        std :: cout << 3 << '\n';
+        return * this;
+    }
+
+    A const& _4() const {
+        std :: cout << 4 << '\n';
+        return * this;
+    }
+
+    A const& _5() const {
+        std :: cout << 5 << '\n';
+        return * this;
+    }
+
+    A const& _6() const {
+        std :: cout << 6 << '\n';
+        return * this;
+    }
+};
 
 int main () {
 
@@ -295,6 +337,12 @@ std::stop_token stopToken;
 
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
+
+    :: A()
+        ._1()._2()._3()._4()._5()._6();
+
+//    cds :: Array < int > a;
+//Sequence (a).atOrNull(3);
 
     return 0;
 }
