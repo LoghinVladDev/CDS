@@ -99,9 +99,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __RandomAccessIteratorType,
-            typename __Comparator = cds :: FunctionComparator <
-                    cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) >,
-                    cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > >
+            typename __Comparator = functional :: DecoratedPredicate <
+                    functional :: PredicateFunction <
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > const &,
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > const &
+                    >,
+                    & cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > >
             >
     > __CDS_MaybeUnused inline auto heapSort (
             __RandomAccessIteratorType  const & begin,
@@ -111,9 +114,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __BidirectionalIteratorType,
-            typename __Comparator = cds :: FunctionComparator <
-                    cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __BidirectionalIteratorType > () ) >,
-                    cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __BidirectionalIteratorType > () ) > >
+            typename __Comparator = functional :: DecoratedPredicate <
+                    functional :: PredicateFunction <
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __BidirectionalIteratorType > () ) > const &,
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __BidirectionalIteratorType > () ) > const &
+                    >,
+                    & cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __BidirectionalIteratorType > () ) > >
             >
     > __CDS_MaybeUnused inline auto insertionSort (
             __BidirectionalIteratorType const & begin,
@@ -123,9 +129,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __RandomAccessIteratorType,
-            typename __Comparator = cds :: FunctionComparator <
-                    cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) >,
-                    cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > >
+            typename __Comparator = functional :: DecoratedPredicate <
+                    functional :: PredicateFunction <
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > const &,
+                            cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > const &
+                    >,
+                    & cds :: predicates :: lessThan < cds :: meta :: Decay < decltype ( * cds :: meta :: referenceOf < __RandomAccessIteratorType > () ) > >
             >
     > inline auto introSort (
             __RandomAccessIteratorType  const & begin,

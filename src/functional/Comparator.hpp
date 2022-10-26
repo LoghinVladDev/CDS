@@ -1,44 +1,37 @@
-//
-// Created by loghin on 10.11.2021.
-//
+/*
+ * Created by loghin on 10.11.2021.
+ */
 
-#ifndef CDS_COMPARATOR_HPP
-#define CDS_COMPARATOR_HPP
+#ifndef __CDS_COMPARATOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_COMPARATOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Compiler>
-#include "../shared/impl/generalPredicates.hpp"
+#include <CDS/Compiler>        /* NOLINT(llvm-include-order) */
+#include <CDS/FunctionalInterface>
 
 namespace cds {
 
     template < typename T >
-    class Comparator {
+    class __CDS_DeprecatedHint("Deprecated use for now, to be redesigned later") Comparator {
     public:
         virtual auto operator () (T const &, T const &) const noexcept (false) -> bool = 0;
     };
 
-}
+} /* namespace cds */
 
 namespace cds {
 
     namespace utility {
 
-        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-        using ComparisonFunction = decltype ( & cds :: meta :: equals < __Type, __Type > );
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ComparisonFunction __CDS_DeprecatedHint("Use Standard Functional Interfaces instead of fixed Interface") =
+                functional :: PredicateFunction < __Type const &, __Type const & >;
 
-    }
+    } /* namespace utility */
 
-    template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > // NOLINT(bugprone-reserved-identifier)
-    class FunctionComparator {
-    public:
-        __CDS_NoDiscard constexpr auto operator () (
-                __Type const & left,
-                __Type const & right
-        ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool {
+    template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    using FunctionComparator __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =
+            functional :: DecoratedPredicate < decltype ( & __comparisonFunction ), __comparisonFunction >;
 
-            return __comparisonFunction ( left, right );
-        }
-    };
+} /* namespace cds */
 
-}
-
-#endif //CDS_COMPARATOR_HPP
+#endif /* __CDS_COMPARATOR_HPP__ */

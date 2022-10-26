@@ -132,14 +132,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @typedef Alias for a generic member function signature of the statically inherited base class ( extended class )
                  * @protected to be reused in the deriving classes to keep type consistency
                  */
-                using __GenericHandler  = auto ( __ReceiverType :: * ) () -> void;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using __GenericHandler  = functional :: ConsumerMemberFunction < __ReceiverType >;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:                                                                          /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for a generic member const function signature of the statically inherited base class ( extended class )
                  * @protected to be reused in the deriving classes to keep type consistency
                  */
-                using __GenericConstHandler  = auto ( __ReceiverType :: * ) () const -> void;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using __GenericConstHandler  = functional :: ConsumerConstMemberFunction < __ReceiverType >;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

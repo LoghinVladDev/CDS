@@ -6,12 +6,7 @@
 #define __CDS_HASH_SET_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Set>
-
-#include <CDS/Comparator>
-#include <CDS/Extractor>                                                                    /* NOLINT(llvm-include-order) */
-#include <CDS/Hasher>
-#include <CDS/Destructor>
-#include <CDS/CopyConstructor>
+#include <CDS/FunctionalInterface>
 
 #include "../../../shared/Node.hpp"
 #include "../../../shared/rehashPolicy/rehashPolicy.hpp"

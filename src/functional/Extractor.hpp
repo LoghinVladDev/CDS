@@ -2,48 +2,29 @@
  * Created by loghin on 6/22/22.
  */
 
-#ifndef __CDS_EXTRACTOR_HPP__
-#define __CDS_EXTRACTOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EXTRACTOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_EXTRACTOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+#include <CDS/Compiler>        /* NOLINT(llvm-include-order) */
+#include <CDS/FunctionalInterface>
 
 namespace cds {
 
-    namespace utility {         /* NOLINT(modernize-concat-nested-namespaces) */
-        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace utility {
 
-                template < typename __BaseType, typename __ExtractedType >                                  /* NOLINT(bugprone-reserved-identifier) */
-                constexpr auto __extractHint ( __BaseType const & ) noexcept -> __ExtractedType const & {   /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __BaseType, typename __ExtractedType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ExtractorFunction __CDS_DeprecatedHint("Use Standard Functional Interfaces instead of fixed Interface") = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+                functional :: MapperFunction < __ExtractedType const &, __BaseType const & >;
 
-                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
-                     * a used function, when it is only declared for SFINAE purposes. It will still return
-                     * a value acquired from an undefined function to avoid usage in compiled code. */
-                    return cds :: meta :: referenceOf < __ExtractedType const > ();
-                }
-
-            }
-        }
-
-        template < typename __BaseType, typename __ExtractedType > /* NOLINT(bugprone-reserved-identifier) */
-        using ExtractorFunction = decltype (
-                & cds :: utility :: __hidden :: __impl :: __extractHint < __BaseType, __ExtractedType >
-        );
-    }
+    } /* namespace utility */
 
     template <
-            typename                                                            __BaseType,          /* NOLINT(bugprone-reserved-identifier) */
-            typename                                                            __ExtractedType,     /* NOLINT(bugprone-reserved-identifier) */
-            cds :: utility :: ExtractorFunction < __BaseType, __ExtractedType > __extractor          /* NOLINT(bugprone-reserved-identifier) */
-    > class FunctionExtractor {
+            typename                                                            __BaseType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                            __ExtractedType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: utility :: ExtractorFunction < __BaseType, __ExtractedType > __extractor          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > using FunctionExtractor __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+            functional :: DecoratedMapper < decltype ( & __extractor ), __extractor >;
 
-    public:
-        __CDS_NoDiscard constexpr auto operator () (
-                __BaseType const & value
-        ) const noexcept ( noexcept ( __extractor ( value ) ) ) -> __ExtractedType const & {
-
-            return __extractor ( value );
-        }
-    };
-
-}
+} /* namespace cds */
 
 #endif /* __CDS_EXTRACTOR_HPP__ */

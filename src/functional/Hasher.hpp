@@ -1,104 +1,28 @@
-//
-// Created by loghin on 10.11.2021.
-//
+/*
+ * Created by loghin on 10.11.2021.
+ */
 
-#ifndef CDS_HASHER_HPP
-#define CDS_HASHER_HPP
+#ifndef __CDS_HASHER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_HASHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <string>
-#include <cstring>
-#include <CDS/std-types>
-
-#include <CDS/Compiler>
-#include <CDS/Options>
-
-namespace cds {
-
-    class Object;
-
-}
-
-namespace cds {
-
-    template <typename K, Size hashBoundary>
-    class __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") HashCalculator {
-    public:
-        using Value                 = K;
-        using ValueConstReference   = Value const &;
-
-        using HashValue             = Index;
-
-        virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
-
-        __CDS_NoDiscard virtual __CDS_cpplang_VirtualConstexpr auto getBoundary () const noexcept -> Size { 
-            return hashBoundary; 
-        }
-    };
-
-}
-
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-#if defined(CDS_EASY_HASH_DEBUG)
-
-        template <class K> using HighCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-        template <class K> using MediumCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-        template <class K> using LowCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-
-#else
-
-        template < typename K > using HighCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-        template < typename K > using MediumCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-        template < typename K > using LowCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
-
-#endif
-
-    }
-}
+#include <CDS/Compiler>        /* NOLINT(llvm-include-order) */
+#include <CDS/FunctionalInterface>
+#include "../primitive/baseTypes/object/impl/HashBase.hpp"
 
 namespace cds {
 
     namespace utility {
 
-        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-        using HashFunction = decltype ( & cds :: hash < __Type > );
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using HashFunction __CDS_DeprecatedHint("Use Standard Functional Interfaces instead of fixed Interface") =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+                functional :: MapperFunction < Size, __Type const & >;
 
-    }
+    } /* namespace utility */
 
-    template < typename __Type, utility :: HashFunction < __Type > __hashFunction > // NOLINT(bugprone-reserved-identifier)
-    class FunctionHasher {
+    template < typename __Type, utility :: HashFunction < __Type > __hashFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    using FunctionHasher __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+            functional :: DecoratedMapper < decltype ( __hashFunction ), __hashFunction >;
 
-    public:
-        __CDS_NoDiscard constexpr auto operator () (
-                __Type const & value
-        ) const noexcept ( noexcept ( __hashFunction ( value ) ) ) -> Size {
+} /* namespace cds */
 
-            return __hashFunction ( value );
-        }
-    };
-
-    template < typename __Type, typename __StandardHasher > // NOLINT(bugprone-reserved-identifier)
-    class WrapperHasher {
-
-    public:
-        __CDS_NoDiscard constexpr auto operator () (
-                __Type const & value
-        ) const noexcept ( noexcept ( __StandardHasher :: hash ( value ) ) ) -> Size {
-
-            return __StandardHasher :: hash ( value );
-        }
-    };
-
-}
-
-#if __CDS_cpplang_Concepts_available == true
-
-    template < typename H >
-    concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
-        { hashCalculator.getBoundary() };
-    };
-
-#endif
-
-#endif //CDS_HASHER_HPP
+#endif /* __CDS_HASHER_HPP__ */

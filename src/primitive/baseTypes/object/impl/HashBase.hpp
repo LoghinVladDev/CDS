@@ -190,6 +190,18 @@ namespace cds {
 
 #endif
 
+    template < typename __Type, typename __StandardHasher > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class WrapperHasher {
+
+    public:
+        __CDS_NoDiscard constexpr auto operator () (
+                __Type const & value
+        ) const noexcept ( noexcept ( __StandardHasher :: hash ( value ) ) ) -> Size {
+
+            return __StandardHasher :: hash ( value );
+        }
+    };
+
 } /* namespace cds */
 
 #endif /* __CDS_HASH_BASE_HPP__ */

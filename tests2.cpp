@@ -12,6 +12,7 @@
 #include <thread>
 #include <pthread.h>
 #include <functional>
+#include "src/functional/FunctionalInterface.hpp"
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -24,6 +25,23 @@ auto timed ( cds :: String const & message, F const & block ) {
     std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 int f2(int a) {return a * 2;}
+
+void gC(int a, float b, cds :: String const & c) {
+    std :: cout << a << '\n' << b << '\n' << c << '\n';
+}
+
+bool gP (int a, int b, float c, float d, cds :: String const & e, cds :: String const & f) {
+    return a== b && c == d && e == f;
+}
+
+cds :: String gM ( int a, float b, int c, cds :: String const & d, float e ) {
+    return cds :: String () + a + b + c + d + e;
+}
+
+cds :: String gS () {
+    return "test";
+}
+
 int main () {
 
 std::stop_token stopToken;
@@ -113,7 +131,6 @@ std::stop_token stopToken;
 
     Runnable run1 = []{
         std :: cout << "test\n";
-        sleep(1);
         std :: cout << "test2\n";
     };
 
@@ -183,7 +200,7 @@ std::stop_token stopToken;
 
     cds :: meta :: Decay < int(float) > pfn;
 
-    long long calls = 1'000'000'000;
+    long long calls = 1'000'000;
 
     timed( "std::function", [calls] {
         std :: function < int(int) > f = f2;
@@ -221,6 +238,61 @@ std::stop_token stopToken;
     };
 
     std :: cout << fact () << '\n';
+
+    using namespace cds :: functional;
+
+    Supplier < int > sint = []() { return 5; };
+    Predicate < int > isEven = [](int e) { return e % 2 == 0; };
+    Predicate < int, int, int, int > all4Even = [](
+            int a, int b,
+            int c, int d
+    ) {
+        return
+                a % 2 == 0 && b % 2 == 0 &&
+                c % 2 == 0 && d % 2 == 0;
+    };
+
+    Mapper < int, double > intToDoubleAndTimes3half = [] (int a) {
+        return a * 3.5;
+    };
+
+    Mapper < String, int, int, int > int3ToString  = [] (int a, int b, int c) {
+        return String() + a + b + c;
+    };
+
+    Consumer < int > intPrinter = [](int a) { std :: cout << a << '\n'; };
+
+    std :: cout << sint() << '\n';
+    std :: cout << isEven(3) << '\n';
+    std :: cout << isEven(4) << '\n';
+    std :: cout << all4Even(1, 1, 1, 1) << '\n';
+    std :: cout << all4Even(2, 1, 1, 1) << '\n';
+    std :: cout << all4Even(1, 2, 1, 1) << '\n';
+    std :: cout << all4Even(1, 1, 2, 1) << '\n';
+    std :: cout << all4Even(1, 1, 1, 2) << '\n';
+    std :: cout << all4Even(2, 2, 2, 2) << '\n';
+    std :: cout << intToDoubleAndTimes3half(3) << '\n';
+    std :: cout << int3ToString(3, 4, 5) << '\n';
+
+    intPrinter (4);
+
+    DecoratedMapper < decltype ( & f2 ), & f2 > mapper;
+    std :: cout << mapper (2) << '\n';
+
+
+    DecoratedConsumer < decltype ( & gC ), & gC > cons1;
+    DecoratedPredicate < decltype ( & gP ), & gP > pred1;
+    DecoratedMapper < decltype ( & gM ), & gM > map1;
+    DecoratedSupplier < decltype ( & gS ), & gS > sup1;
+
+    cons1 ( 3, 5.4f, "testString" );
+    std :: cout << pred1 ( 2, 2, 5.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 1, 2, 5.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 2, 2, 4.4f, 5.4f, "test", "test" ) << '\n';
+    std :: cout << pred1 ( 2, 2, 5.4f, 5.4f, "test2", "test" ) << '\n';
+    std :: cout << map1 ( 1, 1.1f, 1, "1", 1.1f ) << '\n';
+    std :: cout << sup1 () << '\n';
+
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 

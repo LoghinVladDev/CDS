@@ -42,14 +42,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @typedef Alias for a generic function of the target Collection.
                  * @private
                  */
-                using __GenericHandler      = auto ( Collection < __ElementType > :: * ) () -> void; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using __GenericHandler      = functional :: ConsumerMemberFunction < Collection < __ElementType > >;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @typedef Alias for a generic const function of the target Collection.
                  * @private
                  */
-                using __GenericConstHandler = auto ( Collection < __ElementType > :: * ) () const -> void;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using __GenericConstHandler = functional :: ConsumerConstMemberFunction < Collection < __ElementType > >;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**
