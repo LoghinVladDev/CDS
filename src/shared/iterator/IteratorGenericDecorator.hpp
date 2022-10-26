@@ -109,6 +109,93 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto iterator () noexcept -> __DecoratedIteratorType &; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
     };
 
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > class BidirectionalIteratorGenericDecorator : public meta :: BidirectionalIterator {
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __DecoratedIteratorType _iterator;
+
+    public:
+        constexpr BidirectionalIteratorGenericDecorator () noexcept;
+
+    public:
+        __CDS_Explicit constexpr BidirectionalIteratorGenericDecorator (
+                __DecoratedIteratorType const & iterator
+        ) noexcept;
+
+    public:
+        __CDS_Explicit constexpr BidirectionalIteratorGenericDecorator (
+                __DecoratedIteratorType && iterator
+        ) noexcept;
+
+    public:
+        constexpr BidirectionalIteratorGenericDecorator (
+                BidirectionalIteratorGenericDecorator const & iterator
+        ) noexcept;
+
+    public:
+        constexpr BidirectionalIteratorGenericDecorator (
+                BidirectionalIteratorGenericDecorator && iterator
+        ) noexcept;
+
+    public:
+        ~ BidirectionalIteratorGenericDecorator () noexcept = default;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                BidirectionalIteratorGenericDecorator const & iterator
+        ) noexcept -> BidirectionalIteratorGenericDecorator &;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                BidirectionalIteratorGenericDecorator && iterator
+        ) noexcept -> BidirectionalIteratorGenericDecorator &;
+
+    public:
+        constexpr auto operator * () const noexcept -> __ValueAtType &;
+
+    public:
+        constexpr auto operator -> () const noexcept -> __ValueAtType *;
+
+    public:
+        constexpr auto operator == (
+                BidirectionalIteratorGenericDecorator const & iterator
+        ) const noexcept -> bool;
+
+    public:
+        constexpr auto operator != (
+                BidirectionalIteratorGenericDecorator const & iterator
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BidirectionalIteratorGenericDecorator &;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> BidirectionalIteratorGenericDecorator;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> BidirectionalIteratorGenericDecorator &;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> BidirectionalIteratorGenericDecorator;
+
+    public:
+        __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+
+    public:
+        __CDS_NoDiscard constexpr auto iterator () const noexcept -> __DecoratedIteratorType const &;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto iterator () noexcept -> __DecoratedIteratorType &;
+
+    };
+
+
+
 } /* namespace cds */
 
 #endif /* __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP__ */

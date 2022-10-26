@@ -23,6 +23,7 @@
 #include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
+#include "../../shared/iterator/IteratorGenericDecorator.hpp"
 #include "../../shared/delegateIterator/DelegateIterator.hpp"
 
 #include "shared/redBlackTree/RedBlackTree.hpp"
@@ -107,6 +108,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected: using typename MapBase :: AbstractEntryMutableCollectionProxy;
 
         private: class ValueMutableCollectionProxy;
+        private: class EntryMutableCollectionProxy;
+        private: class KeySetProxy;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
@@ -132,6 +135,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 #include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
 
 #include "../../shared/delegateIterator/impl/DelegateIterator.hpp"
+#include "../../shared/iterator/impl/IteratorGenericDecorator.hpp"
 
 #include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
 #include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"

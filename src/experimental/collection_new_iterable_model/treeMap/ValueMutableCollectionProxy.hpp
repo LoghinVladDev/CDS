@@ -10,6 +10,82 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
 
 
+                template <
+                        typename __ServerType,              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                /* NOLINT(bugprone-reserved-identifier) */
+                > using __TreeMapValueProxyServer =         /* NOLINT(bugprone-reserved-identifier) */
+                        __MutableCollectionServer <
+                                __ServerType,
+                                __ValueType
+                        >;
+
+
+                template <
+                        typename __DecoratedIteratorType,                                           /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueAtType                                                      /* NOLINT(bugprone-reserved-identifier) */
+                > constexpr auto __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt (     /* NOLINT(bugprone-reserved-identifier) */
+                        __DecoratedIteratorType const & iterator
+                ) noexcept -> __ValueAtType & {
+
+                    return ( * iterator ).value ();
+                }
+
+
+                template <
+                        typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                        /* NOLINT(bugprone-reserved-identifier) */
+                > using __TreeMapValueProxyForwardIterator =        /* NOLINT(bugprone-reserved-identifier) */
+                        BidirectionalIteratorGenericDecorator <
+                                typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_Iterator,
+                                __ValueType,
+                                & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
+                                        typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_Iterator,
+                                        __ValueType
+                                >
+                        >;
+
+
+                template <
+                        typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                            /* NOLINT(bugprone-reserved-identifier) */
+                > using __TreeMapValueProxyForwardConstIterator =       /* NOLINT(bugprone-reserved-identifier) */
+                        BidirectionalIteratorGenericDecorator <
+                                typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ConstIterator,
+                                __ValueType const,
+                                & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
+                                        typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ConstIterator,
+                                        __ValueType const
+                                >
+                        >;
+
+
+                template <
+                        typename __KeyType,                          /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                         /* NOLINT(bugprone-reserved-identifier) */
+                > using __TreeMapValueProxyBackwardIterator =        /* NOLINT(bugprone-reserved-identifier) */
+                        BidirectionalIteratorGenericDecorator <
+                                typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseIterator,
+                                __ValueType,
+                                & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
+                                        typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseIterator,
+                                        __ValueType
+                                >
+                        >;
+
+
+                template <
+                        typename __KeyType,                              /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType                             /* NOLINT(bugprone-reserved-identifier) */
+                > using __TreeMapValueProxyBackwardConstIterator =       /* NOLINT(bugprone-reserved-identifier) */
+                        BidirectionalIteratorGenericDecorator <
+                                typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseConstIterator,
+                                __ValueType const,
+                                & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
+                                        typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseConstIterator,
+                                        __ValueType const
+                                >
+                        >;
              }
         }
 
@@ -20,8 +96,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __KeyType,
                     __ValueType
             > :: ValueMutableCollectionProxy :
-                    private AbstractValueMutableCollectionProxy
-            {
+                    private AbstractValueMutableCollectionProxy,
+                    private __hidden :: __impl :: __TreeMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType > {
 
             };
     }
