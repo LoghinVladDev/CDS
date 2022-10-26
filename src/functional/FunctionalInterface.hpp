@@ -5,6 +5,8 @@
 #ifndef __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include <CDS/meta/Base>
+
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace functional {
 
@@ -64,10 +66,26 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         );
 
 
+        template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ConsumerMemberFunctionPointer = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) -> void;
+
+
+        template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ConsumerConstMemberFunctionPointer = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) const -> void;
+
+
         template < typename ... __TestedTypes >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         using PredicateFunctionPointer = decltype (
                 & __hidden :: __impl :: __predicateFunctionHint < __TestedTypes ... >
         );
+
+
+        template < typename __ClassType, typename ... __TestedTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using PredicateMemberFunction = auto ( __ClassType :: * ) ( __TestedTypes ... ) -> bool;
+
+
+        template < typename __ClassType, typename ... __TestedTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using PredicateConstMemberFunction = auto ( __ClassType :: * ) ( __TestedTypes ... ) const -> bool;
 
 
         template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -76,10 +94,26 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         );
 
 
+        template < typename __ClassType, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using MapperMemberFunction = auto ( __ClassType :: * ) ( __ArgumentTypes ... ) -> __ReturnType;
+
+
+        template < typename __ClassType, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using MapperConstMemberFunction = auto ( __ClassType :: * ) ( __ArgumentTypes ... ) const -> __ReturnType;
+
+
         template < typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         using SupplierFunctionPointer = decltype (
                 & __hidden :: __impl :: __supplierFunctionHint < __SuppliedType >
         );
+
+
+        template < typename __ClassType, typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using SupplierMemberFunction = auto ( __ClassType :: * ) () -> __SuppliedType;
+
+
+        template < typename __ClassType, typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using SupplierConstMemberFunction = auto ( __ClassType :: * ) () const -> __SuppliedType;
 
 
         template < typename __ConsumerFunctionType, __ConsumerFunctionType __consumerFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
