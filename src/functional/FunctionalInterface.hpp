@@ -5,7 +5,7 @@
 #ifndef __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/meta/Base>
+#include <CDS/meta/TypeTraits>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace functional {
@@ -61,21 +61,21 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         } /* namespace __hidden */
 
         template < typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using ConsumerFunctionPointer = decltype (
+        using ConsumerFunction = decltype (
                 & __hidden :: __impl :: __consumerFunctionHint < __ConsumedTypes ... >
         );
 
 
         template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using ConsumerMemberFunctionPointer = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) -> void;
+        using ConsumerMemberFunction = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) -> void;
 
 
         template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using ConsumerConstMemberFunctionPointer = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) const -> void;
+        using ConsumerConstMemberFunction = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) const -> void;
 
 
         template < typename ... __TestedTypes >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using PredicateFunctionPointer = decltype (
+        using PredicateFunction = decltype (
                 & __hidden :: __impl :: __predicateFunctionHint < __TestedTypes ... >
         );
 
@@ -103,7 +103,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template < typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using SupplierFunctionPointer = decltype (
+        using SupplierFunction = decltype (
                 & __hidden :: __impl :: __supplierFunctionHint < __SuppliedType >
         );
 
@@ -116,27 +116,39 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using SupplierConstMemberFunction = auto ( __ClassType :: * ) () const -> __SuppliedType;
 
 
-        template < typename __ConsumerFunctionType, __ConsumerFunctionType __consumerFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        struct DecoratedConsumer {};
+        template <
+                typename                __ConsumerFunctionType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __ConsumerFunctionType  __consumerFunction,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedConsumerFunctionType = __ConsumerFunctionType /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedConsumer {};
 
 
-        template < typename __PredicateFunctionType, __PredicateFunctionType __predicateFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        struct DecoratedPredicate {};
+        template <
+                typename                __PredicateFunctionType,                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __PredicateFunctionType __predicateFunction,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedPredicateFunctionType = __PredicateFunctionType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedPredicate {};
 
 
-        template < typename __MapperFunctionType, __MapperFunctionType __mapperFunction >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        struct DecoratedMapper {};
+        template <
+                typename                __MapperFunctionType,                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __MapperFunctionType    __mapperFunction,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedMapperFunctionType = __MapperFunctionType /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedMapper {};
 
 
-        template < typename __SupplierFunctionType, __SupplierFunctionType __supplierFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        struct DecoratedSupplier {};
+        template <
+                typename                __SupplierFunctionType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __SupplierFunctionType  __supplierFunction,                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedSupplierFunctionType  = __SupplierFunctionType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedSupplier {};
 
 
         template <
                 typename                    __ConsumerFunctionType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __ConsumerFunctionType      __consumerFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                ... __ConsumerArgumentTypes /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > struct DecoratedConsumer < void (*) ( __ConsumerArgumentTypes ... ), __consumerFunction > {
+        > struct DecoratedConsumer < __ConsumerFunctionType, __consumerFunction, void (*) ( __ConsumerArgumentTypes ... ) > {
 
             __CDS_cpplang_ConstexprNonLiteralReturn auto operator () (
                     __ConsumerArgumentTypes ... arguments
@@ -151,7 +163,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename                    __PredicateFunctionType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __PredicateFunctionType     __predicateFunction,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                ... __PredicateArgumentTypes    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > struct DecoratedPredicate < bool (*) ( __PredicateArgumentTypes ... ), __predicateFunction > {
+        > struct DecoratedPredicate < __PredicateFunctionType, __predicateFunction, bool (*) ( __PredicateArgumentTypes ... ) > {
 
             __CDS_NoDiscard constexpr auto operator () (
                     __PredicateArgumentTypes ... arguments
@@ -167,7 +179,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __MapperFunctionType        __mapperFunction,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                    __MapperReturnType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                ... __MapperArgumentTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > struct DecoratedMapper < __MapperReturnType (*) ( __MapperArgumentTypes ... ), __mapperFunction > {
+        > struct DecoratedMapper < __MapperFunctionType, __mapperFunction, __MapperReturnType (*) ( __MapperArgumentTypes ... ) > {
 
             __CDS_NoDiscard constexpr auto operator () (
                     __MapperArgumentTypes ... arguments
@@ -182,7 +194,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 typename                    __SupplierFunctionType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __SupplierFunctionType      __supplierFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 typename                    __SupplierReturnType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        > struct DecoratedSupplier < __SupplierReturnType (*) (), __supplierFunction > {
+        > struct DecoratedSupplier < __SupplierFunctionType, __supplierFunction, __SupplierReturnType (*) () > {
 
             __CDS_NoDiscard constexpr auto operator () () const noexcept ( noexcept ( __supplierFunction () ) ) -> __SupplierReturnType {
 

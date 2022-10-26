@@ -7,7 +7,6 @@
 
 #include <CDS/Compiler>        /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
-#include "../shared/impl/generalPredicates.hpp"
 
 namespace cds {
 
@@ -25,13 +24,13 @@ namespace cds {
 
         template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         using ComparisonFunction __CDS_DeprecatedHint("Use Standard Functional Interfaces instead of fixed Interface") =
-                functional :: PredicateFunctionPointer < __Type const &, __Type const & >;
+                functional :: PredicateFunction < __Type const &, __Type const & >;
 
     } /* namespace utility */
 
     template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    using  FunctionComparator __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =
-            functional :: DecoratedPredicate < utility :: ComparisonFunction < __Type >, __comparisonFunction >;
+    using FunctionComparator __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =
+            functional :: DecoratedPredicate < decltype ( & __comparisonFunction ), __comparisonFunction >;
 
 } /* namespace cds */
 
