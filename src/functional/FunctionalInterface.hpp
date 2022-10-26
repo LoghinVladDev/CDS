@@ -207,7 +207,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #endif /* __CDS_FUNCTIONAL_INTERFACE_HPP__ */
 
-#if defined (__CDS_FUNCTION_HPP__) && ! defined (__CDS_FUNCTION_FUNCTIONAL_INTERFACES_HPP__)
+#if defined (__CDS_FUNCTION_IMPL_HPP__) && ! defined (__CDS_FUNCTION_FUNCTIONAL_INTERFACES_HPP__)
 #define __CDS_FUNCTION_FUNCTIONAL_INTERFACES_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
