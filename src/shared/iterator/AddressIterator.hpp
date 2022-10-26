@@ -12,9 +12,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    cds :: utility :: ComparisonFunction < __ElementType >
-            > class __ArrayBase;                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >
+            > class __ArrayBase;            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
         } /* namespace __impl */
     } /* namespace __hidden */
@@ -34,9 +34,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         /** Friend class declaration for use of 'absoluteBase' function */
         template <
-                typename __TElementType,                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                cds :: utility :: ComparisonFunction < __TElementType >
-        > friend class cds :: __hidden :: __impl :: __ArrayBase;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename __TElementType,                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: PredicateFunction < __TElementType const &, __TElementType const & >
+        > friend class cds :: __hidden :: __impl :: __ArrayBase;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         /**

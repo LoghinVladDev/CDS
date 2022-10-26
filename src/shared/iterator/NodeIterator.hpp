@@ -20,7 +20,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              */
             template <
                     typename __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    cds :: utility :: ComparisonFunction < __ElementType >
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >
             > class __SingleLinkedList;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 
@@ -33,7 +33,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              */
             template <
                     typename __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    cds :: utility :: ComparisonFunction < __ElementType >
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >
             > class __DoubleLinkedList;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
         } /* namespace __impl */
@@ -61,8 +61,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                cds :: utility :: ComparisonFunction < __TElementType >
+                typename __TElementType,                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: PredicateFunction < __TElementType const &, __TElementType const & >
         > friend class cds :: __hidden :: __impl :: __SingleLinkedList;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -288,8 +288,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                cds :: utility :: ComparisonFunction < __TElementType >
+                typename __TElementType,                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: PredicateFunction < __TElementType const &, __TElementType const & >
         > friend class cds :: __hidden :: __impl :: __SingleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -513,8 +513,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                cds :: utility :: ComparisonFunction < __TElementType >
+                typename __TElementType,                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: PredicateFunction < __TElementType const &, __TElementType const & >
         > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -714,8 +714,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          * @namespace cds :: __hidden :: __impl
          */
         template <
-                typename __TElementType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                cds :: utility :: ComparisonFunction < __TElementType >
+                typename __TElementType,                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                functional :: PredicateFunction < __TElementType const &, __TElementType const & >
         > friend class cds :: __hidden :: __impl :: __DoubleLinkedList; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */

@@ -5,13 +5,8 @@
 #ifndef __CDS_HASH_MAP_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_HASH_MAP_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Map>
-
-#include <CDS/Comparator>
-#include <CDS/Extractor>                                                                        /* NOLINT(llvm-include-order) */
-#include <CDS/Hasher>
-#include <CDS/Destructor>
-#include <CDS/CopyConstructor>
+#include <CDS/Map>                      /* NOLINT(llvm-include-order) */
+#include <CDS/FunctionalInterface>
 
 #include "../../../../shared/Node.hpp"
 #include "../../../../shared/rehashPolicy/rehashPolicy.hpp"
