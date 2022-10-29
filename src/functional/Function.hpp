@@ -76,6 +76,10 @@ namespace cds {
         ) noexcept -> Function &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
+
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprConditioned auto operator () (
                 __ArgumentTypes ... arguments
         ) const noexcept (false) -> __ReturnType;

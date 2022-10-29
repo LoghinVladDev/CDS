@@ -5,9 +5,14 @@
 #ifndef __CDS_SEQUENCE_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SEQUENCE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Object>
+#include <CDS/Object>           /* NOLINT(llvm-include-order) */
 #include <CDS/Optional>
+#include <CDS/Function>
 #include <CDS/meta/TypeTraits>
+
+#include "../../shared/impl/generalMappers.hpp"
+#include "../../shared/sequence/Predeclaration.hpp"
+#include "../../shared/array/ArrayBase.hpp"
 
 /* TODO : indices of client */
 /* TODO : Generic Statements */
@@ -18,14 +23,24 @@
 
 namespace cds {
 
-    template < typename __IterableType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __ElementType, typename __BaseIterable > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Sequence : public Object {
 
     private:
-        using __IterableConstIteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin() );
+        using __BaseConstIteratorType = decltype ( cds :: meta :: referenceOf < __BaseIterable > ().cbegin() );
 
     private:
-        using __ElementType = decltype ( * ( cds :: meta :: referenceOf < __IterableConstIteratorType > () ) );
+        using __BaseElementType = decltype ( * cds :: meta :: referenceOf < __BaseConstIteratorType > () );
+
+    private:
+        template < typename __ArrayElementType >
+        class __SequenceInternalArray;
+
+    private:
+        Function < __ElementType ( __BaseElementType ) > entryMapper;
+
+    private:
+        __SequenceInternalArray < functional :: Predicate < __ElementType const & > > _filters;
 
     public:
         Sequence () noexcept = delete;
@@ -41,13 +56,13 @@ namespace cds {
         ) noexcept;
 
     public:
-        Sequence (
-                __IterableType const &
+        __CDS_Explicit Sequence (
+                __BaseIterable const & iterable
         ) noexcept;
 
     public:
-        Sequence (
-                __IterableType &&
+        __CDS_Explicit Sequence (
+                __BaseIterable && iterable
         ) noexcept;
 
     public:
@@ -64,125 +79,7 @@ namespace cds {
         ) noexcept -> Sequence &;
 
     public:
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
-        __CDS_NoDiscard auto hash () const noexcept -> Size override;
-
-    public:
-        __CDS_NoDiscard auto equals (
-                Object const & object
-        ) const noexcept -> bool override;
-
-    public:
-        __CDS_NoDiscard auto contains (
-                __ElementType const & element
-        ) const noexcept -> bool;
-
-    public:
-        __CDS_NoDiscard auto at (
-                Index index
-        ) const noexcept -> Optional < __ElementType >;
-
-    public:
-        __CDS_NoDiscard auto atOr (
-                Index                   index,
-                __ElementType   const & defaultValue
-        ) const noexcept -> __ElementType;
-
-    public:
-        template < cds :: meta :: EnableIf < cds :: meta :: isPointer < __ElementType > () > = 0 >
-        __CDS_NoDiscard auto atOrNull (
-                Index                   index
-        ) const noexcept -> __ElementType;
-
-    public:
-        auto dropFirst (
-                Size count
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        auto dropLast (
-                Size count
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto dropFirstThat (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto dropLastThat (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto dropFirstWhile (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto dropLastWhile (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        auto keepFirst (
-                Size count
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        auto keepLast (
-                Size count
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto keepFirstWhile (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto keepLastWhile (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto keepFirstThat (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto keepLastThat (
-                Size                count,
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __Predicate >
-        auto filter (
-                __Predicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
-
-    public:
-        template < typename __IndexedPredicate >
-        auto filterIndexed (
-                __IndexedPredicate const & predicate
-        ) noexcept -> Sequence < __IterableType > &;
     };
 
 } /* namespace cds */
