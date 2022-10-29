@@ -311,6 +311,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: empty () const noexcept -> bool {
+
+        return this->_functionObject == nullptr;
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
     __CDS_cpplang_ConstexprConditioned auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator () (
             __ArgumentTypes ... arguments
     ) const noexcept (false) -> __ReturnType {
