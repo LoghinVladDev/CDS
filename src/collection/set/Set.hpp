@@ -7,7 +7,7 @@
 
 #include <CDS/Collection>
 
-#include "../../shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
 
 #include "set/Constructs.hpp"
 
@@ -205,7 +205,7 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
 
 #include "set/impl/Set.hpp"
 

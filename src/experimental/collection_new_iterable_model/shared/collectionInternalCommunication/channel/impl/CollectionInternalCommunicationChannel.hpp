@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_COLLECTION_INTERNAL_COMMUNICATION_CHANNEL_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
+#include "../../../../../../shared/collectionInternalCommunication/channel/impl/IterableInternalCommunicationChannel.hpp"
 
 #endif /* __CDS_EX_SHARED_COLLECTION_INTERNAL_COMMUNICATION_CHANNEL_IMPL_HPP__ */
