@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_SHARED_COLLECTION_INTERNAL_REQUEST_TYPE_HPP__
 #define __CDS_EX_SHARED_COLLECTION_INTERNAL_REQUEST_TYPE_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include "../../../../shared/collectionInternalCommunication/CollectionInternalRequestType.hpp"
+#include "../../../../shared/collectionInternalCommunication/IterableInternalRequestType.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

@@ -11,19 +11,19 @@
 
 #include "../../../shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"         /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/IteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"         /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/IteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"                          /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/IndicesCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/IndicesOfCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/IndicesByCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/ReplaceCompositeClient.hpp"                          /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/IndicesCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/IndicesOfCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/IndicesByCompositeClient.hpp"
 
 #include "list/Constructs.hpp"
 
@@ -44,11 +44,11 @@ namespace cds {
      * @implements [public] __ListConstIteratorRelativeInsertionClient - Insertion relative to given const iterator position Client - insertBefore / insertAllBefore / insertAllOfBefore / emplaceBefore / insertAfter / insertAllAfter / insertAllOfAfter / emplaceAfter
      * @implements [public] __ListIndexedOperationsClient - List Operations using indices. operator[], sub < list >, sub ( list )
      * @implements [public] __ListReplaceClient - Replace singular element values - replace / replaceFirst / replaceLast / replaceAll
-     * @implements [public] __ListReplaceOfCollectionClient - Replace Client for replacing values belonging to a given collection - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
+     * @implements [public] __ListReplaceOfIterableClient - Replace Client for replacing values belonging to a given collection - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
      * @implements [public] __ListReplaceOfInitializerListClient - Replace Client for replacing values belonging to a given initializer list - replaceOf / replaceFirstOf / replaceLastOf / replaceAllOf / replaceNotOf / replaceFirstNotOf / replaceLastNotOf / replaceAllNotOf
      * @implements [public] __ListReplaceByClient - Replace Client for replacing values validated by a given predicate - replaceThat / replaceFirstThat / replaceLastThat / replaceAllThat
      * @implements [public] __ListIndicesClient - Client used for identifying indices of a given element - indexOf / firstIndexOf / lastIndexOf / indicesOf
-     * @implements [public] __ListIndicesOfCollectionClient - Client used for identifying indices of the elements found in the given collection - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
+     * @implements [public] __ListIndicesOfIterableClient - Client used for identifying indices of the elements found in the given collection - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
      * @implements [public] __ListIndicesOfInitializerListClient - Client used for identifying indices of the elements found in the given initializer list - indicesOfFrom / firstIndexOfFrom / lastIndexOfFrom / allIndicesOfFrom / indicesOfNotFrom / firstIndexOfNotFrom / lastIndexOfNotFrom / allIndicesOfNotFrom
      * @implements [public] __ListIndicesByClient - Client used for identifying indices of the elements validated by a given predicate - indicesOfThat / indexOfFirstThat / indexOfLastThat / indicesOfAllThat
      *
@@ -71,11 +71,11 @@ namespace cds {
             public __hidden :: __impl :: __ListConstIteratorRelativeInsertionClient < __ElementType >,
             public __hidden :: __impl :: __ListIndexedOperationsClient < __ElementType >,
             public __hidden :: __impl :: __ListReplaceClient < __ElementType >,
-            public __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ListReplaceOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ListReplaceOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ListReplaceByClient < __ElementType >,
             public __hidden :: __impl :: __ListIndicesClient < __ElementType >,
-            public __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ListIndicesOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ListIndicesOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ListIndicesByClient < __ElementType > {
 
@@ -159,10 +159,10 @@ namespace cds {
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @typedef protected alias for __ListReplaceOfCollectionClient base interface - providing replace of collection operations
+         * @typedef protected alias for __ListReplaceOfIterableClient base interface - providing replace of collection operations
          * @protected
          */
-        using ReplaceOfCollectionClient             = __hidden :: __impl :: __ListReplaceOfCollectionClient < __ElementType >;
+        using ReplaceOfIterableClient               = __hidden :: __impl :: __ListReplaceOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -187,10 +187,10 @@ namespace cds {
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @typedef protected alias for __ListIndicesOfCollectionClient base interface - providing indices of collection elements query operations
+         * @typedef protected alias for __ListIndicesOfIterableClient base interface - providing indices of collection elements query operations
          * @protected
          */
-        using IndicesOfCollectionClient             = __hidden :: __impl :: __ListIndicesOfCollectionClient < __ElementType >;
+        using IndicesOfIterableClient             = __hidden :: __impl :: __ListIndicesOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -1069,28 +1069,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceOf;
+        using ReplaceOfIterableClient :: replaceOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceFirstOf;
+        using ReplaceOfIterableClient :: replaceFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceLastOf;
+        using ReplaceOfIterableClient :: replaceLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceAllOf;
+        using ReplaceOfIterableClient :: replaceAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceNotOf;
+        using ReplaceOfIterableClient :: replaceNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceFirstNotOf;
+        using ReplaceOfIterableClient :: replaceFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceLastNotOf;
+        using ReplaceOfIterableClient :: replaceLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceAllNotOf;
+        using ReplaceOfIterableClient :: replaceAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -1157,28 +1157,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: indicesOfFrom;
+        using IndicesOfIterableClient :: indicesOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: firstIndexOfFrom;
+        using IndicesOfIterableClient :: firstIndexOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: lastIndexOfFrom;
+        using IndicesOfIterableClient :: lastIndexOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: allIndicesOfFrom;
+        using IndicesOfIterableClient :: allIndicesOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: indicesOfNotFrom;
+        using IndicesOfIterableClient :: indicesOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+        using IndicesOfIterableClient :: firstIndexOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+        using IndicesOfIterableClient :: lastIndexOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+        using IndicesOfIterableClient :: allIndicesOfNotFrom;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -1389,19 +1389,19 @@ namespace cds {
 
 #include "../../../shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"            /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"            /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"                             /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
-#include "../../../shared/collectionInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"                             /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
 
 #include "list/impl/List.hpp"
 

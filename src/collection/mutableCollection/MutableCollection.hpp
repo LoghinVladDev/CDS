@@ -7,12 +7,12 @@
 
 #include <CDS/Collection>
 
-#include "../../shared/collectionInternalCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.hpp"
-#include "../../shared/collectionInternalCommunication/client/primitive/IteratorRemovePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/IteratorRemovePrimitiveClient.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/composite/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
-#include "../../shared/collectionInternalCommunication/client/composite/FindOfMutableCompositeClient.hpp"
-#include "../../shared/collectionInternalCommunication/client/composite/FindByMutableCompositeClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
+#include "../../shared/iterableInternalCommunication/client/composite/FindOfMutableCompositeClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/FindByMutableCompositeClient.hpp"
 
 #include "mutableCollection/Constructs.hpp"
 
@@ -27,7 +27,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @implements [public]         __MutableCollectionDelegateForwardIterableClient - Abstract Mutable Iterator Request Client - begin / end
      * @implements [public]         __MutableCollectionIteratorRemoveClient - Abstract Mutable Iterator Remove Client - remove
      * @implements [public]         __MutableCollectionRandomInsertionClient - Insertion without specified position Client - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
-     * @implements [public]         __MutableCollectionFindOfCollectionClient - Find Of Functions for Collection parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+     * @implements [public]         __MutableCollectionFindOfIterableClient - Find Of Functions for Collection parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
      * @implements [public]         __MutableCollectionFindOfInitializerListClient - Find Of Functions for std :: initializer_list parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
      * @implements [public]         __MutableCollectionFindByClient - Find By Functions for Predicates Client - findThat / findFirstThat / findLastThat / findAllThat
      * @implements [public]         __MutableCollectionGenericStatementsClient - Generic Mutable Functional Statements for Predicates - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
@@ -43,7 +43,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             public __hidden :: __impl :: __MutableCollectionDelegateForwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionIteratorRemoveClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionRandomInsertionClient < __ElementType >,
-            public __hidden :: __impl :: __MutableCollectionFindOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __MutableCollectionFindOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionFindOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionFindByClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionGenericStatementsClient < __ElementType > {
@@ -86,10 +86,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @typedef protected alias for __MutableCollectionFindOfCollectionClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
+         * @typedef protected alias for __MutableCollectionFindOfIterableClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
          * @protected
          */
-        using FindOfCollectionClient            = __hidden :: __impl :: __MutableCollectionFindOfCollectionClient < __ElementType >;
+        using FindOfIterableClient              = __hidden :: __impl :: __MutableCollectionFindOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -529,7 +529,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00701-FO-findOfStoreInMatchingNone [-Collection Group],
          *      MCTC-00702-FO-findOfStoreInMatchingOne [-Collection Group],
@@ -548,11 +548,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findOf;
+        using FindOfIterableClient :: findOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findFirstOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findFirstOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00715-FO-findFirstOfMatchingNone [-Collection Group],
          *      MCTC-00716-FO-findFirstOfMatchingOne [-Collection Group],
@@ -562,11 +562,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findFirstOf;
+        using FindOfIterableClient :: findFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findLastOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findLastOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00720-FO-findLastOfMatchingNone [-Collection Group],
          *      MCTC-00721-FO-findLastOfMatchingOne [-Collection Group],
@@ -576,11 +576,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findLastOf;
+        using FindOfIterableClient :: findLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findAllOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findAllOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00725-FO-findAllOfStoreInMatchingNone [-Collection Group],
          *      MCTC-00726-FO-findAllOfStoreInMatchingOne [-Collection Group],
@@ -595,11 +595,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findAllOf;
+        using FindOfIterableClient :: findAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00735-FO-findNotOfStoreInMatchingNone [-Collection Group],
          *      MCTC-00736-FO-findNotOfStoreInMatchingOne [-Collection Group],
@@ -618,11 +618,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findNotOf;
+        using FindOfIterableClient :: findNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findFirstNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findFirstNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00749-FO-findFirstNotOfMatchingNone [-Collection Group],
          *      MCTC-00750-FO-findFirstNotOfMatchingOne [-Collection Group],
@@ -632,11 +632,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findFirstNotOf;
+        using FindOfIterableClient :: findFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findLastNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findLastNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00754-FO-findLastNotOfMatchingNone [-Collection Group],
          *      MCTC-00755-FO-findLastNotOfMatchingOne [-Collection Group],
@@ -646,11 +646,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findLastNotOf;
+        using FindOfIterableClient :: findLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findAllNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfCollectionClient interface
+         * @inherit findAllNotOf ( Collection ) call, returning mutable iterators, inherited from FindOfIterableClient interface
          * @test Suite: MCTS-00001, Group: MCTG-00700-FO, Test Cases: {
          *      MCTC-00759-FO-findAllNotOfStoreInMatchingNone [-Collection Group],
          *      MCTC-00760-FO-findAllNotOfStoreInMatchingOne [-Collection Group],
@@ -665,7 +665,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * }
          * @public
          */
-        using FindOfCollectionClient :: findAllNotOf;
+        using FindOfIterableClient :: findAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -1022,11 +1022,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "mutableCollection/impl/MutableCollection.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
-#include "../../shared/collectionInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"
-#include "../../shared/collectionInternalCommunication/client/composite/impl/FindByMutableCompositeClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp" /* NOLINT(llvm-include-order) */
+#include "../../shared/iterableInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/impl/FindByMutableCompositeClient.hpp"
 
 #endif /* __CDS_MUTABLE_COLLECTION_HPP__ */

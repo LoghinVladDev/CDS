@@ -200,7 +200,7 @@ namespace cds {
                     typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashMapFindOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashMapFindOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             cds :: LinkedHashMap <
                                     __KeyType,
@@ -209,9 +209,9 @@ namespace cds {
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
                             __LinkedHashMapIterator < __KeyType, __ValueType, __Hasher >,
-                            cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            & __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                            cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
                     >;
 
 
@@ -251,10 +251,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __ValueType,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Hasher                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashMapFindOfConstCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashMapFindOfConstIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: LinkedHashMap <
                                     __KeyType,
@@ -263,9 +263,9 @@ namespace cds {
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
                             __LinkedHashMapConstIterator < __KeyType, __ValueType, __Hasher >,
-                            cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            & __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                            cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
                     >;
 
 
@@ -337,10 +337,10 @@ namespace cds {
 
 
             template <
-                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashMapRemoveOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __KeyType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashMapRemoveOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: LinkedHashMap <
                                     __KeyType,
@@ -348,8 +348,8 @@ namespace cds {
                                     __Hasher
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
-                            cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            & __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                            cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >
                     >;
 
 
@@ -419,7 +419,7 @@ namespace cds {
                     typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ValueType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashMapContainsOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashMapContainsOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: LinkedHashMap <
                                     __KeyType,
@@ -427,8 +427,8 @@ namespace cds {
                                     __Hasher
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
-                            cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                            cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                            & __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >
                     >;
 
 
@@ -445,7 +445,7 @@ namespace cds {
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
                             std :: initializer_list < typename Map < __KeyType, __ValueType > :: EntryType >,
-                            __initializerListContains <
+                            & __initializerListContains <
                                     typename Map < __KeyType, __ValueType > :: EntryType,
                                     & __linkedHashMapEquals < __KeyType, __ValueType >
                             >

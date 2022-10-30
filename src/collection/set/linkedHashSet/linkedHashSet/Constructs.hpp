@@ -135,9 +135,9 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashSetFindOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashSetFindOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: LinkedHashSet <
                                     __ElementType,
@@ -145,9 +145,9 @@ namespace cds {
                             >,
                             __ElementType,
                             __LinkedHashSetIterator < __ElementType, __Hasher >,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 
@@ -183,17 +183,17 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashSetRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashSetRemoveOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: LinkedHashSet <
                                     __ElementType,
                                     __Hasher
                             >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -253,14 +253,14 @@ namespace cds {
 
 
             template <
-                    typename __ElementType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Hasher                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedHashSetContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType,                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Hasher                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedHashSetContainsOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: LinkedHashSet < __ElementType, __Hasher >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -272,7 +272,7 @@ namespace cds {
                             cds :: LinkedHashSet < __ElementType, __Hasher >,
                             __ElementType,
                             std :: initializer_list < __ElementType >,
-                            __initializerListContains <
+                            & __initializerListContains <
                                     __ElementType,
                                     & cds :: meta :: equals < __ElementType >
                             >

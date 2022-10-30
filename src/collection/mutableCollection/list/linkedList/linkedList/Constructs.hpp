@@ -66,15 +66,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __LinkedListFindOfCollectionClient =      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __LinkedListFindOfIterableClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             ForwardBidirectionalNodeIterator < __ElementType >,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 
@@ -90,15 +90,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __LinkedListFindConstOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __LinkedListFindConstOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             ForwardBidirectionalNodeConstIterator < __ElementType >,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 
@@ -150,13 +150,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __LinkedListRemoveOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __LinkedListRemoveOfIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -202,13 +202,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __LinkedListReplaceOfCollectionClient =       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __LinkedListReplaceOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalReplaceOfCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -246,13 +246,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __LinkedListIndicesOfCollectionClient =       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __LinkedListIndicesOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalIndicesOfCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -275,13 +275,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ElementType                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LinkedListContainsOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ElementType                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LinkedListContainsOfIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -292,7 +292,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: LinkedList < __ElementType >,
                             __ElementType,                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             std :: initializer_list < __ElementType >,
-                            __initializerListContains <
+                            & __initializerListContains <
                                     __ElementType,
                                     & cds :: meta :: equals < __ElementType >
                             >

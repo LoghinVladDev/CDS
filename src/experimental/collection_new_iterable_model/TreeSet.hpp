@@ -22,11 +22,11 @@
 
 #include "shared/redBlackTree/RedBlackTree.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "../../shared/delegateIterator/DelegateIterator.hpp"
 
-#include "../../shared/collectionInternalCommunication/server/SetServer.hpp"
+#include "../../shared/iterableInternalCommunication/server/SetServer.hpp"
 
 #include "treeSet/Constructs.hpp"
 
@@ -44,34 +44,34 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
                 public __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType >,
-                public __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __TreeSetContainsOfIterableClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >,
-                public __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __TreeSetFindOfIterableClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetFindByClient < __ElementType >,
-                public __hidden :: __impl :: __TreeSetRemoveOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __TreeSetRemoveOfIterableClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetRemoveByClient < __ElementType >,
                 public __hidden :: __impl :: __TreeSetGenericStatementsClient < __ElementType > {
 
-        protected:  using SetBase                                = Set < __ElementType >;
-        protected:  using Server                                 = __hidden :: __impl :: __TreeSetServer < __ElementType >;
-        protected:  using Implementation                         = __hidden :: __impl :: __TreeSetImplementation < __ElementType >;
-        protected:  using Dispatcher                             = __hidden :: __impl :: __TreeSetDispatcher < __ElementType >;
-        protected:  using DelegateForwardConstIterableClient     = __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType >;
-        protected:  using DelegateBackwardConstIterableClient    = __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType >;
-        protected:  using ConstIteratorRemoveClient              = __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType >;
-        protected:  using RandomInsertionClient                  = __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType >;
-        protected:  using FindUniqueClient                       = __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType >;
-        protected:  using ContainsOfCollectionClient             = __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType >;
-        protected:  using ContainsOfInitializerListClient        = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >;
-        protected:  using FindOfCollectionClient                 = __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType >;
-        protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >;
-        protected:  using FindByClient                           = __hidden :: __impl :: __TreeSetFindByClient< __ElementType >;
-        protected:  using RemoveOfCollectionClient               = __hidden :: __impl :: __TreeSetRemoveOfCollectionClient< __ElementType >;
-        protected:  using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType >;
-        protected:  using RemoveByClient                         = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType >;
-        protected:  using GenericStatementsClient                = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType >;
+        protected:  using SetBase                               = Set < __ElementType >;
+        protected:  using Server                                = __hidden :: __impl :: __TreeSetServer < __ElementType >;
+        protected:  using Implementation                        = __hidden :: __impl :: __TreeSetImplementation < __ElementType >;
+        protected:  using Dispatcher                            = __hidden :: __impl :: __TreeSetDispatcher < __ElementType >;
+        protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType >;
+        protected:  using DelegateBackwardConstIterableClient   = __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType >;
+        protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType >;
+        protected:  using RandomInsertionClient                 = __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType >;
+        protected:  using FindUniqueClient                      = __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType >;
+        protected:  using ContainsOfIterableClient              = __hidden :: __impl :: __TreeSetContainsOfIterableClient < __ElementType >;
+        protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >;
+        protected:  using FindOfIterableClient                  = __hidden :: __impl :: __TreeSetFindOfIterableClient < __ElementType >;
+        protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >;
+        protected:  using FindByClient                          = __hidden :: __impl :: __TreeSetFindByClient< __ElementType >;
+        protected:  using RemoveOfIterableClient                = __hidden :: __impl :: __TreeSetRemoveOfIterableClient< __ElementType >;
+        protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType >;
+        protected:  using RemoveByClient                        = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType >;
+        protected:  using GenericStatementsClient               = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType >;
 
         protected:  friend Server;
 
@@ -79,7 +79,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         private:    friend ConstIteratorRemoveClient;
         private:    friend DelegateForwardConstIterableClient;
         private:    friend DelegateBackwardConstIterableClient;
-        private:    friend RemoveOfCollectionClient;
+        private:    friend RemoveOfIterableClient;
         private:    friend RemoveOfInitializerListClient;
         private:    friend RemoveByClient;
 
@@ -89,13 +89,13 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         protected: using typename ConstIteratorRemoveClient :: ConstIterator;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
 
@@ -122,24 +122,24 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
 
         public:     using FindUniqueClient :: find;
 
-        public:     using ContainsOfCollectionClient :: containsAnyOf;
-        public:     using ContainsOfCollectionClient :: containsAnyNotOf;
-        public:     using ContainsOfCollectionClient :: containsAllOf;
-        public:     using ContainsOfCollectionClient :: containsNoneOf;
+        public:     using ContainsOfIterableClient :: containsAnyOf;
+        public:     using ContainsOfIterableClient :: containsAnyNotOf;
+        public:     using ContainsOfIterableClient :: containsAllOf;
+        public:     using ContainsOfIterableClient :: containsNoneOf;
 
         public:     using ContainsOfInitializerListClient :: containsAnyOf;
         public:     using ContainsOfInitializerListClient :: containsAnyNotOf;
         public:     using ContainsOfInitializerListClient :: containsAllOf;
         public:     using ContainsOfInitializerListClient :: containsNoneOf;
 
-        public:     using FindOfCollectionClient :: findOf;
-        public:     using FindOfCollectionClient :: findFirstOf;
-        public:     using FindOfCollectionClient :: findLastOf;
-        public:     using FindOfCollectionClient :: findAllOf;
-        public:     using FindOfCollectionClient :: findNotOf;
-        public:     using FindOfCollectionClient :: findFirstNotOf;
-        public:     using FindOfCollectionClient :: findLastNotOf;
-        public:     using FindOfCollectionClient :: findAllNotOf;
+        public:     using FindOfIterableClient :: findOf;
+        public:     using FindOfIterableClient :: findFirstOf;
+        public:     using FindOfIterableClient :: findLastOf;
+        public:     using FindOfIterableClient :: findAllOf;
+        public:     using FindOfIterableClient :: findNotOf;
+        public:     using FindOfIterableClient :: findFirstNotOf;
+        public:     using FindOfIterableClient :: findLastNotOf;
+        public:     using FindOfIterableClient :: findAllNotOf;
 
         public:     using FindOfInitializerListClient :: findOf;
         public:     using FindOfInitializerListClient :: findFirstOf;
@@ -155,14 +155,14 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         public:     using FindByClient :: findLastThat;
         public:     using FindByClient :: findAllThat;
 
-        public:     using RemoveOfCollectionClient :: removeOf;
-        public:     using RemoveOfCollectionClient :: removeFirstOf;
-        public:     using RemoveOfCollectionClient :: removeLastOf;
-        public:     using RemoveOfCollectionClient :: removeAllOf;
-        public:     using RemoveOfCollectionClient :: removeNotOf;
-        public:     using RemoveOfCollectionClient :: removeFirstNotOf;
-        public:     using RemoveOfCollectionClient :: removeLastNotOf;
-        public:     using RemoveOfCollectionClient :: removeAllNotOf;
+        public:     using RemoveOfIterableClient :: removeOf;
+        public:     using RemoveOfIterableClient :: removeFirstOf;
+        public:     using RemoveOfIterableClient :: removeLastOf;
+        public:     using RemoveOfIterableClient :: removeAllOf;
+        public:     using RemoveOfIterableClient :: removeNotOf;
+        public:     using RemoveOfIterableClient :: removeFirstNotOf;
+        public:     using RemoveOfIterableClient :: removeLastNotOf;
+        public:     using RemoveOfIterableClient :: removeAllNotOf;
 
         public:     using RemoveOfInitializerListClient :: removeOf;
         public:     using RemoveOfInitializerListClient :: removeFirstOf;
@@ -280,12 +280,11 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
 
 #include "shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
+#include "../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
-
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "treeSet/impl/TreeSet.hpp"
 
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #endif /* __CDS_EX_TREE_SET_HPP__ */

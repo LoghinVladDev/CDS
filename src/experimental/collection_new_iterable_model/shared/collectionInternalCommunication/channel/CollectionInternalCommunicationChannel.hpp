@@ -6,7 +6,7 @@
 #define __CDS_EX_SHARED_COLLECTION_INTERNAL_COMMUNICATION_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
+#include "../../../../../shared/collectionInternalCommunication/channel/IterableInternalCommunicationChannel.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

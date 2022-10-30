@@ -149,18 +149,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             /**
-             * @typedef Alias used by List to implement the Replace of Collection Client
+             * @typedef Alias used by List to implement the Replace of Iterable Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ListReplaceOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ListReplaceOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ReplaceOfCompositeClient <
                             cds :: List < __ElementType >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -209,18 +209,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             /**
-             * @typedef Alias used by List to implement the Indices of Collection Client
+             * @typedef Alias used by List to implement the Indices of Iterable Client
              * @tparam __ElementType the type of the elements enclosed in the extending Collection
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
             template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ListIndicesOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ListIndicesOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IndicesOfCompositeClient <
                             cds :: List < __ElementType >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 

@@ -15,8 +15,8 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cicch_obtainGenericHandler (
-            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    > :: __iicch_obtainGenericHandler (
+            __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
 
         return this->__ms_handlers() [ static_cast < uint32 > ( requestType ) ];
@@ -31,8 +31,8 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cicch_obtainGenericConstHandler (
-            __hidden :: __impl :: __CollectionInternalRequestType requestType
+    > :: __iicch_obtainGenericConstHandler (
+            __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
 
         return this->__ms_constHandlers() [ static_cast < uint32 > ( requestType ) ];

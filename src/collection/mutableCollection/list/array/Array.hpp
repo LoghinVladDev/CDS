@@ -12,14 +12,14 @@
 #include "../../../../shared/iterator/IteratorSort.hpp"                                         /* NOLINT(llvm-include-order) */
 #include "../../../../shared/iterator/AddressIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/ListServerDispatcher.hpp"
 
 #include "../../../../shared/array/ArrayBase.hpp"
 
 #include "../../../../shared/delegateIterator/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/DelegateIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/ListServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/ListServer.hpp"
 
 #include "array/Constructs.hpp"
 
@@ -35,28 +35,28 @@ namespace cds {
             public __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIteratorRelativeInsertionClient < __ElementType >,
             public __hidden :: __impl :: __ArrayConstIteratorRelativeInsertionClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayFindOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayFindOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayFindOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayFindConstOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayFindConstOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayFindConstOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ArrayFindByClient < __ElementType >,
             public __hidden :: __impl :: __ArrayFindConstByClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIteratorRemoveClient < __ElementType >,
             public __hidden :: __impl :: __ArrayConstIteratorRemoveClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayRemoveOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayRemoveOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayRemoveOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ArrayRemoveByClient < __ElementType >,
             public __hidden :: __impl :: __ArrayGenericStatementsClient < __ElementType >,
             public __hidden :: __impl :: __ArrayGenericConstStatementsClient < __ElementType >,
             public __hidden :: __impl :: __ArrayReplaceClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayReplaceOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ArrayReplaceByClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayContainsOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayContainsOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayContainsOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIndexedOperationsClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIndicesClient < __ElementType >,
-            public __hidden :: __impl :: __ArrayIndicesOfCollectionClient < __ElementType >,
+            public __hidden :: __impl :: __ArrayIndicesOfIterableClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIndicesOfInitializerListClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIndicesByClient < __ElementType >,
             public __hidden :: __impl :: __ArrayDelegateForwardIterableClient < __ElementType >,
@@ -86,13 +86,13 @@ namespace cds {
         using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ArrayConstIteratorRelativeInsertionClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient                = __hidden :: __impl :: __ArrayFindOfCollectionClient < __ElementType >;
+        using FindOfIterableClient                  = __hidden :: __impl :: __ArrayFindOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using FindOfInitializerListClient           = __hidden :: __impl :: __ArrayFindOfInitializerListClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient           = __hidden :: __impl :: __ArrayFindConstOfCollectionClient < __ElementType >;
+        using FindConstOfIterableClient             = __hidden :: __impl :: __ArrayFindConstOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using FindConstOfInitializerListClient      = __hidden :: __impl :: __ArrayFindConstOfInitializerListClient < __ElementType >;
@@ -110,7 +110,7 @@ namespace cds {
         using ConstIteratorRemoveClient             = __hidden :: __impl :: __ArrayConstIteratorRemoveClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient              = __hidden :: __impl :: __ArrayRemoveOfCollectionClient < __ElementType >;
+        using RemoveOfIterableClient                = __hidden :: __impl :: __ArrayRemoveOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using RemoveOfInitializerListClient         = __hidden :: __impl :: __ArrayRemoveOfInitializerListClient < __ElementType >;
@@ -128,7 +128,7 @@ namespace cds {
         using ReplaceClient                         = __hidden :: __impl :: __ArrayReplaceClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient             = __hidden :: __impl :: __ArrayReplaceOfCollectionClient < __ElementType >;
+        using ReplaceOfIterableClient               = __hidden :: __impl :: __ArrayReplaceOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using ReplaceOfInitializerListClient        = __hidden :: __impl :: __ArrayReplaceOfInitializerListClient < __ElementType >;
@@ -137,7 +137,7 @@ namespace cds {
         using ReplaceByClient                       = __hidden :: __impl :: __ArrayReplaceByClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient            = __hidden :: __impl :: __ArrayContainsOfCollectionClient < __ElementType >;
+        using ContainsOfIterableClient              = __hidden :: __impl :: __ArrayContainsOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using ContainsOfInitializerListClient       = __hidden :: __impl :: __ArrayContainsOfInitializerListClient < __ElementType >;
@@ -149,7 +149,7 @@ namespace cds {
         using IndicesClient                         = __hidden :: __impl :: __ArrayIndicesClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient             = __hidden :: __impl :: __ArrayIndicesOfCollectionClient < __ElementType >;
+        using IndicesOfIterableClient               = __hidden :: __impl :: __ArrayIndicesOfIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using IndicesOfInitializerListClient        = __hidden :: __impl :: __ArrayIndicesOfInitializerListClient < __ElementType >;
@@ -231,13 +231,13 @@ namespace cds {
 
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -384,28 +384,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findOf;
+        using FindOfIterableClient :: findOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findFirstOf;
+        using FindOfIterableClient :: findFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findLastOf;
+        using FindOfIterableClient :: findLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findAllOf;
+        using FindOfIterableClient :: findAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findNotOf;
+        using FindOfIterableClient :: findNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findFirstNotOf;
+        using FindOfIterableClient :: findFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findLastNotOf;
+        using FindOfIterableClient :: findLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findAllNotOf;
+        using FindOfIterableClient :: findAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -434,28 +434,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findOf;
+        using FindConstOfIterableClient :: findOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findFirstOf;
+        using FindConstOfIterableClient :: findFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findLastOf;
+        using FindConstOfIterableClient :: findLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findAllOf;
+        using FindConstOfIterableClient :: findAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findNotOf;
+        using FindConstOfIterableClient :: findNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findFirstNotOf;
+        using FindConstOfIterableClient :: findFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findLastNotOf;
+        using FindConstOfIterableClient :: findLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using FindConstOfCollectionClient :: findAllNotOf;
+        using FindConstOfIterableClient :: findAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -510,28 +510,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeOf;
+        using RemoveOfIterableClient :: removeOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeFirstOf;
+        using RemoveOfIterableClient :: removeFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeLastOf;
+        using RemoveOfIterableClient :: removeLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeAllOf;
+        using RemoveOfIterableClient :: removeAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeNotOf;
+        using RemoveOfIterableClient :: removeNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeFirstNotOf;
+        using RemoveOfIterableClient :: removeFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeLastNotOf;
+        using RemoveOfIterableClient :: removeLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeAllNotOf;
+        using RemoveOfIterableClient :: removeAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -648,28 +648,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceOf;
+        using ReplaceOfIterableClient :: replaceOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceFirstOf;
+        using ReplaceOfIterableClient :: replaceFirstOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceLastOf;
+        using ReplaceOfIterableClient :: replaceLastOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceAllOf;
+        using ReplaceOfIterableClient :: replaceAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceNotOf;
+        using ReplaceOfIterableClient :: replaceNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceFirstNotOf;
+        using ReplaceOfIterableClient :: replaceFirstNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceLastNotOf;
+        using ReplaceOfIterableClient :: replaceLastNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ReplaceOfCollectionClient :: replaceAllNotOf;
+        using ReplaceOfIterableClient :: replaceAllNotOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -740,28 +740,28 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: indicesOfFrom;
+        using IndicesOfIterableClient :: indicesOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: firstIndexOfFrom;
+        using IndicesOfIterableClient :: firstIndexOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: lastIndexOfFrom;
+        using IndicesOfIterableClient :: lastIndexOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: allIndicesOfFrom;
+        using IndicesOfIterableClient :: allIndicesOfFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: indicesOfNotFrom;
+        using IndicesOfIterableClient :: indicesOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+        using IndicesOfIterableClient :: firstIndexOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+        using IndicesOfIterableClient :: lastIndexOfNotFrom;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+        using IndicesOfIterableClient :: allIndicesOfNotFrom;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -803,16 +803,16 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAnyOf;
+        using ContainsOfIterableClient :: containsAnyOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAnyNotOf;
+        using ContainsOfIterableClient :: containsAnyNotOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAllOf;
+        using ContainsOfIterableClient :: containsAllOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsNoneOf;
+        using ContainsOfIterableClient :: containsNoneOf;
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -1048,8 +1048,8 @@ namespace cds {
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/impl/ListServer.hpp"
-#include "../../../../shared/collectionInternalCommunication/server/impl/ListServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/ListServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/ListServerDispatcher.hpp"
 
 #include "../../../../shared/array/impl/Sequence.hpp"
 
