@@ -5,11 +5,9 @@
 #ifndef __CDS_BASE_STRING_VIEW_HPP__    /* NOLINT(llvm-header-guard) */
 #define __CDS_BASE_STRING_VIEW_HPP__    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {
+#include "../../../../shared/sequence/Predeclaration.hpp"
 
-    template < typename C >
-    class Sequence;
-
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, modernize-concat-nested-namespaces, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
