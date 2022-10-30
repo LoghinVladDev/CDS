@@ -66,15 +66,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayFindOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             AddressIterator < __ElementType >,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 
@@ -91,14 +91,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayFindConstOfCollectionClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayFindConstOfIterableClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             AddressIterator < __ElementType const >,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 
@@ -151,12 +151,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayRemoveOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayRemoveOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -202,13 +202,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayReplaceOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayReplaceOfIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalReplaceOfCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -246,13 +246,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayIndicesOfCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayIndicesOfIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalIndicesOfCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -274,13 +274,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     >;
 
 
-            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ArrayContainsOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ArrayContainsOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             cds :: Array < __ElementType >,
                             __ElementType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
-                            cds :: Collection < __ElementType >,
-                            __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >
                     >;
 
 
@@ -290,7 +290,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: Array < __ElementType >,
                             __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                             std :: initializer_list < __ElementType >,
-                            __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                            & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                     >;
 
 

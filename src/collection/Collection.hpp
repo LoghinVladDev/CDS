@@ -5,27 +5,16 @@
 #ifndef __CDS_COLLECTION_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_COLLECTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Object>                                                                                                   /* NOLINT(llvm-include-order) */
+#include <CDS/Iterable>                                                                                                 /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
-
-#include "../shared/memory/PrimitiveAllocation.hpp"
 
 #include "collection/Functions.hpp"
 
-#include "../shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/RandomInsertionPrimitiveClient.hpp"
 
-#include "../shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
-
-#include "../shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.hpp"   /* NOLINT(llvm-include-order) */
-#include "../shared/collectionInternalCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.hpp"
-#include "../shared/collectionInternalCommunication/client/primitive/RandomInsertionPrimitiveClient.hpp"
-
-#include "../shared/collectionInternalCommunication/client/composite/ContainsOfCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/FindOfImmutableCompositeClient.hpp"                /* NOLINT(llvm-include-order) */
-#include "../shared/collectionInternalCommunication/client/composite/FindByImmutableCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/RemoveOfCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/RemoveOfCompositeClient.hpp"                         /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
 
 #include "collection/Constructs.hpp"
 
@@ -35,21 +24,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @class Abstract Object representing any Iterable Container of given elements
      * @tparam __ElementType is the type of elements contained into Collection
      *
-     * @extends [public]            __CollectionCommunicationChannel - Base class used to communicate requests from Abstract Collection to Derived Collections
+     * @extends [public]            Iterable - Base class representing a potentially infinite iterable object. In this case, finite, since it's a container
      * @extends [public,implicit]   Object - base cds Class, inherited from __CollectionCommunicationChannel
-     * @extends [protected]         __CollectionFunctions - container for statically stored equals function
      *
-     * @implements [public]         __CollectionDelegateForwardConstIterableClient - Abstract Iterator Request Client - begin / end / cbegin / cend
      * @implements [public]         __CollectionConstIteratorRemoveClient - Abstract Iterator Remove Client - remove
      * @implements [public]         __CollectionRandomInsertionClient - Insertion without specified position Client - <strike>add</strike> / <strike>addAll</strike> / <strike>addAllOf</strike> / insert / insertAll / insertAllOf / emplace
-     * @implements [public]         __CollectionContainsOfCollectionClient - Contains Functions for Collection parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
-     * @implements [public]         __CollectionContainsOfInitializerListClient - Contains Functions for std :: initializer_list parameter Client - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
-     * @implements [public]         __CollectionFindOfCollectionClient - Find Of Functions for Collection parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
-     * @implements [public]         __CollectionFindOfInitializerListClient - Find Of Functions for std :: initializer_list parameter Client - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
-     * @implements [public]         __CollectionFindByClient - Find By Functions for Predicates Client - findThat / findFirstThat / findLastThat / findAllThat
      * @implements [public]         __CollectionRemoveOfCollectionClient - Remove Of Functions for Collection parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
      * @implements [public]         __CollectionRemoveOfInitializerListClient - Remove Of Functions for std :: initializer_list parameter Client - removeOf / removeFirstOf / removeLastOf / removeAllOf / removeNotOf / removeFirstNotOf / removeLastNotOf / removeAllNotOf
-     * @implements [public]         __CollectionRemoveByClient - Remove By Functions for Predicates Client - removeThat / removeFirstThat / removeLastThat / removeAllThat
      * @implements [public]         __CollectionGenericStatementsClient - Generic Functional Statements for Predicates - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
      *
      * @test Suite: CTS-00001, Group: All - requirement for running, Test Cases: All - requirement for running
@@ -58,20 +39,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      */
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Collection :                  /* NOLINT(*-virtual-class-destructor) */
-            public __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >,
-            public __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >,
+            public Iterable < __ElementType >,
             public __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >,
             public __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionFindByClient < __ElementType >,
             public __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >,
             public __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >,
-            public __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >,
-            protected __hidden :: __impl :: __CollectionFunctions < __ElementType > {
+            public __hidden :: __impl :: __CollectionRemoveByClient < __ElementType > {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -80,20 +53,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @public
          */
         using ElementType                           = __ElementType;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionCommunicationChannel base interface - providing communication channel abstract functions __cicch_obtainGenericHandler / __cicch_obtainGenericConstHandler
-         * @protected
-         */
-        using CommunicationChannel                  = __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionDelegateForwardConstIterableClient base interface - providing begin / end / cbegin / cend for Abstract Iterators
-         * @protected
-         */
-        using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -108,41 +67,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @protected
          */
         using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionContainsOfCollectionClient base interface - providing contains-of functions with a Collection parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
-         * @protected
-         */
-        using ContainsOfCollectionClient            = __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionContainsOfInitializerListClient base interface - providing contains-of functions with a std :: initializer_list parameter - containsAnyOf / containsAllOf / containsAnyOf / containsAnyNotOf
-         * @protected
-         */
-        using ContainsOfInitializerListClient       = __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionFindOfCollectionClient base interface - providing find-of functions with a Collection parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
-         * @protected
-         */
-        using FindOfCollectionClient                = __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionFindOfInitializerListClient base interface - providing find-of functions with a std :: initializer_list parameter - findOf / findFirstOf / findLastOf / findAllOf / findNotOf / findFirstNotOf / findLastNotOf / findAllNotOf
-         * @protected
-         */
-        using FindOfInitializerListClient           = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionFindByClient base interface - providing find-by-predicate functions - findThat / findFirstThat / findLastThat / findAllThat
-         * @protected
-         */
-        using FindByClient                          = __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -164,34 +88,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          * @protected
          */
         using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef protected alias for __CollectionGenericStatementsClient base interface - providing functional-predicate functions - forEach / some / atLeast / atMost / moreThat / fewerThan / count / any / all / none
-         * @protected
-         */
-        using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef imported protected alias for __GenericHandler, representing a generic member function pointer, represents a function returned at a request made through the Collection Communication Channel
-         * @protected
-         */
-        using __GenericHandler                      = typename CommunicationChannel :: __GenericHandler;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef imported protected alias for __GenericConstHandler, representing a generic member const-function pointer, represents a function returned at a request made through the Collection Communication Channel
-         * @protected
-         */
-        using __GenericConstHandler                 = typename CommunicationChannel :: __GenericConstHandler;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @typedef The Const Iterator Type, imported from Abstract Forward Iterator Client
-         * @public
-         */
-        using ConstIterator                         = typename DelegateForwardConstIterableClient :: ConstIterator;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -262,244 +158,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         auto operator = (
                 Collection &&
         ) noexcept -> Collection & = delete;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit begin function inherited from DelegateForwardConstIterableClient interface.
-         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
-         *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
-         * @public
-         */
-        using DelegateForwardConstIterableClient :: begin;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit end function inherited from DelegateForwardConstIterableClient interface.
-         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00052-IT-begin_end,
-         *      CTC-00054-IT-e_begin_end, CTC-00056-IT-e_emptyRange }
-         * @public
-         */
-        using DelegateForwardConstIterableClient :: end;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit cbegin function inherited from DelegateForwardConstIterableClient interface.
-         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
-         *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
-         * @public
-         */
-        using DelegateForwardConstIterableClient :: cbegin;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit cend function inherited from DelegateForwardConstIterableClient interface.
-         * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: { CTC-00051-IT-range, CTC-00053-IT-cbegin_cend,
-         *      CTC-00055-IT-e_cbegin_cend, CTC-00056-IT-e_emptyRange }
-         * @public
-         */
-        using DelegateForwardConstIterableClient :: cend;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit forEach functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00201-FSMF-forEach }
-         * @public
-         */
-        using GenericStatementsClient :: forEach;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit some functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00136-FS-someExact, CTC-00137-FS-someLessFalse, CTC-00138-someMoreFalse }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00202-FSMF-someEqual, CTC-00203-FSMF-someLess, CTC-00204-someMore }
-         * @public
-         */
-        using GenericStatementsClient :: some;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit atLeast functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00132-FS-atLeastTrue, CTC-00133-FS-atLeastCloseTrue, CTC-00134-atLeastCloseFalse, CTC-00135-atLeastFalse }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00205-FSMF-atLeast, CTC-00206-FSMF-atLeastLess, CTC-00207-atLeastMore }
-         * @public
-         */
-        using GenericStatementsClient :: atLeast;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit atMost functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00128-FS-atMostTrue, CTC-00129-FS-atMostCloseTrue, CTC-00130-atMostCloseFalse, CTC-00131-atMostFalse }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00208-FSMF-atMost, CTC-00209-FSMF-atMostLess, CTC-00210-atMostMore }
-         * @public
-         */
-        using GenericStatementsClient :: atMost;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit moreThan functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00123-FS-moreThanTrue, CTC-00124-FS-moreThanCloseTrue, CTC-00125-moreThanCloseFalse, CTC-00126-moreThanFalse, CTC-00127-moreThanCompletelyFalse }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00211-FSMF-moreThan, CTC-00212-FSMF-moreThanLess, CTC-00213-moreThanMore }
-         * @public
-         */
-        using GenericStatementsClient :: moreThan;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit fewerThan functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00118-FS-fewerThanTrue, CTC-00119-FS-fewerThanCloseTrue, CTC-00120-fewerThanCloseFalse, CTC-00121-fewerThanFalse, CTC-00122-fewerThanCompletelyFalse }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00214-FSMF-fewerThan, CTC-00215-FSMF-fewerThanLess, CTC-00216-fewerThanMore }
-         * @public
-         */
-        using GenericStatementsClient :: fewerThan;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit count functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00113-FS-countProp1, CTC-00114-FS-countProp2, CTC-00115-countProp3, CTC-00116-countProp4, CTC-00117-countPropLbd }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00217-FSMF-countExact }
-         * @public
-         */
-        using GenericStatementsClient :: count;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit any functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00101-FS-anyNone, CTC-00102-FS-anyOne, CTC-00103-anyMore, CTC-00104-anyAll }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00218-FSMF-anyNone, CTC-00219-FSMF-anyOne, CTC-00220-anyMore, CTC-00221-anyAll }
-         * @public
-         */
-        using GenericStatementsClient :: any;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit all functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00105-FS-allNone, CTC-00106-FS-allOne, CTC-00107-allMore, CTC-00108-allAll }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00222-FSMF-allNone, CTC-00223-FSMF-allOne, CTC-00224-allMore, CTC-00225-allAll }
-         * @public
-         */
-        using GenericStatementsClient :: all;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit none functional call, inherited from GenericStatementsClient interface
-         * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00109-FS-noneNone, CTC-00110-FS-noneOne, CTC-00111-noneMore, CTC-00112-noneAll }
-         * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00226-FSMF-noneNone, CTC-00227-FSMF-noneOne, CTC-00228-noneMore, CTC-00229-noneAll }
-         * @public
-         */
-        using GenericStatementsClient :: none;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAnyOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-Collection Group],
-         *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-Collection Group],
-         *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-Collection Group],
-         *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-Collection Group],
-         *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using ContainsOfCollectionClient :: containsAnyOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAllOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-Collection Group],
-         *      CTC-00307-CO-containsAllOfCollectionOneCommon [-Collection Group],
-         *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-Collection Group],
-         *      CTC-00309-CO-containsAllOfCollectionAllCommon [-Collection Group],
-         *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using ContainsOfCollectionClient :: containsAllOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAnyNotOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-Collection Group],
-         *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-Collection Group],
-         *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-Collection Group],
-         *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-Collection Group],
-         *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using ContainsOfCollectionClient :: containsAnyNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsNoneOf ( Collection ) call, inherited from ContainsOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-Collection Group],
-         *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-Collection Group],
-         *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-Collection Group],
-         *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-Collection Group],
-         *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using ContainsOfCollectionClient :: containsNoneOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAnyOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00301-CO-containsAnyOfCollectionNoneCommon [-InitializerList Group],
-         *      CTC-00302-CO-containsAnyOfCollectionOneCommon [-InitializerList Group],
-         *      CTC-00303-CO-containsAnyOfCollectionMoreCommon [-InitializerList Group],
-         *      CTC-00304-CO-containsAnyOfCollectionAllCommon [-InitializerList Group],
-         *      CTC-00305-CO-containsAnyOfCollectionAllCommonAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using ContainsOfInitializerListClient :: containsAnyOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAllOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00306-CO-containsAllOfCollectionNoneCommon [-InitializerList Group],
-         *      CTC-00307-CO-containsAllOfCollectionOneCommon [-InitializerList Group],
-         *      CTC-00308-CO-containsAllOfCollectionMoreCommon [-InitializerList Group],
-         *      CTC-00309-CO-containsAllOfCollectionAllCommon [-InitializerList Group],
-         *      CTC-00310-CO-containsAllOfCollectionAllCommonAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using ContainsOfInitializerListClient :: containsAllOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsAnyNotOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00311-CO-containsAnyNotOfCollectionNoneCommon [-InitializerList Group],
-         *      CTC-00312-CO-containsAnyNotOfCollectionOneCommon [-InitializerList Group],
-         *      CTC-00313-CO-containsAnyNotOfCollectionMoreCommon [-InitializerList Group],
-         *      CTC-00314-CO-containsAnyNotOfCollectionAllCommon [-InitializerList Group],
-         *      CTC-00315-CO-containsAnyNotOfCollectionAllCommonAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using ContainsOfInitializerListClient :: containsAnyNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit containsNoneOf ( std :: initializer_list ) call, inherited from ContainsOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00300-CO, Test Cases: {
-         *      CTC-00316-CO-containsNoneOfCollectionNoneCommon [-InitializerList Group],
-         *      CTC-00317-CO-containsNoneOfCollectionOneCommon [-InitializerList Group],
-         *      CTC-00318-CO-containsNoneOfCollectionMoreCommon [-InitializerList Group],
-         *      CTC-00319-CO-containsNoneOfCollectionAllCommon [-InitializerList Group],
-         *      CTC-00320-CO-containsNoneOfCollectionAllCommonAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using ContainsOfInitializerListClient :: containsNoneOf;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -807,370 +465,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
-         * @inherit findThat ( Predicate ) call, inherited from FindByClient interface
-         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
-         *      CTC-00601-FT-findThatStoreInMatchingNone,
-         *      CTC-00602-FT-findThatStoreInMatchingOne,
-         *      CTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit,
-         *      CTC-00604-FT-findThatStoreInMatchingMore,
-         *      CTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit,
-         *      CTC-00606-FT-findThatStoreInMatchingAll,
-         *      CTC-00607-FT-findThatStoreInMatchingAllAndMore,
-         *      CTC-00608-FT-findThatReturnedMatchingNone,
-         *      CTC-00609-FT-findThatReturnedMatchingOne,
-         *      CTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit,
-         *      CTC-00611-FT-findThatReturnedMatchingMore,
-         *      CTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit,
-         *      CTC-00613-FT-findThatReturnedMatchingAll,
-         *      CTC-00614-FT-findThatReturnedMatchingAllAndMore
-         * }
-         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
-         *      CTC-00651-FTMF-findThatStoreInMemberFunction,
-         *      CTC-00652-FTMF-findThatReturnedMemberFunction
-         * }
-         * @public
-         */
-        using FindByClient :: findThat;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findFirstThat ( Predicate ) call, inherited from FindByClient interface
-         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
-         *      CTC-00615-FT-findFirstThatMatchingNone,
-         *      CTC-00616-FT-findFirstThatMatchingOne,
-         *      CTC-00617-FT-findFirstThatMatchingMore,
-         *      CTC-00618-FT-findFirstThatMatchingAll,
-         *      CTC-00619-FT-findFirstThatMatchingAllAndMore
-         * }
-         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
-         *      CTC-00653-FTMF-findFirstThatMemberFunction
-         * }
-         * @public
-         */
-        using FindByClient :: findFirstThat;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findLastThat ( Predicate ) call, inherited from FindByClient interface
-         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
-         *      CTC-00620-FT-findLastThatMatchingNone,
-         *      CTC-00621-FT-findLastThatMatchingOne,
-         *      CTC-00622-FT-findLastThatMatchingMore,
-         *      CTC-00623-FT-findLastThatMatchingAll,
-         *      CTC-00624-FT-findLastThatMatchingAllAndMore
-         * }
-         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
-         *      CTC-00654-FTMF-findLastThatMemberFunction
-         * }
-         * @public
-         */
-        using FindByClient :: findLastThat;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findAllThat ( Predicate ) call, inherited from FindByClient interface
-         * @test Suite: CTS-00001, Group: CTG-00600-FT, Test Cases: {
-         *      CTC-00625-FT-findAllThatStoreInMatchingNone,
-         *      CTC-00626-FT-findAllThatStoreInMatchingOne,
-         *      CTC-00627-FT-findAllThatStoreInMatchingMore,
-         *      CTC-00628-FT-findAllThatStoreInMatchingAll,
-         *      CTC-00629-FT-findAllThatStoreInMatchingAllAndMore,
-         *      CTC-00630-FT-findAllThatReturnedMatchingNone,
-         *      CTC-00631-FT-findAllThatReturnedMatchingOne,
-         *      CTC-00632-FT-findAllThatReturnedMatchingMore,
-         *      CTC-00633-FT-findAllThatReturnedMatchingAll,
-         *      CTC-00634-FT-findAllThatReturnedMatchingAllAndMore
-         * }
-         * @test Suite: CTS-00001, Group: CTG-00650-FTMF, Test Cases: {
-         *      CTC-00655-FTMF-findAllThatStoreInMemberFunction,
-         *      CTC-00656-FTMF-findAllThatReturnedMemberFunction
-         * }
-         * @public
-         */
-        using FindByClient :: findAllThat;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00701-FO-findOfStoreInMatchingNone [-Collection Group],
-         *      CTC-00702-FO-findOfStoreInMatchingOne [-Collection Group],
-         *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-Collection Group],
-         *      CTC-00704-FO-findOfStoreInMatchingMore [-Collection Group],
-         *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
-         *      CTC-00706-FO-findOfStoreInMatchingAll [-Collection Group],
-         *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-Collection Group],
-         *      CTC-00708-FO-findOfReturnedMatchingNone [-Collection Group],
-         *      CTC-00709-FO-findOfReturnedMatchingOne [-Collection Group],
-         *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-Collection Group],
-         *      CTC-00711-FO-findOfReturnedMatchingMore [-Collection Group],
-         *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
-         *      CTC-00713-FO-findOfReturnedMatchingAll [-Collection Group],
-         *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findFirstOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00715-FO-findFirstOfMatchingNone [-Collection Group],
-         *      CTC-00716-FO-findFirstOfMatchingOne [-Collection Group],
-         *      CTC-00717-FO-findFirstOfMatchingMore [-Collection Group],
-         *      CTC-00718-FO-findFirstOfMatchingAll [-Collection Group],
-         *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findFirstOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findLastOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00720-FO-findLastOfMatchingNone [-Collection Group],
-         *      CTC-00721-FO-findLastOfMatchingOne [-Collection Group],
-         *      CTC-00722-FO-findLastOfMatchingMore [-Collection Group],
-         *      CTC-00723-FO-findLastOfMatchingAll [-Collection Group],
-         *      CTC-00724-FO-findLastOfMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findLastOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findAllOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00725-FO-findAllOfStoreInMatchingNone [-Collection Group],
-         *      CTC-00726-FO-findAllOfStoreInMatchingOne [-Collection Group],
-         *      CTC-00727-FO-findAllOfStoreInMatchingMore [-Collection Group],
-         *      CTC-00728-FO-findAllOfStoreInMatchingAll [-Collection Group],
-         *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-Collection Group],
-         *      CTC-00730-FO-findAllOfReturnedMatchingNone [-Collection Group],
-         *      CTC-00731-FO-findAllOfReturnedMatchingOne [-Collection Group],
-         *      CTC-00732-FO-findAllOfReturnedMatchingMore [-Collection Group],
-         *      CTC-00733-FO-findAllOfReturnedMatchingAll [-Collection Group],
-         *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findAllOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00735-FO-findNotOfStoreInMatchingNone [-Collection Group],
-         *      CTC-00736-FO-findNotOfStoreInMatchingOne [-Collection Group],
-         *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-Collection Group],
-         *      CTC-00738-FO-findNotOfStoreInMatchingMore [-Collection Group],
-         *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-Collection Group],
-         *      CTC-00740-FO-findNotOfStoreInMatchingAll [-Collection Group],
-         *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-Collection Group],
-         *      CTC-00742-FO-findNotOfReturnedMatchingNone [-Collection Group],
-         *      CTC-00743-FO-findNotOfReturnedMatchingOne [-Collection Group],
-         *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-Collection Group],
-         *      CTC-00745-FO-findNotOfReturnedMatchingMore [-Collection Group],
-         *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-Collection Group],
-         *      CTC-00747-FO-findNotOfReturnedMatchingAll [-Collection Group],
-         *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findFirstNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00749-FO-findFirstNotOfMatchingNone [-Collection Group],
-         *      CTC-00750-FO-findFirstNotOfMatchingOne [-Collection Group],
-         *      CTC-00751-FO-findFirstNotOfMatchingMore [-Collection Group],
-         *      CTC-00752-FO-findFirstNotOfMatchingAll [-Collection Group],
-         *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findFirstNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findLastNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00754-FO-findLastNotOfMatchingNone [-Collection Group],
-         *      CTC-00755-FO-findLastNotOfMatchingOne [-Collection Group],
-         *      CTC-00756-FO-findLastNotOfMatchingMore [-Collection Group],
-         *      CTC-00757-FO-findLastNotOfMatchingAll [-Collection Group],
-         *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findLastNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findAllNotOf ( Collection ) call, inherited from FindOfCollectionClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-Collection Group],
-         *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-Collection Group],
-         *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-Collection Group],
-         *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-Collection Group],
-         *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-Collection Group],
-         *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-Collection Group],
-         *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-Collection Group],
-         *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-Collection Group],
-         *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-Collection Group],
-         *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-Collection Group]
-         * }
-         * @public
-         */
-        using FindOfCollectionClient :: findAllNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00701-FO-findOfStoreInMatchingNone [-InitializerList Group],
-         *      CTC-00702-FO-findOfStoreInMatchingOne [-InitializerList Group],
-         *      CTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
-         *      CTC-00704-FO-findOfStoreInMatchingMore [-InitializerList Group],
-         *      CTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
-         *      CTC-00706-FO-findOfStoreInMatchingAll [-InitializerList Group],
-         *      CTC-00707-FO-findOfStoreInMatchingAllAndMore [-InitializerList Group],
-         *      CTC-00708-FO-findOfReturnedMatchingNone [-InitializerList Group],
-         *      CTC-00709-FO-findOfReturnedMatchingOne [-InitializerList Group],
-         *      CTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
-         *      CTC-00711-FO-findOfReturnedMatchingMore [-InitializerList Group],
-         *      CTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
-         *      CTC-00713-FO-findOfReturnedMatchingAll [-InitializerList Group],
-         *      CTC-00714-FO-findOfReturnedMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findFirstOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00715-FO-findFirstOfMatchingNone [-InitializerList Group],
-         *      CTC-00716-FO-findFirstOfMatchingOne [-InitializerList Group],
-         *      CTC-00717-FO-findFirstOfMatchingMore [-InitializerList Group],
-         *      CTC-00718-FO-findFirstOfMatchingAll [-InitializerList Group],
-         *      CTC-00719-FO-findFirstOfMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findFirstOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findLastOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00720-FO-findLastOfMatchingNone [-InitializerList Group],
-         *      CTC-00721-FO-findLastOfMatchingOne [-InitializerList Group],
-         *      CTC-00722-FO-findLastOfMatchingMore [-InitializerList Group],
-         *      CTC-00723-FO-findLastOfMatchingAll [-InitializerList Group],
-         *      CTC-00724-FO-findLastOfMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findLastOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findAllOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00725-FO-findAllOfStoreInMatchingNone [-InitializerList Group],
-         *      CTC-00726-FO-findAllOfStoreInMatchingOne [-InitializerList Group],
-         *      CTC-00727-FO-findAllOfStoreInMatchingMore [-InitializerList Group],
-         *      CTC-00728-FO-findAllOfStoreInMatchingAll [-InitializerList Group],
-         *      CTC-00729-FO-findAllOfStoreInMatchingAllAndMore [-InitializerList Group],
-         *      CTC-00730-FO-findAllOfReturnedMatchingNone [-InitializerList Group],
-         *      CTC-00731-FO-findAllOfReturnedMatchingOne [-InitializerList Group],
-         *      CTC-00732-FO-findAllOfReturnedMatchingMore [-InitializerList Group],
-         *      CTC-00733-FO-findAllOfReturnedMatchingAll [-InitializerList Group],
-         *      CTC-00734-FO-findAllOfReturnedMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findAllOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00735-FO-findNotOfStoreInMatchingNone [-InitializerList Group],
-         *      CTC-00736-FO-findNotOfStoreInMatchingOne [-InitializerList Group],
-         *      CTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit [-InitializerList Group],
-         *      CTC-00738-FO-findNotOfStoreInMatchingMore [-InitializerList Group],
-         *      CTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit [-InitializerList Group],
-         *      CTC-00740-FO-findNotOfStoreInMatchingAll [-InitializerList Group],
-         *      CTC-00741-FO-findNotOfStoreInMatchingAllAndMore [-InitializerList Group],
-         *      CTC-00742-FO-findNotOfReturnedMatchingNone [-InitializerList Group],
-         *      CTC-00743-FO-findNotOfReturnedMatchingOne [-InitializerList Group],
-         *      CTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit [-InitializerList Group],
-         *      CTC-00745-FO-findNotOfReturnedMatchingMore [-InitializerList Group],
-         *      CTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit [-InitializerList Group],
-         *      CTC-00747-FO-findNotOfReturnedMatchingAll [-InitializerList Group],
-         *      CTC-00748-FO-findNotOfReturnedMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findFirstNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00749-FO-findFirstNotOfMatchingNone [-InitializerList Group],
-         *      CTC-00750-FO-findFirstNotOfMatchingOne [-InitializerList Group],
-         *      CTC-00751-FO-findFirstNotOfMatchingMore [-InitializerList Group],
-         *      CTC-00752-FO-findFirstNotOfMatchingAll [-InitializerList Group],
-         *      CTC-00753-FO-findFirstNotOfMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findFirstNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findLastNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00754-FO-findLastNotOfMatchingNone [-InitializerList Group],
-         *      CTC-00755-FO-findLastNotOfMatchingOne [-InitializerList Group],
-         *      CTC-00756-FO-findLastNotOfMatchingMore [-InitializerList Group],
-         *      CTC-00757-FO-findLastNotOfMatchingAll [-InitializerList Group],
-         *      CTC-00758-FO-findLastNotOfMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findLastNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @inherit findAllNotOf ( InitializerList ) call, inherited from FindOfInitializerListClient interface
-         * @test Suite: CTS-00001, Group: CTG-00700-FO, Test Cases: {
-         *      CTC-00759-FO-findAllNotOfStoreInMatchingNone [-InitializerList Group],
-         *      CTC-00760-FO-findAllNotOfStoreInMatchingOne [-InitializerList Group],
-         *      CTC-00761-FO-findAllNotOfStoreInMatchingMore [-InitializerList Group],
-         *      CTC-00762-FO-findAllNotOfStoreInMatchingAll [-InitializerList Group],
-         *      CTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore [-InitializerList Group],
-         *      CTC-00764-FO-findAllNotOfReturnedMatchingNone [-InitializerList Group],
-         *      CTC-00765-FO-findAllNotOfReturnedMatchingOne [-InitializerList Group],
-         *      CTC-00766-FO-findAllNotOfReturnedMatchingMore [-InitializerList Group],
-         *      CTC-00767-FO-findAllNotOfReturnedMatchingAll [-InitializerList Group],
-         *      CTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore [-InitializerList Group]
-         * }
-         * @public
-         */
-        using FindOfInitializerListClient :: findAllNotOf;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
          * @inherit add ( copy / move ) call, inherited from RandomInsertionClient interface
          * @deprecated 'Collection :: add' has been deprecated. Use 'Collection :: insert' instead
          * @test Not Applicable
@@ -1316,37 +610,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
          */
         virtual auto clear () noexcept -> void = 0;
 
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        /**
-         * @brief Function used to check if the collection contains the requested element.
-         * @param [in] element : ElementType cref = Constant Reference to the element to be found in the collection
-         * @return bool = true if the element exists in the collection, false otherwise
-         * @test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00007-MF-containsTrue, CTC-00008-MF-containsFalse, CTC-00010-MF-clear }
-         * @public
-         */
-        __CDS_NoDiscard virtual auto contains (
-                ElementType const & element
-        ) const noexcept -> bool;
-
     };
 
 } /* namespace cds */
 
-#include "collection/impl/Constructs.hpp"
-#include "collection/impl/Functions.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClient.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClient.hpp"
 
-#include "../shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"                                               /* NOLINT(llvm-include-order) */
-#include "../shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
-#include "../shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClient.hpp"
-#include "../shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClient.hpp"
-#include "../shared/collectionInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClient.hpp"
-
-#include "../shared/collectionInternalCommunication/client/composite/impl/ContainsOfCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"               /* NOLINT(llvm-include-order) */
-#include "../shared/collectionInternalCommunication/client/composite/impl/FindByImmutableCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"
-#include "../shared/collectionInternalCommunication/client/composite/impl/GenericImmutableStatementsCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"            /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"
 
 #include "collection/impl/Collection.hpp"
 

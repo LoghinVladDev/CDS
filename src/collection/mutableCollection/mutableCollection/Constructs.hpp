@@ -67,15 +67,15 @@ namespace cds {
              * @namespace cds :: __hidden :: __impl
              * @internal library-private
              */
-            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __MutableCollectionFindOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __MutableCollectionFindOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __FindOfMutableCompositeClient <
                             cds :: MutableCollection < __ElementType >,
                             __ElementType,
                             typename __MutableCollectionDelegateForwardIterableClient < __ElementType > :: Iterator,
-                            cds :: Collection < __ElementType >,
-                            & __collectionContains < __ElementType >,
-                            & __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & __iterableContains < __ElementType >,
+                            & __iterableNotContains < __ElementType >
                     >;
 
 

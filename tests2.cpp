@@ -2,6 +2,7 @@
 #include <CDS/Sequence>
 
 
+
 template < typename t >
 class A {
 public:

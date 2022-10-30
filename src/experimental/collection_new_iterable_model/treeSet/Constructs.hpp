@@ -113,13 +113,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         >;
 
 
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __TreeSetContainsOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
+                using __TreeSetContainsOfIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
-                                cds :: Collection < __ElementType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
+                                cds :: Iterable < __ElementType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ElementType >
                         >;
 
 
@@ -136,15 +136,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         >;
 
 
-                template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier) */
-                using __TreeSetFindOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __TreeSetFindOfIterableClient =   /* NOLINT(bugprone-reserved-identifier) */
                         cds :: __hidden :: __impl :: __LocalFindOfImmutableCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
                                 AbstractRedBlackTreeConstIterator < __ElementType >,
-                                cds :: Collection < __ElementType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < __ElementType >
+                                cds :: Iterable < __ElementType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ElementType >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < __ElementType >
                         >;
 
 
@@ -169,13 +169,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         >;
 
 
-                template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-                using __TreeSetRemoveOfCollectionClient =       /* NOLINT(bugprone-reserved-identifier) */
+                template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier) */
+                using __TreeSetRemoveOfIterableClient = /* NOLINT(bugprone-reserved-identifier) */
                         cds :: __hidden :: __impl :: __LocalRemoveOfCompositeClient <
                                 cds :: experimental :: TreeSet < __ElementType >,
                                 __ElementType,
-                                cds :: Collection < __ElementType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
+                                cds :: Iterable < __ElementType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ElementType >
                         >;
 
 
