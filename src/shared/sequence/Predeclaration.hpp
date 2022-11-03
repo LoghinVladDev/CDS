@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    template < typename __ElementType, typename __BaseIterableType = void >
+    template < typename __ElementType >
     class Sequence;
 
 }
