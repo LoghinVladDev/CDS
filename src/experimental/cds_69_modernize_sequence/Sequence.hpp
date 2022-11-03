@@ -15,6 +15,9 @@
 #include "../../shared/sequence/Predeclaration.hpp"
 #include "../../shared/iterableInternalCommunication/server/IterableServer.hpp"
 
+#include "sequence/lazySequence/ConstIterator.hpp"
+#include "sequence/lazySequence/Constructs.hpp"
+
 /* TODO : indices of client */
 /* TODO : Generic Statements */
 /* TODO : Add apply, also, first, one to Generic Statements */
@@ -27,15 +30,18 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
-            template < typename __ElementType >
-            class __LazySequence :
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __LazySequence :              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     public cds :: Iterable < __ElementType > {
 
+            private:
+                friend class __LazySequenceConstIterator < __ElementType >;
+
             public:
-                cds :: Array < cds :: functional :: Predicate < __ElementType const & > > filters;
+                cds :: Array < cds :: functional :: Predicate < __ElementType const & > > _filters;
 
             private:
-                cds :: Iterable < __ElementType > const & baseIterable;
+                cds :: Iterable < __ElementType > const & _baseIterable;
 
             private:
                 using BaseIterable = cds :: Iterable < __ElementType >;
@@ -66,68 +72,17 @@ namespace cds {
 
             public:
                 ~__LazySequence() noexcept override = default;
+
+            public:
+                template < typename __Predicate >
+                __CDS_NoDiscard auto filter ( __Predicate const & predicate ) noexcept -> __LazySequence &;
             };
 
         }
     }
 
-    template < typename __ElementType, typename __BaseIterable > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Sequence : public Object {
-
-    private:
-        using __BaseConstIteratorType = decltype ( cds :: meta :: referenceOf < __BaseIterable > ().cbegin() );
-
-    private:
-        using __BaseElementType = decltype ( * cds :: meta :: referenceOf < __BaseConstIteratorType > () );
-
-    private:
-        template < typename __ArrayElementType >
-        class __SequenceInternalArray;
-
-    private:
-        Function < __ElementType ( __BaseElementType ) > entryMapper;
-
-    private:
-        __SequenceInternalArray < functional :: Predicate < __ElementType const & > > _filters;
-
-    public:
-        Sequence () noexcept = delete;
-
-    public:
-        Sequence (
-                Sequence const & sequence
-        ) noexcept;
-
-    public:
-        Sequence (
-                Sequence && sequence
-        ) noexcept;
-
-    public:
-        __CDS_Explicit Sequence (
-                __BaseIterable const & iterable
-        ) noexcept;
-
-    public:
-        __CDS_Explicit Sequence (
-                __BaseIterable && iterable
-        ) noexcept;
-
-    public:
-        ~Sequence () noexcept override;
-
-    public:
-        auto operator = (
-                Sequence const & sequence
-        ) noexcept -> Sequence &;
-
-    public:
-        auto operator = (
-                Sequence && sequence
-        ) noexcept -> Sequence &;
-
-    public:
-
     };
 
 } /* namespace cds */
