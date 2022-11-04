@@ -2,45 +2,26 @@
  * Created by loghin on 6/22/22.
  */
 
-#ifndef __CDS_DESTRUCTOR_HPP__
-#define __CDS_DESTRUCTOR_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_DESTRUCTOR_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_DESTRUCTOR_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+#include <CDS/Compiler>        /* NOLINT(llvm-include-order) */
+#include <CDS/FunctionalInterface>
 
 namespace cds {
 
-    namespace utility {         /* NOLINT(modernize-concat-nested-namespaces) */
-        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-            namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace utility {
 
-                template < typename __Type >                            /* NOLINT(bugprone-reserved-identifier) */
-                __CDS_cpplang_ConstexprNonLiteralReturn auto __destructHint ( __Type & ) -> void {    /* NOLINT(bugprone-reserved-identifier) */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using DestructorFunction __CDS_DeprecatedHint("Use Standard Functional Interfaces instead of fixed Interface") =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+                functional :: ConsumerFunction < __Type & >;
 
-                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
-                     * a used function, when it is only declared for SFINAE purposes. It will still return
-                     * a value acquired from an undefined function to avoid usage in compiled code. */
-                    (void) cds :: meta :: referenceOf < __Type > ();
-                }
+    } /* namespace utility */
 
-            }
-        }
+    template < typename __Type, utility :: DestructorFunction < __Type > __destructor > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    using FunctionDestructor __CDS_DeprecatedHint("Use Standard Functional Interface Decorator instead of fixed Interface") =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+            functional :: DecoratedConsumer < decltype ( & __destructor ), __destructor >;
 
-        template < typename __Type > /* NOLINT(bugprone-reserved-identifier) */
-        using DestructorFunction = decltype (
-                & cds :: utility :: __hidden :: __impl :: __destructHint < __Type >
-        );
-    }
-
-    template < typename __Type, cds :: utility :: DestructorFunction < __Type > __destructor >  /* NOLINT(bugprone-reserved-identifier) */
-    class FunctionDestructor {
-
-    public:
-        __CDS_cpplang_ConstexprNonLiteralReturn auto operator () (
-                __Type & value
-        ) const noexcept ( noexcept ( __destructor ( value ) ) ) -> void {
-
-            return __destructor ( value );
-        }
-    };
-
-}
+} /* namespace cds */
 
 #endif /* __CDS_DESTRUCTOR_HPP__ */

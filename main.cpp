@@ -226,7 +226,7 @@ int main () {
 //    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
 //    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
 
-arrc.findLastThat ( [](int v){return true;} );
+    (void)arrc.findLastThat ( [](int v){return true;} );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
 * arr.begin() = 3;
 //    arr.insertBefore ( arr.begin(), 3 );

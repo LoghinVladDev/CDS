@@ -55,7 +55,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename,
                         typename __FElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         typename __FIterableType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ContainsFunction < __FIterableType, __FElementType >
+                        functional :: PredicateFunction < __FIterableType const &, __FElementType const & >
                 > friend class __RemoveOfCompositeClient;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */

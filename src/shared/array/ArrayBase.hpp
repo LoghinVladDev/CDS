@@ -24,9 +24,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename                                        __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    utility :: ComparisonFunction < __ElementType > __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > class __ArrayBase {                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __ArrayBase {                                                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -827,10 +827,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ElementType,                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    cds :: utility :: ComparisonFunction < __ElementType > __equals /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __ServerType                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ServerType                                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __ArrayBase <
                     __ElementType,
                     __equals

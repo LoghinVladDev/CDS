@@ -10,11 +10,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > class __IndicesOfCompositeClient {                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromCollectionType const &, __ElementType const & > __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __IndicesOfCompositeClient {                                                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 using ElementType = __ElementType;
@@ -98,11 +98,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromCollectionType, __ElementType >  __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LocalIndicesOfCompositeClient =                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ReceiverType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromCollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromCollectionType const &, __ElementType const & > __contains              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __LocalIndicesOfCompositeClient =                                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IndicesOfCompositeClient <
                             __ReceiverType,
                             __ElementType,

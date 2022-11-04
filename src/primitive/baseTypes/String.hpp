@@ -6,7 +6,7 @@
 #define __CDS_STRING_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Object>   /* NOLINT(llvm-include-order) */
-#include <CDS/Comparator>
+#include <CDS/FunctionalInterface>
 #include "../../shared/iterator/AddressIterator.hpp"
 
 namespace cds {

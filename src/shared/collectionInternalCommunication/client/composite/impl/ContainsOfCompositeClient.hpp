@@ -10,10 +10,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromIterableType const &, __ElementType const & >   __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ContainsOfCompositeClient <
                     __IterableType,
                     __ElementType,
@@ -41,10 +41,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromIterableType const &, __ElementType const & >   __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ContainsOfCompositeClient <
                     __IterableType,
                     __ElementType,
@@ -75,10 +75,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromIterableType const &, __ElementType const & >   __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ContainsOfCompositeClient <
                     __IterableType,
                     __ElementType,
@@ -105,10 +105,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename                                                    __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename                                                    __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ContainsFunction < __FromIterableType, __ElementType >    __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __IterableType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __ElementType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                __FromIterableType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __FromIterableType const &, __ElementType const & >   __contains          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __ContainsOfCompositeClient <
                     __IterableType,
                     __ElementType,

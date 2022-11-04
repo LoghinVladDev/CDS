@@ -65,9 +65,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > __CDS_OptimalInline auto __initializerListContains (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+                    typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __function      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_OptimalInline auto __initializerListContains (                                                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                         std :: initializer_list < __ElementType >   const & list,
                         __ElementType                               const & element
             ) noexcept -> bool;
@@ -86,9 +86,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
              * @internal library-private
              */
             template <
-                    typename __ElementType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    utility :: ComparisonFunction < __ElementType > __function  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > __CDS_OptimalInline auto __initializerListNotContains (           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
+                    typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __function      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_OptimalInline auto __initializerListNotContains (                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                         std :: initializer_list < __ElementType >   const & list,
                         __ElementType                               const & element
             ) noexcept -> bool;
