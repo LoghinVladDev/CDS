@@ -16,7 +16,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __consumerFunctionHint (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ConsumedTypes && ... /* consumedValues */
-                ) noexcept -> void {
+                ) -> void {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                      * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -27,7 +27,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename ... __TestedTypes >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __predicateFunctionHint (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __TestedTypes && ... /* testedValues */
-                ) noexcept -> bool {
+                ) -> bool {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                      * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -39,7 +39,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __mapFunctionHint (                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ArgumentTypes && ... /* arguments */
-                ) noexcept -> __ReturnType {
+                ) -> __ReturnType {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                      * a used function, when it is only declared for SFINAE purposes. It will still return
@@ -48,8 +48,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
-                template < typename __SuppliedType >                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                inline auto __supplierFunctionHint () noexcept -> __SuppliedType {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template < typename __SuppliedType >                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __supplierFunctionHint () -> __SuppliedType {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
                      * a used function, when it is only declared for SFINAE purposes. It will still return
