@@ -16,10 +16,10 @@ namespace cds {
             class __LazySequenceConstIterator : public cds :: meta :: ForwardIterator { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:
-                __LazySequence < __ElementType > const & _sequence;
+                __LazySequence < __ElementType >                            const & _sequence;
 
             private:
-                typename cds :: Iterable < __ElementType > :: ConstIterator _iterator;
+                typename cds :: Iterable < __ElementType > :: ConstIterator         _iterator;
 
             public:
                 constexpr __LazySequenceConstIterator () noexcept = delete;
