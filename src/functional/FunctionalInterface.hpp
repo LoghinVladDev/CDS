@@ -57,6 +57,51 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     return cds :: meta :: referenceOf < __SuppliedType const > ();
                 }
 
+
+                template < typename ... __ConsumedTypes >       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __noexceptConsumerFunctionHint (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ConsumedTypes && ... /* consumedValues */
+                ) -> void {
+
+                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
+                     * a used function, when it is only declared for SFINAE purposes. It will still return
+                     * a value acquired from an undefined function to avoid usage in compiled code. */
+                }
+
+
+                template < typename ... __TestedTypes >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __noexceptPredicateFunctionHint (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __TestedTypes && ... /* testedValues */
+                ) -> bool {
+
+                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
+                     * a used function, when it is only declared for SFINAE purposes. It will still return
+                     * a value acquired from an undefined function to avoid usage in compiled code. */
+                    return true;
+                }
+
+
+                template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __noexceptMapFunctionHint (                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ArgumentTypes && ... /* arguments */
+                ) -> __ReturnType {
+
+                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
+                     * a used function, when it is only declared for SFINAE purposes. It will still return
+                     * a value acquired from an undefined function to avoid usage in compiled code. */
+                    return cds :: meta :: referenceOf < __ReturnType const > ();
+                }
+
+
+                template < typename __SuppliedType >                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __noexceptSupplierFunctionHint () -> __SuppliedType {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                    /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
+                     * a used function, when it is only declared for SFINAE purposes. It will still return
+                     * a value acquired from an undefined function to avoid usage in compiled code. */
+                    return cds :: meta :: referenceOf < __SuppliedType const > ();
+                }
+
             } /* namespace __impl */
         } /* namespace __hidden */
 
@@ -201,6 +246,94 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return __supplierFunction ();
             }
         };
+
+
+#if __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available
+
+        template < typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ConsumerNoexceptFunction = decltype (
+                & __hidden :: __impl :: __noexceptConsumerFunctionHint < __ConsumedTypes ... >
+        );
+
+
+        template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ConsumerNoexceptMemberFunction = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) noexcept -> void;
+
+
+        template < typename __ClassType, typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using ConsumerNoexceptConstMemberFunction = auto ( __ClassType :: * ) ( __ConsumedTypes ... ) const noexcept -> void;
+
+
+        template < typename ... __TestedTypes >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using PredicateNoexceptFunction = decltype (
+                & __hidden :: __impl :: __noexceptPredicateFunctionHint < __TestedTypes ... >
+        );
+
+
+        template < typename __ClassType, typename ... __TestedTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using PredicateNoexcptMemberFunction = auto ( __ClassType :: * ) ( __TestedTypes ... ) noexcept -> bool;
+
+
+        template < typename __ClassType, typename ... __TestedTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using PredicateNoexceptConstMemberFunction = auto ( __ClassType :: * ) ( __TestedTypes ... ) const noexcept -> bool;
+
+
+        template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using MapperNoexceptFunction = decltype (
+                & __hidden :: __impl :: __noexceptMapFunctionHint < __ReturnType, __ArgumentTypes ... >
+        );
+
+
+        template < typename __ClassType, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using MapperNoexceptMemberFunction = auto ( __ClassType :: * ) ( __ArgumentTypes ... ) noexcept -> __ReturnType;
+
+
+        template < typename __ClassType, typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using MapperNoexceptConstMemberFunction = auto ( __ClassType :: * ) ( __ArgumentTypes ... ) const noexcept -> __ReturnType;
+
+
+        template < typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using SupplierNoexceptFunction = decltype (
+                & __hidden :: __impl :: __noexceptSupplierFunctionHint < __SuppliedType >
+        );
+
+
+        template < typename __ClassType, typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using SupplierNoexceptMemberFunction = auto ( __ClassType :: * ) () noexcept -> __SuppliedType;
+
+
+        template < typename __ClassType, typename __SuppliedType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using SupplierNoexceptConstMemberFunction = auto ( __ClassType :: * ) () const noexcept -> __SuppliedType;
+
+
+        template <
+                typename                __ConsumerFunctionType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __ConsumerFunctionType  __consumerFunction,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedConsumerFunctionType = __ConsumerFunctionType /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedNoexceptConsumer {};
+
+
+        template <
+                typename                __PredicateFunctionType,                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __PredicateFunctionType __predicateFunction,                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedPredicateFunctionType = __PredicateFunctionType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedNoexceptPredicate {};
+
+
+        template <
+                typename                __MapperFunctionType,                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __MapperFunctionType    __mapperFunction,                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedMapperFunctionType = __MapperFunctionType /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedNoexceptMapper {};
+
+
+        template <
+                typename                __SupplierFunctionType,                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __SupplierFunctionType  __supplierFunction,                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                typename                __ReceivedSupplierFunctionType  = __SupplierFunctionType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > struct DecoratedNoexceptSupplier {};
+
+#endif
 
     } /* namespace functional */
 } /* namespace cds */
