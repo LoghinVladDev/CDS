@@ -19,7 +19,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyLowerComparator,   /* NOLINT(bugprone-reserved-identifier) */
                         functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyEqualsComparator,  /* NOLINT(bugprone-reserved-identifier) */
                         functional :: ConsumerFunction < __ElementType & >                          __nodeDestructor        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprMultipleReturn auto __RedBlackTree <
+                > constexpr auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,
@@ -66,7 +66,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyLowerComparator,   /* NOLINT(bugprone-reserved-identifier) */
                         functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyEqualsComparator,  /* NOLINT(bugprone-reserved-identifier) */
                         functional :: ConsumerFunction < __ElementType & >                          __nodeDestructor        /* NOLINT(bugprone-reserved-identifier) */
-                > __CDS_cpplang_ConstexprMultipleReturn auto __RedBlackTree <
+                > constexpr auto __RedBlackTree <
                         __ElementType,
                         __KeyType,
                         __keyExtractor,

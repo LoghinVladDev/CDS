@@ -61,13 +61,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     friend class AbstractRedBlackTreeConstIterator;
 
                 private:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprMultipleReturn static auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr static auto __rbt_isLeftChild (      /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType const * pNode,
                             __rbt_NodeType const * pNodeParent
                     ) noexcept -> bool;
 
                 private:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprMultipleReturn static auto __rbt_isRightChild (     /* NOLINT(bugprone-reserved-identifier) */
+                    __CDS_NoDiscard constexpr static auto __rbt_isRightChild (     /* NOLINT(bugprone-reserved-identifier) */
                             __rbt_NodeType const * pNode,
                             __rbt_NodeType const * pNodeParent
                     ) noexcept -> bool;
