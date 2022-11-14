@@ -315,6 +315,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         class JsonObject : public __hidden :: __impl :: __JsonMapImplementation {
 
+        private:
+            using __Base = __hidden :: __impl :: __JsonMapImplementation;
+
         public:
             constexpr JsonObject () noexcept;
 
@@ -581,6 +584,63 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         __CDS_NoDiscard auto parseJson ( StringView asString ) noexcept (false) -> JsonObject;
         __CDS_NoDiscard auto parseJsonArray ( StringView asString ) noexcept (false) -> JsonArray;
+
+        class JsonFormatException : public FormatException {
+
+        public:
+            JsonFormatException () noexcept : FormatException ( "JSON Input Format Exception" ) {}
+
+        public:
+            explicit JsonFormatException ( StringView message ) noexcept : FormatException ( message ) {}
+
+        public:
+            ~JsonFormatException () noexcept override = default;
+
+        public:
+            explicit JsonFormatException (
+                    char expected,
+                    char after,
+                    char received
+            ) noexcept :
+                    FormatException (
+                            String :: f (
+                                    "JSON Input Format Exception : Expected '%c' after '%c', got '%c'",
+                                    expected, after, received
+                            )
+                    ) {
+
+            }
+
+        public:
+            explicit JsonFormatException (
+                    char        expected,
+                    StringView  after,
+                    char        received
+            ) noexcept :
+                    FormatException (
+                            String :: f (
+                                    "JSON Input Format Exception : Expected '%c' after '%s', got '%c'",
+                                    expected, after.cStr(), received
+                            )
+                    ) {
+
+            }
+
+        public:
+            explicit JsonFormatException (
+                    StringView  expected,
+                    StringView  after,
+                    StringView  reason
+            ) noexcept :
+                    FormatException (
+                            String :: f (
+                                    "JSON Input Format Exception : Expected '%s' after '%s', problem - '%s'",
+                                    expected.cStr(), after.cStr(), reason.cStr()
+                            )
+                    ) {
+
+            }
+        };
 
     }
 }

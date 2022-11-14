@@ -53,12 +53,12 @@ namespace cds {
                 ) noexcept;
 
             public:                                         /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_Explicit constexpr __BaseStringView ( /* NOLINT(google-explicit-constructor) */
+                constexpr __BaseStringView ( /* NOLINT(google-explicit-constructor) */
                         __BaseString < __CharType > const & string
                 ) noexcept;
 
             public:                                         /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_Explicit constexpr __BaseStringView ( /* NOLINT(google-explicit-constructor) */
+                constexpr __BaseStringView ( /* NOLINT(google-explicit-constructor) */
                         std :: basic_string < __CharType > const & string
                 ) noexcept;
 
@@ -66,7 +66,7 @@ namespace cds {
                 template <
                         typename __TCharType = __CharType,      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         meta :: EnableIf < meta :: isStringCharType < __TCharType > () > = 0
-                > __CDS_Explicit constexpr __BaseStringView (   /* NOLINT(google-explicit-constructor) */
+                > constexpr __BaseStringView (   /* NOLINT(google-explicit-constructor) */
                         ElementType const * pString
                 ) noexcept;
 
@@ -119,8 +119,11 @@ namespace cds {
                 __CDS_cpplang_NonConstConstexprMemberFunction auto clear () noexcept -> void;
 
             public:                                                                     /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
-                        Index index
+                template <
+                        typename __NumericType,
+                        cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () > = 0
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                        __NumericType index
                 ) const noexcept (false) -> ElementType;
 
             public:                                                             /* NOLINT(readability-redundant-access-specifiers) */
@@ -167,12 +170,6 @@ namespace cds {
                 __CDS_NoDiscard auto operator () (
                         Index from,
                         Index to = -1
-                ) const noexcept -> __BaseString < __CharType >;
-
-            public:                                 /* NOLINT(readability-redundant-access-specifiers) */
-                template < typename __RangeType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __CDS_NoDiscard auto operator [] (
-                        __RangeType const & range
                 ) const noexcept -> __BaseString < __CharType >;
 
 

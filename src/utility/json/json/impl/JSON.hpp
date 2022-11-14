@@ -47,6 +47,352 @@ namespace cds {
                     }
                 }
 
+
+                auto __parseJsonObject (
+                        StringView      const & string,
+                        Size                    offset,
+                        Size                    length,
+                        json :: JsonObject    & into
+                ) noexcept (false) -> Size;
+
+
+                auto __parseJsonArray (
+                        StringView      const & string,
+                        Size                    offset,
+                        Size                    length,
+                        json :: JsonArray     & into
+                ) noexcept (false) -> Size;
+
+
+                inline auto __parseJsonObject (
+                        StringView      const & string,
+                        Size                    offset,
+                        Size                    length,
+                        json :: JsonObject    & into
+                ) noexcept (false) -> Size {
+
+                    enum class State {
+                        ExpectingLabel,
+                        ReadingLabel,
+                        ExpectingLVSeparator,
+                        ReadingValue,
+                        ReadingStringValue,
+                        ReadingNumericValue,
+                        ReadingBase2,
+                        ReadingBase8,
+                        ReadingBase10,
+                        ReadingBase16,
+                        ReadingBoolValue,
+                        ExpectingPSeparator
+                    };
+
+                    State   state           = State :: ExpectingLabel;
+                    bool    readBackslash   = false;
+                    bool    readFloat       = false;
+                    String  label;
+                    String  stringData;
+
+                    /* assume string [0] is right after '{' */
+
+                    for ( Size index = offset; index < length; ++ index ) {
+
+                        switch ( state ) {
+
+                            case State :: ExpectingLabel: {
+
+                                /* skip all following whitespace */
+                                while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
+
+                                /* expecting json input -> "label" : object, "label" : object .... */
+                                if ( string [index] != '"' ) { throw JsonFormatException ( '"', '{', string [index] ); }
+                                state = State :: ReadingLabel;
+
+                                break;
+                            }
+
+                            case State :: ReadingLabel: {
+
+                                if ( string [index] == '\\' ) {
+                                    readBackslash = true;
+                                    break;
+                                }
+
+                                if ( ! readBackslash && string [index] == '"' ) {
+                                    state = State :: ExpectingLVSeparator;
+                                } else if ( readBackslash ) {
+
+                                    if ( string [index] == 'n' ) {
+                                        label += '\n';
+                                    } else if ( string [index] == 't' ) {
+                                        label += '\t';
+                                    } else if ( string [index] == 'f' ) {
+                                        label += '\f';
+                                    } else if ( string [index] == 'r' ) {
+                                        label += '\r';
+                                    } else if ( string [index] == 'v' ) {
+                                        label += '\v';
+                                    } else if ( string [index] == 'a' ) {
+                                        label += '\a';
+                                    } else if ( string [index] == 'b' ) {
+                                        label += '\b';
+                                    }
+
+                                } else {
+                                    label += string[ index ];
+                                }
+
+                                readBackslash = false;
+                                break;
+                            }
+
+                            case State :: ExpectingLVSeparator: {
+
+                                /* skip all following whitespace */
+                                while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
+                                if ( string [index] != ':' ) { throw JsonFormatException ( ':', label, string [index] ); }
+                                state = State :: ReadingValue;
+                                break;
+                            }
+
+                            case State :: ReadingValue: {
+
+                                /* skip all following whitespace */
+                                while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
+
+                                if ( string [index] == '{' ) {
+                                    JsonObject object;
+                                    index = __parseJsonObject ( string, index + 1ULL, length - index - 1ULL, object );
+                                    into.put ( std :: move ( label ), std :: move ( object ) );
+                                    state = State :: ExpectingPSeparator;
+                                    break;
+                                }
+
+                                if ( string [index] == '[' ) {
+                                    JsonArray array;
+                                    index = __parseJsonArray ( string, index + 1ULL, length - index - 1ULL, array );
+                                    into.put ( std :: move ( label ), std :: move ( array ) );
+                                    state = State :: ExpectingPSeparator;
+                                    break;
+                                }
+
+                                if ( string [index] == '"' ) {
+                                    state = State :: ReadingStringValue;
+                                    break;
+                                }
+
+                                state = State :: ReadingNumericValue;
+                                -- index;
+
+                                break;
+                            }
+
+                            case State :: ReadingStringValue: {
+
+                                if ( string [index] == '\\' ) {
+                                    readBackslash = true;
+                                    break;
+                                }
+
+                                if ( ! readBackslash && string [index] == '"' ) {
+                                    state = State :: ExpectingPSeparator;
+                                    into.put ( std :: move ( label ), std :: move ( stringData ) );
+                                } else if ( readBackslash ) {
+
+                                    if ( string [index] == 'n' ) {
+                                        stringData += '\n';
+                                    } else if ( string [index] == 't' ) {
+                                        stringData += '\t';
+                                    } else if ( string [index] == 'f' ) {
+                                        stringData += '\f';
+                                    } else if ( string [index] == 'r' ) {
+                                        stringData += '\r';
+                                    } else if ( string [index] == 'v' ) {
+                                        stringData += '\v';
+                                    } else if ( string [index] == 'a' ) {
+                                        stringData += '\a';
+                                    } else if ( string [index] == 'b' ) {
+                                        stringData += '\b';
+                                    }
+
+                                } else {
+                                    stringData += string[ index ];
+                                }
+
+                                readBackslash = false;
+                                break;
+                            }
+
+                            case State :: ReadingNumericValue: {
+
+                                if ( StringView ("tTfF").contains ( string[index] ) ) {
+
+                                    -- index;
+                                    state = State :: ReadingBoolValue;
+                                } else if ( string[index] == '0' && index + 1 < length ) {
+
+                                    if (
+                                            string [index + 1] == 'x' ||
+                                            string [index + 1] == 'X'
+                                    ) {
+
+                                        ++ index;
+                                        state = State :: ReadingBase16;
+                                    } else if (
+                                            string [index + 1] == 'b' ||
+                                            string [index + 1] == 'B'
+                                    ) {
+
+                                        ++ index;
+                                        state = State :: ReadingBase2;
+                                    } else if (
+                                            StringUtils <char> :: isDigit ( string [index + 1] )
+                                    ) {
+
+                                        state = State :: ReadingBase8;
+                                    } else {
+
+                                        state = State :: ReadingBase10;
+                                    }
+                                } else {
+
+                                    /* only 0 case */
+                                    state = State :: ReadingBase10;
+                                }
+
+                                break;
+                            }
+
+                            case State :: ReadingBoolValue: {
+
+                                if ( index + 4 >= length ) { throw JsonFormatException ( "true/false", "t/f/T/F", "Unexpected end of String" ); }
+                                if (
+                                        ( string [ index ] == 'T' ||
+                                        string [ index ] == 't' ) &&
+                                        string [ index + 1 ] == 'r' &&
+                                        string [ index + 2 ] == 'u' &&
+                                        string [ index + 3 ] == 'e'
+                                ) {
+                                    into.put ( std :: move ( label ), true );
+                                    state = State :: ExpectingPSeparator;
+                                    break;
+                                }
+
+                                if ( index + 5 >= length ) { throw JsonFormatException ( "false", "t/f/T/F", "Unexpected end of String" ); }
+
+                                if (
+                                        ( string [ index ] == 'F' ||
+                                          string [ index ] == 'f' ) &&
+                                        string [ index + 1 ] == 'a' &&
+                                        string [ index + 2 ] == 'l' &&
+                                        string [ index + 3 ] == 's' &&
+                                        string [ index + 4 ] == 'e'
+                                ) {
+                                    into.put ( std :: move ( label ), false );
+                                    state = State :: ExpectingPSeparator;
+                                    break;
+                                }
+
+                                throw JsonFormatException ( "true/false", "t/f/T/F", string.substr(index, index + 5) + " does not represent any bool value" );
+                            }
+
+                            case State :: ReadingBase2: {
+
+                                while ( string [ index ] == '0' || string [ index ] == '1' ) {
+                                    stringData += string [index ++];
+                                }
+
+                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 2 ) );
+                                stringData.clear();
+                                state = State :: ExpectingPSeparator;
+                                break;
+                            }
+
+                            case State :: ReadingBase8: {
+
+                                while ( string [ index ] >= '0' && string [ index ] <= '7' ) {
+                                    stringData += string [index ++];
+                                }
+
+                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 8 ) );
+                                stringData.clear();
+                                state = State :: ExpectingPSeparator;
+                                break;
+                            }
+
+                            case State :: ReadingBase16: {
+
+                                while (
+                                        string [ index ] >= '0' && string [ index ] <= '9' ||
+                                        string [ index ] >= 'a' && string [ index ] <= 'f' ||
+                                        string [ index ] >= 'A' && string [ index ] <= 'F'
+                                ) {
+                                    stringData += string [index ++];
+                                }
+
+                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 16 ) );
+                                stringData.clear();
+                                state = State :: ExpectingPSeparator;
+                                break;
+                            }
+
+                            case State :: ReadingBase10: {
+
+                                while (
+                                        string [ index ] >= '0' && string [ index ] <= '9' ||
+                                        string [ index ] == '.'
+                                ) {
+                                    if ( string [index] == '.' ) { readFloat = true; }
+                                    stringData += string [index ++];
+                                }
+
+                                if ( readFloat ) {
+                                    into.put ( std :: move ( label ), std :: strtod ( stringData.cStr(), nullptr ) );
+                                    readFloat = false;
+                                } else {
+                                    into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 10 ) );
+                                }
+
+                                stringData.clear();
+                                state = State :: ExpectingPSeparator;
+                                break;
+                            }
+
+                            case State :: ExpectingPSeparator: {
+
+                                /* skip all following whitespace */
+                                while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
+
+                                if ( string [index] == '}' ) { return index; }
+                                if ( string [index] == ',' ) {
+                                    state = State :: ExpectingLabel;
+                                    break;
+                                }
+
+                                throw JsonFormatException ( ",/}", "label:value", String ("Unexpected character : ") + string [index] );
+                            }
+                        }
+
+                    }
+
+                    switch ( state ) {
+                        case State::ExpectingLabel:             throw JsonFormatException ("label", "','", "Unexpected End of String");
+                        case State::ReadingLabel:               throw JsonFormatException ("\"", "\"", "Unexpected End of String");
+                        case State::ExpectingLVSeparator:       throw JsonFormatException ("':'", "label", "Unexpected End of String");
+                        case State::ReadingValue:               throw JsonFormatException ("value", "':'", "Unexpected End of String");
+                        case State::ReadingStringValue:         throw JsonFormatException ("string value", "\"", "Unexpected End of String");
+                        case State::ReadingNumericValue:        throw JsonFormatException ("digit", "no string/json/array value id", "Unexpected End of String");
+                        case State::ReadingBase2:               throw JsonFormatException ("0/1", "0b/0B", "Unexpected End of String");
+                        case State::ReadingBase8:               throw JsonFormatException ("0-7", "0", "Unexpected End of String");
+                        case State::ReadingBase10:              throw JsonFormatException ("0-9", "numeric value", "Unexpected End of String");
+                        case State::ReadingBase16:              throw JsonFormatException ("0-9/a-f/A-F", "0x/0X", "Unexpected End of String");
+                        case State::ReadingBoolValue:           throw JsonFormatException ("true/True/false/False", "t/f/T/F", "Unexpected End of String");
+                        case State::ExpectingPSeparator:        throw JsonFormatException (",", "value", "Unexpected End of String");
+                    }
+
+                    /* unlikely to be reached */
+                    return length;
+                }
+
             }
         }
 
@@ -582,6 +928,38 @@ namespace cds {
             }
 
             return * reinterpret_cast < JsonArray * > ( this->_data.data().pObject );
+        }
+
+
+        inline JsonObject :: JsonObject (
+                JsonObject const & object
+        ) noexcept :
+                __Base ( static_cast < __Base const & > ( object ) ) {
+
+        }
+
+
+        constexpr JsonObject :: JsonObject (
+                JsonObject && object
+        ) noexcept :
+                __Base ( static_cast < __Base && > ( std :: move ( object ) ) ) {
+
+        }
+
+
+        inline JsonObject :: JsonObject (
+                Map < String, JsonElement > const & map
+        ) noexcept :
+                __Base ( map ) {
+
+        }
+
+
+        inline JsonObject :: JsonObject (
+                String const & asString
+        ) noexcept {
+
+//            this->
         }
 
     }

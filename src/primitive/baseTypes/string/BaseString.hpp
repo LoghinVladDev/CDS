@@ -327,13 +327,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator [] (
-                        Index index
+                template <
+                        typename __NumericType,
+                        cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () > = 0
+                > __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator [] (
+                        __NumericType index
                 ) noexcept (false) -> ElementType &;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (
-                        Index index
+                template <
+                        typename __NumericType,
+                        cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () > = 0
+                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (
+                        __NumericType index
                 ) const noexcept (false) -> ElementType;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -397,12 +403,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_NoDiscard auto operator () (
                         Index from,
                         Index until = -1
-                ) const noexcept -> __BaseString;
-
-            public:                                 /* NOLINT(readability-redundant-access-specifiers) */
-                template < typename __RangeType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __CDS_NoDiscard auto operator [] (
-                        __RangeType const & range
                 ) const noexcept -> __BaseString;
 
             public:                                 /* NOLINT(readability-redundant-access-specifiers) */

@@ -339,5 +339,20 @@ std::stop_token stopToken;
     }
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 
+    StringView t1 = "a";
+    StringView t2 = t1;
+    String t3 = "b";
+    String t4 = t3;
+    String t5 = t2;
+    StringView t6 = t5;
+
+    std :: cout <<
+            t1 << '\n' <<
+            t2 << '\n' <<
+            t3 << '\n' <<
+            t4 << '\n' <<
+            t5 << '\n' <<
+            t6 << '\n';
+
     return 0;
 }
