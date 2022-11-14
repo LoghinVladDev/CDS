@@ -124,12 +124,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode const * pCurrentNode
             ) noexcept;
 
-        protected:
+        public:
             constexpr AbstractRedBlackTreeConstIterator (
                     AbstractRedBlackTreeConstIterator const & iterator
             ) noexcept;
 
-        protected:
+        public:
             constexpr AbstractRedBlackTreeConstIterator (
                     AbstractRedBlackTreeConstIterator && iterator
             ) noexcept;

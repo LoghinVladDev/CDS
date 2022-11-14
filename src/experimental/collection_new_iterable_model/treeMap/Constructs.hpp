@@ -28,6 +28,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
+                        typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                        typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
+                > auto __treeMapCopyConstructor (       /* NOLINT(bugprone-reserved-identifier) */
+                        typename Map < __KeyType, __ValueType > :: EntryType & destination,
+                        typename Map < __KeyType, __ValueType > :: EntryType const & source
+                ) noexcept -> void {
+
+                    using EntryType = typename Map < __KeyType, __ValueType > :: EntryType;
+                    new ( & destination ) EntryType( source );
+                }
+
+
+                template <
                         typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                         typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
                 > auto __treeMapDestructor (    /* NOLINT(bugprone-reserved-identifier) */

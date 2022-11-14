@@ -61,7 +61,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size                   count
         ) noexcept {
 
-            for ( auto iterator = begin; iterator != end; ++ iterator) {
+            for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }
         }

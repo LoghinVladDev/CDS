@@ -12,13 +12,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
                 template <
-                        typename                                                            __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
-                        typename                                                            __KeyType,              /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ExtractorFunction  < __ElementType, __KeyType >   __keyExtractor,         /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyLowerComparator,   /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ComparisonFunction < __KeyType >                  __keyEqualsComparator,  /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor        /* NOLINT(bugprone-reserved-identifier) */
-                > class __RedBlackTree {                                                                            /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                                    __ElementType,          /* NOLINT(bugprone-reserved-identifier) */
+                        typename                                                                    __KeyType,              /* NOLINT(bugprone-reserved-identifier) */
+                        functional :: MapperFunction < __KeyType const &, __ElementType const & >   __keyExtractor,         /* NOLINT(bugprone-reserved-identifier) */
+                        functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyLowerComparator,   /* NOLINT(bugprone-reserved-identifier) */
+                        functional :: PredicateFunction < __KeyType const &, __KeyType const & >    __keyEqualsComparator,  /* NOLINT(bugprone-reserved-identifier) */
+                        functional :: ConsumerFunction < __ElementType & >                          __nodeDestructor        /* NOLINT(bugprone-reserved-identifier) */
+                > class __RedBlackTree {                                                                                    /* NOLINT(bugprone-reserved-identifier) */
 
                 private:
                     using __rbt_NodeType                = cds :: __hidden :: __impl :: __RedBlackTreeNode < __ElementType >;    /* NOLINT(bugprone-reserved-identifier) */
@@ -215,7 +215,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __CDS_NoDiscard constexpr auto __rbt_size () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
-                    template < cds :: utility :: ComparisonFunction < __KeyType > comparator >
+                    template < functional :: PredicateFunction < __KeyType const &, __KeyType const & > comparator >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __rbt_equals ( __RedBlackTree const & other ) const noexcept -> bool; /* NOLINT(bugprone-reserved-identifier) */
 
                 protected:
@@ -308,9 +308,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename                                                            __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                     typename                                                            __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: PredicateFunction < __KeyType const &, __KeyType const & >                  __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: PredicateFunction < __KeyType const &, __KeyType const & >                  __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: ConsumerFunction < __ElementType & >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
             > template <
                     typename                                                             __ServerType              /* NOLINT(bugprone-reserved-identifier) */
             > class __RedBlackTree <
@@ -417,9 +417,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename                                                            __ElementType,             /* NOLINT(bugprone-reserved-identifier) */
                     typename                                                            __KeyType,                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __ElementType, __KeyType >    __keyExtractor,            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __KeyType >                  __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: DestructorFunction < __ElementType >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: PredicateFunction < __KeyType const &, __KeyType const & >                  __keyLowerComparator,      /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: PredicateFunction < __KeyType const &, __KeyType const & >                  __keyEqualsComparator,     /* NOLINT(bugprone-reserved-identifier) */
+                    functional :: ConsumerFunction < __ElementType & >              __nodeDestructor           /* NOLINT(bugprone-reserved-identifier) */
             > template <
                     typename                                                             __ServerType              /* NOLINT(bugprone-reserved-identifier) */
             > class __RedBlackTree <
