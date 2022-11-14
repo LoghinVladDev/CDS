@@ -153,18 +153,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             cds :: __hidden :: __impl :: __allocation :: __RawContainer < __GenericData >   _data;
 
         private:
-            template <
-                    typename __ElementType,
-                    cds :: meta :: EnableIf < cds :: meta :: isFundamental < __ElementType > () > = 0
-            > auto implicitAdapt () const noexcept (false) -> __ElementType;
-
-        private:
-            template <
-                    typename __ElementType,
-                    cds :: meta :: EnableIf < ! cds :: meta :: isFundamental < __ElementType > () > = 0
-            > auto implicitAdapt () const noexcept (false) -> __ElementType;
-
-        private:
             auto copyData (
                     __GenericData const & genericData
             ) noexcept -> void;
@@ -186,7 +174,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept;
 
         public:
-            __CDS_cpplang_ConstexprConstructorNonEmptyBody JsonElement (
+            JsonElement (
                     JsonElement && element
             ) noexcept;
 
@@ -251,18 +239,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType && value
             ) noexcept -> JsonElement &;
 
-        private:
-            template <
-                    typename __ElementType,
-                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
-            > __CDS_NoDiscard auto to () const noexcept (false) -> typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType const &;
-
-        private:
-            template <
-                    typename __ElementType,
-                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementPrimitiveAdaptable < __ElementType > :: __value > = 0
-            > __CDS_NoDiscard auto to () const noexcept (false) -> typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType;
-
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
@@ -272,7 +248,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:
             __CDS_NoDiscard auto equals (
                     Object const & object
-            ) const noexcept -> bool;
+            ) const noexcept -> bool override;
 
         private:
             template < __hidden :: __impl :: __JsonElementType type >
