@@ -131,6 +131,15 @@ namespace cds {
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         friend FindUniqueClient;
 
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveByClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveOfCollectionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveOfInitializerListClient;
+
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -363,6 +372,8 @@ namespace cds {
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         using IteratorRemoveClient :: remove;
 
+    private:
+        using IteratorRemoveClient :: removeAll;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         using FindUniqueClient :: find;

@@ -79,6 +79,9 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         private:    friend ConstIteratorRemoveClient;
         private:    friend DelegateForwardConstIterableClient;
         private:    friend DelegateBackwardConstIterableClient;
+        private:    friend RemoveOfCollectionClient;
+        private:    friend RemoveOfInitializerListClient;
+        private:    friend RemoveByClient;
 
         protected:  using typename SetBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
         protected:  using typename SetBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
@@ -108,7 +111,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         public:     using DelegateBackwardConstIterableClient :: crend;
 
         public:     using ConstIteratorRemoveClient :: remove;
-        public:     using ConstIteratorRemoveClient :: removeAll;
+        private:     using ConstIteratorRemoveClient :: removeAll;
 
         public:     using RandomInsertionClient :: insert;
         public:     using RandomInsertionClient :: add;
