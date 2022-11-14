@@ -1,0 +1,614 @@
+/*
+ * Created by loghin on 28.02.2021.
+ */
+
+#ifndef __CDS_JSON_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_JSON_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+#include <CDS/meta/TypeTraits>
+#include <CDS/LinkedHashMap>
+#include <CDS/Array>
+#include <CDS/smartPointers/UniquePointer>
+
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace json {
+
+        class JsonElement;
+        class JsonObject;
+        class JsonArray;
+
+        namespace __hidden {
+            namespace __impl {
+
+                using __JsonBaseMap             = cds :: Map < String, JsonElement >;
+                using __JsonBaseArray           = cds :: Array < JsonElement >;
+
+                using __JsonMapImplementation   = cds :: LinkedHashMap < String, JsonElement >;
+                using __JsonArrayImplementation = cds :: Array < JsonElement >;
+
+                enum class __JsonElementType {
+                    __jet_Object,
+                    __jet_Array,
+                    __jet_String,
+                    __jet_Bool,
+                    __jet_Long,
+                    __jet_Int       = __jet_Long,
+                    __jet_Double,
+                    __jet_Float     = __jet_Double,
+                    __jet_Invalid
+                };
+
+                __CDS_cpplang_ConstexprMultipleReturn auto toString (
+                        __JsonElementType type
+                ) noexcept -> StringLiteral;
+
+                template < typename __BaseType >
+                struct __JsonElementAdapterProperties {
+                    constexpr static bool const __adaptable = false;
+                };
+
+                template <> struct __JsonElementAdapterProperties < int > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;
+                    using                                     __AdaptedType = int;
+                };
+
+                template <> struct __JsonElementAdapterProperties < long long > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;
+                    using                                     __AdaptedType = long long;
+                };
+
+                template <> struct __JsonElementAdapterProperties < float > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Double;
+                    using                                     __AdaptedType = float;
+                };
+
+                template <> struct __JsonElementAdapterProperties < double > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Double;
+                    using                                     __AdaptedType = double;
+                };
+
+                template <> struct __JsonElementAdapterProperties < bool > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Bool;
+                    using                                     __AdaptedType = bool;
+                };
+
+                template <> struct __JsonElementAdapterProperties < StringLiteral > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
+                    using                                     __AdaptedType = String;
+                };
+
+                template <> struct __JsonElementAdapterProperties < StringView > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
+                    using                                     __AdaptedType = String;
+                };
+
+                template <> struct __JsonElementAdapterProperties < String > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
+                    using                                     __AdaptedType = String;
+                };
+
+                template <> struct __JsonElementAdapterProperties < JsonArray > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Array;
+                    using                                     __AdaptedType = JsonArray;
+                };
+
+                template <> struct __JsonElementAdapterProperties < JsonObject > {
+                    constexpr static bool               const __adaptable   = true;
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Object;
+                    using                                     __AdaptedType = JsonObject;
+                };
+
+                template < typename __ElementType >
+                struct __JsonElementPrimitiveAdaptable {
+                    constexpr static bool const __value =
+                            __JsonElementAdapterProperties < __ElementType > :: __adaptable &&
+                            cds :: meta :: isFundamental < __ElementType > () || (
+                                    cds :: meta :: isSame < __ElementType, StringLiteral > () &&
+                                    cds :: meta :: isBasicPointer < __ElementType > ()
+                            );
+                };
+
+                template < typename __ElementType >
+                struct __JsonElementAdaptable {
+                    constexpr static bool const __value =
+                            __JsonElementAdapterProperties < __ElementType > :: __adaptable &&
+                            ! cds :: meta :: isFundamental < __ElementType > () && ! (
+                                    cds :: meta :: isSame < __ElementType, StringLiteral > () &&
+                                    cds :: meta :: isBasicPointer < __ElementType > ()
+                            );
+                };
+
+            }
+        }
+
+        class JsonElement : public Object {
+
+        private:
+            friend class JsonArray;
+
+        private:
+            friend class JsonObject;
+
+        private:
+            union __GenericData {
+                bool            bValue;
+                long long int   iValue;
+                double          dValue;
+                cds :: Object * pObject;
+            };
+
+        private:
+            __hidden :: __impl :: __JsonElementType                                         _type { __hidden :: __impl :: __JsonElementType :: __jet_Invalid };
+
+        private:
+            cds :: __hidden :: __impl :: __allocation :: __RawContainer < __GenericData >   _data;
+
+        private:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < cds :: meta :: isFundamental < __ElementType > () > = 0
+            > auto implicitAdapt () const noexcept (false) -> __ElementType;
+
+        private:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < ! cds :: meta :: isFundamental < __ElementType > () > = 0
+            > auto implicitAdapt () const noexcept (false) -> __ElementType;
+
+        private:
+            auto copyData (
+                    __GenericData const & genericData
+            ) noexcept -> void;
+
+        private:
+            auto moveData (
+                    __GenericData & genericData
+            ) noexcept -> void;
+
+        private:
+            auto clearData () noexcept -> void;
+
+        public:
+            __CDS_cpplang_ConstexprConstructorNonEmptyBody JsonElement () noexcept = delete;
+
+        public:
+            JsonElement (
+                    JsonElement const & element
+            ) noexcept;
+
+        public:
+            __CDS_cpplang_ConstexprConstructorNonEmptyBody JsonElement (
+                    JsonElement && element
+            ) noexcept;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementPrimitiveAdaptable < __ElementType > :: __value > = 0
+            > JsonElement (
+                    __ElementType value
+            ) noexcept;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
+            > JsonElement (
+                    __ElementType const & value
+            ) noexcept;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
+            > JsonElement (
+                    __ElementType && value
+            ) noexcept;
+
+        public:
+            ~JsonElement () noexcept;
+
+        public:
+            auto operator = (
+                    JsonElement const & element
+            ) noexcept -> JsonElement &;
+
+        public:
+            auto operator = (
+                    JsonElement && element
+            ) noexcept -> JsonElement &;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementPrimitiveAdaptable < __ElementType > :: __value > = 0
+            > auto operator = (
+                    __ElementType value
+            ) noexcept -> JsonElement &;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
+            > auto operator = (
+                    __ElementType const & value
+            ) noexcept -> JsonElement &;
+
+        public:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
+            > auto operator = (
+                    __ElementType && value
+            ) noexcept -> JsonElement &;
+
+        private:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value > = 0
+            > __CDS_NoDiscard auto to () const noexcept (false) -> typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType const &;
+
+        private:
+            template <
+                    typename __ElementType,
+                    cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementPrimitiveAdaptable < __ElementType > :: __value > = 0
+            > __CDS_NoDiscard auto to () const noexcept (false) -> typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType;
+
+        public:
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+        public:
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+        public:
+            __CDS_NoDiscard auto equals (
+                    Object const & object
+            ) const noexcept -> bool;
+
+        private:
+            template < __hidden :: __impl :: __JsonElementType type >
+            __CDS_NoDiscard constexpr auto is () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto getInt () const noexcept (false) -> int;
+
+        public:
+            __CDS_NoDiscard auto getLong () const noexcept (false) -> long long int;
+
+        public:
+            __CDS_NoDiscard auto getFloat () const noexcept (false) -> float;
+
+        public:
+            __CDS_NoDiscard auto getDouble () const noexcept (false) -> double;
+
+        public:
+            __CDS_NoDiscard auto getBoolean () const noexcept (false) -> bool;
+
+        public:
+            __CDS_NoDiscard auto getString () const noexcept (false) -> String const &;
+
+        public:
+            __CDS_NoDiscard auto getJson () const noexcept (false) -> JsonObject const &;
+
+        public:
+            __CDS_NoDiscard auto getArray () const noexcept (false) -> JsonArray const &;
+
+        public:
+            __CDS_NoDiscard auto getString () noexcept (false) -> String &;
+
+        public:
+            __CDS_NoDiscard auto getJson () noexcept (false) -> JsonObject &;
+
+        public:
+            __CDS_NoDiscard auto getArray () noexcept (false) -> JsonArray &;
+
+        public:
+            __CDS_NoDiscard constexpr auto isInt () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isLong () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isFloat () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isDouble () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isBoolean () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isString () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isJson () const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto isArray () const noexcept -> bool;
+        };
+
+
+        class JsonObject : public __hidden :: __impl :: __JsonMapImplementation {
+
+        public:
+            constexpr JsonObject () noexcept;
+
+        public:
+            JsonObject (
+                    JsonObject const & object
+            ) noexcept;
+
+        public:
+            constexpr JsonObject (
+                    JsonObject && object
+            ) noexcept;
+
+        public:
+            JsonObject (
+                    Map < String, JsonElement > const & map
+            ) noexcept;
+
+        public:
+            JsonObject (
+                    String const & asString
+            ) noexcept;
+
+        public:
+            ~JsonObject () noexcept;
+
+        public:
+            auto operator = (
+                    JsonObject const & object
+            ) noexcept -> JsonObject &;
+
+        public:
+            auto operator = (
+                    JsonObject && object
+            ) noexcept -> JsonObject &;
+
+        public:
+            auto operator = (
+                    Map < String, JsonElement > const & map
+            ) noexcept -> JsonObject &;
+
+        public:
+            template < typename __ElementType >
+            auto put (
+                    StringView          label,
+                    __ElementType    && value
+            ) noexcept -> JsonObject &;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getPrimitive (
+                    StringView label
+            ) const noexcept (false) -> __ElementType;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getComposite (
+                    StringView label
+            ) const noexcept (false) -> __ElementType const &;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getComposite (
+                    StringView label
+            ) noexcept (false) -> __ElementType &;
+
+        public:
+            __CDS_NoDiscard auto getInt (
+                    StringView label
+            ) const noexcept (false) -> int;
+
+        public:
+            __CDS_NoDiscard auto getLong (
+                    StringView label
+            ) const noexcept (false) -> long long int;
+
+        public:
+            __CDS_NoDiscard auto getFloat (
+                    StringView label
+            ) const noexcept (false) -> float;
+
+        public:
+            __CDS_NoDiscard auto getDouble (
+                    StringView label
+            ) const noexcept (false) -> double;
+
+        public:
+            __CDS_NoDiscard auto getString (
+                    StringView label
+            ) const noexcept (false) -> String const &;
+
+        public:
+            __CDS_NoDiscard auto getArray (
+                    StringView label
+            ) const noexcept (false) -> JsonArray const &;
+
+        public:
+            __CDS_NoDiscard auto getJson (
+                    StringView label
+            ) const noexcept (false) -> JsonObject const &;
+
+        public:
+            __CDS_NoDiscard auto getString (
+                    StringView label
+            ) noexcept (false) -> String &;
+
+        public:
+            __CDS_NoDiscard auto getArray (
+                    StringView label
+            ) noexcept (false) -> JsonArray &;
+
+        public:
+            __CDS_NoDiscard auto getJson (
+                    StringView label
+            ) noexcept (false) -> JsonObject &;
+
+        public:
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+        public:
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+        public:
+            __CDS_NoDiscard auto equals (
+                    Object const & object
+            ) const noexcept -> bool override;
+        };
+
+
+        class JsonArray : public __hidden :: __impl :: __JsonArrayImplementation {
+
+        public:
+            constexpr JsonArray () noexcept;
+
+        public:
+            JsonArray (
+                    JsonArray const & object
+            ) noexcept;
+
+        public:
+            constexpr JsonArray (
+                    JsonArray && object
+            ) noexcept;
+
+        public:
+            JsonArray (
+                    List < JsonElement > const & map
+            ) noexcept;
+
+        public:
+            JsonArray (
+                    String const & asString
+            ) noexcept;
+
+        public:
+            ~JsonArray () noexcept;
+
+        public:
+            auto operator = (
+                    JsonArray const & object
+            ) noexcept -> JsonArray &;
+
+        public:
+            auto operator = (
+                    JsonArray && object
+            ) noexcept -> JsonArray &;
+
+        public:
+            auto operator = (
+                    List < JsonElement > const & map
+            ) noexcept -> JsonArray &;
+
+        public:
+            template < typename __ElementType >
+            auto pushBack (
+                    __ElementType && value
+            ) noexcept -> JsonArray &;
+
+        public:
+            template < typename __ElementType >
+            auto pushFront (
+                    __ElementType && value
+            ) noexcept -> JsonArray &;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getPrimitive (
+                    Index index
+            ) const noexcept (false) -> __ElementType;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getComposite (
+                    Index index
+            ) const noexcept (false) -> __ElementType const &;
+
+        private:
+            template < typename __ElementType >
+            __CDS_NoDiscard auto getComposite (
+                    Index index
+            ) noexcept (false) -> __ElementType &;
+
+        public:
+            __CDS_NoDiscard auto getInt (
+                    Index index
+            ) const noexcept (false) -> int;
+
+        public:
+            __CDS_NoDiscard auto getLong (
+                    Index index
+            ) const noexcept (false) -> long long int;
+
+        public:
+            __CDS_NoDiscard auto getFloat (
+                    Index index
+            ) const noexcept (false) -> float;
+
+        public:
+            __CDS_NoDiscard auto getDouble (
+                    Index index
+            ) const noexcept (false) -> double;
+
+        public:
+            __CDS_NoDiscard auto getString (
+                    Index index
+            ) const noexcept (false) -> String const &;
+
+        public:
+            __CDS_NoDiscard auto getArray (
+                    Index index
+            ) const noexcept (false) -> JsonArray const &;
+
+        public:
+            __CDS_NoDiscard auto getJson (
+                    Index index
+            ) const noexcept (false) -> JsonObject const &;
+
+        public:
+            __CDS_NoDiscard auto getString (
+                    Index index
+            ) noexcept (false) -> String &;
+
+        public:
+            __CDS_NoDiscard auto getArray (
+                    Index index
+            ) noexcept (false) -> JsonArray &;
+
+        public:
+            __CDS_NoDiscard auto getJson (
+                    Index index
+            ) noexcept (false) -> JsonObject &;
+
+        public:
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+        public:
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+        public:
+            __CDS_NoDiscard auto equals (
+                    Object const & object
+            ) const noexcept -> bool override;
+        };
+
+        __CDS_NoDiscard auto parseJson ( StringView asString ) noexcept (false) -> JsonObject;
+        __CDS_NoDiscard auto parseJsonArray ( StringView asString ) noexcept (false) -> JsonArray;
+
+    }
+}
+
+#include "json/impl/JSON.hpp"
+
+#endif /* __CDS_JSON_HPP__ */

@@ -8,11 +8,13 @@
 #include <CDS/threading/Mutex>
 #include <CDS/threading/Lock>
 #include <CDS/threading/Thread>
+#include <CDS/util/JSON>
 #include <mutex>
 #include <thread>
 #include <pthread.h>
 #include <functional>
 #include "src/functional/FunctionalInterface.hpp"
+#include <variant>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -28,6 +30,10 @@ int f2(int a) {return a * 2;}
 
 void gC(int a, float b, cds :: String const & c) {
     std :: cout << a << '\n' << b << '\n' << c << '\n';
+}
+
+double ftest (int a, int b) {
+    return a / (double )b;
 }
 
 bool gP (int a, int b, float c, float d, cds :: String const & e, cds :: String const & f) {
@@ -256,6 +262,24 @@ std::stop_token stopToken;
         return a * 3.5;
     };
 
+    Function < double (int, int) > functieDeKkt = [] (int a, int b) { return a / (double) b; };
+    Function < double (int, int) > functieDeKkt2 = ftest;
+
+    class Callable {
+    public:
+        double operator () (int a, int b) {
+            return a * (double) b;
+        }
+    };
+
+    Function < double (int, int) > functieDeKkt3 = Callable();
+    Function < float (int, int) > functieDeKkt4 = Callable();
+
+    Function < bool (String) > fTest = [](String const & s) {return s.empty();};
+    Function < String & (String &) > fTest2 = [](String & s) -> String & {return s.toUpper();};
+
+    functieDeKkt4 (3, 3);
+
     Mapper < String, int, int, int > int3ToString  = [] (int a, int b, int c) {
         return String() + a + b + c;
     };
@@ -293,7 +317,26 @@ std::stop_token stopToken;
     std :: cout << map1 ( 1, 1.1f, 1, "1", 1.1f ) << '\n';
     std :: cout << sup1 () << '\n';
 
+    Function testNoArgs = [](int a, int b) { return a / (float) b; };
 
+    Supplier <int> sInt = [] {return 3;};
+
+    union t {
+        int v;
+        float f;
+    };
+
+    t a;
+    t b;
+
+    a.v = 3;
+    b = a;
+
+    if ( b.v == 3 ) {
+        std :: cout << "a\n";
+    } else {
+        std :: cout << "b\n";
+    }
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
 
     return 0;
