@@ -482,6 +482,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> JsonArray &;
 
         public:
+            __CDS_NoDiscard auto getBoolean (
+                    Index index
+            ) const noexcept (false) -> bool;
+
+        public:
             __CDS_NoDiscard auto getInt (
                     Index index
             ) const noexcept (false) -> int;

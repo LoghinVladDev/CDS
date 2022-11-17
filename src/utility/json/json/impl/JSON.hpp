@@ -1178,6 +1178,9 @@ namespace cds {
         }
 
 
+        constexpr JsonObject :: JsonObject () noexcept = default;
+
+
         inline JsonObject :: JsonObject (
                 JsonObject const & object
         ) noexcept :
@@ -1449,6 +1452,9 @@ namespace cds {
 
             return elementIterator->value().getJson();
         }
+
+
+        constexpr JsonArray :: JsonArray () noexcept = default;
 
 
         inline JsonArray :: JsonArray (
