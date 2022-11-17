@@ -54,13 +54,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 friend class __BaseStringView < __CharType >;
 
 
-            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+            private:                                                /* NOLINT(readability-redundant-access-specifiers) */
                 ElementType       * _pBuffer        { nullptr };    /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
-            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+            private:                                                /* NOLINT(readability-redundant-access-specifiers) */
                 Size                _length         { 0ULL };       /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
-            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+            private:                                                /* NOLINT(readability-redundant-access-specifiers) */
                 Size                _capacity       { 0ULL };       /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
