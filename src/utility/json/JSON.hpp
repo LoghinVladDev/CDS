@@ -50,7 +50,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template <> struct __JsonElementAdapterPropertiesHelper < int > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;
-                    using                                     __AdaptedType = int;
+                    using                                     __AdaptedType = long long;
                 };
 
                 template <> struct __JsonElementAdapterPropertiesHelper < long long > {
@@ -62,7 +62,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 template <> struct __JsonElementAdapterPropertiesHelper < float > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Double;
-                    using                                     __AdaptedType = float;
+                    using                                     __AdaptedType = double;
                 };
 
                 template <> struct __JsonElementAdapterPropertiesHelper < double > {
@@ -367,6 +367,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     StringView          label,
                     __ElementType    && value
             ) noexcept -> JsonObject &;
+
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            auto get (
+                    StringView label
+            ) noexcept (false) -> JsonElement &;
+
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            auto operator [] (
+                    StringView label
+            ) noexcept (false) -> JsonElement &;
 
         public:
             __CDS_NoDiscard auto getBoolean (

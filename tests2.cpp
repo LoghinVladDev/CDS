@@ -39,6 +39,7 @@ int main () {
     json.put ( "test3", "test" );
     json.put ( "test1", "test2"_s );
     json.at ( "test1" ) = "test2"_s;
+    json.get ( "test3" ) = 5;
 
     std :: cout << json << '\n';
 

@@ -723,6 +723,12 @@ namespace cds {
 
                 delete this->_data.data().pObject;
             }
+
+            (void) std :: memset (
+                    reinterpret_cast < void * > ( & this->_data._data [0U] ),
+                    0U,
+                    sizeof ( __GenericData )
+            );
         }
 
 
@@ -833,6 +839,7 @@ namespace cds {
 
             this->clearData();
 
+            this->_type = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
             * reinterpret_cast < __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType * > (
                     & this->_data._data [0U]
             ) = value;
@@ -1277,6 +1284,22 @@ namespace cds {
 
             (void) this->emplace ( label, std :: forward < __ElementType > ( value ) );
             return * this;
+        }
+
+
+        inline auto JsonObject :: get (
+                StringView label
+        ) noexcept (false) -> JsonElement & {
+
+            return this->at(label);
+        }
+
+
+        inline auto JsonObject :: operator [] (
+                StringView label
+        ) noexcept (false) -> JsonElement & {
+
+            return this->at(label);
         }
 
 
