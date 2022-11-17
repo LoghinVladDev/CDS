@@ -45,7 +45,7 @@ namespace cds {
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr __BaseStringView (
                         __BaseStringView const & string
-                ) noexcept;
+                ) noexcept = default;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr __BaseStringView (

@@ -255,10 +255,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     Object const & object
             ) const noexcept -> bool override;
 
-        private:
-            template < __hidden :: __impl :: __JsonElementType type >
-            __CDS_NoDiscard constexpr auto is () const noexcept -> bool;
-
         public:
             __CDS_NoDiscard auto getInt () const noexcept (false) -> int;
 
@@ -291,6 +287,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             __CDS_NoDiscard auto getArray () noexcept (false) -> JsonArray &;
+
+        private:
+            template < __hidden :: __impl :: __JsonElementType __type >
+            __CDS_NoDiscard constexpr auto is () const noexcept -> bool         { return this->_type == __type; }
 
         public:
             __CDS_NoDiscard constexpr auto isInt () const noexcept -> bool      { return this->is < __hidden::__impl::__JsonElementType::__jet_Int > (); }

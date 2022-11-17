@@ -16,16 +16,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __BaseStringView < __CharType > :: __BaseStringView (
-                    __BaseStringView const & string
-            ) noexcept :
-                    _pData ( string._pData ),
-                    _length ( string._length ) {
-
-            }
-
-
-            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr __BaseStringView < __CharType > :: __BaseStringView (
                     __BaseStringView && string
             ) noexcept :
                     _pData ( cds :: exchange ( string._pData, nullptr ) ),

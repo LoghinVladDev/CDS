@@ -196,12 +196,12 @@ bool JsonTest::execute() noexcept {
 //        a.put(0, j1);
 //        a.put(2, j3);
 //        a.put(1, j2);
-        a.add(j1);
-        a.add(j3);
-        a.add(j2);
+        a.pushBack(j1);
+        a.pushBack(j3);
+        a.pushBack(j2);
 
 //        a.put(3, JSON().put("b", JSON::Array().put(0, JSON().put("a", 3)).put(1, 4)).put("c", false));
-        a.add( json ::  JsonObject().put("b", json ::  JsonArray().pushBack(json ::  JsonObject().put("a", 3)).pushBack(4)).put("c", false));
+        a.pushBack( json ::  JsonObject().put("b", json ::  JsonArray().pushBack(json ::  JsonObject().put("a", 3)).pushBack(4)).put("c", false));
         j.put("h", a);
 
 

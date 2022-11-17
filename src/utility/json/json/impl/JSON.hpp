@@ -670,7 +670,7 @@ namespace cds {
                 }
 
 
-                auto __dumpIndented (
+                inline auto __dumpIndented (
                         JsonObject  const & object,
                         Size                indent,
                         Size                depth
@@ -693,7 +693,7 @@ namespace cds {
                 }
 
 
-                auto __dumpIndented (
+                inline auto __dumpIndented (
                         JsonArray   const & array,
                         Size                indent,
                         Size                depth
@@ -716,7 +716,7 @@ namespace cds {
                 }
 
 
-                auto __dumpIndented (
+                inline auto __dumpIndented (
                         JsonElement const & object,
                         Size                indent,
                         Size                depth
@@ -732,7 +732,7 @@ namespace cds {
                 }
 
 
-                auto __dumpIndented (
+                inline auto __dumpIndented (
                         MapEntry < String, JsonElement >    const & entry,
                         Size                                        indent,
                         Size                                        depth
@@ -1087,13 +1087,6 @@ namespace cds {
                     reinterpret_cast < void const * > ( pJsonElement->_data._data [0U] ),
                     sizeof ( __GenericData )
             ) == 0;
-        }
-
-
-        template < __hidden :: __impl :: __JsonElementType type >
-        constexpr auto JsonElement :: is () const noexcept -> bool {
-
-            return this->_type == type;
         }
 
 
@@ -1753,7 +1746,7 @@ namespace cds {
             return JsonArray ( asString );
         }
 
-        __CDS_NoDiscard auto dump (
+        __CDS_NoDiscard inline auto dump (
                 JsonObject  const & object,
                 Size                indent
         ) noexcept -> String {
@@ -1761,7 +1754,7 @@ namespace cds {
             return __hidden :: __impl :: __dumpIndented ( object, indent, 0 );
         }
 
-        __CDS_NoDiscard auto dump (
+        __CDS_NoDiscard inline auto dump (
                 JsonArray   const & object,
                 Size                indent
         ) noexcept -> String {
