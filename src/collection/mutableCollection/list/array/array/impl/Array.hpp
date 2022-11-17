@@ -26,10 +26,6 @@ namespace cds {
 
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    constexpr Array < __ElementType > :: Array () noexcept = default;
-
-
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline Array < __ElementType > :: Array (
             Array const & array
     ) noexcept :

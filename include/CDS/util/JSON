@@ -1,2 +1,1 @@
-#warning Deprecated, use CDS/util/JSON
 #include "../../../src/utility/json/JSON.hpp"

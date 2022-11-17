@@ -125,7 +125,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: All, Test Cases: All
                  * @protected
                  */
-                constexpr __ArrayBase () noexcept;
+                constexpr __ArrayBase () noexcept = default;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

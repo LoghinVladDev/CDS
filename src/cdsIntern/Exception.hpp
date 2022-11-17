@@ -44,35 +44,7 @@ namespace cds {
 
         inline ~Exception () override = default;
 
-        __CDS_MaybeUnused inline explicit Exception ( String message ) noexcept :
-                Object (),
-                std :: exception (),
-                _message ( std :: move ( message ) ) {
-
-        }
-
-        __CDS_MaybeUnused inline explicit Exception ( std :: string const & message ) noexcept :
-                Object (),
-                std :: exception (),
-                _message ( message ) {
-
-        }
-
-        __CDS_MaybeUnused inline explicit Exception ( std :: string && message ) noexcept :
-                Object (),
-                std :: exception (),
-                _message ( message ) {
-
-        }
-
-        inline explicit Exception ( StringLiteral message ) noexcept :
-                Object (),
-                std :: exception (),
-                _message ( message ) {
-
-        }
-
-        __CDS_MaybeUnused inline explicit Exception ( CString message ) noexcept :
+        __CDS_MaybeUnused inline explicit Exception ( StringView message ) noexcept :
                 Object (),
                 std :: exception (),
                 _message ( message ) {

@@ -226,7 +226,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this == & function || this->_functionObject == function._functionObject ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -248,7 +248,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this == & function || this->_functionObject == function._functionObject ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -269,7 +269,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this->_functionObject == function ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -293,7 +293,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this->_functionObject == & functor ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {

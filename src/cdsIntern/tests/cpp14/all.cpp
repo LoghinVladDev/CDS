@@ -11,6 +11,7 @@
 #include <CDS/Pair>
 #include <CDS/smartPointers/SharedPointer>
 #include "collection/mutableCollection/list/ListTest.h"
+#include "collection/unordered/JsonTest.h"
 
 int main () {
     auto start = std::chrono::high_resolution_clock::now();
@@ -24,7 +25,8 @@ int main () {
             Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
             Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
             Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
-            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" }
+            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" },
+            Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
     };
 
     for ( auto & t : tests ) {

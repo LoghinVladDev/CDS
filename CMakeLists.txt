@@ -233,6 +233,7 @@ macro(test_set)
     test_suite(${ARGV0} collection/mutableCollection MutableCollection)
     test_suite(${ARGV0} collection/mutableCollection/list List)
     test_suite(${ARGV0} collection/set Set)
+    test_suite(${ARGV0} collection/unordered Json)
 
     add_executable(
             cpp${ARGV0}_test_all

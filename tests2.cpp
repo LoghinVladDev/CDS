@@ -1,24 +1,45 @@
-#include <iostream>
+#include <CDS/LinkedHashMap>
+#include <CDS/HashMap>
+#include <CDS/HashSet>
+#include <CDS/LinkedHashSet>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+#include <CDS/threading/Atomic>
+#include <CDS/threading/Mutex>
+#include <CDS/threading/Lock>
+#include <CDS/threading/Thread>
+#include <CDS/util/JSON>
+#include <mutex>
+#include <thread>
+#include <pthread.h>
+#include <functional>
+#include "src/functional/FunctionalInterface.hpp"
+#include <variant>
 
-#include <CDS/experimental/TreeSet>
-#include <CDS/experimental/TreeMap>
-#include <CDS/experimental/HashMap>
-#include <CDS/experimental/HashSet>
-//#include <CDS/Collection>
+template < typename F >
+auto timed ( cds :: String const & message, F const & block ) {
 
-//#include <string>
+    auto start = std :: chrono :: high_resolution_clock :: now ();
+    block ();
+    auto end = std :: chrono :: high_resolution_clock :: now ();
+    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
 
-int main() {
-//    cds :: experimental :: TreeMap < int, int > t;
-    cds :: experimental :: TreeSet < int > t2 { 1, 2, 3, 4 };
-    cds :: experimental :: TreeSet < int > t3 { 3, 4, 5, 6 };
-//    int const * v = new int ( 6 );
-//    int const * p =  & v[0] ;
-//    t2.removeAllOf ( t3 );
-    cds :: HashSet < int > h2;
-    cds :: HashSet < int > h3;
-    h2.removeAllOf ( h3 );
-//    std :: cout << h << '\n';
-    int x;
-    return 0;
+    std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
+}
+
+int main () {
+
+    using namespace cds;
+    using namespace cds :: json;
+    using namespace cds :: literals;
+
+    JsonObject json;
+    json.put ( "test1", 2 );
+    json.put ( "test2", 4.3f );
+    json.put ( "test3", "test" );
+    json.put ( "test1", "test2"_s );
+    json.at ( "test1" ) = "test2"_s;
+    json.get ( "test3" ) = 5;
+
+    std :: cout << json << '\n';
 }

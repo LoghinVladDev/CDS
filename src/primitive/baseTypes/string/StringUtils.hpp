@@ -75,6 +75,7 @@ namespace cds {
                 constexpr static char       const * const uppercaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZW";
                 constexpr static char       const * const vowels            = "AEIOUaeiou";
                 constexpr static char       const * const consonants        = "BCDFGHJKLMNPQRSTVXYZWbcdfghjklmnpqrstvxyzw";
+                constexpr static char       const * const whitespace        = " \t\n\r\f";
             };
 
             template <>
@@ -86,6 +87,7 @@ namespace cds {
                 constexpr static wchar_t    const * const uppercaseAlphabet = L"ABCDEFGHIJKLMNOPQRSTUVXYZW";
                 constexpr static wchar_t    const * const vowels            = L"AEIOUaeiou";
                 constexpr static wchar_t    const * const consonants        = L"BCDFGHJKLMNPQRSTVXYZWbcdfghjklmnpqrstvxyzw";
+                constexpr static wchar_t    const * const whitespace        = L" \t\n\r\f";
             };
 
         } /* namespace __impl */

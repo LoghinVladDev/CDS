@@ -3,8 +3,8 @@
 // Please report any bugs to github.com/LoghinVladDev/CDS - Issues
 //
 
-#ifndef CDS_PATH_H
-#define CDS_PATH_H
+#ifndef __CDS_PATH_HPP__
+#define __CDS_PATH_HPP__
 
 #include <CDS/Object>
 #include <CDS/LinkedList>
@@ -174,7 +174,7 @@ namespace cds {
             return this->_osPath;
         }
 
-        __CDS_NoDiscard auto hash () const noexcept -> Index override {
+        __CDS_NoDiscard auto hash () const noexcept -> Size override {
             return this->parent().nodeName().hash();
         }
 
@@ -261,8 +261,6 @@ namespace cds {
 
 namespace cds {
 
-    template <> struct isCallableType <Path::WalkEntry> : std :: false_type{};
-
     class Path::WalkEntry : public Object {
     private:
         Path _root {false};
@@ -291,7 +289,7 @@ namespace cds {
         WalkEntry ( WalkEntry const & ) noexcept = default;
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
-            return "WalkEntry {"_s +
+            return StringView ( "WalkEntry {" ) +
                    " root = " + this->_root.toString() +
                    ", directories = " + this->_directories.toString() +
                    ", files = " + this->_files.toString() +
@@ -322,7 +320,7 @@ namespace cds {
             return this->_files;
         }
 
-        __CDS_NoDiscard auto hash () const noexcept -> Index override {
+        __CDS_NoDiscard auto hash () const noexcept -> Size override {
             return this->_root.hash() + this->_directories.hash() + this->_files.hash();
         }
     };
@@ -548,7 +546,9 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseType(Path) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Path) // NOLINT(clion-misra-cpp2008-8-0-1)
+
+#include "../shared/util/JsonLoad.hpp"
 
 
-#endif //CDS_PATH_H
+#endif // __CDS_PATH_HPP__
