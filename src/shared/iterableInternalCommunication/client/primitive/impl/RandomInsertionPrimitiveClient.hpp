@@ -616,8 +616,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                         /* otherwise, copy created data to the received memory address */
                         (void) std :: memcpy (
-                                pElementLocation,
-                                & referenceElementContainer._data[0],
+                                reinterpret_cast < void * > ( pElementLocation ),
+                                reinterpret_cast < void const * > ( & referenceElementContainer._data[0] ),
                                 sizeof ( __ElementType )
                         );
 
