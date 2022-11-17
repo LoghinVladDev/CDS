@@ -5,13 +5,12 @@
 #ifndef __CDS_JSON_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_JSON_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {
-    namespace json {
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace json {            /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-        namespace __hidden {
-            namespace __impl {
-
-                __CDS_NoDiscard __CDS_cpplang_ConstexprMultipleReturn auto __jet_toString (
+                __CDS_NoDiscard __CDS_cpplang_ConstexprMultipleReturn auto __jet_toString ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-non-const-global-variables) */
                         __JsonElementType type
                 ) noexcept -> StringLiteral {
 
@@ -49,7 +48,7 @@ namespace cds {
                 }
 
 
-                auto __parseJsonObject (
+                auto __parseJsonObject (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         StringView      const & string,
                         Size                    offset,
                         Size                    length,
@@ -57,7 +56,7 @@ namespace cds {
                 ) noexcept (false) -> Size;
 
 
-                auto __parseJsonArray (
+                auto __parseJsonArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         StringView      const & string,
                         Size                    offset,
                         Size                    length,
@@ -65,36 +64,36 @@ namespace cds {
                 ) noexcept (false) -> Size;
 
 
-                auto __dumpIndented (
+                auto __dumpIndented (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         JsonObject  const & object,
                         Size                indent,
                         Size                depth
                 ) noexcept -> String;
 
 
-                auto __dumpIndented (
+                auto __dumpIndented (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         JsonArray   const & object,
                         Size                indent,
                         Size                depth
                 ) noexcept -> String;
 
 
-                auto __dumpIndented (
+                auto __dumpIndented (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         JsonElement const & object,
                         Size                indent,
                         Size                depth
                 ) noexcept -> String;
 
 
-                auto __dumpIndented (
+                auto __dumpIndented (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         MapEntry < String, JsonElement >    const & object,
                         Size                                        indent,
                         Size                                        depth
                 ) noexcept -> String;
 
 
-                inline auto __parseJsonObject (
-                        StringView      const & string,
+                inline auto __parseJsonObject (         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-function-cognitive-complexity) */
+                        StringView      const & string, /* NOLINT(*-easily-swappable-parameters) */
                         Size                    offset,
                         Size                    length,
                         json :: JsonObject    & into
@@ -123,7 +122,7 @@ namespace cds {
 
                     /* assume string [0] is right after '{' */
 
-                    for ( Size index = offset; index < length; ++ index ) {
+                    for ( Size index = offset; index < length; ++ index ) { /* NOLINT(*-init-variables) */
 
                         switch ( state ) {
 
@@ -151,7 +150,7 @@ namespace cds {
                                     state = State :: ExpectingLVSeparator;
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; }
+                                    if ( string [index] == 'n' )        { label += '\n'; } /* NOLINT(bugprone-branch-clone) */
                                     else if ( string [index] == 't' )   { label += '\t'; }
                                     else if ( string [index] == 'f' )   { label += '\f'; }
                                     else if ( string [index] == 'r' )   { label += '\r'; }
@@ -182,7 +181,7 @@ namespace cds {
                                 while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
 
                                 if ( string [index] == '{' ) {
-                                    JsonObject object;
+                                    JsonObject object;   /* NOLINT(cppcoreguidelines-init-variables) */
                                     index = __parseJsonObject ( string, index + 1ULL, length, object );
                                     into.emplace ( std :: move ( label ), std :: move ( object ) );
                                     state = State :: ExpectingPSeparator;
@@ -190,7 +189,7 @@ namespace cds {
                                 }
 
                                 if ( string [index] == '[' ) {
-                                    JsonArray array;
+                                    JsonArray array;    /* NOLINT(cppcoreguidelines-init-variables) */
                                     index = __parseJsonArray ( string, index + 1ULL, length, array );
                                     into.emplace ( std :: move ( label ), std :: move ( array ) );
                                     state = State :: ExpectingPSeparator;
@@ -220,7 +219,7 @@ namespace cds {
                                     into.emplace ( std :: move ( label ), std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; }
+                                    if ( string [index] == 'n' )        { label += '\n'; } /* NOLINT(bugprone-branch-clone) */
                                     else if ( string [index] == 't' )   { label += '\t'; }
                                     else if ( string [index] == 'f' )   { label += '\f'; }
                                     else if ( string [index] == 'r' )   { label += '\r'; }
@@ -291,7 +290,7 @@ namespace cds {
                                     break;
                                 }
 
-                                if ( index + 5 >= length ) { throw JsonFormatException ( "false", "t/f/T/F", "Unexpected end of String" ); }
+                                if ( index + 5 >= length ) { throw JsonFormatException ( "false", "t/f/T/F", "Unexpected end of String" ); } /* NOLINT(*-magic-numbers) */
 
                                 if (
                                         ( string [ index ] == 'F' ||
@@ -306,7 +305,7 @@ namespace cds {
                                     break;
                                 }
 
-                                throw JsonFormatException ( "true/false", "t/f/T/F", string.substr(index, index + 5) + " does not represent any bool value" );
+                                throw JsonFormatException ( "true/false", "t/f/T/F", string.substr(index, index + 5) + " does not represent any bool value" );  /* NOLINT(*-magic-numbers) */
                             }
 
                             case State :: ReadingBase2: {
@@ -408,8 +407,8 @@ namespace cds {
                 }
 
 
-                inline auto __parseJsonArray (
-                        StringView      const & string,
+                inline auto __parseJsonArray (          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-function-cognitive-complexity) */
+                        StringView      const & string, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                    offset,
                         Size                    length,
                         json :: JsonArray     & into
@@ -430,12 +429,12 @@ namespace cds {
                     State   state           = State :: ReadingValue;
                     bool    readBackslash   = false;
                     bool    readFloat       = false;
-                    String  label;
-                    String  stringData;
+                    String  label;      /* NOLINT(cppcoreguidelines-init-variables) */
+                    String  stringData; /* NOLINT(cppcoreguidelines-init-variables) */
 
                     /* assume string [offset] is right after '[' */
 
-                    for ( Size index = offset; index < length; ++ index ) {
+                    for ( Size index = offset; index < length; ++ index ) { /* NOLINT(cppcoreguidelines-init-variables) */
 
                         switch ( state ) {
 
@@ -447,7 +446,7 @@ namespace cds {
                                 if ( string [index] == ']' ) { return index - 1; }
 
                                 if ( string [index] == '{' ) {
-                                    JsonObject object;
+                                    JsonObject object;  /* NOLINT(cppcoreguidelines-init-variables) */
                                     index = __parseJsonObject ( string, index + 1ULL, length, object );
                                     into.pushBack ( std :: move ( object ) );
                                     state = State :: ExpectingPSeparator;
@@ -455,7 +454,7 @@ namespace cds {
                                 }
 
                                 if ( string [index] == '[' ) {
-                                    JsonArray array;
+                                    JsonArray array;    /* NOLINT(cppcoreguidelines-init-variables) */
                                     index = __parseJsonArray ( string, index + 1ULL, length, array );
                                     into.pushBack ( std :: move ( array ) );
                                     state = State :: ExpectingPSeparator;
@@ -556,7 +555,7 @@ namespace cds {
                                     break;
                                 }
 
-                                if ( index + 5 >= length ) { throw JsonFormatException ( "false", "t/f/T/F", "Unexpected end of String" ); }
+                                if ( index + 5 >= length ) { throw JsonFormatException ( "false", "t/f/T/F", "Unexpected end of String" ); } /* NOLINT(*-magic-numbers) */
 
                                 if (
                                         ( string [ index ] == 'F' ||
@@ -571,7 +570,7 @@ namespace cds {
                                     break;
                                 }
 
-                                throw JsonFormatException ( "true/false", "t/f/T/F", string.substr(index, index + 5) + " does not represent any bool value" );
+                                throw JsonFormatException ( "true/false", "t/f/T/F", string.substr(index, index + 5) + " does not represent any bool value" );  /* NOLINT(*-magic-numbers) */
                             }
 
                             case State :: ReadingBase2: {
@@ -670,17 +669,17 @@ namespace cds {
                 }
 
 
-                inline auto __dumpIndented (
-                        JsonObject  const & object,
+                inline auto __dumpIndented (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        JsonObject  const & object, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                indent,
                         Size                depth
                 ) noexcept -> String {
 
                     using namespace cds :: literals;
-                    String const indentation        = " "_s * (indent * depth);
-                    String const futureIndentation  = indentation + " "_s * indent;
+                    String const indentation        = " "_s * (indent * depth);     /* NOLINT(cppcoreguidelines-init-variables) */
+                    String const futureIndentation  = indentation + " "_s * indent; /* NOLINT(cppcoreguidelines-init-variables) */
 
-                    String result = "{\n";
+                    String result = "{\n";                                          /* NOLINT(cppcoreguidelines-init-variables) */
                     for ( auto const & element : object ) {
                         result += futureIndentation + __dumpIndented ( element, indent, depth + 1 ) + ",\n";
                     }
@@ -693,17 +692,17 @@ namespace cds {
                 }
 
 
-                inline auto __dumpIndented (
-                        JsonArray   const & array,
+                inline auto __dumpIndented (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        JsonArray   const & array,  /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                indent,
                         Size                depth
                 ) noexcept -> String {
 
                     using namespace cds :: literals;
-                    String const indentation        = " "_s * (indent * depth);
-                    String const futureIndentation  = indentation + " "_s * indent;
+                    String const indentation        = " "_s * (indent * depth);     /* NOLINT(cppcoreguidelines-init-variables) */
+                    String const futureIndentation  = indentation + " "_s * indent; /* NOLINT(cppcoreguidelines-init-variables) */
 
-                    String result = "[\n";
+                    String result = "[\n";                                          /* NOLINT(cppcoreguidelines-init-variables) */
                     for ( auto const & element : array ) {
                         result += futureIndentation + __dumpIndented ( element, indent, depth + 1 ) + ",\n";
                     }
@@ -716,13 +715,13 @@ namespace cds {
                 }
 
 
-                inline auto __dumpIndented (
-                        JsonElement const & object,
+                inline auto __dumpIndented (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        JsonElement const & object, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                indent,
                         Size                depth
                 ) noexcept -> String {
 
-                    if ( object.isJson () ) {
+                    if ( object.isJson () ) { /* NOLINT(bugprone-branch-clone) */
                         return __dumpIndented ( object.getJson(), indent, depth );
                     } else if ( object.isArray() ) {
                         return __dumpIndented ( object.getArray(), indent, depth );
@@ -732,16 +731,16 @@ namespace cds {
                 }
 
 
-                inline auto __dumpIndented (
-                        MapEntry < String, JsonElement >    const & entry,
+                inline auto __dumpIndented (                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        MapEntry < String, JsonElement >    const & entry,  /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                                        indent,
                         Size                                        depth
                 ) noexcept -> String {
 
                     using namespace cds :: literals;
-                    String common = R"(")" + entry.key() + "\" : ";
+                    String common = R"(")" + entry.key() + "\" : "; /* NOLINT(cppcoreguidelines-init-variables) */
 
-                    if ( entry.value().isJson () ) {
+                    if ( entry.value().isJson () ) { /* NOLINT(bugprone-branch-clone) */
                         return common + "\n" + (" "_s * ( indent * ( depth ) )) +
                                __dumpIndented ( entry.value().getJson(), indent, depth );
                     } else if ( entry.value().isArray() ) {
@@ -752,8 +751,8 @@ namespace cds {
                     }
                 }
 
-            }
-        }
+            } /* namespace __impl */
+        } /* namespace __hidden */
 
         inline auto JsonElement :: copyData (
                 __GenericData const & data
@@ -880,26 +879,12 @@ namespace cds {
                 typename __ElementType,
                 cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value >
         > inline JsonElement :: JsonElement (
-                __ElementType const & value
-        ) noexcept :
-                _type ( __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type ) {
-
-            this->_data.data().pObject = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
-                    value
-            );
-        }
-
-
-        template <
-                typename __ElementType,
-                cds :: meta :: EnableIf < __hidden :: __impl :: __JsonElementAdaptable < __ElementType > :: __value >
-        > inline JsonElement :: JsonElement (
                 __ElementType && value
         ) noexcept :
                 _type ( __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type ) {
 
             this->_data.data().pObject = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
-                    std :: move ( value )
+                    cds :: forward < __ElementType > ( value )
             );
         }
 
@@ -1273,7 +1258,7 @@ namespace cds {
 
         inline JsonObject :: JsonObject (
                 StringView asString
-        ) noexcept {
+        ) noexcept (false) {
 
             for ( Size index = 0ULL; index < asString.length(); ++ index ) {
                 if ( asString [index] == '{' ) {
@@ -1564,7 +1549,7 @@ namespace cds {
 
         inline JsonArray :: JsonArray (
                 StringView asString
-        ) noexcept {
+        ) noexcept (false) {
 
             for ( Size index = 0ULL; index < asString.length(); ++ index ) {
                 if ( asString [index] == '[' ) {
@@ -1785,7 +1770,7 @@ namespace cds {
             return asString;
         }
 
-    }
-}
+    } /* namespace json */
+} /* namespace cds */
 
 #endif /* __CDS_JSON_HPP__ */
