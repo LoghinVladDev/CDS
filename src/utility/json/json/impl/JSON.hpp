@@ -1226,27 +1226,27 @@ namespace cds {
 
 
         inline auto JsonObject :: operator = (
-                JsonObject const & json
+                JsonObject const & object
         ) noexcept -> JsonObject & {
 
-            if ( this == & json ) {
+            if ( this == & object ) {
                 return * this;
             }
 
-            this->__Base :: operator = ( static_cast < __Base const & > ( json ) );
+            this->__Base :: operator = ( static_cast < __Base const & > ( object ) );
             return * this;
         }
 
 
         inline auto JsonObject :: operator = (
-                JsonObject && json
+                JsonObject && object
         ) noexcept -> JsonObject & {
 
-            if ( this == & json ) {
+            if ( this == & object ) {
                 return * this;
             }
 
-            this->__Base :: operator = ( static_cast < __Base && > ( std :: move ( json ) ) );
+            this->__Base :: operator = ( static_cast < __Base && > ( std :: move ( object ) ) );
             return * this;
         }
 
@@ -1270,7 +1270,378 @@ namespace cds {
                 __ElementType    && value
         ) noexcept -> JsonObject & {
 
-            this->emplace ( label, std :: forward < __ElementType > ( value ) );
+            (void) this->emplace ( label, std :: forward < __ElementType > ( value ) );
+            return * this;
+        }
+
+
+        inline auto JsonObject :: getInt (
+                StringView label
+        ) const noexcept (false) -> int {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getInt();
+        }
+
+
+        inline auto JsonObject :: getLong (
+                StringView label
+        ) const noexcept (false) -> long long int {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getLong();
+        }
+
+
+        inline auto JsonObject :: getFloat (
+                StringView label
+        ) const noexcept (false) -> float {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getFloat();
+        }
+
+
+        inline auto JsonObject :: getDouble (
+                StringView label
+        ) const noexcept (false) -> double {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getDouble();
+        }
+
+
+        inline auto JsonObject :: getBoolean (
+                StringView label
+        ) const noexcept (false) -> bool {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getBoolean();
+        }
+
+
+        inline auto JsonObject :: getString (
+                StringView label
+        ) const noexcept (false) -> String const & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getString();
+        }
+
+
+        inline auto JsonObject :: getArray (
+                StringView label
+        ) const noexcept (false) -> JsonArray const & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getArray();
+        }
+
+
+        inline auto JsonObject :: getJson (
+                StringView label
+        ) const noexcept (false) -> JsonObject const & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getJson();
+        }
+
+
+        inline auto JsonObject :: getString (
+                StringView label
+        ) noexcept (false) -> String & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getString();
+        }
+
+
+        inline auto JsonObject :: getArray (
+                StringView label
+        ) noexcept (false) -> JsonArray & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getArray();
+        }
+
+
+        inline auto JsonObject :: getJson (
+                StringView label
+        ) noexcept (false) -> JsonObject & {
+
+            auto elementIterator = this->findFirstThat ( [label]( MapEntry <String, JsonElement> const & entry ) {
+                return entry.key() == label;
+            });
+
+            if ( elementIterator == this->end() ) {
+                throw KeyException ( label );
+            }
+
+            return elementIterator->value().getJson();
+        }
+
+
+        inline JsonArray :: JsonArray (
+                JsonArray const & array
+        ) noexcept :
+                __Base ( static_cast < __Base const & > ( array ) ) {
+
+        }
+
+
+        constexpr JsonArray :: JsonArray (
+                JsonArray && array
+        ) noexcept :
+                __Base ( static_cast < __Base && > ( std :: move ( array ) ) ) {
+
+        }
+
+
+        inline JsonArray :: JsonArray (
+                List < JsonElement > const & list
+        ) noexcept :
+                __Base ( list ) {
+
+        }
+
+
+        inline JsonArray :: JsonArray (
+                String const & asString
+        ) noexcept {
+
+            StringView view = asString;
+            for ( Size index = 0ULL; index < view.length(); ++ index ) {
+                if ( view [index] == '[' ) {
+                    __hidden :: __impl :: __parseJsonArray (
+                            view,
+                            index + 1ULL,
+                            view.length(),
+                            * this
+                    );
+
+                    break;
+                }
+            }
+        }
+
+
+        inline JsonArray :: ~JsonArray () noexcept = default;
+
+
+        inline auto JsonArray :: operator = (
+                JsonArray const & array
+        ) noexcept -> JsonArray & {
+
+            if ( this == & array ) {
+                return * this;
+            }
+
+            this->__Base :: operator = ( static_cast < __Base const & > ( array ) );
+            return * this;
+        }
+
+
+        inline auto JsonArray :: operator = (
+                JsonArray && array
+        ) noexcept -> JsonArray & {
+
+            if ( this == & array ) {
+                return * this;
+            }
+
+            this->__Base :: operator = ( static_cast < __Base && > ( std :: move ( array ) ) );
+            return * this;
+        }
+
+
+        inline auto JsonArray :: operator = (
+                List < JsonElement > const & list
+        ) noexcept -> JsonArray & {
+
+            if ( this == & list ) {
+                return * this;
+            }
+
+            this->__Base :: operator = ( list );
+            return * this;
+        }
+
+
+        template < typename __ElementType >
+        inline auto JsonArray :: pushBack (
+                __ElementType    && value
+        ) noexcept -> JsonArray & {
+
+            (void) this->emplaceBack ( std :: forward < __ElementType > ( value ) );
+            return * this;
+        }
+
+
+        template < typename __ElementType >
+        inline auto JsonArray :: pushFront (
+                __ElementType    && value
+        ) noexcept -> JsonArray & {
+
+            (void) this->emplaceFront ( std :: forward < __ElementType > ( value ) );
+            return * this;
+        }
+
+
+        inline auto JsonArray :: getInt (
+                Index index
+        ) const noexcept (false) -> int {
+
+            return this->get (index).getInt ();
+        }
+
+
+        inline auto JsonArray :: getLong (
+                Index index
+        ) const noexcept (false) -> long long int {
+
+            return this->get (index).getLong ();
+        }
+
+
+        inline auto JsonArray :: getFloat (
+                Index index
+        ) const noexcept (false) -> float {
+
+            return this->get (index).getFloat ();
+        }
+
+
+        inline auto JsonArray :: getDouble (
+                Index index
+        ) const noexcept (false) -> double {
+
+            return this->get (index).getDouble ();
+        }
+
+
+        inline auto JsonArray :: getBoolean (
+                Index index
+        ) const noexcept (false) -> bool {
+
+            return this->get (index).getBoolean ();
+        }
+
+
+        inline auto JsonArray :: getString (
+                Index index
+        ) const noexcept (false) -> String const & {
+
+            return this->get (index).getString ();
+        }
+
+
+        inline auto JsonArray :: getArray (
+                Index index
+        ) const noexcept (false) -> JsonArray const & {
+
+            return this->get (index).getArray ();
+        }
+
+
+        inline auto JsonArray :: getJson (
+                Index index
+        ) const noexcept (false) -> JsonObject const & {
+
+            return this->get (index).getJson ();
+        }
+
+
+        inline auto JsonArray :: getString (
+                Index index
+        ) noexcept (false) -> String & {
+
+            return this->get (index).getString ();
+        }
+
+
+        inline auto JsonArray :: getArray (
+                Index index
+        ) noexcept (false) -> JsonArray & {
+
+            return this->get (index).getArray ();
+        }
+
+
+        inline auto JsonArray :: getJson (
+                Index index
+        ) noexcept (false) -> JsonObject & {
+
+            return this->get (index).getJson ();
         }
 
     }

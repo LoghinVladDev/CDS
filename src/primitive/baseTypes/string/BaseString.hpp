@@ -54,14 +54,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 friend class __BaseStringView < __CharType >;
 
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                ElementType       * _pBuffer        { nullptr };
+            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+                ElementType       * _pBuffer        { nullptr };    /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                Size                _length         { 0ULL };
+            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+                Size                _length         { 0ULL };       /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                Size                _capacity       { 0ULL };
+            protected:                                              /* NOLINT(readability-redundant-access-specifiers) */
+                Size                _capacity       { 0ULL };       /* NOLINT(cppcoreguidelines-non-private-member-variables-in-classes) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 static Size const   minCapacity;

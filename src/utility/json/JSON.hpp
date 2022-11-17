@@ -366,23 +366,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType    && value
             ) noexcept -> JsonObject &;
 
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getPrimitive (
+        public:
+            __CDS_NoDiscard auto getBoolean (
                     StringView label
-            ) const noexcept (false) -> __ElementType;
-
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getComposite (
-                    StringView label
-            ) const noexcept (false) -> __ElementType const &;
-
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getComposite (
-                    StringView label
-            ) noexcept (false) -> __ElementType &;
+            ) const noexcept (false) -> bool;
 
         public:
             __CDS_NoDiscard auto getInt (
@@ -433,38 +420,30 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard auto getJson (
                     StringView label
             ) noexcept (false) -> JsonObject &;
-
-        public:
-            __CDS_NoDiscard auto toString () const noexcept -> String override;
-
-        public:
-            __CDS_NoDiscard auto hash () const noexcept -> Size override;
-
-        public:
-            __CDS_NoDiscard auto equals (
-                    Object const & object
-            ) const noexcept -> bool override;
         };
 
 
         class JsonArray : public __hidden :: __impl :: __JsonArrayImplementation {
+
+        private:
+            using __Base = __hidden :: __impl :: __JsonArrayImplementation;
 
         public:
             constexpr JsonArray () noexcept;
 
         public:
             JsonArray (
-                    JsonArray const & object
+                    JsonArray const & array
             ) noexcept;
 
         public:
             constexpr JsonArray (
-                    JsonArray && object
+                    JsonArray && array
             ) noexcept;
 
         public:
             JsonArray (
-                    List < JsonElement > const & map
+                    List < JsonElement > const & list
             ) noexcept;
 
         public:
@@ -487,7 +466,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             auto operator = (
-                    List < JsonElement > const & map
+                    List < JsonElement > const & list
             ) noexcept -> JsonArray &;
 
         public:
@@ -501,24 +480,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             auto pushFront (
                     __ElementType && value
             ) noexcept -> JsonArray &;
-
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getPrimitive (
-                    Index index
-            ) const noexcept (false) -> __ElementType;
-
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getComposite (
-                    Index index
-            ) const noexcept (false) -> __ElementType const &;
-
-        private:
-            template < typename __ElementType >
-            __CDS_NoDiscard auto getComposite (
-                    Index index
-            ) noexcept (false) -> __ElementType &;
 
         public:
             __CDS_NoDiscard auto getInt (
@@ -569,17 +530,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard auto getJson (
                     Index index
             ) noexcept (false) -> JsonObject &;
-
-        public:
-            __CDS_NoDiscard auto toString () const noexcept -> String override;
-
-        public:
-            __CDS_NoDiscard auto hash () const noexcept -> Size override;
-
-        public:
-            __CDS_NoDiscard auto equals (
-                    Object const & object
-            ) const noexcept -> bool override;
         };
 
         __CDS_NoDiscard auto parseJson ( StringView asString ) noexcept (false) -> JsonObject;
