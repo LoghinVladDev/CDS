@@ -11,6 +11,9 @@
 #include <CDS/smartPointers/UniquePointer>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
+
+    class Path;
+
     namespace json {
 
         class JsonElement;
@@ -290,28 +293,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard auto getArray () noexcept (false) -> JsonArray &;
 
         public:
-            __CDS_NoDiscard constexpr auto isInt () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isInt () const noexcept -> bool      { return this->is < __hidden::__impl::__JsonElementType::__jet_Int > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isLong () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isLong () const noexcept -> bool     { return this->is < __hidden::__impl::__JsonElementType::__jet_Long > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isFloat () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isFloat () const noexcept -> bool    { return this->is < __hidden::__impl::__JsonElementType::__jet_Float > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isDouble () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isDouble () const noexcept -> bool   { return this->is < __hidden::__impl::__JsonElementType::__jet_Double > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isBoolean () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isBoolean () const noexcept -> bool  { return this->is < __hidden::__impl::__JsonElementType::__jet_Bool > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isString () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isString () const noexcept -> bool   { return this->is < __hidden::__impl::__JsonElementType::__jet_String > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isJson () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isJson () const noexcept -> bool     { return this->is < __hidden::__impl::__JsonElementType::__jet_Object > (); }
 
         public:
-            __CDS_NoDiscard constexpr auto isArray () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto isArray () const noexcept -> bool    { return this->is < __hidden::__impl::__JsonElementType::__jet_Array > (); }
         };
 
 
@@ -340,7 +343,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             JsonObject (
-                    String const & asString
+                    StringView asString
             ) noexcept;
 
         public:
@@ -432,6 +435,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_NoDiscard auto getJson (
                     StringView label
             ) noexcept (false) -> JsonObject &;
+
+        public:
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
         };
 
 
@@ -460,7 +466,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         public:
             JsonArray (
-                    String const & asString
+                    StringView asString
             ) noexcept;
 
         public:
@@ -549,8 +555,31 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept (false) -> JsonObject &;
         };
 
-        __CDS_NoDiscard auto parseJson ( StringView asString ) noexcept (false) -> JsonObject;
-        __CDS_NoDiscard auto parseJsonArray ( StringView asString ) noexcept (false) -> JsonArray;
+        __CDS_NoDiscard auto parseJson (
+                StringView asString
+        ) noexcept (false) -> JsonObject;
+
+        __CDS_NoDiscard auto parseJsonArray (
+                StringView asString
+        ) noexcept (false) -> JsonArray;
+
+        __CDS_NoDiscard auto dump (
+                JsonObject  const & object,
+                Size                indent = 4U
+        ) noexcept -> String;
+
+        __CDS_NoDiscard auto dump (
+                JsonArray   const & object,
+                Size                indent = 4U
+        ) noexcept -> String;
+
+        __CDS_NoDiscard auto loadJson (
+                Path const & path
+        ) noexcept (false) -> JsonObject;
+
+        __CDS_NoDiscard auto loadJsonArray (
+                Path const & path
+        ) noexcept (false) -> JsonArray;
 
         class JsonFormatException : public FormatException {
 
@@ -613,5 +642,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 }
 
 #include "json/impl/JSON.hpp"
+#include "../../shared/util/JsonLoad.hpp"
 
 #endif /* __CDS_JSON_HPP__ */

@@ -839,7 +839,7 @@ namespace cds {
 
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        constexpr Array () noexcept;
+        constexpr Array () noexcept = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         Array ( /* NOLINT(google-explicit-constructor) */

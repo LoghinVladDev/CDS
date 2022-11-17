@@ -40,6 +40,7 @@ namespace cds {
                             return "double";
                         }
 
+                        default:
                         case __JsonElementType :: __jet_Invalid: {
                             return "invalid";
                         }
@@ -62,6 +63,34 @@ namespace cds {
                         Size                    length,
                         json :: JsonArray     & into
                 ) noexcept (false) -> Size;
+
+
+                auto __dumpIndented (
+                        JsonObject  const & object,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String;
+
+
+                auto __dumpIndented (
+                        JsonArray   const & object,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String;
+
+
+                auto __dumpIndented (
+                        JsonElement const & object,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String;
+
+
+                auto __dumpIndented (
+                        MapEntry < String, JsonElement >    const & object,
+                        Size                                        indent,
+                        Size                                        depth
+                ) noexcept -> String;
 
 
                 inline auto __parseJsonObject (
@@ -154,16 +183,16 @@ namespace cds {
 
                                 if ( string [index] == '{' ) {
                                     JsonObject object;
-                                    index = __parseJsonObject ( string, index + 1ULL, length - index - 1ULL, object );
-                                    into.put ( std :: move ( label ), std :: move ( object ) );
+                                    index = __parseJsonObject ( string, index + 1ULL, length, object );
+                                    into.emplace ( std :: move ( label ), std :: move ( object ) );
                                     state = State :: ExpectingPSeparator;
                                     break;
                                 }
 
                                 if ( string [index] == '[' ) {
                                     JsonArray array;
-                                    index = __parseJsonArray ( string, index + 1ULL, length - index - 1ULL, array );
-                                    into.put ( std :: move ( label ), std :: move ( array ) );
+                                    index = __parseJsonArray ( string, index + 1ULL, length, array );
+                                    into.emplace ( std :: move ( label ), std :: move ( array ) );
                                     state = State :: ExpectingPSeparator;
                                     break;
                                 }
@@ -188,7 +217,7 @@ namespace cds {
 
                                 if ( ! readBackslash && string [index] == '"' ) {
                                     state = State :: ExpectingPSeparator;
-                                    into.put ( std :: move ( label ), std :: move ( stringData ) );
+                                    into.emplace ( std :: move ( label ), std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
                                     if ( string [index] == 'n' )        { label += '\n'; }
@@ -257,7 +286,7 @@ namespace cds {
                                         string [ index + 2 ] == 'u' &&
                                         string [ index + 3 ] == 'e'
                                 ) {
-                                    into.put ( std :: move ( label ), true );
+                                    into.emplace ( std :: move ( label ), true );
                                     state = State :: ExpectingPSeparator;
                                     break;
                                 }
@@ -272,7 +301,7 @@ namespace cds {
                                         string [ index + 3 ] == 's' &&
                                         string [ index + 4 ] == 'e'
                                 ) {
-                                    into.put ( std :: move ( label ), false );
+                                    into.emplace ( std :: move ( label ), false );
                                     state = State :: ExpectingPSeparator;
                                     break;
                                 }
@@ -286,7 +315,7 @@ namespace cds {
                                     stringData += string [index ++];
                                 }
 
-                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 2 ) );
+                                into.emplace ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 2 ) );
                                 stringData.clear();
                                 state = State :: ExpectingPSeparator;
                                 break;
@@ -298,7 +327,7 @@ namespace cds {
                                     stringData += string [index ++];
                                 }
 
-                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 8 ) );
+                                into.emplace ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 8 ) );
                                 stringData.clear();
                                 state = State :: ExpectingPSeparator;
                                 break;
@@ -314,7 +343,7 @@ namespace cds {
                                     stringData += string [index ++];
                                 }
 
-                                into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 16 ) );
+                                into.emplace ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 16 ) );
                                 stringData.clear();
                                 state = State :: ExpectingPSeparator;
                                 break;
@@ -331,10 +360,10 @@ namespace cds {
                                 }
 
                                 if ( readFloat ) {
-                                    into.put ( std :: move ( label ), std :: strtod ( stringData.cStr(), nullptr ) );
+                                    into.emplace ( std :: move ( label ), std :: strtod ( stringData.cStr(), nullptr ) );
                                     readFloat = false;
                                 } else {
-                                    into.put ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 10 ) );
+                                    into.emplace ( std :: move ( label ), std :: strtoll ( stringData.cStr(), nullptr, 10 ) );
                                 }
 
                                 stringData.clear();
@@ -361,7 +390,7 @@ namespace cds {
 
                     switch ( state ) {
                         case State::ExpectingLabel:             throw JsonFormatException ("label", "','", "Unexpected End of String");
-                        case State::ReadingLabel:               throw JsonFormatException ("\"", "\"", "Unexpected End of String");
+                        case State::ReadingLabel:               throw JsonFormatException ("\"", "label", "Unexpected End of String");
                         case State::ExpectingLVSeparator:       throw JsonFormatException ("':'", "label", "Unexpected End of String");
                         case State::ReadingValue:               throw JsonFormatException ("value", "':'", "Unexpected End of String");
                         case State::ReadingStringValue:         throw JsonFormatException ("string value", "\"", "Unexpected End of String");
@@ -419,7 +448,7 @@ namespace cds {
 
                                 if ( string [index] == '{' ) {
                                     JsonObject object;
-                                    index = __parseJsonObject ( string, index + 1ULL, length - index - 1ULL, object );
+                                    index = __parseJsonObject ( string, index + 1ULL, length, object );
                                     into.pushBack ( std :: move ( object ) );
                                     state = State :: ExpectingPSeparator;
                                     break;
@@ -427,7 +456,7 @@ namespace cds {
 
                                 if ( string [index] == '[' ) {
                                     JsonArray array;
-                                    index = __parseJsonArray ( string, index + 1ULL, length - index - 1ULL, array );
+                                    index = __parseJsonArray ( string, index + 1ULL, length, array );
                                     into.pushBack ( std :: move ( array ) );
                                     state = State :: ExpectingPSeparator;
                                     break;
@@ -640,6 +669,89 @@ namespace cds {
                     return length;
                 }
 
+
+                auto __dumpIndented (
+                        JsonObject  const & object,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String {
+
+                    using namespace cds :: literals;
+                    String const indentation        = " "_s * (indent * depth);
+                    String const futureIndentation  = indentation + " "_s * indent;
+
+                    String result = "{\n";
+                    for ( auto const & element : object ) {
+                        result += futureIndentation + __dumpIndented ( element, indent, depth + 1 ) + ",\n";
+                    }
+
+                    if ( object.empty () ) {
+                        return "{}";
+                    }
+
+                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "}";
+                }
+
+
+                auto __dumpIndented (
+                        JsonArray   const & array,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String {
+
+                    using namespace cds :: literals;
+                    String const indentation        = " "_s * (indent * depth);
+                    String const futureIndentation  = indentation + " "_s * indent;
+
+                    String result = "[\n";
+                    for ( auto const & element : array ) {
+                        result += futureIndentation + __dumpIndented ( element, indent, depth + 1 ) + ",\n";
+                    }
+
+                    if ( array.empty () ) {
+                        return "[]";
+                    }
+
+                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "]";
+                }
+
+
+                auto __dumpIndented (
+                        JsonElement const & object,
+                        Size                indent,
+                        Size                depth
+                ) noexcept -> String {
+
+                    if ( object.isJson () ) {
+                        return __dumpIndented ( object.getJson(), indent, depth );
+                    } else if ( object.isArray() ) {
+                        return __dumpIndented ( object.getArray(), indent, depth );
+                    } else {
+                        return object.toString ();
+                    }
+                }
+
+
+                auto __dumpIndented (
+                        MapEntry < String, JsonElement >    const & entry,
+                        Size                                        indent,
+                        Size                                        depth
+                ) noexcept -> String {
+
+                    using namespace cds :: literals;
+                    String common = R"(")" + entry.key() + "\" : ";
+
+                    if ( entry.value().isJson () ) {
+                        return common + "\n" + (" "_s * ( indent * ( depth ) )) +
+                               __dumpIndented ( entry.value().getJson(), indent, depth );
+                    } else if ( entry.value().isArray() ) {
+                        return common + "\n" + (" "_s * ( indent * ( depth ) )) +
+                               __dumpIndented ( entry.value().getArray(), indent, depth );
+                    } else {
+                        return common + entry.value().toString ();
+                    }
+                }
+
             }
         }
 
@@ -772,7 +884,7 @@ namespace cds {
         ) noexcept :
                 _type ( __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type ) {
 
-            this->_data.data().pObject = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_data.data().pObject = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     value
             );
         }
@@ -786,7 +898,7 @@ namespace cds {
         ) noexcept :
                 _type ( __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type ) {
 
-            this->_data.data().pObject = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_data.data().pObject = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     std :: move ( value )
             );
         }
@@ -840,7 +952,7 @@ namespace cds {
             this->clearData();
 
             this->_type = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
-            * reinterpret_cast < __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType * > (
+            * reinterpret_cast < typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType * > (
                     & this->_data._data [0U]
             ) = value;
 
@@ -858,7 +970,7 @@ namespace cds {
             this->clearData();
 
             this->_type                 = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
-            this->_data.data().pObject  = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_data.data().pObject  = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     value
             );
 
@@ -876,7 +988,7 @@ namespace cds {
             this->clearData();
 
             this->_type                 = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
-            this->_data.data().pObject  = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_data.data().pObject  = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     std :: move ( value )
             );
 
@@ -982,54 +1094,6 @@ namespace cds {
         constexpr auto JsonElement :: is () const noexcept -> bool {
 
             return this->_type == type;
-        }
-
-
-        constexpr auto JsonElement :: isInt () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Int > ();
-        }
-
-
-        constexpr auto JsonElement :: isLong () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Long > ();
-        }
-
-
-        constexpr auto JsonElement :: isFloat () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Float > ();
-        }
-
-
-        constexpr auto JsonElement :: isDouble () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Double > ();
-        }
-
-
-        constexpr auto JsonElement :: isBoolean () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Bool > ();
-        }
-
-
-        constexpr auto JsonElement :: isString () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_String > ();
-        }
-
-
-        constexpr auto JsonElement :: isJson () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Object > ();
-        }
-
-
-        constexpr auto JsonElement :: isArray () const noexcept -> bool {
-
-            return this->is < __hidden :: __impl :: __JsonElementType :: __jet_Array > ();
         }
 
 
@@ -1215,16 +1279,15 @@ namespace cds {
 
 
         inline JsonObject :: JsonObject (
-                String const & asString
+                StringView asString
         ) noexcept {
 
-            StringView view = asString;
-            for ( Size index = 0ULL; index < view.length(); ++ index ) {
-                if ( view [index] == '{' ) {
+            for ( Size index = 0ULL; index < asString.length(); ++ index ) {
+                if ( asString [index] == '{' ) {
                     __hidden :: __impl :: __parseJsonObject (
-                            view,
+                            asString,
                             index + 1ULL,
-                            view.length(),
+                            asString.length(),
                             * this
                     );
 
@@ -1507,16 +1570,15 @@ namespace cds {
 
 
         inline JsonArray :: JsonArray (
-                String const & asString
+                StringView asString
         ) noexcept {
 
-            StringView view = asString;
-            for ( Size index = 0ULL; index < view.length(); ++ index ) {
-                if ( view [index] == '[' ) {
+            for ( Size index = 0ULL; index < asString.length(); ++ index ) {
+                if ( asString [index] == '[' ) {
                     __hidden :: __impl :: __parseJsonArray (
-                            view,
+                            asString,
                             index + 1ULL,
-                            view.length(),
+                            asString.length(),
                             * this
                     );
 
@@ -1673,6 +1735,61 @@ namespace cds {
         ) noexcept (false) -> JsonObject & {
 
             return this->get (index).getJson ();
+        }
+
+
+        inline auto parseJson (
+                StringView asString
+        ) noexcept (false) -> JsonObject {
+
+            return JsonObject ( asString );
+        }
+
+
+        inline auto parseJsonArray (
+                StringView asString
+        ) noexcept (false) -> JsonArray {
+
+            return JsonArray ( asString );
+        }
+
+        __CDS_NoDiscard auto dump (
+                JsonObject  const & object,
+                Size                indent
+        ) noexcept -> String {
+
+            return __hidden :: __impl :: __dumpIndented ( object, indent, 0 );
+        }
+
+        __CDS_NoDiscard auto dump (
+                JsonArray   const & object,
+                Size                indent
+        ) noexcept -> String {
+
+            return __hidden :: __impl :: __dumpIndented ( object, indent, 0 );
+        }
+
+
+        inline auto JsonObject :: toString () const noexcept -> String {
+
+            if ( this->empty() ) {
+                return "{}";
+            }
+
+            std :: stringstream oss;
+            oss << "{ ";
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                cds :: meta :: print ( cds :: meta :: print ( oss << '"', ( * iterator ).key() ) <<
+                        "\": ", ( * iterator ).value() ) << ", ";
+            }
+
+            auto asString = oss.str();
+
+            asString [ asString.length() - 2U ] = ' ';
+            asString [ asString.length() - 1U ] = '}';
+
+            return asString;
         }
 
     }

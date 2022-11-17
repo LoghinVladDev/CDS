@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_JSON_HPP__
 #define __CDS_EX_JSON_HPP__
 
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 #include <CDS/HashMap>
 #include <CDS/Concepts>
 #include <CDS/Path>
