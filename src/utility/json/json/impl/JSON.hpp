@@ -850,7 +850,8 @@ namespace cds {
 
             this->clearData();
 
-            this->_data.data().pObject = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_type                 = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
+            this->_data.data().pObject  = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     value
             );
 
@@ -867,7 +868,8 @@ namespace cds {
 
             this->clearData();
 
-            this->_data.data().pObject = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
+            this->_type                 = __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type;
+            this->_data.data().pObject  = new __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
                     std :: move ( value )
             );
 

@@ -43,87 +43,89 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 ) noexcept -> StringLiteral;
 
                 template < typename __BaseType >
-                struct __JsonElementAdapterProperties {
+                struct __JsonElementAdapterPropertiesHelper {
                     constexpr static bool const __adaptable = false;
                 };
 
-                template <> struct __JsonElementAdapterProperties < int > {
+                template <> struct __JsonElementAdapterPropertiesHelper < int > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;
                     using                                     __AdaptedType = int;
                 };
 
-                template <> struct __JsonElementAdapterProperties < long long > {
+                template <> struct __JsonElementAdapterPropertiesHelper < long long > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;
                     using                                     __AdaptedType = long long;
                 };
 
-                template <> struct __JsonElementAdapterProperties < float > {
+                template <> struct __JsonElementAdapterPropertiesHelper < float > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Double;
                     using                                     __AdaptedType = float;
                 };
 
-                template <> struct __JsonElementAdapterProperties < double > {
+                template <> struct __JsonElementAdapterPropertiesHelper < double > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Double;
                     using                                     __AdaptedType = double;
                 };
 
-                template <> struct __JsonElementAdapterProperties < bool > {
+                template <> struct __JsonElementAdapterPropertiesHelper < bool > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Bool;
                     using                                     __AdaptedType = bool;
                 };
 
-                template <> struct __JsonElementAdapterProperties < StringLiteral > {
+                template <> struct __JsonElementAdapterPropertiesHelper < StringLiteral > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
                     using                                     __AdaptedType = String;
                 };
 
-                template <> struct __JsonElementAdapterProperties < StringView > {
+                template <> struct __JsonElementAdapterPropertiesHelper < StringView > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
                     using                                     __AdaptedType = String;
                 };
 
-                template <> struct __JsonElementAdapterProperties < String > {
+                template <> struct __JsonElementAdapterPropertiesHelper < String > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;
                     using                                     __AdaptedType = String;
                 };
 
-                template <> struct __JsonElementAdapterProperties < JsonArray > {
+                template <> struct __JsonElementAdapterPropertiesHelper < JsonArray > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Array;
                     using                                     __AdaptedType = JsonArray;
                 };
 
-                template <> struct __JsonElementAdapterProperties < JsonObject > {
+                template <> struct __JsonElementAdapterPropertiesHelper < JsonObject > {
                     constexpr static bool               const __adaptable   = true;
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Object;
                     using                                     __AdaptedType = JsonObject;
                 };
 
+                template < typename __ToDecay > struct __JsonElementAdapterProperties : __JsonElementAdapterPropertiesHelper < cds :: meta :: Decay < __ToDecay > > {};
+
                 template < typename __ElementType >
                 struct __JsonElementPrimitiveAdaptable {
                     constexpr static bool const __value =
-                            __JsonElementAdapterProperties < __ElementType > :: __adaptable &&
-                            cds :: meta :: isFundamental < __ElementType > () || (
-                                    cds :: meta :: isSame < __ElementType, StringLiteral > () &&
-                                    cds :: meta :: isBasicPointer < __ElementType > ()
+                            __JsonElementAdapterProperties < cds :: meta :: Decay < __ElementType > > :: __adaptable &&
+                            cds :: meta :: isFundamental < cds :: meta :: Decay < __ElementType > > () || (
+                                    ! cds :: meta :: isSame < cds :: meta :: Decay < __ElementType >, StringLiteral > () &&
+                                    cds :: meta :: isBasicPointer < cds :: meta :: Decay < __ElementType > > ()
                             );
                 };
 
                 template < typename __ElementType >
                 struct __JsonElementAdaptable {
                     constexpr static bool const __value =
-                            __JsonElementAdapterProperties < __ElementType > :: __adaptable &&
-                            ! cds :: meta :: isFundamental < __ElementType > () && ! (
-                                    cds :: meta :: isSame < __ElementType, StringLiteral > () &&
-                                    cds :: meta :: isBasicPointer < __ElementType > ()
+                            __JsonElementAdapterProperties < cds :: meta :: Decay < __ElementType > > :: __adaptable &&
+                            ! cds :: meta :: isFundamental < cds :: meta :: Decay < __ElementType > > () && ! (
+                                    ! cds :: meta :: isSame < cds :: meta :: Decay < __ElementType >, StringLiteral > () &&
+                                    cds :: meta :: isBasicPointer < cds :: meta :: Decay < __ElementType > > ()
                             );
                 };
 
