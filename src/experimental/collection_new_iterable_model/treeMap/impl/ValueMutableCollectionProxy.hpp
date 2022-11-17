@@ -35,6 +35,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return this->__mcs_constHandlers() [ static_cast < uint32 > ( requestType ) ];
         }
 
+
         template <
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
@@ -46,6 +47,198 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept :
                 AbstractValueMutableCollectionProxy ( pMap ) {
 
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__beginLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__endLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__cbeginLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__cendLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __rbeginLocal () noexcept -> ReverseIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__rbeginLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __rendLocal () noexcept -> ReverseIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__rendLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __crbeginLocal () const noexcept -> ConstReverseIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__crbeginLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __crendLocal () const noexcept -> ConstReverseIterator {
+
+            return Iterator ( this->template map < TreeMapBase > ()->__crendLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __remove (
+                AbstractIterator const * iterator
+        ) noexcept -> bool {
+
+            return this->template map < TreeMapBase > ()->__remove() ;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __removeConst (
+                AbstractConstIterator const * iterator
+        ) noexcept -> bool {
+
+            return this->template map < TreeMapBase > ()->__removeConst() ;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __removeArray (
+                AbstractIterator const * const * ppIterators,
+                Size                             iteratorCount
+        ) noexcept -> Size {
+
+            auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
+                    typename cds :: experimental :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator const *
+                > ( iteratorCount );
+
+            for ( auto iteratorIndex = 0U; iteratorIndex < iteratorCount; ++ iteratorIndex ) {
+
+                if ( ppIterators [ iteratorIndex ] != nullptr ) {
+                    ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
+                } else {
+                    ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
+                }
+            }
+
+            auto const removedIteratorCount = this->template map < TreeMapBase > () -> __removeArray (
+                    ppWrappedIteratorArray,
+                    iteratorCount
+            );
+
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
+            return removedIteratorCount;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_OptimalInline auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __removeConstArray (
+                AbstractConstIterator const * const * ppIterators,
+                Size                                  iteratorCount
+        ) noexcept -> Size {
+
+            auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
+                    typename cds :: experimental :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator const *
+                > ( iteratorCount );
+
+            for ( auto iteratorIndex = 0U; iteratorIndex < iteratorCount; ++ iteratorIndex ) {
+
+                if ( ppIterators [ iteratorIndex ] != nullptr ) {
+                    ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
+                } else {
+                    ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
+                }
+            }
+
+            auto const removedIteratorCount = this->template map < TreeMapBase > () -> __removeConstArray (
+                    ppWrappedIteratorArray,
+                    iteratorCount
+            );
+
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
+            return removedIteratorCount;
         }
     }
 }

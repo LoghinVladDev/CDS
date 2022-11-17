@@ -449,6 +449,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         protected: using typename AbstractValueMutableCollectionProxy :: __GenericHandler;          /* NOLINT(bugprone-reserved-identifier) */
         protected: using typename AbstractValueMutableCollectionProxy :: __GenericConstHandler;     /* NOLINT(bugprone-reserved-identifier) */
 
+        public: using typename DelegateForwardIterableClient :: Iterator;
+        public: using typename DelegateForwardConstIterableClient :: ConstIterator;
+        public: using typename DelegateBackwardIterableClient :: ReverseIterator;
+        public: using typename DelegateBackwardConstIterableClient :: ConstReverseIterator;
+        public: using AbstractIterator = typename IteratorRemoveClient :: Iterator;
+        public: using AbstractConstIterator = typename ConstIteratorRemoveClient :: ConstIterator;
 
 
         public:     using DelegateForwardIterableClient :: begin;
@@ -618,9 +624,53 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             auto operator = (
                     ValueMutableCollectionProxy &&
             ) noexcept = delete;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal() noexcept -> Iterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal() noexcept -> Iterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __cbeginLocal() const noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __cendLocal() const noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rbeginLocal() noexcept -> ReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __rendLocal() noexcept -> ReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __crbeginLocal() const noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __crendLocal() const noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            auto __remove (     /* NOLINT(bugprone-reserved-identifier) */
+                AbstractIterator const * iterator
+            ) noexcept -> bool;
+
+        public:
+            auto __removeConst (     /* NOLINT(bugprone-reserved-identifier) */
+                    AbstractConstIterator const * iterator
+            ) noexcept -> bool;
+
+        public:
+            auto __removeArray (     /* NOLINT(bugprone-reserved-identifier) */
+                    AbstractIterator const * const * ppIterators,
+                    Size                             iteratorCount
+            ) noexcept -> Size;
+
+        public:
+            auto __removeConstArray (     /* NOLINT(bugprone-reserved-identifier) */
+                    AbstractConstIterator const * const * ppIterators,
+                    Size                                  iteratorCount
+            ) noexcept -> Size;
         };
-
-
 
     }
 }

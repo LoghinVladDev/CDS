@@ -426,6 +426,20 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         friend DelegateForwardConstIterableClient;
 
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend IteratorRemoveClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend ConstIteratorRemoveClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveOfCollectionClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveOfInitializerListClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend RemoveByClient;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         using DelegateForwardIterableClient :: begin;
@@ -748,9 +762,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         using IteratorRemoveClient :: remove;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        using IteratorRemoveClient :: removeAll;
         
     public:     /* NOLINT(readability-redundant-access-specifiers) */
         using ConstIteratorRemoveClient :: remove;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstIteratorRemoveClient :: removeAll;
         
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */

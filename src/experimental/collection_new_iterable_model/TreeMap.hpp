@@ -109,12 +109,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected: using typename MapBase :: AbstractValueMutableCollectionProxy;
         protected: using typename MapBase :: AbstractEntryMutableCollectionProxy;
 
-        public: class ValueMutableCollectionProxy;
-        private: class EntryMutableCollectionProxy;
-        private: class KeySetProxy;
+        public: class KeySetProxy;
+        private: class ValueMutableCollectionProxy;
+        public: class EntryMutableCollectionProxy;
 
         private:
+            KeySetProxy                 _keySetProxy;
+        private:
             ValueMutableCollectionProxy _valueMutableCollectionProxy;
+        private:
+            EntryMutableCollectionProxy _entryMutableCollectionProxy;
 
 
 
@@ -263,10 +267,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> __GenericConstHandler override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () const noexcept -> ValueMutableCollectionProxy const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () const noexcept -> KeySetProxy const & override;
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keys () noexcept -> KeySetProxy & override;
 
         public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () const noexcept -> ValueMutableCollectionProxy const & override;
+        public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto values () noexcept -> ValueMutableCollectionProxy & override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () const noexcept -> EntryMutableCollectionProxy const & override;
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entries () noexcept -> EntryMutableCollectionProxy & override;
 
         public:
             constexpr TreeMap() noexcept;

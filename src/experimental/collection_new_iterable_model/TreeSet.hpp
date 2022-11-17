@@ -86,7 +86,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         protected:  using typename SetBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
         protected:  using typename SetBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
 
-        public: using typename ConstIteratorRemoveClient :: ConstIterator;
+        protected: using typename ConstIteratorRemoveClient :: ConstIterator;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
@@ -111,7 +111,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
         public:     using DelegateBackwardConstIterableClient :: crend;
 
         public:     using ConstIteratorRemoveClient :: remove;
-        private:     using ConstIteratorRemoveClient :: removeAll;
+        private:    using ConstIteratorRemoveClient :: removeAll;
 
         public:     using RandomInsertionClient :: insert;
         public:     using RandomInsertionClient :: add;

@@ -41,6 +41,30 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_ConstexprOverride auto TreeMap <
                 __KeyType,
                 __ValueType
+        > :: keys () const noexcept -> KeySetProxy const & {
+
+            return this->_keySetProxy;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: keys () noexcept -> KeySetProxy & {
+
+            return this->_keySetProxy;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto TreeMap <
+                __KeyType,
+                __ValueType
         > :: values () const noexcept -> ValueMutableCollectionProxy const & {
 
             return this->_valueMutableCollectionProxy;
@@ -56,6 +80,30 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         > :: values () noexcept -> ValueMutableCollectionProxy & {
 
             return this->_valueMutableCollectionProxy;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: entries () const noexcept -> EntryMutableCollectionProxy const & {
+
+            return this->_entryMutableCollection;
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprOverride auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: entries () noexcept -> EntryMutableCollectionProxy & {
+
+            return this->_entryMutableCollection;
         }
 
 
