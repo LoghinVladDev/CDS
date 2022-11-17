@@ -256,6 +256,288 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         return this->_iterator;
     }
 
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: BidirectionalIteratorGenericDecorator () noexcept = default;
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: BidirectionalIteratorGenericDecorator (
+            __DecoratedIteratorType const & iterator
+    ) noexcept :
+            _iterator ( iterator ) {
+
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: BidirectionalIteratorGenericDecorator (
+            __DecoratedIteratorType && iterator
+    ) noexcept :
+            _iterator ( std :: move ( iterator ) ) {
+
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: BidirectionalIteratorGenericDecorator (
+            BidirectionalIteratorGenericDecorator const & iterator
+    ) noexcept :
+            _iterator ( iterator._iterator ) {
+
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: BidirectionalIteratorGenericDecorator (
+            BidirectionalIteratorGenericDecorator && iterator
+    ) noexcept :
+            _iterator ( std :: move ( iterator._iterator ) ) {
+
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator = (
+            BidirectionalIteratorGenericDecorator const & iterator
+    ) noexcept -> BidirectionalIteratorGenericDecorator & {
+
+        if ( this == & iterator ) {
+            return * this;
+        }
+
+        this->_iterator = iterator._iterator;
+        return * this;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator = (
+            BidirectionalIteratorGenericDecorator && iterator
+    ) noexcept -> BidirectionalIteratorGenericDecorator & {
+
+        if ( this == & iterator ) {
+            return * this;
+        }
+
+        this->_iterator = std :: move ( iterator._iterator );
+        return * this;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator * () const noexcept -> __ValueAtType & {
+
+        return __valueAt ( this->_iterator );
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator -> () const noexcept -> __ValueAtType * {
+
+        return & __valueAt ( this->_iterator );
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator == (
+            BidirectionalIteratorGenericDecorator const & iterator
+    ) const noexcept -> bool {
+
+        return this->_iterator == iterator._iterator;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator != (
+            BidirectionalIteratorGenericDecorator const & iterator
+    ) const noexcept -> bool {
+
+        return this->_iterator != iterator._iterator;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator ++ () noexcept -> BidirectionalIteratorGenericDecorator &{
+
+        ++ this->_iterator;
+        return * this;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator ++ (int) noexcept -> BidirectionalIteratorGenericDecorator {
+
+        auto copy = * this;
+        ++ this->_iterator;
+        return copy;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator -- () noexcept -> BidirectionalIteratorGenericDecorator &{
+
+        -- this->_iterator;
+        return * this;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator -- (int) noexcept -> BidirectionalIteratorGenericDecorator {
+
+        auto copy = * this;
+        -- this->_iterator;
+        return copy;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: operator bool () const noexcept {
+
+        return static_cast < bool > ( this->_iterator );
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > constexpr auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: iterator () const noexcept -> __DecoratedIteratorType const & {
+
+        return this->_iterator;
+    }
+
+
+    template <
+            typename                                                                            __DecoratedIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename                                                                            __ValueAtType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __hidden :: __impl :: __ValueAtFunction < __DecoratedIteratorType, __ValueAtType >  __valueAt                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_NonConstConstexprMemberFunction auto BidirectionalIteratorGenericDecorator <
+            __DecoratedIteratorType,
+            __ValueAtType,
+            __valueAt
+    > :: iterator () noexcept -> __DecoratedIteratorType & {
+
+        return this->_iterator;
+    }
+
 } /* namespace cds */
 
 #endif /* __CDS_SHARED_ITERATOR_GENERIC_DECORATOR_HPP_IMPL__ */

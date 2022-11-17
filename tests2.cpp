@@ -42,6 +42,4 @@ int main () {
     json.get ( "test3" ) = 5;
 
     std :: cout << json << '\n';
-
-    return 0;
 }

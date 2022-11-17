@@ -30,7 +30,7 @@
 
 #include "treeSet/Constructs.hpp"
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
+namespace cds {                             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
@@ -79,10 +79,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         private:    friend ConstIteratorRemoveClient;
         private:    friend DelegateForwardConstIterableClient;
         private:    friend DelegateBackwardConstIterableClient;
+        private:    friend RemoveOfCollectionClient;
+        private:    friend RemoveOfInitializerListClient;
+        private:    friend RemoveByClient;
 
         protected:  using typename SetBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
         protected:  using typename SetBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
 
+        public: using typename ConstIteratorRemoveClient :: ConstIterator;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
@@ -107,7 +111,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using DelegateBackwardConstIterableClient :: crend;
 
         public:     using ConstIteratorRemoveClient :: remove;
-        public:     using ConstIteratorRemoveClient :: removeAll;
+        private:     using ConstIteratorRemoveClient :: removeAll;
 
         public:     using RandomInsertionClient :: insert;
         public:     using RandomInsertionClient :: add;
@@ -279,8 +283,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 #include "../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
 
+#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+
 #include "treeSet/impl/TreeSet.hpp"
 
-#include "../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #endif /* __CDS_EX_TREE_SET_HPP__ */

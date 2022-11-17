@@ -15,8 +15,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
                         typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
+                        cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
                 > class __RedBlackTree;                                                                         /* NOLINT(bugprone-reserved-identifier) */
 
@@ -31,8 +31,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     /* NOLINT(bugprone-reserved-identifier) */
 
@@ -100,8 +100,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                                /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                      /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                                /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                                 /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                     /* NOLINT(bugprone-reserved-identifier) */
 
@@ -124,12 +124,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     RBTreeNode const * pCurrentNode
             ) noexcept;
 
-        protected:
+        public:
             constexpr AbstractRedBlackTreeConstIterator (
                     AbstractRedBlackTreeConstIterator const & iterator
             ) noexcept;
 
-        protected:
+        public:
             constexpr AbstractRedBlackTreeConstIterator (
                     AbstractRedBlackTreeConstIterator && iterator
             ) noexcept;
@@ -171,8 +171,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
@@ -229,8 +229,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
@@ -289,8 +289,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 
@@ -347,8 +347,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType,                                                            /* NOLINT(bugprone-reserved-identifier) */
                     typename __KeyType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: ExtractorFunction < __TElementType, __KeyType >,                  /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: utility :: ComparisonFunction < __TElementType >,                            /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: utility :: ComparisonFunction < __KeyType >,                                 /* NOLINT(bugprone-reserved-identifier) */
                     cds :: utility :: DestructorFunction < __TElementType >                             /* NOLINT(bugprone-reserved-identifier) */
             > friend class cds :: experimental :: __hidden :: __impl :: __RedBlackTree;                 /* NOLINT(bugprone-reserved-identifier) */
 

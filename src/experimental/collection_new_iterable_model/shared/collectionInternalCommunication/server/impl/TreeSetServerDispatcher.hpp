@@ -26,7 +26,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         auto ( __ServiceType :: * __crendFunction )             ()                                      const -> __ReverseConstIteratorType,    /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )             -> __ElementType *,               /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )       -> bool,                          /* NOLINT(bugprone-reserved-identifier) */
-                        auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )       -> Size,                          /* NOLINT(bugprone-reserved-identifier) */
+                        auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )       -> Size,            /* NOLINT(bugprone-reserved-identifier) */
                         auto ( __ServiceType :: * __findConstFunction )         ( __ElementType const & )                const -> __ConstIteratorType           /* NOLINT(bugprone-reserved-identifier) */
                 > auto __TreeSetServerDispatcher <
                         __ServerType,

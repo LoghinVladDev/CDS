@@ -2,8 +2,8 @@
  * Created by stefan on 28.08.2022.
  */
 
-#ifndef __CDS_TREE_SET_HPP__
-#define __CDS_TREE_SET_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_EX_TREE_SET_IMPL_HPP__
+#define __CDS_EX_TREE_SET_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {
@@ -61,7 +61,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size                   count
         ) noexcept {
 
-            for ( auto iterator = begin; iterator != end; ++ iterator) {
+            for ( auto iterator = begin; iterator != end; ++ iterator ) {
                 this->insert ( * iterator );
             }
         }
@@ -182,4 +182,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif /* __CDS_TREE_SET_HPP__ */
+#endif /* __CDS_EX_TREE_SET_IMPL_HPP__ */

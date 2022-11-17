@@ -129,17 +129,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> Size {
 
                 auto pReceiver = reinterpret_cast < __ReceiverType * > ( this );
+
                 if ( iteratorCount >= 2ULL ) {
 
-                    return pReceiver->__removeConstArray (
-                            & pIterators [0ULL],
+                    auto pIteratorBuffer    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < ConstIterator const * > ( iteratorCount );
+                    for ( Size index = 0U; index < iteratorCount; ++ index ) {
+                        pIteratorBuffer[ index ] = & pIterators [ index ];
+                    }
+
+                    Size removedCount = pReceiver->__removeConstArray (
+                            & pIteratorBuffer [0ULL],
                             iteratorCount
                     );
+
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pIteratorBuffer );
+                    return removedCount;
 
                 } else if ( iteratorCount == 1ULL ) {
 
                     return pReceiver->__removeConst (
-                            pIterators [0ULL]
+                            & pIterators [0ULL]
                     ) ? 1ULL : 0ULL;
                 }
 
