@@ -31,105 +31,7 @@ set (
 include_directories(${CDS_INCLUDE_DIRECTORIES})
 
 set(
-        CDS_PRIMITIVE
-        src/primitive/baseTypes/Object.hpp
-        src/primitive/Pointer.hpp
-        src/primitive/Reference.hpp
-        src/primitive/Optional.hpp
-        src/primitive/Pair.hpp
-        src/primitive/Range.hpp
-        src/primitive/baseTypes/String.hpp
-        src/primitive/Sequence.hpp
-        src/primitive/Regex.hpp
-        src/primitive/ParallelSequence.hpp
-        src/primitive/baseTypes/Integer.hpp
-        src/primitive/baseTypes/Long.hpp
-        src/primitive/baseTypes/Float.hpp
-        src/primitive/baseTypes/Double.hpp
-        src/primitive/baseTypes/Boolean.hpp
-        src/primitive/Tuple.hpp
-)
-
-set(
-        CDS_EXTRA
-        src/collection/ordered/BTree.h
-)
-
-set(
-        CDS_COLLECTION_INTERFACE
-
-        ${CDS_PRIMITIVE}
-)
-
-set(
-        CDS_COLLECTION_ORDERED
-
-        src/collection/ordered/Queue.hpp
-        src/collection/ordered/StaticArray.hpp
-)
-
-set(
-        CDS_COLLECTION_UNORDERED
-
-        src/collection/format/JSON.hpp
-)
-
-set(
-        CDS_COLLECTION
-        ${CDS_COLLECTION_INTERFACE}
-        ${CDS_COLLECTION_ORDERED}
-        ${CDS_COLLECTION_UNORDERED}
-)
-
-set(
-        CDS_FUNCTIONAL
-        src/functional/Generator.hpp
-        src/functional/Random.hpp
-)
-
-set(
-        CDS_THREADING
-        src/threading/Thread.hpp
-        src/threading/Semaphore.hpp
-        src/threading/Mutex.hpp
-        src/threading/Atomic.hpp
-)
-
-set(
-        CDS_CRYPTO
-        src/crypto/primitives/CryptoBlock.hpp
-        src/crypto/interface/CryptoOperation.hpp
-        src/crypto/primitives/SignatureGeneratorED25519.hpp
-        src/crypto/primitives/EncryptorAES.hpp
-)
-
-set(
-        CDS_STREAM
-        src/stream/InputStream.hpp
-        src/stream/OutputStream.hpp
-        src/stream/Stream.hpp
-        src/stream/AbstractStream.hpp
-)
-
-set(
-        CDS_PLATFORM
-        src/platform/File.hpp
-        src/platform/Path.hpp
-)
-
-set(
         CDS_HEADERS
-        ${CDS_COLLECTION}
-        ${CDS_EXTRA}
-        ${CDS_FUNCTIONAL}
-        ${CDS_THREADING}
-        ${CDS_CRYPTO}
-        ${CDS_STREAM}
-        ${CDS_PLATFORM}
-        src/std-types.h
-        src/cdsIntern/Concepts.hpp
-        src/cdsIntern/Traits.hpp
-        src/cdsIntern/Types.hpp
 )
 
 if (WIN32)
@@ -148,7 +50,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-        src/threading/Lock.hpp include/CDS/LockGuard src/experimental/JSON.hpp)
+)
 
 target_link_libraries(
         CDS-dummy
