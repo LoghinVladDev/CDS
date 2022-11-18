@@ -15,6 +15,8 @@
 #include <functional>
 #include "src/functional/FunctionalInterface.hpp"
 #include <variant>
+#include <CDS/filesystem/Path>
+#include <CDS/filesystem/Walk>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -40,6 +42,8 @@ int main () {
     json.put ( "test1", "test2"_s );
     json.at ( "test1" ) = "test2"_s;
     json.get ( "test3" ) = 5;
+
+    std :: cout << filesystem :: walk ( __FILE__ );
 
     std :: cout << json << '\n';
 }
