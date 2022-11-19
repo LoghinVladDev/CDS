@@ -7,12 +7,15 @@
 #include <sstream>
 #include <fstream>
 #include <CDS/util/JSON>
-#include <CDS/Path>
+#include <CDS/filesystem/Path>
 //#include <CDS/JSON>
 
 using namespace cds;
 
 bool JsonTest::execute() noexcept {
+
+    using namespace filesystem;
+
     bool allOk = true;
     this->logBold("Starting of test Json...");
 

@@ -5,6 +5,7 @@
 #ifndef __CDS_WALK_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_WALK_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include <CDS/Array>
 #include <CDS/filesystem/Path>
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
@@ -15,7 +16,6 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 auto __walk (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         StringView                                  osPath,
                         Size                                        depth,
-                        Size                                        current,
                         Array < cds :: filesystem :: WalkEntry >  & entries
                 ) noexcept -> void;
 
@@ -27,18 +27,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 Size            depth = limits :: U64_MAX
         ) noexcept -> Array < WalkEntry >;
 
-        auto walk (
-                StringView      osPath,
-                Size            depth = limits :: U64_MAX
-        ) noexcept -> Array < WalkEntry >;
-
         class WalkEntry : public Object {
 
         private:    /* NOLINT(readability-redundant-access-specifiers) */
             friend auto cds :: filesystem :: __hidden :: __impl :: __walk ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     StringView                                  osPath,
                     Size                                        depth,
-                    Size                                        current,
                     Array < cds :: filesystem :: WalkEntry >  & entries
             ) noexcept -> void;
 
@@ -118,6 +112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace filesystem */
 } /* namespace cds */
 
+#include "../../shared/util/PathWalk.hpp"
 #include "walk/impl/Walk.hpp"
 
 #endif /* __CDS_WALK_HPP__ */

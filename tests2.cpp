@@ -34,6 +34,7 @@ int main () {
     using namespace cds;
     using namespace cds :: json;
     using namespace cds :: literals;
+    using namespace cds :: filesystem;
 
     JsonObject json;
     json.put ( "test1", 2 );
@@ -43,7 +44,17 @@ int main () {
     json.at ( "test1" ) = "test2"_s;
     json.get ( "test3" ) = 5;
 
-    std :: cout << filesystem :: walk ( __FILE__ );
+    StringView sv = "test";
+    String path = "test";
+    filesystem :: Path p = sv;
+    filesystem :: Path p2 ( "test2" );
+    filesystem :: Path p3 = path;
+
+    p3 /= "test";
+    p3 = "test";
 
     std :: cout << json << '\n';
+    for ( auto & e : filesystem :: walk ( Path(__FILE__).parent() / "src" ) ) {
+        std :: cout << e << '\n';
+    }
 }

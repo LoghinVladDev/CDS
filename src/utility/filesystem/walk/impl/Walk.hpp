@@ -24,24 +24,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 auto __walk (
                         StringView                                  osPath,
                         Size                                        depth,
-                        Size                                        current,
                         Array < cds :: filesystem :: WalkEntry >  & entries
                 ) noexcept -> void {
 
-                    LinkedList < String > rootQueue;
-                    rootQueue.emplace ( osPath );
-
-                    if ( current > depth ) {
-                        return;
-                    }
+                    LinkedList < Tuple < String, Size > > rootQueue;
+                    rootQueue.emplace ( osPath, 0ULL );
 
 #if defined(__linux)
 
                     while ( ! rootQueue.empty() ) {
 
-                        String root = rootQueue.front();
+                        auto rootTuple = rootQueue.front();
                         rootQueue.popFront();
 
+                        Size rootDepth = rootTuple.get <1> ();
+                        if ( rootDepth > depth ) {
+                            continue;
+                        }
+
+                        String const & root = rootTuple.get <0> ();
                         auto dir = opendir ( root.cStr() );
                         if ( dir == nullptr ) {
                             return;
@@ -64,7 +65,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             if ( entry->d_type == DT_DIR ) {
 
                                 (void) directories.emplaceBack ( entry->d_name );
-                                (void) rootQueue.emplaceBack ( root + Path :: directorySeparator + directories.back() );
+                                (void) rootQueue.emplaceBack ( root + Path :: directorySeparator + directories.back(), rootDepth + 1ULL );
                                 continue;
                             }
 
@@ -92,17 +93,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 Size            depth
         ) noexcept -> Array < WalkEntry > {
 
-            return walk ( path.toString(), depth );
-        }
+            if ( ! path.exists() ) {
+                return {};
+            }
 
-
-        auto walk (
-                StringView      osPath,
-                Size            depth
-        ) noexcept -> Array < WalkEntry > {
-
-            Array < WalkEntry > entries;
-            __hidden :: __impl :: __walk ( osPath, depth, 0U, entries );
+            cds :: Array < WalkEntry > entries;
+            __hidden :: __impl :: __walk (
+                    path.toString(),
+                    depth,
+                    entries
+            );
             return entries;
         }
 
