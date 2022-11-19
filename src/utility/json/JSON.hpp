@@ -12,7 +12,9 @@
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
-    class Path;
+    namespace filesystem {
+        class Path;
+    } /* namespace filesystem */
 
     namespace json {
 
@@ -568,11 +570,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> String;
 
         __CDS_NoDiscard auto loadJson (
-                Path const & path
+                filesystem :: Path const & path
         ) noexcept (false) -> JsonObject;
 
         __CDS_NoDiscard auto loadJsonArray (
-                Path const & path
+                filesystem :: Path const & path
         ) noexcept (false) -> JsonArray;
 
         class JsonFormatException : public FormatException { /* NOLINT(*-special-member-functions) */
