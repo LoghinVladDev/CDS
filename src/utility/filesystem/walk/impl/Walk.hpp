@@ -16,18 +16,18 @@
 #warning Warning : Path-lib Unsupported
 #endif
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace filesystem {
-        namespace __hidden {
-            namespace __impl {
+namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace filesystem {      /* NOLINT(modernize-concat-nested-namespaces) */
+        namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                auto __walk (
-                        StringView                                  osPath,
+                auto __walk (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        StringView                                  osPath, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                                        depth,
                         Array < cds :: filesystem :: WalkEntry >  & entries
                 ) noexcept -> void {
 
-                    LinkedList < Tuple < String, Size > > rootQueue;
+                    LinkedList < Tuple < String, Size > > rootQueue;    /* NOLINT(cppcoreguidelines-init-variables) */
                     rootQueue.emplace ( osPath, 0ULL );
 
 #if defined(__linux)
@@ -37,7 +37,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         auto rootTuple = rootQueue.front();
                         rootQueue.popFront();
 
-                        Size rootDepth = rootTuple.get <1> ();
+                        Size rootDepth = rootTuple.get <1> ();  /* NOLINT(cppcoreguidelines-init-variables) */
                         if ( rootDepth > depth ) {
                             continue;
                         }
@@ -48,8 +48,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             return;
                         }
 
-                        Array < String > directories;
-                        Array < String > files;
+                        Array < String > directories;   /* NOLINT(cppcoreguidelines-init-variables) */
+                        Array < String > files;         /* NOLINT(cppcoreguidelines-init-variables) */
 
                         for ( auto entry = readdir64 (dir); entry != nullptr; entry = readdir64(dir) ) {
 
@@ -89,7 +89,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         } /* namespace __hidden */
 
         auto walk (
-                Path    const & path,
+                Path    const & path,   /* NOLINT(bugprone-easily-swappable-parameters) */
                 Size            depth
         ) noexcept -> Array < WalkEntry > {
 

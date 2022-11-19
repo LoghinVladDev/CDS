@@ -12,29 +12,29 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         class Path : public Object {
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             static char const directorySeparator;
 
-        private:
-            String _osPath;
+        private:    /* NOLINT(readability-redundant-access-specifiers) */
+            String _osPath {};
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             static auto currentDirectory () noexcept -> Path const &;
 
-        private:
+        private:    /* NOLINT(readability-redundant-access-specifiers) */
             static auto pathOsConvert (
                     StringView path
             ) noexcept -> String;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             Path () noexcept = default;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_Implicit Path (
                     StringView osPath
             ) noexcept;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             template <
                     typename __ConvertibleType,
                     cds :: meta :: EnableIf <
@@ -44,35 +44,35 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConvertibleType && osPath
             ) noexcept;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             Path (
                     Path const & path
             ) noexcept;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             constexpr Path (
                     Path && path
             ) noexcept;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             ~Path () noexcept override = default;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto operator = (
                     Path const & path
             ) noexcept -> Path &;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto operator = (
                     Path && path
             ) noexcept -> Path &;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto operator = (
                     StringView osPath
             ) noexcept -> Path &;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             template <
                     typename __ConvertibleType,
                     cds :: meta :: EnableIf <
@@ -82,88 +82,88 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConvertibleType && osPath
             ) noexcept -> Path &;
 
-        public:
-            __CDS_NoDiscard auto parent () const noexcept -> Path;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto parent () const noexcept -> Path;      /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto node () const noexcept -> StringView;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto node () const noexcept -> StringView;  /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto root () const noexcept -> Path;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto root () const noexcept -> Path;        /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto sanitize () const noexcept -> Path;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto sanitize () const noexcept -> Path;    /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto asAbsolute () const noexcept (false) -> Path;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto asAbsolute () const noexcept (false) -> Path;  /* NOLINT(modernize-use-nodiscard) */
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator / (
                     StringView node
             ) const noexcept -> Path;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto operator /= (
                     StringView node
             ) noexcept -> Path &;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator + (
                     StringView node
             ) const noexcept -> Path;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto operator += (
                     StringView node
             ) noexcept -> Path &;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             auto append (
                     StringView node
             ) noexcept -> Path &;
 
-        public:
-            __CDS_NoDiscard auto isRelative () const noexcept -> bool;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto isRelative () const noexcept -> bool;  /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto isAbsolute () const noexcept -> bool;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto isAbsolute () const noexcept -> bool;  /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto exists () const noexcept -> bool;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto exists () const noexcept -> bool;      /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto walk (
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto walk (                                 /* NOLINT(modernize-use-nodiscard) */
                     Size maxDepth = cds :: limits :: U64_MAX
             ) const noexcept -> Array < WalkEntry >;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator == (
                     Path const & path
             ) const noexcept -> bool;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator != (
                     Path const & path
             ) const noexcept -> bool;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator == (
                     StringView path
             ) const noexcept -> bool;
 
-        public:
+        public: /* NOLINT(readability-redundant-access-specifiers) */
             __CDS_NoDiscard auto operator != (
                     StringView path
             ) const noexcept -> bool;
 
-        public:
-            __CDS_NoDiscard auto toString () const noexcept -> String override;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto toString () const noexcept -> String override; /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto hash () const noexcept -> Size override;
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;       /* NOLINT(modernize-use-nodiscard) */
 
-        public:
-            __CDS_NoDiscard auto equals (
+        public: /* NOLINT(readability-redundant-access-specifiers) */
+            __CDS_NoDiscard auto equals (                                       /* NOLINT(modernize-use-nodiscard) */
                     Object const & object
             ) const noexcept -> bool override;
         };
@@ -171,8 +171,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace filesystem */
 } /* namespace cds */
 
-#include "../../shared/util/PathWalk.hpp"
 #include "../../shared/util/JsonLoad.hpp"
+#include "../../shared/util/PathWalk.hpp"
 #include "path/impl/Path.hpp"
 
 #endif /* __CDS_PATH_HPP__ */

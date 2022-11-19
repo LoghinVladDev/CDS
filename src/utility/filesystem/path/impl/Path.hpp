@@ -8,15 +8,15 @@
 #if defined(WIN32)
 #include <windows.h>
 #elif defined(__linux)
-#include <sys/stat.h>
-#include <unistd.h>
 #include <climits>
 #include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #else
 #warning Warning : Path-lib Unsupported
 #endif
 
-namespace cds {
+namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace filesystem {
 
 #if defined(WIN32)
@@ -455,12 +455,14 @@ namespace cds {
             free ( resolvedPath );
             return StringView (resolvedPathAsStr);
 
-#endif
+#else
 
             return * this;
+
+#endif
         }
 
-    }
-}
+    } /* namespace filesystem */
+} /* namespace cds */
 
 #endif /* __CDS_PATH_IMPL_HPP__ */
