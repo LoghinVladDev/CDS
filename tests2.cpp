@@ -35,6 +35,7 @@ int main () {
     using namespace cds :: json;
     using namespace cds :: literals;
     using namespace cds :: filesystem;
+    std::unique_ptr p;
 
     JsonObject json;
     json.put ( "test1", 2 );
