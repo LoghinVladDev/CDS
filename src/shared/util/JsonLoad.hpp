@@ -5,6 +5,7 @@
 #if defined (__CDS_JSON_HPP__) && defined (__CDS_PATH_HPP__) && ! defined (__CDS_SHARED_UTIL_JSON_LOAD_HPP__)
 #define __CDS_SHARED_UTIL_JSON_LOAD_HPP__
 
+#include <fstream>
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace json {
 

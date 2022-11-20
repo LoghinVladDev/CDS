@@ -122,7 +122,7 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         virtual auto reset (
-                __ElementType pointer
+                __ElementType * pointer
         ) noexcept -> void = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */

@@ -36,7 +36,6 @@ int main () {
     using namespace cds :: json;
     using namespace cds :: literals;
     using namespace cds :: filesystem;
-    std::unique_ptr p;
 
     JsonObject json;
     json.put ( "test1", 2 );
@@ -45,8 +44,6 @@ int main () {
     json.put ( "test1", "test2"_s );
     json.at ( "test1" ) = "test2"_s;
     json.get ( "test3" ) = 5;
-
-    std::shared_ptr;
     StringView sv = "test";
     String path = "test";
     filesystem :: Path p = sv;
