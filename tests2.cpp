@@ -17,6 +17,7 @@
 #include <variant>
 #include <CDS/filesystem/Path>
 #include <CDS/filesystem/Walk>
+#include <memory>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -45,6 +46,7 @@ int main () {
     json.at ( "test1" ) = "test2"_s;
     json.get ( "test3" ) = 5;
 
+    std::shared_ptr;
     StringView sv = "test";
     String path = "test";
     filesystem :: Path p = sv;
