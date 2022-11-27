@@ -18,6 +18,7 @@
 #include <CDS/filesystem/Path>
 #include <CDS/filesystem/Walk>
 #include <memory>
+#include <CDS/smartPointers/UniquePointer>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -36,6 +37,12 @@ int main () {
     using namespace cds :: json;
     using namespace cds :: literals;
     using namespace cds :: filesystem;
+
+    HashMap < int, int > m;
+    class  T1: HashMap < int, int > {} m2;
+    T1 m3;
+
+    JsonArray arr;
 
     JsonObject json;
     json.put ( "test1", 2 );
@@ -57,4 +64,7 @@ int main () {
     for ( auto & e : filesystem :: walk ( Path(__FILE__).parent() / "src" ) ) {
         std :: cout << e << '\n';
     }
+
+    UniquePointer <int> p54 = new int (3);
+    UniquePointer <int[]> p64 = new int [5];
 }

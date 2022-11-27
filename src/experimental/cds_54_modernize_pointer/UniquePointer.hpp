@@ -9,8 +9,11 @@
 
 namespace cds {
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class UniquePointer : public SmartPointer < __ElementType > {
+
+    private:
+        using Implementation = SmartPointer < __ElementType >;
 
     public:
         constexpr UniquePointer () noexcept = default;
@@ -26,12 +29,12 @@ namespace cds {
         ) noexcept = delete;
 
     public:
-        UniquePointer (
+        constexpr UniquePointer (
                 UniquePointer && pointer
         ) noexcept;
 
     public:
-        ~UniquePointer () noexcept override;
+        __CDS_cpplang_ConstexprDestructor ~UniquePointer () noexcept override;
 
     public:
         auto operator = (
@@ -41,7 +44,7 @@ namespace cds {
     public:
         auto operator = (
                 UniquePointer const & pointer
-        ) noexcept -> UniquePointer &;
+        ) noexcept -> UniquePointer & = delete;
 
     public:
         auto operator = (
@@ -49,12 +52,72 @@ namespace cds {
         ) noexcept -> UniquePointer &;
 
     public:
-        auto exchange (
+        __CDS_cpplang_ConstexprOverride auto exchange (
                 __ElementType * pointer
         ) noexcept -> __ElementType * override;
 
     public:
-        auto release () noexcept -> __ElementType * override;
+        __CDS_cpplang_ConstexprOverride auto release () noexcept -> __ElementType * override;
+
+    public:
+        auto reset () noexcept -> void override;
+
+    public:
+        auto reset (
+                __ElementType * pointer
+        ) noexcept -> void override;
+    };
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class UniquePointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType > {
+
+    private:
+        using Implementation = SmartPointer < __ElementType >;
+
+    public:
+        constexpr UniquePointer () noexcept = default;
+
+    public:
+        constexpr UniquePointer (
+                __ElementType * pointer
+        ) noexcept;
+
+    public:
+        UniquePointer (
+                UniquePointer const & /* pointer */
+        ) noexcept = delete;
+
+    public:
+        constexpr UniquePointer (
+                UniquePointer && pointer
+        ) noexcept;
+
+    public:
+        __CDS_cpplang_ConstexprDestructor ~UniquePointer () noexcept override;
+
+    public:
+        auto operator = (
+                __ElementType * pointer
+        ) noexcept -> UniquePointer &;
+
+    public:
+        auto operator = (
+                UniquePointer const & pointer
+        ) noexcept -> UniquePointer & = delete;
+
+    public:
+        auto operator = (
+                UniquePointer && pointer
+        ) noexcept -> UniquePointer &;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * override;
+
+    public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto release () noexcept -> __ElementType * override;
 
     public:
         auto reset () noexcept -> void override;
@@ -66,5 +129,7 @@ namespace cds {
     };
 
 } /* namespace cds */
+
+#include "pointer/impl/UniquePointer.hpp"
 
 #endif /* __CDS_UNIQUE_POINTER_HPP__ */

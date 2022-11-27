@@ -92,10 +92,13 @@ namespace cds {
             typename __ElementType  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > using ForeignPointer = RawPointer < __ElementType >;
 
+    /**
+     * Temporarily Disabled
+     * */
     template <
             typename __ElementType,                                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Deleter = __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > using AtomicSharedPointer = SharedPointer < __ElementType, __Deleter >;
+    > using AtomicSharedPointer = void; /* SharedPointer < __ElementType, __Deleter >; */
 
 } /* namespace cds */
 
