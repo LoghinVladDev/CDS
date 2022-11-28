@@ -156,7 +156,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 return this->_osPath;
             }
 
-            return StringView ( this->_osPath.cStr() + location + 1, this->_osPath.length() - location - 1 );
+            return { this->_osPath.cStr() + location + 1, this->_osPath.length() - location - 1 };
         }
 
 
@@ -220,7 +220,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 StringView node
         ) const noexcept -> Path {
 
-            return Path ( this->_osPath + Path :: directorySeparator + std :: move ( Path :: pathOsConvert ( node ) ) );
+            return { this->_osPath + Path :: directorySeparator + std :: move ( Path :: pathOsConvert ( node ) ) };
         }
 
 
@@ -297,7 +297,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             char * resolvedPath = (char *) malloc (initialPathSize);
 
             auto actualLength = GetFullPathNameA (
-                    path.cStr(),
+                    this->_osPath.cStr(),
                     initialPathSize,
                     resolvedPath,
                     nullptr
@@ -309,7 +309,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 if (
                         GetFullPathNameA (
-                                path.cStr(),
+                                this->_osPath.cStr(),
                                 actualLength + 1,
                                 resolvedPath,
                                 nullptr
@@ -418,7 +418,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             char * resolvedPath = (char *) malloc (initialPathSize);
 
             auto actualLength = GetFullPathNameA (
-                    path.cStr(),
+                    this->_osPath.cStr(),
                     initialPathSize,
                     resolvedPath,
                     nullptr
@@ -430,25 +430,23 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 if (
                         GetFullPathNameA (
-                                path.cStr(),
+                                this->_osPath.cStr(),
                                 actualLength + 1,
                                 resolvedPath,
                                 nullptr
                         ) == 0
                 ) {
                     free ( resolvedPath );
-                    IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
+                    throw IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
                 }
             } else if ( actualLength == 0 ) {
                 free ( resolvedPath );
-                IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
+                throw IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
             }
-
-            free (resolvedPath);
 
             if ( GetFileAttributesA(resolvedPath) == INVALID_FILE_ATTRIBUTES ) {
                 free(resolvedPath);
-                IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
+                throw IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
             }
 
             String resolvedPathAsStr = resolvedPath;

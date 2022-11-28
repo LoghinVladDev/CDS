@@ -82,6 +82,61 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         );
                     }
 
+#elif defined(WIN32)
+
+                    while ( ! rootQueue.empty() ) {
+
+                        auto rootTuple = rootQueue.front();
+                        rootQueue.popFront();
+
+                        Size rootDepth = rootTuple.get <1> ();  /* NOLINT(cppcoreguidelines-init-variables) */
+                        if ( rootDepth > depth ) {
+                            continue;
+                        }
+
+                        String const & root = rootTuple.get <0> ();
+                        WIN32_FIND_DATAA win32FindData {};
+                        HANDLE fileHandle = FindFirstFileA (
+                                ( root + Path :: directorySeparator + "*" ).cStr(),
+                                & win32FindData
+                        );
+
+                        if ( fileHandle == INVALID_HANDLE_VALUE ) {
+                            return;
+                        }
+
+                        Array < String > directories;   /* NOLINT(cppcoreguidelines-init-variables) */
+                        Array < String > files;         /* NOLINT(cppcoreguidelines-init-variables) */
+
+                        do {
+                            if (
+                                    std :: strcmp ( win32FindData.cFileName, "." ) == 0 || std :: strcmp ( win32FindData.cFileName, ".." ) == 0
+                            ) {
+                                /* avoid looping into links, do nothing */
+                                /* avoid looping into self, do nothing */
+                                continue;
+                            }
+
+                            if ( ( win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY ) {
+
+                                (void) directories.emplaceBack ( win32FindData.cFileName );
+                                (void) rootQueue.emplaceBack ( root + Path :: directorySeparator + directories.back(), rootDepth + 1ULL );
+                                continue;
+                            }
+
+                            (void) files.emplaceBack ( win32FindData.cFileName );
+                        } while ( FindNextFileA ( fileHandle, & win32FindData ) != FALSE );
+
+                        (void) FindClose ( fileHandle );
+                        (void) entries.pushBack (
+                                WalkEntry (
+                                        Path ( std :: move ( root ) ),
+                                        std :: move ( directories ),
+                                        std :: move ( files )
+                                )
+                        );
+                    }
+
 #endif
                 }
 
