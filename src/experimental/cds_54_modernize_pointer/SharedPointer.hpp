@@ -8,57 +8,15 @@
 #include <CDS/memory/SmartPointer>
 #include <CDS/threading/Atomic>
 
+#include "pointer/SharedPointerControlBlock.hpp"
+
 namespace cds {
-
-    namespace __hidden {
-        namespace __impl {
-
-            template < typename __ElementType >
-            class __SharedPointerControlBlock {
-
-            private:
-                Atomic < uint32 >           _ownerCount;
-
-            private:
-                Atomic < uint32 >           _observerCount;
-
-            private:
-                std :: atomic_flag          _dataExpired;
-
-            private:
-                std :: atomic_flag          _blockExpired;
-
-            private:
-                __ElementType             * _pObject;
-
-            public:
-                static auto __new (
-                        __ElementType * pointer = nullptr
-                ) noexcept -> __SharedPointerControlBlock *;
-
-            public:
-                auto __use () noexcept -> __SharedPointerControlBlock *;
-
-            public:
-                auto __release () noexcept -> __ElementType *;
-
-            public:
-                auto __disposeSelf () noexcept -> void;
-
-            public:
-                __CDS_NoDiscard constexpr auto __get () const noexcept -> __ElementType *;
-
-            public:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __exchange (
-                        __ElementType * pointer
-                ) noexcept -> __ElementType *;
-            };
-
-        }
-    }
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class SharedPointer : public SmartPointer < __ElementType > {
+
+    private:
+        friend class WeakPointer < __ElementType, __Deleter >;
 
     private:
         using Base = SmartPointer < __ElementType >;
@@ -71,6 +29,11 @@ namespace cds {
 
     public:
         SharedPointer () noexcept;
+
+    public:
+        __CDS_Implicit SharedPointer (
+                std :: nullptr_t pointer
+        ) noexcept;
 
     public:
         __CDS_Implicit SharedPointer (
@@ -99,6 +62,11 @@ namespace cds {
 
     public:
         ~SharedPointer () noexcept;
+
+    public:
+        auto operator = (
+                std :: nullptr_t pointer
+        ) noexcept -> SharedPointer &;
 
     public:
         auto operator = (
@@ -177,10 +145,20 @@ namespace cds {
         ) noexcept -> __ElementType * override;
 
     public:
+        auto exchange (
+                std :: nullptr_t pointer
+        ) noexcept -> __ElementType *;
+
+    public:
         auto release () noexcept -> __ElementType * override;
 
     public:
         auto reset () noexcept -> void override;
+
+    public:
+        auto reset (
+                std :: nullptr_t pointer
+        ) noexcept -> void;
 
     public:
         auto reset (
@@ -193,6 +171,9 @@ namespace cds {
     class SharedPointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType [] > {
 
     private:
+        friend class WeakPointer < __ElementType [], __Deleter >;
+
+    private:
         using Base = SmartPointer < __ElementType >;
 
     private:
@@ -203,6 +184,11 @@ namespace cds {
 
     public:
         SharedPointer () noexcept;
+
+    public:
+        __CDS_Implicit SharedPointer (
+                std :: nullptr_t pointer
+        ) noexcept;
 
     public:
         __CDS_Implicit SharedPointer (
@@ -231,6 +217,11 @@ namespace cds {
 
     public:
         ~SharedPointer () noexcept;
+
+    public:
+        auto operator = (
+                std :: nullptr_t pointer
+        ) noexcept -> SharedPointer &;
 
     public:
         auto operator = (
@@ -305,6 +296,11 @@ namespace cds {
 
     public:
         auto exchange (
+                std :: nullptr_t pointer
+        ) noexcept -> __ElementType *;
+
+    public:
+        auto exchange (
                 __ElementType * pointer
         ) noexcept -> __ElementType * override;
 
@@ -316,6 +312,11 @@ namespace cds {
 
     public:
         auto reset (
+                std :: nullptr_t pointer
+        ) noexcept -> void;
+
+    public:
+        auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
     };
@@ -323,5 +324,6 @@ namespace cds {
 } /* namespace cds */
 
 #include "pointer/impl/SharedPointer.hpp"
+#include "pointer/impl/SharedPointerControlBlock.hpp"
 
 #endif /* __CDS_SHARED_POINTER_HPP__ */

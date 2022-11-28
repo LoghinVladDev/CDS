@@ -1,1 +1,2 @@
-#include "../../../src/primitive/pointer/ForeignPointer.hpp"
+#warning Deprecated. Use RawPointer instead
+#include <CDS/memory/RawPointer>

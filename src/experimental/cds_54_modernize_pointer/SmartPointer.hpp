@@ -69,7 +69,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get () const noexcept -> __ElementType * = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
@@ -163,7 +163,7 @@ namespace cds {
         __CDS_NoDiscard virtual auto get () const noexcept -> __ElementType * = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;

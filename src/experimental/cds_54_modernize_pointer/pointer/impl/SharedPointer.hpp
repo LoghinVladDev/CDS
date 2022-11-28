@@ -6,79 +6,6 @@
 #define __CDS_SHARED_POINTER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {
-    namespace __hidden {
-        namespace __impl {
-
-            template < typename __ElementType >
-            __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __new (
-                    __ElementType * pointer
-            ) noexcept -> __SharedPointerControlBlock * {
-
-                auto block = new __SharedPointerControlBlock ();
-                block->_dataExpired.clear();
-                block->_blockExpired.clear();
-                block->_ownerCount      = 1U;
-                block->_observerCount   = 0U;
-                block->_pObject         = pointer;
-                return block;
-            }
-
-
-            template < typename __ElementType >
-            __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __use () noexcept -> __SharedPointerControlBlock * {
-
-                (void) this->_ownerCount.getThenAdd (1U, AtomicMemoryOrder :: Relaxed);
-                return this;
-            }
-
-
-            template < typename __ElementType >
-            __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __release () noexcept -> __ElementType * {
-
-                if (
-                        1U == this->_ownerCount.getThenSubtract (1U, AtomicMemoryOrder :: AcquireRelease) &&
-                        ! this->_dataExpired.test_and_set (std :: memory_order_acq_rel)
-                ) {
-
-                    auto pToReturn = this->_pObject;
-                    this->__disposeSelf();
-                    return pToReturn;
-                }
-
-                return nullptr;
-            }
-
-
-            template < typename __ElementType >
-            __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __disposeSelf () noexcept -> void {
-
-                if (
-                        0U == this->_observerCount.get (AtomicMemoryOrder :: AcquireRelease) &&
-                        ! this->_blockExpired.test_and_set (std :: memory_order_acq_rel)
-                ) {
-
-                    delete this;
-                }
-            }
-
-
-            template < typename __ElementType >
-            constexpr auto __SharedPointerControlBlock < __ElementType > :: __get () const noexcept -> __ElementType * {
-
-                return this->_pObject;
-            }
-
-
-            template < typename __ElementType >
-            __CDS_cpplang_NonConstConstexprMemberFunction auto __SharedPointerControlBlock < __ElementType > :: __exchange (
-                    __ElementType * pointer
-            ) noexcept -> __ElementType * {
-
-                return cds :: exchange ( this->_pObject, pointer );
-            }
-
-        }
-    }
 
     template < typename __ElementType, typename __Deleter >
     __CDS_OptimalInline SharedPointer <
@@ -129,9 +56,33 @@ namespace cds {
             __ElementType,
             __Deleter
     > :: SharedPointer (
+            std :: nullptr_t pointer
+    ) noexcept :
+            _pControl ( nullptr ) {
+
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: SharedPointer (
+            std :: nullptr_t pointer
+    ) noexcept :
+            _pControl ( nullptr ) {
+
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: SharedPointer (
             SharedPointer const & pointer
     ) noexcept :
-            _pControl ( pointer._pControl->__use() ) {
+            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__use() ) {
 
     }
 
@@ -143,7 +94,7 @@ namespace cds {
     > :: SharedPointer (
             SharedPointer const & pointer
     ) noexcept :
-            _pControl ( pointer._pControl->__use() ) {
+            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__use() ) {
 
     }
 
@@ -215,6 +166,32 @@ namespace cds {
             __Deleter
     > :: operator = (
             __ElementType * pointer
+    ) noexcept -> SharedPointer & {
+
+        this->reset ( pointer );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            std :: nullptr_t pointer
+    ) noexcept -> SharedPointer & {
+
+        this->reset ( pointer );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: operator = (
+            std :: nullptr_t pointer
     ) noexcept -> SharedPointer & {
 
         this->reset ( pointer );
@@ -599,7 +576,7 @@ namespace cds {
             return pointer;
         }
 
-        return this->_pControl->__exchange ( pointer );
+        return cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
     }
 
 
@@ -620,7 +597,39 @@ namespace cds {
             return pointer;
         }
 
-        return this->_pControl->__exchange ( pointer );
+        return cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: exchange (
+            std :: nullptr_t pointer
+    ) noexcept -> __ElementType * {
+
+        if ( this->_pControl == nullptr ) {
+            return nullptr;
+        }
+
+        return cds :: exchange ( this->_pControl, nullptr )->__release ();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: exchange (
+            std :: nullptr_t pointer
+    ) noexcept -> __ElementType * {
+
+        if ( this->_pControl == nullptr ) {
+            return nullptr;
+        }
+
+        return cds :: exchange ( this->_pControl, nullptr )->__release ();
     }
 
 
@@ -634,7 +643,7 @@ namespace cds {
             return nullptr;
         }
 
-        return this->_pControl->__exchange ( nullptr );
+        return this->_pControl->__release ();
     }
 
 
@@ -648,7 +657,7 @@ namespace cds {
             return nullptr;
         }
 
-        return this->_pControl->__exchange ( nullptr );
+        return this->_pControl->__release ();
     }
 
 
@@ -662,7 +671,7 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
+        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
     }
 
 
@@ -676,7 +685,7 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
+        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
     }
 
 
@@ -692,7 +701,7 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
     }
 
 
@@ -708,7 +717,39 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: reset (
+            std :: nullptr_t pointer
+    ) noexcept -> void {
+
+        if ( this->_pControl == nullptr ) {
+            return;
+        }
+
+        (void) cds :: exchange ( this->_pControl, nullptr )->__release ();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: reset (
+            std :: nullptr_t pointer
+    ) noexcept -> void {
+
+        if ( this->_pControl == nullptr ) {
+            return;
+        }
+
+        (void) cds :: exchange ( this->_pControl, nullptr )->__release ();
     }
 
 } /* namespace cds */

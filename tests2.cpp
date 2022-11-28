@@ -20,6 +20,9 @@
 #include <memory>
 #include <CDS/memory/UniquePointer>
 #include <CDS/memory/SharedPointer>
+#include <CDS/memory/RawPointer>
+#include <CDS/memory/WeakPointer>
+
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -33,6 +36,7 @@ auto timed ( cds :: String const & message, F const & block ) {
 }
 
 int main () {
+    std::make_shared<int>(3);
 std::shared_ptr <int> p24121;
 p24121.~shared_ptr();
     using namespace cds;
@@ -80,42 +84,42 @@ p24121.~shared_ptr();
     std :: cout << sp6 << '\n';
     std :: cout << sp7 << '\n';
 
-    constexpr int thCount = 10;
-    SharedPointer <int> sp = new int(0);
-    cds :: Function < void () > threadFunc = [tsp = sp]{
-        cds :: Function < void () > innerThreadFunc = [itsp = tsp]{
-            cds :: Function < void () > innerInnerThreadFunc = [iitsp = itsp]{
-                cds :: Function < void () > innerInnerInnerThreadFunc = [iiitsp = iitsp]{
-                    cds :: Function < void () > innerInnerInnerInnerThreadFunc = [iiiitsp = iiitsp]{
+    constexpr int thCount = 3;
+    SharedPointer < Atomic < int > > sp = new Atomic <int> (0);
+    cds :: Function threadFunc = [tsp = sp]{
+        cds :: Function innerThreadFunc = [itsp = tsp]{
+            cds :: Function innerInnerThreadFunc = [iitsp = itsp]{
+                cds :: Function innerInnerInnerThreadFunc = [iiitsp = iitsp]{
+                    cds :: Function innerInnerInnerInnerThreadFunc = [iiiitsp = iiitsp]{
                         ++ * iiiitsp;
                     };
 
                     cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
                     for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerInnerThreadFunc ) ); }
                     threads.forEach ([](auto & th){th->start();});
-                    threads.forEach ([](auto & th){th->join();});
                     -- * iiitsp;
+                    threads.forEach ([](auto & th){th->join();});
                 };
 
                 cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
                 for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerThreadFunc ) ); }
                 threads.forEach ([](auto & th){th->start();});
-                threads.forEach ([](auto & th){th->join();});
                 ++ * iitsp;
+                threads.forEach ([](auto & th){th->join();});
             };
 
             cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
             for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerThreadFunc ) ); }
             threads.forEach ([](auto & th){th->start();});
-            threads.forEach ([](auto & th){th->join();});
             -- * itsp;
+            threads.forEach ([](auto & th){th->join();});
         };
 
         cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
         for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerThreadFunc ) ); }
         threads.forEach ([](auto & th){th->start();});
-        threads.forEach ([](auto & th){th->join();});
         -- * tsp;
+        threads.forEach ([](auto & th){th->join();});
     };
 
     cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
@@ -123,6 +127,8 @@ p24121.~shared_ptr();
     threads.forEach ([](auto & th){th->start();});
     threads.forEach ([](auto & th){th->join();});
     std :: cout << * sp << '\n';
+
+
 
     return 0;
 }

@@ -1,1 +1,3 @@
-#include "../../../src/primitive/pointer/AtomicSharedPointer.hpp"
+#warning Deprecated. Use Atomic <SharedPointer> to achieve an equivalent object
+#include <CDS/threading/Atomic>
+#include <CDS/memory/SharedPointer>

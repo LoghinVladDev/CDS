@@ -7,7 +7,7 @@
 
 #include <CDS/Mutex>
 #include <CDS/memory/SharedPointer>
-#include <CDS/memory/ForeignPointer>
+#include <CDS/memory/RawPointer>
 
 namespace cds {
 
