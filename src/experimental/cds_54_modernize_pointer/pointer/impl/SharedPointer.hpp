@@ -162,9 +162,148 @@ namespace cds {
     > :: ~SharedPointer () noexcept {
 
         if ( this->_pControl != nullptr && this->_pControl->__release () ) {
-
             __Deleter () ( this->_pObject );
         }
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: ~SharedPointer () noexcept {
+
+        if ( this->_pControl != nullptr && this->_pControl->__release () ) {
+            __Deleter () ( this->_pObject );
+        }
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            __ElementType * pointer
+    ) noexcept -> SharedPointer & {
+
+        this->reset ( pointer );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: operator = (
+            __ElementType * pointer
+    ) noexcept -> SharedPointer & {
+
+        this->reset ( pointer );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            SharedPointer const & pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this == & pointer ) {
+            return * this;
+        }
+
+        if ( this->_pControl != nullptr && this->_pControl->__release () ) {
+            __Deleter () ( this->_pObject );
+        }
+
+        this->_pControl = pointer._pControl.__use ();
+        this->_pObject  = pointer._pObject;
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: operator = (
+            SharedPointer const & pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this == & pointer ) {
+            return * this;
+        }
+
+        if ( this->_pControl != nullptr && this->_pControl->__release () ) {
+            __Deleter () ( this->_pObject );
+        }
+
+        this->_pControl = pointer._pControl.__use ();
+        this->_pObject  = pointer._pObject;
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            SharedPointer && pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this == & pointer ) {
+            return * this;
+        }
+
+        this->_pControl = cds :: exchange ( pointer._pControl, nullptr );
+        this->_pObject  = cds :: exchange ( pointer._pObject, nullptr );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: operator = (
+            SharedPointer && pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this == & pointer ) {
+            return * this;
+        }
+
+        this->_pControl = cds :: exchange ( pointer._pControl, nullptr );
+        this->_pObject  = cds :: exchange ( pointer._pObject, nullptr );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: exchange (
+            __ElementType * pointer
+    ) noexcept -> __ElementType * {
+
+        /* TODO : Requires redraft to SmartPointer Base. Ownership of address
+         * MUST be inside SharedBlock.
+         *
+         * Reason:
+         * SharedPointer sp1 = new int (3);
+         * auto sp2 = sp1;
+         *
+         * sp1 = new int (5);
+         * // * sp2; <- segfault, since sp2 cannot know about assignment of sp1 otherwise.
+         * */
+//        return cds :: exchange (  )
     }
 
 } /* namespace cds */
