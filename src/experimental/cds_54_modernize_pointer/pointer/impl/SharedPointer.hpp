@@ -40,10 +40,11 @@ namespace cds {
                         ! this->_dataExpired.test_and_set (std :: memory_order_acq_rel)
                 ) {
 
-                    return this->_pObject;
+                    auto pToReturn = this->_pObject;
+                    this->__disposeSelf();
+                    return pToReturn;
                 }
 
-                this->__disposeSelf ();
                 return nullptr;
             }
 
@@ -52,7 +53,7 @@ namespace cds {
             __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __disposeSelf () noexcept -> void {
 
                 if (
-                        1U == this->_observerCount.getThenSubtract (1U, AtomicMemoryOrder :: AcquireRelease) &&
+                        0U == this->_observerCount.get (AtomicMemoryOrder :: AcquireRelease) &&
                         ! this->_blockExpired.test_and_set (std :: memory_order_acq_rel)
                 ) {
 
