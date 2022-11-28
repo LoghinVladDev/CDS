@@ -27,90 +27,52 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         using ConstPointerType      = __ElementType const *;
 
-    protected:                                  /* NOLINT(readability-redundant-access-specifiers) */
-        __ElementType * _pObject { nullptr };   /* NOLINT(*-non-private-member-variables-in-classes) */
-
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         constexpr SmartPointer () noexcept = default;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Explicit constexpr SmartPointer (
-                __ElementType * pObject
-        ) noexcept;
-
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
         constexpr SmartPointer (
                 SmartPointer const & pointer
-        ) noexcept;
+        ) noexcept = default;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         constexpr SmartPointer (
                 SmartPointer && pointer
-        ) noexcept;
+        ) noexcept = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_ConstexprDestructor ~SmartPointer () noexcept override = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 SmartPointer const & pointer
-        ) noexcept -> SmartPointer &;
+        ) noexcept -> SmartPointer & = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+        auto operator = (
                 SmartPointer && pointer
-        ) noexcept -> SmartPointer &;
+        ) noexcept -> SmartPointer & = default;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator == (
-                SmartPointer const & pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto isNull () const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator != (
-                SmartPointer const & pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept (false) -> __ElementType &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator == (
-                __ElementType const * pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto valueAt () const noexcept (false) -> __ElementType & = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator != (
-                __ElementType const * pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator -> () const noexcept (false) -> __ElementType *;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator == (
-                std :: nullptr_t pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get () const noexcept -> __ElementType * = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto operator != (
-                std :: nullptr_t pointer
-        ) const noexcept -> bool;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator bool () const noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto isNull () const noexcept -> bool;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator * () const noexcept (false) -> __ElementType &;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto valueAt () const noexcept (false) -> __ElementType &;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator -> () const noexcept (false) -> __ElementType *;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto get () const noexcept -> __ElementType *;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr explicit operator bool () const noexcept;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr explicit operator __ElementType * () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard virtual auto exchange (
@@ -137,7 +99,107 @@ namespace cds {
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto hash () const noexcept -> Size override;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
+    };
+
+
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class SmartPointer < __ElementType [] > : public Object {
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using AddressType           = Size;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ValueType             = __ElementType;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ValueReferenceType    = __ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using PointerType           = __ElementType *;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        using ConstPointerType      = __ElementType const *;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr SmartPointer () noexcept = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr SmartPointer (
+                SmartPointer const & pointer
+        ) noexcept = default;
+
+    protected:  /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr SmartPointer (
+                SmartPointer && pointer
+        ) noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~SmartPointer () noexcept override = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                SmartPointer const & pointer
+        ) noexcept -> SmartPointer & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                SmartPointer && pointer
+        ) noexcept -> SmartPointer & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto isNull () const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept (false) -> __ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard virtual auto valueAt () const noexcept (false) -> __ElementType & = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator -> () const noexcept (false) -> __ElementType *;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard virtual auto get () const noexcept -> __ElementType * = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator bool () const noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard virtual auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard virtual auto release () noexcept -> __ElementType * = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        virtual auto reset (
+                __ElementType * pointer
+        ) noexcept -> void = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        virtual auto reset () noexcept -> void = 0;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
+
+    public:
+        template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator [] (
+                __NumericType index
+        ) const noexcept -> __ElementType &;
     };
 
 } /* namespace cds */

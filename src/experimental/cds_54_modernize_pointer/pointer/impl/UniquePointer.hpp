@@ -14,7 +14,7 @@ namespace cds {
     > :: UniquePointer (
             __ElementType * pointer
     ) noexcept :
-            Base ( pointer ) {
+            _pObject ( pointer ) {
 
     }
 
@@ -26,7 +26,7 @@ namespace cds {
     > :: UniquePointer (
             __ElementType * pointer
     ) noexcept :
-            Base ( pointer ) {
+            _pObject ( pointer ) {
 
     }
 
@@ -38,7 +38,7 @@ namespace cds {
     > :: UniquePointer (
             UniquePointer && pointer
     ) noexcept :
-            Base ( std :: move ( pointer ) ) {
+            _pObject ( cds :: exchange ( pointer._pObject, nullptr ) ) {
 
     }
 
@@ -50,7 +50,7 @@ namespace cds {
     > :: UniquePointer (
             UniquePointer && pointer
     ) noexcept :
-            Base ( std :: move ( pointer ) ) {
+            _pObject ( cds :: exchange ( pointer._pObject, nullptr ) ) {
 
     }
 
@@ -119,103 +119,330 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
+    constexpr auto UniquePointer <
             __ElementType,
             __Deleter
-    > :: exchange (
-            __ElementType * pointer
-    ) noexcept -> __ElementType * {
+    > :: operator == (
+            __ElementType const * pointer
+    ) const noexcept -> bool {
 
-        return cds :: exchange ( this->_pObject, pointer );
+        return this->_pObject == pointer;
     }
 
 
     template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
-            __ElementType [],
-            __Deleter
-    > :: exchange (
-            __ElementType * pointer
-    ) noexcept -> __ElementType * {
-
-        return cds :: exchange ( this->_pObject, pointer );
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_ConstexprOverride auto UniquePointer <
-            __ElementType,
-            __Deleter
-    > :: release () noexcept -> __ElementType * {
-
-        return this->exchange ( nullptr );
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_ConstexprOverride auto UniquePointer <
-            __ElementType [],
-            __Deleter
-    > :: release () noexcept -> __ElementType * {
-
-        return this->exchange ( nullptr );
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto UniquePointer <
-            __ElementType,
-            __Deleter
-    > :: reset () noexcept -> void {
-
-        __Deleter () (this->release());
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto UniquePointer <
-            __ElementType [],
-            __Deleter
-    > :: reset () noexcept -> void {
-
-        __Deleter () (this->release());
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto UniquePointer <
-            __ElementType,
-            __Deleter
-    > :: reset (
-            __ElementType * pointer
-    ) noexcept -> void {
-
-        __Deleter () (this->exchange(pointer));
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto UniquePointer <
-            __ElementType [],
-            __Deleter
-    > :: reset (
-            __ElementType * pointer
-    ) noexcept -> void {
-
-        __Deleter () (this->exchange(pointer));
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    template < typename __NumericType >
     constexpr auto UniquePointer <
             __ElementType [],
             __Deleter
-    > :: operator [] (
-            __NumericType index
-    ) const noexcept -> __ElementType & {
+    > :: operator == (
+            __ElementType const * pointer
+    ) const noexcept -> bool {
 
-        return this->_pObject [ index ];
+        return this->_pObject == pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator != (
+            __ElementType const * pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator != (
+            __ElementType const * pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_VirtualConstexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator == (
+            Base const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer.get();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_VirtualConstexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator == (
+            Base const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer.get();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_VirtualConstexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator != (
+            Base const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer.get();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_VirtualConstexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator != (
+            Base const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer.get();
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator == (
+            UniquePointer const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer._pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator == (
+            UniquePointer const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer._pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator != (
+            UniquePointer const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer._pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator != (
+            UniquePointer const & pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer._pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator == (
+            std :: nullptr_t pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator == (
+            std :: nullptr_t pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject == pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator != (
+            std :: nullptr_t pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator != (
+            std :: nullptr_t pointer
+    ) const noexcept -> bool {
+
+        return this->_pObject != pointer;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: valueAt () const noexcept (false) -> __ElementType & {
+
+        if ( this->_pObject == nullptr ) {
+            throw NullPointerException ();
+        }
+
+        return * this->_pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: valueAt () const noexcept (false) -> __ElementType & {
+
+        if ( this->_pObject == nullptr ) {
+            throw NullPointerException ();
+        }
+
+        return * this->_pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: get () const noexcept -> __ElementType * {
+
+        return this->_pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: get () const noexcept -> __ElementType * {
+
+        return this->_pObject;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: exchange (
+            __ElementType * pointer
+    ) noexcept -> __ElementType * {
+
+        return cds :: exchange ( this->_pObject, pointer );
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: exchange (
+            __ElementType * pointer
+    ) noexcept -> __ElementType * {
+
+        return cds :: exchange ( this->_pObject, pointer );
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: release () noexcept -> __ElementType * {
+
+        return this->exchange ( nullptr );
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: release () noexcept -> __ElementType * {
+
+        return this->exchange ( nullptr );
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: reset () noexcept -> void {
+
+        __Deleter () (this->release());
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: reset () noexcept -> void {
+
+        __Deleter () (this->release());
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: reset (
+            __ElementType * pointer
+    ) noexcept -> void {
+
+        __Deleter () (this->exchange(pointer));
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: reset (
+            __ElementType * pointer
+    ) noexcept -> void {
+
+        __Deleter () (this->exchange(pointer));
     }
 
 } /* namespace cds */

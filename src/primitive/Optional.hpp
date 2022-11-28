@@ -7,7 +7,7 @@
 
 #include <CDS/meta/FunctionTraits>
 #include <CDS/memory/UniquePointer>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

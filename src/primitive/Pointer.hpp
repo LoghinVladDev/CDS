@@ -10,7 +10,7 @@
 
 #include <CDS/Traits>
 #include <CDS/Utility>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 #warning Header deprecated. Do not include this directly via relative pathing!
 

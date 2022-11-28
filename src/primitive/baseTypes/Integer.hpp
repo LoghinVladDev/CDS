@@ -10,7 +10,7 @@
 #include <CDS/memory/UniquePointer>
 #include <CDS/Utility>
 #include <CDS/Range>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

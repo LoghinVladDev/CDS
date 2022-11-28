@@ -18,7 +18,7 @@
 #include <CDS/Types>
 #include <CDS/Double>
 #include <CDS/Function>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 #include "SequencePrivate.hpp"
 

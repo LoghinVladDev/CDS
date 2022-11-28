@@ -13,6 +13,7 @@ namespace cds {
     namespace __hidden {
         namespace __impl {
 
+            template < typename __ElementType >
             class __SharedPointerControlBlock {
 
             private:
@@ -27,17 +28,30 @@ namespace cds {
             private:
                 std :: atomic_flag          _blockExpired;
 
+            private:
+                __ElementType             * _pObject;
+
             public:
-                static auto __new () noexcept -> __SharedPointerControlBlock *;
+                static auto __new (
+                        __ElementType * pointer = nullptr
+                ) noexcept -> __SharedPointerControlBlock *;
 
             public:
                 auto __use () noexcept -> __SharedPointerControlBlock *;
 
             public:
-                auto __release () noexcept -> bool;
+                auto __release () noexcept -> __ElementType *;
 
             public:
                 auto __disposeSelf () noexcept -> void;
+
+            public:
+                __CDS_NoDiscard constexpr auto __get () const noexcept -> __ElementType *;
+
+            public:
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __exchange (
+                        __ElementType * pointer
+                ) noexcept -> __ElementType *;
             };
 
         }
@@ -50,7 +64,7 @@ namespace cds {
         using Base = SmartPointer < __ElementType >;
 
     private:
-        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock;
+        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
     private:
         ControlBlock * _pControl { nullptr };
@@ -59,7 +73,7 @@ namespace cds {
         SharedPointer () noexcept;
 
     public:
-        SharedPointer (
+        __CDS_Implicit SharedPointer (
                 __ElementType * pointer
         ) noexcept;
 
@@ -75,12 +89,12 @@ namespace cds {
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > const &
+                WeakPointer < __ElementType, __Deleter > const & pointer
         ) noexcept;
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > &&
+                WeakPointer < __ElementType, __Deleter > && pointer
         ) noexcept;
 
     public:
@@ -110,6 +124,52 @@ namespace cds {
         auto operator = (
                 WeakPointer < __ElementType, __Deleter > && pointer
         ) noexcept -> SharedPointer &;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
 
     public:
         auto exchange (
@@ -130,13 +190,13 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class SharedPointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType > {
+    class SharedPointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType [] > {
 
     private:
         using Base = SmartPointer < __ElementType >;
 
     private:
-        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock;
+        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
     private:
         ControlBlock * _pControl { nullptr };
@@ -145,7 +205,7 @@ namespace cds {
         SharedPointer () noexcept;
 
     public:
-        SharedPointer (
+        __CDS_Implicit SharedPointer (
                 __ElementType * pointer
         ) noexcept;
 
@@ -161,12 +221,12 @@ namespace cds {
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > const &
+                WeakPointer < __ElementType, __Deleter > const & pointer
         ) noexcept;
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > &&
+                WeakPointer < __ElementType, __Deleter > && pointer
         ) noexcept;
 
     public:
@@ -198,6 +258,52 @@ namespace cds {
         ) noexcept -> SharedPointer &;
 
     public:
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+
+    public:
         auto exchange (
                 __ElementType * pointer
         ) noexcept -> __ElementType * override;
@@ -212,12 +318,6 @@ namespace cds {
         auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
-
-    public:
-        template < typename __NumericType >
-        __CDS_NoDiscard constexpr auto operator [] (
-                __NumericType index
-        ) const noexcept -> __ElementType &;
     };
 
 } /* namespace cds */

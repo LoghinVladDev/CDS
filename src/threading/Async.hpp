@@ -8,7 +8,7 @@
 #include <CDS/memory/UniquePointer>
 #include <CDS/memory/SharedPointer>
 #include <CDS/Semaphore>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 #include <CDS/Function>
 #include <CDS/Thread>
 

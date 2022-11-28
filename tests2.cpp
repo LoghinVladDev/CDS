@@ -69,6 +69,6 @@ p24121.~shared_ptr();
 
     UniquePointer <int> p54 = new int (3);
     UniquePointer <int[]> p64 = new int [5];
-    SharedPointer <int> s54 = new int (3);
-    SharedPointer <int[]> s64 = new int[5];
+//    SharedPointer <int> s54 = new int (3);
+//    SharedPointer <int[]> s64 = new int[5];
 }

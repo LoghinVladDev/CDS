@@ -6,7 +6,7 @@
 #define CDS_EXCEPTION_HPP
 
 #include <CDS/String>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 #include <utility>
 
 namespace cds {

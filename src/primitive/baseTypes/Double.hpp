@@ -9,7 +9,7 @@
 #include <CDS/Random>
 #include <CDS/memory/UniquePointer>
 #include <CDS/Utility>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

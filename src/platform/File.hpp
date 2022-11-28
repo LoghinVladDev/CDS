@@ -12,7 +12,7 @@
 #include <CDS/Path>
 #include <CDS/HashMap>
 #include <CDS/memory/UniquePointer>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 #if defined(__linux)
 #include <sys/stat.h>

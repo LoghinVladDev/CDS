@@ -7,7 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Warnings>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 #include <CDS/Utility>
 #include <CDS/DoubleLinkedList>
 

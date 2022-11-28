@@ -15,6 +15,9 @@ namespace cds {
     private:
         using Base = SmartPointer < __ElementType >;
 
+    private:
+        __ElementType * _pObject { nullptr };
+
     public:
         constexpr UniquePointer () noexcept = default;
 
@@ -50,6 +53,52 @@ namespace cds {
         auto operator = (
                 UniquePointer && pointer
         ) noexcept -> UniquePointer &;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
 
     public:
         __CDS_cpplang_ConstexprOverride auto exchange (
@@ -70,10 +119,13 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class UniquePointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType > {
+    class UniquePointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType [] > {
 
     private:
         using Base = SmartPointer < __ElementType >;
+
+    private:
+        __ElementType * _pObject { nullptr };
 
     public:
         constexpr UniquePointer () noexcept = default;
@@ -112,12 +164,58 @@ namespace cds {
         ) noexcept -> UniquePointer &;
 
     public:
-        __CDS_cpplang_NonConstConstexprMemberFunction auto exchange (
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+
+    public:
+        __CDS_cpplang_ConstexprOverride auto exchange (
                 __ElementType * pointer
         ) noexcept -> __ElementType * override;
 
     public:
-        __CDS_cpplang_NonConstConstexprMemberFunction auto release () noexcept -> __ElementType * override;
+        __CDS_cpplang_ConstexprOverride auto release () noexcept -> __ElementType * override;
 
     public:
         auto reset () noexcept -> void override;
@@ -126,12 +224,6 @@ namespace cds {
         auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
-
-    public:
-        template < typename __NumericType >
-        __CDS_NoDiscard constexpr auto operator [] (
-                __NumericType index
-        ) const noexcept -> __ElementType &;
     };
 
 } /* namespace cds */

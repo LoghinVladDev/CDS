@@ -14,7 +14,7 @@ namespace cds {
 
 #include <CDS/Object>
 #include <CDS/Pair>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

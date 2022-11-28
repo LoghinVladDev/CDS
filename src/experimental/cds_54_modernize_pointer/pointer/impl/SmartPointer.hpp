@@ -54,172 +54,80 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace __hidden */
 
     template < typename __ElementType >
-    constexpr SmartPointer < __ElementType > :: SmartPointer (
-            __ElementType * pObject
-    ) noexcept :
-            _pObject ( pObject ) {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType > :: isNull () const noexcept -> bool {
 
+        return this->get() == nullptr;
     }
 
 
     template < typename __ElementType >
-    constexpr SmartPointer < __ElementType > :: SmartPointer (
-            SmartPointer < __ElementType > const & pointer
-    ) noexcept :
-            _pObject ( pointer._pObject ) {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType [] > :: isNull () const noexcept -> bool {
 
+        return this->get() == nullptr;
     }
 
 
     template < typename __ElementType >
-    constexpr SmartPointer < __ElementType > :: SmartPointer (
-            SmartPointer < __ElementType > && pointer
-    ) noexcept :
-            _pObject ( cds :: exchange ( pointer._pObject, nullptr ) ) {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType > :: operator * () const noexcept (false) -> __ElementType & {
 
+        return this->valueAt();
     }
 
 
     template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto SmartPointer < __ElementType > :: operator = (
-            SmartPointer < __ElementType > const & pointer
-    ) noexcept -> SmartPointer & {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType [] > :: operator * () const noexcept (false) -> __ElementType & {
 
-        if ( this == & pointer ) {
-            return * this;
-        }
-
-        this->_pObject = pointer._pObject;
-        return * this;
+        return this->valueAt();
     }
 
 
     template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto SmartPointer < __ElementType > :: operator = (
-            SmartPointer < __ElementType > && pointer
-    ) noexcept -> SmartPointer & {
-
-        if ( this == & pointer ) {
-            return * this;
-        }
-
-        this->_pObject = cds :: exchange ( pointer._pObject, nullptr );
-        return * this;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator == (
-            SmartPointer const & pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject == pointer._pObject;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator != (
-            SmartPointer const & pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject != pointer._pObject;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator == (
-            __ElementType const * pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject == pointer;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator != (
-            __ElementType const * pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject != pointer;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator == (
-            std :: nullptr_t pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject == pointer;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: operator != (
-            std :: nullptr_t pointer
-    ) const noexcept -> bool {
-
-        return this->_pObject != pointer;
-    }
-
-
-    template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: isNull () const noexcept -> bool {
-
-        return this->_pObject == nullptr;
-    }
-
-
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprConditioned auto SmartPointer < __ElementType > :: operator * () const noexcept (false) -> __ElementType & {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType > :: operator -> () const noexcept (false) -> __ElementType * {
 
         if ( this->_pObject == nullptr ) {
             throw NullPointerException ();
         }
 
-        return * this->_pObject;
+        return this->get();
     }
 
 
     template < typename __ElementType >
-    __CDS_cpplang_ConstexprConditioned auto SmartPointer < __ElementType > :: valueAt () const noexcept (false) -> __ElementType & {
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType [] > :: operator -> () const noexcept (false) -> __ElementType * {
 
         if ( this->_pObject == nullptr ) {
             throw NullPointerException ();
         }
 
-        return * this->_pObject;
+        return this->get();
     }
 
 
     template < typename __ElementType >
-    __CDS_cpplang_ConstexprConditioned auto SmartPointer < __ElementType > :: operator -> () const noexcept (false) -> __ElementType * {
+    __CDS_cpplang_VirtualConstexpr SmartPointer < __ElementType > :: operator bool () const noexcept {
 
-        if ( this->_pObject == nullptr ) {
-            throw NullPointerException ();
-        }
-
-        return this->_pObject;
+        return ! this->isNull();
     }
 
 
     template < typename __ElementType >
-    constexpr auto SmartPointer < __ElementType > :: get () const noexcept -> __ElementType * {
+    __CDS_cpplang_VirtualConstexpr SmartPointer < __ElementType [] > :: operator bool () const noexcept {
 
-        return this->_pObject;
+        return ! this->isNull();
     }
 
 
     template < typename __ElementType >
-    constexpr SmartPointer < __ElementType > :: operator bool () const noexcept {
+    __CDS_cpplang_VirtualConstexpr SmartPointer < __ElementType > :: operator __ElementType * () const noexcept {
 
-        return this->_pObject != nullptr;
+        return this->get();
     }
 
 
     template < typename __ElementType >
-    constexpr SmartPointer < __ElementType > :: operator __ElementType * () const noexcept {
+    __CDS_cpplang_VirtualConstexpr SmartPointer < __ElementType [] > :: operator __ElementType * () const noexcept {
 
-        return this->_pObject;
+        return this->get();
     }
 
 
@@ -237,7 +145,25 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             return false;
         }
 
-        return this->_pObject == pPointer->_pObject;
+        return this->get() == pPointer->get();
+    }
+
+
+    template < typename __ElementType >
+    auto SmartPointer < __ElementType [] > :: equals (
+            Object const & object
+    ) const noexcept -> bool {
+
+        if ( this == & object ) {
+            return false;
+        }
+
+        auto pPointer = dynamic_cast < decltype (this) > ( & object );
+        if ( pPointer == nullptr ) {
+            return false;
+        }
+
+        return this->get() == pPointer->get();
     }
 
 
@@ -245,15 +171,41 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     auto SmartPointer < __ElementType > :: toString () const noexcept -> String {
 
         std :: stringstream oss;
-        __hidden :: __impl :: __ptrStringRep ( oss, this->_pObject );
+        __hidden :: __impl :: __ptrStringRep ( oss, this->get() );
         return oss.str();
     }
 
 
     template < typename __ElementType >
-    auto SmartPointer < __ElementType > :: hash () const noexcept -> Size {
+    auto SmartPointer < __ElementType [] > :: toString () const noexcept -> String {
 
-        return reinterpret_cast < Size > ( this->_pObject );
+        std :: stringstream oss;
+        __hidden :: __impl :: __ptrStringRep ( oss, this->get() );
+        return oss.str();
+    }
+
+
+    template < typename __ElementType >
+    __CDS_cpplang_ConstexprOverride auto SmartPointer < __ElementType > :: hash () const noexcept -> Size {
+
+        return reinterpret_cast < Size > ( this->get() );
+    }
+
+
+    template < typename __ElementType >
+    __CDS_cpplang_ConstexprOverride auto SmartPointer < __ElementType [] > :: hash () const noexcept -> Size {
+
+        return reinterpret_cast < Size > ( this->get() );
+    }
+
+
+    template < typename __ElementType >
+    template < typename __NumericType >
+    __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType [] > :: operator [] (
+            __NumericType index
+    ) const noexcept -> __ElementType & {
+
+        return this->get() [index];
     }
 
 } /* namespace cds */
