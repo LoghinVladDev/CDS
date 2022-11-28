@@ -11,20 +11,14 @@ namespace cds {
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
-    > :: SharedPointer () noexcept :
-            _pControl ( ControlBlock :: __new () ) {
-
-    }
+    > :: SharedPointer () noexcept = default;
 
 
     template < typename __ElementType, typename __Deleter >
     __CDS_OptimalInline SharedPointer <
             __ElementType [],
             __Deleter
-    > :: SharedPointer () noexcept :
-            _pControl ( ControlBlock :: __new () ) {
-
-    }
+    > :: SharedPointer () noexcept = default;
 
 
     template < typename __ElementType, typename __Deleter >
@@ -56,7 +50,7 @@ namespace cds {
             __ElementType,
             __Deleter
     > :: SharedPointer (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept :
             _pControl ( nullptr ) {
 
@@ -68,7 +62,7 @@ namespace cds {
             __ElementType [],
             __Deleter
     > :: SharedPointer (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept :
             _pControl ( nullptr ) {
 
@@ -671,7 +665,7 @@ namespace cds {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, nullptr )->__release () );
     }
 
 
@@ -685,7 +679,7 @@ namespace cds {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, nullptr )->__release () );
     }
 
 
@@ -701,7 +695,7 @@ namespace cds {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
     }
 
 
@@ -717,7 +711,7 @@ namespace cds {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
     }
 
 
@@ -726,14 +720,14 @@ namespace cds {
             __ElementType,
             __Deleter
     > :: reset (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept -> void {
 
         if ( this->_pControl == nullptr ) {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, nullptr )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, nullptr )->__release () );
     }
 
 
@@ -742,14 +736,14 @@ namespace cds {
             __ElementType [],
             __Deleter
     > :: reset (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept -> void {
 
         if ( this->_pControl == nullptr ) {
             return;
         }
 
-        (void) cds :: exchange ( this->_pControl, nullptr )->__release ();
+        __Deleter () ( cds :: exchange ( this->_pControl, nullptr )->__release () );
     }
 
 } /* namespace cds */

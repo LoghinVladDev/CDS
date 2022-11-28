@@ -84,7 +84,7 @@ p24121.~shared_ptr();
     std :: cout << sp6 << '\n';
     std :: cout << sp7 << '\n';
 
-    constexpr int thCount = 3;
+    constexpr int thCount = 2;
     SharedPointer < Atomic < int > > sp = new Atomic <int> (0);
     cds :: Function threadFunc = [tsp = sp]{
         cds :: Function innerThreadFunc = [itsp = tsp]{
@@ -128,7 +128,33 @@ p24121.~shared_ptr();
     threads.forEach ([](auto & th){th->join();});
     std :: cout << * sp << '\n';
 
+    auto f = []{
+        SharedPointer < int > intSP = new int(3);
+        WeakPointer < int > intWP = intSP;
+        WeakPointer < int > intWP2 = intWP;
 
+        if ( auto intSP2 = intWP2.acquire() ) {
+            std :: cout << * intSP2 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+
+        intSP.reset();
+
+        if ( auto intSP3 = intWP.acquire() ) {
+            std :: cout << * intSP3 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+
+        if ( auto intSP2 = intWP2.acquire() ) {
+            std :: cout << * intSP2 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+    };
+
+    f();
 
     return 0;
 }
