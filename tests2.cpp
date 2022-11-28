@@ -80,62 +80,46 @@ p24121.~shared_ptr();
     std :: cout << sp6 << '\n';
     std :: cout << sp7 << '\n';
 
+    constexpr int thCount = 10;
     SharedPointer <int> sp = new int(0);
     cds :: Function < void () > threadFunc = [tsp = sp]{
         cds :: Function < void () > innerThreadFunc = [itsp = tsp]{
             cds :: Function < void () > innerInnerThreadFunc = [iitsp = itsp]{
+                cds :: Function < void () > innerInnerInnerThreadFunc = [iiitsp = iitsp]{
+                    cds :: Function < void () > innerInnerInnerInnerThreadFunc = [iiiitsp = iiitsp]{
+                        ++ * iiiitsp;
+                    };
+
+                    cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+                    for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerInnerThreadFunc ) ); }
+                    threads.forEach ([](auto & th){th->start();});
+                    threads.forEach ([](auto & th){th->join();});
+                    -- * iiitsp;
+                };
+
+                cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+                for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerThreadFunc ) ); }
+                threads.forEach ([](auto & th){th->start();});
+                threads.forEach ([](auto & th){th->join();});
                 ++ * iitsp;
             };
 
-            auto threads = cds :: listOf < cds :: UniquePointer < Thread > > (
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc ),
-                    new Runnable ( innerInnerThreadFunc )
-            );
-
+            cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+            for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerThreadFunc ) ); }
             threads.forEach ([](auto & th){th->start();});
             threads.forEach ([](auto & th){th->join();});
             -- * itsp;
         };
 
-        auto threads = cds :: listOf < cds :: UniquePointer < Thread > > (
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc ),
-                new Runnable ( innerThreadFunc )
-        );
-
+        cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+        for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerThreadFunc ) ); }
         threads.forEach ([](auto & th){th->start();});
         threads.forEach ([](auto & th){th->join();});
         -- * tsp;
     };
 
-    auto threads = cds :: listOf < cds :: UniquePointer < Thread > > (
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc ),
-            new Runnable ( threadFunc )
-    );
-
+    cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+    for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( threadFunc ) ); }
     threads.forEach ([](auto & th){th->start();});
     threads.forEach ([](auto & th){th->join();});
     std :: cout << * sp << '\n';
