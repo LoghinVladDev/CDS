@@ -14,7 +14,7 @@ namespace cds {
     > :: UniquePointer (
             __ElementType * pointer
     ) noexcept :
-            Implementation ( pointer ) {
+            Base ( pointer ) {
 
     }
 
@@ -26,7 +26,7 @@ namespace cds {
     > :: UniquePointer (
             __ElementType * pointer
     ) noexcept :
-            Implementation ( pointer ) {
+            Base ( pointer ) {
 
     }
 
@@ -38,7 +38,7 @@ namespace cds {
     > :: UniquePointer (
             UniquePointer && pointer
     ) noexcept :
-            Implementation ( std :: move ( pointer ) ) {
+            Base ( std :: move ( pointer ) ) {
 
     }
 
@@ -50,7 +50,7 @@ namespace cds {
     > :: UniquePointer (
             UniquePointer && pointer
     ) noexcept :
-            Implementation ( std :: move ( pointer ) ) {
+            Base ( std :: move ( pointer ) ) {
 
     }
 
@@ -203,6 +203,19 @@ namespace cds {
     ) noexcept -> void {
 
         __Deleter () (this->exchange(pointer));
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    template < typename __NumericType >
+    constexpr auto UniquePointer <
+            __ElementType [],
+            __Deleter
+    > :: operator [] (
+            __NumericType index
+    ) const noexcept -> __ElementType & {
+
+        return this->_pObject [ index ];
     }
 
 } /* namespace cds */

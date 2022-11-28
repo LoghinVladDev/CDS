@@ -18,7 +18,8 @@
 #include <CDS/filesystem/Path>
 #include <CDS/filesystem/Walk>
 #include <memory>
-#include <CDS/smartPointers/UniquePointer>
+#include <CDS/memory/UniquePointer>
+#include <CDS/memory/SharedPointer>
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -32,7 +33,8 @@ auto timed ( cds :: String const & message, F const & block ) {
 }
 
 int main () {
-
+std::shared_ptr <int> p24121;
+p24121.~shared_ptr();
     using namespace cds;
     using namespace cds :: json;
     using namespace cds :: literals;
@@ -67,4 +69,6 @@ int main () {
 
     UniquePointer <int> p54 = new int (3);
     UniquePointer <int[]> p64 = new int [5];
+    SharedPointer <int> s54 = new int (3);
+    SharedPointer <int[]> s64 = new int[5];
 }

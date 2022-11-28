@@ -5,7 +5,7 @@
 #ifndef __CDS_UNIQUE_POINTER_HPP__
 #define __CDS_UNIQUE_POINTER_HPP__
 
-#include <CDS/smartPointers/SmartPointer>
+#include <CDS/memory/SmartPointer>
 
 namespace cds {
 

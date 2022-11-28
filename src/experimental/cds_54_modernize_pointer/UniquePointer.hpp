@@ -5,7 +5,7 @@
 #ifndef __CDS_UNIQUE_POINTER_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_UNIQUE_POINTER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/smartPointers/SmartPointer>
+#include <CDS/memory/SmartPointer>
 
 namespace cds {
 
@@ -13,7 +13,7 @@ namespace cds {
     class UniquePointer : public SmartPointer < __ElementType > {
 
     private:
-        using Implementation = SmartPointer < __ElementType >;
+        using Base = SmartPointer < __ElementType >;
 
     public:
         constexpr UniquePointer () noexcept = default;
@@ -73,7 +73,7 @@ namespace cds {
     class UniquePointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType > {
 
     private:
-        using Implementation = SmartPointer < __ElementType >;
+        using Base = SmartPointer < __ElementType >;
 
     public:
         constexpr UniquePointer () noexcept = default;
@@ -126,6 +126,12 @@ namespace cds {
         auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
+
+    public:
+        template < typename __NumericType >
+        __CDS_NoDiscard constexpr auto operator [] (
+                __NumericType index
+        ) const noexcept -> __ElementType &;
     };
 
 } /* namespace cds */

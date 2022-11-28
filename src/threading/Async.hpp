@@ -5,8 +5,8 @@
 #ifndef CDS_ASYNC_HPP
 #define CDS_ASYNC_HPP
 
-#include <CDS/smartPointers/UniquePointer>
-#include <CDS/smartPointers/SharedPointer>
+#include <CDS/memory/UniquePointer>
+#include <CDS/memory/SharedPointer>
 #include <CDS/Semaphore>
 #include <CDS/Memory>
 #include <CDS/Function>

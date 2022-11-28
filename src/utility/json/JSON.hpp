@@ -8,7 +8,7 @@
 #include <CDS/meta/TypeTraits>              /* NOLINT(llvm-include-order) */
 #include <CDS/LinkedHashMap>
 #include <CDS/Array>
-#include <CDS/smartPointers/UniquePointer>
+#include <CDS/memory/UniquePointer>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
