@@ -84,7 +84,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     template < typename __ElementType >
     __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType > :: operator -> () const noexcept (false) -> __ElementType * {
 
-        if ( this->_pObject == nullptr ) {
+        if ( this->get() == nullptr ) {
             throw NullPointerException ();
         }
 
@@ -95,7 +95,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     template < typename __ElementType >
     __CDS_cpplang_VirtualConstexpr auto SmartPointer < __ElementType [] > :: operator -> () const noexcept (false) -> __ElementType * {
 
-        if ( this->_pObject == nullptr ) {
+        if ( this->get() == nullptr ) {
             throw NullPointerException ();
         }
 

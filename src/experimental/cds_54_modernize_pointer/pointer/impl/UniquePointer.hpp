@@ -103,6 +103,23 @@ namespace cds {
 
     template < typename __ElementType, typename __Deleter >
     __CDS_OptimalInline auto UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            UniquePointer && pointer
+    ) noexcept -> UniquePointer & {
+
+        if ( this == & pointer ) {
+            return * this;
+        }
+
+        this->reset (pointer.release());
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto UniquePointer <
             __ElementType [],
             __Deleter
     > :: operator = (
