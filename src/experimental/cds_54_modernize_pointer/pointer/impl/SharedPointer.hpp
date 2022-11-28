@@ -535,7 +535,7 @@ namespace cds {
             throw NullPointerException ();
         }
 
-        return this->_pControl->__get();
+        return * this->_pControl->__get();
     }
 
 
@@ -549,7 +549,7 @@ namespace cds {
             throw NullPointerException ();
         }
 
-        return this->_pControl->__get();
+        return * this->_pControl->__get();
     }
 
 
@@ -691,7 +691,7 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ( pointer );
+        cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
     }
 
 
@@ -707,7 +707,7 @@ namespace cds {
             return;
         }
 
-        cds :: exchange ( this->_pControl, ControlBlock :: __new () )->__release ( pointer );
+        cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release ();
     }
 
 } /* namespace cds */
