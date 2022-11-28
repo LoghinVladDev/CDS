@@ -161,7 +161,7 @@ namespace cds {
             __Deleter
     > :: ~SharedPointer () noexcept {
 
-        if ( this->_pControl->__release () ) {
+        if ( this->_pControl != nullptr && this->_pControl->__release () ) {
 
             __Deleter () ( this->_pObject );
         }
