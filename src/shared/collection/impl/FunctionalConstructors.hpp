@@ -1,18 +1,18 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/13/22.
  */
 
-#ifndef __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
-#define __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __CollectionType,  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __LastArgumentType /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __collectionOfPush (  /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __LastArgumentType /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __collectionOfPush (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __CollectionType      & collection,
                     __LastArgumentType   && lastValue
             ) noexcept -> void {
@@ -22,10 +22,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __CollectionType,              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __FirstArgumentType,           /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __RemainingArgumentTypes   /* NOLINT(bugprone-reserved-identifier) */
-            > inline auto __collectionOfPush (              /* NOLINT(bugprone-reserved-identifier) */
+                    typename __CollectionType,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __FirstArgumentType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __RemainingArgumentTypes   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > inline auto __collectionOfPush (              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __CollectionType          &       collection,
                     __FirstArgumentType      &&       firstValue,
                     __RemainingArgumentTypes && ...   remainingValues
@@ -36,10 +36,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
             template <
-                    template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier) */
-                    typename ... __ArgumentTypes,                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __Common                                   /* NOLINT(bugprone-reserved-identifier) */
-            > auto __instantiateCollectionOf (                          /* NOLINT(bugprone-reserved-identifier) */
+                    template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename ... __ArgumentTypes,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Common                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > auto __instantiateCollectionOf (                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ArgumentTypes && ... values
             ) noexcept -> __CollectionType < __Common > {
 
@@ -48,18 +48,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return collection;
             }
 
-        }
-    }
-}
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
 
 #endif /* __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__ */
 
 namespace cds {
 
 #if defined (__CDS_LINKED_LIST_HPP__) && ! defined ( __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto linkedListOf (
             __ArgumentTypes && ... values
     ) noexcept -> LinkedList < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -71,9 +71,9 @@ namespace cds {
 
 
 #if defined (__CDS_ARRAY_HPP__) && ! defined ( __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto arrayOf (
             __ArgumentTypes && ... values
     ) noexcept -> Array < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -86,9 +86,9 @@ namespace cds {
 
 
 #if defined (__CDS_LINKED_HASH_SET_HPP__) && ! defined ( __CDS_SHARED_LINKED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_LINKED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_LINKED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto linkedHashSetOf (
             __ArgumentTypes && ... values
     ) noexcept -> LinkedHashSet < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -100,9 +100,9 @@ namespace cds {
 
 
 #if defined (__CDS_TREE_SET_HPP__) && ! defined ( __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ ) && defined ( __CDS_TREE_SET_REMOVE_WHEN_IMPLEMENTED )
-#define __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto treeSetOf (
             __ArgumentTypes && ... values
     ) noexcept -> TreeSet < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -114,9 +114,9 @@ namespace cds {
 
 
 #if defined (__CDS_HASH_SET_HPP__) && ! defined ( __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto hashSetOf (
             __ArgumentTypes && ... values
     ) noexcept -> HashSet < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -129,7 +129,7 @@ namespace cds {
 
 
 #if defined (__CDS_LINKED_HASH_MAP_HPP__) && ! defined ( __CDS_SHARED_LINKED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_LINKED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_LINKED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template <
             typename ... __ArgumentTypes,
@@ -150,7 +150,7 @@ namespace cds {
 
 
 #if defined (__CDS_TREE_MAP_HPP__) && ! defined ( __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ ) && defined ( __CDS_TREE_MAP_REMOVE_WHEN_IMPLEMENTED )
-#define __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template <
             typename ... __ArgumentTypes,
@@ -171,7 +171,7 @@ namespace cds {
 
 
 #if defined (__CDS_HASH_MAP_HPP__) && ! defined ( __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template <
             typename ... __ArgumentTypes,
@@ -194,9 +194,9 @@ namespace cds {
 
 
 #if defined (__CDS_LIST_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto listOf (
             __ArgumentTypes && ... values
     ) noexcept -> __CDS_LIST_FUNCTIONAL_CONSTRUCTOR_TYPE < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -210,9 +210,9 @@ namespace cds {
 
 
 #if defined (__CDS_SET_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier) */
+    template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto setOf (
             __ArgumentTypes && ... values
     ) noexcept -> __CDS_SET_FUNCTIONAL_CONSTRUCTOR_TYPE < cds :: meta :: Common < __ArgumentTypes ... > > {
@@ -226,7 +226,7 @@ namespace cds {
 
 
 #if defined (__CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template <
             typename ... __ArgumentTypes,
@@ -245,4 +245,4 @@ namespace cds {
 
 #endif /* __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ */
 
-}
+} /* namespace cds */
