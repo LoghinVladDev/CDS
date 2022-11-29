@@ -27,15 +27,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             public:
                 template <
-                        typename __ConvertibleType,
+                        typename __ConvertibleType,                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         cds :: meta :: EnableIf <
-                                cds :: meta :: isConvertible < __ConvertibleType (*)[], __ElementType (*)[] > ()
+                                cds :: meta :: isConvertible < __ConvertibleType (*)[], __ElementType (*)[] > ()    /* NOLINT(*-avoid-c-arrays) */
                         > = 0
                 > auto operator () (
                         __ConvertibleType * pointer
                 ) const noexcept -> void {
 
-                    delete [] pointer;
+                    delete [] pointer; /* NOLINT(*-owning-memory) */
                 }
             };
 

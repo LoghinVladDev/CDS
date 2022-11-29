@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr RawPointer < __ElementType > :: RawPointer (
             __ElementType * pointer
     ) noexcept :
@@ -16,8 +16,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr RawPointer < __ElementType [] > :: RawPointer (
+    template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr RawPointer < __ElementType [] > :: RawPointer (   /* NOLINT(*-avoid-c-arrays) */
             __ElementType * pointer
     ) noexcept :
             _pObject ( pointer ) {
@@ -25,7 +25,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr RawPointer < __ElementType > :: RawPointer (
             RawPointer const & pointer
     ) noexcept :
@@ -34,8 +34,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr RawPointer < __ElementType [] > :: RawPointer (
+    template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr RawPointer < __ElementType [] > :: RawPointer (   /* NOLINT(*-avoid-c-arrays) */
             RawPointer const & pointer
     ) noexcept :
             _pObject ( pointer._pObject ) {
@@ -43,7 +43,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr RawPointer < __ElementType > :: RawPointer (
             RawPointer && pointer
     ) noexcept :
@@ -52,8 +52,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr RawPointer < __ElementType [] > :: RawPointer (
+    template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr RawPointer < __ElementType [] > :: RawPointer (   /* NOLINT(*-avoid-c-arrays) */
             RawPointer && pointer
     ) noexcept :
             _pObject ( cds :: exchange ( pointer._pObject, nullptr ) ) {
@@ -61,7 +61,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType > :: operator = (
             __ElementType * pointer
     ) noexcept -> RawPointer & {
@@ -71,8 +71,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (
+    template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (  /* NOLINT(*-avoid-c-arrays) */
             __ElementType * pointer
     ) noexcept -> RawPointer & {
 
@@ -81,8 +81,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType > :: operator = (
+    template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType > :: operator = ( /* NOLINT(*-unhandled-self-assignment, cert-oop54-cpp) */
             RawPointer const & pointer
     ) noexcept -> RawPointer & {
 
@@ -91,8 +91,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (
+    template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (  /* NOLINT(*-avoid-c-arrays, *-unhandled-self-assignment, cert-oop54-cpp) */
             RawPointer const & pointer
     ) noexcept -> RawPointer & {
 
@@ -101,7 +101,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType > :: operator = (
             RawPointer && pointer
     ) noexcept -> RawPointer & {
@@ -111,8 +111,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (
+    template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_NonConstConstexprMemberFunction auto RawPointer < __ElementType [] > :: operator = (  /* NOLINT(*-avoid-c-arrays) */
             RawPointer && pointer
     ) noexcept -> RawPointer & {
 
@@ -121,7 +121,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator == (
             __ElementType const * pointer
     ) const noexcept -> bool {
@@ -130,8 +130,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator == (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator == ( /* NOLINT(*-avoid-c-arrays) */
             __ElementType const * pointer
     ) const noexcept -> bool {
 
@@ -139,7 +139,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator != (
             __ElementType const * pointer
     ) const noexcept -> bool {
@@ -148,8 +148,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator != (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator != ( /* NOLINT(*-avoid-c-arrays) */
             __ElementType const * pointer
     ) const noexcept -> bool {
 
@@ -157,7 +157,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType > :: operator == (
             Base const & pointer
     ) const noexcept -> bool {
@@ -166,8 +166,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType [] > :: operator == (
+    template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType [] > :: operator == (    /* NOLINT(*-avoid-c-arrays) */
             Base const & pointer
     ) const noexcept -> bool {
 
@@ -175,7 +175,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType > :: operator != (
             Base const & pointer
     ) const noexcept -> bool {
@@ -184,8 +184,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType [] > :: operator != (
+    template < typename __ElementType >                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_VirtualConstexpr auto RawPointer < __ElementType [] > :: operator != (    /* NOLINT(*-avoid-c-arrays) */
             Base const & pointer
     ) const noexcept -> bool {
 
@@ -193,7 +193,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator == (
             RawPointer const & pointer
     ) const noexcept -> bool {
@@ -202,8 +202,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator == (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator == ( /* NOLINT(*-avoid-c-arrays) */
             RawPointer const & pointer
     ) const noexcept -> bool {
 
@@ -211,7 +211,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator != (
             RawPointer const & pointer
     ) const noexcept -> bool {
@@ -220,8 +220,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator != (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator != ( /* NOLINT(*-avoid-c-arrays) */
             RawPointer const & pointer
     ) const noexcept -> bool {
 
@@ -229,7 +229,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator == (
             std :: nullptr_t pointer
     ) const noexcept -> bool {
@@ -238,8 +238,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator == (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator == ( /* NOLINT(*-avoid-c-arrays) */
             std :: nullptr_t pointer
     ) const noexcept -> bool {
 
@@ -247,7 +247,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto RawPointer < __ElementType > :: operator != (
             std :: nullptr_t pointer
     ) const noexcept -> bool {
@@ -256,8 +256,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    constexpr auto RawPointer < __ElementType [] > :: operator != (
+    template < typename __ElementType >                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto RawPointer < __ElementType [] > :: operator != ( /* NOLINT(*-avoid-c-arrays) */
             std :: nullptr_t pointer
     ) const noexcept -> bool {
 
@@ -265,7 +265,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: valueAt () const noexcept (false) -> __ElementType & {
 
         if ( this->_pObject == nullptr ) {
@@ -276,8 +276,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: valueAt () const noexcept (false) -> __ElementType & {
+    template < typename __ElementType >                                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: valueAt () const noexcept (false) -> __ElementType & {  /* NOLINT(*-avoid-c-arrays) */
 
         if ( this->_pObject == nullptr ) {
             throw NullPointerException ();
@@ -287,21 +287,21 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: get () const noexcept -> __ElementType * {
 
         return this->_pObject;
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: get () const noexcept -> __ElementType * {
+    template < typename __ElementType >                                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: get () const noexcept -> __ElementType * {  /* NOLINT(*-avoid-c-arrays) */
 
         return this->_pObject;
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: exchange (
             __ElementType * pointer
     ) noexcept -> __ElementType * {
@@ -310,8 +310,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: exchange (
+    template < typename __ElementType >                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: exchange (  /* NOLINT(*-avoid-c-arrays) */
             __ElementType * pointer
     ) noexcept -> __ElementType * {
 
@@ -319,35 +319,35 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: release () noexcept -> __ElementType * {
 
         return cds :: exchange ( this->_pObject, nullptr );
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: release () noexcept -> __ElementType * {
+    template < typename __ElementType >                                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: release () noexcept -> __ElementType * {    /* NOLINT(*-avoid-c-arrays) */
 
         return cds :: exchange ( this->_pObject, nullptr );
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: reset () noexcept -> void {
 
         this->_pObject = nullptr;
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: reset () noexcept -> void {
+    template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: reset () noexcept -> void { /* NOLINT(*-avoid-c-arrays) */
 
         this->_pObject = nullptr;
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType > :: reset (
             __ElementType * pointer
     ) noexcept -> void {
@@ -356,8 +356,8 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
-    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: reset (
+    template < typename __ElementType >                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_ConstexprOverride auto RawPointer < __ElementType [] > :: reset ( /* NOLINT(*-avoid-c-arrays) */
             __ElementType * pointer
     ) noexcept -> void {
 

@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline WeakPointer <
             __ElementType,
             __Deleter
@@ -19,9 +19,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: WeakPointer (
             WeakPointer const & pointer
@@ -31,7 +31,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr WeakPointer <
             __ElementType,
             __Deleter
@@ -43,9 +43,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: WeakPointer (
             WeakPointer && pointer
@@ -55,7 +55,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline WeakPointer <
             __ElementType,
             __Deleter
@@ -67,9 +67,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: ~WeakPointer () noexcept {
 
@@ -79,7 +79,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -92,9 +92,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             std :: nullptr_t /* pointer */
@@ -105,11 +105,11 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
-    > :: operator = (
+    > :: operator = (                                       /* NOLINT(*-unhandled-self-assignment, cert-oop54-cpp) */
             WeakPointer const & pointer
     ) noexcept -> WeakPointer & {
 
@@ -118,11 +118,11 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
-    > :: operator = (
+    > :: operator = (                                       /* NOLINT(*-unhandled-self-assignment, cert-oop54-cpp) */
             WeakPointer const & pointer
     ) noexcept -> WeakPointer & {
 
@@ -131,7 +131,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto WeakPointer <
             __ElementType,
             __Deleter
@@ -144,9 +144,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             WeakPointer && pointer
@@ -157,7 +157,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto WeakPointer <
             __ElementType,
             __Deleter
@@ -169,9 +169,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator == (
             WeakPointer const & pointer
@@ -181,7 +181,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto WeakPointer <
             __ElementType,
             __Deleter
@@ -193,9 +193,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator != (
             WeakPointer const & pointer
@@ -205,7 +205,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -217,9 +217,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset () noexcept -> void {
 
@@ -229,7 +229,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -249,9 +249,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset (
             WeakPointer const & pointer
@@ -269,7 +269,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -285,9 +285,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset (
             WeakPointer && pointer
@@ -301,7 +301,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -315,9 +315,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: expired () const noexcept -> bool {
 
@@ -329,47 +329,47 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
     > :: toString () const noexcept -> String {
 
         auto pValue     = this->_pControl == nullptr ? nullptr : this->_pControl->__get();
-        auto expired    = this->_pControl == nullptr ? true : this->_pControl->__expired();
+        auto expired    = this->_pControl == nullptr || this->_pControl->__expired();
 
         if ( expired ) {
             return "< Weak Pointer to Expired Memory >";
-        } else {
-            std :: stringstream oss;
-            oss << "< Weak Pointer to Memory at 0x" << std :: hex <<
-                    reinterpret_cast < Size > ( pValue ) << std :: dec << " >";
-            return oss.str();
         }
+
+        std :: stringstream oss;
+        oss << "< Weak Pointer to Memory at 0x" << std :: hex <<
+                reinterpret_cast < Size > ( pValue ) << std :: dec << " >"; /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
+        return oss.str();
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: toString () const noexcept -> String {
 
         auto pValue     = this->_pControl == nullptr ? nullptr : this->_pControl->__get();
-        auto expired    = this->_pControl == nullptr ? true : this->_pControl->__expired();
+        auto expired    = this->_pControl == nullptr || this->_pControl->__expired();
 
         if ( expired ) {
             return "< Weak Pointer to Expired Memory >";
-        } else {
-            std :: stringstream oss;
-            oss << "< Weak Pointer to Memory at 0x" << std :: hex <<
-                    reinterpret_cast < Size > ( pValue ) << std :: dec << " >";
-            return oss.str();
         }
+
+        std :: stringstream oss;
+        oss << "< Weak Pointer to Memory at 0x" << std :: hex <<
+                reinterpret_cast < Size > ( pValue ) << std :: dec << " >"; /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
+        return oss.str();
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
@@ -381,7 +381,7 @@ namespace cds {
             return true;
         }
 
-        auto pWeakPointer = dynamic_cast < decltype (this) > ( & object );
+        auto const * pWeakPointer = dynamic_cast < decltype (this) > ( & object );  /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pWeakPointer == nullptr ) {
             return false;
         }
@@ -390,9 +390,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: equals (
             Object const & object
@@ -402,7 +402,7 @@ namespace cds {
             return true;
         }
 
-        auto pWeakPointer = dynamic_cast < decltype (this) > ( & object );
+        auto const * pWeakPointer = dynamic_cast < decltype (this) > ( & object );  /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pWeakPointer == nullptr ) {
             return false;
         }
@@ -411,25 +411,25 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
     > :: hash () const noexcept -> Size {
 
-        return reinterpret_cast < Size > ( this->_pControl );
+        return reinterpret_cast < Size > ( this->_pControl );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: hash () const noexcept -> Size {
 
-        return reinterpret_cast < Size > ( this->_pControl );
+        return reinterpret_cast < Size > ( this->_pControl );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
     }
 
 } /* namespace cds */
 
-#endif /* __CDS_WEAK_POINTER_HPP__ */
+#endif /* __CDS_WEAK_POINTER_IMPL_HPP__ */

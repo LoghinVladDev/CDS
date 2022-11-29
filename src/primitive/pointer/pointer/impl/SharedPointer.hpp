@@ -7,21 +7,21 @@
 
 namespace cds {
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
     > :: SharedPointer () noexcept = default;
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: SharedPointer () noexcept = default;
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
@@ -33,9 +33,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: SharedPointer (
             __ElementType * pointer
@@ -45,11 +45,11 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
-    > :: SharedPointer (
+    > :: SharedPointer (                                    /* NOLINT(clion-misra-cpp2008-12-1-3) */
             std :: nullptr_t /* pointer */
     ) noexcept :
             _pControl ( nullptr ) {
@@ -57,11 +57,11 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
-    > :: SharedPointer (
+    > :: SharedPointer (                                    /* NOLINT(clion-misra-cpp2008-12-1-3) */
             std :: nullptr_t /* pointer */
     ) noexcept :
             _pControl ( nullptr ) {
@@ -69,7 +69,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
@@ -81,9 +81,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: SharedPointer (
             SharedPointer const & pointer
@@ -93,7 +93,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr SharedPointer <
             __ElementType,
             __Deleter
@@ -105,9 +105,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: SharedPointer (
             SharedPointer && pointer
@@ -117,7 +117,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
@@ -129,9 +129,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: ~SharedPointer () noexcept {
 
@@ -141,7 +141,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -154,9 +154,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             __ElementType * pointer
@@ -167,7 +167,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -180,9 +180,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             std :: nullptr_t pointer
@@ -193,7 +193,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -214,9 +214,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             SharedPointer const & pointer
@@ -235,7 +235,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -256,9 +256,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator = (
             SharedPointer && pointer
@@ -277,7 +277,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -291,9 +291,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator == (
             __ElementType const * pointer
@@ -305,7 +305,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -319,9 +319,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator != (
             __ElementType const * pointer
@@ -333,7 +333,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -347,9 +347,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator == (
             Base const & pointer
@@ -361,7 +361,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -370,26 +370,26 @@ namespace cds {
     ) const noexcept -> bool {
 
         return
-                this->_pControl == nullptr && ! pointer.isNull() ||
+                this->_pControl == nullptr && ! pointer.isNull() ||     /* NOLINT(clion-misra-cpp2008-5-3-1) */
                 this->_pControl->__get() != pointer.get();
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_VirtualConstexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator != (
             Base const & pointer
     ) const noexcept -> bool {
 
         return
-                this->_pControl == nullptr && ! pointer.isNull() ||
+                this->_pControl == nullptr && ! pointer.isNull() ||     /* NOLINT(clion-misra-cpp2008-5-3-1) */
                 this->_pControl->__get() != pointer.get();
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -404,9 +404,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator == (
             SharedPointer const & pointer
@@ -419,7 +419,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -434,9 +434,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator != (
             SharedPointer const & pointer
@@ -449,7 +449,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -461,9 +461,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator == (
             std :: nullptr_t pointer
@@ -473,7 +473,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
             __ElementType,
             __Deleter
@@ -485,9 +485,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: operator != (
             std :: nullptr_t pointer
@@ -497,7 +497,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto SharedPointer <
             __ElementType,
             __Deleter
@@ -511,9 +511,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: valueAt () const noexcept (false) -> __ElementType & {
 
@@ -525,7 +525,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto SharedPointer <
             __ElementType,
             __Deleter
@@ -539,9 +539,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: get () const noexcept -> __ElementType * {
 
@@ -553,7 +553,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -574,9 +574,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: exchange (
             __ElementType * pointer
@@ -595,7 +595,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -611,9 +611,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: exchange (
             std :: nullptr_t /* pointer */
@@ -627,7 +627,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -641,9 +641,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: release () noexcept -> __ElementType * {
 
@@ -655,7 +655,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -669,9 +669,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset () noexcept -> void {
 
@@ -683,7 +683,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -699,9 +699,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset (
             __ElementType * pointer
@@ -715,7 +715,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
             __ElementType,
             __Deleter
@@ -731,9 +731,9 @@ namespace cds {
     }
 
 
-    template < typename __ElementType, typename __Deleter >
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto SharedPointer <
-            __ElementType [],
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
             __Deleter
     > :: reset (
             std :: nullptr_t /* pointer */

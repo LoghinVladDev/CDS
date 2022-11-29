@@ -31,12 +31,12 @@ namespace cds {
         SharedPointer () noexcept;
 
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*) */
+        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*, clion-misra-cpp2008-12-1-3) */
                 std :: nullptr_t pointer
         ) noexcept;
 
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*) */
+        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*, clion-misra-cpp2008-12-1-3) */
                 __ElementType * pointer
         ) noexcept;
 
@@ -186,12 +186,12 @@ namespace cds {
         SharedPointer () noexcept;
 
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*) */
+        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*, clion-misra-cpp2008-12-1-3) */
                 std :: nullptr_t pointer
         ) noexcept;
 
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*) */
+        __CDS_Implicit SharedPointer (  /* NOLINT(*-explicit-*, clion-misra-cpp2008-12-1-3) */
                 __ElementType * pointer
         ) noexcept;
 
