@@ -184,5 +184,10 @@ p24121.~shared_ptr();
 
     std :: cout << *gs() + *hs() << '\n';
 
+    auto ptr1 = cds :: makeUnique <int> ( 3 );
+    auto ptr2 = cds :: makeUnique <int[]> ( 5 );
+    auto sptr1 = cds :: makeShared <int> ( 3 );
+    auto sptr2 = cds :: makeShared <int[]> ( 5 );
+
     return 0;
 }

@@ -98,6 +98,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 }
 
+#include "tuple/impl/CTAD.hpp"
 #include "tuple/impl/TupleNode.hpp"
 #include "tuple/impl/Tuple.hpp"
 

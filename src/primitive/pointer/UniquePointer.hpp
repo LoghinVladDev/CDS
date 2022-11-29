@@ -226,6 +226,55 @@ namespace cds {
         ) noexcept -> void override;
     };
 
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUnique (
+            __ConstructionArguments && ... arguments
+    ) noexcept (
+            noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) )
+    ) -> cds :: meta :: EnableIf <
+            ! cds :: meta :: isArray < __ElementType > (),                      /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >
+    >;
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            > = 0
+    > __CDS_NoDiscard auto makeUnique (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUnique () noexcept -> cds :: meta :: EnableIf < cds :: meta :: isBoundedArray < __ElementType > () > = delete;
+
+
+    template <
+            typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    ! cds :: meta :: isArray < __ElementType > ()   /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            > = 0
+    > __CDS_NoDiscard auto makeUniqueDefault () noexcept ( noexcept ( __ElementType () ) ) -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            > = 0
+    > __CDS_NoDiscard auto makeUniqueDefault (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUniqueDefault (
+            __ConstructionArguments && ...
+    ) noexcept -> cds :: meta :: EnableIf < cds :: meta :: isBoundedArray < __ElementType > () > = delete;
+
 } /* namespace cds */
 
 #include "pointer/impl/UniquePointer.hpp"

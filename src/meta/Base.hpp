@@ -347,9 +347,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @brief Meta-type implementation used to check if a given type is an array type
              * @tparam __T is the type checked
              */
-            template < typename >                   struct __IsArray                    : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            template < typename __T, Size __size >  struct __IsArray < __T [__size] >   : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
-            template < typename __T >               struct __IsArray < __T [] >         : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+            template < typename >                   struct __IsArray                            : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T, Size __size >  struct __IsArray < __T [__size] >           : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+            template < typename __T >               struct __IsArray < __T [] >                 : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+
+            template < typename >                   struct __IsBoundedArray                     : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T, Size __size >  struct __IsBoundedArray < __T [__size] >    : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+
+            template < typename >                   struct __IsUnboundedArray                   : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >               struct __IsUnboundedArray < __T [] >        : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
 
             namespace __isPointerImpl { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 /**
@@ -833,6 +839,24 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isArray () noexcept -> bool {
             return __impl :: __IsArray < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a bounded array type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isBoundedArray () noexcept -> bool {
+            return __impl :: __IsBoundedArray < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an unbounded array type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isUnboundedArray () noexcept -> bool {
+            return __impl :: __IsUnboundedArray < __Type > :: value;
         }
 
         /**

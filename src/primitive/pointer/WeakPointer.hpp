@@ -244,6 +244,7 @@ namespace cds {
 
 #include "pointer/impl/SharedPointerControlBlock.hpp"
 #include "pointer/impl/WeakPointer.hpp"
+#include "pointer/impl/WeakPointerCTAD.hpp"
 #include "pointer/impl/WeakSharedPointer.hpp"
 
 #endif /* __CDS_WEAK_POINTER_HPP__ */

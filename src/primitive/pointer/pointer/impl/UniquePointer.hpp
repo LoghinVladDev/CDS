@@ -462,6 +462,65 @@ namespace cds {
         __Deleter () (this->exchange(pointer));
     }
 
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    inline auto makeUnique (
+            __ConstructionArguments && ... arguments
+    ) noexcept (
+            noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) )
+    ) -> cds :: meta :: EnableIf <
+            ! cds :: meta :: isArray < __ElementType > (),                      /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >
+    > {
+
+        return UniquePointer < __ElementType > (
+                new __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) /* NOLINT(clion-misra-cpp2008-18-4-1) */
+        );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            >
+    > inline auto makeUnique (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > > {
+
+        return UniquePointer < __ElementType > (
+                new cds :: meta :: RemoveExtent < __ElementType > [size]    /* NOLINT(clion-misra-cpp2008-18-4-1) */
+        );
+    }
+
+
+    template <
+            typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    ! cds :: meta :: isArray < __ElementType > ()   /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            >
+    > inline auto makeUniqueDefault () noexcept ( noexcept ( __ElementType () ) ) -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > > {
+
+        return UniquePointer < __ElementType > (
+                new __ElementType ()    /* NOLINT(clion-misra-cpp2008-18-4-1) */
+        );
+    }
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            >
+    > __CDS_NoDiscard auto makeUniqueDefault (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > > {
+
+        return UniquePointer < __ElementType > (
+                new cds :: meta :: RemoveExtent < __ElementType > [size] () /* NOLINT(clion-misra-cpp2008-18-4-1) */
+        );
+    }
+
 } /* namespace cds */
 
 #endif /* __CDS_UNIQUE_POINTER_IMPL_HPP__ */
