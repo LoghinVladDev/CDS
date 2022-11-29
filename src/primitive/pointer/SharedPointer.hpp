@@ -1,130 +1,330 @@
-//
-// Created by loghin on 5/1/22.
-//
+/*
+ * Created by loghin on 5/1/22.
+ */
 
-#ifndef __CDS_SHARED_POINTER_HPP__
-#define __CDS_SHARED_POINTER_HPP__
+#ifndef __CDS_SHARED_POINTER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_POINTER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/memory/SmartPointer>
+#include <CDS/threading/Atomic>
+
+#include "pointer/SharedPointerControlBlock.hpp"
 
 namespace cds {
 
-    template < typename T >
-    class SharedPointer : public SmartPointer < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class SharedPointer : public SmartPointer < __ElementType > {
+
     private:
-        struct SharedPointerControlBlock {
-            int ownerCount {1}; // NOLINT(clion-misra-cpp2008-11-0-1)
+        friend class WeakPointer < __ElementType, __Deleter >;
 
-#if defined CDS_PTR_DEBUG
+    private:
+        using Base = SmartPointer < __ElementType >;
 
-            constexpr SharedPointerControlBlock() noexcept : ownerCount(1) {
-                std::cout << "Created Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
-            }
+    private:
+        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
-            __CDS_cpplang_ConstexprDestructor ~SharedPointerControlBlock () noexcept {
-                std::cout << "Destroyed Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
-            }
-
-#endif
-
-#if __CDS_cpplang_StructBracesInitialization_available == false
-            constexpr explicit SharedPointerControlBlock(int ownerCount = 1) noexcept : ownerCount(ownerCount) {}
-#endif
-
-        };
-
-        SharedPointerControlBlock * pControl { nullptr };
+    private:
+        ControlBlock * _pControl { nullptr };
 
     public:
-        constexpr SharedPointer() noexcept = default;
-        __CDS_OptimalInline SharedPointer(SharedPointer const & pointer) noexcept :
-                SmartPointer<T>(pointer.pObj),
-                pControl(pointer.pControl) {
+        SharedPointer () noexcept;
 
-            ++ pointer.pControl->ownerCount;
-        }
+    public:
+        __CDS_Implicit SharedPointer (
+                std :: nullptr_t pointer
+        ) noexcept;
 
-        __CDS_cpplang_ConstexprDynamicAllocation SharedPointer(typename SmartPointer<T>::Pointer pointer) noexcept : // NOLINT(google-explicit-constructor)
-                SmartPointer<T>(pointer),
-                pControl(Memory :: instance().create < SharedPointerControlBlock > ()){
+    public:
+        __CDS_Implicit SharedPointer (
+                __ElementType * pointer
+        ) noexcept;
 
-        }
+    public:
+        SharedPointer (
+                SharedPointer const & pointer
+        ) noexcept;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( SharedPointer const & pointer ) noexcept -> SharedPointer & {
-            if ( this == & pointer ) {
-                return * this;
-            }
+    public:
+        constexpr SharedPointer (
+                SharedPointer && pointer
+        ) noexcept;
 
-            this-> SharedPointer :: reset(pointer );
-            return * this;
-        }
+    public:
+        SharedPointer (
+                WeakPointer < __ElementType, __Deleter > const & pointer
+        ) noexcept;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( typename SmartPointer < T > :: Pointer pointer ) noexcept -> SharedPointer & {
-            this-> SharedPointer :: reset(pointer);
-            return * this;
-        }
+    public:
+        SharedPointer (
+                WeakPointer < __ElementType, __Deleter > && pointer
+        ) noexcept;
 
-        __CDS_cpplang_ConstexprDestructor ~SharedPointer() noexcept override {
-            this-> SharedPointer :: reset( nullptr );
-        }
+    public:
+        ~SharedPointer () noexcept;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto release () noexcept -> typename SmartPointer<T>::Pointer override {
-            auto pointer = this->pObj;
-            this-> SharedPointer :: reset ( nullptr );
-            return pointer;
-        }
+    public:
+        auto operator = (
+                std :: nullptr_t pointer
+        ) noexcept -> SharedPointer &;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto reset ( typename SmartPointer<T>::Pointer pointer ) noexcept -> void override {
-            if (this->pObj == pointer ) {
-                return;
-            }
+    public:
+        auto operator = (
+                __ElementType * pointer
+        ) noexcept -> SharedPointer &;
 
-            auto pVal = this->pObj;
-            this->pObj = pointer;
+    public:
+        auto operator = (
+                SharedPointer const & pointer
+        ) noexcept -> SharedPointer &;
 
-            if ( this->pControl != nullptr ) {
-                if ( -- this->pControl->ownerCount == 0 ) {
-                    Memory :: instance().destroy ( this->pControl );
-                    Memory :: instance().destroy ( pVal );
-                }
+    public:
+        auto operator = (
+                SharedPointer && pointer
+        ) noexcept -> SharedPointer &;
 
-                this->pControl = nullptr;
-            }
+    public:
+        auto operator = (
+                WeakPointer < __ElementType, __Deleter > const & pointer
+        ) noexcept -> SharedPointer &;
 
-            if ( this->pObj != nullptr ) {
-                this->pControl = Memory :: instance () .create < SharedPointerControlBlock > ();
-            }
-        }
+    public:
+        auto operator = (
+                WeakPointer < __ElementType, __Deleter > && pointer
+        ) noexcept -> SharedPointer &;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto reset ( SharedPointer const & pointer ) noexcept -> void {
-            if (this->pControl == pointer.pControl ) {
-                return;
-            }
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
 
-            auto oldAddress = this->pObj;
-            this->pObj = pointer.pObj;
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
 
-            if ( this->pControl != nullptr ) {
-                if ( -- this->pControl->ownerCount == 0 ) {
-                    Memory :: instance().destroy ( this->pControl );
-                    Memory :: instance().destroy ( oldAddress );
-                }
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
 
-                this->pControl = nullptr;
-            }
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
 
-            if (pointer.pControl != nullptr ) {
-                this->pControl = pointer.pControl;
-                ++ this->pControl->ownerCount;
-            }
-        }
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
+
+    public:
+        auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * override;
+
+    public:
+        auto exchange (
+                std :: nullptr_t pointer
+        ) noexcept -> __ElementType *;
+
+    public:
+        auto release () noexcept -> __ElementType * override;
+
+    public:
+        auto reset () noexcept -> void override;
+
+    public:
+        auto reset (
+                std :: nullptr_t pointer
+        ) noexcept -> void;
+
+    public:
+        auto reset (
+                __ElementType * pointer
+        ) noexcept -> void override;
     };
 
-    template < typename T, typename ... ArgumentTypes >
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeShared ( ArgumentTypes && ... arguments ) noexcept -> UniquePointer < T > {
-        return SharedPointer < T > ( Memory :: instance ().create < T > ( std :: forward < ArgumentTypes > ( arguments ) ... ) );
-    }
 
-}
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class SharedPointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType [] > {
 
-#endif // __CDS_SHARED_POINTER_HPP__
+    private:
+        friend class WeakPointer < __ElementType [], __Deleter >;
+
+    private:
+        using Base = SmartPointer < __ElementType >;
+
+    private:
+        using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
+
+    private:
+        ControlBlock * _pControl { nullptr };
+
+    public:
+        SharedPointer () noexcept;
+
+    public:
+        __CDS_Implicit SharedPointer (
+                std :: nullptr_t pointer
+        ) noexcept;
+
+    public:
+        __CDS_Implicit SharedPointer (
+                __ElementType * pointer
+        ) noexcept;
+
+    public:
+        SharedPointer (
+                SharedPointer const & pointer
+        ) noexcept;
+
+    public:
+        constexpr SharedPointer (
+                SharedPointer && pointer
+        ) noexcept;
+
+    public:
+        SharedPointer (
+                WeakPointer < __ElementType [], __Deleter > const & pointer
+        ) noexcept;
+
+    public:
+        SharedPointer (
+                WeakPointer < __ElementType [], __Deleter > && pointer
+        ) noexcept;
+
+    public:
+        ~SharedPointer () noexcept;
+
+    public:
+        auto operator = (
+                std :: nullptr_t pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        auto operator = (
+                __ElementType * pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        auto operator = (
+                SharedPointer const & pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        auto operator = (
+                SharedPointer && pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        auto operator = (
+                WeakPointer < __ElementType [], __Deleter > const & pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        auto operator = (
+                WeakPointer < __ElementType [], __Deleter > && pointer
+        ) noexcept -> SharedPointer &;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                SharedPointer const & pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
+
+    public:
+        auto exchange (
+                std :: nullptr_t pointer
+        ) noexcept -> __ElementType *;
+
+    public:
+        auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * override;
+
+    public:
+        auto release () noexcept -> __ElementType * override;
+
+    public:
+        auto reset () noexcept -> void override;
+
+    public:
+        auto reset (
+                std :: nullptr_t pointer
+        ) noexcept -> void;
+
+    public:
+        auto reset (
+                __ElementType * pointer
+        ) noexcept -> void override;
+    };
+
+} /* namespace cds */
+
+#include "pointer/impl/SharedPointer.hpp"
+#include "pointer/impl/SharedPointerControlBlock.hpp"
+#include "pointer/impl/WeakSharedPointer.hpp"
+
+#endif /* __CDS_SHARED_POINTER_HPP__ */

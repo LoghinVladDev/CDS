@@ -1,1 +1,1 @@
-#include "../../../src/experimental/cds_54_modernize_pointer/SmartPointer.hpp"
+#include "../../../src/primitive/pointer/SmartPointer.hpp"

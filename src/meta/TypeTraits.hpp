@@ -8,7 +8,7 @@
 #include <CDS/meta/Base>
 #include <iostream>
 
-#include "../../src/experimental/cds_54_modernize_pointer/pointer/Predeclarations.hpp"
+#include "../../src/primitive/pointer/pointer/Predeclarations.hpp"
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
