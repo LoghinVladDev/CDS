@@ -376,7 +376,7 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
             __ElementType,
             __Deleter
     > :: exchange (
@@ -388,7 +388,7 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter >
-    __CDS_cpplang_NonConstConstexprMemberFunction auto UniquePointer <
+    __CDS_cpplang_ConstexprOverride auto UniquePointer <
             __ElementType [],
             __Deleter
     > :: exchange (

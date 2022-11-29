@@ -59,60 +59,6 @@ namespace cds {
     __CDS_OptimalInline WeakPointer <
             __ElementType,
             __Deleter
-    > :: WeakPointer (
-            SharedPointer < __ElementType, __Deleter > const & pointer
-    ) noexcept :
-            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__observe() ) {
-
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: WeakPointer (
-            SharedPointer < __ElementType [], __Deleter > const & pointer
-    ) noexcept :
-            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__observe() ) {
-
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline WeakPointer <
-            __ElementType,
-            __Deleter
-    > :: WeakPointer (
-            SharedPointer < __ElementType, __Deleter > && pointer
-    ) noexcept {
-
-        if ( pointer._pControl != nullptr ) {
-            this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->__observe();
-            __Deleter () ( this->_pControl->__release() );
-        }
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: WeakPointer (
-            SharedPointer < __ElementType [], __Deleter > && pointer
-    ) noexcept {
-
-        if ( pointer._pControl != nullptr ) {
-            this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->__observe();
-            __Deleter () ( this->_pControl->__release() );
-        }
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline WeakPointer <
-            __ElementType,
-            __Deleter
     > :: ~WeakPointer () noexcept {
 
         if ( this->_pControl != nullptr ) {
@@ -212,58 +158,6 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType,
-            __Deleter
-    > :: operator = (
-            SharedPointer < __ElementType, __Deleter > const & pointer
-    ) noexcept -> WeakPointer & {
-
-        this->reset (pointer);
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: operator = (
-            SharedPointer < __ElementType [], __Deleter > const & pointer
-    ) noexcept -> WeakPointer & {
-
-        this->reset (pointer);
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType,
-            __Deleter
-    > :: operator = (
-            SharedPointer < __ElementType, __Deleter > && pointer
-    ) noexcept -> WeakPointer & {
-
-        this->reset ( std :: move ( pointer ) );
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: operator = (
-            SharedPointer < __ElementType [], __Deleter > && pointer
-    ) noexcept -> WeakPointer & {
-
-        this->reset ( std :: move ( pointer ) );
-        return * this;
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
     constexpr auto WeakPointer <
             __ElementType,
             __Deleter
@@ -411,84 +305,6 @@ namespace cds {
     __CDS_OptimalInline auto WeakPointer <
             __ElementType,
             __Deleter
-    > :: reset (
-            SharedPointer < __ElementType, __Deleter > const & pointer
-    ) noexcept -> void {
-
-        if ( this->_pControl == pointer._pControl ) {
-            return;
-        }
-
-        if ( this->_pControl != nullptr ) {
-            this->_pControl->__disposeObserver();
-        }
-
-        this->_pControl = pointer._pControl->__observe();
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: reset (
-            SharedPointer < __ElementType [], __Deleter > const & pointer
-    ) noexcept -> void {
-
-        if ( this->_pControl == pointer._pControl ) {
-            return;
-        }
-
-        if ( this->_pControl != nullptr ) {
-            this->_pControl->__disposeObserver();
-        }
-
-        this->_pControl = pointer._pControl->__observe();
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType,
-            __Deleter
-    > :: reset (
-            SharedPointer < __ElementType, __Deleter > && pointer
-    ) noexcept -> void {
-
-        if ( this->_pControl != nullptr ) {
-            cds :: exchange ( this->_pControl, nullptr )->__disposeObserver();
-        }
-
-        if ( pointer._pControl != nullptr ) {
-            this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->__observe();
-            __Deleter () ( this->_pControl->__release() );
-        }
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: reset (
-            SharedPointer < __ElementType [], __Deleter > && pointer
-    ) noexcept -> void {
-
-        if ( this->_pControl != nullptr ) {
-            cds :: exchange ( this->_pControl, nullptr )->__disposeObserver();
-        }
-
-        if ( pointer._pControl != nullptr ) {
-            this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->__observe();
-            __Deleter () ( this->_pControl->__release() );
-        }
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType,
-            __Deleter
     > :: expired () const noexcept -> bool {
 
         if ( this->_pControl == nullptr ) {
@@ -510,30 +326,6 @@ namespace cds {
         }
 
         return this->_pControl->__expired ();
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType,
-            __Deleter
-    > :: acquire () const noexcept -> SharedPointer < __ElementType, __Deleter > {
-
-        SharedPointer < __ElementType, __Deleter > emptyShared;
-        emptyShared._pControl = this->_pControl->__checkAndUse();
-        return emptyShared;
-    }
-
-
-    template < typename __ElementType, typename __Deleter >
-    __CDS_OptimalInline auto WeakPointer <
-            __ElementType [],
-            __Deleter
-    > :: acquire () const noexcept -> SharedPointer < __ElementType [], __Deleter > {
-
-        SharedPointer < __ElementType, __Deleter > emptyShared;
-        emptyShared._pControl = this->_pControl->__checkAndUse();
-        return emptyShared;
     }
 
 

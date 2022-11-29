@@ -201,7 +201,7 @@ namespace cds {
             SharedPointer const & pointer
     ) noexcept -> SharedPointer & {
 
-        if ( this == & pointer ) {
+        if ( this == & pointer || this->_pControl == pointer._pControl ) {
             return * this;
         }
 
@@ -222,7 +222,7 @@ namespace cds {
             SharedPointer const & pointer
     ) noexcept -> SharedPointer & {
 
-        if ( this == & pointer ) {
+        if ( this == & pointer || this->_pControl == pointer._pControl ) {
             return * this;
         }
 
@@ -243,7 +243,7 @@ namespace cds {
             SharedPointer && pointer
     ) noexcept -> SharedPointer & {
 
-        if ( this == & pointer ) {
+        if ( this == & pointer || this->_pControl == pointer._pControl ) {
             return * this;
         }
 
@@ -264,7 +264,7 @@ namespace cds {
             SharedPointer && pointer
     ) noexcept -> SharedPointer & {
 
-        if ( this == & pointer ) {
+        if ( this == & pointer || this->_pControl == pointer._pControl ) {
             return * this;
         }
 
@@ -399,7 +399,7 @@ namespace cds {
 
         return
                 this->_pControl == pointer._pControl ||
-                ! this->_pControl == nullptr &&
+                this->_pControl != nullptr &&
                 this->_pControl->__get() == pointer._pControl->__get();
     }
 
@@ -414,7 +414,7 @@ namespace cds {
 
         return
                 this->_pControl == pointer._pControl ||
-                ! this->_pControl == nullptr &&
+                this->_pControl != nullptr &&
                 this->_pControl->__get() == pointer._pControl->__get();
     }
 
@@ -429,7 +429,7 @@ namespace cds {
 
         return
                 this->_pControl != pointer._pControl ||
-                ! this->_pControl == nullptr &&
+                this->_pControl != nullptr &&
                 this->_pControl->__get() != pointer._pControl->__get();
     }
 
@@ -444,7 +444,7 @@ namespace cds {
 
         return
                 this->_pControl != pointer._pControl ||
-                ! this->_pControl == nullptr &&
+                this->_pControl != nullptr &&
                 this->_pControl->__get() != pointer._pControl->__get();
     }
 

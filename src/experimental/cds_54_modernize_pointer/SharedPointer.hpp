@@ -134,10 +134,10 @@ namespace cds {
         ) const noexcept -> bool;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
 
     public:
         auto exchange (
@@ -207,12 +207,12 @@ namespace cds {
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > const & pointer
+                WeakPointer < __ElementType [], __Deleter > const & pointer
         ) noexcept;
 
     public:
         SharedPointer (
-                WeakPointer < __ElementType, __Deleter > && pointer
+                WeakPointer < __ElementType [], __Deleter > && pointer
         ) noexcept;
 
     public:
@@ -240,12 +240,12 @@ namespace cds {
 
     public:
         auto operator = (
-                WeakPointer < __ElementType, __Deleter > const & pointer
+                WeakPointer < __ElementType [], __Deleter > const & pointer
         ) noexcept -> SharedPointer &;
 
     public:
         auto operator = (
-                WeakPointer < __ElementType, __Deleter > && pointer
+                WeakPointer < __ElementType [], __Deleter > && pointer
         ) noexcept -> SharedPointer &;
 
     public:
@@ -289,10 +289,10 @@ namespace cds {
         ) const noexcept -> bool;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
 
     public:
         auto exchange (
@@ -325,5 +325,6 @@ namespace cds {
 
 #include "pointer/impl/SharedPointer.hpp"
 #include "pointer/impl/SharedPointerControlBlock.hpp"
+#include "pointer/impl/WeakSharedPointer.hpp"
 
 #endif /* __CDS_SHARED_POINTER_HPP__ */

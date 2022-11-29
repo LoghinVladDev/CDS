@@ -15,6 +15,9 @@ namespace cds {
     class WeakPointer : public cds :: Object {
 
     private:
+        friend class SharedPointer < __ElementType, __Deleter >;
+
+    private:
         using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
     private:
@@ -125,6 +128,9 @@ namespace cds {
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class WeakPointer < __ElementType [], __Deleter > : public cds :: Object {
+
+    private:
+        friend class SharedPointer < __ElementType [], __Deleter >;
 
     private:
         using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
@@ -238,5 +244,6 @@ namespace cds {
 
 #include "pointer/impl/WeakPointer.hpp"
 #include "pointer/impl/SharedPointerControlBlock.hpp"
+#include "pointer/impl/WeakSharedPointer.hpp"
 
 #endif /* __CDS_WEAK_POINTER_HPP__ */

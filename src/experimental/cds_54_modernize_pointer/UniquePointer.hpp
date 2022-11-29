@@ -95,10 +95,10 @@ namespace cds {
         ) const noexcept -> bool;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
 
     public:
         __CDS_cpplang_ConstexprOverride auto exchange (
@@ -204,10 +204,10 @@ namespace cds {
         ) const noexcept -> bool;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType &;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
 
     public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType *;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
 
     public:
         __CDS_cpplang_ConstexprOverride auto exchange (

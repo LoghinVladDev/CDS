@@ -156,5 +156,33 @@ p24121.~shared_ptr();
 
     f();
 
+    auto g = []{
+        return UniquePointer <int> (new int (3));
+    };
+
+    auto h = []{
+        auto h1 = []{
+            return UniquePointer <int> (new int (5));
+        };
+
+        return h1();
+    };
+
+    std :: cout << *g() + *h() << '\n';
+
+    auto gs = []{
+        return SharedPointer <int> (new int (3));
+    };
+
+    auto hs = []{
+        auto h1 = []{
+            return SharedPointer <int> (new int (5));
+        };
+
+        return h1();
+    };
+
+    std :: cout << *gs() + *hs() << '\n';
+
     return 0;
 }
