@@ -9,7 +9,7 @@
 
 #include <CDS/Array>
 #include <CDS/Pair>
-#include <CDS/smartPointers/SharedPointer>
+#include <CDS/memory/SharedPointer>
 #include "collection/mutableCollection/list/ListTest.h"
 #include "collection/unordered/JsonTest.h"
 

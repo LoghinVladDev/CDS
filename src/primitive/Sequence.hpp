@@ -7,7 +7,7 @@
 
 #include <CDS/Object>
 
-#include <CDS/smartPointers/SharedPointer>
+#include <CDS/memory/SharedPointer>
 #include <CDS/Boolean>
 #include <CDS/Optional>
 #include <CDS/Pair>
@@ -18,7 +18,7 @@
 #include <CDS/Types>
 #include <CDS/Double>
 #include <CDS/Function>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 #include "SequencePrivate.hpp"
 

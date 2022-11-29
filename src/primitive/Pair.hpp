@@ -8,7 +8,7 @@
 #include <CDS/Object>
 #include <sstream>
 #include <CDS/Traits>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

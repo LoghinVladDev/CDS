@@ -17,6 +17,12 @@
 #include <variant>
 #include <CDS/filesystem/Path>
 #include <CDS/filesystem/Walk>
+#include <memory>
+#include <CDS/memory/UniquePointer>
+#include <CDS/memory/SharedPointer>
+#include <CDS/memory/RawPointer>
+#include <CDS/memory/WeakPointer>
+
 
 template < typename F >
 auto timed ( cds :: String const & message, F const & block ) {
@@ -30,11 +36,19 @@ auto timed ( cds :: String const & message, F const & block ) {
 }
 
 int main () {
-
+    std::make_shared<int>(3);
+std::shared_ptr <int> p24121;
+p24121.~shared_ptr();
     using namespace cds;
     using namespace cds :: json;
     using namespace cds :: literals;
     using namespace cds :: filesystem;
+
+    HashMap < int, int > m;
+    class  T1: HashMap < int, int > {} m2;
+    T1 m3;
+
+    JsonArray arr;
 
     JsonObject json;
     json.put ( "test1", 2 );
@@ -43,7 +57,6 @@ int main () {
     json.put ( "test1", "test2"_s );
     json.at ( "test1" ) = "test2"_s;
     json.get ( "test3" ) = 5;
-
     StringView sv = "test";
     String path = "test";
     filesystem :: Path p = sv;
@@ -57,4 +70,119 @@ int main () {
     for ( auto & e : filesystem :: walk ( Path(__FILE__).parent() / "src" ) ) {
         std :: cout << e << '\n';
     }
+
+    UniquePointer <int> p54 = new int (3);
+    UniquePointer <int[]> p64 = new int [5];
+    SharedPointer <int> s54 = new int (3);
+    SharedPointer <int[]> s64 = new int[5];
+
+    auto sp5 = s54;
+    std :: cout << * sp5 << '\n';
+    std :: cout << sp5 << '\n';
+    auto sp6 = s54;
+    auto sp7 = sp6;
+    std :: cout << sp6 << '\n';
+    std :: cout << sp7 << '\n';
+
+    constexpr int thCount = 2;
+    SharedPointer < Atomic < int > > sp = new Atomic <int> (0);
+    cds :: Function threadFunc = [tsp = sp]{
+        cds :: Function innerThreadFunc = [itsp = tsp]{
+            cds :: Function innerInnerThreadFunc = [iitsp = itsp]{
+                cds :: Function innerInnerInnerThreadFunc = [iiitsp = iitsp]{
+                    cds :: Function innerInnerInnerInnerThreadFunc = [iiiitsp = iiitsp]{
+                        ++ * iiiitsp;
+                    };
+
+                    cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+                    for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerInnerThreadFunc ) ); }
+                    threads.forEach ([](auto & th){th->start();});
+                    -- * iiitsp;
+                    threads.forEach ([](auto & th){th->join();});
+                };
+
+                cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+                for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerInnerThreadFunc ) ); }
+                threads.forEach ([](auto & th){th->start();});
+                ++ * iitsp;
+                threads.forEach ([](auto & th){th->join();});
+            };
+
+            cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+            for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerInnerThreadFunc ) ); }
+            threads.forEach ([](auto & th){th->start();});
+            -- * itsp;
+            threads.forEach ([](auto & th){th->join();});
+        };
+
+        cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+        for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( innerThreadFunc ) ); }
+        threads.forEach ([](auto & th){th->start();});
+        -- * tsp;
+        threads.forEach ([](auto & th){th->join();});
+    };
+
+    cds :: Array < cds :: UniquePointer < cds :: Thread > > threads;
+    for ( int i = 0; i < thCount; ++ i ) { threads.emplaceBack ( new Runnable ( threadFunc ) ); }
+    threads.forEach ([](auto & th){th->start();});
+    threads.forEach ([](auto & th){th->join();});
+    std :: cout << * sp << '\n';
+
+    auto f = []{
+        SharedPointer < int > intSP = new int(3);
+        WeakPointer < int > intWP = intSP;
+        WeakPointer < int > intWP2 = intWP;
+
+        if ( auto intSP2 = intWP2.acquire() ) {
+            std :: cout << * intSP2 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+
+        intSP.reset();
+
+        if ( auto intSP3 = intWP.acquire() ) {
+            std :: cout << * intSP3 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+
+        if ( auto intSP2 = intWP2.acquire() ) {
+            std :: cout << * intSP2 << '\n';
+        } else {
+            std :: cout << "Expired\n";
+        }
+    };
+
+    f();
+
+    auto g = []{
+        return UniquePointer <int> (new int (3));
+    };
+
+    auto h = []{
+        auto h1 = []{
+            return UniquePointer <int> (new int (5));
+        };
+
+        return h1();
+    };
+
+    std :: cout << *g() + *h() << '\n';
+
+    auto gs = []{
+        return SharedPointer <int> (new int (3));
+    };
+
+    auto hs = []{
+        auto h1 = []{
+            return SharedPointer <int> (new int (5));
+        };
+
+        return h1();
+    };
+
+    std :: cout << *gs() + *hs() << '\n';
+
+    return 0;
 }

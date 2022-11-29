@@ -6,7 +6,7 @@
 #define CDS_BOOLEAN_HPP
 
 #include <CDS/Object>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

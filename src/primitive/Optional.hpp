@@ -6,8 +6,8 @@
 #define CDS_OPTIONAL_HPP
 
 #include <CDS/meta/FunctionTraits>
-#include <CDS/smartPointers/UniquePointer>
-#include <CDS/Memory>
+#include <CDS/memory/UniquePointer>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 
