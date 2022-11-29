@@ -5,9 +5,9 @@
 #ifndef __CDS_SMART_POINTERS_PREDECLARATIONS_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SMART_POINTERS_PREDECLARATIONS_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {
-    namespace __hidden {
-        namespace __impl {
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             struct __DefaultSmartPointerDeleter {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -17,13 +17,13 @@ namespace cds {
                         __ElementType * pointer
                 ) const noexcept -> void {
 
-                    delete pointer;
+                    delete pointer; /* NOLINT(*-owning-memory) */
                 }
             };
 
 
             template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            struct __DefaultSmartPointerDeleter < __ElementType [] > {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __DefaultSmartPointerDeleter < __ElementType [] > {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
 
             public:
                 template <

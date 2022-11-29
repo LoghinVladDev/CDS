@@ -69,7 +69,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get () const noexcept -> __ElementType * = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept; /* NOLINT(*-explicit-*) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
@@ -103,8 +103,8 @@ namespace cds {
     };
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class SmartPointer < __ElementType [] > : public Object {
+    template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class SmartPointer < __ElementType [] > : public Object {   /* NOLINT(*-avoid-c-arrays) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         using AddressType           = Size;
@@ -163,7 +163,7 @@ namespace cds {
         __CDS_NoDiscard virtual auto get () const noexcept -> __ElementType * = 0;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept; /* NOLINT(*-explicit-*) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
@@ -195,7 +195,7 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         template < typename __NumericType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator [] (
                 __NumericType index

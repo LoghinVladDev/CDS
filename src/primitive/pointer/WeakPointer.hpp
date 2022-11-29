@@ -14,236 +14,236 @@ namespace cds {
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class WeakPointer : public cds :: Object {
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         friend class SharedPointer < __ElementType, __Deleter >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         ControlBlock * _pControl { nullptr };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr WeakPointer () noexcept = default;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         WeakPointer (
                 WeakPointer const & pointer
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr WeakPointer (
                 WeakPointer && pointer
         ) noexcept;
 
-    public:
-        WeakPointer (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit WeakPointer (    /* NOLINT(*-explicit-*) */
                 SharedPointer < __ElementType, __Deleter > const & pointer
         ) noexcept;
 
-    public:
-        WeakPointer (
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit WeakPointer (    /* NOLINT(*-explicit-*) */
                 SharedPointer < __ElementType, __Deleter > && pointer
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         ~WeakPointer () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 std :: nullptr_t pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 WeakPointer const & pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                 WeakPointer && pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 SharedPointer < __ElementType, __Deleter > const & pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 SharedPointer < __ElementType, __Deleter > && pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard constexpr auto operator == (
                 WeakPointer const & pointer
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard constexpr auto operator != (
                 WeakPointer const & pointer
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset () noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 SharedPointer < __ElementType, __Deleter > const & pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 SharedPointer < __ElementType, __Deleter > && pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 WeakPointer const & pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 WeakPointer && pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto expired () const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto acquire () const noexcept -> SharedPointer < __ElementType, __Deleter >;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto equals (
                 Object const & object
         ) const noexcept -> bool override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
     };
 
 
-    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class WeakPointer < __ElementType [], __Deleter > : public cds :: Object {
+    template < typename __ElementType, typename __Deleter >                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class WeakPointer < __ElementType [], __Deleter > : public cds :: Object {  /* NOLINT(*-avoid-c-arrays) */
 
-    private:
-        friend class SharedPointer < __ElementType [], __Deleter >;
+    private:                                                        /* NOLINT(readability-redundant-access-specifiers) */
+        friend class SharedPointer < __ElementType [], __Deleter >; /* NOLINT(*-avoid-c-arrays) */
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         using ControlBlock = __hidden :: __impl :: __SharedPointerControlBlock < __ElementType >;
 
-    private:
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         ControlBlock * _pControl { nullptr };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr WeakPointer () noexcept = default;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         WeakPointer (
                 WeakPointer const & pointer
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr WeakPointer (
                 WeakPointer && pointer
         ) noexcept;
 
-    public:
-        WeakPointer (
-                SharedPointer < __ElementType [], __Deleter > const & pointer
+    public:                                                                     /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit WeakPointer (                                            /* NOLINT(*-explicit-*) */
+                SharedPointer < __ElementType [], __Deleter > const & pointer   /* NOLINT(*-avoid-c-arrays) */
         ) noexcept;
 
-    public:
-        WeakPointer (
-                SharedPointer < __ElementType [], __Deleter > && pointer
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit WeakPointer (                                        /* NOLINT(*-explicit-*) */
+                SharedPointer < __ElementType [], __Deleter > && pointer    /* NOLINT(*-avoid-c-arrays) */
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         ~WeakPointer () noexcept override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 std :: nullptr_t pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 WeakPointer const & pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                 WeakPointer && pointer
         ) noexcept -> WeakPointer &;
 
-    public:
+    public:                                                                     /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
-                SharedPointer < __ElementType [], __Deleter > const & pointer
+                SharedPointer < __ElementType [], __Deleter > const & pointer   /* NOLINT(*-avoid-c-arrays) */
         ) noexcept -> WeakPointer &;
 
-    public:
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
-                SharedPointer < __ElementType [], __Deleter > && pointer
+                SharedPointer < __ElementType [], __Deleter > && pointer    /* NOLINT(*-avoid-c-arrays) */
         ) noexcept -> WeakPointer &;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard constexpr auto operator == (
                 WeakPointer const & pointer
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard constexpr auto operator != (
                 WeakPointer const & pointer
         ) const noexcept -> bool;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset () noexcept -> void;
 
-    public:
+    public:                                                                     /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
-                SharedPointer < __ElementType [], __Deleter > const & pointer
+                SharedPointer < __ElementType [], __Deleter > const & pointer   /* NOLINT(*-avoid-c-arrays) */
         ) noexcept -> void;
 
-    public:
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
-                SharedPointer < __ElementType [], __Deleter > && pointer
+                SharedPointer < __ElementType [], __Deleter > && pointer    /* NOLINT(*-avoid-c-arrays) */
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 WeakPointer const & pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 WeakPointer && pointer
         ) noexcept -> void;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto expired () const noexcept -> bool;
 
-    public:
-        __CDS_NoDiscard auto acquire () const noexcept -> SharedPointer < __ElementType [], __Deleter >;
+    public:                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto acquire () const noexcept -> SharedPointer < __ElementType [], __Deleter >;    /* NOLINT(*-avoid-c-arrays) */
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto equals (
                 Object const & object
         ) const noexcept -> bool override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
     };
 
 } /* namespace cds */
 
-#include "pointer/impl/WeakPointer.hpp"
 #include "pointer/impl/SharedPointerControlBlock.hpp"
+#include "pointer/impl/WeakPointer.hpp"
 #include "pointer/impl/WeakSharedPointer.hpp"
 
 #endif /* __CDS_WEAK_POINTER_HPP__ */

@@ -5,9 +5,9 @@
 #ifndef __CDS_POINTER_SHARED_POINTER_CONTROL_BLOCK_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_POINTER_SHARED_POINTER_CONTROL_BLOCK_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds {
-    namespace __hidden {
-        namespace __impl {
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ElementType >
             __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __new (
@@ -118,15 +118,6 @@ namespace cds {
             constexpr auto __SharedPointerControlBlock < __ElementType > :: __get () const noexcept -> __ElementType * {
 
                 return this->_pObject;
-            }
-
-
-            template < typename __ElementType >
-            __CDS_cpplang_NonConstConstexprMemberFunction auto __SharedPointerControlBlock < __ElementType > :: __exchange (
-                    __ElementType * pointer
-            ) noexcept -> __ElementType * {
-
-                return cds :: exchange ( this->_pObject, pointer );
             }
 
         } /* namespace __impl */

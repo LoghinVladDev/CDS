@@ -600,7 +600,7 @@ namespace cds {
             __ElementType,
             __Deleter
     > :: exchange (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept -> __ElementType * {
 
         if ( this->_pControl == nullptr ) {
@@ -616,7 +616,7 @@ namespace cds {
             __ElementType [],
             __Deleter
     > :: exchange (
-            std :: nullptr_t pointer
+            std :: nullptr_t /* pointer */
     ) noexcept -> __ElementType * {
 
         if ( this->_pControl == nullptr ) {
