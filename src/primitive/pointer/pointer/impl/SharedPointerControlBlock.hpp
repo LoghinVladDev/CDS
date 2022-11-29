@@ -118,6 +118,20 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return this->_pObject;
             }
 
+
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            inline auto __SharedPointerControlBlock < __ElementType > :: __observerCount () const noexcept -> Size {
+
+                return static_cast < Size > ( this->_observerCount.get ( AtomicMemoryOrder :: Relaxed ) );
+            }
+
+
+            template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            inline auto __SharedPointerControlBlock < __ElementType > :: __ownerCount () const noexcept -> Size {
+
+                return static_cast < Size > ( this->_ownerCount.get ( AtomicMemoryOrder :: Relaxed ) );
+            }
+
         } /* namespace __impl */
     } /* namespace __hidden */
 } /* namespace cds */

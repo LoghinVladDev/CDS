@@ -430,6 +430,46 @@ namespace cds {
         return reinterpret_cast < Size > ( this->_pControl );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
     }
 
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: ownerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__ownerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
+            __Deleter
+    > :: ownerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__ownerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: observerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__observerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
+            __Deleter
+    > :: observerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__observerCount();
+    }
+
 } /* namespace cds */
 
 #endif /* __CDS_WEAK_POINTER_IMPL_HPP__ */

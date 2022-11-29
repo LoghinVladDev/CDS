@@ -164,6 +164,15 @@ namespace cds {
         auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
+
+    public:
+        __CDS_NoDiscard auto ownerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observe () const noexcept -> WeakPointer < __ElementType, __Deleter >;
     };
 
 
@@ -319,6 +328,15 @@ namespace cds {
         auto reset (
                 __ElementType * pointer
         ) noexcept -> void override;
+
+    public:
+        __CDS_NoDiscard auto ownerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observe () const noexcept -> WeakPointer < __ElementType [], __Deleter >;
     };
 
 

@@ -314,7 +314,7 @@ namespace cds {
     > :: acquire () const noexcept -> SharedPointer < __ElementType, __Deleter > {
 
         SharedPointer < __ElementType, __Deleter > emptyShared;
-        emptyShared._pControl = this->_pControl->__checkAndUse();
+        emptyShared._pControl = this->_pControl == nullptr ? nullptr : this->_pControl->__checkAndUse();
         return emptyShared;
     }
 
@@ -325,9 +325,29 @@ namespace cds {
             __Deleter
     > :: acquire () const noexcept -> SharedPointer < __ElementType [], __Deleter > {
 
-        SharedPointer < __ElementType, __Deleter > emptyShared;
-        emptyShared._pControl = this->_pControl->__checkAndUse();
+        SharedPointer < __ElementType [], __Deleter > emptyShared;
+        emptyShared._pControl = this->_pControl == nullptr ? nullptr : this->_pControl->__checkAndUse();
         return emptyShared;
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: observe () const noexcept -> WeakPointer < __ElementType, __Deleter > {
+
+        return WeakPointer < __ElementType, __Deleter > ( * this );
+    }
+
+
+    template < typename __ElementType, typename __Deleter >
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],
+            __Deleter
+    > :: observe () const noexcept -> WeakPointer < __ElementType [], __Deleter > {
+
+        return WeakPointer < __ElementType [], __Deleter > ( * this );
     }
 
 } /* namespace cds */

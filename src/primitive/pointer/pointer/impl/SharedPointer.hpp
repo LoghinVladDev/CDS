@@ -747,6 +747,46 @@ namespace cds {
     }
 
 
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: ownerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__ownerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
+            __Deleter
+    > :: ownerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__ownerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: observerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__observerCount();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType [],                               /* NOLINT(*-avoid-c-arrays) */
+            __Deleter
+    > :: observerCount () const noexcept -> Size {
+
+        return this->_pControl == nullptr ? 0ULL : this->_pControl->__observerCount();
+    }
+
+
     template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto makeShared (
             __ConstructionArguments && ... arguments

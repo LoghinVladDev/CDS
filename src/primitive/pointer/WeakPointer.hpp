@@ -123,6 +123,12 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+    public:
+        __CDS_NoDiscard auto ownerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observerCount () const noexcept -> Size;
     };
 
 
@@ -238,6 +244,12 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+    public:
+        __CDS_NoDiscard auto ownerCount () const noexcept -> Size;
+
+    public:
+        __CDS_NoDiscard auto observerCount () const noexcept -> Size;
     };
 
 } /* namespace cds */

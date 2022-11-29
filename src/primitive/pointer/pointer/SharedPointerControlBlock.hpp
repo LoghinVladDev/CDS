@@ -55,6 +55,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             public:                                                                         /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoDiscard constexpr auto __get () const noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-use-nodiscard) */
+
+            public:
+                __CDS_NoDiscard auto __observerCount () const noexcept -> Size;
+
+            public:
+                __CDS_NoDiscard auto __ownerCount () const noexcept -> Size;
             };
 
         } /* namespace __impl */

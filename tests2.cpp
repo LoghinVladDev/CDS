@@ -189,5 +189,8 @@ p24121.~shared_ptr();
     auto sptr1 = cds :: makeShared <int> ( 3 );
     auto sptr2 = cds :: makeShared <int[]> ( 5 );
 
+    auto wptr2 = sptr2.observe();
+    auto sptr3 = wptr2.acquire();
+
     return 0;
 }
