@@ -192,5 +192,12 @@ p24121.~shared_ptr();
     auto wptr2 = sptr2.observe();
     auto sptr3 = wptr2.acquire();
 
+    Tuple t = {1, 3.4f, String ("test"), false, String ("test2")};
+    Tuple t2 = t;
+
+    std :: cout << t << '\n' << t2 << '\n';
+    Tuple t3 = std :: move (t2);
+    std :: cout << t << '\n' << t2 << '\n' << t3 << '\n';
+
     return 0;
 }
