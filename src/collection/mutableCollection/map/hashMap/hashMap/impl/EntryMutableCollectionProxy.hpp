@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -330,7 +330,7 @@ namespace cds {
             EntryMutableCollectionProxy const & set
     ) const noexcept -> bool {
 
-        return ! this->__equals ( set );
+        return ! this->__equals ( set ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 } /* namespace cds */

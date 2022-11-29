@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 17/07/22.
  */
 
@@ -292,7 +292,7 @@ namespace cds {
             return false;
         }
 
-        return ! this->__dll_equals ( list );
+        return ! this->__dll_equals ( list ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 

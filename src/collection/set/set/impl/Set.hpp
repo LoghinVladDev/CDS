@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 09/08/22.
  */
 
@@ -84,7 +84,7 @@ namespace cds {
         out << "{ ";
 
         /* iterate through Set and append iterator value to Stream */
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             cds :: meta :: print ( out, * iterator ) << ", ";
         }
 

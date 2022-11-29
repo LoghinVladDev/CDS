@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 28/11/22.
  */
 
@@ -637,7 +637,7 @@ namespace cds {
             return nullptr;
         }
 
-        return this->_pControl->__release ();
+        return cds :: exchange ( this->_pControl, nullptr )->__release ();
     }
 
 
@@ -651,7 +651,7 @@ namespace cds {
             return nullptr;
         }
 
-        return this->_pControl->__release ();
+        return cds :: exchange ( this->_pControl, nullptr )->__release ();
     }
 
 

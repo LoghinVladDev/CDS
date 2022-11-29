@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -237,8 +237,8 @@ namespace cds {
 
         for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
 
-            if ( ppIterators [ iteratorIndex ] != nullptr ) {
-                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
+            if ( ppIterators [ iteratorIndex ] != nullptr ) {                                           /* NOLINT(*-bounds-pointer-arithmetic) */
+                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator(); /* NOLINT(*-bounds-pointer-arithmetic) */
             } else {
                 ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
             }
@@ -273,8 +273,8 @@ namespace cds {
 
         for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
 
-            if ( ppIterators [ iteratorIndex ] != nullptr ) {
-                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator();
+            if ( ppIterators [ iteratorIndex ] != nullptr ) {                                           /* NOLINT(*-bounds-pointer-arithmetic) */
+                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator(); /* NOLINT(*-bounds-pointer-arithmetic) */
             } else {
                 ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
             }
@@ -311,14 +311,14 @@ namespace cds {
         }
 
         for (
-                auto
+                auto                                                            /* NOLINT(clion-misra-cpp2008-8-0-1) */
                         leftIt  = this->begin(),    rightIt     = set.begin(),
                         leftEnd = this->end(); /*,  rightEnd    = set.end(); */
 
                 leftIt != leftEnd;
-                ++ leftIt, ++ rightIt
+                ++ leftIt, ++ rightIt                                           /* NOLINT(clion-misra-cpp2008-5-18-1) */
         ) {
-            if ( ! cds :: meta :: equals ( * leftIt, * rightIt ) ) {
+            if ( ! cds :: meta :: equals ( * leftIt, * rightIt ) ) {            /* NOLINT(clion-misra-cpp2008-5-3-1) */
                 return false;
             }
         }
@@ -355,7 +355,7 @@ namespace cds {
             ValueMutableCollectionProxy const & set
     ) const noexcept -> bool {
 
-        return ! this->__equals ( set );
+        return ! this->__equals ( set ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 } /* namespace cds */

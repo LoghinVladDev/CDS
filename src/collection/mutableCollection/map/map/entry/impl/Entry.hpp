@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/16/22.
  */
 
@@ -33,8 +33,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 return
-                        ! cds :: meta :: equals ( this->_key, entry._key ) ||
-                        ! cds :: meta :: equals ( this->_value, entry._value );
+                        ! cds :: meta :: equals ( this->_key, entry._key ) ||   /* NOLINT(clion-misra-cpp2008-5-3-1) */
+                        ! cds :: meta :: equals ( this->_value, entry._value ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
             }
 
 
@@ -75,11 +75,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __KeyType,
-                    typename __ValueType
+                    typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __DecayedKeyType,
-                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >
+                    typename __DecayedKeyType,                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >  /* NOLINT(clion-misra-cpp2008-5-3-1) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry < __DecayedKeyType, __ValueType > const & entry
             ) noexcept (
@@ -93,11 +93,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __KeyType,
-                    typename __ValueType
+                    typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TKeyType,
-                    typename __TValueType
+                    typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     cds :: Pair < __TKeyType, __TValueType > const & entry
             ) noexcept (
@@ -124,11 +124,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __KeyType,
-                    typename __ValueType
+                    typename __KeyType,                                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __DecayedKeyType,
-                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >
+                    typename __DecayedKeyType,                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () >  /* NOLINT(clion-misra-cpp2008-5-3-1) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry < __DecayedKeyType, __ValueType > && entry
             ) noexcept (
@@ -142,11 +142,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __KeyType,
-                    typename __ValueType
+                    typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __TKeyType,
-                    typename __TValueType
+                    typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     cds :: Pair < __TKeyType, __TValueType > && entry
             ) noexcept (
@@ -159,7 +159,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __KeyType, typename __ValueType >
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: operator = (
                     __MapEntry const & entry
             ) noexcept (
@@ -175,7 +175,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            template < typename __KeyType, typename __ValueType >
+            template < typename __KeyType, typename __ValueType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: operator = (
                     __MapEntry && entry
             ) noexcept (

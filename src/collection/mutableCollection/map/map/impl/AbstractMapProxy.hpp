@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -59,7 +59,7 @@ namespace cds {
             __ValueType
     > :: AbstractMapProxy :: map () noexcept -> __DerivedType * {
 
-        return reinterpret_cast < __DerivedType * > ( this->_pMap );
+        return reinterpret_cast < __DerivedType * > ( this->_pMap ); /* NOLINT(*-reinterpret-cast) */
     }
 
 
@@ -73,7 +73,7 @@ namespace cds {
             __ValueType
     > :: AbstractMapProxy :: map () const noexcept -> __DerivedType const * {
 
-        return reinterpret_cast < __DerivedType const * > ( this->_pMap );
+        return reinterpret_cast < __DerivedType const * > ( this->_pMap ); /* NOLINT(*-reinterpret-cast) */
     }
 
 } /* namespace cds */

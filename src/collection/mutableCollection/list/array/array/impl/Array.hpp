@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 7/2/22.
  */
 
@@ -208,7 +208,7 @@ namespace cds {
             return false;
         }
 
-        return ! this->__ab_equals ( array );
+        return ! this->__ab_equals ( array ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 

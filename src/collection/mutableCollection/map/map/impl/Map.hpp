@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 10/08/22.
  */
 
@@ -80,7 +80,7 @@ namespace cds {
         std :: stringstream oss;
         oss << "{ ";
 
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             cds :: meta :: print ( cds :: meta :: print ( oss, ( * iterator ).key() ) <<
                     ": ", ( * iterator ).value() ) << ", ";
         }
@@ -124,7 +124,7 @@ namespace cds {
             __TKeyType && key
     ) noexcept -> ValueType & {
 
-        bool isNew;
+        bool isNew; /* NOLINT(cppcoreguidelines-init-variables) */
         auto pEntry = this->entryAt ( key, & isNew );
 
         if ( isNew ) {
@@ -148,7 +148,7 @@ namespace cds {
             KeyType const & key
     ) noexcept (false) -> ValueType & {
 
-        auto pEntry = const_cast < EntryType * > ( this->entryAt ( key ) );
+        auto pEntry = const_cast < EntryType * > ( this->entryAt ( key ) ); /* NOLINT(*-const-cast) */
         if ( pEntry == nullptr ) {
             throw KeyException ( key );
         }

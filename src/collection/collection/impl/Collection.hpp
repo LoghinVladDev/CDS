@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/26/22.
  */
 
@@ -105,7 +105,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
         /* Default toString implementation, store 'Collection at 0x....'. Use a stringstream for simplicity */
         std :: stringstream oss;
-        oss << "Collection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "Collection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
 
         /* converted to std :: string, and to cds :: String afterwards */
         return oss.str();
@@ -119,9 +119,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
          *      ( ... ( ( h(a[0]) * 31 + h(a[1]) ) * 31 + h(a[2]) ) * 31 + ... ) * 31 + h(a[n - 1])
          *      where h(x) represents a cds :: hash computation over x */
         Size totalHash = 0ULL;
+        constexpr uint8 primeFactor = 31U;
 
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
-            totalHash = totalHash * 31ULL + cds :: hash ( * iterator );
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
+            totalHash = totalHash * primeFactor + cds :: hash ( * iterator );
         }
 
         return totalHash;
@@ -139,7 +140,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         }
 
         /* Then, if not same, Compute Collection type identification */
-        auto pObject = dynamic_cast < decltype ( this ) > ( & object );
+        auto const * pObject = dynamic_cast < decltype ( this ) > ( & object ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pObject == nullptr ) {
             return false;
         }
@@ -151,15 +152,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
         /* If sizes are equal, compare each element */
         for (
-                auto
+                auto                                                            /* NOLINT(clion-misra-cpp2008-8-0-1) */
                         leftIt  = this->cbegin(),    leftEnd = this->cend(),
                         rightIt = pObject->cbegin();
                 leftIt != leftEnd;
-                ++ leftIt, ++ rightIt
+                ++ leftIt, ++ rightIt                                           /* NOLINT(clion-misra-cpp2008-5-18-1) */
         ) {
 
             /* If, by forward iteration, one pair's elements are different, not equal */
-            if ( ! Collection :: __cf_equals ( * leftIt, * rightIt ) ) {
+            if ( ! Collection :: __cf_equals ( * leftIt, * rightIt ) ) {        /* NOLINT(clion-misra-cpp2008-5-3-1) */
                 return false;
             }
         }
@@ -175,7 +176,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) const noexcept -> bool {
 
         /* Parse object via forward iteration */
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
 
             /* If object found, the object is contained in the collection */
             if ( Collection :: __cf_equals ( element, * iterator ) ) {

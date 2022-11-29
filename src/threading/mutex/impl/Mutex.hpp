@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 08.03.2021.
  */
 
@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    inline Mutex :: Mutex () noexcept {
+    inline Mutex :: Mutex () noexcept { /* NOLINT(*-member-init) */
 
         cds :: __hidden :: __impl :: __mutexPlatformInit ( & this->_handle );
     }

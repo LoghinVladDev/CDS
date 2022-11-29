@@ -1,11 +1,11 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/24/22.
  */
 
 #ifndef __CDS_LINKED_HASH_SET_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_LINKED_HASH_SET_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Set>
+#include <CDS/Set>                  /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
 
 #include "../../../shared/Node.hpp"

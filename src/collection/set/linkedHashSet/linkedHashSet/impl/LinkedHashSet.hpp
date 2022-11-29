@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 06/10/22.
  */
 
@@ -152,7 +152,7 @@ namespace cds {
         auto pRemovedElementArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType const * > ( iteratorArraySize );
         auto pSllIteratorPtrArray   = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < typename LinkedListImplementation :: __sll_ConstIterator const * > ( iteratorArraySize );
         for ( Size index = 0U; index < iteratorArraySize; ++ index ) {
-            pSllIteratorPtrArray [ index ] = & ( * ppIterators [index] ).iterator();
+            pSllIteratorPtrArray [ index ] = & ( * ppIterators [index] ).iterator(); /* NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic) */
             pRemovedElementArray [ index ] = * ( * pSllIteratorPtrArray [ index ] );
         }
 
@@ -184,7 +184,7 @@ namespace cds {
             );
         }
 
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( * iterator, element ) ) {
                 return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __ElementType const, ConstIterator > > (
                         iterator
@@ -212,7 +212,7 @@ namespace cds {
             return this->cend();
         }
 
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( * iterator, element ) ) {
                 return iterator;
             }
@@ -242,7 +242,7 @@ namespace cds {
     ) noexcept {
 
         /* Copy of each not possible, linked list references hash table elements from other set */
-        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             this->insert ( * iterator );
         }
     }
@@ -446,7 +446,7 @@ namespace cds {
         this->__ht_clear ();
 
         /* Copy of each not possible, linked list references hash table elements from other set */
-        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {
+        for ( auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             this->insert ( * iterator );
         }
 
@@ -486,7 +486,7 @@ namespace cds {
 
         this->__ht_clear ();
         this->__sll_clear ();
-        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {    /* NOLINT(clion-misra-cpp2008-8-0-1) */
             (void) this->insert ( * iterator );
         }
 
@@ -511,7 +511,7 @@ namespace cds {
 
         this->__ht_clear ();
         this->__sll_clear ();
-        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             this->insert ( * iterator );
         }
 
@@ -605,7 +605,7 @@ namespace cds {
             return false;
         }
 
-        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 } /* namespace cds */
