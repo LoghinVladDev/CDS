@@ -22,7 +22,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             using __ThreadPlatformIdType                = DWORD;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             using __ThreadPlatformFunctionReturnType    = DWORD;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            constexpr __ThreadPlatformFunctionReturnType const __threadPlatformFunctionReturn = 0;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr __ThreadPlatformFunctionReturnType const __threadPlatformFunctionReturn = 0U;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ThreadLaunchFunction >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             inline auto __threadPlatformLaunch (            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -40,7 +40,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         & pHandle->_threadId
                 );
 
-                pHandle->_accessFlags = THREAD_ALL_ACCESS;
+                pHandle->_accessFlags = static_cast < DWORD > ( THREAD_ALL_ACCESS ); /* NOLINT(clion-misra-cpp2008-5-0-6) */
             }
 
 
@@ -63,7 +63,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 if ( pThreadHandle->_handle != nullptr ) {
-                    TerminateThread ( pThreadHandle->_handle, 0 );
+                    (void) TerminateThread ( pThreadHandle->_handle, 0U );
                     pThreadHandle->_handle = nullptr;
                 }
             }
@@ -74,7 +74,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 if ( pThreadHandle->_handle != nullptr ) {
-                    WaitForSingleObject ( pThreadHandle->_handle, INFINITE );
+                    (void) WaitForSingleObject ( pThreadHandle->_handle, INFINITE );
                     pThreadHandle->_handle = nullptr;
                 }
             }
@@ -85,7 +85,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 if ( pThreadHandle->_handle != nullptr ) {
-                    CloseHandle ( pThreadHandle->_handle );
+                    (void) CloseHandle ( pThreadHandle->_handle );
                     pThreadHandle->_handle = nullptr;
                 }
             }
@@ -95,7 +95,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     uint64 milliseconds
             ) noexcept -> void {
 
-                Sleep ( milliseconds );
+                Sleep ( static_cast < DWORD > ( milliseconds ) );
             }
 
         } /* namespace __impl */

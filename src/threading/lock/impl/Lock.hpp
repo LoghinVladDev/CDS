@@ -5,9 +5,8 @@
 #ifndef __CDS_LOCK_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_LOCK_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-
-    namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
@@ -34,7 +33,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 locks.template get < __currentIndex > ().lock();
-                __groupLockApply < __currentIndex + 1, __LockTypes ... > ( locks );
+                __groupLockApply < __currentIndex + 1U, __LockTypes ... > ( locks );
             }
 
 
@@ -62,13 +61,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 locks.template get < __currentIndex > ().unlock();
-                __groupLockRemove < __currentIndex + 1, __LockTypes ... > ( locks );
+                __groupLockRemove < __currentIndex + 1U, __LockTypes ... > ( locks );
             }
 
         } /* namespace __impl */
     } /* namespace __hidden */
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline Lock < __LockedObjectType > :: Lock (
             __LockedObjectType & lock
     ) noexcept :
@@ -78,28 +77,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline Lock < __LockedObjectType > :: ~Lock () noexcept {
 
         this->_lock.unlock ();
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Lock < __LockedObjectType > :: toString () const noexcept -> String {
 
         return "Lock over " + this->_lock.toString ();
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Lock < __LockedObjectType > :: hash () const noexcept -> Size {
 
         return this->_lock.hash ();
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline DeferredLock < __LockedObjectType > :: DeferredLock (
             __LockedObjectType & lock
     ) noexcept :
@@ -108,7 +107,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline DeferredLock < __LockedObjectType > :: ~DeferredLock () noexcept {
 
         if ( this->_used && this->_pLock != nullptr ) {
@@ -118,7 +117,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: lock () noexcept -> void {
 
         this->_pLock->lock();
@@ -126,7 +125,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: unlock () noexcept -> void {
 
         this->_pLock->unlock();
@@ -134,7 +133,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: tryLock () noexcept -> bool {
 
         if ( this->_pLock->tryLock() ) {
@@ -147,7 +146,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: equals (
             Object const & object
     ) const noexcept -> bool {
@@ -156,7 +155,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return true;
         }
 
-        auto pLock = dynamic_cast < decltype (this) > ( & object );
+        auto pLock = dynamic_cast < decltype (this) > ( & object ); /* NOLINT(clion-misra-cpp2008-5-2-5) */
         if ( pLock == nullptr ) {
             return false;
         }
@@ -165,21 +164,21 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: toString () const noexcept -> String {
 
         return "DeferredLock over " + this->_pLock->toString ();
     }
 
 
-    template < typename __LockedObjectType >
+    template < typename __LockedObjectType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto DeferredLock < __LockedObjectType > :: hash () const noexcept -> Size {
 
         return this->_pLock->hash ();
     }
 
 
-    template < typename ... __LockedObjects >
+    template < typename ... __LockedObjects >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline GroupLock < __LockedObjects ... > :: GroupLock (
             __LockedObjects & ... locks
     ) noexcept : _locks ( std :: forward < __LockedObjects & > ( locks ) ... ) {
@@ -188,28 +187,28 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename ... __LockedObjects >
+    template < typename ... __LockedObjects >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline GroupLock < __LockedObjects ... > :: ~GroupLock () noexcept {
 
         __hidden :: __impl :: __groupLockRemove < 0U, __LockedObjects ... > ( this->_locks );
     }
 
 
-    template < typename ... __LockedObjects >
+    template < typename ... __LockedObjects >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: hash () const noexcept -> Size {
 
         return this->_locks.hash();
     }
 
 
-    template < typename ... __LockedObjects >
+    template < typename ... __LockedObjects >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: toString () const noexcept -> String {
 
         return "GroupLock over " + this->_locks.toString();
     }
 
 
-    template < typename ... __LockedObjects >
+    template < typename ... __LockedObjects >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto GroupLock < __LockedObjects ... > :: equals (
             Object const & object
     ) const noexcept -> bool {
@@ -218,7 +217,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return true;
         }
 
-        auto pGroupLock = dynamic_cast < decltype (this) > ( & object );
+        auto const * pGroupLock = dynamic_cast < decltype (this) > ( & object ); /* NOLINT(clion-misra-cpp2008-5-2-5) */
         if ( pGroupLock == nullptr ) {
             return false;
         }
@@ -228,4 +227,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 } /* namespace cds */
 
-#endif /* __CDS_LOCK_HPP__ */
+#endif /* __CDS_LOCK_IMPL_HPP__ */
