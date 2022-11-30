@@ -209,7 +209,7 @@ namespace cds {
             __Deleter () ( this->_pControl->__release() );
         }
 
-        this->_pControl = pointer._pControl.__use ();
+        this->_pControl = pointer._pControl == nullptr ? nullptr : pointer._pControl->__use();
         return * this;
     }
 
@@ -230,7 +230,7 @@ namespace cds {
             __Deleter () ( this->_pControl->__release() );
         }
 
-        this->_pControl = pointer._pControl.__use ();
+        this->_pControl = pointer._pControl == nullptr ? nullptr : pointer._pControl->__use();
         return * this;
     }
 
@@ -691,11 +691,11 @@ namespace cds {
             __ElementType * pointer
     ) noexcept -> void {
 
-        if ( this->_pControl == nullptr ) {
-            return;
+        if ( this->_pControl != nullptr ) {
+            __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
+        } else {
+            this->_pControl = ControlBlock :: __new ( pointer );
         }
-
-        __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
     }
 
 
@@ -707,11 +707,11 @@ namespace cds {
             __ElementType * pointer
     ) noexcept -> void {
 
-        if ( this->_pControl == nullptr ) {
-            return;
+        if ( this->_pControl != nullptr ) {
+            __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
+        } else {
+            this->_pControl = ControlBlock :: __new ( pointer );
         }
-
-        __Deleter () ( cds :: exchange ( this->_pControl, ControlBlock :: __new ( pointer ) )->__release () );
     }
 
 

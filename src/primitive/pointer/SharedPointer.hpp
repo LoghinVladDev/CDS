@@ -15,7 +15,7 @@ namespace cds {
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class SharedPointer : public SmartPointer < __ElementType > {
 
-    private:    /* NOLINT(readability-redundant-access-specifiers) */
+    private:
         friend class WeakPointer < __ElementType, __Deleter >;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */

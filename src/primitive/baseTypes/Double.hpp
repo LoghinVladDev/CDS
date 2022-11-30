@@ -8,7 +8,8 @@
 #include <CDS/Object>
 #include <CDS/Random>
 #include <CDS/memory/UniquePointer>
-#include <CDS/Utility>
+#include <CDS/exception/DivideByZeroException>
+#include <CDS/exception/IllegalArgumentException>
 #include <CDS/memory/Allocation>
 
 namespace cds {

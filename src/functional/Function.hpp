@@ -6,6 +6,8 @@
 #define __CDS_FUNCTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Object>               /* NOLINT(llvm-include-order) */
+#include <CDS/exception/NoSuchElementException>
+
 #include "function/Constructs.hpp"
 
 namespace cds {

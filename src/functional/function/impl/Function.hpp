@@ -316,7 +316,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) const noexcept (false) -> __ReturnType {
 
         if ( this->_functionObject == nullptr ) {
-            throw NullPointerException ("Invalid Function Call. No Handle Assigned");
+            throw NoSuchElementException ("Invalid Function Call. No Handle Assigned");
         }
 
         return this->_adapterGroup->_invoke (
