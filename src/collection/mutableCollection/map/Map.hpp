@@ -7,6 +7,8 @@
 
 #include <CDS/MutableCollection>
 #include <CDS/Set>
+#include <CDS/exception/KeyException>
+#include <CDS/exception/UnsupportedOperationException>
 
 #include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"    /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"

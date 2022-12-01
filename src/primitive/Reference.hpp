@@ -1,137 +1,161 @@
-//
-// Created by loghin on 27.01.2021.
-//
+/*
+ * Created by loghin on 27.01.2021.
+ */
 
-#ifndef CDS_REFERENCE_HPP
-#define CDS_REFERENCE_HPP
+#ifndef __CDS_REFERENCE_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_REFERENCE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Object>
-#include <CDS/Traits>
-#include <functional>
+#include <CDS/meta/FunctionTraits>
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace referenceImpl {
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                template < typename T >
-                constexpr T & hiddenRef(T & unused) noexcept { return unused; }
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __referenceImplicitCastCheck (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ElementType & value
+            ) noexcept -> __ElementType & {
 
-                template < typename T >
-                __CDS_MaybeUnused constexpr auto hiddenRef(T && ) -> void = delete;
-
+                return value;
             }
-        }
-    }
-}
 
-namespace cds {
 
-    template < typename T >
+            template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            constexpr auto __referenceImplicitCastCheck (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ElementType && value
+            ) noexcept -> void = delete;
+
+
+            template <
+                    typename __ElementType,                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ReferredValueType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename = void
+            > struct __ReferableTo : cds :: meta :: FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+
+            template < typename __ElementType, typename __ReferredValueType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __ReferableTo <                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __ElementType,
+                    __ReferredValueType,
+                    cds :: meta :: Void <
+                            decltype ( __referenceImplicitCastCheck < __ElementType > ( cds :: meta :: valueOf < __ReferredValueType > () ) )
+                    >
+            > : cds :: meta :: TrueType {
+
+            };
+
+
+            template < typename __ElementType, bool = cds :: meta :: isCallable < __ElementType > () >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __ReturnOfUnsafe {                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using Type = void;
+            };
+
+
+            template < typename __ElementType >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __ReturnOfUnsafe < __ElementType, true > {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                using Type = cds :: meta :: ReturnOf < __ElementType >;
+            };
+
+        } /* namespace __impl */
+    } /* namespace __hidden */
+
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Reference : public Object {
-    public:
-        using Pointer = T *;
-        using Value = T;
 
-    private:
-        Pointer p;
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __ElementType * _pObject { nullptr };
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __ReferredValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: meta :: EnableIf <
+                        cds :: __hidden :: __impl :: __ReferableTo <
+                                __ElementType,
+                                __ReferredValueType
+                        > :: value &&
+                        ! cds :: meta :: isSame <
+                                Reference,
+                                cds :: meta :: RemoveConst < cds :: meta :: RemoveReference < __ElementType > >
+                        > ()
+                > = 0
+        > __CDS_Implicit constexpr Reference ( /* NOLINT(*-explicit-*, *-forwarding-reference-overload) */
+                __ReferredValueType && value
+        ) noexcept ( noexcept ( cds :: __hidden :: __impl :: __referenceImplicitCastCheck < __ElementType > ( std :: forward < __ReferredValueType > ( value ) ) ) );
 
-        template < class V, class = decltype (
-            utility :: hidden :: referenceImpl :: hiddenRef < T > ( std::declval < V > () ), // NOLINT(clion-misra-cpp2008-5-18-1)
-            std :: enable_if <
-                ! std::is_same < // NOLINT(clion-misra-cpp2008-5-3-1)
-                    Reference,
-                    meta :: RemoveConst < meta :: RemoveReference < V >
-                >
-            > :: value > ()
-        ) > constexpr Reference ( V && value ) noexcept ( noexcept ( utility :: hidden :: referenceImpl :: hiddenRef < T > (std :: forward < V > (value )))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
-                p ( std :: addressof ( utility :: hidden :: referenceImpl :: hiddenRef < T > ( std :: forward < V > (value )))) {
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Reference (
+                Reference const & reference
+        ) noexcept = default;
 
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Reference (
+                Reference && reference
+        ) noexcept = default;
 
-        constexpr Reference(Reference const &) noexcept = default;
-        __CDS_cpplang_NonConstConstexprMemberFunction Reference & operator = ( Reference const & ) noexcept = default;
-        __CDS_cpplang_ConstexprDestructor ~Reference () noexcept override = default;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~Reference () noexcept = default;
 
-        constexpr operator T & () const noexcept { // NOLINT(google-explicit-constructor)
-            return * this->p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                Reference const & reference
+        ) noexcept -> Reference & = default;
 
-        constexpr T & get () const noexcept {
-            return * this->p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                Reference && reference
+        ) noexcept -> Reference & = default;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction operator T & () noexcept { // NOLINT(google-explicit-constructor)
-            return *p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_Explicit constexpr operator __ElementType & () const noexcept;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction T & get () noexcept {
-            return *p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto get () const noexcept -> __ElementType &;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -> () noexcept -> Pointer {
-            return this->p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
 
-        constexpr auto operator -> () const noexcept -> Pointer {
-            return this->p;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                Reference const & reference
+        ) const noexcept -> bool;
 
-        constexpr auto operator == (Reference const & reference) const noexcept -> bool {
-            return
-                this == & reference ||
-                meta :: equals ( reference.get(), this->get() );
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                Reference const & reference
+        ) const noexcept -> bool;
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool final {
-            if ( this == & object ) {
-                return true;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const & element
+        ) const noexcept -> bool;
 
-            auto pReference = dynamic_cast < Reference < T > const * > ( & object );
-            if (pReference == nullptr ) {
-                return false;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const & element
+        ) const noexcept -> bool;
 
-            return this->operator==(*pReference);
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
 
-        __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
-            std::stringstream oss;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-            meta :: print ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-                << reinterpret_cast < AddressValueType > ( p ) << std::dec << " : " , *p ) << " >";
-            return oss.str();
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
-    #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-        template <class...ArgTypes>
-        constexpr std::invoke_result_t<T&, ArgTypes...> operator () (ArgTypes&&... args) const {
-            return std::invoke(get(), std::forward<ArgTypes>(args)...);
-        }
-
-    #else
-
-    #endif
-
+    public:                                         /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename ... __ArgumentTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto operator () (
+                __ArgumentTypes && ... arguments
+        ) noexcept ( noexcept (
+                ( * this->_pObject ) ( std :: forward < __ArgumentTypes > ( arguments ) ... )
+        ) ) -> typename __hidden :: __impl :: __ReturnOfUnsafe < __ElementType > :: Type;
     };
 
-}
+} /* namespace cds */
 
-#if __CDS_cpplang_CTAD_available == true
+#include "reference/impl/Reference.hpp"
 
-namespace cds {
-
-    template <class T>
-    Reference(T&) -> Reference<T>;
-
-}
-
-#endif
-
-__CDS_Meta_RegisterParseTemplateType(Reference) // NOLINT(clion-misra-cpp2008-8-0-1)
-
-#endif //CDS_REFERENCE_HPP
+#endif /* __CDS_REFERENCE_HPP__ */

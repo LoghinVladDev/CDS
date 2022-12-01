@@ -22,6 +22,21 @@
 #include <CDS/memory/SharedPointer>
 #include <CDS/memory/RawPointer>
 #include <CDS/memory/WeakPointer>
+#include <CDS/memory/Reference>
+#include <CDS/Optional>
+#include <CDS/exception/ArithmeticException>
+#include <CDS/exception/RuntimeException>
+#include <CDS/exception/Exception>
+#include <CDS/exception/DivideByZeroException>
+#include <CDS/exception/IllegalArgumentException>
+#include <CDS/exception/KeyException>
+#include <CDS/exception/TypeException>
+#include <CDS/exception/UnsupportedOperationException>
+#include <CDS/exception/OutOfBoundsException>
+#include <CDS/exception/NullPointerException>
+#include <CDS/exception/NotImplementedException>
+#include <CDS/exception/FormatException>
+#include <CDS/exception/NoSuchElementException>
 
 
 template < typename F >
@@ -198,6 +213,30 @@ p24121.~shared_ptr();
     std :: cout << t << '\n' << t2 << '\n';
     Tuple t3 = std :: move (t2);
     std :: cout << t << '\n' << t2 << '\n' << t3 << '\n';
+
+
+    Optional < int > o1;
+    std :: cout << o1 << '\n';
+    o1 = 3;
+    std :: cout << o1 << '\n';
+
+    Optional < int > o2;
+    o1 = o2;
+    std :: cout << o1 << '\n';
+
+    Optional < int > o3 = 4;
+    o1 = std :: move ( o3 );
+
+    std :: cout << o1 << '\n';
+    std :: cout << o3 << '\n';
+
+    Function < int(int) > f123 = [](int x) { return x * 2; };
+    Reference < Function < int(int) > > fref = f123;
+
+    int x123;
+    Reference < int > refx123 = x123;
+
+    auto opt123 = cds :: makeOptional < int > ( 3 );
 
     return 0;
 }

@@ -7,6 +7,7 @@
 
 #include <CDS/Function>
 #include <CDS/MutableCollection>
+#include <CDS/exception/OutOfBoundsException>
 
 #include "../../../shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
 
