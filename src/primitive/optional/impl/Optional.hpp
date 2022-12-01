@@ -364,7 +364,7 @@ namespace cds {
     ) const noexcept -> bool {
 
         if ( this == & optional ) {
-            return true;
+            return false;
         }
 
         if ( this->isPresent() != optional.isPresent() ) {
@@ -408,6 +408,15 @@ namespace cds {
         return
                 this->_pObject.get() != & element &&
                 * this->_pObject != element;
+    }
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeOptional (
+            __ConstructionArguments && ... arguments
+    ) noexcept ( noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> Optional < __ElementType > {
+
+        return cds :: Optional < __ElementType > ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) );
     }
 
 } /* namespace cds */

@@ -22,6 +22,7 @@
 #include <CDS/memory/SharedPointer>
 #include <CDS/memory/RawPointer>
 #include <CDS/memory/WeakPointer>
+#include <CDS/memory/Reference>
 #include <CDS/Optional>
 #include <CDS/exception/ArithmeticException>
 #include <CDS/exception/RuntimeException>
@@ -228,6 +229,14 @@ p24121.~shared_ptr();
 
     std :: cout << o1 << '\n';
     std :: cout << o3 << '\n';
+
+    Function < int(int) > f123 = [](int x) { return x * 2; };
+    Reference < Function < int(int) > > fref = f123;
+
+    int x123;
+    Reference < int > refx123 = x123;
+
+    auto opt123 = cds :: makeOptional < int > ( 3 );
 
     return 0;
 }

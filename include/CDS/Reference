@@ -1,1 +1,2 @@
-#include "../../src/primitive/Reference.hpp"
+#warning Deprecated. Use CDS/memory/Reference instead
+#include <CDS/memory/Reference>
