@@ -2018,7 +2018,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "impl/BaseStringNonException.hpp"
 
-#include <CDS/Utility>
+#include <CDS/exception/OutOfBoundsException>
 
 #include "impl/StringUtils.hpp" /* NOLINT(llvm-include-order) */
 #include "impl/BaseString.hpp"

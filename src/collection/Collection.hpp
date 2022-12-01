@@ -7,6 +7,7 @@
 
 #include <CDS/Object>                                                                                                   /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
+#include <CDS/Utility>
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 

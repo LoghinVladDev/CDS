@@ -373,11 +373,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             Function const & function
     ) const noexcept -> bool {
 
-        if ( this == & function ) {
-            return true;
-        }
-
         return
+                this == & function ||
                 this->_adapterGroup == function._adapterGroup &&
                 this->_adapterGroup->_compare ( this->_functionObject, function._functionObject );
     }
@@ -388,13 +385,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             Function const & function
     ) const noexcept -> bool {
 
-        if ( this == & function ) {
-            return false;
-        }
-
-        return
-                this->_adapterGroup != function._adapterGroup ||
-                ! this->_adapterGroup->_compare ( this->_functionObject, function._functionObject );
+        return ! this->operator == ( function );
     }
 
 
@@ -404,8 +395,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __Functor const & functor
     ) const noexcept -> bool {
 
-        return
-                this->_adapterGroup->_compare ( this->_functionObject, & functor );
+        return this->_adapterGroup->_compare ( this->_functionObject, & functor );
     }
 
 
@@ -415,8 +405,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __Functor const & functor
     ) const noexcept -> bool {
 
-        return
-                ! this->_adapterGroup->_compare ( this->_functionObject, & functor );
+        return ! this->_adapterGroup->_compare ( this->_functionObject, & functor );
     }
 
 
@@ -426,8 +415,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
     ) const noexcept -> bool {
 
-        return
-                this->_adapterGroup->_compare ( this->_functionObject, function );
+        return this->_adapterGroup->_compare ( this->_functionObject, function );
     }
 
 
@@ -437,8 +425,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
     ) const noexcept -> bool {
 
-        return
-                ! this->_adapterGroup->_compare ( this->_functionObject, function );
+        return ! this->_adapterGroup->_compare ( this->_functionObject, function );
     }
 
 } /* namespace cds */
