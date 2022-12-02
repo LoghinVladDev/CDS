@@ -37,6 +37,7 @@
 #include <CDS/exception/NotImplementedException>
 #include <CDS/exception/FormatException>
 #include <CDS/exception/NoSuchElementException>
+#include <CDS/Union>
 
 
 template < typename F >
@@ -50,7 +51,11 @@ auto timed ( cds :: String const & message, F const & block ) {
     std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 
+void unionDebugF();
+
 int main () {
+    std::variant<std::string> v31231;
+    std::string strstr;
     std::make_shared<int>(3);
 std::shared_ptr <int> p24121;
 p24121.~shared_ptr();
@@ -238,5 +243,61 @@ p24121.~shared_ptr();
 
     auto opt123 = cds :: makeOptional < int > ( 3 );
 
+    class B {
+    private:
+        int y;
+    };
+
+    class Test : public Object, public B {
+    public:
+        int x;
+        size_t y = reinterpret_cast < size_t > ( static_cast < B * > ( this ) );
+        size_t t = reinterpret_cast < size_t > ( static_cast < Test * > ( static_cast < B * > ( this ) ) );
+        size_t z = reinterpret_cast < size_t > ( reinterpret_cast < B * > ( this ) );
+    };
+
+    Test test123;
+    std :: cout << & test123 << '\n';
+    std :: cout << static_cast < B * > ( & test123 ) << '\n';
+    std :: cout << & test123.x << '\n';
+    std :: cout << std :: hex << test123.y << '\n';
+    std :: cout << std :: hex << test123.z << '\n';
+    std :: cout << std :: hex << test123.t << '\n';
+
+
+    std :: cout << cds :: meta :: isConvertible < char const *, int > () << '\n';
+    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, String >;
+    std :: cout << t4124512 :: __directInit << '\n';
+    std :: cout << t4124512 :: __convertInit << '\n';
+    std :: cout << t4124512 :: __directInitIndex << '\n';
+    std :: cout << t4124512 :: __convertInitIndex << '\n';
+    std :: cout << t4124512 :: __NextEntryTraits :: __directInitIndex << '\n';
+    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+    std :: variant < int, float, double, String > var3241234;
+    Union < int, float, String > u12312 = "123";
+    Union < int, float, String > ui4123412 = u12312;
+unionDebugF();
     return 0;
+}
+
+template < typename t >
+void printUnionTraits () {
+
+    std :: cout << "Direct Init :           " << t :: __directInit << '\n';
+    std :: cout << "Direct Init Index :     " << t :: __directInitIndex << '\n';
+    std :: cout << "Convert Init :          " << t :: __convertInit << '\n';
+    std :: cout << "Convert Init Index :    " << t :: __convertInitIndex << '\n';
+    std :: cout << '\n';
+};
+
+void unionDebugF () {
+
+    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, cds :: String >;
+    printUnionTraits < t4124512 > ();
+    printUnionTraits < t4124512 :: __NextEntryTraits > ();
+    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits > ();
+    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
 }
