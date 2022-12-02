@@ -316,6 +316,10 @@ int main () {
 
 //    u5 = u6;
 
+    u7.emplace < String > ( 5, 'e' );
+    u7.emplace < String > ( {'a', 'b', 'c'} );
+//    u7.emplace < StringView > ( "abc" );
+
 
 unionDebugF();
     return 0;

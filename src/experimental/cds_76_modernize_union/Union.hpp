@@ -70,6 +70,30 @@ namespace cds {
             struct __UnionInitTraits : __UnionInitTraitsImpl < 0U, __ElementType, __Types ... > {};
 
 
+            template < uint32, uint32 __index, typename ... __EmptyTypePack >
+            struct __UnionIndexTraitsImpl {
+
+                using __Type = void;
+            };
+
+
+            template < uint32 __requestedIndex, uint32 __index, typename __FirstType, typename ... __RemainingTypes >
+            struct __UnionIndexTraitsImpl < __requestedIndex, __index, __FirstType, __RemainingTypes ... > {
+
+                using __NextEntryTraits = __UnionIndexTraitsImpl < __requestedIndex, __index + 1U, __RemainingTypes ... >;
+
+                using __Type = cds :: meta :: Conditional <
+                        __requestedIndex == __index,
+                        __FirstType,
+                        typename __NextEntryTraits :: __Type
+                >;
+            };
+
+
+            template < uint32 __requestedIndex, typename ... __Types >
+            struct __UnionIndexTraits : __UnionIndexTraitsImpl < __requestedIndex, 0U, __Types ... > {};
+
+
             template < uint32 __index, typename ... __EmptyTypePack >
             struct __VariadicUnionEntryImpl {
 
@@ -535,6 +559,48 @@ namespace cds {
                             "assignment operator for the requested value"
                     );
                 }
+
+
+                template <
+                        typename __TargetElementType,
+                        typename ... __ConstructionArguments
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __vu_emplace (
+                        __ConstructionArguments && ... arguments
+                ) noexcept -> cds :: meta :: EnableIf <
+                        __UnionInitTraits < __TargetElementType, __Types ... > :: __directInit,
+                        typename __UnionInitTraits < __TargetElementType, __Types ... > :: __DirectInitType &
+                > {
+
+                    using __UnionTargetInitTraits = __UnionInitTraits < __TargetElementType, __Types ... >;
+
+                    if ( this->_holder != __UnionTargetInitTraits :: __directInitIndex ) {
+                        __EntryList ::__vue_acquireDestructor ( this->_holder ) (
+                                static_cast < void * > ( & this->_memory [0U] )
+                        );
+                    }
+
+                    this->_holder = __UnionTargetInitTraits :: __directInitIndex;
+                    return * new ( & this->_memory [0U] ) typename __UnionTargetInitTraits :: __DirectInitType ( std :: forward < __ConstructionArguments > ( arguments ) ... );
+                }
+
+
+
+                template <
+                        typename __TargetElementType,
+                        typename ... __ConstructionArguments
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __vu_emplace (
+                        __ConstructionArguments && ... arguments
+                ) noexcept -> cds :: meta :: EnableIf <
+                        ! __UnionInitTraits < __TargetElementType, __Types ... > :: __directInit,
+                        __TargetElementType &
+                > {
+
+                    static_assert (
+                            __UnionInitTraits < __TargetElementType, __Types ... > :: __directInit,
+                            "Union Emplace is not possible for requested Type due to it not being "
+                            "a variant of this Union"
+                    );
+                }
             };
 
         }
@@ -597,6 +663,56 @@ namespace cds {
 
             this->__vu_reset ( std :: forward < __ElementType > ( value ) );
             return * this;
+        }
+
+    public:
+        __CDS_NoDiscard constexpr auto index () const noexcept -> uint32 {
+
+            return this->_holder;
+        }
+
+    public:
+        __CDS_NoDiscard constexpr auto empty () const noexcept -> bool {
+
+            return this->__vu_valueless();
+        }
+
+    public:
+        template < typename __ElementType, typename ... __ConstructionArguments >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto emplace (
+                __ConstructionArguments && ... arguments
+        ) noexcept ( noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> __ElementType & {
+
+            return this->template __vu_emplace < __ElementType > ( std :: forward < __ConstructionArguments > ( arguments ) ... );
+        }
+
+    public:
+        template < typename __ElementType, typename __ListElementType, typename ... __ConstructionArguments >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto emplace (
+                std :: initializer_list < __ListElementType > const &       list,
+                __ConstructionArguments                            &&   ... arguments
+        ) noexcept ( noexcept ( __ElementType ( list, std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> __ElementType & {
+
+            return this->template __vu_emplace < __ElementType > ( list, std :: forward < __ConstructionArguments > ( arguments ) ... );
+        }
+
+    public:
+        template < Size __index, typename ... __ConstructionArguments >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto emplace (
+                __ConstructionArguments && ... arguments
+        ) noexcept ( noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type & {
+
+            return this->template __vu_emplace < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type > ( std :: forward < __ConstructionArguments > ( arguments ) ... );
+        }
+
+    public:
+        template < Size __index, typename __ListElementType, typename ... __ConstructionArguments >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto emplace (
+                std :: initializer_list < __ListElementType > const &       list,
+                __ConstructionArguments                            &&   ... arguments
+        ) noexcept ( noexcept ( __ElementType ( list, std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type & {
+
+            return this->template __vu_emplace < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type > ( list, std :: forward < __ConstructionArguments > ( arguments ) ... );
         }
     };
 
