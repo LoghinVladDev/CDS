@@ -51,14 +51,12 @@ auto timed ( cds :: String const & message, F const & block ) {
     std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 
-void unionDebugF();
-
-int main () {
+void f2( ) {
     std::variant<std::string> v31231;
     std::string strstr;
     std::make_shared<int>(3);
-std::shared_ptr <int> p24121;
-p24121.~shared_ptr();
+    std::shared_ptr <int> p24121;
+    p24121.~shared_ptr();
     using namespace cds;
     using namespace cds :: json;
     using namespace cds :: literals;
@@ -253,7 +251,7 @@ p24121.~shared_ptr();
         int x;
         size_t y = reinterpret_cast < size_t > ( static_cast < B * > ( this ) );
         size_t t = reinterpret_cast < size_t > ( static_cast < Test * > ( static_cast < B * > ( this ) ) );
-        size_t z = reinterpret_cast < size_t > ( reinterpret_cast < B * > ( this ) );
+//        size_t z = reinterpret_cast < size_t > ( reinterpret_cast < B * > ( this ) );
     };
 
     Test test123;
@@ -261,7 +259,7 @@ p24121.~shared_ptr();
     std :: cout << static_cast < B * > ( & test123 ) << '\n';
     std :: cout << & test123.x << '\n';
     std :: cout << std :: hex << test123.y << '\n';
-    std :: cout << std :: hex << test123.z << '\n';
+//    std :: cout << std :: hex << test123.z << '\n';
     std :: cout << std :: hex << test123.t << '\n';
 
 
@@ -276,8 +274,49 @@ p24121.~shared_ptr();
     std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
     std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
     std :: variant < int, float, double, String > var3241234;
-    Union < int, float, String > u12312 = "123";
-    Union < int, float, String > ui4123412 = u12312;
+}
+
+void unionDebugF();
+
+int main () {
+
+    using namespace cds;
+
+    Union < int, float, String > u1 = "123";
+    Union < int, float, String > u2 = StringView ( "123" );
+    Union < int, float, String > u3 = String ( "123" );
+
+    Union < int, float, String > u4 = u3;
+    Union < int, float, UniquePointer <int> > u5 = new int (3);
+    Union < int, float, UniquePointer <int> > u6 = std :: move ( u5 );
+
+    std :: variant < String, Tuple <int, float >> v1 = "test";
+    std :: variant < String, Tuple <int, float >> v2 = Tuple {1, 4.3f};
+
+    v1 = v2;
+
+    u2 = u3;
+    u1 = std :: move (u3);
+
+    Union <int, float, String > u7 = 4.5f;
+    Union <int, float, String > u8 = 4;
+    u1 = std :: move ( u7 );
+    u1 = u2;
+    u1 = u3;
+    u1 = std :: move ( u3 );
+    u1 = u8;
+    u1 = 3;
+    u1 = 4.5f;
+    u1 = "abc";
+    u1 = StringView("123");
+    u1 = std :: move ( String ( "123" ) );
+
+    u5 = new int(3);
+//    u5 = "abc";
+
+//    u5 = u6;
+
+
 unionDebugF();
     return 0;
 }
