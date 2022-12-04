@@ -264,16 +264,16 @@ void f2( ) {
 
 
     std :: cout << cds :: meta :: isConvertible < char const *, int > () << '\n';
-    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, String >;
-    std :: cout << t4124512 :: __directInit << '\n';
-    std :: cout << t4124512 :: __convertInit << '\n';
-    std :: cout << t4124512 :: __directInitIndex << '\n';
-    std :: cout << t4124512 :: __convertInitIndex << '\n';
-    std :: cout << t4124512 :: __NextEntryTraits :: __directInitIndex << '\n';
-    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
-    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
-    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
-    std :: variant < int, float, double, String > var3241234;
+//    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, String >;
+//    std :: cout << t4124512 :: __directInit << '\n';
+//    std :: cout << t4124512 :: __convertInit << '\n';
+//    std :: cout << t4124512 :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __convertInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: variant < int, float, double, String > var3241234;
 }
 
 void unionDebugF();
@@ -404,22 +404,22 @@ unionDebugF();
 }
 
 
-template < typename t >
-void printUnionTraits () {
-
-    std :: cout << "Direct Init :           " << t :: __directInit << '\n';
-    std :: cout << "Direct Init Index :     " << t :: __directInitIndex << '\n';
-    std :: cout << "Convert Init :          " << t :: __convertInit << '\n';
-    std :: cout << "Convert Init Index :    " << t :: __convertInitIndex << '\n';
-    std :: cout << '\n';
-};
+//template < typename t >
+//void printUnionTraits () {
+//
+//    std :: cout << "Direct Init :           " << t :: __directInit << '\n';
+//    std :: cout << "Direct Init Index :     " << t :: __directInitIndex << '\n';
+//    std :: cout << "Convert Init :          " << t :: __convertInit << '\n';
+//    std :: cout << "Convert Init Index :    " << t :: __convertInitIndex << '\n';
+//    std :: cout << '\n';
+//};
 
 void unionDebugF () {
 
-    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, cds :: String >;
-    printUnionTraits < t4124512 > ();
-    printUnionTraits < t4124512 :: __NextEntryTraits > ();
-    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits > ();
-    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
+//    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, cds :: String >;
+//    printUnionTraits < t4124512 > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
 //    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
 }
