@@ -395,6 +395,11 @@ unionDebugF();
     std :: cout << u1 << '\n';
     std :: cout << u3 << '\n';
 
+    std :: cout << ( u7 == 3 ) << '\n';
+//    std :: cout << ( u7 == 3.5 ) << '\n';
+    std :: cout << ( u7 == String("abc") ) << '\n';
+    std :: cout << ( u7 == String("Abc") ) << '\n';
+
     return 0;
 }
 

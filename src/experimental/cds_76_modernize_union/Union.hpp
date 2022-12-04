@@ -1107,6 +1107,60 @@ namespace cds {
 
             return this->__vu_equals ( * pUnion );
         }
+
+    public:
+        __CDS_NoDiscard auto operator == (
+                Union const & object
+        ) const noexcept -> bool {
+
+            if ( this == & object ) {
+                return true;
+            }
+
+            return this->__vu_equals ( object );
+        }
+
+    public:
+        __CDS_NoDiscard auto operator != (
+                Union const & object
+        ) const noexcept -> bool {
+
+            if ( this == & object ) {
+                return false;
+            }
+
+            return ! this->__vu_equals ( object );
+        }
+
+    public:
+        template < typename __ElementType >
+        __CDS_NoDiscard auto operator == (
+                __ElementType const & object
+        ) const noexcept -> bool {
+
+            using __TargetUnionInitTraits = typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... >;
+
+            if ( this->empty() || this->index() != __TargetUnionInitTraits :: __directInitIndex ) {
+                return false;
+            }
+
+            return * this->template __vu_getConst < typename __TargetUnionInitTraits :: __DirectInitType > () == object;
+        }
+
+    public:
+        template < typename __ElementType >
+        __CDS_NoDiscard auto operator != (
+                __ElementType const & object
+        ) const noexcept -> bool {
+
+            using __TargetUnionInitTraits = typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... >;
+
+            if ( this->empty() || this->index() != __TargetUnionInitTraits :: __directInitIndex ) {
+                return true;
+            }
+
+            return * this->template __vu_getConst < typename __TargetUnionInitTraits :: __DirectInitType > () != object;
+        }
     };
 
 } /* namespace cds */
