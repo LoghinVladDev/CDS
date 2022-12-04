@@ -45,9 +45,7 @@ namespace cds {
 
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    inline TypeException :: TypeException (
-            __ElementType const & value
-    ) noexcept :
+    inline TypeException :: TypeException () noexcept :
             RuntimeException ( String ( "Type Cast Exception. Conversion to '" ) + cds :: meta :: Type < __ElementType > :: name () + "' not possible" ) {
 
     }

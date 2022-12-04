@@ -13,8 +13,10 @@
 #include <CDS/Pair>
 #include <CDS/memory/SharedPointer>
 #include <CDS/util/JSON>
+#include <CDS/Union>
 
 int main () {
+
     auto start = std::chrono::high_resolution_clock::now();
 
     auto test = [] ( Test & test, String const & name ) {

@@ -37,6 +37,7 @@
 #include <CDS/exception/NotImplementedException>
 #include <CDS/exception/FormatException>
 #include <CDS/exception/NoSuchElementException>
+#include <CDS/Union>
 
 
 template < typename F >
@@ -50,10 +51,12 @@ auto timed ( cds :: String const & message, F const & block ) {
     std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
 }
 
-int main () {
+void f2( ) {
+    std::variant<std::string> v31231;
+    std::string strstr;
     std::make_shared<int>(3);
-std::shared_ptr <int> p24121;
-p24121.~shared_ptr();
+    std::shared_ptr <int> p24121;
+    p24121.~shared_ptr();
     using namespace cds;
     using namespace cds :: json;
     using namespace cds :: literals;
@@ -238,5 +241,185 @@ p24121.~shared_ptr();
 
     auto opt123 = cds :: makeOptional < int > ( 3 );
 
+    class B {
+    private:
+        int y;
+    };
+
+    class Test : public Object, public B {
+    public:
+        int x;
+        size_t y = reinterpret_cast < size_t > ( static_cast < B * > ( this ) );
+        size_t t = reinterpret_cast < size_t > ( static_cast < Test * > ( static_cast < B * > ( this ) ) );
+//        size_t z = reinterpret_cast < size_t > ( reinterpret_cast < B * > ( this ) );
+    };
+
+    Test test123;
+    std :: cout << & test123 << '\n';
+    std :: cout << static_cast < B * > ( & test123 ) << '\n';
+    std :: cout << & test123.x << '\n';
+    std :: cout << std :: hex << test123.y << '\n';
+//    std :: cout << std :: hex << test123.z << '\n';
+    std :: cout << std :: hex << test123.t << '\n';
+
+
+    std :: cout << cds :: meta :: isConvertible < char const *, int > () << '\n';
+//    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, String >;
+//    std :: cout << t4124512 :: __directInit << '\n';
+//    std :: cout << t4124512 :: __convertInit << '\n';
+//    std :: cout << t4124512 :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __convertInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: cout << t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __directInitIndex << '\n';
+//    std :: variant < int, float, double, String > var3241234;
+}
+
+void unionDebugF();
+
+int main () {
+
+    using namespace cds;
+
+
+
+    Union < int, float, String > u1 = "123";
+    Union < int, float, String > u2 = StringView ( "123" );
+    Union < int, float, String > u3 = String ( "123" );
+
+    Union < int, float, String > u4 = u3;
+    Union < int, float, UniquePointer <int> > u5 = new int (3);
+    Union < int, float, UniquePointer <int> > u6 = std :: move ( u5 );
+
+    std :: variant < String, Tuple <int, float >> v1 = "test";
+    std :: variant < String, Tuple <int, float >> v2 = Tuple {1, 4.3f};
+
+    v1 = v2;
+
+    u2 = u3;
+    u1 = std :: move (u3);
+
+    Union <int, float, String > u7 = 4.5f;
+    Union <int, float, String > u8 = 4;
+    u1 = std :: move ( u7 );
+    u1 = u2;
+    u1 = u3;
+    u1 = std :: move ( u3 );
+    u1 = u8;
+    u1 = 3;
+    u1 = 4.5f;
+    u1 = "abc";
+    u1 = StringView("123");
+    u1 = std :: move ( String ( "123" ) );
+
+    u5 = new int(3);
+//    u5 = "abc";
+
+//    u5 = u6;
+
+    u7.emplace < String > ( 5, 'e' );
+    u7.emplace < String > ( {'a', 'b', 'c'} );
+//    u7.emplace < StringView > ( "abc" );
+
+    std :: cout << u5.get <2> () << '\n';
+    std :: cout << u5.get < UniquePointer < int > > () << '\n';
+    std :: cout << u7.get <2> () << '\n';
+    std :: cout << u7.get < String > () << '\n';
+
+    Union <int, float, String> const & u7c = u7;
+    std :: cout << u7c.get <2> () << '\n';
+    std :: cout << u7c.get <String> () << '\n';
+
+    try {
+        std :: cout << u7.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    try {
+        std :: cout << u7c.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    try {
+        std :: cout << u5.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    std :: cout << u5.getPointer <2> () << " : " << * u5.getPointer <2> () << '\n';
+    std :: cout << u5.getPointer <UniquePointer <int>> () << " : " << * u5.getPointer <UniquePointer <int>> () << '\n';
+    std :: cout << u5.getPointer <0> () << '\n';
+    std :: cout << u5.getPointer <int> () << '\n';
+
+    std :: cout << u7c.getPointer <2> () << " : " << * u7c.getPointer <2> () << '\n';
+    std :: cout << u7c.getPointer <String> () << " : " << * u7c.getPointer <String> () << '\n';
+    std :: cout << u7c.getPointer <0> () << '\n';
+    std :: cout << u7c.getPointer <int> () << '\n';
+
+    std :: cout << "if is : \n";
+    u5.ifIs <0> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <int> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <2> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <UniquePointer < int >> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u7c.ifIs <String> ([](auto & e){
+        std :: cout << e << '\n';
+    });
+
+//    u7c.ifIs <String> ([](auto & e){
+//        e = "abc";
+//    });
+
+
+//    std :: cout << u5.get<double>() << '\n';
+
+unionDebugF();
+
+    std :: cout << u7 << '\n';
+    std :: cout << u7c << '\n';
+    std :: cout << u5 << '\n';
+    std :: cout << u1 << '\n';
+    std :: cout << u3 << '\n';
+
+    std :: cout << ( u7 == 3 ) << '\n';
+//    std :: cout << ( u7 == 3.5 ) << '\n';
+    std :: cout << ( u7 == String("abc") ) << '\n';
+    std :: cout << ( u7 == String("Abc") ) << '\n';
+
     return 0;
+}
+
+
+//template < typename t >
+//void printUnionTraits () {
+//
+//    std :: cout << "Direct Init :           " << t :: __directInit << '\n';
+//    std :: cout << "Direct Init Index :     " << t :: __directInitIndex << '\n';
+//    std :: cout << "Convert Init :          " << t :: __convertInit << '\n';
+//    std :: cout << "Convert Init Index :    " << t :: __convertInitIndex << '\n';
+//    std :: cout << '\n';
+//};
+
+void unionDebugF () {
+
+//    using t4124512 = cds :: __hidden :: __impl :: __UnionInitTraits < char const *, int, float, double, cds :: String >;
+//    printUnionTraits < t4124512 > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
+//    printUnionTraits < t4124512 :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits :: __NextEntryTraits > ();
 }

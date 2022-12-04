@@ -35,9 +35,7 @@ namespace cds {
 
     public:
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        TypeException (
-                __ElementType const & value
-        ) noexcept;
+        TypeException () noexcept;
 
     public:
         ~TypeException() noexcept override = default;
