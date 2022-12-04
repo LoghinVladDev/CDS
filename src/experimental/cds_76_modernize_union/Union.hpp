@@ -96,11 +96,14 @@ namespace cds {
 
             struct __VariadicUnionCallGroup {
 
-                cds :: functional :: ConsumerFunction < void *, void const * >  _copyConstructor;
-                cds :: functional :: ConsumerFunction < void *, void * >        _moveConstructor;
-                cds :: functional :: ConsumerFunction < void *, void const * >  _copyAssigner;
-                cds :: functional :: ConsumerFunction < void *, void * >        _moveAssigner;
-                cds :: functional :: ConsumerFunction < void * >                _destructor;
+                cds :: functional :: ConsumerFunction < void *, void const * >          _copyConstructor;
+                cds :: functional :: ConsumerFunction < void *, void * >                _moveConstructor;
+                cds :: functional :: ConsumerFunction < void *, void const * >          _copyAssigner;
+                cds :: functional :: ConsumerFunction < void *, void * >                _moveAssigner;
+                cds :: functional :: ConsumerFunction < void * >                        _destructor;
+                cds :: functional :: MapperFunction < cds :: String, void const * >     _toString;
+                cds :: functional :: MapperFunction < Size, void const * >              _hash;
+                cds :: functional :: PredicateFunction < void const *, void const * >   _equals;
             };
 
 
@@ -158,13 +161,38 @@ namespace cds {
                     /* do nothing, nothing to move */
                 }
 
+                inline static auto __vue_toString (
+                        void const * /* pObject */
+                ) noexcept -> String {
+
+                    return "null";
+                }
+
+                constexpr static auto __vue_hash (
+                        void const * /* pObject */
+                ) noexcept -> Size {
+
+                    return 0ULL;
+                }
+
+                constexpr static auto __vue_equals (
+                        void const *, /* pObject */
+                        void const *  /* pOtherObject */
+                ) noexcept -> bool {
+
+                    return true;
+                }
+
 
                 constexpr static __VariadicUnionCallGroup const _callGroup {
                     & __VariadicUnionEntryImpl :: __vue_copyConstructor,
                     & __VariadicUnionEntryImpl :: __vue_moveConstructor,
                     & __VariadicUnionEntryImpl :: __vue_copyAssigner,
                     & __VariadicUnionEntryImpl :: __vue_moveAssigner,
-                    & __VariadicUnionEntryImpl :: __vue_destructor
+                    & __VariadicUnionEntryImpl :: __vue_destructor,
+                    & __VariadicUnionEntryImpl :: __vue_toString,
+                    & __VariadicUnionEntryImpl :: __vue_hash,
+                    & __VariadicUnionEntryImpl :: __vue_equals
                 };
 
 
@@ -313,13 +341,43 @@ namespace cds {
                     __variadicUnionLateMoveAssign < __FirstType > ( pTo, pFrom );
                 }
 
+                inline static auto __vue_toString (
+                        void const * pObject
+                ) noexcept -> String {
+
+                    std :: stringstream oss;
+                    cds :: streamPrint ( oss, * static_cast < __FirstType const * > ( pObject ) );
+                    return oss.str();
+                }
+
+                inline static auto __vue_hash (
+                        void const * pObject
+                ) noexcept -> Size {
+
+                    return cds :: Hash < __FirstType > :: hash ( * static_cast < __FirstType const * > ( pObject ) );
+                }
+
+                inline static auto __vue_equals (
+                        void const * pObject,
+                        void const * pOtherObject
+                ) noexcept -> bool {
+
+                    return cds :: meta :: equals (
+                            * static_cast < __FirstType const * > ( pObject ),
+                            * static_cast < __FirstType const * > ( pOtherObject )
+                    );
+                }
+
 
                 constexpr static __VariadicUnionCallGroup const _callGroup {
                         & __VariadicUnionEntryImpl :: __vue_copyConstructor,
                         & __VariadicUnionEntryImpl :: __vue_moveConstructor,
                         & __VariadicUnionEntryImpl :: __vue_copyAssigner,
                         & __VariadicUnionEntryImpl :: __vue_moveAssigner,
-                        & __VariadicUnionEntryImpl :: __vue_destructor
+                        & __VariadicUnionEntryImpl :: __vue_destructor,
+                        & __VariadicUnionEntryImpl :: __vue_toString,
+                        & __VariadicUnionEntryImpl :: __vue_hash,
+                        & __VariadicUnionEntryImpl :: __vue_equals
                 };
 
 
@@ -567,6 +625,7 @@ namespace cds {
 
                     if ( this->_holder == object._holder ) {
 
+                        this->_holder = cds :: exchange ( object._holder, __VariadicUnion :: __vu_valuelessHolder );
                         __VariadicUnion :: __vu_callGroup ( this->_holder, typename __VariadicUnionIndexSequence < sizeof ... (__Types) + 1U > :: __Type () )->_moveAssigner (
                                 static_cast < void * > ( & this->_memory [0U] ),
                                 static_cast < void * > ( & object._memory [0U] )
@@ -683,7 +742,6 @@ namespace cds {
                 }
 
 
-
                 template <
                         typename __TargetElementType,
                         typename ... __ConstructionArguments
@@ -721,6 +779,35 @@ namespace cds {
                     }
 
                     return static_cast < __ElementType const * > ( static_cast < void const * > ( & this->_memory [0U] ) );
+                }
+
+
+                __CDS_NoDiscard inline auto __vu_toString () const noexcept -> String {
+
+                    return __VariadicUnion :: __vu_callGroup ( this->_holder, typename __VariadicUnionIndexSequence < sizeof ... ( __Types ) + 1U > :: __Type () )->_toString (
+                            static_cast < void const * > ( & this->_memory [0U] )
+                    );
+                }
+
+
+                __CDS_NoDiscard constexpr auto __vu_hash () const noexcept -> Size {
+
+                    return __VariadicUnion :: __vu_callGroup ( this->_holder, typename __VariadicUnionIndexSequence < sizeof ... ( __Types ) + 1U > :: __Type () )->_hash (
+                            static_cast < void const * > ( & this->_memory [0U] )
+                    );
+                }
+
+
+                __CDS_NoDiscard constexpr auto __vu_equals (
+                        __VariadicUnion const & otherUnion
+                ) const noexcept -> bool {
+
+                    return
+                            this->_holder == otherUnion._holder &&
+                            __VariadicUnion :: __vu_callGroup ( this->_holder, typename __VariadicUnionIndexSequence < sizeof ... ( __Types ) + 1U > :: __Type () )->_equals (
+                                    static_cast < void const * > ( & this->_memory [0U] ),
+                                    static_cast < void const * > ( & otherUnion._memory [0U] )
+                            );
                 }
             };
 
@@ -797,9 +884,9 @@ namespace cds {
         }
 
     public:
-        __CDS_NoDiscard constexpr auto index () const noexcept -> uint32 {
+        __CDS_NoDiscard constexpr auto index () const noexcept -> Size {
 
-            return this->_holder;
+            return static_cast < Size > ( this->_holder );
         }
 
     public:
@@ -934,6 +1021,91 @@ namespace cds {
         constexpr auto is () const noexcept -> bool {
 
             return __index == this->_holder;
+        }
+
+    public:
+        template < typename __ElementType, typename __Consumer >
+        __CDS_cpplang_ConstexprConditioned auto ifIs (
+                __Consumer const & consumer
+        ) noexcept ( noexcept ( consumer ( cds :: meta :: referenceOf < typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... > :: __DirectInitType > () ) ) ) -> void {
+
+            auto pObject = this->template __vu_get < typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... > :: __DirectInitType > ();
+            if ( pObject == nullptr ) {
+                return;
+            }
+
+            consumer ( * pObject );
+        }
+
+    public:
+        template < Size __index, typename __Consumer >
+        __CDS_cpplang_ConstexprConditioned auto ifIs (
+                __Consumer const & consumer
+        ) noexcept ( noexcept ( consumer ( cds :: meta :: referenceOf < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type > () ) ) ) -> void {
+
+            auto pObject = this->template __vu_get < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type > ();
+            if ( pObject == nullptr ) {
+                return;
+            }
+
+            consumer ( * pObject );
+        }
+
+    public:
+        template < typename __ElementType, typename __Consumer >
+        __CDS_cpplang_ConstexprConditioned auto ifIs (
+                __Consumer const & consumer
+        ) const noexcept ( noexcept ( consumer ( cds :: meta :: referenceOf < typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... > :: __DirectInitType const > () ) ) ) -> void {
+
+            auto pObject = this->template __vu_getConst < typename __hidden :: __impl :: __UnionInitTraits < __ElementType, __Types ... > :: __DirectInitType > ();
+            if ( pObject == nullptr ) {
+                return;
+            }
+
+            consumer ( * pObject );
+        }
+
+    public:
+        template < Size __index, typename __Consumer >
+        __CDS_cpplang_ConstexprConditioned auto ifIs (
+                __Consumer const & consumer
+        ) const noexcept ( noexcept ( consumer ( cds :: meta :: referenceOf < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type const > () ) ) ) -> void {
+
+            auto pObject = this->template __vu_getConst < typename __hidden :: __impl :: __UnionIndexTraits < __index, __Types ... > :: __Type > ();
+            if ( pObject == nullptr ) {
+                return;
+            }
+
+            consumer ( * pObject );
+        }
+
+    public:
+        __CDS_NoDiscard auto toString () const noexcept -> String override {
+
+            return this->__vu_toString ();
+        }
+
+    public:
+        __CDS_NoDiscard auto hash () const noexcept -> Size override {
+
+            return this->__vu_hash ();
+        }
+
+    public:
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override {
+
+            if ( this == & object ) {
+                return true;
+            }
+
+            auto pUnion = dynamic_cast < decltype (this) > ( & object );
+            if ( pUnion == nullptr ) {
+                return false;
+            }
+
+            return this->__vu_equals ( * pUnion );
         }
     };
 

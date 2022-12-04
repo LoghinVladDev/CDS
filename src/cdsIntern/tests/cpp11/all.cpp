@@ -17,12 +17,6 @@
 
 int main () {
 
-
-    Union < int, float, String > unionTest = "test";
-    unionTest.emplace < float > (3.4f);
-    std :: cout << unionTest.get <1>() << '\n';
-    return 0;
-
     auto start = std::chrono::high_resolution_clock::now();
 
     auto test = [] ( Test & test, String const & name ) {

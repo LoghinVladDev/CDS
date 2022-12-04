@@ -359,10 +359,42 @@ int main () {
     std :: cout << u7c.getPointer <0> () << '\n';
     std :: cout << u7c.getPointer <int> () << '\n';
 
+    std :: cout << "if is : \n";
+    u5.ifIs <0> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <int> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <2> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u5.ifIs <UniquePointer < int >> ( [](auto & e) {
+        std :: cout << e << '\n';
+    });
+
+    u7c.ifIs <String> ([](auto & e){
+        std :: cout << e << '\n';
+    });
+
+//    u7c.ifIs <String> ([](auto & e){
+//        e = "abc";
+//    });
+
 
 //    std :: cout << u5.get<double>() << '\n';
 
 unionDebugF();
+
+    std :: cout << u7 << '\n';
+    std :: cout << u7c << '\n';
+    std :: cout << u5 << '\n';
+    std :: cout << u1 << '\n';
+    std :: cout << u3 << '\n';
+
     return 0;
 }
 
