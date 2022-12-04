@@ -282,6 +282,8 @@ int main () {
 
     using namespace cds;
 
+
+
     Union < int, float, String > u1 = "123";
     Union < int, float, String > u2 = StringView ( "123" );
     Union < int, float, String > u3 = String ( "123" );
@@ -320,10 +322,50 @@ int main () {
     u7.emplace < String > ( {'a', 'b', 'c'} );
 //    u7.emplace < StringView > ( "abc" );
 
+    std :: cout << u5.get <2> () << '\n';
+    std :: cout << u5.get < UniquePointer < int > > () << '\n';
+    std :: cout << u7.get <2> () << '\n';
+    std :: cout << u7.get < String > () << '\n';
+
+    Union <int, float, String> const & u7c = u7;
+    std :: cout << u7c.get <2> () << '\n';
+    std :: cout << u7c.get <String> () << '\n';
+
+    try {
+        std :: cout << u7.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    try {
+        std :: cout << u7c.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    try {
+        std :: cout << u5.get <int> () << '\n';
+    } catch ( Exception const & e ) {
+        std :: cout << e.message() << '\n';
+    }
+
+    std :: cout << u5.getPointer <2> () << " : " << * u5.getPointer <2> () << '\n';
+    std :: cout << u5.getPointer <UniquePointer <int>> () << " : " << * u5.getPointer <UniquePointer <int>> () << '\n';
+    std :: cout << u5.getPointer <0> () << '\n';
+    std :: cout << u5.getPointer <int> () << '\n';
+
+    std :: cout << u7c.getPointer <2> () << " : " << * u7c.getPointer <2> () << '\n';
+    std :: cout << u7c.getPointer <String> () << " : " << * u7c.getPointer <String> () << '\n';
+    std :: cout << u7c.getPointer <0> () << '\n';
+    std :: cout << u7c.getPointer <int> () << '\n';
+
+
+//    std :: cout << u5.get<double>() << '\n';
 
 unionDebugF();
     return 0;
 }
+
 
 template < typename t >
 void printUnionTraits () {
