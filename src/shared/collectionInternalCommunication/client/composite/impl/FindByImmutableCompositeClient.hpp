@@ -30,7 +30,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindThatWrapper {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     Size,
@@ -53,7 +53,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     Size,
@@ -76,7 +76,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     Size,
@@ -203,7 +203,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindAllThatWrapper {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
@@ -225,7 +225,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
@@ -247,7 +247,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > {
 
                 constexpr static cds :: functional :: MapperFunction <
-                    __IteratorType,
+                    __CollectionType < __IteratorType > &,
                     __IteratorType const &,
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
