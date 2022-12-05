@@ -34,7 +34,7 @@ namespace cds {
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __ValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class LinkedHashMap :
+    > class __CDS_InheritsEBOs LinkedHashMap :
             public Map < __KeyType, __ValueType >,
             protected __hidden :: __impl :: __LinkedHashMapServer < __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __LinkedHashMapHashTableImplementation < __KeyType, __ValueType, __Hasher >,

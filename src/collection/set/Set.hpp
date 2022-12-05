@@ -31,7 +31,7 @@ namespace cds {
     template <
             typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             cds :: meta :: EnableIf < cds :: meta :: isValidSetElement < __ElementType > () >   __enabler       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class Set :
+    > class __CDS_InheritsEBOs Set :
             public Collection < __ElementType >,
             public __hidden :: __impl :: __SetFindUniqueClient < __ElementType, __enabler > {
 

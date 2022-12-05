@@ -316,7 +316,7 @@ namespace cds {             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __ValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class LinkedHashMap <
+    > class __CDS_InheritsEBOs LinkedHashMap <
             __KeyType,
             __ValueType,
             __Hasher

@@ -29,7 +29,7 @@ namespace cds {
     template <
             typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class HashSet :
+    > class __CDS_InheritsEBOs HashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >,
             public __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >,

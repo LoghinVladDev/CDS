@@ -37,8 +37,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @namespace cds
      * @public
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class MutableCollection :           /* NOLINT(*-virtual-class-destructor) */
+    template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class __CDS_InheritsEBOs MutableCollection :    /* NOLINT(*-virtual-class-destructor) */
             public Collection < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionDelegateForwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __MutableCollectionIteratorRemoveClient < __ElementType >,

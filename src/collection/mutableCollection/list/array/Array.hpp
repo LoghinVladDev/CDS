@@ -26,7 +26,7 @@
 namespace cds {
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class Array :
+    class __CDS_InheritsEBOs Array :
             public List < __ElementType >,
             protected __hidden :: __impl :: __ArrayServer < __ElementType >,
             public __hidden :: __impl :: __ArrayImplementation < __ElementType >,

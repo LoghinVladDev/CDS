@@ -32,7 +32,7 @@ namespace cds {
     template <
             typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class LinkedHashSet :
+    > class __CDS_InheritsEBOs LinkedHashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >,
             public __hidden :: __impl :: __LinkedHashSetHashTableImplementation < __ElementType, __Hasher >,
