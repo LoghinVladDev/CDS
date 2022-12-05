@@ -910,7 +910,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushFrontAllOf (
                     __IterableType const & iterable
-            ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                 /* Variant with RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                 this->pushFrontAllOf (
@@ -936,7 +936,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushFrontAllOf (
                     __IterableType const & iterable
-            ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                 /* Variant without RandomAccessIterator - 'operator -'. Call pushFrontAllOf without size, letting
                  * the function compute the distance between start and end */
@@ -962,7 +962,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushFrontAllOf (
                     std :: initializer_list < __ElementType > const & list
-            ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                 /* initializer_list has RandomAccessIterator - 'operator -'. Call pushFrontAllOf with size */
                 this->pushFrontAllOf (
@@ -988,7 +988,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushBackAllOf (
                     __IterableType const & iterable
-            ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                 /* Variant with RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                 this->pushBackAllOf (
@@ -1014,7 +1014,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushBackAllOf (
                     __IterableType const & iterable
-            ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                 /* Variant without RandomAccessIterator - 'operator -'. Call pushBackAllOf without size, letting
                  * the function compute the distance between start and end */
@@ -1040,7 +1040,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ReturnType
             > :: pushBackAllOf (
                     std :: initializer_list < __ElementType > const & list
-            ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                 /* initializer_list has RandomAccessIterator - 'operator -'. Call pushBackAllOf with size */
                 this->pushBackAllOf (
@@ -1065,7 +1065,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count
-            ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                 /* The number of received values is the numbers of elements to be created. If 0, compute */
                 Size    const parameterCount    = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
@@ -1104,7 +1104,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
                     Size                   count
-            ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
+            ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                 /* The number of received values is the numbers of elements to be created. If 0, compute */
                 Size    const parameterCount    = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;

@@ -321,7 +321,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ValueType,
             __Hasher
     > :: ValueMutableCollectionProxy :
-            public AbstractValueMutableCollectionProxy,
+            public HashMap < __KeyType, __ValueType, __Hasher > :: AbstractValueMutableCollectionProxy,
             protected __hidden :: __impl :: __HashMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,

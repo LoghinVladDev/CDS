@@ -11,24 +11,24 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             template <
                     typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Action,                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Consumer,                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             ! cds :: meta :: isMemberFunctionPointer <
-                                    __Action,
+                                    __Consumer,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     >
             > __CDS_cpplang_ConstexprConditioned auto __forEach (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
-                    __Action       const & action
-            ) noexcept ( noexcept ( action ( * begin ) ) ) -> void {
+                    __Consumer     const & consumer
+            ) noexcept ( noexcept ( consumer ( * begin ) ) ) -> void {
 
                 /* iterate through range */
                 for ( auto iterator = begin; iterator != end; ++ iterator ) {
 
                     /* call action for each value */
-                    (void) action ( * iterator );
+                    (void) consumer ( * iterator );
                 }
             }
 

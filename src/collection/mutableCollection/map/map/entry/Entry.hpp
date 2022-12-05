@@ -37,8 +37,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 constexpr __MapEntry (
                         __MapEntry const & entry
                 ) noexcept (
-                        noexcept ( KeyType ( entry._key ) ) &&
-                        noexcept ( ValueType ( entry._value ) )
+                        noexcept ( __KeyType ( entry._key ) ) &&
+                        noexcept ( __ValueType ( entry._value ) )
                 );
 
             public:                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
@@ -48,8 +48,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > constexpr __MapEntry (                                                                            /* NOLINT(*-explicit-*) */
                         __MapEntry < __DecayedKeyType, __ValueType > const & entry
                 ) noexcept (
-                        noexcept ( KeyType ( entry.key() ) ) &&
-                        noexcept ( ValueType ( entry.value() ) )
+                        noexcept ( __KeyType ( entry.key() ) ) &&
+                        noexcept ( __ValueType ( entry.value() ) )
                 );
 
             public:                                     /* NOLINT(readability-redundant-access-specifiers) */
@@ -59,16 +59,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_Implicit constexpr __MapEntry ( /* NOLINT(*-explicit-*) */
                         cds :: Pair < __TKeyType, __TValueType > const & pair
                 ) noexcept (
-                        noexcept ( KeyType ( pair.first() ) ) &&
-                        noexcept ( ValueType ( pair.second() ) )
+                        noexcept ( __KeyType ( pair.first() ) ) &&
+                        noexcept ( __ValueType ( pair.second() ) )
                 );
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr __MapEntry (
                         __MapEntry && entry
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                        noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( entry._value ) ) )
                 );
 
             public:                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
@@ -78,8 +78,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > constexpr __MapEntry (                                                                            /* NOLINT(*-explicit-*) */
                         __MapEntry < __DecayedKeyType, __ValueType > && entry
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                        noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( entry._value ) ) )
                 );
 
             public:                                     /* NOLINT(readability-redundant-access-specifiers) */
@@ -89,8 +89,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_Implicit constexpr __MapEntry ( /* NOLINT(*-explicit-*) */
                         cds :: Pair < __TKeyType, __TValueType > && pair
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( pair._first ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( pair._second ) ) )
+                        noexcept ( __KeyType ( std :: move ( pair._first ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( pair._second ) ) )
                 );
 
             public: /* NOLINT(readability-redundant-access-specifiers) */

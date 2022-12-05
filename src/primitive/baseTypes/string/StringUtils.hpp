@@ -51,7 +51,7 @@ namespace cds {
             struct __IsConvertibleToBaseStringView <                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __ConvertibleType,
                     __CharType,
-                    Void < decltype ( __hidden :: __impl :: __BaseStringView < __CharType > ( valueOf < __ConvertibleType > () ) ) >
+                    cds :: meta :: Void < decltype ( __hidden :: __impl :: __BaseStringView < __CharType > ( valueOf < __ConvertibleType > () ) ) >
             > : BoolConstant <
                     ! meta :: isSame < __ConvertibleType, __hidden :: __impl :: __BaseStringView < __CharType > > () && (
                             meta :: isSame < Decay < __ConvertibleType >, __CharType const * > ()                                       ||
@@ -324,7 +324,7 @@ namespace cds {
     public:                                 /* NOLINT(readability-redundant-access-specifiers) */
         template <
                 typename __ArgumentType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > = 0
+                meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType, __CharType > () > = 0
         > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
                 __ArgumentType && argumentType
         ) noexcept -> Size;

@@ -321,7 +321,7 @@ namespace cds {             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c
             __ValueType,
             __Hasher
     > :: ValueMutableCollectionProxy :
-            public AbstractValueMutableCollectionProxy,
+            public LinkedHashMap < __KeyType, __ValueType, __Hasher > :: AbstractValueMutableCollectionProxy,
             protected __hidden :: __impl :: __LinkedHashMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __LinkedHashMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __LinkedHashMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,

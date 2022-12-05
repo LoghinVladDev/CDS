@@ -382,7 +382,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :
-            public AbstractEntryMutableCollectionProxy,
+            public HashMap < __KeyType, __ValueType, __Hasher > :: AbstractEntryMutableCollectionProxy,
             protected __hidden :: __impl :: __HashMapEntryProxyServer < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyRandomInsertionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,

@@ -65,8 +65,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry const & entry
             ) noexcept (
-                    noexcept ( KeyType ( entry._key ) ) &&
-                    noexcept ( ValueType ( entry._value ) )
+                    noexcept ( __KeyType ( entry._key ) ) &&
+                    noexcept ( __ValueType ( entry._value ) )
             ) :
                     _key ( entry._key ),
                     _value ( entry._value ) {
@@ -83,8 +83,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry < __DecayedKeyType, __ValueType > const & entry
             ) noexcept (
-                    noexcept ( KeyType ( entry.key() ) ) &&
-                    noexcept ( ValueType ( entry.value() ) )
+                    noexcept ( __KeyType ( entry.key() ) ) &&
+                    noexcept ( __ValueType ( entry.value() ) )
             ) :
                     _key ( entry.key() ),
                     _value ( entry.value() ) {
@@ -99,13 +99,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
-                    cds :: Pair < __TKeyType, __TValueType > const & entry
+                    cds :: Pair < __TKeyType, __TValueType > const & pair
             ) noexcept (
-                    noexcept ( KeyType ( entry.first() ) ) &&
-                    noexcept ( ValueType ( entry.second() ) )
+                    noexcept ( __KeyType ( pair.first() ) ) &&
+                    noexcept ( __ValueType ( pair.second() ) )
             ) :
-                    _key ( entry.first() ),
-                    _value ( entry.second() ) {
+                    _key ( pair.first() ),
+                    _value ( pair.second() ) {
 
             }
 
@@ -114,8 +114,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry && entry
             ) noexcept (
-                    noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                    noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                    noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                    noexcept ( __ValueType ( std :: move ( entry._value ) ) )
             ) :
                     _key ( std :: move ( entry._key ) ),
                     _value ( std :: move ( entry._value ) ) {
@@ -132,8 +132,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
                     __MapEntry < __DecayedKeyType, __ValueType > && entry
             ) noexcept (
-                    noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                    noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                    noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                    noexcept ( __ValueType ( std :: move ( entry._value ) ) )
             ) :
                     _key ( std :: move ( entry._key ) ),
                     _value ( std :: move ( entry._value ) ) {
@@ -148,13 +148,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > constexpr __MapEntry < __KeyType, __ValueType > :: __MapEntry (
-                    cds :: Pair < __TKeyType, __TValueType > && entry
+                    cds :: Pair < __TKeyType, __TValueType > && pair
             ) noexcept (
-                    noexcept ( KeyType ( std :: move ( entry._first ) ) ) &&
-                    noexcept ( ValueType ( std :: move ( entry._second ) ) )
+                    noexcept ( __KeyType ( std :: move ( pair._first ) ) ) &&
+                    noexcept ( __ValueType ( std :: move ( pair._second ) ) )
             ) :
-                    _key ( std :: move ( entry._first ) ),
-                    _value ( std :: move ( entry._second ) ) {
+                    _key ( std :: move ( pair._first ) ),
+                    _value ( std :: move ( pair._second ) ) {
 
             }
 
@@ -197,8 +197,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __TKeyType      && key,
                     __TValueType    && value
             ) noexcept (
-                    noexcept ( KeyType ( std :: forward < __TKeyType > ( key ) ) ) &&
-                    noexcept ( ValueType ( std :: forward < __TValueType > ( value ) ) )
+                    noexcept ( __KeyType ( std :: forward < __TKeyType > ( key ) ) ) &&
+                    noexcept ( __ValueType ( std :: forward < __TValueType > ( value ) ) )
             ) :
                     _key ( std :: forward < __TKeyType > ( key ) ),
                     _value ( std :: forward < __TValueType > ( value ) ) {

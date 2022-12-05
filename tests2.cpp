@@ -11,7 +11,6 @@
 #include <CDS/util/JSON>
 #include <mutex>
 #include <thread>
-#include <pthread.h>
 #include <functional>
 #include "src/functional/FunctionalInterface.hpp"
 #include <variant>
@@ -52,9 +51,10 @@ auto timed ( cds :: String const & message, F const & block ) {
 }
 
 void f2( ) {
+
     std::variant<std::string> v31231;
     std::string strstr;
-    std::make_shared<int>(3);
+    (void) std::make_shared<int>(3);
     std::shared_ptr <int> p24121;
     p24121.~shared_ptr();
     using namespace cds;
@@ -399,6 +399,13 @@ unionDebugF();
 //    std :: cout << ( u7 == 3.5 ) << '\n';
     std :: cout << ( u7 == String("abc") ) << '\n';
     std :: cout << ( u7 == String("Abc") ) << '\n';
+
+    class A {
+    public:
+        void f ();
+    };
+
+    std :: cout << cds :: meta :: isFunction < decltype ( & A :: f ) > () << '\n';
 
     return 0;
 }

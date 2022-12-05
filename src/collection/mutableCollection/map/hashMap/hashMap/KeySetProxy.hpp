@@ -237,7 +237,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ValueType,
             __Hasher
     > :: KeySetProxy :
-            public AbstractKeySetProxy,
+            public HashMap < __KeyType, __ValueType, __Hasher > :: AbstractKeySetProxy,
             protected __hidden :: __impl :: __HashMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapKeyProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,

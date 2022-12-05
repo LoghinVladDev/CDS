@@ -5,6 +5,12 @@
 #ifndef __CDS_SHARED_LIST_SERVER_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_LIST_SERVER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#ifdef _MSC_VER
+
+#include "../../../impl/forceFunctionPointerCast.hpp"
+
+#endif
+
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -21,6 +27,32 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
+
+#ifdef _MSC_VER
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __begin ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __end ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __rbegin ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __rend ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __remove ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConst ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAddress ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newFront ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBack ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newFrontArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBackArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBefore ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBeforeConst ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAfter ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAfterConst ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBeforeArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newBeforeArrayConst ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAfterArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAfterArrayConst ),
+
+#else
+
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),                  /* __cirt_begin                         - expected part of List     */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                    /* __cirt_end                           - expected part of List     */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rbegin ),                 /* __cirt_rbegin                        - expected part of List     */
@@ -42,6 +74,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeArrayConst ),    /* __cirt_newBeforeAddressArrayConst    - expected part of List     */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArray ),          /* __cirt_newAfterAddressArray          - expected part of List     */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArrayConst ),     /* __cirt_newAfterAddressArrayConst     - expected part of List     */
+
+#endif
+
                     nullptr,                                                                                /* __cirt_find                          - not expected part of List */
                     nullptr                                                                                 /* __cirt_findConst                     - not expected part of List */
             };
@@ -59,10 +94,23 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
+
+#ifdef _MSC_VER
+                    
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cend ),
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __crbegin ),
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __crend ),
+
+#else
+
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of List     */
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of List     */
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crbegin ),   /* __cirt_rbegin                        - expected part of List     */
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crend ),     /* __cirt_rend                          - expected part of List     */
+
+#endif
+
                     nullptr,                                                                        /* __cirt_remove                        - not expected part of List */
                     nullptr,                                                                        /* __cirt_removeConst                   - not expected part of List */
                     nullptr,                                                                        /* __cirt_removeArray                   - not expected part of List */

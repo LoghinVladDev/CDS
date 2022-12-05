@@ -12,11 +12,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Function used to apply an action over each element of an iterable range. This is the action = callable object variant
              * @tparam __IteratorType is the type of the iterator elements that define the range of iteration
-             * @tparam __Action is the type of the action given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
+             * @tparam __Consumer is the type of the consumer given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
              * @param [in] begin : __IteratorType cref = Constant Reference to the begin iterator of the range
              * @param [in] end : __IteratorType cref = Constant Reference to the end iterator of the range
-             * @param [in] action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter, if callable, or as an object caller, if member function
-             * @exceptsafe if __Action callable / member function is exceptsafe
+             * @param [in] consumer : __Consumer cref = Constant Reference to callable object / member function, to be called with each element of the range as a parameter, if callable, or as an object caller, if member function
+             * @exceptsafe if __Consumer callable / member function is exceptsafe
              *
              * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
              * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00201-FSMF-forEach }
@@ -29,18 +29,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
              */
             template <
                     typename __IteratorType,                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __Action,                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Consumer,                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     cds :: meta :: EnableIf <
                             ! cds :: meta :: isMemberFunctionPointer <
-                                    __Action,
+                                    __Consumer,
                                     cds :: meta :: Decay < decltype ( * cds :: meta :: valueOf < __IteratorType > () ) >
                             > ()
                     > = 0
             > __CDS_cpplang_ConstexprConditioned auto __forEach (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __IteratorType const & begin,
                     __IteratorType const & end,
-                    __Action       const & action
-            ) noexcept ( noexcept ( action ( * begin ) ) ) -> void;
+                    __Consumer     const & consumer
+            ) noexcept ( noexcept ( consumer ( * begin ) ) ) -> void;
 
             /**
              * @brief Function used to check if the iterable range contains exactly 'count' elements that are validated by a given predicate. This is the predicate = callable object variant

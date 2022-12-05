@@ -5,6 +5,12 @@
 #ifndef __CDS_SHARED_SET_SERVER_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_SET_SERVER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#ifdef _MSC_VER
+
+#include "../../../impl/forceFunctionPointerCast.hpp"
+
+#endif
+
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -26,10 +32,31 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     nullptr,                                                                            /* __cirt_rbegin                        - not expected part of Set  */
                     nullptr,                                                                            /* __cirt_rend                          - not expected part of Set  */
                     nullptr,                                                                            /* __cirt_remove                        - not expected part of Set  */
+
+#ifdef _MSC_VER
+
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConst ),
+
+#else
+
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),        /* __cirt_removeConst                   - expected part of Set      */
+
+#endif
+
                     nullptr,                                                                            /* __cirt_removeArray                   - not expected part of Set  */
+
+#ifdef _MSC_VER
+
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),
+                    __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAddress ),
+
+#else
+
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),   /* __cirt_removeConstArray              - expected part of Set      */
                     reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),         /* __cirt_newAddress                    - expected part of Set      */
+
+#endif
+
                     nullptr,                                                                            /* __cirt_newFrontAddress               - not expected part of Set  */
                     nullptr,                                                                            /* __cirt_newBackAddress                - not expected part of Set  */
                     nullptr,                                                                            /* __cirt_newFrontAddressArray          - not expected part of Set  */
@@ -59,8 +86,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
+
+#ifdef _MSC_VER
+
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cend ),
+
+#else
+
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of Set      */
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of Set      */
+
+#endif
+
                     nullptr,                                                                        /* __cirt_rbegin                        - not expected part of Set  */
                     nullptr,                                                                        /* __cirt_rend                          - not expected part of Set  */
                     nullptr,                                                                        /* __cirt_remove                        - not expected part of Set  */
@@ -81,7 +119,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     nullptr,                                                                        /* __cirt_newAfterAddressArray          - not expected part of Set  */
                     nullptr,                                                                        /* __cirt_newAfterAddressArrayConst     - not expected part of Set  */
                     nullptr,                                                                        /* __cirt_find                          - not expected part of Set  */
+
+#ifdef _MSC_VER
+
+                    __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __findConst )
+
+#else
+
                     reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __findConst )  /* __cirt_findConst                     - expected part of Set      */
+
+#endif
+
             };
 
 

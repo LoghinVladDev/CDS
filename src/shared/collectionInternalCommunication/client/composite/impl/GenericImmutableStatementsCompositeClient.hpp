@@ -5,32 +5,582 @@
 #ifndef __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#if defined _MSC_VER
+
+#include "../../../../../functional/FunctionalInterface.hpp"
+
+#endif
+
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+#ifdef _MSC_VER
+
+            /*
+             Manual SFINAE for little non-compliant MSVC :)
+            */
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Consumer,
+                    bool = cds :: meta :: isFunction < __Consumer > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Consumer > ()
+            > struct __MSVC_ForEachWrapper {
+
+                constexpr static cds :: functional :: ConsumerFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Consumer
+                > __forEach = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Consumer
+            > struct __MSVC_ForEachWrapper <
+                    __IteratorType,
+                    __Consumer,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: ConsumerFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Consumer
+                > __forEach = & __forEach < __IteratorType, __Consumer >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Consumer
+            > struct __MSVC_ForEachWrapper <
+                    __IteratorType,
+                    __Consumer,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: ConsumerFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Consumer
+                > __forEach = & __forEach < __IteratorType, __Consumer >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_SomeWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __some = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_SomeWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __some = & __some < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_SomeWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __some = & __some < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_AtLeastWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atLeast = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AtLeastWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atLeast = & __atLeast < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AtLeastWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atLeast = & __atLeast < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_AtMostWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atMost = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AtMostWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atMost = & __atMost < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AtMostWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __atMost = & __atMost < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_MoreThanWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __moreThan = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_MoreThanWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __moreThan = & __moreThan < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_MoreThanWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __moreThan = & __moreThan < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_FewerThanWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __fewerThan = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_FewerThanWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __fewerThan = & __fewerThan < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_FewerThanWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        Size,
+                        __Predicate
+                > __fewerThan = & __fewerThan < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_CountWrapper {
+
+                constexpr static cds :: functional :: MapperFunction <
+                        Size,
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __count = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_CountWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: MapperFunction <
+                        Size,
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __count = & __count < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_CountWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: MapperFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __count = & __count < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_AnyWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __any = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AnyWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __any = & __any < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AnyWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __any = & __any < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_AllWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __all = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AllWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __all = & __all < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_AllWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __all = & __all < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate,
+                    bool = cds :: meta :: isFunction < __Predicate > (),
+                    bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
+            > struct __MSVC_NoneWrapper {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __none = nullptr;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_NoneWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    true,
+                    false
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __none = & __none < __IteratorType, __Predicate >;
+            };
+
+
+            template <
+                    typename                        __IteratorType,
+                    typename                        __Predicate
+            > struct __MSVC_NoneWrapper <
+                    __IteratorType,
+                    __Predicate,
+                    false,
+                    true
+            > {
+
+                constexpr static cds :: functional :: PredicateFunction <
+                        __IteratorType const &,
+                        __IteratorType const &,
+                        __Predicate
+                > __none = & __none < __IteratorType, __Predicate >;
+            };
+
+#endif
 
             template <
                     typename __IterableType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __Action           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Consumer         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_OptimalInline auto __GenericImmutableStatementsCompositeClient <
                     __IterableType,
                     __ElementType
             > :: forEach (
-                    __Action const & action
-            ) const noexcept ( noexcept ( __forEach (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    action
-            ) ) ) -> void {
+                    __Consumer const & consumer
+            ) const noexcept ( __ConsumerExceptSpecTraits < __ElementType const, __Consumer > :: __noexceptSpec ) -> void {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_ForEachWrapper < IteratorType, __Consumer > :: __forEach (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        consumer
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __forEach (
                         reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
-                        action
+                        consumer
                 );
+
+#endif
+
             }
 
 
@@ -45,12 +595,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: some (
                     Size                count,
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __some (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    count,
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_SomeWrapper < IteratorType, __Predicate > :: __some (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        count,
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __some (
@@ -59,6 +616,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         count,
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -73,12 +633,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: atLeast (
                     Size                count,
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __atLeast (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    count,
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_AtLeastWrapper < IteratorType, __Predicate > :: __atLeast (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        count,
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __atLeast (
@@ -87,6 +654,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         count,
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -101,12 +671,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: atMost (
                     Size                count,
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __atMost (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    count,
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_AtMostWrapper < IteratorType, __Predicate > :: __atMost (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        count,
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __atMost (
@@ -115,6 +692,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         count,
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -129,12 +709,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: moreThan (
                     Size                count,
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __moreThan (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    count,
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_MoreThanWrapper < IteratorType, __Predicate > :: __moreThan (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        count,
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __moreThan (
@@ -143,6 +730,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         count,
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -157,12 +747,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: fewerThan (
                     Size                count,
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __fewerThan (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    count,
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_FewerThanWrapper < IteratorType, __Predicate > :: __fewerThan (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        count,
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __fewerThan (
@@ -171,6 +768,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         count,
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -184,11 +784,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType
             > :: count (
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __count (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    predicate
-            ) ) ) -> Size {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> Size {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_CountWrapper < IteratorType, __Predicate > :: __count (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __count (
@@ -196,6 +803,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -209,11 +819,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType
             > :: any (
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __any (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_AnyWrapper < IteratorType, __Predicate > :: __any (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __any (
@@ -221,6 +838,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -234,11 +854,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType
             > :: all (
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __all (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_AllWrapper < IteratorType, __Predicate > :: __all (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __all (
@@ -246,6 +873,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         predicate
                 );
+
+#endif
+
             }
 
 
@@ -259,11 +889,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ElementType
             > :: none (
                     __Predicate const & predicate
-            ) const noexcept ( noexcept ( __none (
-                    cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                    cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                    predicate
-            ) ) ) -> bool {
+            ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool {
+
+#ifdef _MSC_VER
+
+                using IteratorType = decltype ( cds :: meta :: referenceOf < __IterableType const > ().cbegin () );
+                return __MSVC_NoneWrapper < IteratorType, __Predicate > :: __none (
+                        reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                        reinterpret_cast < __IterableType const * > ( this )->cend(),
+                        predicate
+                );
+
+#else
 
                 /* Call base, global implementation. Abstracts the 'is object const' requirement */
                 return __none (
@@ -271,6 +908,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         predicate
                 );
+
+#endif
+
             }
 
         } /* namespace __impl */
