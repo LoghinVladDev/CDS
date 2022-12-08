@@ -218,7 +218,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Call base, global implementation. Abstracts the 'is object const' requirement.
                  * Also use the MSVC dedicated manual-SFINAE wrapper due to the year being
                  * 2022 and they still can't deduce whether a function is enabled or not. */
-                return __MSVC_FindAllThatWrapper < __IteratorType, __Predicate > :: __findAllThat (
+                return __MSVC_FindAllThatWrapper < __IteratorType, __CollectionType, __Predicate > :: __findAllThat (
                         reinterpret_cast < __IterableType * > ( this )->begin(),
                         reinterpret_cast < __IterableType * > ( this )->end(),
                         storeIn,
@@ -264,7 +264,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Call base, global implementation. Abstracts the 'is object const' requirement.
                  * Also use the MSVC dedicated manual-SFINAE wrapper due to the year being
                  * 2022 and they still can't deduce whether a function is enabled or not. */
-                return __MSVC_FindAllThatWrapper < __IteratorType, __Predicate > :: __findAllThat (
+                return __MSVC_FindAllThatWrapper < __IteratorType, __CollectionType, __Predicate > :: __findAllThat (
                         reinterpret_cast < __IterableType * > ( this )->begin(),
                         reinterpret_cast < __IterableType * > ( this )->end(),
                         foundIterators,

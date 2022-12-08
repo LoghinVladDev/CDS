@@ -25,7 +25,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     typename                        __IteratorType,
                     template < typename ... > class __CollectionType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_FindThatWrapper {
 
@@ -36,7 +35,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findThat = nullptr;
+                > const __findThat = nullptr;
             };
 
 
@@ -48,7 +47,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType,
                     __CollectionType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -59,7 +57,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findThat = & __findThat < __IteratorType, __CollectionType, __Predicate >;
+                > const __findThat = & __findThat < __IteratorType, __CollectionType, __Predicate >;
             };
 
 
@@ -71,7 +69,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType,
                     __CollectionType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -82,14 +79,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findThat = & __findThat < __IteratorType, __CollectionType, __Predicate >;
+                > const __findThat = & __findThatMember < __IteratorType, __CollectionType, __Predicate >;
             };
 
 
             template <
                     typename __IteratorType,
                     typename __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_FindFirstThatWrapper {
 
@@ -98,7 +94,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findFirstThat = nullptr;
+                > const __findFirstThat = nullptr;
             };
 
 
@@ -108,7 +104,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindFirstThatWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -117,7 +112,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findFirstThat = & __findFirstThat < __IteratorType, __Predicate >;
+                > const __findFirstThat = & __findFirstThat < __IteratorType, __Predicate >;
             };
 
 
@@ -127,7 +122,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindFirstThatWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -136,14 +130,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findFirstThat = & __findFirstThat < __IteratorType, __Predicate >;
+                > const __findFirstThat = & __findFirstThatMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename __IteratorType,
                     typename __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_FindLastThatWrapper {
 
@@ -152,7 +145,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findLastThat = nullptr;
+                > const __findLastThat = nullptr;
             };
 
 
@@ -162,7 +155,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindLastThatWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -171,7 +163,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findLastThat = & __findLastThat < __IteratorType, __Predicate >;
+                > const __findLastThat = & __findLastThat < __IteratorType, __Predicate >;
             };
 
 
@@ -181,7 +173,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FindLastThatWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -190,7 +181,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __IteratorType const &,
                     __Predicate const &
-                > __findLastThat = & __findLastThat < __IteratorType, __Predicate >;
+                > const __findLastThat = & __findLastThatMember < __IteratorType, __Predicate >;
             };
 
 
@@ -198,7 +189,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     typename                        __IteratorType,
                     template < typename ... > class __CollectionType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_FindAllThatWrapper {
 
@@ -208,7 +198,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findAllThat = nullptr;
+                > const __findAllThat = nullptr;
             };
 
 
@@ -220,7 +210,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType,
                     __CollectionType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -230,7 +219,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findAllThat = & __findAllThat < __IteratorType, __CollectionType, __Predicate >;
+                > const __findAllThat = & __findAllThat < __IteratorType, __CollectionType, __Predicate >;
             };
 
 
@@ -242,7 +231,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType,
                     __CollectionType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -252,7 +240,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const &,
                     __CollectionType < __IteratorType > &,
                     __Predicate const &
-                > __findAllThat = & __findAllThat < __IteratorType, __CollectionType, __Predicate >;
+                > const __findAllThat = & __findAllThatMember < __IteratorType, __CollectionType, __Predicate >;
             };
 
 #endif
@@ -449,7 +437,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Call base, global implementation. Abstracts the 'is object const' requirement.
                  * Also use the MSVC dedicated manual-SFINAE wrapper due to the year being
                  * 2022 and they still can't deduce whether a function is enabled or not. */
-                return __MSVC_FindAllThatWrapper < __IteratorType, __Predicate > :: __findAllThat (
+                return __MSVC_FindAllThatWrapper < __IteratorType, __CollectionType, __Predicate > :: __findAllThat (
                         reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         storeIn,
@@ -493,7 +481,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Call base, global implementation. Abstracts the 'is object const' requirement.
                  * Also use the MSVC dedicated manual-SFINAE wrapper due to the year being
                  * 2022 and they still can't deduce whether a function is enabled or not. */
-                return __MSVC_FindAllThatWrapper < __IteratorType, __Predicate > :: __findAllThat (
+                return __MSVC_FindAllThatWrapper < __IteratorType, __CollectionType, __Predicate > :: __findAllThat (
                         reinterpret_cast < __IterableType const * > ( this )->cbegin(),
                         reinterpret_cast < __IterableType const * > ( this )->cend(),
                         foundIterators,

@@ -24,14 +24,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename                        __IteratorType,
                     typename                        __Consumer,
-                    bool = cds :: meta :: isFunction < __Consumer > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Consumer > ()
             > struct __MSVC_ForEachWrapper {
 
                 constexpr static cds :: functional :: ConsumerFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Consumer
+                        __Consumer     const &
                 > __forEach = nullptr;
             };
 
@@ -42,14 +41,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_ForEachWrapper <
                     __IteratorType,
                     __Consumer,
-                    true,
                     false
             > {
 
                 constexpr static cds :: functional :: ConsumerFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Consumer
+                        __Consumer     const &
                 > __forEach = & __forEach < __IteratorType, __Consumer >;
             };
 
@@ -60,22 +58,20 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_ForEachWrapper <
                     __IteratorType,
                     __Consumer,
-                    false,
                     true
             > {
 
                 constexpr static cds :: functional :: ConsumerFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Consumer
-                > __forEach = & __forEach < __IteratorType, __Consumer >;
+                        __Consumer     const &
+                > __forEach = & __forEachMember < __IteratorType, __Consumer >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_SomeWrapper {
 
@@ -83,7 +79,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __some = nullptr;
             };
 
@@ -94,7 +90,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_SomeWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -102,7 +97,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __some = & __some < __IteratorType, __Predicate >;
             };
 
@@ -113,7 +108,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_SomeWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -121,15 +115,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
-                > __some = & __some < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __some = & __someMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_AtLeastWrapper {
 
@@ -137,7 +130,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __atLeast = nullptr;
             };
 
@@ -148,7 +141,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AtLeastWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -156,7 +148,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __atLeast = & __atLeast < __IteratorType, __Predicate >;
             };
 
@@ -167,7 +159,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AtLeastWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -175,15 +166,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
-                > __atLeast = & __atLeast < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __atLeast = & __atLeastMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_AtMostWrapper {
 
@@ -191,7 +181,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __atMost = nullptr;
             };
 
@@ -202,7 +192,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AtMostWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -210,7 +199,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __atMost = & __atMost < __IteratorType, __Predicate >;
             };
 
@@ -221,7 +210,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AtMostWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -229,15 +217,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
-                > __atMost = & __atMost < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __atMost = & __atMostMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_MoreThanWrapper {
 
@@ -245,7 +232,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __moreThan = nullptr;
             };
 
@@ -256,7 +243,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_MoreThanWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -264,7 +250,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __moreThan = & __moreThan < __IteratorType, __Predicate >;
             };
 
@@ -275,7 +261,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_MoreThanWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -283,15 +268,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
-                > __moreThan = & __moreThan < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __moreThan = & __moreThanMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_FewerThanWrapper {
 
@@ -299,7 +283,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __fewerThan = nullptr;
             };
 
@@ -310,7 +294,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FewerThanWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -318,7 +301,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
+                        __Predicate    const &
                 > __fewerThan = & __fewerThan < __IteratorType, __Predicate >;
             };
 
@@ -329,7 +312,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_FewerThanWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
@@ -337,15 +319,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __IteratorType const &,
                         __IteratorType const &,
                         Size,
-                        __Predicate
-                > __fewerThan = & __fewerThan < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __fewerThan = & __fewerThanMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_CountWrapper {
 
@@ -353,7 +334,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         Size,
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __count = nullptr;
             };
 
@@ -364,7 +345,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_CountWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
@@ -372,7 +352,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         Size,
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __count = & __count < __IteratorType, __Predicate >;
             };
 
@@ -383,29 +363,27 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_CountWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
                 constexpr static cds :: functional :: MapperFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
-                > __count = & __count < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __count = & __countMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_AnyWrapper {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __any = nullptr;
             };
 
@@ -416,14 +394,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AnyWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __any = & __any < __IteratorType, __Predicate >;
             };
 
@@ -434,29 +411,27 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AnyWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
-                > __any = & __any < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __any = & __anyMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_AllWrapper {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __all = nullptr;
             };
 
@@ -467,14 +442,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AllWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __all = & __all < __IteratorType, __Predicate >;
             };
 
@@ -485,29 +459,27 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_AllWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
-                > __all = & __all < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __all = & __allMember < __IteratorType, __Predicate >;
             };
 
 
             template <
                     typename                        __IteratorType,
                     typename                        __Predicate,
-                    bool = cds :: meta :: isFunction < __Predicate > (),
                     bool = cds :: meta :: isMemberFunctionPointer < __Predicate > ()
             > struct __MSVC_NoneWrapper {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __none = nullptr;
             };
 
@@ -518,14 +490,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_NoneWrapper <
                     __IteratorType,
                     __Predicate,
-                    true,
                     false
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
+                        __Predicate    const &
                 > __none = & __none < __IteratorType, __Predicate >;
             };
 
@@ -536,15 +507,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > struct __MSVC_NoneWrapper <
                     __IteratorType,
                     __Predicate,
-                    false,
                     true
             > {
 
                 constexpr static cds :: functional :: PredicateFunction <
                         __IteratorType const &,
                         __IteratorType const &,
-                        __Predicate
-                > __none = & __none < __IteratorType, __Predicate >;
+                        __Predicate    const &
+                > __none = & __noneMember < __IteratorType, __Predicate >;
             };
 
 #endif

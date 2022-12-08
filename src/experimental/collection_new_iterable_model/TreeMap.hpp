@@ -38,7 +38,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-        > class TreeMap :
+        > class __CDS_InheritsEBOs TreeMap :
                 public cds :: Map < __KeyType, __ValueType >,
                 protected  __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType >,
