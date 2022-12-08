@@ -758,7 +758,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         __keyEqualsComparator,
                         __nodeDestructor
                 > :: __rbt_remove (
-                        __ElementType const & key
+                        __KeyType const & key
                 ) noexcept -> bool {
 
                     if ( this->__rbt_empty() ) {

@@ -85,7 +85,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
                 > using __TreeMapServer =           /* NOLINT(bugprone-reserved-identifier) */
                         __MapServer <
-                                __TreeMapImplementation <
+                                TreeMap <
                                         __KeyType,
                                         __ValueType
                                 >,

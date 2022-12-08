@@ -183,7 +183,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 protected:
                     auto __rbt_remove ( /* NOLINT(bugprone-reserved-identifier) */
-                            __ElementType const & key
+                            __KeyType const & key
                     ) noexcept -> bool;
 
                 protected:

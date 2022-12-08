@@ -597,7 +597,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
-        protected:
+        public:
             __CDS_Explicit ValueMutableCollectionProxy (
                     TreeMap < __KeyType, __ValueType > * pMap
             ) noexcept;
@@ -626,10 +626,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept = delete;
 
         public:
+            __CDS_NoDiscard constexpr auto __begin() noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __end() noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
             __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal() noexcept -> Iterator;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
             __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal() noexcept -> Iterator;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __cbegin() const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *;     /* NOLINT(bugprone-reserved-identifier) */
+
+        public:
+            __CDS_NoDiscard constexpr auto __cend() const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
             __CDS_NoDiscard constexpr auto __cbeginLocal() const noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */

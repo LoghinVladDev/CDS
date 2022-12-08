@@ -53,6 +53,34 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __begin () noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
+
+            return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > >(
+                    Iterator ( this->template map < TreeMapBase > ()->__beginLocal() )
+            );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __end () noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
+
+            return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > >(
+                    Iterator ( this->template map < TreeMapBase > ()->__endLocal() )
+            );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
                 __KeyType,
                 __ValueType
@@ -71,6 +99,34 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > :: ValueMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
 
             return Iterator ( this->template map < TreeMapBase > ()->__endLocal() );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __cbegin () const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
+
+            return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > >(
+                    ConstIterator ( this->template map < TreeMapBase > ()->__cbeginLocal() )
+            );
+        }
+
+
+        template <
+                typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+        > constexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ValueMutableCollectionProxy :: __cend () const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
+
+            return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > >(
+                    ConstIterator ( this->template map < TreeMapBase > ()->__cendLocal() )
+            );
         }
 
 
@@ -156,7 +212,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractIterator const * iterator
         ) noexcept -> bool {
 
-            return this->template map < TreeMapBase > ()->__remove() ;
+            return this->template map < TreeMapBase > ()->__remove( & iterator->iterator() ) ;
         }
 
 
@@ -170,7 +226,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 AbstractConstIterator const * iterator
         ) noexcept -> bool {
 
-            return this->template map < TreeMapBase > ()->__removeConst() ;
+            return this->template map < TreeMapBase > ()->__removeConst( & iterator->iterator() ) ;
         }
 
 

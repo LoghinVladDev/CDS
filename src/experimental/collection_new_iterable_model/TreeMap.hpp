@@ -29,6 +29,7 @@
 #include "shared/redBlackTree/RedBlackTree.hpp"
 
 #include "shared/collectionInternalCommunication/server/MapServer.hpp"
+#include "shared/collectionInternalCommunication/server/SetServer.hpp"
 
 #include "treeMap/Constructs.hpp"
 
@@ -40,7 +41,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
         > class TreeMap :
                 public cds :: Map < __KeyType, __ValueType >,
-                protected  __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
+                protected __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType >,
@@ -100,7 +101,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         private: friend DelegateForwardConstIterableClient;
         private: friend DelegateBackwardConstIterableClient;
 
+        private: friend RandomInsertionClient;
+        private: friend IteratorRemoveClient;
+        private: friend ConstIteratorRemoveClient;
+
         public: using __ElementType =  typename MapBase :: ElementType;   /* NOLINT(bugprone-reserved-identifier) */
+
+        using EntryType     = typename MapBase :: EntryType;
 
         private: using typename MapBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
         private: using typename MapBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
@@ -109,9 +116,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         protected: using typename MapBase :: AbstractValueMutableCollectionProxy;
         protected: using typename MapBase :: AbstractEntryMutableCollectionProxy;
 
-        public: class KeySetProxy;
-        private: class ValueMutableCollectionProxy;
-        public: class EntryMutableCollectionProxy;
+        protected: class KeySetProxy;
+        protected: class ValueMutableCollectionProxy;
+        protected: class EntryMutableCollectionProxy;
 
         private:
             KeySetProxy                 _keySetProxy;
@@ -312,9 +319,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
-                    >
+                    > = 0
             > TreeMap (
-                    std :: initializer_list < __TElementType > const & initializer_list
+                    std :: initializer_list < __ElementType > const & initializer_list
             ) noexcept;
 
         public:
@@ -322,10 +329,36 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_Explicit TreeMap ( __IterableType const & iterable ) noexcept;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
         public:
-            auto clear () noexcept -> void;
+            auto clear () noexcept -> void override;
+
+        public:
+            auto remove (
+                    __KeyType const & key
+            ) noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto containsKey (
+                    __KeyType const & key
+            ) const noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto containsValue (
+                    __ValueType const & value
+            ) const noexcept -> bool override;
+
+        public:
+            auto entryAt (
+                    __KeyType const & key,
+                    bool            * pNewElementCreated
+            ) noexcept -> EntryType * override;
+
+        public:
+            auto entryAt (
+                    __KeyType const & key
+            ) const noexcept -> EntryType const * override;
         };
     }
 }

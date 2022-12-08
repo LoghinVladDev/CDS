@@ -91,7 +91,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __ValueType
         > :: entries () const noexcept -> EntryMutableCollectionProxy const & {
 
-            return this->_entryMutableCollection;
+            return this->_entryMutableCollectionProxy;
         }
 
 
@@ -103,7 +103,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __ValueType
         > :: entries () noexcept -> EntryMutableCollectionProxy & {
 
-            return this->_entryMutableCollection;
+            return this->_entryMutableCollectionProxy;
         }
 
 
@@ -113,7 +113,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr TreeMap <
                 __KeyType,
                 __ValueType
-        > :: TreeMap () noexcept = default;
+        > :: TreeMap () noexcept :
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
+
+        }
 
 
         template <
@@ -124,7 +129,10 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __ValueType
         > :: TreeMap (
                 TreeMap const & map
-        ) noexcept {
+        ) noexcept :
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
 
             this-> template __rbt_copyCleared < & __hidden :: __impl :: __treeMapCopyConstructor < __KeyType, __ValueType > > ( map );
         }
@@ -139,6 +147,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         > :: TreeMap (
                 TreeMap && map
         ) noexcept :
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ),
                 Implementation ( std :: move ( map ) ) {
 
         }
@@ -160,8 +171,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __IteratorType const & begin,
                 __IteratorType const & end,
                 Size                   count
-        ) noexcept {
+        ) noexcept :
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
 
+                (void) count;
                 for ( auto iterator = begin; iterator != end; ++ iterator ) {
                     this->insert ( * iterator );
                 }
@@ -180,11 +195,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType
         > :: TreeMap (
-                std :: initializer_list < __TElementType > const & initializer_list
+                std :: initializer_list < __ElementType > const & initializer_list
         ) noexcept :
                 TreeMap (
                         initializer_list.begin(),
-                        initializer_list.end()
+                        initializer_list.end(),
+                        initializer_list.size()
                 ) {
 
         }
@@ -229,6 +245,82 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         > :: clear () noexcept -> void {
 
             this->__rbt_clear();
+        }
+
+
+        template <
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
+        > auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: remove (
+                __KeyType const & key
+        ) noexcept -> bool {
+
+            this->__rbt_remove ( key );
+        }
+
+
+        template <
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_VirtualConstexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: containsKey (
+                __KeyType const & key
+        ) const noexcept -> bool {
+
+            return this->__rbt_get ( key ) != nullptr;
+        }
+
+
+        template <
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_VirtualConstexpr auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: containsValue (
+                __ValueType const & value
+        ) const noexcept -> bool {
+
+            for ( auto it = this->__rbt_cbegin(); it != this->__rbt_cend(); ++ it ) {
+                if ( cds :: meta :: equals ( ( * it ).value(), value ) == true )
+                    return true;
+            }
+
+            return false;
+        }
+
+
+        template <
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
+        > auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: entryAt (
+                __KeyType const & key,
+                bool            * pNewElementCreated
+        ) noexcept -> EntryType * {
+
+            return this->__rbt_get ( key, pNewElementCreated );
+        }
+
+
+        template <
+                typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
+        > auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: entryAt (
+                __KeyType const & key
+        ) const noexcept -> EntryType const * {
+
+            return this->__rbt_get ( key );
         }
     }
 }
