@@ -84,7 +84,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard auto __begin () noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard static auto __begin (
+                        __ServerType * pServer
+                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -95,7 +97,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
                  * @protected
                  */
-                __CDS_NoDiscard auto __end () noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard static auto __end (
+                        __ServerType * pServer
+                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -106,7 +110,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __beginLocal (
+                        __ServerType * pServer
+                ) noexcept -> __IteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -117,7 +123,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __endLocal (
+                        __ServerType * pServer
+                ) noexcept -> __IteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -131,7 +139,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                  * @protected
                  */
-                auto __remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static auto __remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType                 * pServer,
                         __AbstractIteratorType const * pIterator
                 ) noexcept -> bool;
 
@@ -147,7 +156,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: MCTS-00001, Group: MCTG-00450-RO, Test Cases: All
                  * @protected
                  */
-                auto __removeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static auto __removeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType                          * pServer,
                         __AbstractIteratorType  const * const * ppIterators,
                         Size                                    iteratorArrayCount
                 ) noexcept -> Size;

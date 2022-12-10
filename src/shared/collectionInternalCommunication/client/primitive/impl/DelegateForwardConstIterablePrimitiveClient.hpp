@@ -49,19 +49,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __bidirectional
             > :: cbegin () const noexcept -> ConstIterator {
 
-                using __ReceiverBeginHandlerType    = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const;
+                using __ReceiverBeginHandlerType    = cds :: functional :: MapperFunction < __AbstractDelegateIterator < __ElementType const > *, __ReceiverType const * >;
                 auto const pReceiver                = reinterpret_cast < __ReceiverType const * > ( this );
 
                 /* Construct a ConstIterator with the current collection and the result from calling the received server member function of type __cirt_begin.
                  * Member function is acquired from the Collection Communication Channel */
                 return ConstIterator (
-                        pReceiver, (
-                                pReceiver ->* reinterpret_cast < __ReceiverBeginHandlerType > (
-                                        pReceiver->__cicch_obtainGenericConstHandler (
-                                                __CollectionInternalRequestType :: __cirt_begin
-                                        )
-                                )
-                        ) ()
+                        pReceiver,
+                        reinterpret_cast < __ReceiverBeginHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_begin ) ) ( pReceiver )
                 );
             }
 
@@ -76,19 +71,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __bidirectional
             > :: cend () const noexcept -> ConstIterator {
 
-                using __ReceiverEndHandlerType  = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const;
+                using __ReceiverEndHandlerType  = cds :: functional :: MapperFunction < __AbstractDelegateIterator < __ElementType const > *, __ReceiverType const * >;
                 auto const pReceiver            = reinterpret_cast < __ReceiverType const * > ( this );
 
                 /* Construct a ConstIterator with the current collection and the result from calling the received server member function of type __cirt_end.
                  * Member function is acquired from the Collection Communication Channel */
+
+                /* Construct a ConstIterator with the current collection and the result from calling the received server member function of type __cirt_begin.
+                 * Member function is acquired from the Collection Communication Channel */
                 return ConstIterator (
-                        pReceiver, (
-                                pReceiver ->* reinterpret_cast < __ReceiverEndHandlerType > (
-                                        pReceiver->__cicch_obtainGenericConstHandler (
-                                                __CollectionInternalRequestType :: __cirt_end
-                                        )
-                                )
-                        ) ()
+                        pReceiver,
+                        reinterpret_cast < __ReceiverEndHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_end ) ) ( pReceiver )
                 );
             }
 
@@ -101,7 +94,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConstIteratorType
             > :: begin () const noexcept -> ConstIterator {
 
-                return reinterpret_cast < __ReceiverType const * > ( this )->__cbeginLocal();
+                return __ReceiverType :: __cbeginLocal (
+                        reinterpret_cast < __ReceiverType const * > ( this )
+                );
             }
 
 
@@ -113,7 +108,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConstIteratorType
             > :: end () const noexcept -> ConstIterator {
 
-                return reinterpret_cast < __ReceiverType const * > ( this )->__cendLocal();
+                return __ReceiverType :: __cendLocal (
+                        reinterpret_cast < __ReceiverType const * > ( this )
+                );
             }
 
 
@@ -125,7 +122,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConstIteratorType
             > :: cbegin () const noexcept -> ConstIterator {
 
-                return reinterpret_cast < __ReceiverType const * > ( this )->__cbeginLocal();
+                return __ReceiverType :: __cbeginLocal (
+                        reinterpret_cast < __ReceiverType const * > ( this )
+                );
             }
 
 
@@ -137,7 +136,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __ConstIteratorType
             > :: cend () const noexcept -> ConstIterator {
 
-                return reinterpret_cast < __ReceiverType const * > ( this )->__cendLocal();
+                return __ReceiverType :: __cendLocal (
+                        reinterpret_cast < __ReceiverType const * > ( this )
+                );
             }
 
         } /* namespace __impl */

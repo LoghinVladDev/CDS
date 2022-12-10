@@ -19,7 +19,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     AbstractConstIterator const & iterator
             ) noexcept -> bool {
 
-                using __ReceiverRemoveConstIteratorHandlerType  = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
+                using __ReceiverRemoveConstIteratorHandlerType  = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const * >;
                 auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* Since iterator is abstract, it is compatible with Collection Ownership -> has 'of' function. Check for ownership. If not owned, removal unsuccessful */
@@ -28,13 +28,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* Acquire the member function to call from client and call it with extracted delegate as parameter, return value received from the call */
-                return (
-                        pReceiver ->* reinterpret_cast < __ReceiverRemoveConstIteratorHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_removeConst
-                                )
-                        )
-                ) (
+                return reinterpret_cast < __ReceiverRemoveConstIteratorHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_removeConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator()
                 );
             }
@@ -51,8 +46,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     Size                          iteratorCount
             ) noexcept -> Size {
 
-                using __ReceiverRemoveConstIteratorArrayHandlerType = Size ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * const *, Size );
-                using __ReceiverRemoveConstIteratorHandlerType      = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
+                using __ReceiverRemoveConstIteratorArrayHandlerType = cds :: functional :: MapperFunction < Size, __ReceiverType *, cds :: meta :: Iterator const * const *, Size >;
+                using __ReceiverRemoveConstIteratorHandlerType      = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const * >;
 
                 auto pReceiver                  = reinterpret_cast < __ReceiverType * > ( this );
                 auto genericIteratorArray       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < cds :: meta :: Iterator const * > ( iteratorCount );
@@ -70,25 +65,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 if ( genericIteratorArraySize >= 2ULL ) {
 
-                    removedIteratorCount = (
-                            pReceiver ->* reinterpret_cast < __ReceiverRemoveConstIteratorArrayHandlerType > (
-                                    pReceiver->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_removeConstArray
-                                    )
-                            )
-                    ) (
+                    removedIteratorCount = reinterpret_cast < __ReceiverRemoveConstIteratorArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_removeConstArray ) ) (
+                            pReceiver,
                             & genericIteratorArray [0ULL],
                             genericIteratorArraySize
                     );
                 } else if ( genericIteratorArraySize == 1ULL ) {
 
-                    removedIteratorCount = (
-                            pReceiver ->* reinterpret_cast < __ReceiverRemoveConstIteratorHandlerType > (
-                                    pReceiver->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_removeConst
-                                    )
-                            )
-                    ) (
+                    removedIteratorCount = reinterpret_cast < __ReceiverRemoveConstIteratorHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_removeConst ) ) (
+                            pReceiver,
                             genericIteratorArray [0ULL]
                     ) ? 1ULL : 0ULL;
                 }
@@ -111,7 +96,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> bool {
 
                 /* local client, directly call the dispatcher-generated function for const removal */
-                return reinterpret_cast < __ReceiverType * > ( this )->__removeConst ( & iterator );
+                return __ReceiverType :: __removeConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
+                        & iterator
+                );
             }
 
 
@@ -137,7 +125,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         pIteratorBuffer[ index ] = & pIterators [ index ];
                     }
 
-                    Size removedCount = pReceiver->__removeConstArray (
+                    Size removedCount = __ReceiverType :: __removeConstArray (
+                            pReceiver,
                             & pIteratorBuffer [0ULL],
                             iteratorCount
                     );
@@ -147,7 +136,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 } else if ( iteratorCount == 1ULL ) {
 
-                    return pReceiver->__removeConst (
+                    return __ReceiverType :: __removeConst (
+                            pReceiver,
                             & pIterators [0ULL]
                     ) ? 1ULL : 0ULL;
                 }

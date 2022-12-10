@@ -45,11 +45,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __begin () noexcept -> __AbstractDelegateIterator < __ElementType > * {
+            > :: __begin (
+                    __ServerType * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType, __IteratorType > > (
-                        ( reinterpret_cast < __ServerType * > ( this ) ->* __beginFunction ) ()
+                        ( pServer ->* __beginFunction ) ()
                 );
             }
 
@@ -88,11 +90,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __end () noexcept -> __AbstractDelegateIterator < __ElementType > * {
+            > :: __end (
+                    __ServerType * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType, __IteratorType > > (
-                        ( reinterpret_cast < __ServerType * > ( this ) ->* __endFunction ) ()
+                        ( pServer ->* __endFunction ) ()
                 );
             }
 
@@ -131,10 +135,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __beginLocal () noexcept -> __IteratorType {
+            > :: __beginLocal (
+                    __ServerType * pServer
+            ) noexcept -> __IteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __beginFunction ) ();
+                return ( pServer ->* __beginFunction ) ();
             }
 
 
@@ -172,10 +178,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __endLocal () noexcept -> __IteratorType {
+            > :: __endLocal (
+                    __ServerType * pServer
+            ) noexcept -> __IteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __endFunction ) ();
+                return ( pServer ->* __endFunction ) ();
             }
 
 
@@ -214,11 +222,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __remove (
+                    __ServerType                 * pServer,
                     __AbstractIteratorType const * pIterator
             ) noexcept -> bool {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __removeFunction ) (
+                return ( pServer ->* __removeFunction ) (
                         * pIterator
                 );
             }
@@ -259,12 +268,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __removeArray (
+                    __ServerType                          * pServer,
                     __AbstractIteratorType  const * const * ppIterators,
                     Size                                    iteratorArrayCount
             ) noexcept -> Size {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __removeArrayFunction ) (
+                return ( pServer ->* __removeArrayFunction ) (
                         ppIterators,
                         iteratorArrayCount
                 );

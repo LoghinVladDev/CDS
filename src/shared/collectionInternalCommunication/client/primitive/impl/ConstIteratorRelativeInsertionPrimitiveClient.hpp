@@ -121,7 +121,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeConstHandlerType   = __ElementType * ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
+                using __ReceiverNewBeforeConstHandlerType   = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType *, cds :: meta :: Iterator const * >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -131,13 +131,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* Create the request for a new before address handler and call it */
-                auto const pNewLocation = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newBeforeAddressConst
-                                )
-                        )
-                ) (
+                auto const pNewLocation = reinterpret_cast < __ReceiverNewBeforeConstHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newBeforeAddressConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator()
                 );
 
@@ -170,7 +165,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterConstHandlerType    = __ElementType * ( __ReceiverType :: * ) ( cds :: meta :: Iterator const * );
+                using __ReceiverNewAfterConstHandlerType    = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType *, cds :: meta :: Iterator const * >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -180,13 +175,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* Create the request for a new after address handler and call it */
-                auto const pNewLocation = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newAfterAddressConst
-                                )
-                        )
-                ) (
+                auto const pNewLocation = reinterpret_cast < __ReceiverNewAfterConstHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAfterAddressConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator()
                 );
 
@@ -219,7 +209,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeConstArrayHandlerType  = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
+                using __ReceiverNewBeforeConstArrayHandlerType  = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -234,13 +224,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Request and call handler for a new before address array with the created buffer */
-                auto const allocationStatus = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                )
-                        )
-                ) (
+                auto const allocationStatus = reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator(),
                         parameterCount,
                         ppElements
@@ -274,7 +259,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterConstArrayHandlerType   = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
+                using __ReceiverNewAfterConstArrayHandlerType   = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -289,13 +274,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Request and call handler for a new after address array with the created buffer */
-                auto const allocationStatus = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                )
-                        )
-                ) (
+                auto const allocationStatus = reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator(),
                         parameterCount,
                         ppElements
@@ -487,7 +467,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
                 /* Handle type of the new before address function */
-                using __ReceiverNewBeforeConstArrayHandlerType  = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
+                using __ReceiverNewBeforeConstArrayHandlerType  = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -502,13 +482,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Request and call handler for a new before address array with the created buffer */
-                auto const allocationStatus = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                )
-                        )
-                ) (
+                auto const allocationStatus = reinterpret_cast < __ReceiverNewBeforeConstArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator(),
                         parameterCount,
                         ppElements
@@ -545,7 +520,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
                 /* Handle type of the new after address function */
-                using __ReceiverNewAfterConstArrayHandlerType   = bool ( __ReceiverType :: * ) ( cds :: meta :: Iterator const *, Size, __ElementType ** );
+                using __ReceiverNewAfterConstArrayHandlerType   = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
                 auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
 
@@ -560,13 +535,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Request and call handler for a new after address array with the created buffer */
-                auto const allocationStatus = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                )
-                        )
-                ) (
+                auto const allocationStatus = reinterpret_cast < __ReceiverNewAfterConstArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst ) ) (
+                        pReceiver,
                         iterator._pDelegate->iterator(),
                         parameterCount,
                         ppElements
@@ -712,7 +682,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* Call dispatcher local new before address handler */
-                auto const pNewLocation = reinterpret_cast < __ReceiverType * > ( this )->__newBeforeConst ( & iterator );
+                auto const pNewLocation = __ReceiverType :: __newBeforeConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
+                        & iterator
+                );
 
                 /* If no address received, insertion not possible */
                 if ( pNewLocation == nullptr ) {
@@ -750,7 +723,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 /* Call dispatcher local new after address handler */
-                auto const pNewLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAfterConst ( & iterator );
+                auto const pNewLocation = __ReceiverType :: __newAfterConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
+                        & iterator
+                );
 
                 /* If no address received, insertion not possible */
                 if ( pNewLocation == nullptr ) {
@@ -793,7 +769,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Call dispatcher local new before address array handler */
-                auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                auto const allocationStatus = __ReceiverType :: __newBeforeArrayConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & iterator,
                         parameterCount,
                         ppElements
@@ -839,7 +816,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Call dispatcher local new after address array handler */
-                auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                auto const allocationStatus = __ReceiverType :: __newAfterArrayConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & iterator,
                         parameterCount,
                         ppElements
@@ -1055,7 +1033,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Call dispatcher local new before address array handler */
-                auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                auto const allocationStatus = __ReceiverType :: __newBeforeArrayConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & iterator,
                         parameterCount,
                         ppElements
@@ -1104,7 +1083,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto        ppElements      = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Call dispatcher local new after address array handler */
-                auto const allocationStatus = reinterpret_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                auto const allocationStatus = __ReceiverType :: __newAfterArrayConst (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & iterator,
                         parameterCount,
                         ppElements
