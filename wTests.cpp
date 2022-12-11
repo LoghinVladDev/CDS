@@ -42,6 +42,7 @@ int main () {
 	auto it = c.begin();
 	c.remove(it);
 
+	std::cout<<sizeof(cds::AddressIterator<int const>)<<'\n';
 	std::cout << arr << '\n';
 
 	return 0;
