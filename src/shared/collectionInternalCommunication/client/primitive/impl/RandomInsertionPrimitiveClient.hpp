@@ -64,22 +64,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* called handle type */
-                using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+                using __ReceiverNewHandlerType      = cds :: functional :: MapperFunction < __ConstructibleElementType *, __ReceiverType *, __ConstructibleElementType const *, bool * >;
 
                 /* receiver to call the request to */
-                auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                auto        pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* status if new element was created and construction is possible */
                 bool        newElementCreated;
 
                 /* call receiver to acquire a new address from */
-                auto const  pElementLocation        = (
-                            pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
-                                    pReceiver->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newAddress
-                                    )
-                            )
-                ) (
+                auto const  pElementLocation        = reinterpret_cast < __ReceiverNewHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAddress ) ) (
+                        pReceiver,
                         & element,
                         & newElementCreated
                 );
@@ -117,22 +112,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* called handle type */
-                using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+                using __ReceiverNewHandlerType      = cds :: functional :: MapperFunction < __ConstructibleElementType *, __ReceiverType *, __ConstructibleElementType const *, bool * >;
 
                 /* receiver to call the request to */
-                auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                auto        pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* status if new element was created and construction is possible */
                 bool        newElementCreated;
 
                 /* call receiver to acquire a new address from */
-                auto  const pElementLocation        = (
-                        pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
-                                pReceiver->__cicch_obtainGenericHandler (
-                                        __CollectionInternalRequestType :: __cirt_newAddress
-                                )
-                        )
-                ) (
+                auto const  pElementLocation        = reinterpret_cast < __ReceiverNewHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAddress ) ) (
+                        pReceiver,
                         & element,
                         & newElementCreated
                 );
@@ -211,7 +201,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 using __ConstructibleElementType    = cds :: meta :: RemoveConst < __ElementType >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
                 /* called handle type */
-                using __ReceiverNewHandlerType      = __ConstructibleElementType * ( __ReceiverType :: * ) ( __ConstructibleElementType const *, bool * );
+                using __ReceiverNewHandlerType      = cds :: functional :: MapperFunction < __ConstructibleElementType *, __ReceiverType *, __ConstructibleElementType const *, bool * >;
 
                 /* prepare a memory container of the newly constructed element, to avoid destruction in out-of-stack contexts, without need
                  * of dynamic allocation */
@@ -226,19 +216,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 try {
 
                     /* receiver to call the request to */
-                    auto  const pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
+                    auto        pReceiver               = reinterpret_cast < __ReceiverType * > ( this );
 
                     /* status if new element was created and construction is possible */
                     bool        newElementCreated;
 
                     /* call receiver to acquire a new address from */
-                    auto  const pElementLocation        = (
-                            pReceiver ->* reinterpret_cast < __ReceiverNewHandlerType > (
-                                    pReceiver->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newAddress
-                                    )
-                            )
-                    ) (
+                    auto const  pElementLocation        = reinterpret_cast < __ReceiverNewHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newAddress ) ) (
+                            pReceiver,
                             & referenceElementContainer.data(),
                             & newElementCreated
                     );
@@ -474,7 +459,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 bool newElementCreated;
 
                 /* call receiver to acquire a new address from */
-                auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
+                auto pElementLocation = __ReceiverType :: __newAddress (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & element,
                         & newElementCreated
                 );
@@ -512,7 +498,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 bool newElementCreated;
 
                 /* call receiver to acquire a new address from */
-                auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
+                auto pElementLocation = __ReceiverType :: __newAddress (
+                        reinterpret_cast < __ReceiverType * > ( this ),
                         & element,
                         & newElementCreated
                 );
@@ -602,7 +589,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     bool        newElementCreated;
 
                     /* call receiver to acquire a new address from */
-                    auto  const pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
+                    auto  const pElementLocation = __ReceiverType :: __newAddress (
+                            reinterpret_cast < __ReceiverType * > ( this ),
                             & referenceElementContainer.data(),
                             & newElementCreated
                     );

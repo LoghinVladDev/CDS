@@ -52,12 +52,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __findFunction,
                     __findConstFunction
             > :: __find (
-                    __KeyType const & key
+                    __ServerType          * pServer,
+                    __KeyType       const & key
             ) noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType, __IteratorType > > (
-                        ( reinterpret_cast < __ServerType * > ( this ) ->* __findFunction ) ( key )
+                        ( pServer ->* __findFunction ) ( key )
                 );
             }
 
@@ -103,12 +104,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __findFunction,
                     __findConstFunction
             > :: __findConst (
-                    __KeyType const & key
-            ) const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    __ServerType    const * pServer,
+                    __KeyType       const & key
+            ) noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType const, __ConstIteratorType > > (
-                        ( reinterpret_cast < __ServerType const * > ( this ) ->* __findConstFunction ) ( key )
+                        ( pServer ->* __findConstFunction ) ( key )
                 );
             }
 
@@ -154,11 +156,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __findFunction,
                     __findConstFunction
             > :: __findLocal (
-                    __KeyType const & key
+                    __ServerType          * pServer,
+                    __KeyType       const & key
             ) noexcept -> __IteratorType {
 
                 /* call the template received member function*/
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __findFunction ) ( key );
+                return ( pServer ->* __findFunction ) ( key );
             }
 
 
@@ -203,11 +206,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __findFunction,
                     __findConstFunction
             > :: __findConstLocal (
-                    __KeyType const & key
-            ) const noexcept -> __ConstIteratorType {
+                    __ServerType    const * pServer,
+                    __KeyType       const & key
+            ) noexcept -> __ConstIteratorType {
 
                 /* call the template received member function*/
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __findConstFunction ) ( key );
+                return ( pServer ->* __findConstFunction ) ( key );
             }
 
         } /* namespace __impl */

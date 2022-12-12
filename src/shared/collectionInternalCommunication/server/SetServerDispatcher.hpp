@@ -79,9 +79,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: STS-00001, Group: STS-00050-FU, Test Cases: All
                  * @protected
                  */
-                auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ElementType const & element
-                ) const noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+                static auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType    const * pServer,
+                        __ElementType   const & element
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -93,9 +94,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ElementType const & element
-                ) const noexcept -> __ConstIteratorType;
+                __CDS_cpplang_NonConstConstexprMemberFunction static auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType    const * pServer,
+                        __ElementType   const & element
+                ) noexcept -> __ConstIteratorType;
             };
 
         } /* namespace __impl */

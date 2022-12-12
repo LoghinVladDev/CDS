@@ -71,9 +71,10 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
     protected:
-        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __KeyType const * pReferenceKey,
-                bool            * pIsNew
+        static auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                AbstractKeySetProxy       * pObject,
+                __KeyType           const * pReferenceKey,
+                bool                      * pIsNew
         ) noexcept (false) -> __KeyType *;
     };
 

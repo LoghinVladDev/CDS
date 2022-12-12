@@ -75,12 +75,14 @@ namespace cds {
             __KeyType,
             __ValueType
     > :: AbstractKeySetProxy :: __newAddress (
-            __KeyType const * pReferenceKey,
-            bool            * pIsNew        /* NOLINT(readability-non-const-parameter) */
+            AbstractKeySetProxy       * pObject,        /* NOLINT(readability-non-const-parameter) */
+            __KeyType           const * pReferenceKey,
+            bool                      * pIsNew          /* NOLINT(readability-non-const-parameter) */
     ) noexcept (false) -> __KeyType * {
 
         (void) pReferenceKey;
         (void) pIsNew;
+        (void) pObject;
 
         throw cds :: UnsupportedOperationException (
                 cds :: String ( "Cannot insert a value into a Map Key Set" )

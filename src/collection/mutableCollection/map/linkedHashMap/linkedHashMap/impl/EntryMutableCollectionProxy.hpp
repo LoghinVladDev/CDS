@@ -91,11 +91,12 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :: __newAddress (
-            EntryType const * pReferenceElement,
-            bool            * pIsNew
+            EntryMutableCollectionProxy       * pObject,
+            EntryType                   const * pReferenceElement,
+            bool                              * pIsNew
     ) noexcept -> EntryType * {
 
-        return this->template map < LinkedHashMapBase > ()->__newAddress (
+        return pObject->template map < LinkedHashMapBase > ()->__ht_new (
                 pReferenceElement,
                 pIsNew
         );
@@ -110,9 +111,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
+    > :: EntryMutableCollectionProxy :: __begin (
+            EntryMutableCollectionProxy * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-        return this->template map < LinkedHashMapBase > ()->__begin();
+        return LinkedHashMapBase :: __begin ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -124,9 +127,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
+    > :: EntryMutableCollectionProxy :: __end (
+            EntryMutableCollectionProxy * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-        return this->template map < LinkedHashMapBase > ()->__end();
+        return LinkedHashMapBase :: __end ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -138,9 +143,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+    > :: EntryMutableCollectionProxy :: __cbegin (
+            EntryMutableCollectionProxy const * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
 
-        return this->template map < LinkedHashMapBase > ()->__cbegin();
+        return LinkedHashMapBase :: __cbegin ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -152,9 +159,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+    > :: EntryMutableCollectionProxy :: __cend (
+            EntryMutableCollectionProxy const * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
 
-        return this->template map < LinkedHashMapBase > ()->__cend();
+        return LinkedHashMapBase :: __cend ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -166,9 +175,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
+    > :: EntryMutableCollectionProxy :: __beginLocal (
+            EntryMutableCollectionProxy * pObject
+    ) noexcept -> Iterator {
 
-        return this->template map < LinkedHashMapBase > ()->__beginLocal();
+        return LinkedHashMapBase :: __beginLocal ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -180,9 +191,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
+    > :: EntryMutableCollectionProxy :: __endLocal (
+            EntryMutableCollectionProxy * pObject
+    ) noexcept -> Iterator {
 
-        return this->template map < LinkedHashMapBase > ()->__endLocal();
+        return LinkedHashMapBase :: __endLocal ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -194,9 +207,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
+    > :: EntryMutableCollectionProxy :: __cbeginLocal (
+            EntryMutableCollectionProxy const * pObject
+    ) noexcept -> ConstIterator {
 
-        return this->template map < LinkedHashMapBase > ()->__cbeginLocal();
+        return LinkedHashMapBase :: __cbeginLocal ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -208,9 +223,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: EntryMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
+    > :: EntryMutableCollectionProxy :: __cendLocal (
+            EntryMutableCollectionProxy const * pObject
+    ) noexcept -> ConstIterator {
 
-        return this->template map < LinkedHashMapBase > ()->__cendLocal();
+        return LinkedHashMapBase :: __cendLocal ( pObject->template map < LinkedHashMapBase > () );
     }
 
 
@@ -223,10 +240,14 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :: __remove (
-            Iterator const * iterator
+            EntryMutableCollectionProxy       * pObject,
+            Iterator                    const * iterator
     ) noexcept -> bool {
 
-        return this->template map < LinkedHashMapBase > ()->__remove ( iterator );
+        return LinkedHashMapBase :: __remove (
+                pObject->template map < LinkedHashMapBase > (),
+                iterator
+        );
     }
 
 
@@ -239,10 +260,14 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :: __removeConst (
-            ConstIterator const * iterator
+            EntryMutableCollectionProxy       * pObject,
+            ConstIterator               const * iterator
     ) noexcept -> bool {
 
-        return this->template map < LinkedHashMapBase > ()->__removeConst ( iterator );
+        return LinkedHashMapBase :: __removeConst (
+                pObject->template map < LinkedHashMapBase > (),
+                iterator
+        );
     }
 
 
@@ -255,11 +280,13 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :: __removeArray (
-            Iterator    const * const * ppIterators,
-            Size                        iteratorArrayCount
+            EntryMutableCollectionProxy               * pObject,
+            Iterator                    const * const * ppIterators,
+            Size                                        iteratorArrayCount
     ) noexcept -> Size {
 
-        return this->template map < LinkedHashMapBase > ()->__removeArray (
+        return LinkedHashMapBase :: __removeArray (
+                pObject->template map < LinkedHashMapBase > (),
                 ppIterators,
                 iteratorArrayCount
         );
@@ -275,11 +302,13 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: EntryMutableCollectionProxy :: __removeConstArray (
-            ConstIterator   const * const * ppIterators,
-            Size                            iteratorArrayCount
+            EntryMutableCollectionProxy               * pObject,
+            ConstIterator               const * const * ppIterators,
+            Size                                        iteratorArrayCount
     ) noexcept -> Size {
 
-        return this->template map < LinkedHashMapBase > ()->__removeConstArray (
+        return LinkedHashMapBase :: __removeConstArray (
+                pObject->template map < LinkedHashMapBase > (),
                 ppIterators,
                 iteratorArrayCount
         );

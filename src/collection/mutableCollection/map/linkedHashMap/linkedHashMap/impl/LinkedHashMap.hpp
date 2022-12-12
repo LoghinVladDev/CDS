@@ -47,10 +47,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __begin () noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType > * {
+    > :: __begin (
+            LinkedHashMap * pObject
+    ) noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType, Iterator > > (
-                Iterator ( this->__sll_begin() )
+                Iterator ( pObject->__sll_begin() )
         );
     }
 
@@ -63,10 +65,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __end () noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType > * {
+    > :: __end (
+            LinkedHashMap * pObject
+    ) noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType, Iterator > > (
-                Iterator ( this->__sll_end() )
+                Iterator ( pObject->__sll_end() )
         );
     }
 
@@ -79,9 +83,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __beginLocal () noexcept -> Iterator {
+    > :: __beginLocal (
+            LinkedHashMap * pObject
+    ) noexcept -> Iterator {
 
-        return Iterator ( this->__sll_begin() );
+        return Iterator ( pObject->__sll_begin() );
     }
 
 
@@ -93,9 +99,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __endLocal () noexcept -> Iterator {
+    > :: __endLocal (
+            LinkedHashMap * pObject
+    ) noexcept -> Iterator {
 
-        return Iterator ( this->__sll_end() );
+        return Iterator ( pObject->__sll_end() );
     }
 
 
@@ -107,10 +115,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cbegin () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType const > * {
+    > :: __cbegin (
+            LinkedHashMap const * pObject
+    ) noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType const > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType const, ConstIterator > > (
-                ConstIterator ( this->__sll_cbegin() )
+                ConstIterator ( pObject->__sll_cbegin() )
         );
     }
 
@@ -123,10 +133,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cend () const noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType const > * {
+    > :: __cend (
+            LinkedHashMap const * pObject
+    ) noexcept -> __hidden :: __impl ::__AbstractDelegateIterator < EntryType const > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType const, ConstIterator > > (
-                ConstIterator ( this->__sll_cend() )
+                ConstIterator ( pObject->__sll_cend() )
         );
     }
 
@@ -139,9 +151,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cbeginLocal () const noexcept -> ConstIterator {
+    > :: __cbeginLocal (
+            LinkedHashMap const * pObject
+    ) noexcept -> ConstIterator {
 
-        return ConstIterator ( this->__sll_cbegin() );
+        return ConstIterator ( pObject->__sll_cbegin() );
     }
 
 
@@ -153,9 +167,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: __cendLocal () const noexcept -> ConstIterator {
+    > :: __cendLocal (
+            LinkedHashMap const * pObject
+    ) noexcept -> ConstIterator {
 
-        return ConstIterator ( this->__sll_cend() );
+        return ConstIterator ( pObject->__sll_cend() );
     }
 
 
@@ -168,17 +184,18 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __newAddress (
-            EntryType   const * pReferenceElement,
-            bool              * pNewElementCreated
+            LinkedHashMap         * pObject,
+            EntryType       const * pReferenceElement,
+            bool                  * pNewElementCreated
     ) noexcept -> EntryType * {
 
-        EntryType * pNewElement = this->__ht_new (
+        EntryType * pNewElement = pObject->__ht_new (
                 pReferenceElement,
                 pNewElementCreated
         );
 
         if ( * pNewElementCreated ) {
-            (void) new ( this->__sll_newBack () ) EntryType * ( pNewElement );
+            (void) new ( pObject->__sll_newBack () ) EntryType * ( pNewElement );
         }
 
         return pNewElement;
@@ -194,20 +211,21 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __remove (
-            Iterator const * pIterator
+            LinkedHashMap         * pObject,
+            Iterator        const * pIterator
     ) noexcept -> bool {
 
         if (
                 pIterator == nullptr ||
                 ! static_cast < bool > ( * pIterator ) ||
-                ( * pIterator ).iterator() == this->__sll_end()
+                ( * pIterator ).iterator() == pObject->__sll_end()
         ) {
             return false;
         }
 
         auto const pElement = * ( * pIterator ).iterator();
-        if ( this->__sll_removeIterator ( ( * pIterator ).iterator() ) ) {
-            return this->__ht_remove ( pElement->key() );
+        if ( pObject->__sll_removeIterator ( ( * pIterator ).iterator() ) ) {
+            return pObject->__ht_remove ( pElement->key() );
         }
 
         return false;
@@ -223,20 +241,21 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __removeConst (
-            ConstIterator const * pIterator
+            LinkedHashMap         * pObject,
+            ConstIterator   const * pIterator
     ) noexcept -> bool {
 
         if (
                 pIterator == nullptr ||
                 ! static_cast < bool > ( * pIterator ) ||
-                ( * pIterator ).iterator() == this->__sll_cend()
+                ( * pIterator ).iterator() == pObject->__sll_cend()
         ) {
             return false;
         }
 
         auto const pElement = * ( * pIterator ).iterator();
-        if ( this->__sll_removeConstIterator ( ( * pIterator ).iterator() ) ) {
-            return this->__ht_remove ( pElement->key() );
+        if ( pObject->__sll_removeConstIterator ( ( * pIterator ).iterator() ) ) {
+            return pObject->__ht_remove ( pElement->key() );
         }
 
         return false;
@@ -252,6 +271,7 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __removeArray (
+            LinkedHashMap             * pObject,
             Iterator    const * const * ppIterators,
             Size                        iteratorArraySize
     ) noexcept -> Size {
@@ -263,9 +283,9 @@ namespace cds {
             pRemovedElementArray [ index ] = * ( * pSllIteratorPtrArray [ index ] );
         }
 
-        Size removedCount = this->__sll_removeIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
+        Size removedCount = pObject->__sll_removeIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
         for ( Size index = 0ULL; index < iteratorArraySize; ++ index ) {
-            this->__ht_remove ( pRemovedElementArray [ index ]->key() );
+            pObject->__ht_remove ( pRemovedElementArray [ index ]->key() );
         }
 
         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pRemovedElementArray );
@@ -284,6 +304,7 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __removeConstArray (
+            LinkedHashMap                 * pObject,
             ConstIterator   const * const * ppIterators,
             Size                            iteratorArraySize
     ) noexcept -> Size {
@@ -295,9 +316,9 @@ namespace cds {
             pRemovedElementArray [ index ] = * ( * pSllIteratorPtrArray [ index ] );
         }
 
-        Size removedCount = this->__sll_removeConstIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
+        Size removedCount = pObject->__sll_removeConstIteratorArray ( & pSllIteratorPtrArray [0ULL], iteratorArraySize );
         for ( Size index = 0ULL; index < iteratorArraySize; ++ index ) {
-            this->__ht_remove ( pRemovedElementArray [ index ]->key() );
+            pObject->__ht_remove ( pRemovedElementArray [ index ]->key() );
         }
 
         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pRemovedElementArray );
@@ -316,16 +337,17 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __find (
-            __KeyType const & element
+            LinkedHashMap         * pObject,
+            __KeyType       const & element
     ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType > * {
 
-        if ( this->__ht_getConst ( element ) == nullptr ) {
+        if ( pObject->__ht_getConst ( element ) == nullptr ) {
             return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType, Iterator > > (
-                    this->end()
+                    pObject->end()
             );
         }
 
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
+        for ( auto iterator = pObject->begin(), end = pObject->end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( iterator->key(), element ) ) {
                 return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType, Iterator > > (
                         iterator
@@ -334,7 +356,7 @@ namespace cds {
         }
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType, Iterator > > (
-                this->end()
+                pObject->end()
         );
     }
 
@@ -348,16 +370,17 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __findConst (
-            __KeyType const & element
-    ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
+            LinkedHashMap   const * pObject,
+            __KeyType       const & element
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < EntryType const > * {
 
-        if ( this->__ht_getConst ( element ) == nullptr ) {
+        if ( pObject->__ht_getConst ( element ) == nullptr ) {
             return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType const, ConstIterator > > (
-                    this->cend()
+                    pObject->cend()
             );
         }
 
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
+        for ( auto iterator = pObject->cbegin(), end = pObject->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( iterator->key(), element ) ) {
                 return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType const, ConstIterator > > (
                         iterator
@@ -366,7 +389,7 @@ namespace cds {
         }
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < EntryType const, ConstIterator > > (
-                this->cend()
+                pObject->cend()
         );
     }
 
@@ -380,20 +403,21 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __findLocal (
-            __KeyType const & element
+            LinkedHashMap         * pObject,
+            __KeyType       const & element
     ) noexcept -> Iterator {
 
-        if ( this->__ht_getConst ( element ) == nullptr ) {
-            return this->end();
+        if ( pObject->__ht_getConst ( element ) == nullptr ) {
+            return pObject->end();
         }
 
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {    /* NOLINT(clion-misra-cpp2008-8-0-1) */
+        for ( auto iterator = pObject->begin(), end = pObject->end(); iterator != end; ++ iterator ) {    /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( iterator->key(), element ) ) {
                 return iterator;
             }
         }
 
-        return this->end();
+        return pObject->end();
     }
 
 
@@ -406,20 +430,21 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: __findConstLocal (
-            __KeyType const & element
-    ) const noexcept -> ConstIterator {
+            LinkedHashMap   const * pObject,
+            __KeyType       const & element
+    ) noexcept -> ConstIterator {
 
-        if ( this->__ht_getConst ( element ) == nullptr ) {
-            return this->cend();
+        if ( pObject->__ht_getConst ( element ) == nullptr ) {
+            return pObject->cend();
         }
 
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
+        for ( auto iterator = pObject->cbegin(), end = pObject->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( iterator->key(), element ) ) {
                 return iterator;
             }
         }
 
-        return this->cend();
+        return pObject->cend();
     }
 
 

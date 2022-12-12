@@ -99,7 +99,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __find ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static auto __find ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType    * pServer,
                         __KeyType const & key
                 ) noexcept -> __AbstractDelegateIterator < __ElementType > *;
 
@@ -113,9 +114,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __KeyType const & key
-                ) const noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+                static auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType    const * pServer,
+                        __KeyType       const & key
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -127,8 +129,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __findLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __KeyType const & key
+                static auto __findLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType          * pServer,
+                        __KeyType       const & key
                 ) noexcept -> __IteratorType;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
@@ -141,9 +144,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __KeyType const & key
-                ) const noexcept -> __ConstIteratorType;
+                static auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __ServerType    const * pServer,
+                        __KeyType       const & key
+                ) noexcept -> __ConstIteratorType;
             };
 
         } /* namespace __impl */
