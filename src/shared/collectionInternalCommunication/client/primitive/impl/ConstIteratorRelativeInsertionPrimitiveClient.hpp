@@ -123,7 +123,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new before address function */
                 using __ReceiverNewBeforeConstHandlerType   = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType *, cds :: meta :: Iterator const * >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                              = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
@@ -167,7 +167,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new after address function */
                 using __ReceiverNewAfterConstHandlerType    = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType *, cds :: meta :: Iterator const * >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                        = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                              = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace after it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
@@ -211,7 +211,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new before address function */
                 using __ReceiverNewBeforeConstArrayHandlerType  = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
@@ -261,7 +261,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new after address function */
                 using __ReceiverNewAfterConstArrayHandlerType   = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace after it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
@@ -469,7 +469,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new before address function */
                 using __ReceiverNewBeforeConstArrayHandlerType  = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {
@@ -522,7 +522,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new after address function */
                 using __ReceiverNewAfterConstArrayHandlerType   = cds :: functional :: PredicateFunction < __ReceiverType *, cds :: meta :: Iterator const *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                            = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                                  = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* If iterator invalid, cannot emplace before it */
                 if ( ! iterator.of ( pReceiver ) || ! static_cast < bool > ( iterator ) ) {

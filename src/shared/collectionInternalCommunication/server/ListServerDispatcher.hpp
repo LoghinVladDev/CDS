@@ -209,7 +209,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  */
                 __CDS_NoDiscard constexpr static auto __crbeginLocal (
                         __ServerType const * pServer
-                ) const noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

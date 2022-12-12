@@ -56,7 +56,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * Member function is acquired from the Collection Communication Channel */
                 return ConstIterator (
                         pReceiver,
-                        reinterpret_cast < __ReceiverBeginHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_begin ) ) ( pReceiver )
+                        reinterpret_cast < __ReceiverBeginHandlerType > ( pReceiver->__cicch_obtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_begin ) ) ( pReceiver )
                 );
             }
 
@@ -81,7 +81,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * Member function is acquired from the Collection Communication Channel */
                 return ConstIterator (
                         pReceiver,
-                        reinterpret_cast < __ReceiverEndHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_end ) ) ( pReceiver )
+                        reinterpret_cast < __ReceiverEndHandlerType > ( pReceiver->__cicch_obtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_end ) ) ( pReceiver )
                 );
             }
 

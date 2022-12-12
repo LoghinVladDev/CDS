@@ -90,9 +90,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: KeySetProxy :: __cbeginLocal () const noexcept -> ConstIterator {
+    > :: KeySetProxy :: __cbeginLocal (
+            KeySetProxy const * pObject
+    ) noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < HashMapBase > ()->__cbeginLocal() );
+        return ConstIterator ( HashMapBase :: __cbeginLocal ( pObject->template map < HashMapBase > () ) );
     }
 
 
@@ -104,9 +106,11 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: KeySetProxy :: __cendLocal () const noexcept -> ConstIterator {
+    > :: KeySetProxy :: __cendLocal (
+            KeySetProxy const * pObject
+    ) noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < HashMapBase > ()->__cendLocal() );
+        return ConstIterator ( HashMapBase :: __cendLocal ( pObject->template map < HashMapBase > () ) );
     }
 
 
@@ -118,10 +122,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: KeySetProxy :: __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
+    > :: KeySetProxy :: __cbegin (
+            KeySetProxy const * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __KeyType const, ConstIterator > > (
-                ConstIterator ( this->template map < HashMapBase > ()->__cbeginLocal() )
+                ConstIterator ( HashMapBase :: __cbeginLocal ( pObject->template map < HashMapBase > () ) )
         );
     }
 
@@ -134,10 +140,12 @@ namespace cds {
             __KeyType,
             __ValueType,
             __Hasher
-    > :: KeySetProxy :: __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
+    > :: KeySetProxy :: __cend (
+            KeySetProxy const * pObject
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __KeyType const, ConstIterator > > (
-                ConstIterator ( this->template map < HashMapBase > ()->__cendLocal() )
+                ConstIterator ( HashMapBase :: __cendLocal ( pObject->template map < HashMapBase > () ) )
         );
     }
 
@@ -151,10 +159,14 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: KeySetProxy :: __removeConst (
+            KeySetProxy         * pObject,
             ConstIterator const * pIterator
     ) noexcept -> bool {
 
-        return this->template map < HashMapBase > ()->__removeConst ( & pIterator->iterator() );
+        return HashMapBase :: __removeConst (
+                pObject->template map < HashMapBase > (),
+                & pIterator->iterator ()
+        );
     }
 
 
@@ -167,6 +179,7 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: KeySetProxy :: __removeConstArray (
+            KeySetProxy                   * pObject,
             ConstIterator   const * const * ppIterators,
             Size                            iteratorArrayCount
     ) noexcept -> Size {
@@ -175,18 +188,20 @@ namespace cds {
                 typename cds :: __hidden :: __impl :: __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator const *
         > ( iteratorArrayCount );
 
+        uint32 wrappedIteratorArraySize = 0U;
         for ( uint32 iteratorIndex = 0U; iteratorIndex < iteratorArrayCount; ++ iteratorIndex ) {
 
             if ( ppIterators [ iteratorIndex ] != nullptr ) {                                           /* NOLINT(*-bounds-pointer-arithmetic) */
-                ppWrappedIteratorArray [ iteratorIndex ] = & ppIterators [ iteratorIndex ]->iterator(); /* NOLINT(*-bounds-pointer-arithmetic) */
+                ppWrappedIteratorArray [ wrappedIteratorArraySize ++ ] = & ppIterators [ iteratorIndex ]->iterator(); /* NOLINT(*-bounds-pointer-arithmetic) */
             } else {
-                ppWrappedIteratorArray [ iteratorIndex ] = nullptr;
+                /* do nothing */
             }
         }
 
-        auto const removedIteratorCount = this->template map < HashMapBase > ()->__removeConstArray (
+        auto const removedIteratorCount = HashMapBase :: __removeConstArray (
+                pObject->template map < HashMapBase > (),
                 ppWrappedIteratorArray,
-                iteratorArrayCount
+                wrappedIteratorArraySize
         );
 
         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppWrappedIteratorArray );
@@ -203,11 +218,12 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: KeySetProxy :: __findConst (
-            __KeyType const & key
-    ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
+            KeySetProxy const * pObject,
+            __KeyType   const & key
+    ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
 
         return Memory :: instance().create < __hidden :: __impl :: __DelegateIterator < __KeyType const, ConstIterator > > (
-                ConstIterator ( this->template map < HashMapBase > ()->__findConstLocal ( key ) )
+                ConstIterator ( HashMapBase :: __findConstLocal ( pObject->template map < HashMapBase > (), key ) )
         );
     }
 
@@ -221,10 +237,11 @@ namespace cds {
             __ValueType,
             __Hasher
     > :: KeySetProxy :: __findConstLocal (
-            __KeyType const & key
-    ) const noexcept -> ConstIterator {
+            KeySetProxy const * pObject,
+            __KeyType   const & key
+    ) noexcept -> ConstIterator {
 
-        return ConstIterator ( this->template map < HashMapBase > ()->__findConstLocal ( key ) );
+        return ConstIterator ( HashMapBase :: __findConstLocal ( pObject->template map < HashMapBase > (), key ) );
     }
 
 

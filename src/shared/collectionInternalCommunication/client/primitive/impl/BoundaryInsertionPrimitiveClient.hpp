@@ -204,7 +204,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new front address function */
                 using __ReceiverNewFrontHandlerType = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType * >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                      = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* Create the request for a new front address handler, call it and pass the received address, and
                  * forward the received parameters to the emplacement new operator */
@@ -235,7 +235,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new back address function */
                 using __ReceiverNewBackHandlerType  = cds :: functional :: MapperFunction < __ElementType *, __ReceiverType * >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto const pReceiver                = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                      = reinterpret_cast < __ReceiverType * > ( this );
 
                 /* Create the request for a new back address handler, call it and pass the received address, and
                  * forward the received parameters to the emplacement new operator */
@@ -266,7 +266,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new front address function */
                 using __ReceiverNewFrontArrayHandlerType    = cds :: functional :: ConsumerFunction < __ReceiverType *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto    const pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
+                auto          pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
                 /* The number of received values is the numbers of elements to be created */
                 Size    const parameterCount                = sizeof ... ( __ArgumentTypes );
                 /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
@@ -274,6 +274,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 /* Request and call handler for a new front address array with the created buffer */
                 reinterpret_cast < __ReceiverNewFrontArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newFrontAddressArray ) ) (
+                        pReceiver,
                         parameterCount,
                         ppElements
                 );
@@ -306,7 +307,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new back address function */
                 using __ReceiverNewBackArrayHandlerType = cds :: functional :: ConsumerFunction < __ReceiverType *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto    const pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
+                auto          pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
                 /* The number of received values is the numbers of elements to be created */
                 Size    const parameterCount            = sizeof ... ( __ArgumentTypes );
                 /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
@@ -314,6 +315,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 /* Request and call handler for a new back address array with the created buffer */
                 reinterpret_cast < __ReceiverNewBackArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_newBackAddressArray ) ) (
+                        pReceiver,
                         parameterCount,
                         ppElements
                 );
@@ -504,7 +506,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new front address function */
                 using __ReceiverNewFrontArrayHandlerType    = cds :: functional :: ConsumerFunction < __ReceiverType *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto    const pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
+                auto          pReceiver                     = reinterpret_cast < __ReceiverType * > ( this );
                 /* The number of received values is the numbers of elements to be created. If 0, compute */
                 Size    const parameterCount                = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
                 /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */
@@ -548,7 +550,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* Handle type of the new back address function */
                 using __ReceiverNewBackArrayHandlerType = cds :: functional :: ConsumerFunction < __ReceiverType *, Size, __ElementType ** >;
                 /* Caller object reinterpreted as receiver of the request */
-                auto    const pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
+                auto          pReceiver                 = reinterpret_cast < __ReceiverType * > ( this );
                 /* The number of received values is the numbers of elements to be created. If 0, compute */
                 Size    const parameterCount            = count == 0ULL ? __IteratorDistance < __IteratorType > :: __compute ( begin, end ) : count;
                 /* Allocate the buffer to store the addresses of the newly created memory spaces for the elements */

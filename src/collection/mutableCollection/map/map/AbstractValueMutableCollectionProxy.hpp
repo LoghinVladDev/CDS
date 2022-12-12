@@ -68,9 +68,10 @@ namespace cds {
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
     protected:
-        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __ValueType const * pReferenceKey,
-                bool              * pIsNew
+        static auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                AbstractValueMutableCollectionProxy       * pObject,
+                __ValueType                         const * pReferenceKey,
+                bool                                      * pIsNew
         ) noexcept (false) -> __ValueType *;
     };
 

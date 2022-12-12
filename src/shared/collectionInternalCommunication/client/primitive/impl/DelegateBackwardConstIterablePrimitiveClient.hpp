@@ -52,7 +52,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 return ConstReverseIterator (
                         pReceiver,
-                        reinterpret_cast < __ReceiverRBeginHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_rbegin ) ) ( pReceiver )
+                        reinterpret_cast < __ReceiverRBeginHandlerType > ( pReceiver->__cicch_obtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_rbegin ) ) ( pReceiver )
                 );
             }
 
@@ -72,7 +72,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                 return ConstReverseIterator (
                         pReceiver,
-                        reinterpret_cast < __ReceiverREndHandlerType > ( pReceiver->__cicchObtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_rend ) ) ( pReceiver )
+                        reinterpret_cast < __ReceiverREndHandlerType > ( pReceiver->__cicch_obtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_rend ) ) ( pReceiver )
                 );
             }
 

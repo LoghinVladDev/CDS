@@ -24,19 +24,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> Iterator {
 
                 /* explicit type of the handler received from the client */
-                using __ReceiverFindHandlerType = __AbstractDelegateIterator < __ElementType > * ( __ReceiverType :: * ) ( __KeyType const & );
+                using __ReceiverFindHandlerType = cds :: functional :: MapperFunction < __AbstractDelegateIterator < __ElementType > *, __ReceiverType *, __KeyType const & >;
                 /* object as the receiver type */
-                auto const pReceiver            = reinterpret_cast < __ReceiverType * > ( this );
+                auto pReceiver                  = reinterpret_cast < __ReceiverType const * > ( this );
 
-                /* create a wrapper iterator with the received delegate iterator from __cirt_find */
+                /* create a wrapper const iterator with the received delegate iterator from __cirt_findConst */
                 return Iterator (
-                        pReceiver, (
-                                pReceiver ->* reinterpret_cast < __ReceiverFindHandlerType > (
-                                        pReceiver->__cicch_obtainGenericHandler (
-                                                __CollectionInternalRequestType :: __cirt_find
-                                        )
-                                )
-                        ) ( key )
+                        pReceiver,
+                        reinterpret_cast < __ReceiverFindHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __CollectionInternalRequestType :: __cirt_find ) ) ( pReceiver, key )
                 );
             }
 
@@ -54,7 +49,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> Iterator {
 
                 /* directly call the __findLocal function */
-                return reinterpret_cast < __ReceiverType * > ( this )->__findLocal ( key );
+                return __ReceiverType :: __findLocal (
+                        reinterpret_cast < __ReceiverType * > ( this ),
+                        key
+                );
             }
 
         } /* namespace __impl */

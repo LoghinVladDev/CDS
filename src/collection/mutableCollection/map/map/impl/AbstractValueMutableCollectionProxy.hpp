@@ -96,12 +96,14 @@ namespace cds {
             __KeyType,
             __ValueType
     > :: AbstractValueMutableCollectionProxy :: __newAddress (
-            __ValueType const * pReferenceKey,
-            bool              * pIsNew        /* NOLINT(readability-non-const-parameter) */
+            AbstractValueMutableCollectionProxy       * pObject,        /* NOLINT(readability-non-const-parameter) */
+            __ValueType                         const * pReferenceKey,
+            bool                                      * pIsNew          /* NOLINT(readability-non-const-parameter) */
     ) noexcept (false) -> __ValueType * {
 
         (void) pReferenceKey;
         (void) pIsNew;
+        (void) pObject;
 
         throw cds :: UnsupportedOperationException (
                 cds :: String ( "Cannot insert a value into a Map Value Collection" )
