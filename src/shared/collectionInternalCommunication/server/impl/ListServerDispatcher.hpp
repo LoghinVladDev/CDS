@@ -81,11 +81,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > * {
+            > :: __rbegin (
+                    __ServerType * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType, __ReverseIteratorType > > (
-                        ( reinterpret_cast < __ServerType * > ( this ) ->* __rbeginFunction ) ()
+                        ( pServer ->* __rbeginFunction ) ()
                 );
             }
 
@@ -160,11 +162,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __rend () noexcept -> __AbstractDelegateIterator < __ElementType > * {
+            > :: __rend (
+                    __ServerType * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType, __ReverseIteratorType > > (
-                        ( reinterpret_cast < __ServerType * > ( this ) ->* __rendFunction ) ()
+                        ( pServer ->* __rendFunction ) ()
                 );
             }
 
@@ -239,11 +243,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+            > :: __crbegin (
+                    __ServerType const * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType const, __ConstReverseIteratorType > > (
-                        ( reinterpret_cast < __ServerType const * > ( this ) ->* __crbeginFunction ) ()
+                        ( pServer ->* __crbeginFunction ) ()
                 );
             }
 
@@ -318,11 +324,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+            > :: __crend (
+                    __ServerType const * pServer
+            ) noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType const, __ConstReverseIteratorType > > (
-                        ( reinterpret_cast < __ServerType const * > ( this ) ->* __crendFunction ) ()
+                        ( pServer ->* __crendFunction ) ()
                 );
             }
 
@@ -397,10 +405,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __rbeginLocal () noexcept -> __ReverseIteratorType {
+            > :: __rbeginLocal (
+                    __ServerType * pServer
+            ) noexcept -> __ReverseIteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __rbeginFunction ) ();
+                return ( pServer ->* __rbeginFunction ) ();
             }
 
 
@@ -474,10 +484,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __rendLocal () noexcept -> __ReverseIteratorType {
+            > :: __rendLocal (
+                    __ServerType * pServer
+            ) noexcept -> __ReverseIteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __rendFunction ) ();
+                return ( pServer ->* __rendFunction ) ();
             }
 
 
@@ -551,10 +563,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __crbeginLocal () const noexcept -> __ConstReverseIteratorType {
+            > :: __crbeginLocal (
+                    __ServerType const * pServer
+            ) noexcept -> __ConstReverseIteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crbeginFunction ) ();
+                return ( pServer ->* __crbeginFunction ) ();
             }
 
 
@@ -628,10 +642,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __crendLocal () const noexcept -> __ConstReverseIteratorType {
+            > :: __crendLocal (
+                    __ServerType const * pServer
+            ) noexcept -> __ConstReverseIteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crendFunction ) ();
+                return ( pServer ->* __crendFunction ) ();
             }
 
 
@@ -705,10 +721,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __newFront () noexcept -> __ElementType * {
+            > :: __newFront (
+                    __ServerType * pServer
+            ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newFrontFunction ) ();
+                return ( pServer ->* __newFrontFunction ) ();
             }
 
 
@@ -782,10 +800,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstFunction,
                     __removeArrayFunction,
                     __removeConstArrayFunction
-            > :: __newBack () noexcept -> __ElementType * {
+            > :: __newBack (
+                    __ServerType * pServer
+            ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newBackFunction ) ();
+                return ( pServer ->* __newBackFunction ) ();
             }
 
 
@@ -860,12 +880,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newFrontArray (
+                    __ServerType      * pServer,
                     Size                count,
                     __ElementType    ** ppElements
             ) noexcept -> void {
 
                 /* call the template received member function */
-                ( reinterpret_cast < __ServerType * > ( this ) ->* __newFrontArrayFunction ) (
+                ( pServer ->* __newFrontArrayFunction ) (
                         count,
                         ppElements
                 );
@@ -943,12 +964,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newBackArray (
+                    __ServerType      * pServer,
                     Size                count,
                     __ElementType    ** ppElements
             ) noexcept -> void {
 
                 /* call the template received member function */
-                ( reinterpret_cast < __ServerType * > ( this ) ->* __newBackArrayFunction ) (
+                ( pServer ->* __newBackArrayFunction ) (
                         count,
                         ppElements
                 );
@@ -1026,11 +1048,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newBefore (
+                    __ServerType                 * pServer,
                     __AbstractIteratorType const * pIterator
             ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newBeforeFunction ) (
+                return ( pServer ->* __newBeforeFunction ) (
                         * pIterator
                 );
             }
@@ -1107,11 +1130,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newBeforeConst (
+                    __ServerType                      * pServer,
                     __AbstractConstIteratorType const * pIterator
             ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newBeforeConstFunction ) (
+                return ( pServer ->* __newBeforeConstFunction ) (
                         * pIterator
                 );
             }
@@ -1188,11 +1212,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newAfter (
+                    __ServerType                 * pServer,
                     __AbstractIteratorType const * pIterator
             ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newAfterFunction ) (
+                return ( pServer ->* __newAfterFunction ) (
                         * pIterator
                 );
             }
@@ -1269,11 +1294,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newAfterConst (
+                    __ServerType                      * pServer,
                     __AbstractConstIteratorType const * pIterator
             ) noexcept -> __ElementType * {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newAfterConstFunction ) (
+                return ( pServer ->* __newAfterConstFunction ) (
                         * pIterator
                 );
             }
@@ -1350,13 +1376,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newBeforeArray (
+                    __ServerType                  * pServer,
                     __AbstractIteratorType  const * pIterator,
                     Size                            count,
                     __ElementType                ** ppElements
             ) noexcept -> bool {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newBeforeArrayFunction ) (
+                return ( pServer ->* __newBeforeArrayFunction ) (
                         * pIterator,
                         count,
                         ppElements
@@ -1435,13 +1462,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newBeforeArrayConst (
+                    __ServerType                      * pServer,
                     __AbstractConstIteratorType const * pIterator,
                     Size                                count,
                     __ElementType                    ** ppElements
             ) noexcept -> bool {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newBeforeArrayConstFunction ) (
+                return ( pServer ->* __newBeforeArrayConstFunction ) (
                         * pIterator,
                         count,
                         ppElements
@@ -1520,13 +1548,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newAfterArray (
+                    __ServerType                  * pServer,
                     __AbstractIteratorType  const * pIterator,
                     Size                            count,
                     __ElementType                ** ppElements
             ) noexcept -> bool {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newAfterArrayFunction ) (
+                return ( pServer ->* __newAfterArrayFunction ) (
                         * pIterator,
                         count,
                         ppElements
@@ -1605,13 +1634,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeArrayFunction,
                     __removeConstArrayFunction
             > :: __newAfterArrayConst (
+                    __ServerType                      * pServer,
                     __AbstractConstIteratorType const * pIterator,
                     Size                                count,
                     __ElementType                    ** ppElements
             ) noexcept -> bool {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __newAfterArrayConstFunction ) (
+                return ( pServer ->* __newAfterArrayConstFunction ) (
                         * pIterator,
                         count,
                         ppElements

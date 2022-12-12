@@ -34,7 +34,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
     namespace experimental {
 
         template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-        class TreeSet :
+        class __CDS_InheritsEBOs TreeSet :
                 public Set < __ElementType >,
                 protected __hidden :: __impl :: __TreeSetServer < __ElementType >,
                 public __hidden :: __impl :: __TreeSetImplementation < __ElementType >,

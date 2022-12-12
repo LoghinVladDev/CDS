@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 23/10/22.
  */
 
@@ -105,7 +105,7 @@ namespace cds {
 
     inline auto AtomicFlag :: hash () const noexcept -> Size {
 
-        return reinterpret_cast < Size > ( & this->_atomicFlag );
+        return reinterpret_cast < Size > ( & this->_atomicFlag );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
     }
 
 
@@ -117,7 +117,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomicFlag = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomicFlag = dynamic_cast < decltype (this) > ( & object );
         if ( pAtomicFlag == nullptr ) {
             return false;
         }
@@ -143,7 +143,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomicFlag = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomicFlag = dynamic_cast < decltype (this) > ( & object );
         if ( pAtomicFlag == nullptr ) {
             return false;
         }
@@ -152,7 +152,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction Atomic < __ElementType > :: Atomic (
             Atomic const & atomic
     ) noexcept {
@@ -161,7 +161,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction Atomic < __ElementType > :: Atomic (
             Atomic              const & atomic,
             AtomicMemoryOrder           order
@@ -174,7 +174,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction Atomic < __ElementType > :: Atomic (
             Atomic              const & atomic,
             AtomicMemoryOrder           loadOrder,
@@ -188,7 +188,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction Atomic < __ElementType > :: Atomic (
             __ElementType value
     ) noexcept {
@@ -197,7 +197,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction Atomic < __ElementType > :: Atomic (
             __ElementType               value,
             AtomicMemoryOrder           order
@@ -207,7 +207,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator = (
             Atomic const & atomic
     ) noexcept -> Atomic & {
@@ -221,7 +221,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator = (
             __ElementType value
     ) noexcept -> Atomic & {
@@ -231,14 +231,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto Atomic < __ElementType > :: get () const noexcept -> __ElementType {
 
         return this->_data.load();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto Atomic < __ElementType > :: get (
             AtomicMemoryOrder order
     ) const noexcept -> __ElementType {
@@ -247,7 +247,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: set (
             __ElementType value
     ) noexcept -> void {
@@ -256,7 +256,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: set (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -266,14 +266,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr Atomic < __ElementType > :: operator __ElementType () const noexcept {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: exchange (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -282,7 +282,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: exchange (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -292,7 +292,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeWeak (
             __ElementType & expected,
             __ElementType   desired
@@ -302,7 +302,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeWeak (
             __ElementType     & expected,
             __ElementType       desired,
@@ -317,7 +317,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeWeak (
             __ElementType     & expected,
             __ElementType       desired,
@@ -334,7 +334,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeStrong (
             __ElementType & expected,
             __ElementType   desired
@@ -344,7 +344,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeStrong (
             __ElementType     & expected,
             __ElementType       desired,
@@ -359,7 +359,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: compareExchangeStrong (
             __ElementType     & expected,
             __ElementType       desired,
@@ -376,7 +376,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenAdd (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -385,7 +385,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenAdd (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -399,7 +399,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenSubtract (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -408,7 +408,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenSubtract (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -422,7 +422,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseAnd (
             __ElementType value
@@ -432,7 +432,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseAnd (
             __ElementType       value,
@@ -447,7 +447,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseOr (
             __ElementType value
@@ -457,7 +457,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseOr (
             __ElementType       value,
@@ -472,7 +472,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseXor (
             __ElementType value
@@ -482,7 +482,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: getThenBitwiseXor (
             __ElementType       value,
@@ -497,7 +497,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -512,7 +512,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -527,7 +527,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -542,7 +542,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -557,7 +557,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator += (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -569,7 +569,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator -= (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -581,7 +581,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator &= (
             __ElementType value
@@ -594,7 +594,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator |= (
             __ElementType value
@@ -607,7 +607,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto Atomic < __ElementType > :: operator ^= (
             __ElementType value
@@ -620,14 +620,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto Atomic < __ElementType > :: hash () const noexcept -> Size {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto Atomic < __ElementType > :: hash (
             AtomicMemoryOrder order
     ) const noexcept -> Size {
@@ -636,14 +636,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto Atomic < __ElementType > :: toString () const noexcept -> String {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto Atomic < __ElementType > :: toString (
             AtomicMemoryOrder order
     ) const noexcept -> String {
@@ -652,7 +652,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto Atomic < __ElementType > :: equals (
             Object const & object
     ) const noexcept -> bool {
@@ -661,7 +661,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomic = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomic = dynamic_cast < decltype (this) > ( & object ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pAtomic == nullptr ) {
             return false;
         }
@@ -670,7 +670,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto Atomic < __ElementType > :: equals (
             Object              const & object,
             AtomicMemoryOrder           order
@@ -680,7 +680,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomic = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomic = dynamic_cast < decltype (this) > ( & object );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pAtomic == nullptr ) {
             return false;
         }
@@ -690,7 +690,7 @@ namespace cds {
 
 
 #if __CDS_atomic_ref_implementation != __CDS_atomic_ref_unavailable
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AtomicReference < __ElementType > :: AtomicReference (
             __ElementType & value
     ) noexcept :
@@ -702,7 +702,7 @@ namespace cds {
     { }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AtomicReference < __ElementType > :: AtomicReference (
             AtomicReference const & atomic
     ) noexcept :
@@ -714,7 +714,7 @@ namespace cds {
     { }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator = (
             __ElementType & value
     ) noexcept -> AtomicReference & {
@@ -724,14 +724,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AtomicReference < __ElementType > :: get () const noexcept -> __ElementType {
 
         return this->_data.load();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto AtomicReference < __ElementType > :: get (
             AtomicMemoryOrder order
     ) const noexcept -> __ElementType {
@@ -740,7 +740,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: set (
             __ElementType value
     ) noexcept -> void {
@@ -749,7 +749,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: set (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -759,14 +759,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr AtomicReference < __ElementType > :: operator __ElementType () const noexcept {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: exchange (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -775,7 +775,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: exchange (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -785,7 +785,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeWeak (
             __ElementType & expected,
             __ElementType   desired
@@ -795,7 +795,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeWeak (
             __ElementType     & expected,
             __ElementType       desired,
@@ -810,7 +810,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeWeak (
             __ElementType     & expected,
             __ElementType       desired,
@@ -827,7 +827,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeStrong (
             __ElementType & expected,
             __ElementType   desired
@@ -837,7 +837,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeStrong (
             __ElementType     & expected,
             __ElementType       desired,
@@ -852,7 +852,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: compareExchangeStrong (
             __ElementType     & expected,
             __ElementType       desired,
@@ -869,7 +869,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenAdd (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -878,7 +878,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenAdd (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -892,7 +892,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenSubtract (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -901,7 +901,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenSubtract (
             __ElementType       value,
             AtomicMemoryOrder   order
@@ -915,7 +915,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseAnd (
             __ElementType value
@@ -925,7 +925,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseAnd (
             __ElementType       value,
@@ -940,7 +940,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseOr (
             __ElementType value
@@ -950,7 +950,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseOr (
             __ElementType       value,
@@ -965,7 +965,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseXor (
             __ElementType value
@@ -975,7 +975,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: getThenBitwiseXor (
             __ElementType       value,
@@ -990,7 +990,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -1005,7 +1005,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -1020,7 +1020,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -1035,7 +1035,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template <
             meta :: EnableIf <
                     meta :: isIntegral < __ElementType > () ||
@@ -1050,7 +1050,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator += (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -1062,7 +1062,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator -= (
             __ElementType value
     ) noexcept -> __ElementType {
@@ -1074,7 +1074,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator &= (
             __ElementType value
@@ -1087,7 +1087,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator |= (
             __ElementType value
@@ -1100,7 +1100,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     template < meta :: EnableIf < meta :: isIntegral < __ElementType > () > >
     __CDS_cpplang_NonConstConstexprMemberFunction auto AtomicReference < __ElementType > :: operator ^= (
             __ElementType value
@@ -1113,14 +1113,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto AtomicReference < __ElementType > :: hash () const noexcept -> Size {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto AtomicReference < __ElementType > :: hash (
             AtomicMemoryOrder order
     ) const noexcept -> Size {
@@ -1129,14 +1129,14 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto AtomicReference < __ElementType > :: toString () const noexcept -> String {
 
         return this->get();
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto AtomicReference < __ElementType > :: toString (
             AtomicMemoryOrder order
     ) const noexcept -> String {
@@ -1145,7 +1145,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto AtomicReference < __ElementType > :: equals (
             Object const & object
     ) const noexcept -> bool {
@@ -1154,7 +1154,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomic = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomic = dynamic_cast < decltype (this) > ( & object );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pAtomic == nullptr ) {
             return false;
         }
@@ -1163,7 +1163,7 @@ namespace cds {
     }
 
 
-    template < typename __ElementType >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto AtomicReference < __ElementType > :: equals (
             Object              const & object,
             AtomicMemoryOrder           order
@@ -1173,7 +1173,7 @@ namespace cds {
             return true;
         }
 
-        auto pAtomic = dynamic_cast < decltype (this) > ( & object );
+        auto const * pAtomic = dynamic_cast < decltype (this) > ( & object );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         if ( pAtomic == nullptr ) {
             return false;
         }

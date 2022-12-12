@@ -226,7 +226,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this == & function || this->_functionObject == function._functionObject ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -248,7 +248,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this == & function || this->_functionObject == function._functionObject ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -269,7 +269,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this->_functionObject == function ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -293,7 +293,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Function & {
 
         if ( this->_functionObject == & functor ) {
-            return true;
+            return * this;
         }
 
         if ( this->_adapterGroup != nullptr ) {
@@ -316,7 +316,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     ) const noexcept (false) -> __ReturnType {
 
         if ( this->_functionObject == nullptr ) {
-            throw NullPointerException ("Invalid Function Call. No Handle Assigned");
+            throw NoSuchElementException ("Invalid Function Call. No Handle Assigned");
         }
 
         return this->_adapterGroup->_invoke (
@@ -365,6 +365,67 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     __CDS_OptimalInline auto Function < __ReturnType ( __ArgumentTypes ... ) > :: hash () const noexcept -> Size {
 
         return reinterpret_cast < Size > ( this->_adapterGroup );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator == (
+            Function const & function
+    ) const noexcept -> bool {
+
+        return
+                this == & function ||
+                this->_adapterGroup == function._adapterGroup &&
+                this->_adapterGroup->_compare ( this->_functionObject, function._functionObject );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator != (
+            Function const & function
+    ) const noexcept -> bool {
+
+        return ! this->operator == ( function );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator == (
+            __Functor const & functor
+    ) const noexcept -> bool {
+
+        return this->_adapterGroup->_compare ( this->_functionObject, & functor );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator != (
+            __Functor const & functor
+    ) const noexcept -> bool {
+
+        return ! this->_adapterGroup->_compare ( this->_functionObject, & functor );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator == (
+            __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
+    ) const noexcept -> bool {
+
+        return this->_adapterGroup->_compare ( this->_functionObject, function );
+    }
+
+
+    template < typename __ReturnType, typename ... __ArgumentTypes >
+    template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator != (
+            __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
+    ) const noexcept -> bool {
+
+        return ! this->_adapterGroup->_compare ( this->_functionObject, function );
     }
 
 } /* namespace cds */

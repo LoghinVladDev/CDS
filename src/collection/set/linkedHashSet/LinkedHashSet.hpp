@@ -1,11 +1,11 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/24/22.
  */
 
 #ifndef __CDS_LINKED_HASH_SET_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_LINKED_HASH_SET_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Set>
+#include <CDS/Set>                  /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
 
 #include "../../../shared/Node.hpp"
@@ -32,7 +32,7 @@ namespace cds {
     template <
             typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class LinkedHashSet :
+    > class __CDS_InheritsEBOs LinkedHashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __LinkedHashSetServer < __ElementType, __Hasher >,
             public __hidden :: __impl :: __LinkedHashSetHashTableImplementation < __ElementType, __Hasher >,
@@ -144,44 +144,57 @@ namespace cds {
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard static auto __cbegin (
+                LinkedHashSet const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard static auto __cend (
+                LinkedHashSet const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr static auto __cbeginLocal (
+                LinkedHashSet const * pObject
+        ) noexcept -> ConstIterator;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr static auto __cendLocal (
+                LinkedHashSet const * pObject
+        ) noexcept -> ConstIterator;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                LinkedHashSet       * pObject,
                 __ElementType const * pReferenceElement,
                 bool                * pNewElementCreated
         ) noexcept -> __ElementType *;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        static auto __removeConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                LinkedHashSet       * pObject,
                 ConstIterator const * pIterator
         ) noexcept -> bool;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConstArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        static auto __removeConstArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                LinkedHashSet                 * pObject,
                 ConstIterator   const * const * ppIterators,
                 Size                            iteratorArraySize
         ) noexcept -> Size;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        static auto __findConst ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                LinkedHashSet const * pObject,
                 __ElementType const & element
-        ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ElementType const > *;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto __findConstLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                LinkedHashSet const * pObject,
                 __ElementType const & element
-        ) const noexcept -> ConstIterator;
+        ) noexcept -> ConstIterator;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         using DelegateForwardConstIterableClient :: begin;

@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -428,7 +428,7 @@ namespace cds {
     ) noexcept -> HashMap & {
 
         this->__ht_clear ();
-        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             (void) this->insert ( * iterator );
         }
 
@@ -454,7 +454,7 @@ namespace cds {
         }
 
         this->__ht_clear ();
-        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             this->insert ( * iterator );
         }
 
@@ -542,7 +542,7 @@ namespace cds {
             return false;
         }
 
-        return ! this-> template __ht_equals < & __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > > ( map );
+        return ! this-> template __ht_equals < & __hidden :: __impl :: __hashMapEquals < __KeyType, __ValueType > > ( map ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 
@@ -574,7 +574,7 @@ namespace cds {
             __ValueType const & value
     ) const noexcept -> bool {
 
-        for ( auto iterator = this->__ht_cbegin (), end = this->__ht_cend (); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->__ht_cbegin (), end = this->__ht_cend (); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
             if ( cds :: meta :: equals ( ( * iterator ).value(), value ) ) {
                 return true;
             }

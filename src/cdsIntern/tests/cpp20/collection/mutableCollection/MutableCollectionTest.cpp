@@ -3168,6 +3168,9 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
     });
 
+#ifdef _MSC_VER
+#pragma message("You are testing this on MSVC. Some Functions will not be tested. While compatbility should be OK, I am not bothering to actually do these tests until microsoft gets their member function pointer acquisiton code to standard.")
+#else
 
     /* MutableCollectionTestGroup-FunctionalStatements-CPP20 : MCTG-00100-FS-CPP20 - Tests MCTC-00101-FS to MCTC-10139-FS - located directly below due to varability of these tests */
     /* IntArray */              this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatements-CPP20 : MCTG-00100-FS-CPP20 : IntArray", [& allOk, this] {
@@ -6042,6 +6045,12 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         }
     });
 
+#endif
+
+#ifdef _MSC_VER
+#pragma message("You are testing this on MSVC. Some Functions will not be tested. While compatbility should be OK, I am not bothering to actually do these tests until microsoft gets their member function pointer acquisiton code to standard.")
+#else
+
     /* MutableCollectionTestGroup-FunctionalStatementsMemberFunction-CPP20 : MCTG-00200-FSMF-CPP20 - Tests MCTC-00201-FSMF to MCTC-00229-FSMF */
     this->executeSubtest ( "MutableCollectionTestGroup-FunctionalStatementsMemberFunction-CPP20 : MCTG-00200-FSMF-CPP20 : StringArray", [& allOk, this] {
 
@@ -6375,6 +6384,7 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
         );
     });
 
+#endif
 
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveAbsIt-CPP20 : MCTG-00350-RAIT-CPP20 : IntArray", [this, & allOk]{
 

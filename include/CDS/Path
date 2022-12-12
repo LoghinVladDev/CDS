@@ -1,1 +1,2 @@
-#include "../../src/platform/Path.hpp"
+#warning Deprecated, use CDS/filesystem/Path
+#include "../../src/utility/filesystem/Path.hpp"

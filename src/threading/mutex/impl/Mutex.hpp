@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 08.03.2021.
  */
 
@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    inline Mutex :: Mutex () noexcept {
+    inline Mutex :: Mutex () noexcept { /* NOLINT(*-member-init) */
 
         cds :: __hidden :: __impl :: __mutexPlatformInit ( & this->_handle );
     }
@@ -42,7 +42,7 @@ namespace cds {
         /* Reused from Collection */
         /* Default toString implementation, store 'Mutex at 0x....'. Use a stringstream for simplicity */
         std :: stringstream oss;
-        oss << "Mutex at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "Mutex at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
 
         /* converted to std :: string, and to cds :: String afterwards */
         return oss.str();
@@ -51,7 +51,7 @@ namespace cds {
 
     inline auto Mutex :: hash () const noexcept -> Size {
 
-        return reinterpret_cast < Size > ( & this->_handle );
+        return reinterpret_cast < Size > ( & this->_handle );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
     }
 
 } /* namespace cds */

@@ -6,12 +6,16 @@
 
 #include <sstream>
 #include <fstream>
-#include <CDS/experimental/JSON>
+#include <CDS/util/JSON>
+#include <CDS/filesystem/Path>
 //#include <CDS/JSON>
 
 using namespace cds;
 
 bool JsonTest::execute() noexcept {
+
+    using namespace cds :: filesystem;
+
     bool allOk = true;
     this->logBold("Starting of test Json...");
 
@@ -168,7 +172,7 @@ bool JsonTest::execute() noexcept {
 
     this->executeSubtest("test3", [in1Path, in2Path, &allOk, this]{
 //        JSON j;
-        json :: standard :: JsonObject j;
+        json :: JsonObject j;
         j.put("a", 1);
         j.put("b", true);
         j.put("c", 1ll);
@@ -180,13 +184,13 @@ bool JsonTest::execute() noexcept {
 //        std::cout << j.dump() << '\n';
 
 //        JSON::Array a;
-        json :: standard :: JsonArray a;
+        json ::  JsonArray a;
 //        JSON j1;
 //        JSON j2;
 //        JSON j3;
-        json :: standard :: JsonObject j1;
-        json :: standard :: JsonObject j2;
-        json :: standard :: JsonObject j3;
+        json ::  JsonObject j1;
+        json ::  JsonObject j2;
+        json ::  JsonObject j3;
 
         j1.put("a", 1);
         j2.put("b", 2);
@@ -195,12 +199,12 @@ bool JsonTest::execute() noexcept {
 //        a.put(0, j1);
 //        a.put(2, j3);
 //        a.put(1, j2);
-        a.add(j1);
-        a.add(j3);
-        a.add(j2);
+        a.pushBack(j1);
+        a.pushBack(j3);
+        a.pushBack(j2);
 
 //        a.put(3, JSON().put("b", JSON::Array().put(0, JSON().put("a", 3)).put(1, 4)).put("c", false));
-        a.add( json :: standard :: JsonObject().put("b", json :: standard :: JsonArray().add(json :: standard :: JsonObject().put("a", 3)).add(4)).put("c", false));
+        a.pushBack( json ::  JsonObject().put("b", json ::  JsonArray().pushBack(json ::  JsonObject().put("a", 3)).pushBack(4)).put("c", false));
         j.put("h", a);
 
 

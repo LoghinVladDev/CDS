@@ -5,7 +5,7 @@
 #ifndef CDS_JSONTEST_H
 #define CDS_JSONTEST_H
 
-#include <cdsIntern/tests/cpp11/Test.h>
+#include "../../Test.h"
 
 class JsonTest : public Test {
 public:

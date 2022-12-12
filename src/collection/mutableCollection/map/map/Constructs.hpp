@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 10/08/22.
  */
 

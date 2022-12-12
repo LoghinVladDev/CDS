@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -73,7 +73,7 @@ namespace cds {
         out << "[ ";
 
         /* iterate through iterable and append iterator value to Stream */
-        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             cds :: meta :: print ( out, * iterator ) << ", ";
         }
 
@@ -96,12 +96,14 @@ namespace cds {
             __KeyType,
             __ValueType
     > :: AbstractValueMutableCollectionProxy :: __newAddress (
-            __ValueType const * pReferenceKey,
-            bool              * pIsNew        /* NOLINT(readability-non-const-parameter) */
+            AbstractValueMutableCollectionProxy       * pObject,        /* NOLINT(readability-non-const-parameter) */
+            __ValueType                         const * pReferenceKey,
+            bool                                      * pIsNew          /* NOLINT(readability-non-const-parameter) */
     ) noexcept (false) -> __ValueType * {
 
         (void) pReferenceKey;
         (void) pIsNew;
+        (void) pObject;
 
         throw cds :: UnsupportedOperationException (
                 cds :: String ( "Cannot insert a value into a Map Value Collection" )

@@ -16,16 +16,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             constexpr __BaseStringView < __CharType > :: __BaseStringView (
-                    __BaseStringView const & string
-            ) noexcept :
-                    _pData ( string._pData ),
-                    _length ( string._length ) {
-
-            }
-
-
-            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            constexpr __BaseStringView < __CharType > :: __BaseStringView (
                     __BaseStringView && string
             ) noexcept :
                     _pData ( cds :: exchange ( string._pData, nullptr ) ),
@@ -164,11 +154,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator [] (
-                    Index index
+            template <
+                    typename __NumericType,
+                    cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () >
+            > __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator [] (
+                    __NumericType index
             ) const noexcept (false) -> ElementType {
 
-                return this->get ( index );
+                return this->get ( static_cast < Index > ( index ) );
             }
 
 
@@ -290,16 +283,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept ->__BaseString < __CharType > {
 
                 return this->substr ( from, until );
-            }
-
-
-            template < typename __CharType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            template < typename __RangeType >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator [] (
-                    __RangeType const & range
-            ) const noexcept ->__BaseString < __CharType > {
-
-                return this->substr ( range.from(), range.to() );
             }
 
 

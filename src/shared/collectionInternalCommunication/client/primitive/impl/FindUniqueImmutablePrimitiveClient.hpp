@@ -24,19 +24,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> ConstIterator {
 
                 /* explicit type of the handler received from the client */
-                using __ReceiverFindConstHandlerType    = __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) ( __KeyType const & ) const;
+                using __ReceiverFindConstHandlerType    = cds :: functional :: MapperFunction < __AbstractDelegateIterator < __ElementType const > *, __ReceiverType const *, __KeyType const & >;
                 /* object as the receiver type */
                 auto const pReceiver                    = reinterpret_cast < __ReceiverType const * > ( this );
 
                 /* create a wrapper const iterator with the received delegate iterator from __cirt_findConst */
                 return ConstIterator (
-                        pReceiver, (
-                                pReceiver ->* reinterpret_cast < __ReceiverFindConstHandlerType > (
-                                        pReceiver->__cicch_obtainGenericConstHandler (
-                                                __CollectionInternalRequestType :: __cirt_findConst
-                                        )
-                                )
-                        ) ( key )
+                        pReceiver,
+                        reinterpret_cast < __ReceiverFindConstHandlerType > ( pReceiver->__cicch_obtainGenericConstHandler ( __CollectionInternalRequestType :: __cirt_findConst ) ) ( pReceiver, key )
                 );
             }
 
@@ -54,7 +49,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> ConstIterator {
 
                 /* directly call the __findConstLocal function */
-                return reinterpret_cast < __ReceiverType const * > ( this )->__findConstLocal ( key );
+                return __ReceiverType :: __findConstLocal (
+                        reinterpret_cast < __ReceiverType const * > ( this ),
+                        key
+                );
             }
 
         } /* namespace __impl */

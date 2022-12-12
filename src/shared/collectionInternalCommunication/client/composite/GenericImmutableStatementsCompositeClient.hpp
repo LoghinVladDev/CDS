@@ -5,6 +5,7 @@
 #ifndef __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_GENERIC_IMMUTABLE_STATEMENTS_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include "../../../impl/functionalExceptSpecification.hpp"
 #include "../../../iterator/IteratorStatements.hpp"         /* NOLINT(llvm-include-order) */
 #include "../../../iterator/IteratorMemberStatements.hpp"
 
@@ -40,23 +41,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
                  * @brief Function used to apply an action over each element of the iterable
-                 * @tparam __Action the type of the action given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
-                 * @param [in] action : __Action cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function
-                 * @exceptsafe if __Action callable / member function is exceptsafe
+                 * @tparam __Consumer the type of the consumer given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
+                 * @param [in] consumer : __Consumer cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function
+                 * @exceptsafe if __Consumer callable / member function is exceptsafe
                  *
                  * @test Suite: CTS-00001, Group: CTG-00100-FS, Test Cases: { CTC-00139-FS-forEachCount }
                  * @test Suite: CTS-00001, Group: CTG-00200-FSMF, Test Cases: { CTC-00201-FSMF-forEach }
                  *
                  * @public
                  */
-                template < typename __Action > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template < typename __Consumer > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 auto forEach (
-                        __Action const & action
-                ) const noexcept ( noexcept ( __forEach (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        action
-                ) ) ) -> void;
+                        __Consumer const & consumer
+                ) const noexcept ( __ConsumerExceptSpecTraits < __ElementType const, __Consumer > :: __noexceptSpec ) -> void;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -78,12 +75,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto some (
                         Size                count,
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __some (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        count,
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -105,12 +97,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto atLeast (
                         Size                count,
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __atLeast (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        count,
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -132,12 +119,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto atMost (
                         Size                count,
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __atMost (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        count,
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -159,12 +141,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto moreThan (
                         Size                count,
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __moreThan (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        count,
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -186,12 +163,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto fewerThan (
                         Size                count,
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __fewerThan (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        count,
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -211,11 +183,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto count (
                         __Predicate const & predicate = & predicates :: alwaysTrue < __ElementType >
-                ) const noexcept ( noexcept ( __count (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        predicate
-                ) ) ) -> Size;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> Size;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -235,11 +203,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto any (
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __any (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -259,11 +223,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto all (
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __all (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -283,11 +243,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto none (
                         __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
-                ) const noexcept ( noexcept ( __none (
-                        cds :: meta :: addressOf < __IterableType const > ()->cbegin(),
-                        cds :: meta :: addressOf < __IterableType const > ()->cend(),
-                        predicate
-                ) ) ) -> bool;
+                ) const noexcept ( __PredicateExceptSpecTraits < __ElementType const, __Predicate > :: __noexceptSpec ) -> bool;
             };
 
 

@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 02/10/22.
  */
 
@@ -290,7 +290,6 @@ namespace cds {
 
         } /* namespace __impl */
     } /* namespace __hidden */
-    
 } /* namespace cds */
 
 #endif /* __CDS_LINKED_HASH_SET_CONSTRUCTS_HPP__ */

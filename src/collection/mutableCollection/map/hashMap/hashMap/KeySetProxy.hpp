@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -232,12 +232,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __ValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class HashMap <
+    > class __CDS_InheritsEBOs HashMap <
             __KeyType,
             __ValueType,
             __Hasher
     > :: KeySetProxy :
-            public AbstractKeySetProxy,
+            public HashMap < __KeyType, __ValueType, __Hasher > :: AbstractKeySetProxy,
             protected __hidden :: __impl :: __HashMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapKeyProxyIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Hasher >,
@@ -587,37 +587,49 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         ) const noexcept -> bool override;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard static auto __cbegin (
+                KeySetProxy const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard static auto __cend (
+                KeySetProxy const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard constexpr static auto __cbeginLocal (
+                KeySetProxy const * pObject
+        ) noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard constexpr static auto __cendLocal (
+                KeySetProxy const * pObject
+        ) noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __removeConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                KeySetProxy         * pObject,
                 ConstIterator const * pIterator
         ) noexcept -> bool;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                KeySetProxy                   * pObject,
                 ConstIterator   const * const * ppIterators,
                 Size                            iteratorArraySize
         ) noexcept -> Size;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __findConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __KeyType const & key
-        ) const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __findConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                KeySetProxy const * pObject,
+                __KeyType   const & key
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __findConstLocal (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __KeyType const & key
-        ) const noexcept -> ConstIterator;
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __findConstLocal (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                KeySetProxy const * pObject,
+                __KeyType   const & key
+        ) noexcept -> ConstIterator;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto __equals ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */

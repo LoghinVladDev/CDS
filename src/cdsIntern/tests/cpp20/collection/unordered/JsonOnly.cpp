@@ -3,6 +3,7 @@
 //
 
 #include "JsonTest.h"
+#include <iostream>
 
 int main () {
     std::cout << JsonTest().execute();

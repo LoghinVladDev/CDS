@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/27/22.
  */
 
@@ -32,7 +32,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         /* Default toString implementation, store 'MutableCollection at 0x....'. Use a stringstream for simplicity */
         std :: stringstream oss;
-        oss << "MutableCollection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "MutableCollection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
 
         /* converted to std :: string, and to cds :: String afterwards */
         return oss.str();

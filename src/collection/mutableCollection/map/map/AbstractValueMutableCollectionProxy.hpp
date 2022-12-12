@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -10,7 +10,7 @@ namespace cds {
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class Map <
+    > class __CDS_InheritsEBOs Map <
             __KeyType,
             __ValueType
     > :: AbstractValueMutableCollectionProxy :
@@ -68,9 +68,10 @@ namespace cds {
         __CDS_NoDiscard auto toString () const noexcept -> String override;
 
     protected:
-        auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __ValueType const * pReferenceKey,
-                bool              * pIsNew
+        static auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                AbstractValueMutableCollectionProxy       * pObject,
+                __ValueType                         const * pReferenceKey,
+                bool                                      * pIsNew
         ) noexcept (false) -> __ValueType *;
     };
 

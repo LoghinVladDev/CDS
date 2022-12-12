@@ -32,7 +32,7 @@
 #include <CDS/Pair>
 #include <CDS/LinkedList>
 #include <CDS/Utility>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

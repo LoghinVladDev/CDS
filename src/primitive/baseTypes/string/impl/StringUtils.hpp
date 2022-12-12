@@ -787,8 +787,8 @@ namespace cds {                         /* NOLINT(modernize-concat-nested-namesp
     }
 
 
-    template < typename __CharType >                                                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    template < typename __ArgumentType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __CharType >                                                                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __ArgumentType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType, __CharType > () > >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
             __ArgumentType && argumentType
     ) noexcept -> Size {

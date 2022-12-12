@@ -36,12 +36,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findConstFunction
             > :: __findConst (
-                    __ElementType const & element
-            ) const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    __ServerType    const * pServer,
+                    __ElementType   const & element
+            ) noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                 /* call the template received member function and wrap iterator in a new delegate */
                 return Memory :: instance().create < __DelegateIterator < __ElementType const, __ConstIteratorType > > (
-                        ( reinterpret_cast < __ServerType const * > ( this ) ->* __findConstFunction ) ( element )
+                        ( pServer ->* __findConstFunction ) ( element )
                 );
             }
 
@@ -71,11 +72,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findConstFunction
             > :: __findConstLocal (
-                    __ElementType const & element
-            ) const noexcept -> __ConstIteratorType {
+                    __ServerType    const * pServer,
+                    __ElementType   const & element
+            ) noexcept -> __ConstIteratorType {
 
                 /* call the template received member function */
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __findConstFunction ) ( element );
+                return ( pServer ->* __findConstFunction ) ( element );
             }
 
         } /* namespace __impl */

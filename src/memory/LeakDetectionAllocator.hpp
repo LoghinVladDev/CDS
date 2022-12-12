@@ -5,7 +5,7 @@
 #ifndef CDS_LEAKDETECTIONALLOCATOR_HPP
 #define CDS_LEAKDETECTIONALLOCATOR_HPP
 
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 #include <CDS/HashMap>
 #include <CDS/Mutex>
 

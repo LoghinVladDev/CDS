@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 10/08/22.
  */
 
@@ -292,7 +292,7 @@ namespace cds {
     ) noexcept -> HashSet & {
 
         this->__ht_clear ();
-        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = initializerList.begin(), end = initializerList.end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             (void) this->insert ( * iterator );
         }
 
@@ -316,7 +316,7 @@ namespace cds {
         }
 
         this->__ht_clear ();
-        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
+        for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) { /* NOLINT(clion-misra-cpp2008-8-0-1) */
             this->insert ( * iterator );
         }
 
@@ -408,7 +408,7 @@ namespace cds {
             return false;
         }
 
-        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
         
 } /* namespace cds */

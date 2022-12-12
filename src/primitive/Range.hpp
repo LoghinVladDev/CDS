@@ -1,9 +1,9 @@
-//
-// Created by loghin on 27.01.2021.
-//
+/*
+ * Created by loghin on 27.01.2021.
+ */
 
-#ifndef CDS_RANGE_HPP
-#define CDS_RANGE_HPP
+#ifndef __CDS_RANGE_HPP__
+#define __CDS_RANGE_HPP__
 
 namespace cds {
 
@@ -14,7 +14,7 @@ namespace cds {
 
 #include <CDS/Object>
 #include <CDS/Pair>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 
@@ -142,4 +142,4 @@ namespace cds {
 
 __CDS_Meta_RegisterParseType(Range) // NOLINT(clion-misra-cpp2008-8-0-1)
 
-#endif //CDS_RANGE_HPP
+#endif /* __CDS_RANGE_HPP__ */

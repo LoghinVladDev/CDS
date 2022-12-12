@@ -7,11 +7,12 @@
 
 #include <CDS/Object>
 #include <CDS/Random>
-#include <CDS/smartPointers/UniquePointer>
-#include <CDS/Utility>
+#include <CDS/memory/UniquePointer>
+#include <CDS/exception/DivideByZeroException>
+#include <CDS/exception/IllegalArgumentException>
 #include <CDS/Limits>
 #include <CDS/Integer>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

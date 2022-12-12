@@ -57,4 +57,10 @@
 #undef __CDS_cpplang_DynamicCastConstexpr
 #define __CDS_cpplang_DynamicCastConstexpr /* NOLINT(bugprone-reserved-identifier) */
 
+#undef __CDS_InheritsEBOs
+/**
+ * Specifically created for the wonderful MSVC, which has EBO optimization for only one class, since 2006. It would "break programs" if activated, yes. Ofc.
+ * */
+#define __CDS_InheritsEBOs __declspec(empty_bases) /* NOLINT(bugprone-reserved-identifier) */
+
 #endif //CDS_MSVC_HPP

@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 24/10/22.
  */
 
@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    inline Thread :: Thread (
+    inline Thread :: Thread ( /* NOLINT(*-member-init) */
             Thread && thread
     ) noexcept {
 
@@ -35,7 +35,7 @@ namespace cds {
             void * pArgument
     ) noexcept (false) -> cds :: __hidden :: __impl :: __ThreadPlatformFunctionReturnType {
 
-        auto pThread = reinterpret_cast < Thread * > ( pArgument );
+        auto * pThread = reinterpret_cast < Thread * > ( pArgument ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast) */
         pThread->run();
         return cds :: __hidden :: __impl :: __threadPlatformFunctionReturn;
     }
@@ -52,7 +52,7 @@ namespace cds {
         cds :: __hidden :: __impl :: __threadPlatformLaunch (
                 & this->_handle,
                 & Thread :: launch,
-                reinterpret_cast < void * > ( this )
+                reinterpret_cast < void * > ( this )    /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast) */
         );
     }
 
@@ -82,7 +82,7 @@ namespace cds {
     inline auto Thread :: toString () const noexcept -> String {
 
         std :: stringstream oss;
-        oss << "Thread at " << std::hex << reinterpret_cast < Size > ( this );
+        oss << "Thread at " << std::hex << reinterpret_cast < Size > ( this );  /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         return oss.str();
     }
 
@@ -95,7 +95,7 @@ namespace cds {
             return true;
         }
 
-        auto pThread = reinterpret_cast < decltype (this) > ( & object );
+        auto const * pThread = reinterpret_cast < decltype (this) > ( & object );   /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast) */
         if ( pThread == nullptr ) {
             return false;
         }
@@ -114,14 +114,14 @@ namespace cds {
     }
 
 
-    template < typename __ThreadFunction >
+    template < typename __ThreadFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Runnable < __ThreadFunction > :: run () noexcept (false) -> void {
 
         this->_function ();
     }
 
 
-    template < typename __ThreadFunction >
+    template < typename __ThreadFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline Runnable < __ThreadFunction > :: Runnable (
             Runnable && runnable
     ) noexcept :
@@ -130,7 +130,7 @@ namespace cds {
     }
 
 
-    template < typename __ThreadFunction >
+    template < typename __ThreadFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline Runnable < __ThreadFunction > :: Runnable (
             __ThreadFunction threadFunction
     ) noexcept :
@@ -140,11 +140,11 @@ namespace cds {
     }
 
 
-    template < typename __ThreadFunction >
+    template < typename __ThreadFunction >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline auto Runnable < __ThreadFunction > :: toString () const noexcept -> String {
 
         std :: stringstream oss;
-        oss << "Runnable Thread at " << std::hex << reinterpret_cast < Size > ( this );
+        oss << "Runnable Thread at " << std::hex << reinterpret_cast < Size > ( this ); /* NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9) */
         return oss.str();
     }
 

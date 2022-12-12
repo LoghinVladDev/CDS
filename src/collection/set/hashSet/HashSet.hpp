@@ -1,11 +1,11 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/13/22.
  */
 
 #ifndef __CDS_HASH_SET_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_HASH_SET_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/Set>
+#include <CDS/Set>                  /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
 
 #include "../../../shared/Node.hpp"
@@ -29,7 +29,7 @@ namespace cds {
     template <
             typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class HashSet :
+    > class __CDS_InheritsEBOs HashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __HashSetServer < __ElementType, __Hasher >,
             public __hidden :: __impl :: __HashSetImplementation < __ElementType, __Hasher >,

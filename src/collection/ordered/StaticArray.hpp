@@ -6,7 +6,7 @@
 #define CDS_STATICARRAY_HPP
 
 #include <CDS/List>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 

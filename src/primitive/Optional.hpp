@@ -1,223 +1,191 @@
-//
-// Created by loghin on 26.01.2021.
-//
+/*
+ * Created by loghin on 26.01.2021.
+ */
 
-#ifndef CDS_OPTIONAL_HPP
-#define CDS_OPTIONAL_HPP
+#ifndef __CDS_OPTIONAL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_OPTIONAL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include <CDS/memory/SharedPointer>
 #include <CDS/meta/FunctionTraits>
-#include <CDS/smartPointers/UniquePointer>
-#include <CDS/Memory>
+#include <CDS/exception/NoSuchElementException>
 
 namespace cds {
 
-    template < typename T >
+    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Optional : public Object {
-    public:
-        using Value                 = T;
-        using ValueReference        = T &;
-        using ValueConstReference   = T const &;
 
-    private:
-        UniquePointer<T> pObj;
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        SharedPointer < __ElementType > _pObject { nullptr };
 
-    public:
-        constexpr Optional() noexcept = default;
-        __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional const & object) noexcept {
-            * this = object;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Optional () noexcept = default;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional && optional) noexcept :
-                pObj ( std :: move ( optional.pObj ) ){
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        Optional (
+                Optional const & optional
+        ) noexcept;
 
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr Optional (
+                Optional && optional
+        ) noexcept;
 
-        __CDS_cpplang_ConstexprDestructor ~Optional() noexcept override = default;
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit Optional ( /* NOLINT(*-explicit-*) */
+                __ElementType const & element
+        ) noexcept ( noexcept ( __ElementType ( element ) ) );
 
-        __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference value ) noexcept : // NOLINT(google-explicit-constructor)
-                pObj ( Memory :: instance().create < Value > (value ) ) {
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit Optional ( /* NOLINT(*-explicit-*) */
+                __ElementType && element
+        ) noexcept ( noexcept ( __ElementType ( std :: move ( element ) ) ) );
 
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~Optional () noexcept override = default;
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( ValueConstReference value ) noexcept -> Optional & {
-            this->pObj.reset( Memory :: instance().create < Value > (value ));
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Optional const & optional
+        ) noexcept -> Optional &;
 
-        constexpr auto operator -> () const noexcept -> UniquePointer<T> const & {
-            return this->pObj;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                Optional && optional
+        ) noexcept -> Optional &;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -> () noexcept -> UniquePointer<T> & {
-            return this->pObj;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                __ElementType const & element
+        ) noexcept ( noexcept ( __ElementType ( element ) ) ) -> Optional &;
 
-        constexpr auto operator * () const noexcept (false) -> ValueReference {
-            return * this->pObj;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                __ElementType && element
+        ) noexcept ( noexcept ( __ElementType ( std :: move ( element ) ) ) ) -> Optional &;
 
-        __CDS_NoDiscard constexpr auto hasValue () const noexcept -> bool {
-            return this->pObj != nullptr;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr static auto empty () noexcept -> Optional;
 
-        __CDS_NoDiscard constexpr auto isEmpty () const noexcept -> bool {
-            return ! this->hasValue(); // NOLINT(clion-misra-cpp2008-5-3-1)
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard static auto of (
+                __ElementType const & element
+        ) noexcept ( noexcept ( __ElementType ( element ) ) ) -> Optional;
 
-        __CDS_NoDiscard constexpr auto isPresent () const noexcept -> bool {
-            return this->hasValue();
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard static auto of (
+                __ElementType && element
+        ) noexcept ( noexcept ( __ElementType ( std :: move ( element ) ) ) ) -> Optional;
 
-        constexpr auto value () const noexcept(false) -> ValueReference {
-            return * this->pObj;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto isPresent () const noexcept -> bool;
 
-        __CDS_MaybeUnused constexpr auto valueOr (ValueReference value) const noexcept -> ValueReference {
-            return this->hasValue() ? this->value() : value;
-        }
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Consumer >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto ifPresent (
+                __Consumer const & consumer
+        ) const noexcept ( noexcept ( consumer ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> void;
 
-        __CDS_MaybeUnused constexpr auto valueOr (ValueConstReference value) const noexcept -> ValueConstReference {
-            return this->hasValue() ? this->value() : value;
-        }
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Predicate >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard auto filter (
+                __Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Optional < __ElementType >;
 
-        template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresent (Action const & action) const noexcept -> void {
-            if ( this->isPresent() ) {
-                action(this->pObj.valueAt());
-            }
-        }
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Mapper >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard auto map (
+                __Mapper const & mapper
+        ) const noexcept ( noexcept ( mapper ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Optional < cds :: meta :: ReturnOf < __Mapper > >;
 
-        template < typename Action, typename EmptyAction >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
-            if ( this->isPresent() ) {
-                action(this->pObj.valueAt());
-            } else {
-                onElse();
-            }
-        }
+    public:                             /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Mapper >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard auto flatMap (
+                __Mapper const & mapper
+        ) const noexcept ( noexcept ( mapper ( * this ) ) ) -> Optional < cds :: meta :: ReturnOf < __Mapper > >;
 
-        template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto filter ( Predicate const & predicate ) const noexcept -> Optional {
-            if ( this->isEmpty() ) {
-                return * this;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto get () const noexcept (false) -> __ElementType &;
 
-            return predicate (this->pObj.valueAt()) ? (*this) : Optional();
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto operator * () const noexcept (false) -> __ElementType &;
 
-        template < typename Mapper >
-        __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < meta :: ReturnOf < Mapper > > {
-            if ( this->isEmpty() ) {
-                return Optional < meta :: ReturnOf < Mapper> > ();
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto operator -> () const noexcept (false) -> __ElementType *;
 
-            return Optional < meta :: ReturnOf < Mapper > > (mapper(this->pObj.valueAt()));
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto orElse (
+                __ElementType & element
+        ) const noexcept -> __ElementType &;
 
-        template < typename Supplier >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto orSupply (Supplier const & supplier) const noexcept -> Optional {
-            if ( this->isPresent() ) {
-                return * this;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto orElse (
+                __ElementType const & element
+        ) const noexcept -> __ElementType const &;
 
-            return supplier();
-        }
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Supplier >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard auto orElseGet (
+                __Supplier const & supplier
+        ) const noexcept ( noexcept ( supplier () ) ) -> __ElementType;
 
-        __CDS_MaybeUnused constexpr auto orElse (ValueConstReference other) const noexcept -> ValueConstReference {
-            return this->isPresent() ? this->pObj.valueAt() : other;
-        }
+    public:                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __Supplier,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isDerivedFrom < cds :: meta :: ReturnOf < __Supplier >, std :: exception > ()
+                > = 0
+        > __CDS_NoDiscard auto orElseThrow (
+                __Supplier const & supplier
+        ) const noexcept (false) -> __ElementType &;
 
-        __CDS_MaybeUnused constexpr auto orElse (ValueReference other) const noexcept -> ValueReference {
-            return this->isPresent() ? this->pObj.valueAt() : other;
-        }
+    public:                                     /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __ExceptionType,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isDerivedFrom < __ExceptionType, std :: exception > ()
+                > = 0
+        > __CDS_NoDiscard auto orElseThrow () const noexcept (false) -> __ElementType &;
 
-        template < typename Supplier >
-        __CDS_MaybeUnused constexpr auto orElseGet (Supplier const & supplier) const noexcept -> T {
-            return this->isPresent() ? this->pObj.valueAt() : supplier();
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto equals (
+                Object const & object
+        ) const noexcept -> bool override;
 
-        constexpr explicit operator bool () const noexcept {
-            return this->hasValue();
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto clear () noexcept -> Optional & {
-            this->pObj.reset();
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional const & object) noexcept -> Optional & {
-            if ( this == & object ) {
-                return * this;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                Optional const & optional
+        ) const noexcept -> bool;
 
-            if ( ! object.hasValue() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                if ( this->hasValue() ) {
-                    this->pObj.reset();
-                }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                Optional const & optional
+        ) const noexcept -> bool;
 
-                return * this;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const & element
+        ) const noexcept -> bool;
 
-            this->pObj.reset( Memory :: instance ().create < Value > ( * object.pObj ) );
-
-            return * this;
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional && optional) noexcept -> Optional & {
-            if ( this == & optional ) {
-                return * this;
-            }
-
-            this->pObj = std :: move ( optional.pObj );
-            return * this;
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
-            if ( this == & object ) {
-                return true;
-            }
-
-            auto pOptional = dynamic_cast < Optional < T > const * > ( & object );
-            if (pOptional == nullptr ) {
-                return false;
-            }
-
-            return this->operator==(*pOptional);
-        }
-
-        constexpr auto operator == ( Optional const & optional ) const noexcept -> bool {
-            return
-                this == & optional ||
-                meta :: equals (this->value(), optional.value() );
-        }
-
-        __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
-            std::stringstream oss;
-            oss << "| ";
-            if ( this->hasValue() ) {
-                oss << this->value();
-            } else {
-                oss << "none";
-            }
-
-            oss << " |";
-            return {oss.str()};
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const & element
+        ) const noexcept -> bool;
     };
+    
 
-}
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeOptional (
+            __ConstructionArguments && ... arguments
+    ) noexcept ( noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) ) ) -> Optional < __ElementType >;
 
-#if __CDS_cpplang_CTAD_available
+} /* namespace cds */
 
-namespace cds {
+#include "optional/impl/Optional.hpp"
 
-    template < typename T >
-    Optional ( T ) -> Optional < T >;
-
-}
-
-#endif
-
-__CDS_Meta_RegisterParseTemplateType(Optional) // NOLINT(clion-misra-cpp2008-8-0-1)
-
-#endif //CDS_OPTIONAL_HPP
+#endif /* __CDS_OPTIONAL_HPP__ */

@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/15/22.
  */
 
@@ -37,60 +37,60 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 constexpr __MapEntry (
                         __MapEntry const & entry
                 ) noexcept (
-                        noexcept ( KeyType ( entry._key ) ) &&
-                        noexcept ( ValueType ( entry._value ) )
+                        noexcept ( __KeyType ( entry._key ) ) &&
+                        noexcept ( __ValueType ( entry._value ) )
                 );
 
-            public:                                                                         /* NOLINT(readability-redundant-access-specifiers) */
+            public:                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __DecayedKeyType = cds :: meta :: Decay < __KeyType >,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () > = 0
-                > constexpr __MapEntry (
+                        typename __DecayedKeyType = cds :: meta :: Decay < __KeyType >,                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () > = 0  /* NOLINT(clion-misra-cpp2008-5-3-1) */
+                > constexpr __MapEntry (                                                                            /* NOLINT(*-explicit-*) */
                         __MapEntry < __DecayedKeyType, __ValueType > const & entry
                 ) noexcept (
-                        noexcept ( KeyType ( entry.key() ) ) &&
-                        noexcept ( ValueType ( entry.value() ) )
+                        noexcept ( __KeyType ( entry.key() ) ) &&
+                        noexcept ( __ValueType ( entry.value() ) )
                 );
 
-            public:                             /* NOLINT(readability-redundant-access-specifiers) */
+            public:                                     /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > __CDS_Implicit constexpr __MapEntry (
+                        typename __TKeyType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __TValueType           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > __CDS_Implicit constexpr __MapEntry ( /* NOLINT(*-explicit-*) */
                         cds :: Pair < __TKeyType, __TValueType > const & pair
                 ) noexcept (
-                        noexcept ( KeyType ( pair.first() ) ) &&
-                        noexcept ( ValueType ( pair.second() ) )
+                        noexcept ( __KeyType ( pair.first() ) ) &&
+                        noexcept ( __ValueType ( pair.second() ) )
                 );
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr __MapEntry (
                         __MapEntry && entry
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                        noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( entry._value ) ) )
                 );
 
-            public:                                                                     /* NOLINT(readability-redundant-access-specifiers) */
+            public:                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __DecayedKeyType = cds :: meta :: Decay < __KeyType >, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () > = 0
-                > constexpr __MapEntry (
+                        typename __DecayedKeyType = cds :: meta :: Decay < __KeyType >,                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        cds :: meta :: EnableIf < ! cds :: meta :: isSame < __DecayedKeyType, __KeyType > () > = 0  /* NOLINT(clion-misra-cpp2008-5-3-1) */
+                > constexpr __MapEntry (                                                                            /* NOLINT(*-explicit-*) */
                         __MapEntry < __DecayedKeyType, __ValueType > && entry
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( entry._key ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( entry._value ) ) )
+                        noexcept ( __KeyType ( std :: move ( entry._key ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( entry._value ) ) )
                 );
 
-            public:                             /* NOLINT(readability-redundant-access-specifiers) */
+            public:                                     /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __TKeyType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TValueType   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > __CDS_Implicit constexpr __MapEntry (
+                        typename __TKeyType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        typename __TValueType           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > __CDS_Implicit constexpr __MapEntry ( /* NOLINT(*-explicit-*) */
                         cds :: Pair < __TKeyType, __TValueType > && pair
                 ) noexcept (
-                        noexcept ( KeyType ( std :: move ( pair._first ) ) ) &&
-                        noexcept ( ValueType ( std :: move ( pair._second ) ) )
+                        noexcept ( __KeyType ( std :: move ( pair._first ) ) ) &&
+                        noexcept ( __ValueType ( std :: move ( pair._second ) ) )
                 );
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -164,7 +164,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __CDS_NoDiscard auto toString () const noexcept -> String;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes, *-explicit-*) */
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 template < typename __TKeyType, typename __TValueType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */

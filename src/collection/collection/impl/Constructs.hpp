@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 6/26/22.
  */
 
@@ -31,7 +31,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> bool {
 
                 /* received type is collection, call contains */
-                return ! collection.contains ( element );
+                return ! collection.contains ( element ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
             }
 
 

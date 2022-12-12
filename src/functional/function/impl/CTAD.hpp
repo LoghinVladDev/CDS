@@ -18,10 +18,9 @@ namespace cds {
             template <
                     typename        __ReturnType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename        __ClassType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    bool            __noexceptSpecification,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename    ... __ArgumentTypes             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > struct __SignatureOf <
-                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) noexcept ( __noexceptSpecification )
+                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... )
             > {
                 using Type = __ReturnType ( __ArgumentTypes ... );
             };
@@ -29,10 +28,9 @@ namespace cds {
             template <
                     typename        __ReturnType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename        __ClassType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    bool            __noexceptSpecification,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename    ... __ArgumentTypes             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > struct __SignatureOf <
-                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) const noexcept ( __noexceptSpecification )
+                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) const
             > {
                 using Type = __ReturnType ( __ArgumentTypes ... );
             };
@@ -40,10 +38,9 @@ namespace cds {
             template <
                     typename        __ReturnType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename        __ClassType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    bool            __noexceptSpecification,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename    ... __ArgumentTypes             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > struct __SignatureOf <
-                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) & noexcept ( __noexceptSpecification )
+                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) &
             > {
                 using Type = __ReturnType ( __ArgumentTypes ... );
             };
@@ -51,10 +48,9 @@ namespace cds {
             template <
                     typename        __ReturnType,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename        __ClassType,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    bool            __noexceptSpecification,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename    ... __ArgumentTypes             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > struct __SignatureOf <
-                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) const & noexcept ( __noexceptSpecification )
+                    __ReturnType ( __ClassType :: * ) ( __ArgumentTypes ... ) const & noexcept
             > {
                 using Type = __ReturnType ( __ArgumentTypes ... );
             };

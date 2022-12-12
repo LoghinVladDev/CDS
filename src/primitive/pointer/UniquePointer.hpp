@@ -1,72 +1,282 @@
-//
-// Created by loghin on 5/1/22.
-//
+/* NOLINT(llvm-header-guard)
+ * Created by loghin on 26.01.2021.
+ */
 
-#ifndef __CDS_UNIQUE_POINTER_HPP__
-#define __CDS_UNIQUE_POINTER_HPP__
+#ifndef __CDS_UNIQUE_POINTER_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_UNIQUE_POINTER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/smartPointers/SmartPointer>
+#include <CDS/memory/SmartPointer>
 
 namespace cds {
 
-    template < typename T >
-    class UniquePointer : public SmartPointer < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
-    public:
-        constexpr UniquePointer() noexcept = default;
-        constexpr UniquePointer( typename SmartPointer < T > :: Pointer pointer ) noexcept : SmartPointer<T>(pointer) { } // NOLINT(google-explicit-constructor)
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class UniquePointer : public SmartPointer < __ElementType > {
 
-        constexpr UniquePointer( UniquePointer const & pointer ) noexcept = delete;
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        using Base = SmartPointer < __ElementType >;
 
-        __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer & pointer ) noexcept : SmartPointer<T>(pointer.release()) { }
-        __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer && pointer ) noexcept : SmartPointer<T>(pointer.release()) { }
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __ElementType * _pObject { nullptr };
 
-        template < typename DerivedType, meta :: EnableIf < meta :: isDerivedFrom < DerivedType, T > () > = 0 >
-        __CDS_cpplang_VirtualConstexpr UniquePointer ( UniquePointer < DerivedType > && pointer ) noexcept : SmartPointer < T > ( pointer.release() ) { } // NOLINT(google-explicit-constructor)
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr UniquePointer () noexcept = default;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer && pointer ) noexcept -> UniquePointer & {
-            if (&pointer == this ) {
-                return * this;
-            }
+    public:                                         /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit constexpr UniquePointer (    /* NOLINT(*-explicit-*) */
+                __ElementType * pointer
+        ) noexcept;
 
-            this->reset(pointer.release());
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        UniquePointer (
+                UniquePointer const & /* pointer */
+        ) noexcept = delete;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer & pointer ) noexcept -> UniquePointer & { // NOLINT(misc-unconventional-assign-operator)
-            if (&pointer == this ) {
-                return * this;
-            }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr UniquePointer (
+                UniquePointer && pointer
+        ) noexcept;
 
-            this->reset(pointer.release());
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~UniquePointer () noexcept override;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( typename SmartPointer < T > :: Pointer pointer ) noexcept -> UniquePointer & {
-            this->reset(pointer);
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                __ElementType * pointer
+        ) noexcept -> UniquePointer &;
 
-        template < typename D, meta :: EnableIf < meta :: isDerivedFrom < meta :: RemovePointer < D >, T > () > = 0 >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( D pointer ) noexcept -> UniquePointer & {
-            this->reset((T *)pointer);
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                UniquePointer const & pointer
+        ) noexcept -> UniquePointer & = delete;
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( decltype(nullptr) ) noexcept -> UniquePointer & {
-            this->reset();
-            return * this;
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                UniquePointer && pointer
+        ) noexcept -> UniquePointer &;
 
-        __CDS_cpplang_ConstexprDestructor ~UniquePointer() noexcept override {
-            Memory :: instance () . destroy ( this->pObj );
-        }
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprOverride auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprOverride auto release () noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto reset () noexcept -> void override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto reset (
+                __ElementType * pointer
+        ) noexcept -> void override;
     };
 
-    template < typename T, typename ... ArgumentTypes >
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeUnique ( ArgumentTypes && ... arguments ) noexcept -> UniquePointer < T > {
-        return UniquePointer < T > ( Memory :: instance ().create < T > ( std :: forward < ArgumentTypes > ( arguments ) ... ) );
-    }
 
-}
+    template < typename __ElementType, typename __Deleter >                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class UniquePointer < __ElementType [], __Deleter > : public SmartPointer < __ElementType [] > {    /* NOLINT(*-avoid-c-arrays) */
 
-#endif // __CDS_UNIQUE_POINTER_HPP__
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        using Base = SmartPointer < __ElementType >;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        __ElementType * _pObject { nullptr };
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr UniquePointer () noexcept = default;
+
+    public:                                         /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_Implicit constexpr UniquePointer (    /* NOLINT(*-explicit-*) */
+                __ElementType * pointer
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        UniquePointer (
+                UniquePointer const & /* pointer */
+        ) noexcept = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr UniquePointer (
+                UniquePointer && pointer
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprDestructor ~UniquePointer () noexcept override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                __ElementType * pointer
+        ) noexcept -> UniquePointer &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                UniquePointer const & pointer
+        ) noexcept -> UniquePointer & = delete;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto operator = (
+                UniquePointer && pointer
+        ) noexcept -> UniquePointer &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __ElementType const * pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator == (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto operator != (
+                Base const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                UniquePointer const & pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                std :: nullptr_t pointer
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueAt () const noexcept (false) -> __ElementType & override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get () const noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprOverride auto exchange (
+                __ElementType * pointer
+        ) noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprOverride auto release () noexcept -> __ElementType * override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto reset () noexcept -> void override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        auto reset (
+                __ElementType * pointer
+        ) noexcept -> void override;
+    };
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUnique (
+            __ConstructionArguments && ... arguments
+    ) noexcept (
+            noexcept ( __ElementType ( std :: forward < __ConstructionArguments > ( arguments ) ... ) )
+    ) -> cds :: meta :: EnableIf <
+            ! cds :: meta :: isArray < __ElementType > (),                      /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >
+    >;
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            > = 0
+    > __CDS_NoDiscard auto makeUnique (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUnique () noexcept -> cds :: meta :: EnableIf < cds :: meta :: isBoundedArray < __ElementType > () > = delete;
+
+
+    template <
+            typename __ElementType,                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    ! cds :: meta :: isArray < __ElementType > ()   /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            > = 0
+    > __CDS_NoDiscard auto makeUniqueDefault () noexcept ( noexcept ( __ElementType () ) ) -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template <
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            cds :: meta :: EnableIf <
+                    cds :: meta :: isUnboundedArray < __ElementType > ()
+            > = 0
+    > __CDS_NoDiscard auto makeUniqueDefault (
+            Size size
+    ) noexcept -> UniquePointer < __ElementType, __hidden :: __impl :: __DefaultSmartPointerDeleter < __ElementType > >;
+
+
+    template < typename __ElementType, typename ... __ConstructionArguments >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeUniqueDefault (
+            __ConstructionArguments && ...
+    ) noexcept -> cds :: meta :: EnableIf < cds :: meta :: isBoundedArray < __ElementType > () > = delete;
+
+} /* namespace cds */
+
+#include "pointer/impl/UniquePointer.hpp"
+
+#endif /* __CDS_UNIQUE_POINTER_HPP__ */

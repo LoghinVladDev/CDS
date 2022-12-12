@@ -9,6 +9,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#ifndef _MSC_VER
+
             template <
                     typename __IteratorType,                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     template < typename ... > class __CollectionType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -132,6 +134,110 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 /* return reference to the received storeIn collection */
                 return storeIn;
             }
+
+#else
+
+            template <
+                    typename __IteratorType,                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template < typename ... > class __CollectionType,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __findThatMember (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __IteratorType                      const & begin,
+                    __IteratorType                      const & end,
+                    Size                                        count,
+                    __CollectionType < __IteratorType >       & storeIn,
+                    __Predicate                         const & predicate
+            ) noexcept ( noexcept ( ( ( * begin ) .* predicate ) () ) ) -> __CollectionType < __IteratorType > & {
+
+                /* parse the range until the end or until the limit has been reached */
+                for ( auto iterator = begin; iterator != end && count != 0ULL; ++ iterator ) {
+
+                    /* if the predicate validates the current element, store the iterator */
+                    if ( ( ( * iterator ) .* predicate ) () ) {
+                        -- count;
+                        (void) storeIn.insert ( iterator );
+                    }
+                }
+
+                /* return reference to the received storeIn collection */
+                return storeIn;
+            }
+
+
+            template <
+                    typename __IteratorType,                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __findFirstThatMember ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __IteratorType                      const & begin,
+                    __IteratorType                      const & end,
+                    __Predicate                         const & predicate
+            ) noexcept ( noexcept ( ( ( * begin ) .* predicate ) () ) ) -> __IteratorType {
+
+                /* parse the range until the end */
+                for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                    /* if the predicate validates the current element, return the iterator */
+                    if ( ( ( * iterator ).* predicate ) () ) {
+                        return iterator;
+                    }
+                }
+
+                /* if the range parse has ended, no element found, return end of range */
+                return end;
+            }
+
+
+            template <
+                    typename __IteratorType,                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __findLastThatMember (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __IteratorType                      const & begin,
+                    __IteratorType                      const & end,
+                    __Predicate                         const & predicate
+            ) noexcept ( noexcept ( ( ( * begin ) .* predicate ) ()  ) ) -> __IteratorType {
+
+                /* create an iterator to store the last valid element iterator. Initialize with end in case of no element found */
+                auto lastFound = end;
+
+                /* parse the range to the end */
+                for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                    /* if the predicate validates the current element, store the iterator */
+                    if ( ( ( * iterator ) .* predicate ) () ) {
+                        lastFound = iterator;
+                    }
+                }
+
+                /* return the stored iterator */
+                return lastFound;
+            }
+
+
+            template <
+                    typename __IteratorType,                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template < typename ... > class __CollectionType,                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __Predicate                                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __findAllThatMember (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __IteratorType                      const & begin,
+                    __IteratorType                      const & end,
+                    __CollectionType < __IteratorType >       & storeIn,
+                    __Predicate                         const & predicate
+            ) noexcept ( noexcept ( ( ( * begin ) .* predicate ) () ) ) -> __CollectionType < __IteratorType > & {
+
+                /* parse the range to the end */
+                for ( auto iterator = begin; iterator != end; ++ iterator ) {
+
+                    /* if the predicate validates the current element, store the iterator */
+                    if ( ( ( * iterator ) .* predicate ) () ) {
+                        (void) storeIn.insert ( iterator );
+                    }
+                }
+
+                /* return reference to the received storeIn collection */
+                return storeIn;
+            }
+
+#endif
 
         } /* namespace __impl */
     } /* namespace __hidden */

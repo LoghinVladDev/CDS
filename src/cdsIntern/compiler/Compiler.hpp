@@ -39,6 +39,12 @@
 #define __CDS_Unlikely /* NOLINT(bugprone-reserved-identifier) */
 
 
+/**
+ * Specifically created for the wonderful MSVC, which has EBO optimization for only one class, since 2006. It would "break programs" if activated, yes. Ofc.
+ * */
+#define __CDS_InheritsEBOs /* NOLINT(bugprone-reserved-identifier) */
+
+
 #include <utility>
 
 /**

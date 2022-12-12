@@ -5,6 +5,7 @@
 #ifndef __CDS_SHARED_FIND_BY_MUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_FIND_BY_MUTABLE_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include "../../../impl/functionalExceptSpecification.hpp"
 #include "../../../iterator/IteratorFindStatements.hpp"         /* NOLINT(llvm-include-order) */
 #include "../../../iterator/IteratorFindMemberStatements.hpp"
 
@@ -74,13 +75,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         Size                                        count,
                         __CollectionType < Iterator >             & storeIn,
                         __Predicate                         const & predicate
-                ) noexcept ( noexcept ( __findThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        count,
-                        storeIn,
-                        predicate
-                ) ) ) -> __CollectionType < Iterator > &;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> __CollectionType < Iterator > &;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -114,13 +109,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > __CDS_NoDiscard auto findThat (
                         Size count,
                         __Predicate const & predicate
-                ) noexcept ( noexcept ( __findThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        count,
-                        cds :: meta :: referenceOf < __CollectionType < Iterator > > (),
-                        predicate
-                ) ) ) -> __CollectionType < Iterator >;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> __CollectionType < Iterator >;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -147,11 +136,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findFirstThat (
                         __Predicate const & predicate
-                ) noexcept ( noexcept ( __findFirstThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        predicate
-                ) ) ) -> Iterator;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> Iterator;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -178,11 +163,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 template < typename __Predicate > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 __CDS_NoDiscard auto findLastThat (
                         __Predicate const & predicate
-                ) noexcept ( noexcept ( __findLastThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        predicate
-                ) ) ) -> Iterator;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> Iterator;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -214,12 +195,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 > auto findAllThat (
                         __CollectionType < Iterator >             & storeIn,
                         __Predicate                         const & predicate
-                ) noexcept ( noexcept ( __findAllThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        storeIn,
-                        predicate
-                ) ) ) -> __CollectionType < Iterator > &;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> __CollectionType < Iterator > &;
 
             public: /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -249,12 +225,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                        __Predicate         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 > __CDS_NoDiscard auto findAllThat (
                         __Predicate const & predicate
-                ) noexcept ( noexcept ( __findAllThat (
-                        cds :: meta :: addressOf < __IterableType > ()->begin(),
-                        cds :: meta :: addressOf < __IterableType > ()->end(),
-                        cds :: meta :: referenceOf < __CollectionType < Iterator > > (),
-                        predicate
-                ) ) ) -> __CollectionType < Iterator >;
+                ) noexcept ( noexcept ( __PredicateExceptSpecTraits < __ElementType, __Predicate > :: __noexceptSpec ) ) -> __CollectionType < Iterator >;
 
             };
 

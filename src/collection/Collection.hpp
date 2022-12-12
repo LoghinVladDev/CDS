@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 15.01.2021.
  */
 
@@ -7,6 +7,7 @@
 
 #include <CDS/Object>                                                                                                   /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
+#include <CDS/Utility>
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 
@@ -56,8 +57,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @namespace cds
      * @public
      */
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class Collection :                  /* NOLINT(*-virtual-class-destructor) */
+    template < typename __ElementType >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    class __CDS_InheritsEBOs Collection :   /* NOLINT(*-virtual-class-destructor) */
             public __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >,
             public __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >,
             public __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >,

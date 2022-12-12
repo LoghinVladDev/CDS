@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 7/2/22.
  */
 
@@ -23,10 +23,6 @@ namespace cds {
 
         return this->__ls_constHandlers() [ static_cast < uint32 > ( requestType ) ];
     }
-
-
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    constexpr Array < __ElementType > :: Array () noexcept = default;
 
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -212,7 +208,7 @@ namespace cds {
             return false;
         }
 
-        return ! this->__ab_equals ( array );
+        return ! this->__ab_equals ( array ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 

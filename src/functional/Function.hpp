@@ -6,6 +6,8 @@
 #define __CDS_FUNCTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Object>               /* NOLINT(llvm-include-order) */
+#include <CDS/exception/NoSuchElementException>
+
 #include "function/Constructs.hpp"
 
 namespace cds {
@@ -88,6 +90,40 @@ namespace cds {
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator == (
+                Function const & function
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto operator != (
+                Function const & function
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > = 0 >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __Functor const & functor
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > = 0 >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __Functor const & functor
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard constexpr auto operator == (
+                __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __ReceivedReturnType, typename ... __ReceivedArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard constexpr auto operator != (
+                __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
+        ) const noexcept -> bool;
     };
 
 } /* namespace cds */

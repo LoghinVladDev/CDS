@@ -7,10 +7,12 @@
 #include "collection/mutableCollection/MutableCollectionTest.h"
 #include "collection/set/SetTest.h"
 #include "collection/mutableCollection/list/ListTest.h"
+#include "collection/unordered/JsonTest.h"
 
 #include <CDS/Array>
 #include <CDS/Pair>
-#include <CDS/smartPointers/SharedPointer>
+#include <CDS/memory/SharedPointer>
+#include <CDS/util/JSON>
 
 int main () {
     auto start = std::chrono::high_resolution_clock::now();
@@ -24,7 +26,8 @@ int main () {
             Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
             Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
             Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
-            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" }
+            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" },
+            Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
     };
 
     for ( auto & t : tests ) {

@@ -5,6 +5,12 @@
 #ifndef __CDS_SHARED_MUTABLE_COLLECTION_SERVER_IMPL_HPP__   /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_MUTABLE_COLLECTION_SERVER_IMPL_HPP__   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#ifdef _MSC_VER
+
+#include "../../../impl/forceFunctionPointerCast.hpp"
+
+#endif
+
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -21,15 +27,40 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
+
+#ifdef _MSC_VER
+
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __begin ),
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __end ),
+
+#else
+
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),              /* __cirt_begin                         - expected part of MutableCollection        */
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                /* __cirt_end                           - expected part of MutableCollection        */
+
+#endif
+
                             nullptr,                                                                            /* __cirt_rbegin                        - not expected part of MutableCollection    */
                             nullptr,                                                                            /* __cirt_rend                          - not expected part of MutableCollection    */
+
+#ifdef _MSC_VER
+
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __remove ),
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConst ),
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeArray ),
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),
+                            __forceFunctionPointerCast < __GenericHandler > ( & __ReceiverType :: __newAddress ),
+
+#else
+
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),             /* __cirt_remove                        - expected part of MutableCollection        */
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),        /* __cirt_removeConst                   - expected part of MutableCollection        */
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),        /* __cirt_removeArray                   - expected part of MutableCollection        */
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),   /* __cirt_removeConstArray              - expected part of MutableCollection        */
                             reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),         /* __cirt_newAddress                    - expected part of MutableCollection        */
+
+#endif
+
                             nullptr,                                                                            /* __cirt_newFrontAddress               - not expected part of MutableCollection    */
                             nullptr,                                                                            /* __cirt_newBackAddress                - not expected part of MutableCollection    */
                             nullptr,                                                                            /* __cirt_newFrontAddressArray          - not expected part of MutableCollection    */
@@ -59,8 +90,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __CollectionInternalRequestType :: __cirt_requestCountDoNotUse )
             ] = {
+
+#ifdef _MSC_VER
+
+                            __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),
+                            __forceFunctionPointerCast < __GenericConstHandler > ( & __ReceiverType :: __cend ),
+
+#else
+
                             reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of MutableCollection        */
                             reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of MutableCollection        */
+
+#endif
+
                             nullptr,                                                                        /* __cirt_rbegin                        - not expected part of MutableCollection    */
                             nullptr,                                                                        /* __cirt_rend                          - not expected part of MutableCollection    */
                             nullptr,                                                                        /* __cirt_remove                        - not expected part of MutableCollection    */

@@ -90,10 +90,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > __CDS_cpplang_ConstexprOverride auto __DelegateIterator <
                     __ElementType,
                     __WrappedIteratorType
-            > :: iterator () const noexcept -> __WrappedIteratorType const * {
+            > :: iterator () const noexcept -> cds :: meta :: Iterator const * {
+
+                /**
+                  * Gimmicky implementation here. Something happens with MSVC when upcasting to EBOs, shifting from base ptr to members after the
+                  * Empty object. to avoid this, for now, iterators assumed to be derived from cds :: meta :: Iterator first and foremost ( which
+                  * should always apply ).
+                  */
 
                 /* return the address of this iterator */
-                return & this->_wrappedIterator;
+                return static_cast < cds :: meta :: Iterator const * > ( static_cast < void const * > ( & this->_wrappedIterator ) );
             }
 
 

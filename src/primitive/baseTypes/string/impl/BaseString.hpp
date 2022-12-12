@@ -496,20 +496,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: operator [] (
-                    Index index
+            template <
+                    typename __NumericType,
+                    cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () >
+            > __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: operator [] (
+                    __NumericType index
             ) noexcept (false) -> ElementType & {
 
-                return this->get ( index );
+                return this->get ( static_cast < Index > ( index ) );
             }
 
 
             template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator [] (
-                    Index index
+            template <
+                    typename __NumericType,
+                    cds :: meta :: EnableIf < cds :: meta :: isIntegral < __NumericType > () >
+            > __CDS_cpplang_ConstexprConditioned auto __BaseString < __CharType > :: operator [] (
+                    __NumericType index
             ) const noexcept (false) -> ElementType {
 
-                return this->get ( index );
+                return this->get ( static_cast < Index > ( index ) );
             }
 
 
@@ -692,16 +698,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> __BaseString < __CharType > {
 
                 return this->substr ( from, until );
-            }
-
-
-            template < typename __CharType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            template < typename __RangeType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            __CDS_OptimalInline auto __BaseString < __CharType > :: operator [] (
-                    __RangeType const & range
-            ) const noexcept -> __BaseString < __CharType > {
-
-                return this->substr ( range.from(), range.to() );
             }
 
 

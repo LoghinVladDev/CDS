@@ -216,6 +216,237 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __T >                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             struct __IsVoid : __isVoidImpl :: __IsVoid < __RemoveConstVolatile < __T > > :: Type {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+            /**
+             * @brief Meta-type implementation used to check if a given type is an enum type
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsEnum : __BoolConstant < std :: is_enum < __T > :: value > {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is an union type
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsUnion : __BoolConstant < std :: is_union < __T > :: value > {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a class or struct type
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsClass : __BoolConstant < std :: is_class < __T > :: value > {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a function type
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsFunction : __BoolConstant < std :: is_function < __T > :: value > {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a fundamental type ( bool, int types, float types )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsFundamental : __BoolConstant < std :: is_fundamental < __T > :: value > {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is an integral type ( bool, int types )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsIntegral : __BoolConstant < std :: is_integral < __T > :: value > {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a floating point type ( float types )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsFloatingPoint : __BoolConstant < std :: is_floating_point < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is an arithmetic type ( int, float types )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsArithmetic : __BoolConstant < std :: is_arithmetic < __T > :: value > {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            namespace __isSignedImpl {                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template < typename __T, bool = __IsArithmetic < __T > :: value >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IsSigned : __FalseType {};                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IsSigned < __T, true > : __impl :: __BoolConstant < __T ( -1 ) < __T ( 0 ) > {};
+            } /* namespace __isSignedImpl */
+
+            template < typename __T >                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsSigned : __isSignedImpl :: __IsSigned < __T > :: Type {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be constructed without arguments ( has default constructor )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsDefaultConstructible : __BoolConstant < std :: is_default_constructible < __T > :: value > {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be constructed by copy ( has copy constructor )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsCopyConstructible : __BoolConstant < std :: is_copy_constructible < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be copied trivially ( public fields, no copy operator specialization )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsTriviallyCopyable : __BoolConstant < std :: is_trivially_copyable < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be constructed by move ( has move constructor )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsMoveConstructible : __BoolConstant < std :: is_move_constructible < __T > :: value > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be assigned a value by copy ( has copy assignment operator )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsCopyAssignable : __BoolConstant < std :: is_copy_assignable < __T > :: value > {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type can be assigned a value by move ( has move assignment operator )
+             * @tparam __T is the type checked
+             */
+            template < typename __T >                                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsMoveAssignable : __BoolConstant < std :: is_move_assignable < __T > :: value > {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a static-function type ( non-object callable )
+             * @tparam __T is the type checked
+             */
+            template < typename __T, typename = void > struct __IsStaticFunction : __FalseType {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a callable object ( non-static function )
+             * @tparam __T is the type checked
+             */
+            template < typename __T, typename = void > struct __IsObjectFunction : __FalseType {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsStaticFunction < __T > : __BoolConstant < __IsFunction < __T > :: value && ! __IsObjectFunction < __T > :: value > {};
+
+            template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsObjectFunction < __T, Void < decltype ( & __T :: operator () ) > > : __TrueType {};
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is an array type
+             * @tparam __T is the type checked
+             */
+            template < typename >                   struct __IsArray                            : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T, Size __size >  struct __IsArray < __T [__size] >           : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+            template < typename __T >               struct __IsArray < __T [] >                 : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+
+            template < typename >                   struct __IsBoundedArray                     : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T, Size __size >  struct __IsBoundedArray < __T [__size] >    : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+
+            template < typename >                   struct __IsUnboundedArray                   : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >               struct __IsUnboundedArray < __T [] >        : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-avoid-c-arrays) */
+
+            namespace __isPointerImpl { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                /**
+                 * @brief Meta-type helper implementation used to check if a given type is a pointer type
+                 * @tparam __T is the type checked
+                 */
+                template < typename >       struct __IsPointer : __FalseType {};            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template < typename __T >   struct __IsPointer < __T * > : __TrueType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            } /* namespace __isPointerImpl */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a pointer type
+             * @tparam __T is the type checked
+             */
+            template < typename __T >       struct __IsPointer : __isPointerImpl :: __IsPointer < typename __RemoveConstVolatile < __T > :: Type > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a lvalue reference (&) type
+             * @tparam __T is the type checked
+             */
+            template < typename >           struct __IsLValueReference              : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >       struct __IsLValueReference < __T & >    : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a rvalue reference (&&) type
+             * @tparam __T is the type checked
+             */
+            template < typename >           struct __IsRValueReference              : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >       struct __IsRValueReference < __T && >   : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a const type
+             * @tparam __T is the type checked
+             */
+            template < typename >           struct __IsConst                        : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >       struct __IsConst < __T const >          : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is a volatile type
+             * @tparam __T is the type checked
+             */
+            template < typename >           struct __IsVolatile                     : __FalseType {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __T >       struct __IsVolatile < __T volatile >    : __TrueType {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            namespace __isConvertibleImpl { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                /**
+                 * @brief Meta-type helper used to check if a given type is convertible to another given type
+                 * @tparam __From is the type being converted
+                 * @tparam __To is the type to which the conversion is done
+                 */
+                template < typename __From, typename __To, bool = __IsVoid < __From > :: value || __IsFunction < __To > :: value || __IsArray < __To > :: value >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IsConvertible {                                                                                                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = typename __IsVoid < __To > :: Type;
+                };
+
+                template < typename __From, typename __To > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IsConvertible < __From, __To, false > {
+                private:
+                    template < typename __To1 >                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    static auto __metaTest ( __To1 ) noexcept -> void;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                    template < typename __From1, typename __To1, typename = decltype ( __metaTest < __To1 > ( valueOf < __From1 > () ) ) >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    static auto __test (int) -> __TrueType;                                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                    template < typename, typename >
+                    static auto __test (...) -> __FalseType; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                public:
+                    using Type = decltype ( __test < __From, __To > (0) );
+                };
+            } /* namespace __isConvertibleImpl */
+
+            /**
+             * @brief Meta-type implementation used to check if a given type is convertible to another given type
+             * @tparam __From is the type being converted
+             * @tparam __To is the type to which the conversion is done
+             */
+            template < typename __From, typename __To >                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsConvertible : __isConvertibleImpl :: __IsConvertible < __From, __To > :: Type {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            /**
+             * @brief Meta-type implementation used to check if two given types are the same
+             * @tparam __LeftType is the first type
+             * @tparam __RightType is the second type
+             */
+            template < typename __LeftType, typename __RightType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsSame : __FalseType {};                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __IsSame < __Type, __Type > : __TrueType {};
+
             namespace __addPtrImpl { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 /**
                  * @brief Meta-type helper used to obtain a pointer to the given type
@@ -414,6 +645,281 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isReferenceable () noexcept -> bool {
             return __impl :: __IsReferenceable < __T > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an enum type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isEnum () noexcept -> bool {
+            return __impl :: __IsEnum < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an union type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isUnion () noexcept -> bool {
+            return __impl :: __IsUnion < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a class or struct type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isClass () noexcept -> bool {
+            return __impl :: __IsClass < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a function type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isFunction () noexcept -> bool {
+            return __impl :: __IsFunction < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a fundamental type ( bool, int types, float types )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isFundamental () noexcept -> bool {
+            return __impl :: __IsFundamental < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an integral type ( bool, int types )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isIntegral () noexcept -> bool {
+            return __impl :: __IsIntegral < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a floating point type ( float types )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isFloatingPoint () noexcept -> bool {
+            return __impl :: __IsFloatingPoint < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an arithmetic type ( int, float types )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isArithmetic () noexcept -> bool {
+            return __impl :: __IsArithmetic < __Type > :: value;
+        }
+
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isSigned () noexcept -> bool {
+            return __impl :: __IsSigned < __Type > :: value;
+        }
+
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isUnsigned () noexcept -> bool {
+            return
+                    isArithmetic < __Type > () &&
+                    ! isSigned < __Type > ();
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is convertible to another given type
+         * @tparam __From is the type being converted
+         * @tparam __To is the type to which the conversion is done
+         */
+        template < typename __From, typename __To > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isConvertible () noexcept -> bool {
+            return __impl :: __IsConvertible < __From, __To > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if two given types are the same
+         * @tparam __LeftType is the first type
+         * @tparam __RightType is the second type
+         */
+        template < typename __LeftType, typename __RightType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isSame () noexcept -> bool {
+            return __impl :: __IsSame < __LeftType, __RightType > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be constructed without arguments ( has default constructor )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isDefaultConstructible () noexcept -> bool {
+            return __impl :: __IsDefaultConstructible < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be copied trivially ( public fields, no copy operator specialization )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isTriviallyCopyable () noexcept -> bool {
+            return __impl :: __IsTriviallyCopyable < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be constructed by copy ( has copy constructor )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isCopyConstructible () noexcept -> bool {
+            return __impl :: __IsCopyConstructible < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be constructed by move ( has move constructor )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isMoveConstructible () noexcept -> bool {
+            return __impl :: __IsMoveConstructible < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be assigned a value by copy ( has copy assignment operator )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isCopyAssignable () noexcept -> bool {
+            return __impl :: __IsCopyAssignable < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type can be assigned a value by move ( has move assignment operator )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isMoveAssignable () noexcept -> bool {
+            return __impl :: __IsMoveAssignable < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a callable type ( function / object with operator () )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isCallable () noexcept -> bool {
+            return __impl :: __IsFunction < __Type > :: value || __impl :: __IsObjectFunction < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a static-function type ( non-object callable )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isStaticFunction () noexcept -> bool {
+            return __impl :: __IsStaticFunction < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a callable object ( non-static function )
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isObjectFunction () noexcept -> bool {
+            return __impl :: __IsObjectFunction < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an array type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isArray () noexcept -> bool {
+            return __impl :: __IsArray < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a bounded array type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isBoundedArray () noexcept -> bool {
+            return __impl :: __IsBoundedArray < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is an unbounded array type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isUnboundedArray () noexcept -> bool {
+            return __impl :: __IsUnboundedArray < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a basic-pointer type = non-smart pointer type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isBasicPointer () noexcept -> bool {
+            return __impl :: __IsPointer < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a lvalue reference (&) type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isLValueReference () noexcept -> bool {
+            return __impl :: __IsLValueReference < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isRValueReference () noexcept -> bool {
+            return __impl :: __IsRValueReference < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a lvalue reference (&) type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isReference () noexcept -> bool {
+            return __impl :: __IsLValueReference < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
+         * @tparam __Type is the type checked
+         */
+        template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isMoveReference () noexcept -> bool {
+            return __impl :: __IsRValueReference < __Type > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a volatile type
+         * @tparam __T is the type checked
+         */
+        template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isVolatile () noexcept -> bool {
+            return __impl :: __IsVolatile < __T > :: value;
+        }
+
+        /**
+         * @brief Meta-function used to check if a given type is a const type
+         * @tparam __T is the type checked
+         */
+        template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        constexpr auto isConst () noexcept -> bool {
+            return __impl :: __IsConst < __T > :: value;
         }
 
     } /* namespace meta */

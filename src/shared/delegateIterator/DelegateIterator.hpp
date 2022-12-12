@@ -195,7 +195,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  *
                  * @public
                  */
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto iterator () const noexcept -> __WrappedIteratorType const * override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto iterator () const noexcept -> cds :: meta :: Iterator const * override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 /**

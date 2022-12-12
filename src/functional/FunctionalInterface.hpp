@@ -5,7 +5,7 @@
 #ifndef __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_FUNCTIONAL_INTERFACE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include <CDS/meta/TypeTraits>
+#include <CDS/meta/Base>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace functional {
@@ -15,7 +15,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename ... __ConsumedTypes >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __consumerFunctionHint (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ConsumedTypes && ... /* consumedValues */
+                        __ConsumedTypes ... /* consumedValues */
                 ) -> void {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
@@ -26,7 +26,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename ... __TestedTypes >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __predicateFunctionHint (       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __TestedTypes && ... /* testedValues */
+                        __TestedTypes ... /* testedValues */
                 ) -> bool {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
@@ -38,7 +38,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __mapFunctionHint (                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ArgumentTypes && ... /* arguments */
+                        __ArgumentTypes ... /* arguments */
                 ) -> __ReturnType {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
@@ -60,7 +60,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename ... __ConsumedTypes >       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __noexceptConsumerFunctionHint (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ConsumedTypes && ... /* consumedValues */
+                        __ConsumedTypes ... /* consumedValues */
                 ) -> void {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
@@ -71,7 +71,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename ... __TestedTypes >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __noexceptPredicateFunctionHint (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __TestedTypes && ... /* testedValues */
+                        __TestedTypes ... /* testedValues */
                 ) -> bool {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
@@ -83,7 +83,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 inline auto __noexceptMapFunctionHint (                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ArgumentTypes && ... /* arguments */
+                        __ArgumentTypes ... /* arguments */
                 ) -> __ReturnType {
 
                     /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as

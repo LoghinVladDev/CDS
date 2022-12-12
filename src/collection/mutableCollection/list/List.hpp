@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 15.01.2021.
  */
 
@@ -7,6 +7,7 @@
 
 #include <CDS/Function>
 #include <CDS/MutableCollection>
+#include <CDS/exception/OutOfBoundsException>
 
 #include "../../../shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
 
@@ -59,7 +60,7 @@ namespace cds {
      * @public
      */
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class List :                        /* NOLINT(cppcoreguidelines-virtual-class-destructor) */
+    class __CDS_InheritsEBOs List :     /* NOLINT(cppcoreguidelines-virtual-class-destructor) */
             public MutableCollection < __ElementType >,
             public __hidden :: __impl :: __ListDelegateForwardIterableClient < __ElementType >,
             public __hidden :: __impl :: __ListDelegateBackwardIterableClient < __ElementType >,

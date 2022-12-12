@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 15.01.2021.
  */
 
@@ -7,6 +7,8 @@
 
 #include <CDS/MutableCollection>
 #include <CDS/Set>
+#include <CDS/exception/KeyException>
+#include <CDS/exception/UnsupportedOperationException>
 
 #include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"    /* NOLINT(llvm-include-order) */
 #include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
@@ -62,9 +64,9 @@ namespace cds {
 
 
     template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class Map :                   /* NOLINT(*-virtual-class-destructor) */
+            typename __KeyType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > class __CDS_InheritsEBOs Map :    /* NOLINT(*-virtual-class-destructor) */
             public MutableCollection < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > >,
             public __hidden :: __impl :: __MapFindUniqueImmutableClient < __KeyType, __ValueType >,
             public __hidden :: __impl :: __MapFindUniqueMutableClient < __KeyType, __ValueType > {

@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 15.01.2021.
  */
 
@@ -27,7 +27,7 @@
 namespace cds {
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class LinkedList :
+    class __CDS_InheritsEBOs LinkedList :
             public List < __ElementType >,
             protected __hidden :: __impl :: __LinkedListServer < __ElementType >,
             public __hidden :: __impl :: __LinkedListImplementation < __ElementType >,

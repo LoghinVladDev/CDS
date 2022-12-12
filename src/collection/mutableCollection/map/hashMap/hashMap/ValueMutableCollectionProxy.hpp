@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 14/08/22.
  */
 
@@ -316,12 +316,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __ValueType,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class HashMap <
+    > class __CDS_InheritsEBOs HashMap <
             __KeyType,
             __ValueType,
             __Hasher
     > :: ValueMutableCollectionProxy :
-            public AbstractValueMutableCollectionProxy,
+            public HashMap < __KeyType, __ValueType, __Hasher > :: AbstractValueMutableCollectionProxy,
             protected __hidden :: __impl :: __HashMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
@@ -812,49 +812,69 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         ) noexcept -> ValueMutableCollectionProxy & = delete;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __begin () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard static auto __begin (
+                ValueMutableCollectionProxy * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __end () noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard static auto __end (
+                ValueMutableCollectionProxy * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cbegin () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard static auto __cbegin (
+                ValueMutableCollectionProxy const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto __cend () const noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard static auto __cend (
+                ValueMutableCollectionProxy const * pObject
+        ) noexcept -> __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __beginLocal () noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __beginLocal (
+                ValueMutableCollectionProxy * pObject
+        ) noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __endLocal () noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __endLocal (
+                ValueMutableCollectionProxy * pObject
+        ) noexcept -> Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cbeginLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard constexpr static auto __cbeginLocal (
+                ValueMutableCollectionProxy const * pObject
+        ) noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard constexpr auto __cendLocal () const noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
+        __CDS_NoDiscard constexpr static auto __cendLocal (
+                ValueMutableCollectionProxy const * pObject
+        ) noexcept -> ConstIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, modernize-use-nodiscard) */
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                Iterator const * iterator
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ValueMutableCollectionProxy       * pObject,
+                Iterator                    const * iterator
         ) noexcept -> bool;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                ConstIterator const * iterator
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __removeConst (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ValueMutableCollectionProxy       * pObject,
+                ConstIterator               const * iterator
         ) noexcept -> bool;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                Iterator    const * const * ppIterators,
-                Size                        iteratorArrayCount
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __removeArray ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ValueMutableCollectionProxy               * pObject,
+                Iterator                    const * const * ppIterators,
+                Size                                        iteratorArrayCount
         ) noexcept -> Size;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                ConstIterator   const * const * ppIterators,
-                Size                            iteratorArrayCount
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        static auto __removeConstArray (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ValueMutableCollectionProxy               * pObject,
+                ConstIterator               const * const * ppIterators,
+                Size                                        iteratorArrayCount
         ) noexcept -> Size;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */

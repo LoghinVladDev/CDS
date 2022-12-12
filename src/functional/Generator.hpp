@@ -8,7 +8,7 @@
 #include <CDS/Semaphore>
 #include <CDS/Thread>
 #include <CDS/Boolean>
-#include <CDS/Memory>
+#include <CDS/memory/Allocation>
 
 namespace cds {
 
