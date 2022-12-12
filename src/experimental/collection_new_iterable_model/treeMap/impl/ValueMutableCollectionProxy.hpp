@@ -56,10 +56,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __begin () noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
+        > :: ValueMutableCollectionProxy :: __begin (
+                ValueMutableCollectionProxy * pObject
+        ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
 
             return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > >(
-                    Iterator ( this->template map < TreeMapBase > ()->__beginLocal() )
+                    Iterator ( TreeMapBase :: __beginLocal( pObject->template map < TreeMapBase > () ) )
             );
         }
 
@@ -70,10 +72,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __end () noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
+        > :: ValueMutableCollectionProxy :: __end (
+                    ValueMutableCollectionProxy * pObject
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
 
             return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType, Iterator > >(
-                    Iterator ( this->template map < TreeMapBase > ()->__endLocal() )
+                    Iterator ( TreeMapBase :: __endLocal( pObject->template map < TreeMapBase > () ) )
             );
         }
 
@@ -84,9 +88,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __beginLocal () noexcept -> Iterator {
+        > :: ValueMutableCollectionProxy :: __beginLocal (
+                    ValueMutableCollectionProxy * pObject
+            ) noexcept -> Iterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__beginLocal() );
+            return Iterator ( TreeMapBase :: __beginLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -96,9 +102,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __endLocal () noexcept -> Iterator {
+        > :: ValueMutableCollectionProxy :: __endLocal (
+                    ValueMutableCollectionProxy * pObject
+            ) noexcept -> Iterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__endLocal() );
+            return Iterator ( TreeMapBase :: __endLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -108,10 +116,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cbegin () const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
+        > :: ValueMutableCollectionProxy :: __cbegin (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
 
             return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > >(
-                    ConstIterator ( this->template map < TreeMapBase > ()->__cbeginLocal() )
+                    ConstIterator ( TreeMapBase :: __cbeginLocal( pObject->template map < TreeMapBase > () ) )
             );
         }
 
@@ -122,10 +132,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cend () const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
+        > :: ValueMutableCollectionProxy :: __cend (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
 
             return Memory :: instance().create < cds :: __hidden :: __impl :: __DelegateIterator < __ValueType const, ConstIterator > >(
-                    ConstIterator ( this->template map < TreeMapBase > ()->__cendLocal() )
+                    ConstIterator ( TreeMapBase :: __cendLocal( pObject->template map < TreeMapBase > () ) )
             );
         }
 
@@ -136,9 +148,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cbeginLocal () const noexcept -> ConstIterator {
+        > :: ValueMutableCollectionProxy :: __cbeginLocal (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> ConstIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__cbeginLocal() );
+            return Iterator ( TreeMapBase :: __cbeginLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -148,9 +162,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cendLocal () const noexcept -> ConstIterator {
+        > :: ValueMutableCollectionProxy :: __cendLocal (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> ConstIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__cendLocal() );
+            return Iterator ( TreeMapBase :: __cendLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -160,9 +176,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __rbeginLocal () noexcept -> ReverseIterator {
+        > :: ValueMutableCollectionProxy :: __rbeginLocal (
+                    ValueMutableCollectionProxy * pObject
+            ) noexcept -> ReverseIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__rbeginLocal() );
+            return Iterator ( TreeMapBase :: __rbeginLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -172,9 +190,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __rendLocal () noexcept -> ReverseIterator {
+        > :: ValueMutableCollectionProxy :: __rendLocal (
+                    ValueMutableCollectionProxy * pObject
+            ) noexcept -> ReverseIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__rendLocal() );
+            return Iterator ( TreeMapBase :: __rendLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -184,9 +204,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __crbeginLocal () const noexcept -> ConstReverseIterator {
+        > :: ValueMutableCollectionProxy :: __crbeginLocal (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> ConstReverseIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__crbeginLocal() );
+            return Iterator ( TreeMapBase :: __crbeginLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -196,9 +218,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > constexpr auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __crendLocal () const noexcept -> ConstReverseIterator {
+        > :: ValueMutableCollectionProxy :: __crendLocal (
+                    ValueMutableCollectionProxy const * pObject
+            ) noexcept -> ConstReverseIterator {
 
-            return Iterator ( this->template map < TreeMapBase > ()->__crendLocal() );
+            return Iterator ( TreeMapBase :: __crendLocal( pObject->template map < TreeMapBase > () ) );
         }
 
 
@@ -209,10 +233,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType
         > :: ValueMutableCollectionProxy :: __remove (
+                ValueMutableCollectionProxy * pObject,
                 AbstractIterator const * iterator
         ) noexcept -> bool {
 
-            return this->template map < TreeMapBase > ()->__remove( & iterator->iterator() ) ;
+            return TreeMapBase :: __remove (
+                    pObject->template map < TreeMapBase > (),
+                    & iterator->iterator()
+                );
         }
 
 
@@ -223,10 +251,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType
         > :: ValueMutableCollectionProxy :: __removeConst (
+                ValueMutableCollectionProxy * pObject,
                 AbstractConstIterator const * iterator
         ) noexcept -> bool {
 
-            return this->template map < TreeMapBase > ()->__removeConst( & iterator->iterator() ) ;
+            return TreeMapBase :: __removeConst (
+                    pObject->template map < TreeMapBase > (),
+                    & iterator->iterator()
+                );
         }
 
 
@@ -237,6 +269,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType
         > :: ValueMutableCollectionProxy :: __removeArray (
+                ValueMutableCollectionProxy * pObject,
                 AbstractIterator const * const * ppIterators,
                 Size                             iteratorCount
         ) noexcept -> Size {
@@ -254,7 +287,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 }
             }
 
-            auto const removedIteratorCount = this->template map < TreeMapBase > () -> __removeArray (
+            auto const removedIteratorCount = TreeMapBase :: __removeArray (
+                    pObject->template map < TreeMapBase > (),
                     ppWrappedIteratorArray,
                     iteratorCount
             );
@@ -271,6 +305,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 __KeyType,
                 __ValueType
         > :: ValueMutableCollectionProxy :: __removeConstArray (
+                ValueMutableCollectionProxy * pObject,
                 AbstractConstIterator const * const * ppIterators,
                 Size                                  iteratorCount
         ) noexcept -> Size {
@@ -288,7 +323,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 }
             }
 
-            auto const removedIteratorCount = this->template map < TreeMapBase > () -> __removeConstArray (
+            auto const removedIteratorCount = TreeMapBase :: __removeConstArray (
+                    pObject->template map < TreeMapBase > (),
                     ppWrappedIteratorArray,
                     iteratorCount
             );

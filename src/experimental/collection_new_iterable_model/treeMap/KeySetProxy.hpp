@@ -265,11 +265,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         template <
                 typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
-        > class TreeMap <
+        > class __CDS_InheritsEBOs TreeMap <
                 __KeyType,
                 __ValueType
         > :: KeySetProxy :
-                public AbstractKeySetProxy,
+                public TreeMap < __KeyType, __ValueType > :: AbstractKeySetProxy,
                 private __hidden :: __impl :: __TreeMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapKeyProxyConstIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType >,
                 public __hidden :: __impl :: __TreeMapKeyProxyDelegateBackwardConstIterableClient < KeySetProxy, __KeyType, __ValueType >,
@@ -305,8 +305,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         private: friend Server;
 
-        private: friend DelegateForwardIterableClient;
-        private: friend DelegateBackwardIterableClient;
         private: friend DelegateForwardConstIterableClient;
         private: friend DelegateBackwardConstIterableClient;
 
@@ -449,43 +447,59 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             ) const noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard constexpr auto __cbegin() const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __cbegin (
+                    KeySetProxy const * pObject
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            __CDS_NoDiscard constexpr auto __cend() const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __cend (
+                    KeySetProxy const * pObject
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            __CDS_NoDiscard constexpr auto __cbeginLocal() const noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __cbeginLocal (
+                    KeySetProxy const * pObject
+            ) noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            __CDS_NoDiscard constexpr auto __cendLocal() const noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __cendLocal (
+                    KeySetProxy const * pObject
+            ) noexcept -> ConstIterator;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            __CDS_NoDiscard constexpr auto __crbeginLocal() const noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __crbeginLocal (
+                    KeySetProxy const * pObject
+            ) noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            __CDS_NoDiscard constexpr auto __crendLocal() const noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
+            __CDS_NoDiscard constexpr static auto __crendLocal (
+                    KeySetProxy const * pObject
+            ) noexcept -> ConstReverseIterator;     /* NOLINT(bugprone-reserved-identifier) */
 
         public:
-            auto __removeConst (     /* NOLINT(bugprone-reserved-identifier) */
+            static auto __removeConst (     /* NOLINT(bugprone-reserved-identifier) */
+                    KeySetProxy * pObject,
                     AbstractConstIterator const * iterator
             ) noexcept -> bool;
 
         public:
-            auto __removeConstArray (     /* NOLINT(bugprone-reserved-identifier) */
+            static auto __removeConstArray (     /* NOLINT(bugprone-reserved-identifier) */
+                    KeySetProxy * pObject,
                     AbstractConstIterator const * const * ppIterators,
                     Size                                  iteratorCount
             ) noexcept -> Size;
 
         public:
-            auto __findConst (      /* NOLINT(bugprone-reserved-identifier) */
+            static auto __findConst (      /* NOLINT(bugprone-reserved-identifier) */
+                    KeySetProxy const * pObject,
                     __KeyType const & key
-            ) const noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
+            ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > *;
 
         public:
-            auto __findConstLocal (     /* NOLINT(bugprone-reserved-identifier) */
+            static auto __findConstLocal (     /* NOLINT(bugprone-reserved-identifier) */
+                    KeySetProxy const * pObject,
                     __KeyType const & key
-            ) const noexcept -> ConstIterator;
+            ) noexcept -> ConstIterator;
         };
 
     }

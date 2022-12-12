@@ -225,6 +225,52 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 
         template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
+        > __CDS_cpplang_ConstexprDestructor TreeMap <
+                __KeyType,
+                __ValueType
+        > :: ~TreeMap () noexcept {
+
+            this->__rbt_clear();
+        }
+
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
+        > auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: operator = (
+                TreeMap const & map
+        ) noexcept -> TreeMap & {
+
+            this->template __rbt_copy <
+                    & __hidden :: __impl ::__treeMapCopyConstructor <
+                                    __KeyType,
+                                    __ValueType >
+                    > ( map );
+            return * this;
+        }
+
+
+        template <
+                typename __KeyType,             /* NOLINT(bugprone-reserved-identifier) */
+                typename __ValueType            /* NOLINT(bugprone-reserved-identifier) */
+        > auto TreeMap <
+                __KeyType,
+                __ValueType
+        > :: operator = (
+                TreeMap && map
+        ) noexcept -> TreeMap & {
+
+            this->__rbt_move ( std :: move ( map ) );
+            return * this;
+        }
+
+
+        template <
                 typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                 typename __ValueType        /* NOLINT(bugprone-reserved-identifier) */
         > __CDS_cpplang_ConstexprOverride auto TreeMap <

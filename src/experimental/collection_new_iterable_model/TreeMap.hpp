@@ -5,13 +5,13 @@
 #ifndef __CDS_EX_TREE_MAP_HPP__     /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_EX_TREE_MAP_HPP__     /* NOLINT(bugprone-reserved-identifier) */
 
-#include <CDS/experimental/Map>
-
 #include <CDS/Comparator>
 #include <CDS/Extractor>
 #include <CDS/Destructor>
 #include <CDS/CopyConstructor>
 #include <CDS/Function>
+
+#include <CDS/experimental/Map>
 
 #include "../../shared/Node.hpp"
 #include "../../shared/impl/generalPredicates.hpp"
@@ -112,6 +112,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         private: using typename MapBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
         private: using typename MapBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
 
+        protected: using typename MapBase :: AbstractMapProxy;
         protected: using typename MapBase :: AbstractKeySetProxy;
         protected: using typename MapBase :: AbstractValueMutableCollectionProxy;
         protected: using typename MapBase :: AbstractEntryMutableCollectionProxy;
@@ -329,6 +330,19 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             __CDS_Explicit TreeMap ( __IterableType const & iterable ) noexcept;
 
         public:
+            __CDS_cpplang_ConstexprDestructor ~TreeMap () noexcept override;
+
+        public:
+            auto operator = (
+                    TreeMap const & map
+            ) noexcept -> TreeMap &;
+
+        public:
+            auto operator = (
+                    TreeMap && map
+            ) noexcept -> TreeMap &;
+
+        public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
         public:
@@ -370,6 +384,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 #include "shared/redBlackTree/impl/RedBlackTree.hpp"
 
 #include "shared/collectionInternalCommunication/server/impl/MapServer.hpp"
+#include "shared/collectionInternalCommunication/server/impl/SetServer.hpp"
 
 #include "../../shared/delegateIterator/impl/DelegateIterator.hpp"
 #include "../../shared/iterator/impl/IteratorGenericDecorator.hpp"
