@@ -269,6 +269,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 } else {
 
                                     /* only 0 case */
+                                    -- index;
                                     state = State :: ReadingBase10;
                                 }
 
@@ -366,6 +367,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 }
 
                                 stringData.clear();
+                                -- index;
                                 state = State :: ExpectingPSeparator;
                                 break;
                             }
