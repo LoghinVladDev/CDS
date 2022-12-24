@@ -13,10 +13,10 @@ namespace cds {
             class __LazySequence;               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ElementType >                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            class __LazySequenceConstIterator : public cds :: meta :: ForwardIterator { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            class __CDS_InheritsEBOs __LazySequenceConstIterator : public cds :: meta :: ForwardIterator { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:
-                __LazySequence < __ElementType >                            const & _sequence;
+                __LazySequence < __ElementType >                            const * _pSequence {nullptr};
 
             private:
                 typename cds :: Iterable < __ElementType > :: ConstIterator         _iterator;
@@ -25,7 +25,7 @@ namespace cds {
                 constexpr __LazySequenceConstIterator () noexcept = delete;
 
             public:
-                constexpr __LazySequenceConstIterator (
+                __LazySequenceConstIterator (
                         __LazySequenceConstIterator const & iterator
                 ) noexcept;
 
@@ -35,7 +35,7 @@ namespace cds {
                 ) noexcept;
 
             public:
-                constexpr __LazySequenceConstIterator (
+                __LazySequenceConstIterator (
                         typename cds :: Iterable < __ElementType > :: ConstIterator      && iterator,
                         __LazySequence < __ElementType >                            const & sequence
                 ) noexcept;
@@ -44,20 +44,20 @@ namespace cds {
                 ~__LazySequenceConstIterator () noexcept = default;
 
             public:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                auto operator = (
                         __LazySequenceConstIterator const & iterator
                 ) noexcept -> __LazySequenceConstIterator &;
 
             public:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                auto operator = (
                         __LazySequenceConstIterator && iterator
                 ) noexcept -> __LazySequenceConstIterator &;
 
             public:
-                __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
+                __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType const &;
 
             public:
-                __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType;
+                __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType const *;
 
             public:
                 __CDS_NoDiscard constexpr auto operator == (
@@ -70,13 +70,16 @@ namespace cds {
                 ) const noexcept -> bool;
 
             public:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> __LazySequenceConstIterator &;
+                auto operator ++ () noexcept -> __LazySequenceConstIterator &;
 
             public:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> __LazySequenceConstIterator;
+                auto operator ++ (int) noexcept -> __LazySequenceConstIterator;
 
             public:
                 __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
+
+            private:
+                auto __ls_filter () noexcept -> void;
             };
 
         }

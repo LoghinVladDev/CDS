@@ -12,6 +12,7 @@ namespace cds {
             template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             class __LazySequence :              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     public cds :: Iterable < __ElementType >,
+                    private __LazySequenceIterableServer < __ElementType >,
                     public __LazySequenceDelegateForwardIterableClient < __ElementType >,
                     public __LazySequenceContainsOfIterableClient < __ElementType >,
                     public __LazySequenceContainsOfInitializerListClient < __ElementType >,
@@ -21,16 +22,29 @@ namespace cds {
                     public __LazySequenceGenericStatementsClient < __ElementType > {
 
             private:
-                friend class __LazySequenceConstIterator < __ElementType >;
-
-            public:
-                cds :: Array < cds :: functional :: Predicate < __ElementType const & > >           _filters;
+                static uint32 const __ls_baseFilterCapacity                                 {32U};
 
             private:
-                cds :: Iterable < __ElementType >                                           const & _baseIterable;
+                cds :: functional :: Predicate < __ElementType const & >  * _pFilters       {nullptr};
+
+            private:
+                uint32                                                      _filterCount    {0U};
+
+            private:
+                uint32                                                      _filterCapacity {0U};
+
+            private:
+                cds :: Iterable < __ElementType >                   const * _pBaseIterable  {nullptr};
+
+            private:
+                bool                                                        _ownedIterable  {false};
 
             private:
                 using BaseIterable = cds :: Iterable < __ElementType >;
+
+            private:
+                using Server =
+                        __LazySequenceIterableServer < __ElementType >;
 
             private:
                 using DelegateForwardIterableClient =
@@ -66,6 +80,36 @@ namespace cds {
             private:
                 using typename BaseIterable :: __GenericConstHandler;
 
+            public:
+                using typename DelegateForwardIterableClient :: ConstIterator;
+
+            private:
+                friend class __LazySequenceConstIterator < __ElementType >;
+
+            private:
+                friend DelegateForwardIterableClient;
+
+            private:
+                friend Server;
+
+            private:
+                friend ContainsOfIterableClient;
+
+            private:
+                friend ContainsOfInitializerListClient;
+
+            private:
+                friend FindOfIterableClient;
+
+            private:
+                friend FindOfInitializerListClient;
+
+            private:
+                friend FindByClient;
+
+            private:
+                friend GenericStatementsClient;
+
             private:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (
                         __IterableInternalRequestType requestType
@@ -76,8 +120,25 @@ namespace cds {
                         __IterableInternalRequestType requestType
                 ) const noexcept -> __GenericConstHandler override;
 
-            public:
-                using typename DelegateForwardIterableClient :: ConstIterator;
+            private:
+                __CDS_NoDiscard static auto __cbegin (
+                        __LazySequence const * pObject
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+
+            private:
+                __CDS_NoDiscard static auto __cend (
+                        __LazySequence const * pObject
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
+
+            private:
+                __CDS_NoDiscard constexpr static auto __cbeginLocal (
+                        __LazySequence const * pObject
+                ) noexcept -> ConstIterator;
+
+            private:
+                __CDS_NoDiscard constexpr static auto __cendLocal (
+                        __LazySequence const * pObject
+                ) noexcept -> ConstIterator;
 
             public:
                 using DelegateForwardIterableClient :: begin;
@@ -206,12 +267,12 @@ namespace cds {
                 __LazySequence () noexcept = delete;
 
             public:
-                __LazySequence (
+                constexpr __LazySequence (
                         cds :: Iterable < __ElementType > const & iterable
                 ) noexcept;
 
             public:
-                ~__LazySequence() noexcept override = default;
+                ~__LazySequence() noexcept override;
 
             public:
                 template < typename __Predicate >

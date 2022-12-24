@@ -32,7 +32,7 @@ namespace cds {
 
         /* Default toString implementation, store 'Iterable at 0x....'. Use a stringstream for simplicity */
         std :: stringstream oss;
-        oss << "Iterable at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "Iterable at 0x" << std :: hex << reinterpret_cast < AddressValueType const > ( this );
 
         /* converted to std :: string, and to cds :: String afterwards */
         return oss.str();

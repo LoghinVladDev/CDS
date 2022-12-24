@@ -78,9 +78,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                         __ArgumentTypes         && ... arguments
                 ) noexcept (false) -> __ReturnType {
 
-                    static auto const pMemberCallOperator = & __Functor :: operator ();
                     return
-                            ( ( static_cast < __Functor * > ( function ) ) ->* pMemberCallOperator ) (
+                            ( * static_cast < __Functor * > ( function ) ) (
                                     std :: forward < __ArgumentTypes > ( arguments ) ...
                             );
                 }
@@ -197,7 +196,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
-    template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >
+    template < typename __Functor, typename >
     __CDS_cpplang_ConstexprConstructorNonEmptyBody Function < __ReturnType ( __ArgumentTypes ... ) > :: Function (
             __Functor const & functor
     ) noexcept {
@@ -397,7 +396,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
-    template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __Functor, typename >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator == (
             __Functor const & functor
     ) const noexcept -> bool {
@@ -407,7 +406,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ReturnType, typename ... __ArgumentTypes >
-    template < typename __Functor, cds :: meta :: EnableIf < cds :: meta :: isObjectFunction < __Functor > () > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __Functor, typename >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto Function < __ReturnType ( __ArgumentTypes ... ) > :: operator != (
             __Functor const & functor
     ) const noexcept -> bool {

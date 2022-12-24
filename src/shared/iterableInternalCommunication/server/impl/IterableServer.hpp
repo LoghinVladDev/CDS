@@ -21,8 +21,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
-                            reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),              /* __iirt_begin                         - expected part of Iterable        */
-                            reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                /* __iirt_end                           - expected part of Iterable        */
+                            nullptr,                                                                            /* __iirt_begin                         - not expected part of Iterable        */
+                            nullptr,                                                                            /* __iirt_end                           - not expected part of Iterable        */
                             nullptr,                                                                            /* __iirt_rbegin                        - not expected part of Iterable    */
                             nullptr,                                                                            /* __iirt_rend                          - not expected part of Iterable    */
                             nullptr,                                                                            /* __iirt_remove                        - not expected part of Iterable    */

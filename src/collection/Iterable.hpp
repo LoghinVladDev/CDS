@@ -48,7 +48,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
      * @public
      */
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class Iterable :                  /* NOLINT(*-virtual-class-destructor) */
+    class __CDS_InheritsEBOs Iterable :                  /* NOLINT(*-virtual-class-destructor) */
             public __hidden :: __impl :: __IterableCommunicationChannel < __ElementType >,
             public __hidden :: __impl :: __IterableDelegateForwardConstIterableClient < __ElementType >,
             public __hidden :: __impl :: __IterableContainsOfIterableClient < __ElementType >,

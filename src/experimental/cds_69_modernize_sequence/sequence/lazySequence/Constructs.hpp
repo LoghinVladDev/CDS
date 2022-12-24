@@ -10,6 +10,14 @@ namespace cds {
         namespace __impl {
 
             template < typename __ElementType >
+            using __LazySequenceIterableServer =
+                    __IterableServer <
+                            __LazySequence < __ElementType >,
+                            __ElementType
+                    >;
+
+
+            template < typename __ElementType >
             using __LazySequenceDelegateForwardIterableClient =
                     __LocalDelegateForwardConstIterablePrimitiveClient <
                             __LazySequence < __ElementType >,

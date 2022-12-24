@@ -9,7 +9,6 @@
 #include <CDS/Optional>
 #include <CDS/Function>
 #include <CDS/meta/TypeTraits>
-#include <CDS/Array>
 
 #include "../../shared/impl/generalMappers.hpp"
 #include "../../shared/sequence/Predeclaration.hpp"
@@ -36,5 +35,8 @@ namespace cds {
 } /* namespace cds */
 
 #include "../../shared/iterableInternalCommunication/server/impl/IterableServer.hpp"
+
+#include "sequence/lazySequence/impl/ConstIterator.hpp"
+#include "sequence/lazySequence/impl/LazySequence.hpp"
 
 #endif /* __CDS_SEQUENCE_HPP__ */
