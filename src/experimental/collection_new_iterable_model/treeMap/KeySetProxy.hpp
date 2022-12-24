@@ -129,8 +129,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         __LocalContainsOfCompositeClient <
                                 __ServerType,
                                 __KeyType,
-                                cds :: Collection < __KeyType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __KeyType  >
+                                cds :: Iterable < __KeyType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __KeyType  >
                         >;
 
 
@@ -171,9 +171,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ServerType,
                                 __KeyType,
                                 __TreeMapKeyProxyAbstractConstIterator < __KeyType, __ValueType >,
-                                cds :: Collection < __KeyType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __KeyType  >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < __KeyType  >
+                                cds :: Iterable < __KeyType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __KeyType  >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < __KeyType  >
                         >;
 
 
@@ -239,8 +239,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         __LocalRemoveOfCompositeClient <
                                 __ServerType,
                                 __KeyType,
-                                cds :: Collection < __KeyType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __KeyType  >
+                                cds :: Iterable < __KeyType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __KeyType  >
                         >;
 
 
@@ -404,13 +404,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using ConstGenericStatementsClient :: none;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
         public:

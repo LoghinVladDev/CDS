@@ -107,8 +107,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRandomInsertionPrimitiveClient <
@@ -124,15 +124,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyContainsOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
                         __LocalContainsOfCompositeClient <
                                 __ServerType,
                                 typename __TreeMap :: EntryType,
-                                cds :: Collection < typename __TreeMap :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >
+                                cds :: Iterable < typename __TreeMap :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >
                         >;
 
 
@@ -142,8 +142,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyContainsOfInitializerListClient =     /* NOLINT(bugprone-reserved-identifier) */
                         cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
@@ -163,8 +163,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindByImmutableClient =      /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindByImmutableCompositeClient <
@@ -180,8 +180,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindByMutableClient =      /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindByMutableCompositeClient <
@@ -197,17 +197,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindOfConstCollectionClient =        /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
                                 __ServerType,
                                 typename __TreeMap :: EntryType,
                                 typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator,
-                                cds :: Collection < typename __TreeMap :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < typename __TreeMap :: EntryType  >
+                                cds :: Iterable < typename __TreeMap :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < typename __TreeMap :: EntryType  >
                         >;
 
 
@@ -217,8 +217,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindOfConstInitializerListClient =        /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
@@ -243,17 +243,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindOfCollectionClient =        /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
                                 __ServerType,
                                 typename __TreeMap :: EntryType,
                                 typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator,
-                                cds :: Collection < typename __TreeMap :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < typename __TreeMap :: EntryType  >
+                                cds :: Iterable < typename __TreeMap :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < typename __TreeMap :: EntryType  >
                         >;
 
 
@@ -263,8 +263,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyFindOfInitializerListClient =        /* NOLINT(bugprone-reserved-identifier) */
                         __LocalFindOfImmutableCompositeClient <
@@ -289,8 +289,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyConstGenericStatementsClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __LocalGenericImmutableStatementsCompositeClient <
@@ -305,8 +305,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyGenericStatementsClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __LocalGenericMutableStatementsCompositeClient <
@@ -321,8 +321,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyRemoveByClient =       /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveByCompositeClient <
@@ -337,15 +337,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyRemoveOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveOfCompositeClient <
                                 __ServerType,
                                 typename __TreeMap :: EntryType,
-                                cds :: Collection < typename __TreeMap :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >
+                                cds :: Iterable < typename __TreeMap :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >
                         >;
 
 
@@ -355,8 +355,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         typename __ValueType,                /* NOLINT(bugprone-reserved-identifier) */
                         typename __TreeMap =                 /* NOLINT(bugprone-reserved-identifier) */
                                 cds :: experimental :: TreeMap <
-                                                        __KeyType,
-                                                        __ValueType
+                                        __KeyType,
+                                        __ValueType
                                 >
                 > using __TreeMapEntryProxyRemoveOfInitializerListClient =     /* NOLINT(bugprone-reserved-identifier) */
                         __LocalRemoveOfCompositeClient <
@@ -575,13 +575,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using ConstGenericStatementsClient :: none;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
         public:

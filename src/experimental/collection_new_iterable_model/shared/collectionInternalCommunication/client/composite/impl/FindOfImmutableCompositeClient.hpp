@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../../shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"
+#include "../../../../../../../shared/iterableInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"
 
 #endif /* __CDS_EX_SHARED_FIND_OF_IMMUTABLE_COMPOSITE_CLIENT_IMPL_HPP__ */

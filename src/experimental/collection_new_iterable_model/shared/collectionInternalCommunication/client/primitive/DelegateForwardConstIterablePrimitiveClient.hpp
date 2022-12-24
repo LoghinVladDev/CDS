@@ -6,7 +6,7 @@
 #define __CDS_EX_SHARED_DELEGATE_FORWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.hpp"
+#include "../../../../../../shared/iterableInternalCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

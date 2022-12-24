@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../shared/collectionInternalCommunication/server/impl/MutableCollectionServerDispatcher.hpp"
+#include "../../../../../../shared/iterableInternalCommunication/server/impl/MutableCollectionServerDispatcher.hpp"
 
 #endif /* __CDS_EX_SHARED_MUTABLE_COLLECTION_SERVER_DISPATCHER_IMPL_HPP__ */

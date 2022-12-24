@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_REMOVE_OF_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../../shared/collectionInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"
+#include "../../../../../../../shared/iterableInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"
 
 #endif /* __CDS_EX_SHARED_REMOVE_OF_COMPOSITE_CLIENT_IMPL_HPP__ */

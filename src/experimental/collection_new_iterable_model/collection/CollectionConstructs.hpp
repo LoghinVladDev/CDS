@@ -17,7 +17,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __ElementType                   const & element
                 ) noexcept -> bool {
 
-                    return cds :: __hidden :: __impl :: __collectionContains < __ElementType > ( collection, element );
+                    return cds :: __hidden :: __impl :: __iterableContains < __ElementType > ( collection, element );
                 }
 
 
@@ -27,7 +27,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             __ElementType                   const & element
                 ) noexcept -> bool {
 
-                    return cds :: __hidden :: __impl :: __collectionNotContains < __ElementType > ( collection, element );
+                    return cds :: __hidden :: __impl :: __iterableNotContains < __ElementType > ( collection, element );
                 }
 
 
@@ -57,12 +57,12 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionCommunicationChannel __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableCommunicationChannel < __ElementType >;
 
 
                 template < typename __ElementType >                                                                                     /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionDelegateForwardConstIterableClient __CDS_DeprecatedHint("No longer an experimental feature.") =       /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableDelegateForwardConstIterableClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
@@ -77,27 +77,27 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionContainsOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableContainsOfIterableClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                             /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionContainsOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableContainsOfInitializerListClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionFindOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") =   /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableFindOfIterableClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionFindOfInitializerListClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableFindOfInitializerListClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                             /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionFindByClient __CDS_DeprecatedHint("No longer an experimental feature.") =     /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableFindByClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                         /* NOLINT(bugprone-reserved-identifier) */
@@ -117,7 +117,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
                 using __CollectionGenericStatementsClient __CDS_DeprecatedHint("No longer an experimental feature.") =  /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __IterableGenericStatementsClient < __ElementType >;
 
             }
         }

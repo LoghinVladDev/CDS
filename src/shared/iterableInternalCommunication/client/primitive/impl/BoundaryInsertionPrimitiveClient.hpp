@@ -273,7 +273,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 auto          ppElements                    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                 /* Request and call handler for a new front address array with the created buffer */
-                reinterpret_cast < __ReceiverNewFrontArrayHandlerType > ( pReceiver->__cicch_obtainGenericHandler ( __IterableInternalRequestType :: __iirt_newFrontAddressArray ) ) (
+                reinterpret_cast < __ReceiverNewFrontArrayHandlerType > ( pReceiver->__iicch_obtainGenericHandler ( __IterableInternalRequestType :: __iirt_newFrontAddressArray ) ) (
                         pReceiver,
                         parameterCount,
                         ppElements

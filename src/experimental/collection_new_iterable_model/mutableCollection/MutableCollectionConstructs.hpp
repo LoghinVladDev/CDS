@@ -27,7 +27,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
                 template < typename __ElementType >                                                                          /* NOLINT(bugprone-reserved-identifier) */
                 using __MutableCollectionFindOfCollectionClient __CDS_DeprecatedHint("No longer an experimental feature.") = /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __MutableCollectionFindOfCollectionClient < __ElementType >;
+                        cds :: __hidden :: __impl :: __MutableCollectionFindOfIterableClient < __ElementType >;
 
 
                 template < typename __ElementType >                                                                               /* NOLINT(bugprone-reserved-identifier) */

@@ -14,8 +14,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_ConstexprOverride auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        > :: ValueMutableCollectionProxy :: __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler {
 
             return this->__mcs_handlers() [ static_cast < uint32 > ( requestType ) ];
@@ -28,8 +28,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         > __CDS_cpplang_ConstexprOverride auto TreeMap <
                 __KeyType,
                 __ValueType
-        > :: ValueMutableCollectionProxy :: __cicch_obtainGenericConstHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        > :: ValueMutableCollectionProxy :: __iicch_obtainGenericConstHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler {
 
             return this->__mcs_constHandlers() [ static_cast < uint32 > ( requestType ) ];

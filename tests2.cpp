@@ -186,7 +186,7 @@ std::stop_token stopToken;
     public:
         A() noexcept = default;
         A(A const&) noexcept = default;
-        A(A &&) noexcept = delete;
+        A(A &&) noexcept = default;
         auto operator ()(int a) const {return a * 2.5f;}
     };
 
@@ -299,6 +299,12 @@ std::stop_token stopToken;
 
 
 //    std :: function <float(A)> f0 = [](A a) { return a(3); };
+
+    :: A()
+        ._1()._2()._3()._4()._5()._6();
+
+//    cds :: Array < int > a;
+//Sequence (a).atOrNull(3);
 
     return 0;
 }

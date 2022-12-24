@@ -433,7 +433,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         friend ConstIteratorRemoveClient;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        friend RemoveOfCollectionClient;
+        friend RemoveOfIterableClient;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         friend RemoveOfInitializerListClient;

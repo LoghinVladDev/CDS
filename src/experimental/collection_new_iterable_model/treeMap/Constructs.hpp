@@ -222,8 +222,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                         __ValueType
                                 >,
                                 typename Map < __KeyType, __ValueType > :: EntryType,
-                                cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                                cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
 
@@ -284,9 +284,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 >,
                                 typename Map < __KeyType, __ValueType > :: EntryType,
                                 AbstractRedBlackTreeIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                                cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
 
@@ -324,9 +324,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 >,
                                 typename Map < __KeyType, __ValueType > :: EntryType,
                                 AbstractRedBlackTreeConstIterator < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                                cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
 
@@ -402,8 +402,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                         __ValueType
                                 >,
                                 typename Map < __KeyType, __ValueType > :: EntryType,
-                                cds :: Collection < typename Map < __KeyType, __ValueType > :: EntryType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < typename Map < __KeyType, __ValueType > :: EntryType >
+                                cds :: Iterable < typename Map < __KeyType, __ValueType > :: EntryType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < typename Map < __KeyType, __ValueType > :: EntryType >
                         >;
 
 

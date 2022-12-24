@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_DELEGATE_BACKWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../../../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #endif /* __CDS_EX_SHARED_DELEGATE_BACKWARD_CONST_ITERABLE_PRIMITIVE_CLIENT_IMPL_HPP__ */

@@ -205,8 +205,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         __LocalContainsOfCompositeClient <
                                 __ServerType,
                                 __ValueType,
-                                cds :: Collection < __ValueType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ValueType  >
+                                cds :: Iterable < __ValueType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ValueType  >
                         >;
 
 
@@ -259,9 +259,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ServerType,
                                 __ValueType,
                                 __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType >,
-                                cds :: Collection < __ValueType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ValueType  >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < __ValueType  >
+                                cds :: Iterable < __ValueType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ValueType  >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < __ValueType  >
                         >;
 
 
@@ -295,9 +295,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                 __ServerType,
                                 __ValueType,
                                 __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType >,
-                                cds :: Collection < __ValueType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ValueType  >,
-                                & cds :: __hidden :: __impl :: __collectionNotContains < __ValueType  >
+                                cds :: Iterable < __ValueType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ValueType  >,
+                                & cds :: __hidden :: __impl :: __iterableNotContains < __ValueType  >
                         >;
 
 
@@ -363,8 +363,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         __LocalRemoveOfCompositeClient <
                                 __ServerType,
                                 __ValueType,
-                                cds :: Collection < __ValueType >,
-                                & cds :: __hidden :: __impl :: __collectionContains < __ValueType  >
+                                cds :: Iterable < __ValueType >,
+                                & cds :: __hidden :: __impl :: __iterableContains < __ValueType  >
                         >;
 
 
@@ -588,13 +588,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         public:     using ConstGenericStatementsClient :: none;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) noexcept -> __GenericHandler override;
 
         private:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                    cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                    cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
             ) const noexcept -> __GenericConstHandler override;
 
         public:
