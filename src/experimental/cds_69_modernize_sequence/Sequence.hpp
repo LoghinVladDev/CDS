@@ -16,6 +16,9 @@
 
 #include "sequence/lazySequence/ConstIterator.hpp"
 #include "sequence/lazySequence/Constructs.hpp"
+#include "sequence/lazySequence/transitionPipeline/ConstIterator.hpp"
+#include "sequence/lazySequence/transitionPipeline/Constructs.hpp"
+#include "sequence/lazySequence/transitionPipeline/LazySequenceTransitionPipeline.hpp"
 
 #include "sequence/LazySequence.hpp"
 

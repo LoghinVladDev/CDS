@@ -6,6 +6,7 @@ int main () {
 
     using namespace cds;
 
+
     auto array = cds :: arrayOf ( 1, 2, 3, 4, 5 );
     std :: cout << array << '\n';
 
