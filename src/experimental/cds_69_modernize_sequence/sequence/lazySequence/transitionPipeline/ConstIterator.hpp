@@ -12,17 +12,20 @@ namespace cds {
             template <
                     typename __ElementType,
                     typename __Mapper,
-                    typename __MapperResult = cds :: meta :: RemoveReference < typename std :: invoke_result < __Mapper, __ElementType const & > :: type >
+                    typename __MapperResult = typename std :: invoke_result < __Mapper, __ElementType const & > :: type
             > class __LazySequenceTransitionPipeline;                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template < typename __ElementType, typename __Mapper, typename __MapperResult >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             class __CDS_InheritsEBOs __LazySequenceTransitionPipelineConstIterator : public cds :: meta :: ForwardIterator { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:
+                using IterableIterator = typename cds :: Iterable < __ElementType > :: ConstIterator;
+
+            private:
                 __LazySequenceTransitionPipeline < __ElementType, __Mapper, __MapperResult >    const * _pPipeline {nullptr};
 
             private:
-                __LazySequenceConstIterator < __ElementType >                                           _iterator;
+                IterableIterator                                                                        _iterator;
 
             public:
                 constexpr __LazySequenceTransitionPipelineConstIterator () noexcept = delete;
@@ -39,7 +42,7 @@ namespace cds {
 
             public:
                 __LazySequenceTransitionPipelineConstIterator (
-                        __LazySequenceConstIterator < __ElementType     >                                    && iterator,
+                        IterableIterator                                                                     && iterator,
                         __LazySequenceTransitionPipeline < __ElementType, __Mapper, __MapperResult >    const & sequence
                 ) noexcept;
 
@@ -57,10 +60,7 @@ namespace cds {
                 ) noexcept -> __LazySequenceTransitionPipelineConstIterator &;
 
             public:
-                __CDS_NoDiscard constexpr auto operator * () const noexcept -> __MapperResult const &;
-
-            public:
-                __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __MapperResult const *;
+                __CDS_NoDiscard constexpr auto operator * () const noexcept -> __MapperResult;
 
             public:
                 __CDS_NoDiscard constexpr auto operator == (

@@ -25,6 +25,13 @@ int main () {
             .filter([](int const & e){return e != 5;})) {
         std :: cout << e << '\n';
     }
+
+    auto mapper = [](auto e) {return e * 2.0f;};
+    __LazySequenceTransitionPipeline < int, decltype (mapper) > trans (mapper, & ls, false);
+    for (auto e : trans) {
+        std :: cout << e << '\n';
+    }
+
 //    std :: cout << ls << '\n';
 
     return 0;
