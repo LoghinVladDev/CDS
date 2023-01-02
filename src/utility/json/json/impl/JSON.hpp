@@ -690,7 +690,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return "{}";
                     }
 
-                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "}";
+                    return result.replace ( static_cast < Index > (result.size()) - 2, static_cast < Index > (result.size()), "\n" ) + indentation + "}";
                 }
 
 
@@ -713,7 +713,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return "[]";
                     }
 
-                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "]";
+                    return result.replace ( static_cast < Index > (result.size()) - 2, static_cast < Index > (result.size()), "\n" ) + indentation + "]";
                 }
 
 
