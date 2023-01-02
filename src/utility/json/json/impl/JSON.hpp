@@ -717,6 +717,28 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
 
+                inline auto __escape (
+                        String const & string
+                ) noexcept -> String {
+
+                    String newStr = "";
+                    for ( auto c : string ) {
+
+                        if ( c == '\n' ) { newStr += "\\n"; }
+                        else if ( c == '\t' ) { newStr += "\\t"; }
+                        else if ( c == '\f' ) { newStr += "\\f"; }
+                        else if ( c == '\r' ) { newStr += "\\r"; }
+                        else if ( c == '\v' ) { newStr += "\\v"; }
+                        else if ( c == '\a' ) { newStr += "\\a"; }
+                        else if ( c == '\b' ) { newStr += "\\b"; }
+                        else if ( c == '\"' ) { newStr += "\\\""; }
+                        else { newStr += c; }
+                    }
+
+                    return newStr;
+                }
+
+
                 inline auto __dumpIndented (        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         JsonElement const & object, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                indent,
@@ -992,7 +1014,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 case __hidden :: __impl :: __JsonElementType :: __jet_String: {
-                    return "\"" + this->_data.data().pObject->toString() + "\"";
+                    return "\"" + __hidden :: __impl :: __escape (
+                            this->_data.data().pObject->toString()
+                    ) + "\"";
                 }
 
                 case __hidden :: __impl :: __JsonElementType :: __jet_Bool: {
