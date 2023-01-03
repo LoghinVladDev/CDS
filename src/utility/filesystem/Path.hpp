@@ -12,9 +12,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         class Path : public Object {
 
-        public: /* NOLINT(readability-redundant-access-specifiers) */
-            static char const directorySeparator;
-
         private:    /* NOLINT(readability-redundant-access-specifiers) */
             String _osPath {};
 
