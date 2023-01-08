@@ -219,13 +219,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     into.emplace ( std :: move ( label ), std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; } /* NOLINT(bugprone-branch-clone) */
-                                    else if ( string [index] == 't' )   { label += '\t'; }
-                                    else if ( string [index] == 'f' )   { label += '\f'; }
-                                    else if ( string [index] == 'r' )   { label += '\r'; }
-                                    else if ( string [index] == 'v' )   { label += '\v'; }
-                                    else if ( string [index] == 'a' )   { label += '\a'; }
-                                    else if ( string [index] == 'b' )   { label += '\b'; }
+                                    if ( string [index] == 'n' )        { stringData += '\n'; } /* NOLINT(bugprone-branch-clone) */
+                                    else if ( string [index] == 't' )   { stringData += '\t'; }
+                                    else if ( string [index] == 'f' )   { stringData += '\f'; }
+                                    else if ( string [index] == 'r' )   { stringData += '\r'; }
+                                    else if ( string [index] == 'v' )   { stringData += '\v'; }
+                                    else if ( string [index] == 'a' )   { stringData += '\a'; }
+                                    else if ( string [index] == 'b' )   { stringData += '\b'; }
 
                                 } else {
                                     stringData += string[ index ];
@@ -486,13 +486,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     into.pushBack ( std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; }
-                                    else if ( string [index] == 't' )   { label += '\t'; }
-                                    else if ( string [index] == 'f' )   { label += '\f'; }
-                                    else if ( string [index] == 'r' )   { label += '\r'; }
-                                    else if ( string [index] == 'v' )   { label += '\v'; }
-                                    else if ( string [index] == 'a' )   { label += '\a'; }
-                                    else if ( string [index] == 'b' )   { label += '\b'; }
+                                    if ( string [index] == 'n' )        { stringData += '\n'; }
+                                    else if ( string [index] == 't' )   { stringData += '\t'; }
+                                    else if ( string [index] == 'f' )   { stringData += '\f'; }
+                                    else if ( string [index] == 'r' )   { stringData += '\r'; }
+                                    else if ( string [index] == 'v' )   { stringData += '\v'; }
+                                    else if ( string [index] == 'a' )   { stringData += '\a'; }
+                                    else if ( string [index] == 'b' )   { stringData += '\b'; }
 
                                 } else {
                                     stringData += string[ index ];
