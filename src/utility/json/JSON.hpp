@@ -53,13 +53,49 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     constexpr static bool const __adaptable = false;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 };
 
-                template <> struct __JsonElementAdapterPropertiesHelper < int > {                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: uint8 > {                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 };
 
-                template <> struct __JsonElementAdapterPropertiesHelper < long long > {                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: uint16 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: uint32 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: uint64 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: sint8 > {                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: sint16 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: sint32 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < cds :: sint64 > {                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static bool               const __adaptable   = true;                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_Long;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     using                                     __AdaptedType = long long;                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -96,6 +132,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 };
 
                 template <> struct __JsonElementAdapterPropertiesHelper < String > {                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool               const __adaptable   = true;                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using                                     __AdaptedType = String;                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <> struct __JsonElementAdapterPropertiesHelper < std :: string > {                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static bool               const __adaptable   = true;                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     constexpr static __JsonElementType  const __type        = __JsonElementType :: __jet_String;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     using                                     __AdaptedType = String;                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
