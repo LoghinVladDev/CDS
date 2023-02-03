@@ -8,8 +8,8 @@
 #include <CDS/LinkedList>
 #include <CDS/HashSet>
 #include <CDS/HashMap>
-#include <CDS/experimental/TreeSet>
-#include <CDS/experimental/TreeMap>
+#include <CDS/TreeSet>
+#include <CDS/TreeMap>
 #include <CDS/LinkedHashSet>
 #include <CDS/LinkedHashMap>
 
@@ -3578,7 +3578,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : IntTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < int > intTreeSetObjectUnderTest;
+        cds :: TreeSet < int > intTreeSetObjectUnderTest;
         intTreeSetObjectUnderTest = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
@@ -3589,10 +3589,10 @@ auto CollectionTest :: execute () noexcept -> bool {
                                                  cds :: hash ( 1 ) * 31 + cds :: hash ( 2 )
                                          ) * 31 + cds :: hash ( 3 )) * 31 + cds :: hash ( 4 ) ) * 31 + cds :: hash ( 5 ));
 
-        auto equalSameType          = cds :: experimental :: TreeSet < int > { 1, 2, 3, 4, 5 };
-        auto equalDifferentType     = cds :: experimental :: TreeSet < int > { 1, 2, 3, 4, 5 };
-        auto notEqualSameType       = cds :: experimental :: TreeSet < int > { 1, 2, 3, 5 };
-        auto notEqualDifferentType  = cds :: experimental :: TreeSet < int > { 1, 2, 3, 5 };
+        auto equalSameType          = cds :: TreeSet < int > { 1, 2, 3, 4, 5 };
+        auto equalDifferentType     = cds :: TreeSet < int > { 1, 2, 3, 4, 5 };
+        auto notEqualSameType       = cds :: TreeSet < int > { 1, 2, 3, 5 };
+        auto notEqualDifferentType  = cds :: TreeSet < int > { 1, 2, 3, 5 };
         auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
 
         auto status = collectionTestGroupMemberFunctions (
@@ -3732,7 +3732,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : IntToIntTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < int, int > intIntTreeMapObjectUnderTest;
+        cds :: TreeMap < int, int > intIntTreeMapObjectUnderTest;
         intIntTreeMapObjectUnderTest = { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
 
         auto expectedToString       = "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }";
@@ -3744,10 +3744,10 @@ auto CollectionTest :: execute () noexcept -> bool {
                                          ) * 31 + ( cds :: hash ( 3 )) ^ cds :: hash (8)) * 31 + ( cds :: hash ( 4 ) ^ cds :: hash (9)) ) * 31 + ( cds :: hash ( 5 )) ^ cds :: hash (10));
 
         /* error reported by IDE makes no sense? */
-        auto equalDifferentType     = cds :: experimental :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
-        auto notEqualSameType       = cds :: experimental :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
-        auto equalSameType          = cds :: experimental :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
-        auto notEqualDifferentType  = cds :: experimental :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
+        auto equalDifferentType     = cds :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
+        auto notEqualSameType       = cds :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
+        auto equalSameType          = cds :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {4, 9}, {5, 10} };
+        auto notEqualDifferentType  = cds :: TreeMap < int, int > { {1, 6}, {2, 7}, {3, 8}, {5, 10} };
         auto notEqualNonCollection  = cds :: String { "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }" };
 
         auto status = collectionTestGroupMemberFunctions (
@@ -3885,7 +3885,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < cds :: String > stringTreeSetObjectUnderTest;
+        cds :: TreeSet < cds :: String > stringTreeSetObjectUnderTest;
         stringTreeSetObjectUnderTest     = { "Ana", "are", "mere" };
 
         auto expectedToString       = "{ Ana, are, mere }";
@@ -3896,10 +3896,10 @@ auto CollectionTest :: execute () noexcept -> bool {
                                               cds :: hash ( "Ana" ) * 31 + cds :: hash ( "are" )
                                       ) * 31 + cds :: hash ( "mere" );
 
-        auto equalSameType          = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "mere" };
-        auto equalDifferentType     = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "mere" };
-        auto notEqualSameType       = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "pere" };
-        auto notEqualDifferentType  = cds :: experimental :: TreeSet < cds :: String > { "Ana", "are", "pere" };
+        auto equalSameType          = cds :: TreeSet < cds :: String > { "Ana", "are", "mere" };
+        auto equalDifferentType     = cds :: TreeSet < cds :: String > { "Ana", "are", "mere" };
+        auto notEqualSameType       = cds :: TreeSet < cds :: String > { "Ana", "are", "pere" };
+        auto notEqualDifferentType  = cds :: TreeSet < cds :: String > { "Ana", "are", "pere" };
         auto notEqualNonCollection  = cds :: String { "[ 1, 2, 3, 4, 5 ]" };
 
         auto status = collectionTestGroupMemberFunctions < cds :: String > (
@@ -4039,7 +4039,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-MemberFunctions-CPP20 : CTG-00002-MF-CPP20 : StringToStringTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < cds :: String, cds :: String > stringStringTreeMapObjectUnderTest;
+        cds :: TreeMap < cds :: String, cds :: String > stringStringTreeMapObjectUnderTest;
         stringStringTreeMapObjectUnderTest = { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
 
         auto expectedToString       = "{ Ana: name, are: verb, mere: noun }";
@@ -4051,10 +4051,10 @@ auto CollectionTest :: execute () noexcept -> bool {
                 * 31 + ( cds :: hash ( "mere" ) ^ cds :: hash ("noun")));
 
         /* error reported by IDE makes no sense? */
-        auto equalSameType          = cds :: experimental :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
-        auto equalDifferentType     = cds :: experimental :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
-        auto notEqualSameType       = cds :: experimental :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "pere", "noun" } };
-        auto notEqualDifferentType  = cds :: experimental :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "other" } };
+        auto equalSameType          = cds :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto equalDifferentType     = cds :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "noun" } };
+        auto notEqualSameType       = cds :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "pere", "noun" } };
+        auto notEqualDifferentType  = cds :: TreeMap < cds :: String, cds :: String > { { "Ana", "name" }, { "are", "verb" }, { "mere", "other" } };
         auto notEqualNonCollection  = cds :: String { "{ 1: 6, 2: 7, 3: 8, 4: 9, 5: 10 }" };
 
         auto status = collectionTestGroupMemberFunctions < cds :: MapEntry < cds :: String, cds :: String > > (
@@ -4119,7 +4119,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : IntTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < int > objUnderTest = {3, 4, 5, 6, 7};
+        cds :: TreeSet < int > objUnderTest = {3, 4, 5, 6, 7};
         auto status = collectionTestGroupDelegateForwardConstIterableClientImports < int > (
                 objUnderTest,
                 this,
@@ -4179,7 +4179,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : IntToIntTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
+        cds :: TreeMap < int, int > objUnderTest = {{3,4}, {4,5}, {5,6}, {6,7}, {7,8}};
         auto status = collectionTestGroupDelegateForwardConstIterableClientImports < MapEntry < int, int > > (
                 objUnderTest,
                 this,
@@ -4235,7 +4235,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : StringTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < String > objUnderTest = {"Ana", "are", "mere"};
+        cds :: TreeSet < String > objUnderTest = {"Ana", "are", "mere"};
         auto status = collectionTestGroupDelegateForwardConstIterableClientImports < String > (
                 objUnderTest,
                 this,
@@ -4291,7 +4291,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-DelegateForwardConstIterableClientImports-CPP20 : CTG-00050-IT-CPP20 : StringToStringTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < String, String > objUnderTest = {{"Ana","name"}, {"are","verb"}, {"mere","noun"}};
+        cds :: TreeMap < String, String > objUnderTest = {{"Ana","name"}, {"are","verb"}, {"mere","noun"}};
         auto status = collectionTestGroupDelegateForwardConstIterableClientImports < MapEntry < String, String > > (
                 objUnderTest,
                 this,
@@ -5703,7 +5703,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     /* IntTreeSet */                    this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : IntTreeSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs101 = { 1, 3, 5, 7, 9 };
+        cds :: TreeSet < int > fs101 = { 1, 3, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00101-FS-anyNone-CPP20",
                 /* objUnderTest */  fs101,
@@ -5714,7 +5714,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP20 : CTC-00102-FS-anyOne-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs102 = { 1, 4, 5, 7, 9 };
+        cds :: TreeSet < int > fs102 = { 1, 4, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00102-FS-anyOne-CPP20",
                 /* objUnderTest */  fs102,
@@ -5725,7 +5725,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs103 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs103 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP20",
                 /* objUnderTest */  fs103,
@@ -5736,7 +5736,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs104 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs104 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP20",
                 /* objUnderTest */  fs104,
@@ -5747,7 +5747,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs105 = { 1, 3, 5, 7, 9 };
+        cds :: TreeSet < int > fs105 = { 1, 3, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP20",
                 /* objUnderTest */  fs105,
@@ -5758,7 +5758,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs106 = { 1, 4, 5, 7, 9 };
+        cds :: TreeSet < int > fs106 = { 1, 4, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP20",
                 /* objUnderTest */  fs106,
@@ -5769,7 +5769,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs107 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs107 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP20",
                 /* objUnderTest */  fs107,
@@ -5780,7 +5780,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs108 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs108 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP20",
                 /* objUnderTest */  fs108,
@@ -5791,7 +5791,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs109 = { 1, 3, 5, 7, 9 };
+        cds :: TreeSet < int > fs109 = { 1, 3, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP20",
                 /* objUnderTest */  fs109,
@@ -5802,7 +5802,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs110 = { 1, 4, 5, 7, 9 };
+        cds :: TreeSet < int > fs110 = { 1, 4, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP20",
                 /* objUnderTest */  fs110,
@@ -5813,7 +5813,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs111 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs111 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP20",
                 /* objUnderTest */  fs111,
@@ -5824,7 +5824,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs112 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs112 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP20",
                 /* objUnderTest */  fs112,
@@ -5835,7 +5835,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs113 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs113 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP20",
                 /* objUnderTest */  fs113,
@@ -5846,7 +5846,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs114 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs114 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP20",
                 /* objUnderTest */  fs114,
@@ -5857,7 +5857,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs115 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs115 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP20",
                 /* objUnderTest */  fs115,
@@ -5868,7 +5868,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs116 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs116 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP20",
                 /* objUnderTest */  fs116,
@@ -5880,7 +5880,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         int comparedTo = 3;
         /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs117 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs117 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
                 /* objUnderTest */  fs117,
@@ -5891,7 +5891,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs118 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs118 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
                 /* objUnderTest */  fs118,
@@ -5903,7 +5903,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs119 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs119 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
                 /* objUnderTest */  fs119,
@@ -5915,7 +5915,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs120 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs120 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
                 /* objUnderTest */  fs120,
@@ -5927,7 +5927,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs121 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs121 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
                 /* objUnderTest */  fs121,
@@ -5939,7 +5939,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs122 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs122 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs122,
@@ -5951,7 +5951,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs123 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs123 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
                 /* objUnderTest */  fs123,
@@ -5963,7 +5963,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs124 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs124 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
                 /* objUnderTest */  fs124,
@@ -5975,7 +5975,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs125 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs125 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
                 /* objUnderTest */  fs125,
@@ -5987,7 +5987,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs126 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs126 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
                 /* objUnderTest */  fs126,
@@ -5999,7 +5999,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs127 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs127 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs127,
@@ -6011,7 +6011,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs128 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs128 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
                 /* objUnderTest */  fs128,
@@ -6023,7 +6023,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs129 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs129 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
                 /* objUnderTest */  fs129,
@@ -6035,7 +6035,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs130 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs130 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
                 /* objUnderTest */  fs130,
@@ -6047,7 +6047,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs131 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs131 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
                 /* objUnderTest */  fs131,
@@ -6059,7 +6059,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs132 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs132 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
                 /* objUnderTest */  fs132,
@@ -6071,7 +6071,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs133 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs133 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
                 /* objUnderTest */  fs133,
@@ -6083,7 +6083,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs134 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs134 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
                 /* objUnderTest */  fs134,
@@ -6095,7 +6095,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs135 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs135 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
                 /* objUnderTest */  fs135,
@@ -6107,7 +6107,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs136 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs136 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP20",
                 /* objUnderTest */  fs136,
@@ -6119,7 +6119,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs137 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs137 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
                 /* objUnderTest */  fs137,
@@ -6131,7 +6131,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs138 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs138 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
                 /* objUnderTest */  fs138,
@@ -6143,7 +6143,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs139 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs139 = { 1, 2, 3, 4, 5 };
         Collection < int > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( int e ) { if ( e % 2 == 0 ) { ++ count; } };
@@ -6182,7 +6182,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs103 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs103 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP20",
                 /* objUnderTest */  fs103,
@@ -6193,7 +6193,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs104 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs104 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP20",
                 /* objUnderTest */  fs104,
@@ -6204,7 +6204,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs105 = { 1, 3, 5, 7, 9 };
+        cds :: TreeSet < int > fs105 = { 1, 3, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP20",
                 /* objUnderTest */  fs105,
@@ -6215,7 +6215,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs106 = { 1, 4, 5, 7, 9 };
+        cds :: TreeSet < int > fs106 = { 1, 4, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP20",
                 /* objUnderTest */  fs106,
@@ -6226,7 +6226,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs107 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs107 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP20",
                 /* objUnderTest */  fs107,
@@ -6237,7 +6237,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs108 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs108 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP20",
                 /* objUnderTest */  fs108,
@@ -6248,7 +6248,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs109 = { 1, 3, 5, 7, 9 };
+        cds :: TreeSet < int > fs109 = { 1, 3, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP20",
                 /* objUnderTest */  fs109,
@@ -6259,7 +6259,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs110 = { 1, 4, 5, 7, 9 };
+        cds :: TreeSet < int > fs110 = { 1, 4, 5, 7, 9 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP20",
                 /* objUnderTest */  fs110,
@@ -6270,7 +6270,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs111 = { 1, 4, 5, 6, 8 };
+        cds :: TreeSet < int > fs111 = { 1, 4, 5, 6, 8 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP20",
                 /* objUnderTest */  fs111,
@@ -6281,7 +6281,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs112 = { 2, 4, 6, 8, 10 };
+        cds :: TreeSet < int > fs112 = { 2, 4, 6, 8, 10 };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP20",
                 /* objUnderTest */  fs112,
@@ -6292,7 +6292,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs113 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs113 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP20",
                 /* objUnderTest */  fs113,
@@ -6303,7 +6303,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs114 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs114 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP20",
                 /* objUnderTest */  fs114,
@@ -6314,7 +6314,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs115 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs115 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP20",
                 /* objUnderTest */  fs115,
@@ -6325,7 +6325,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs116 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs116 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP20",
                 /* objUnderTest */  fs116,
@@ -6337,7 +6337,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         int comparedTo = 3;
         /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs117 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs117 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
                 /* objUnderTest */  fs117,
@@ -6348,7 +6348,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs118 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs118 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
                 /* objUnderTest */  fs118,
@@ -6360,7 +6360,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs119 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs119 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
                 /* objUnderTest */  fs119,
@@ -6372,7 +6372,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs120 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs120 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
                 /* objUnderTest */  fs120,
@@ -6384,7 +6384,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs121 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs121 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
                 /* objUnderTest */  fs121,
@@ -6396,7 +6396,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs122 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs122 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs122,
@@ -6408,7 +6408,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs123 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs123 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
                 /* objUnderTest */  fs123,
@@ -6420,7 +6420,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs124 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs124 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
                 /* objUnderTest */  fs124,
@@ -6432,7 +6432,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs125 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs125 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
                 /* objUnderTest */  fs125,
@@ -6444,7 +6444,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs126 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs126 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
                 /* objUnderTest */  fs126,
@@ -6456,7 +6456,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs127 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs127 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs127,
@@ -6468,7 +6468,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs128 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs128 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
                 /* objUnderTest */  fs128,
@@ -6480,7 +6480,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs129 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs129 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
                 /* objUnderTest */  fs129,
@@ -6492,7 +6492,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs130 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs130 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
                 /* objUnderTest */  fs130,
@@ -6504,7 +6504,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs131 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs131 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
                 /* objUnderTest */  fs131,
@@ -6516,7 +6516,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs132 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs132 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
                 /* objUnderTest */  fs132,
@@ -6528,7 +6528,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs133 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs133 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
                 /* objUnderTest */  fs133,
@@ -6540,7 +6540,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs134 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs134 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
                 /* objUnderTest */  fs134,
@@ -6552,7 +6552,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs135 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs135 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
                 /* objUnderTest */  fs135,
@@ -6564,7 +6564,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs136 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs136 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP20",
                 /* objUnderTest */  fs136,
@@ -6576,7 +6576,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs137 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs137 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
                 /* objUnderTest */  fs137,
@@ -6588,7 +6588,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs138 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs138 = { 1, 2, 3, 4, 5 };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
                 /* objUnderTest */  fs138,
@@ -6600,7 +6600,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : IntTreeSet */
-        cds :: experimental :: TreeSet < int > fs139 = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > fs139 = { 1, 2, 3, 4, 5 };
         Collection < int > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( int e ) { if ( e % 2 == 0 ) { ++ count; } };
@@ -7531,7 +7531,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     /* IntToIntTreeMap */         this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : IntToIntTreeMap", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: TreeMap < int, int > fs101 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00101-FS-anyNone-CPP20",
                 /* objUnderTest */  fs101,
@@ -7542,7 +7542,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP20 : CTC-00102-FS-anyOne-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs102 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: TreeMap < int, int > fs102 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00102-FS-anyOne-CPP20",
                 /* objUnderTest */  fs102,
@@ -7553,7 +7553,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs103 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs103 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP20",
                 /* objUnderTest */  fs103,
@@ -7564,7 +7564,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs104 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs104 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP20",
                 /* objUnderTest */  fs104,
@@ -7575,7 +7575,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs105 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: TreeMap < int, int > fs105 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP20",
                 /* objUnderTest */  fs105,
@@ -7586,7 +7586,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs106 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: TreeMap < int, int > fs106 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP20",
                 /* objUnderTest */  fs106,
@@ -7597,7 +7597,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs107 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs107 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP20",
                 /* objUnderTest */  fs107,
@@ -7608,7 +7608,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs108 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs108 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP20",
                 /* objUnderTest */  fs108,
@@ -7619,7 +7619,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs109 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
+        cds :: TreeMap < int, int > fs109 = { {1, 1}, {3, 3}, {5, 5}, {7, 7}, {9, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP20",
                 /* objUnderTest */  fs109,
@@ -7630,7 +7630,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs110 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {8, 9} };
+        cds :: TreeMap < int, int > fs110 = { {1, 1}, {4, 3}, {5, 5}, {7, 7}, {8, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP20",
                 /* objUnderTest */  fs110,
@@ -7641,7 +7641,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs111 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs111 = { {1, 1}, {4, 3}, {5, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP20",
                 /* objUnderTest */  fs111,
@@ -7652,7 +7652,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs112 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
+        cds :: TreeMap < int, int > fs112 = { {2, 1}, {4, 3}, {6, 5}, {8, 7}, {10, 9} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP20",
                 /* objUnderTest */  fs112,
@@ -7663,7 +7663,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs113 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs113 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP20",
                 /* objUnderTest */  fs113,
@@ -7674,7 +7674,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs114 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs114 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP20",
                 /* objUnderTest */  fs114,
@@ -7685,7 +7685,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs115 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs115 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP20",
                 /* objUnderTest */  fs115,
@@ -7696,7 +7696,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs116 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs116 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP20",
                 /* objUnderTest */  fs116,
@@ -7708,7 +7708,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         int comparedTo = 3;
         /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs117 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs117 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
                 /* objUnderTest */  fs117,
@@ -7719,7 +7719,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs118 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs118 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
                 /* objUnderTest */  fs118,
@@ -7731,7 +7731,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs119 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs119 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
                 /* objUnderTest */  fs119,
@@ -7743,7 +7743,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs120 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs120 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
                 /* objUnderTest */  fs120,
@@ -7755,7 +7755,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs121 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs121 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
                 /* objUnderTest */  fs121,
@@ -7767,7 +7767,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs122 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs122 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs122,
@@ -7779,7 +7779,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs123 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs123 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
                 /* objUnderTest */  fs123,
@@ -7791,7 +7791,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs124 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs124 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
                 /* objUnderTest */  fs124,
@@ -7803,7 +7803,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs125 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs125 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
                 /* objUnderTest */  fs125,
@@ -7815,7 +7815,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs126 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs126 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
                 /* objUnderTest */  fs126,
@@ -7827,7 +7827,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs127 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs127 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs127,
@@ -7839,7 +7839,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs128 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs128 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
                 /* objUnderTest */  fs128,
@@ -7851,7 +7851,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs129 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs129 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
                 /* objUnderTest */  fs129,
@@ -7863,7 +7863,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs130 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs130 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
                 /* objUnderTest */  fs130,
@@ -7875,7 +7875,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs131 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs131 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
                 /* objUnderTest */  fs131,
@@ -7887,7 +7887,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs132 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs132 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
                 /* objUnderTest */  fs132,
@@ -7899,7 +7899,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs133 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs133 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
                 /* objUnderTest */  fs133,
@@ -7911,7 +7911,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs134 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs134 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
                 /* objUnderTest */  fs134,
@@ -7923,7 +7923,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs135 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs135 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
                 /* objUnderTest */  fs135,
@@ -7935,7 +7935,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs136 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs136 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP20",
                 /* objUnderTest */  fs136,
@@ -7947,7 +7947,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs137 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs137 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
                 /* objUnderTest */  fs137,
@@ -7959,7 +7959,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs138 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs138 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
                 /* objUnderTest */  fs138,
@@ -7971,7 +7971,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : IntToIntTreeMap */
-        cds :: experimental :: TreeMap < int, int > fs139 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > fs139 = { {1, 1}, {2 ,2}, {3, 3}, {4, 4}, {5, 5} };
         Collection < MapEntry < int, int > > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( MapEntry<int, int>const & e ) { if ( e.key() % 2 == 0 ) { ++ count; } };
@@ -9359,7 +9359,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     /* StringTreeSet */                 this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : StringTreeSet", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs101 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00101-FS-anyNone-CPP20",
                 /* objUnderTest */  fs101,
@@ -9370,7 +9370,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP20 : CTC-00102-FS-anyOne-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs102 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00102-FS-anyOne-CPP20",
                 /* objUnderTest */  fs102,
@@ -9381,7 +9381,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: TreeSet < String > fs103 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP20",
                 /* objUnderTest */  fs103,
@@ -9392,7 +9392,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: TreeSet < String > fs104 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP20",
                 /* objUnderTest */  fs104,
@@ -9403,7 +9403,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs105 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP20",
                 /* objUnderTest */  fs105,
@@ -9414,7 +9414,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs106 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP20",
                 /* objUnderTest */  fs106,
@@ -9425,7 +9425,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: TreeSet < String > fs107 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP20",
                 /* objUnderTest */  fs107,
@@ -9436,7 +9436,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: TreeSet < String > fs108 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP20",
                 /* objUnderTest */  fs108,
@@ -9447,7 +9447,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs109 = { "aaa", "bbb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP20",
                 /* objUnderTest */  fs109,
@@ -9458,7 +9458,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
+        cds :: TreeSet < String > fs110 = { "aaa", "bb", "ccc", "ddd", "eee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP20",
                 /* objUnderTest */  fs110,
@@ -9469,7 +9469,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
+        cds :: TreeSet < String > fs111 = { "aaa", "bb", "ccc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP20",
                 /* objUnderTest */  fs111,
@@ -9480,7 +9480,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
+        cds :: TreeSet < String > fs112 = { "aa", "bb", "cc", "dd", "ee" };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP20",
                 /* objUnderTest */  fs112,
@@ -9491,7 +9491,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs113 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP20",
                 /* objUnderTest */  fs113,
@@ -9502,7 +9502,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs114 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP20",
                 /* objUnderTest */  fs114,
@@ -9513,7 +9513,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs115 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP20",
                 /* objUnderTest */  fs115,
@@ -9524,7 +9524,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs116 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP20",
                 /* objUnderTest */  fs116,
@@ -9536,7 +9536,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         int comparedTo = 3;
         /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs117 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
                 /* objUnderTest */  fs117,
@@ -9547,7 +9547,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs118 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
                 /* objUnderTest */  fs118,
@@ -9559,7 +9559,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs119 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
                 /* objUnderTest */  fs119,
@@ -9571,7 +9571,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs120 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
                 /* objUnderTest */  fs120,
@@ -9583,7 +9583,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs121 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
                 /* objUnderTest */  fs121,
@@ -9595,7 +9595,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs122 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs122,
@@ -9607,7 +9607,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs123 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
                 /* objUnderTest */  fs123,
@@ -9619,7 +9619,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs124 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
                 /* objUnderTest */  fs124,
@@ -9631,7 +9631,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs125 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
                 /* objUnderTest */  fs125,
@@ -9643,7 +9643,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs126 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
                 /* objUnderTest */  fs126,
@@ -9655,7 +9655,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs127 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs127,
@@ -9667,7 +9667,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs128 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
                 /* objUnderTest */  fs128,
@@ -9679,7 +9679,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs129 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
                 /* objUnderTest */  fs129,
@@ -9691,7 +9691,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs130 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
                 /* objUnderTest */  fs130,
@@ -9703,7 +9703,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs131 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
                 /* objUnderTest */  fs131,
@@ -9715,7 +9715,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs132 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
                 /* objUnderTest */  fs132,
@@ -9727,7 +9727,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs133 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
                 /* objUnderTest */  fs133,
@@ -9739,7 +9739,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs134 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
                 /* objUnderTest */  fs134,
@@ -9751,7 +9751,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs135 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
                 /* objUnderTest */  fs135,
@@ -9763,7 +9763,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs136 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP20",
                 /* objUnderTest */  fs136,
@@ -9775,7 +9775,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs137 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
                 /* objUnderTest */  fs137,
@@ -9787,7 +9787,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
+        cds :: TreeSet < String > fs138 = { "a", "bb", "ccc", "dddd", "eeeee" };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
                 /* objUnderTest */  fs138,
@@ -9799,7 +9799,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : StringTreeSet */
-        cds :: experimental :: TreeSet < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
+        cds :: TreeSet < String > fs139 = { "xxx", "yy", "zzz", "tt", "www" };
         Collection < String > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( String const & e ) { if ( e.length() % 2 == 0 ) { ++ count; } };
@@ -11187,7 +11187,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     /* StringToStringTreeMap */   this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-CPP20 : CTG-00100-FS-CPP20 : StringToStringTreeMap", [& allOk, this] {
 
         /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-CPP20 : CTC-00101-FS-anyNone-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs101 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00101-FS-anyNone-CPP20",
                 /* objUnderTest */  fs101,
@@ -11198,7 +11198,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyOneApplicable-CPP20 : CTC-00102-FS-anyOne-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs102 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs102 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00102-FS-anyOne-CPP20",
                 /* objUnderTest */  fs102,
@@ -11209,7 +11209,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-CPP20 : CTC-00103-FS-anyMore-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs103 = { {"x", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs103 = { {"x", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00103-FS-anyMore-CPP20",
                 /* objUnderTest */  fs103,
@@ -11220,7 +11220,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-anyAllApplicable-CPP20 : CTC-00104-FS-anyAll-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs104 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: TreeMap < String, String > fs104 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00104-FS-anyAll-CPP20",
                 /* objUnderTest */  fs104,
@@ -11231,7 +11231,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allNoneApplicable-CPP20 : CTC-00105-FS-allNone-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs105 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs105 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00105-FS-allNone-CPP20",
                 /* objUnderTest */  fs105,
@@ -11242,7 +11242,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allOneApplicable-CPP20 : CTC-00106-FS-allOne-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs106 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs106 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00106-FS-allOne-CPP20",
                 /* objUnderTest */  fs106,
@@ -11253,7 +11253,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allMoreApplicable-CPP20 : CTC-00107-FS-allMore-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs107 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: TreeMap < String, String > fs107 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00107-FS-allMore-CPP20",
                 /* objUnderTest */  fs107,
@@ -11264,7 +11264,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-allAllApplicable-CPP20 : CTC-00108-FS-allAll-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs108 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: TreeMap < String, String > fs108 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00108-FS-allAll-CPP20",
                 /* objUnderTest */  fs108,
@@ -11275,7 +11275,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-CPP20 : CTC-00109-FS-noneNone-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs109 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs109 = { {"x", "x"}, {"y", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00109-FS-noneNone-CPP20",
                 /* objUnderTest */  fs109,
@@ -11286,7 +11286,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneOneApplicable-CPP20 : CTC-00110-FS-noneOne-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs110 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
+        cds :: TreeMap < String, String > fs110 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"w", "w"}, {"t", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00110-FS-noneOne-CPP20",
                 /* objUnderTest */  fs110,
@@ -11297,7 +11297,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-CPP20 : CTC-00111-FS-noneMore-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs111 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: TreeMap < String, String > fs111 = { {"x", "x"}, {"yy", "y"}, {"z", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00111-FS-noneMore-CPP20",
                 /* objUnderTest */  fs111,
@@ -11308,7 +11308,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-noneAllApplicable-CPP20 : CTC-00112-FS-noneAll-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs112 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
+        cds :: TreeMap < String, String > fs112 = { {"xx", "x"}, {"yy", "y"}, {"zz", "z"}, {"ww", "w"}, {"tt", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle (
                 /* tName */         "CTC-00112-FS-noneAll-CPP20",
                 /* objUnderTest */  fs112,
@@ -11319,7 +11319,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-CPP20 : CTC-00113-FS-countProp1-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs113 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs113 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00113-FS-countProp1-CPP20",
                 /* objUnderTest */  fs113,
@@ -11330,7 +11330,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp2-CPP20 : CTC-00114-FS-countProp2-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs114 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs114 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00114-FS-countProp2-CPP20",
                 /* objUnderTest */  fs114,
@@ -11341,7 +11341,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp3-CPP20 : CTC-00115-FS-countProp3-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs115 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs115 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00115-FS-countProp3-CPP20",
                 /* objUnderTest */  fs115,
@@ -11352,7 +11352,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp4-CPP20 : CTC-00116-FS-countProp4-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs116 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs116 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00116-FS-countProp4-CPP20",
                 /* objUnderTest */  fs116,
@@ -11364,7 +11364,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         int comparedTo = 3;
         /* CollectionTestCase-FunctionalStatements-countPropLbd-CPP20 : CTC-00117-FS-countPropLbd-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs117 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs117 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateHandle < Size > (
                 /* tName */         "CTC-00117-FS-countPropLbd-CPP20",
                 /* objUnderTest */  fs117,
@@ -11375,7 +11375,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanTrue-CPP20 : CTC-00118-FS-fewerThanTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs118 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs118 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00118-FS-fewerThanTrue-CPP20",
                 /* objUnderTest */  fs118,
@@ -11387,7 +11387,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseTrue-CPP20 : CTC-00119-FS-fewerThanCloseTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs119 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs119 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00119-FS-fewerThanCloseTrue-CPP20",
                 /* objUnderTest */  fs119,
@@ -11399,7 +11399,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCloseFalse-CPP20 : CTC-00120-FS-fewerThanCloseFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs120 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs120 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00120-FS-fewerThanCloseFalse-CPP20",
                 /* objUnderTest */  fs120,
@@ -11411,7 +11411,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanFalse-CPP20 : CTC-00121-FS-fewerThanFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs121 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs121 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00121-FS-fewerThanFalse-CPP20",
                 /* objUnderTest */  fs121,
@@ -11423,7 +11423,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-fewerThanCompletelyFalse-CPP20 : CTC-00122-FS-fewerThanCompletelyFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs122 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs122 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00122-FS-fewerThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs122,
@@ -11435,7 +11435,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanTrue-CPP20 : CTC-00123-FS-moreThanTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs123 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs123 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00123-FS-moreThanTrue-CPP20",
                 /* objUnderTest */  fs123,
@@ -11447,7 +11447,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseTrue-CPP20 : CTC-00124-FS-moreThanCloseTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs124 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs124 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00124-FS-moreThanCloseTrue-CPP20",
                 /* objUnderTest */  fs124,
@@ -11459,7 +11459,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCloseFalse-CPP20 : CTC-00125-FS-moreThanCloseFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs125 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs125 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00125-FS-moreThanCloseFalse-CPP20",
                 /* objUnderTest */  fs125,
@@ -11471,7 +11471,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanFalse-CPP20 : CTC-00126-FS-moreThanFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs126 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs126 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00126-FS-moreThanFalse-CPP20",
                 /* objUnderTest */  fs126,
@@ -11483,7 +11483,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-moreThanCompletelyFalse-CPP20 : CTC-00127-FS-moreThanCompletelyFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs127 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs127 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00127-FS-moreThanCompletelyFalse-CPP20",
                 /* objUnderTest */  fs127,
@@ -11495,7 +11495,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostTrue-CPP20 : CTC-00128-FS-atMostTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs128 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs128 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00128-FS-atMostTrue-CPP20",
                 /* objUnderTest */  fs128,
@@ -11507,7 +11507,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseTrue-CPP20 : CTC-00129-FS-atMostCloseTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs129 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs129 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00129-FS-atMostCloseTrue-CPP20",
                 /* objUnderTest */  fs129,
@@ -11519,7 +11519,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostCloseFalse-CPP20 : CTC-00130-FS-atMostCloseFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs130 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs130 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00130-FS-atMostCloseFalse-CPP20",
                 /* objUnderTest */  fs130,
@@ -11531,7 +11531,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atMostFalse-CPP20 : CTC-00131-FS-atMostFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs131 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs131 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00131-FS-atMostFalse-CPP20",
                 /* objUnderTest */  fs131,
@@ -11543,7 +11543,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastTrue-CPP20 : CTC-00132-FS-atLeastTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs132 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs132 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00132-FS-atLeastTrue-CPP20",
                 /* objUnderTest */  fs132,
@@ -11555,7 +11555,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseTrue-CPP20 : CTC-00133-FS-atLeastCloseTrue-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs133 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs133 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00133-FS-atLeastCloseTrue-CPP20",
                 /* objUnderTest */  fs133,
@@ -11567,7 +11567,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastCloseFalse-CPP20 : CTC-00134-FS-atLeastCloseFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs134 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs134 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00134-FS-atLeastCloseFalse-CPP20",
                 /* objUnderTest */  fs134,
@@ -11579,7 +11579,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-atLeastFalse-CPP20 : CTC-00135-FS-atLeastFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs135 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs135 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00135-FS-atLeastFalse-CPP20",
                 /* objUnderTest */  fs135,
@@ -11591,7 +11591,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someExact-CPP20 : CTC-00136-FS-someExact-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs136 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs136 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00136-FS-someExact-CPP20",
                 /* objUnderTest */  fs136,
@@ -11603,7 +11603,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someLessFalse-CPP20 : CTC-00137-FS-someLessFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs137 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs137 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00137-FS-someLessFalse-CPP20",
                 /* objUnderTest */  fs137,
@@ -11615,7 +11615,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-someMoreFalse-CPP20 : CTC-00138-FS-someMoreFalse-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs138 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
+        cds :: TreeMap < String, String > fs138 = { {"a", "x"}, {"bb", "y"}, {"ccc", "z"}, {"dddd", "w"}, {"eeeee", "t"} };
         allOk = allOk && collectionTestCasePredicateCountedHandle (
                 /* tName */         "CTC-00138-FS-someMoreFalse-CPP20",
                 /* objUnderTest */  fs138,
@@ -11627,7 +11627,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-FunctionalStatements-forEachCount-CPP20 : CTC-00139-FS-forEachCount-CPP20 : StringToStringTreeMap */
-        cds :: experimental :: TreeMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
+        cds :: TreeMap < String, String > fs139 = { {"X", "x"}, {"YY" ,"Y"}, {"z", "Z"}, {"WW", "W"}, {"t", "TTT"} };
         Collection < MapEntry < String, String > > const & collection = fs139;
         Size count = 0;
         auto action = [& count] ( MapEntry<String, String>const & e ) { if ( e.key().length() % 2 == 0 ) { ++ count; } };
@@ -12110,13 +12110,13 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < int > intTreeSet = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > intTreeSet = { 1, 2, 3, 4, 5 };
 
-        cds :: experimental :: TreeSet < int > noneCommon = { 6, 7, 8, 9, 10 };
-        cds :: experimental :: TreeSet < int > oneCommon = { 6, 2, 8, 9, 10 };
-        cds :: experimental :: TreeSet < int > moreCommon = { 6, 2, 8, 4, 5 };
-        cds :: experimental :: TreeSet < int > allCommon = { 1, 2, 3, 4, 5 };
-        cds :: experimental :: TreeSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: TreeSet < int > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: TreeSet < int > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: TreeSet < int > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP20 */
         allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
@@ -12268,13 +12268,13 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : IntToIntTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < int, int > intToIntTreeMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > intToIntTreeMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
 
-        cds :: experimental :: TreeMap < int, int > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
-        cds :: experimental :: TreeMap < int, int > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
-        cds :: experimental :: TreeMap < int, int > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
-        cds :: experimental :: TreeMap < int, int > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
-        cds :: experimental :: TreeMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: TreeMap < int, int > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: TreeMap < int, int > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP20 */
         allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < int, int > > > (
@@ -12428,13 +12428,13 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < String > StringTreeSet = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < String > StringTreeSet = { 1, 2, 3, 4, 5 };
 
-        cds :: experimental :: TreeSet < String > noneCommon = { 6, 7, 8, 9, 10 };
-        cds :: experimental :: TreeSet < String > oneCommon = { 6, 2, 8, 9, 10 };
-        cds :: experimental :: TreeSet < String > moreCommon = { 6, 2, 8, 4, 5 };
-        cds :: experimental :: TreeSet < String > allCommon = { 1, 2, 3, 4, 5 };
-        cds :: experimental :: TreeSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > noneCommon = { 6, 7, 8, 9, 10 };
+        cds :: TreeSet < String > oneCommon = { 6, 2, 8, 9, 10 };
+        cds :: TreeSet < String > moreCommon = { 6, 2, 8, 4, 5 };
+        cds :: TreeSet < String > allCommon = { 1, 2, 3, 4, 5 };
+        cds :: TreeSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP20 */
         allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
@@ -12588,13 +12588,13 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-ContainsOf-CPP20 : CTG-00300-CO-CPP20 : StringToIntTreeMap", [& allOk, this] {
 
-        cds :: experimental :: TreeMap < String, String > StringToIntTreeMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < String, String > StringToIntTreeMap = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
 
-        cds :: experimental :: TreeMap < String, String > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
-        cds :: experimental :: TreeMap < String, String > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
-        cds :: experimental :: TreeMap < String, String > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
-        cds :: experimental :: TreeMap < String, String > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
-        cds :: experimental :: TreeMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > noneCommon = { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: TreeMap < String, String > oneCommon = { {6, 6}, {2, 2}, {8, 8}, {9, 9}, {10, 10} };
+        cds :: TreeMap < String, String > moreCommon = { {6, 6}, {2, 2}, {8, 8}, {4, 4}, {5, 5} };
+        cds :: TreeMap < String, String > allCommon = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} };
+        cds :: TreeMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP20 */
         allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < String, String > > > (
@@ -12694,14 +12694,14 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         cds :: Collection < int > & underTestColl = underTest;
 
-        cds :: experimental :: TreeSet < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: TreeSet < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: TreeSet < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: TreeSet < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: TreeSet < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < int > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: TreeSet < int > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < int > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < int > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && collectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -12778,14 +12778,14 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : IntToIntTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
         cds :: Collection < MapEntry < int, int > > & underTestColl = underTest;
 
-        cds :: experimental :: TreeMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: TreeMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: TreeMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: TreeMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: TreeMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < int, int > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < int, int > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < int, int > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
 
         allOk = allOk && collectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -12862,14 +12862,14 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         cds :: Collection < String > & underTestColl = underTest;
 
-        cds :: experimental :: TreeSet < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
-        cds :: experimental :: TreeSet < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
-        cds :: experimental :: TreeSet < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: TreeSet < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
-        cds :: experimental :: TreeSet < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < String > afterFrontRemove = { 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > afterMidRemove = { 2, 3, 4, 5, 7, 8, 9 };
+        cds :: TreeSet < String > afterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < String > afterAfterBackRemove = { 2, 3, 4, 5, 7, 8 };
+        cds :: TreeSet < String > afterOtherRemove = { 2, 3, 4, 5, 7, 8 };
 
         allOk = allOk && collectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -12946,14 +12946,14 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveAbsIt-CPP20 : CTG-00350-RAIT-CPP20 : StringToStringTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
         cds :: Collection < MapEntry < String, String > > & underTestColl = underTest;
 
-        cds :: experimental :: TreeMap < String, String > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: TreeMap < String, String > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
-        cds :: experimental :: TreeMap < String, String > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: TreeMap < String, String > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
-        cds :: experimental :: TreeMap < String, String > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < String, String > afterFrontRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > afterMidRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > afterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < String, String > afterAfterBackRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
+        cds :: TreeMap < String, String > afterOtherRemove = { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8} };
 
         allOk = allOk && collectionTestGroupRemoveAbstractIterator (
                 underTest,
@@ -12970,10 +12970,10 @@ auto CollectionTest :: execute () noexcept -> bool {
 #define make_ll(type, ...) cds :: LinkedList < type > { __VA_ARGS__ }
 #define make_hs(type, ...) cds :: HashSet < type > { __VA_ARGS__ }
 #define make_lhs(type, ...) cds :: LinkedHashSet < type > { __VA_ARGS__ }
-#define make_ts(type, ...) cds :: experimental :: TreeSet < type > { __VA_ARGS__ }
+#define make_ts(type, ...) cds :: TreeSet < type > { __VA_ARGS__ }
 #define make_hm(ktype, vtype, ...) cds :: HashMap < ktype, vtype > { __VA_ARGS__ }
 #define make_lhm(ktype, vtype, ...) cds :: LinkedHashMap < ktype, vtype > { __VA_ARGS__ }
-#define make_tm(ktype, vtype, ...) cds :: experimental :: TreeMap < ktype, vtype > { __VA_ARGS__ }
+#define make_tm(ktype, vtype, ...) cds :: TreeMap < ktype, vtype > { __VA_ARGS__ }
 #define make_il(...) { __VA_ARGS__ }
 
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntArray", [this, & allOk]{
@@ -13086,7 +13086,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > originalArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 
         allOk = allOk && collectionTestGroupRemoveBy (
@@ -13230,7 +13230,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : IntToIntTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > originalArray = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 
         allOk = allOk && collectionTestGroupRemoveBy (
@@ -13373,7 +13373,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
+        cds :: TreeSet < String > originalArray = { "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" };
 
 
         allOk = allOk && collectionTestGroupRemoveBy (
@@ -13517,7 +13517,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-CPP20 : CTG-00400-RB-CPP20 : StringToStringTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < String, String > originalArray = { {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} };
+        cds :: TreeMap < String, String > originalArray = { {"aaa", "aaa"}, {"aab", "aab"}, {"aac", "aac"}, {"bba", "bba"}, {"bbb", "bbb"}, {"bbc", "bbc"}, {"cca", "cca"}, {"ccb", "ccb"}, {"ccc", "ccc"} };
 
 
         allOk = allOk && collectionTestGroupRemoveBy (
@@ -14908,7 +14908,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 #define make(t, ...) make_ts(t, __VA_ARGS__)
 
@@ -16600,7 +16600,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : IntToIntTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 #define make(k, v, ...) make_tm(k, v, __VA_ARGS__)
 
@@ -18293,7 +18293,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringTreeSet", [this, & allOk]{
 
-        cds :: experimental :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* due to hash table rules, oredring might be odd */
 #define make(t, ...) make_ts(t, __VA_ARGS__)
@@ -19987,7 +19987,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveOf-CPP20 : CTG-00450-RO-CPP20 : StringToStringTreeMap", [this, & allOk]{
 
-        cds :: experimental :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
 #define make(k, v, ...) make_tm(k, v, __VA_ARGS__)
 
@@ -20595,7 +20595,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : IntTreeSet", [this, & allOk] {
 
-        cds :: experimental :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && collectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -20839,7 +20839,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : IntToIntTreeMap", [this, & allOk] {
 
-        cds :: experimental :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && collectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -21083,7 +21083,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : StringTreeSet", [this, & allOk] {
 
-        cds :: experimental :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && collectionTestGroupFindThat < String > (
                 /* pTestLib= */                                 this,
@@ -21327,7 +21327,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindThat-CPP20 : CTG-00600-FT-CPP20 : StringToStringTreeMap", [this, & allOk] {
 
-        cds :: experimental :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && collectionTestGroupFindThat (
                 /* pTestLib= */                                 this,
@@ -22094,7 +22094,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20 : IntTreeSet", [this, & allOk] {
 
-        cds :: experimental :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && collectionTestGroupFindOf < cds :: Collection < int > > (
                 /* pTestLib= */                                 this,
@@ -22938,7 +22938,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20 : IntToIntTreeMap", [this, & allOk] {
 
-        cds :: experimental :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < int, int > > > (
                 /* pTestLib= */                                 this,
@@ -23780,7 +23780,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20 : StringTreeSet", [this, & allOk] {
 
-        cds :: experimental :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
                 /* pTestLib= */                                 this,
@@ -24624,7 +24624,7 @@ auto CollectionTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "CollectionTestGroup-FindOf-CPP20 : CTG-00700-FO-CPP20 : StringToStringTreeMap", [this, & allOk] {
 
-        cds :: experimental :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds :: TreeMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < String, String > > > (
                 /* pTestLib= */                                 this,
@@ -24948,7 +24948,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         std :: vector < int > range3Definer { 20, 21, 22, 23, 24, 25 };
 
         allOk = allOk && collectionTestGroupRandomInsertion <
-                cds :: experimental :: TreeSet < int >,
+                cds :: TreeSet < int >,
                 int
         > (
                 this,
@@ -25112,7 +25112,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         std :: vector < MapEntry < int, int > > range3Definer { {20, 20}, {21, 21}, {22, 22}, {23, 23}, {24, 24}, {25, 25} };
 
         allOk = allOk && collectionTestGroupRandomInsertion <
-                cds :: experimental :: TreeMap < int, int >,
+                cds :: TreeMap < int, int >,
                 MapEntry < int, int >
         > (
                 this,
@@ -25137,13 +25137,13 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
 
         /* CollectionTestCase-RandomInsertion-specialEmplace-CPP20 : CTC-00810-RI-specialEmplace-CPP20 */
-        cds :: experimental :: TreeMap < int, int > hm00810;
+        cds :: TreeMap < int, int > hm00810;
         cds :: Collection < MapEntry < int, int > > & RI00810 = hm00810;
 
         RI00810.emplace ( 3, 5 );
         RI00810.emplace ( 4, 5 );
 
-        if ( ! RI00810.equals ( cds :: experimental :: TreeMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
+        if ( ! RI00810.equals ( cds :: TreeMap < int, int > { { 3, 5 }, { 4, 5 } } ) ) {
             this->logError( "'CTC-00810-RI-specialEmplace-CPP20' failed" );
             allOk = false;
         } else {
