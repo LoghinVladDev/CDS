@@ -7,12 +7,6 @@
 
 #include <CDS/Set>
 
-#include <CDS/Comparator>
-#include <CDS/Extractor>
-#include <CDS/Destructor>
-#include <CDS/CopyConstructor>
-#include <CDS/Function>
-
 #include "../../../shared/Node.hpp"
 #include "../../../shared/impl/generalPredicates.hpp"
 

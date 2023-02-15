@@ -5,12 +5,6 @@
 #ifndef __CDS_TREE_MAP_HPP__     /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_TREE_MAP_HPP__     /* NOLINT(bugprone-reserved-identifier) */
 
-#include <CDS/Comparator>
-#include <CDS/Extractor>
-#include <CDS/Destructor>
-#include <CDS/CopyConstructor>
-#include <CDS/Function>
-
 #include <CDS/Map>
 
 #include "../../../../shared/Node.hpp"
