@@ -6,7 +6,7 @@
 #define __CDS_EX_SHARED_REPLACE_OF_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
+#include "../../../../../../shared/iterableInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

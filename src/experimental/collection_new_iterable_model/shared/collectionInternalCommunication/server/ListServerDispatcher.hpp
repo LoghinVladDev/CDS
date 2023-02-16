@@ -6,7 +6,7 @@
 #define __CDS_EX_SHARED_LIST_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
+#include "../../../../../shared/iterableInternalCommunication/server/ListServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

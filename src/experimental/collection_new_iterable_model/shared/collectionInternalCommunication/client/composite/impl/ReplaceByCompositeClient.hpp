@@ -6,6 +6,6 @@
 #define __CDS_EX_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../../../shared/collectionInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+#include "../../../../../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
 
 #endif /* __CDS_EX_SHARED_REPLACE_BY_COMPOSITE_CLIENT_IMPL_HPP__ */

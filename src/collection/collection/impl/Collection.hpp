@@ -160,32 +160,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         ) {
 
             /* If, by forward iteration, one pair's elements are different, not equal */
-            if ( ! Collection :: __cf_equals ( * leftIt, * rightIt ) ) {        /* NOLINT(clion-misra-cpp2008-5-3-1) */
+            if ( ! Collection :: __if_equals ( * leftIt, * rightIt ) ) {
                 return false;
             }
         }
 
         /* Otherwise, objects are equal content-wise */
         return true;
-    }
-
-
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    __CDS_OptimalInline auto Collection < __ElementType > :: contains (
-            ElementType const & element
-    ) const noexcept -> bool {
-
-        /* Parse object via forward iteration */
-        for ( auto iterator = this->cbegin(), end = this->cend(); iterator != end; ++ iterator ) {  /* NOLINT(clion-misra-cpp2008-8-0-1) */
-
-            /* If object found, the object is contained in the collection */
-            if ( Collection :: __cf_equals ( element, * iterator ) ) {
-                return true;
-            }
-        }
-
-        /* If full parse complete and not found, object not contained in the collection */
-        return false;
     }
 
 } /* namespace cds */

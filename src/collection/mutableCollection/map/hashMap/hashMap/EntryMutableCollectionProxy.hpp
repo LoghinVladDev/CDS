@@ -95,14 +95,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __ValueType,
                             __Hasher
                     >
-            > using __HashMapEntryProxyFindOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapEntryProxyFindOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfMutableCompositeClient <
                             __ServerType,
                             typename __HashMap :: EntryType,
                             typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_Iterator,
-                            cds :: Collection < typename __HashMap :: EntryType >,
-                            & __collectionContains < typename __HashMap :: EntryType >,
-                            & __collectionNotContains < typename __HashMap :: EntryType >
+                            cds :: Iterable < typename __HashMap :: EntryType >,
+                            & __iterableContains < typename __HashMap :: EntryType >,
+                            & __iterableNotContains < typename __HashMap :: EntryType >
                     >;
 
 
@@ -117,14 +117,14 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __ValueType,
                             __Hasher
                     >
-            > using __HashMapEntryProxyFindOfConstCollectionClient =    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapEntryProxyFindOfConstIterableClient =  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalFindOfImmutableCompositeClient <
                             __ServerType,
                             typename __HashMap :: EntryType,
                             typename __HashMapImplementation < __KeyType, __ValueType, __Hasher > :: __ht_ConstIterator,
-                            cds :: Collection < typename __HashMap :: EntryType >,
-                            & __collectionContains < typename __HashMap :: EntryType >,
-                            & __collectionNotContains < typename __HashMap :: EntryType >
+                            cds :: Iterable < typename __HashMap :: EntryType >,
+                            & __iterableContains < typename __HashMap :: EntryType >,
+                            & __iterableNotContains < typename __HashMap :: EntryType >
                     >;
 
 
@@ -221,12 +221,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __ValueType,
                             __Hasher
                     >
-            > using __HashMapEntryProxyRemoveOfCollectionClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapEntryProxyRemoveOfIterableClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalRemoveOfCompositeClient <
                             __ServerType,
                             typename __HashMap :: EntryType,
-                            cds :: Collection < typename __HashMap :: EntryType >,
-                            & __collectionContains < typename __HashMap :: EntryType >
+                            cds :: Iterable < typename __HashMap :: EntryType >,
+                            & __iterableContains < typename __HashMap :: EntryType >
                     >;
 
 
@@ -315,12 +315,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __ValueType,
                             __Hasher
                     >
-            > using __HashMapEntryProxyContainsOfCollectionClient = /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > using __HashMapEntryProxyContainsOfIterableClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     __LocalContainsOfCompositeClient <
                             __ServerType,
                             typename __HashMap :: EntryType,
-                            cds :: Collection < typename __HashMap :: EntryType >,
-                            __collectionContains < typename __HashMap :: EntryType >
+                            cds :: Iterable < typename __HashMap :: EntryType >,
+                            & __iterableContains < typename __HashMap :: EntryType >
                     >;
 
 
@@ -340,7 +340,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             __ServerType,
                             typename __HashMap :: EntryType,
                             std :: initializer_list < typename __HashMap :: EntryType >,
-                            __initializerListContains <
+                            & __initializerListContains <
                                     typename __HashMap :: EntryType,
                                     & cds :: meta :: equals < typename __HashMap :: EntryType >
                             >
@@ -387,18 +387,18 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             public __hidden :: __impl :: __HashMapEntryProxyRandomInsertionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyConstIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __HashMapEntryProxyFindOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __HashMapEntryProxyFindOfConstCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __HashMapEntryProxyFindOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __HashMapEntryProxyFindOfConstIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyFindOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyFindOfConstInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyConstFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __HashMapEntryProxyRemoveOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __HashMapEntryProxyRemoveOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyRemoveOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyRemoveByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyConstGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
-            public __hidden :: __impl :: __HashMapEntryProxyContainsOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
+            public __hidden :: __impl :: __HashMapEntryProxyContainsOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyContainsOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyDelegateForwardIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >,
             public __hidden :: __impl :: __HashMapEntryProxyDelegateForwardConstIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher > {
@@ -419,10 +419,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         using ConstIteratorRemoveClient             = __hidden :: __impl :: __HashMapEntryProxyConstIteratorRemoveClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient                = __hidden :: __impl :: __HashMapEntryProxyFindOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+        using FindOfIterableClient                  = __hidden :: __impl :: __HashMapEntryProxyFindOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient           = __hidden :: __impl :: __HashMapEntryProxyFindOfConstCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+        using ConstFindOfIterableClient             = __hidden :: __impl :: __HashMapEntryProxyFindOfConstIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using FindOfInitializerListClient           = __hidden :: __impl :: __HashMapEntryProxyFindOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
@@ -437,7 +437,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         using ConstFindByClient                     = __hidden :: __impl :: __HashMapEntryProxyConstFindByClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient              = __hidden :: __impl :: __HashMapEntryProxyRemoveOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+        using RemoveOfIterableClient                = __hidden :: __impl :: __HashMapEntryProxyRemoveOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using RemoveOfInitializerListClient         = __hidden :: __impl :: __HashMapEntryProxyRemoveOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
@@ -449,7 +449,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         using GenericStatementsClient               = __hidden :: __impl :: __HashMapEntryProxyGenericStatementsClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient            = __hidden :: __impl :: __HashMapEntryProxyContainsOfCollectionClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
+        using ContainsOfIterableClient              = __hidden :: __impl :: __HashMapEntryProxyContainsOfIterableClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using ContainsOfInitializerListClient       = __hidden :: __impl :: __HashMapEntryProxyContainsOfInitializerListClient < EntryMutableCollectionProxy, __KeyType, __ValueType, __Hasher >;
@@ -588,28 +588,28 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeOf;
+        using RemoveOfIterableClient :: removeOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeFirstOf;
+        using RemoveOfIterableClient :: removeFirstOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeLastOf;
+        using RemoveOfIterableClient :: removeLastOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeAllOf;
+        using RemoveOfIterableClient :: removeAllOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeNotOf;
+        using RemoveOfIterableClient :: removeNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeFirstNotOf;
+        using RemoveOfIterableClient :: removeFirstNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeLastNotOf;
+        using RemoveOfIterableClient :: removeLastNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using RemoveOfCollectionClient :: removeAllNotOf;
+        using RemoveOfIterableClient :: removeAllNotOf;
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
@@ -638,16 +638,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAnyOf;
+        using ContainsOfIterableClient :: containsAnyOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAnyNotOf;
+        using ContainsOfIterableClient :: containsAnyNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsAllOf;
+        using ContainsOfIterableClient :: containsAllOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ContainsOfCollectionClient :: containsNoneOf;
+        using ContainsOfIterableClient :: containsNoneOf;
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
@@ -677,28 +677,28 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findOf;
+        using FindOfIterableClient :: findOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findFirstOf;
+        using FindOfIterableClient :: findFirstOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findLastOf;
+        using FindOfIterableClient :: findLastOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findAllOf;
+        using FindOfIterableClient :: findAllOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findNotOf;
+        using FindOfIterableClient :: findNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findFirstNotOf;
+        using FindOfIterableClient :: findFirstNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findLastNotOf;
+        using FindOfIterableClient :: findLastNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using FindOfCollectionClient :: findAllNotOf;
+        using FindOfIterableClient :: findAllNotOf;
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
@@ -740,28 +740,28 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findOf;
+        using ConstFindOfIterableClient :: findOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findFirstOf;
+        using ConstFindOfIterableClient :: findFirstOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findLastOf;
+        using ConstFindOfIterableClient :: findLastOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findAllOf;
+        using ConstFindOfIterableClient :: findAllOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findNotOf;
+        using ConstFindOfIterableClient :: findNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findFirstNotOf;
+        using ConstFindOfIterableClient :: findFirstNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findLastNotOf;
+        using ConstFindOfIterableClient :: findLastNotOf;
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
-        using ConstFindOfCollectionClient :: findAllNotOf;
+        using ConstFindOfIterableClient :: findAllNotOf;
 
 
     public:     /* NOLINT(readability-redundant-access-specifiers) */
@@ -819,13 +819,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */

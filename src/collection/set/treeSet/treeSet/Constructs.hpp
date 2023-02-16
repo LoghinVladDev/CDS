@@ -117,8 +117,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
                             cds :: TreeSet < __ElementType >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < __ElementType >
                     >;
 
 
@@ -141,9 +141,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             cds :: TreeSet < __ElementType >,
                             __ElementType,
                             AbstractRedBlackTreeConstIterator < __ElementType >,
-                            cds :: Collection < __ElementType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < __ElementType >,
-                            & cds :: __hidden :: __impl :: __collectionNotContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < __ElementType >,
+                            & cds :: __hidden :: __impl :: __iterableNotContains < __ElementType >
                     >;
 
 
@@ -173,8 +173,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     cds :: __hidden :: __impl :: __LocalRemoveOfCompositeClient <
                             cds :: TreeSet < __ElementType >,
                             __ElementType,
-                            cds :: Collection < __ElementType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < __ElementType >
+                            cds :: Iterable < __ElementType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < __ElementType >
                     >;
 
 

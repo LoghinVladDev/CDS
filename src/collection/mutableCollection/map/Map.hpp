@@ -10,9 +10,9 @@
 #include <CDS/exception/KeyException>
 #include <CDS/exception/UnsupportedOperationException>
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"    /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/server/MutableCollectionServer.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/FindUniqueMutablePrimitiveClient.hpp"    /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/primitive/FindUniqueImmutablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/server/MutableCollectionServer.hpp"
 
 #include "map/entry/Entry.hpp"
 
@@ -248,9 +248,9 @@ namespace cds {
 #include "map/AbstractValueMutableCollectionProxy.hpp"
 #include "map/AbstractEntryMutableCollectionProxy.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClient.hpp"       /* NOLINT(llvm-include-order) */
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
-#include "../../../shared/collectionInternalCommunication/server/impl/MutableCollectionServer.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClient.hpp"       /* NOLINT(llvm-include-order) */
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/MutableCollectionServer.hpp"
 
 #include "map/entry/impl/Entry.hpp"
 

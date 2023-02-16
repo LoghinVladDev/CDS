@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__
 #define __CDS_EX_SHARED_TREE_SET_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
-#include "../../../../../../shared/collectionInternalCommunication/server/impl/SetServerDispatcher.hpp"
+#include "../../../../../../shared/iterableInternalCommunication/server/impl/SetServerDispatcher.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

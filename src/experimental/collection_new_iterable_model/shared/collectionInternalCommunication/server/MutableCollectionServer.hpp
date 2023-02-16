@@ -6,7 +6,7 @@
 #define __CDS_EX_SHARED_MUTABLE_COLLECTION_SERVER_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 #warning No longer an experimental feature. Use the non-experimental header.
-#include "../../../../../shared/collectionInternalCommunication/server/MutableCollectionServer.hpp"
+#include "../../../../../shared/iterableInternalCommunication/server/MutableCollectionServer.hpp"
 
 namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     namespace experimental {    /* NOLINT(modernize-concat-nested-namespaces) */

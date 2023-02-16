@@ -12,15 +12,15 @@
 
 #include "../../../shared/iterator/RedBlackTreeIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/server/TreeSetServerDispatcher.hpp"
+#include "../../../shared/iterableInternalCommunication/server/TreeSetServerDispatcher.hpp"
 
 #include "../../../shared/redBlackTree/RedBlackTree.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "../../../shared/delegateIterator/DelegateIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/server/SetServer.hpp"
+#include "../../../shared/iterableInternalCommunication/server/SetServer.hpp"
 
 #include "treeSet/Constructs.hpp"
 
@@ -82,13 +82,13 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
     protected: using typename ConstIteratorRemoveClient :: ConstIterator;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
 
@@ -272,10 +272,10 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
 
 #include "../../../shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "../../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
-#include "../../../shared/collectionInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
 
-#include "../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "treeSet/impl/TreeSet.hpp"
 

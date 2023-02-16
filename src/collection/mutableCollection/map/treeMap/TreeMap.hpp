@@ -10,20 +10,20 @@
 #include "../../../../shared/Node.hpp"
 #include "../../../../shared/impl/generalPredicates.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/TreeMapServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/TreeMapServerDispatcher.hpp"
 
 #include "../../../../shared/iterator/RedBlackTreeIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
-#include "../../../../shared/collectionInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../../shared/iterableInternalCommunication/client/primitive/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "../../../../shared/iterator/IteratorGenericDecorator.hpp"
 #include "../../../../shared/delegateIterator/DelegateIterator.hpp"
 
 #include "../../../../shared/redBlackTree/RedBlackTree.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/MapServer.hpp"
-#include "../../../../shared/collectionInternalCommunication/server/SetServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/MapServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/SetServer.hpp"
 
 #include "treeMap/Constructs.hpp"
 
@@ -258,13 +258,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     public:     using ConstGenericStatementsClient :: none;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
     public:
@@ -375,18 +375,18 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "../../../../shared/redBlackTree/impl/RedBlackTree.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/impl/MapServer.hpp"
-#include "../../../../shared/collectionInternalCommunication/server/impl/SetServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/MapServer.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"
 
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 #include "../../../../shared/iterator/impl/IteratorGenericDecorator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
-#include "../../../../shared/collectionInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"
+#include "../../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
 
 #include "../../../../shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "../../../../shared/collectionInternalCommunication/server/impl/TreeMapServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/TreeMapServerDispatcher.hpp"
 
 #include "treeMap/impl/TreeMap.hpp"
 

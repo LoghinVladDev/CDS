@@ -10960,7 +10960,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: Array < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < int > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intArray,
                 /* pTestLib= */         this,
@@ -11000,7 +11000,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedList < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < int > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intLinkedList,
                 /* pTestLib= */         this,
@@ -11040,7 +11040,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: HashSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < int > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intHashSet,
                 /* pTestLib= */         this,
@@ -11080,7 +11080,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: TreeSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < int > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intTreeSet,
                 /* pTestLib= */         this,
@@ -11119,7 +11119,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedHashSet < int > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < int > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < int > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intTreeSet,
                 /* pTestLib= */         this,
@@ -11158,7 +11158,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: HashMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < int, int > > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < MapEntry < int, int > > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intToIntHashMap,
                 /* pTestLib= */         this,
@@ -11198,7 +11198,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedHashMap < int, int > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < int, int > > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < MapEntry < int, int > > > (
                 /* groupName= */        "Collection",
                 /* collection= */       intToIntHashMap,
                 /* pTestLib= */         this,
@@ -11238,7 +11238,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: Array < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < String > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringArray,
                 /* pTestLib= */         this,
@@ -11278,7 +11278,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedList < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < String > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringLinkedList,
                 /* pTestLib= */         this,
@@ -11318,7 +11318,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: HashSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < String > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringHashSet,
                 /* pTestLib= */         this,
@@ -11358,7 +11358,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: TreeSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < String > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringTreeSet,
                 /* pTestLib= */         this,
@@ -11398,7 +11398,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedHashSet < String > allCommonAndMore = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < String > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < String > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringLinkedHashSet,
                 /* pTestLib= */         this,
@@ -11438,7 +11438,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: HashMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < String, String > > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < MapEntry < String, String > > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringToIntHashMap,
                 /* pTestLib= */         this,
@@ -11478,7 +11478,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         cds :: LinkedHashMap < String, String > allCommonAndMore = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
         /* CTC-00301-C0-Collection-CPP11 */
-        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Collection < MapEntry < String, String > > > (
+        allOk = allOk && collectionTestGroupContainsGroupByEquivalent < Iterable < MapEntry < String, String > > > (
                 /* groupName= */        "Collection",
                 /* collection= */       StringToIntHashMap,
                 /* pTestLib= */         this,
@@ -12408,7 +12408,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_a(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -12439,7 +12439,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -12463,7 +12463,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -12487,7 +12487,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -12511,7 +12511,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -12542,7 +12542,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -12566,7 +12566,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -12590,7 +12590,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -12831,7 +12831,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_ll(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -12862,7 +12862,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -12886,7 +12886,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -12910,7 +12910,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -12934,7 +12934,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -12965,7 +12965,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -12989,7 +12989,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -13013,7 +13013,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -13254,7 +13254,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_hs(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -13285,7 +13285,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -13309,7 +13309,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -13333,7 +13333,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -13357,7 +13357,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -13388,7 +13388,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -13412,7 +13412,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -13436,7 +13436,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -13677,7 +13677,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_ts(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -13708,7 +13708,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -13732,7 +13732,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -13756,7 +13756,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -13780,7 +13780,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -13811,7 +13811,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -13835,7 +13835,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -13859,7 +13859,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -14100,7 +14100,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_lhs(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -14131,7 +14131,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -14155,7 +14155,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -14179,7 +14179,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -14203,7 +14203,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -14234,7 +14234,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -14258,7 +14258,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -14282,7 +14282,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < int >, decltype (underTest), int > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -14523,7 +14523,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -14554,7 +14554,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -14578,7 +14578,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -14602,7 +14602,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -14626,7 +14626,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -14657,7 +14657,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -14681,7 +14681,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -14705,7 +14705,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -14946,7 +14946,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(k, v, ...) make_lhm(k, v, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -14977,7 +14977,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, int, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -15001,7 +15001,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -15025,7 +15025,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -15049,7 +15049,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -15080,7 +15080,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -15104,7 +15104,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -15128,7 +15128,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(int, int, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -15369,7 +15369,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_a(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -15400,7 +15400,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -15424,7 +15424,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -15448,7 +15448,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -15472,7 +15472,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -15503,7 +15503,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -15527,7 +15527,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -15551,7 +15551,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -15792,7 +15792,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(t, ...) make_ll(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -15823,7 +15823,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -15847,7 +15847,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -15871,7 +15871,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -15895,7 +15895,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -15926,7 +15926,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -15950,7 +15950,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -15974,7 +15974,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -16216,7 +16216,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         /* due to hash table rules, oredring might be odd */
 #define make(t, ...) make_hs(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -16247,7 +16247,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -16271,7 +16271,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -16295,7 +16295,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -16319,7 +16319,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -16350,7 +16350,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -16374,7 +16374,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -16398,7 +16398,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -16640,7 +16640,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         /* due to hash table rules, oredring might be odd */
 #define make(t, ...) make_ts(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -16671,7 +16671,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -16695,7 +16695,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -16719,7 +16719,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -16743,7 +16743,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -16774,7 +16774,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -16798,7 +16798,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -16822,7 +16822,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -17064,7 +17064,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         /* due to hash table rules, oredring might be odd */
 #define make(t, ...) make_lhs(t, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -17095,7 +17095,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -17119,7 +17119,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -17143,7 +17143,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -17167,7 +17167,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -17198,7 +17198,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -17222,7 +17222,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -17246,7 +17246,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < String >, decltype (underTest), String > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -17487,7 +17487,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(k, v, ...) make_hm(k, v, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -17518,7 +17518,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -17542,7 +17542,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -17566,7 +17566,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -17590,7 +17590,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -17621,7 +17621,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -17645,7 +17645,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -17669,7 +17669,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -17910,7 +17910,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
 #define make(k, v, ...) make_lhm(k, v, __VA_ARGS__)
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeOf",
@@ -17941,7 +17941,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, String, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllOf",
@@ -17965,7 +17965,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstOf",
@@ -17989,7 +17989,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastOf",
@@ -18013,7 +18013,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                                 this,
                 /* groupVariant= */                             "Collection",
                 /* subvariant= */                               "removeNotOf",
@@ -18044,7 +18044,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */         make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeAllNotOf",
@@ -18068,7 +18068,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} )
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeFirstNotOf",
@@ -18092,7 +18092,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedCollectionFromAllAndMore= */ make(String, String, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9})
         );
 
-        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Collection < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
                 /* pTestLib= */                         this,
                 /* groupVariant= */                     "Collection",
                 /* subvariant= */                       "removeLastNotOf",
@@ -19473,7 +19473,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < int > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -19683,7 +19683,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: HashSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < int > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -19893,7 +19893,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: TreeSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < int > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -20103,7 +20103,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedHashSet < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < int > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < int > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -20313,7 +20313,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < int, int > > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < MapEntry < int, int > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -20525,7 +20525,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedHashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < int, int > > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < MapEntry < int, int > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -20737,7 +20737,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -20947,7 +20947,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -21157,7 +21157,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: HashSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -21367,7 +21367,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: TreeSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -21577,7 +21577,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedHashSet < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < String >, String > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < String >, String > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -21787,7 +21787,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < String, String > > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < MapEntry < String, String > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,
@@ -21999,7 +21999,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: LinkedHashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && collectionTestGroupFindOf < cds :: Collection < MapEntry < String, String > > > (
+        allOk = allOk && collectionTestGroupFindOf < cds :: Iterable < MapEntry < String, String > > > (
                 /* pTestLib= */                                 this,
                 /* variant= */                                  "Collection",
                 /* underTest= */                                underTest,

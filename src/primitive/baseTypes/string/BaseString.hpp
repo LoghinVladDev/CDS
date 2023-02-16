@@ -10,6 +10,7 @@
 #include "../../../shared/impl/generalPredicates.hpp"   /* NOLINT(llvm-include-order) */
 #include "../../../shared/impl/arithmetic.hpp"
 #include "../../../shared/memory/PrimitiveAllocation.hpp"
+#include "../../../shared/sequence/Predeclaration.hpp"
 
 #include <CDS/Limits>                                   /* NOLINT(llvm-include-order) */
 #include "StringUtils.hpp"
@@ -17,9 +18,6 @@
 #include <sstream>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
-
-    template < typename C >
-    class Sequence;
 
     class OutOfBoundsException;
 

@@ -18,7 +18,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         typename                                                __ElementType,                                          /* NOLINT(bugprone-reserved-identifier) */
                         cds :: utility :: ComparisonFunction < __ElementType >  __compare = & cds :: meta :: equals < __ElementType >   /* NOLINT(bugprone-reserved-identifier) */
                 > using __CollectionFunctions __CDS_DeprecatedHint("No longer an experimental feature.") =                              /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: __hidden :: __impl :: __CollectionFunctions < __ElementType, __compare >;
+                        cds :: __hidden :: __impl :: __IterableFunctions < __ElementType, __compare >;
 
             }
         }

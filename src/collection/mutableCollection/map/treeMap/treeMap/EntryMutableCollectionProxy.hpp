@@ -130,8 +130,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __LocalContainsOfCompositeClient <
                             __ServerType,
                             typename __TreeMap :: EntryType,
-                            cds :: Collection < typename __TreeMap :: EntryType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >
+                            cds :: Iterable < typename __TreeMap :: EntryType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >
                     >;
 
 
@@ -204,9 +204,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             __ServerType,
                             typename __TreeMap :: EntryType,
                             typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator,
-                            cds :: Collection < typename __TreeMap :: EntryType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >,
-                            & cds :: __hidden :: __impl :: __collectionNotContains < typename __TreeMap :: EntryType  >
+                            cds :: Iterable < typename __TreeMap :: EntryType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >,
+                            & cds :: __hidden :: __impl :: __iterableNotContains < typename __TreeMap :: EntryType  >
                     >;
 
 
@@ -250,9 +250,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             __ServerType,
                             typename __TreeMap :: EntryType,
                             typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator,
-                            cds :: Collection < typename __TreeMap :: EntryType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >,
-                            & cds :: __hidden :: __impl :: __collectionNotContains < typename __TreeMap :: EntryType  >
+                            cds :: Iterable < typename __TreeMap :: EntryType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >,
+                            & cds :: __hidden :: __impl :: __iterableNotContains < typename __TreeMap :: EntryType  >
                     >;
 
 
@@ -343,8 +343,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     __LocalRemoveOfCompositeClient <
                             __ServerType,
                             typename __TreeMap :: EntryType,
-                            cds :: Collection < typename __TreeMap :: EntryType >,
-                            & cds :: __hidden :: __impl :: __collectionContains < typename __TreeMap :: EntryType  >
+                            cds :: Iterable < typename __TreeMap :: EntryType >,
+                            & cds :: __hidden :: __impl :: __iterableContains < typename __TreeMap :: EntryType  >
                     >;
 
 
@@ -574,13 +574,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     public:     using ConstGenericStatementsClient :: none;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) noexcept -> __GenericHandler override;
 
     private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
+                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
     public:

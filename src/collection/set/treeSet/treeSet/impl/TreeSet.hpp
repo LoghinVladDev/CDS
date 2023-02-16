@@ -8,8 +8,8 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __cicch_obtainGenericHandler (    /* NOLINT(bugprone-reserved-identifier) */
-            cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __iicch_obtainGenericHandler (    /* NOLINT(bugprone-reserved-identifier) */
+            cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
 
         return this->__ss_handlers() [ static_cast < uint32 > ( requestType ) ];
@@ -17,8 +17,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
     template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __cicch_obtainGenericConstHandler (   /* NOLINT(bugprone-reserved-identifier) */
-            cds :: __hidden :: __impl :: __CollectionInternalRequestType requestType
+    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __iicch_obtainGenericConstHandler (   /* NOLINT(bugprone-reserved-identifier) */
+            cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
 
         return this->__ss_constHandlers() [ static_cast < uint32 > ( requestType ) ];
