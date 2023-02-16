@@ -16,6 +16,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: PredicateFunction < __ElementType const &, __ElementType const & >
             > class __ArrayBase;            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+            template <
+                    typename __ElementType, /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    Size,
+                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >,
+                    typename
+            > class __StaticArrayBase;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
         } /* namespace __impl */
     } /* namespace __hidden */
 
