@@ -9,7 +9,7 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace json {
 
-        __CDS_NoDiscard auto loadJson (
+        __CDS_NoDiscard inline auto loadJson (
                 filesystem :: Path const & path
         ) noexcept (false) -> JsonObject {
 
@@ -18,7 +18,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             );
         }
 
-        __CDS_NoDiscard auto loadJsonArray (
+        __CDS_NoDiscard inline auto loadJsonArray (
                 filesystem :: Path const & path
         ) noexcept (false) -> JsonArray {
 

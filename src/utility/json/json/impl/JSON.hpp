@@ -219,13 +219,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     into.emplace ( std :: move ( label ), std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; } /* NOLINT(bugprone-branch-clone) */
-                                    else if ( string [index] == 't' )   { label += '\t'; }
-                                    else if ( string [index] == 'f' )   { label += '\f'; }
-                                    else if ( string [index] == 'r' )   { label += '\r'; }
-                                    else if ( string [index] == 'v' )   { label += '\v'; }
-                                    else if ( string [index] == 'a' )   { label += '\a'; }
-                                    else if ( string [index] == 'b' )   { label += '\b'; }
+                                    if ( string [index] == 'n' )        { stringData += '\n'; } /* NOLINT(bugprone-branch-clone) */
+                                    else if ( string [index] == 't' )   { stringData += '\t'; }
+                                    else if ( string [index] == 'f' )   { stringData += '\f'; }
+                                    else if ( string [index] == 'r' )   { stringData += '\r'; }
+                                    else if ( string [index] == 'v' )   { stringData += '\v'; }
+                                    else if ( string [index] == 'a' )   { stringData += '\a'; }
+                                    else if ( string [index] == 'b' )   { stringData += '\b'; }
 
                                 } else {
                                     stringData += string[ index ];
@@ -486,13 +486,13 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                     into.pushBack ( std :: move ( stringData ) );
                                 } else if ( readBackslash ) {
 
-                                    if ( string [index] == 'n' )        { label += '\n'; }
-                                    else if ( string [index] == 't' )   { label += '\t'; }
-                                    else if ( string [index] == 'f' )   { label += '\f'; }
-                                    else if ( string [index] == 'r' )   { label += '\r'; }
-                                    else if ( string [index] == 'v' )   { label += '\v'; }
-                                    else if ( string [index] == 'a' )   { label += '\a'; }
-                                    else if ( string [index] == 'b' )   { label += '\b'; }
+                                    if ( string [index] == 'n' )        { stringData += '\n'; }
+                                    else if ( string [index] == 't' )   { stringData += '\t'; }
+                                    else if ( string [index] == 'f' )   { stringData += '\f'; }
+                                    else if ( string [index] == 'r' )   { stringData += '\r'; }
+                                    else if ( string [index] == 'v' )   { stringData += '\v'; }
+                                    else if ( string [index] == 'a' )   { stringData += '\a'; }
+                                    else if ( string [index] == 'b' )   { stringData += '\b'; }
 
                                 } else {
                                     stringData += string[ index ];
@@ -690,7 +690,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return "{}";
                     }
 
-                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "}";
+                    return result.replace ( static_cast < Index > (result.size()) - 2, static_cast < Index > (result.size()), "\n" ) + indentation + "}";
                 }
 
 
@@ -713,7 +713,29 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return "[]";
                     }
 
-                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "]";
+                    return result.replace ( static_cast < Index > (result.size()) - 2, static_cast < Index > (result.size()), "\n" ) + indentation + "]";
+                }
+
+
+                inline auto __escape (
+                        String const & string
+                ) noexcept -> String {
+
+                    String newStr = "";
+                    for ( auto c : string ) {
+
+                        if ( c == '\n' ) { newStr += "\\n"; }
+                        else if ( c == '\t' ) { newStr += "\\t"; }
+                        else if ( c == '\f' ) { newStr += "\\f"; }
+                        else if ( c == '\r' ) { newStr += "\\r"; }
+                        else if ( c == '\v' ) { newStr += "\\v"; }
+                        else if ( c == '\a' ) { newStr += "\\a"; }
+                        else if ( c == '\b' ) { newStr += "\\b"; }
+                        else if ( c == '\"' ) { newStr += "\\\""; }
+                        else { newStr += c; }
+                    }
+
+                    return newStr;
                 }
 
 
@@ -992,7 +1014,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 case __hidden :: __impl :: __JsonElementType :: __jet_String: {
-                    return "\"" + this->_data.data().pObject->toString() + "\"";
+                    return "\"" + __hidden :: __impl :: __escape (
+                            this->_data.data().pObject->toString()
+                    ) + "\"";
                 }
 
                 case __hidden :: __impl :: __JsonElementType :: __jet_Bool: {

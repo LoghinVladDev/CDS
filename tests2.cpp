@@ -1,38 +1,27 @@
-#include <CDS/Array>
-#include "src/experimental/cds_69_modernize_sequence/Sequence.hpp"
+#include <CDS/TreeMap>
+#include <CDS/experimental/TreeSet>
+#include <CDS/experimental/TreeMap>
+using namespace std;
 
-int main () {
+template <std::string * temp> //pointer to object
+void f()
+{
+    cout << *temp << endl;
+}
 
+template <std::string & temp> //reference to object
+void g()
+{
+    cout << temp << endl;
+    temp += "...appended some string";
+}
 
-    using namespace cds;
+std::string s; //must not be local as it must have external linkage!
 
-
-    auto array = cds :: arrayOf ( 1, 2, 3, 4, 5 );
-    std :: cout << array << '\n';
-
-    using namespace cds :: __hidden :: __impl;
-
-    std::function <bool(int const &)> f2 = [](auto e) {return e % 2 == 1;};
-    f2 (3);
-    Function <bool(int const &)> f = [](auto e ){ return e % 2 == 1;};
-    f( 3);
-
-//    Function <bool(int const &)> f3 = /**/3;
-
-    __LazySequence < int > ls ( array );
-    for ( auto e : ls
-            .filter ([](auto e){return e % 2 == 1;})
-            .filter([](int const & e){return e != 5;})) {
-        std :: cout << e << '\n';
-    }
-
-    auto mapper = [](auto e) {return e * 2.0f;};
-    __LazySequenceTransitionPipeline < int, decltype (mapper) > trans (mapper, & ls, false);
-    for (auto e : trans) {
-        std :: cout << e << '\n';
-    }
-
-//    std :: cout << ls << '\n';
-
+int main() {
+    s = "can assign values locally";
+    f<&s>();
+    g<s>();
+    cout << s << endl;
     return 0;
 }

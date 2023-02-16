@@ -19,11 +19,20 @@
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace filesystem {
 
+        namespace __hidden {
+            namespace __impl {
+
+                constexpr auto __directorySeparator () noexcept -> char {
+
 #if defined(WIN32)
-        char const Path :: directorySeparator = '\\';
+                    return '\\';
 #elif defined(__linux)
-        char const Path :: directorySeparator = '/';
+                    return '/';
 #endif
+                }
+
+            }
+        }
 
         inline auto Path :: pathOsConvert (
                 StringView path
@@ -41,7 +50,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                         continue;
                     }
 
-                    osPath += Path :: directorySeparator;
+                    osPath += __hidden :: __impl :: __directorySeparator();
                     prevDirSeparator = true;
                 } else {
                     osPath += character;
@@ -140,7 +149,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         inline auto Path :: parent () const noexcept -> Path {
 
-            auto location = this->_osPath.findLast ( Path :: directorySeparator );
+            auto location = this->_osPath.findLast ( __hidden :: __impl :: __directorySeparator() );
             if ( location == 0 || location == String :: invalidIndex ) {
                 return * this;
             }
@@ -151,7 +160,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         inline auto Path :: node () const noexcept -> StringView {
 
-            auto location = this->_osPath.findLast ( Path :: directorySeparator );
+            auto location = this->_osPath.findLast ( __hidden :: __impl :: __directorySeparator() );
             if ( location == String :: invalidIndex ) {
                 return this->_osPath;
             }
@@ -162,7 +171,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
         inline auto Path :: root () const noexcept -> Path {
 
-            auto location = this->_osPath.findFirst ( Path :: directorySeparator );
+            auto location = this->_osPath.findFirst ( __hidden :: __impl :: __directorySeparator() );
             if ( location == 0 || location == String :: invalidIndex ) {
                 return * this;
             }
@@ -184,7 +193,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     continue;
                 } else {
 
-                    if ( dotSequenceValid && dotSequenceCount > 0 && character == Path :: directorySeparator ) {
+                    if ( dotSequenceValid && dotSequenceCount > 0 && character == __hidden :: __impl :: __directorySeparator() ) {
 
                         if ( dotSequenceCount == 1 ) {
 
@@ -193,7 +202,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                             continue;
                         } else if ( dotSequenceCount == 2 ) {
 
-                            auto lastSeparator = newPath.findLast ( Path :: directorySeparator );
+                            auto lastSeparator = newPath.findLast ( __hidden :: __impl :: __directorySeparator() );
                             if ( lastSeparator == 0 || lastSeparator == String :: invalidIndex ) {
                                 /* nothing */
                             } else {
@@ -207,7 +216,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 }
 
                 newPath += character;
-                if ( character == Path :: directorySeparator ) {
+                if ( character == __hidden :: __impl :: __directorySeparator() ) {
                     dotSequenceValid = true;
                 }
             }
@@ -220,7 +229,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 StringView node
         ) const noexcept -> Path {
 
-            return { this->_osPath + Path :: directorySeparator + std :: move ( Path :: pathOsConvert ( node ) ) };
+            return { this->_osPath + __hidden :: __impl :: __directorySeparator() + std :: move ( Path :: pathOsConvert ( node ) ) };
         }
 
 
@@ -228,7 +237,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 StringView node
         ) noexcept -> Path & {
 
-            this->_osPath += Path :: directorySeparator;
+            this->_osPath += __hidden :: __impl :: __directorySeparator();
             this->_osPath += std :: move ( Path :: pathOsConvert ( node ) );
             return * this;
         }
@@ -258,7 +267,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         }
 
 
-        auto Path :: isRelative () const noexcept -> bool {
+        inline auto Path :: isRelative () const noexcept -> bool {
 
             return
                     this->_osPath.length() > 0 &&
@@ -267,12 +276,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         }
 
 
-        auto Path :: isAbsolute () const noexcept -> bool {
+        inline auto Path :: isAbsolute () const noexcept -> bool {
 
             return
 #if (__linux)
                     this->_osPath.length() >= 1 &&
-                    Path :: directorySeparator == this->_osPath.cStr()[0];
+                    __hidden :: __impl :: __directorySeparator() == this->_osPath.cStr()[0];
 #elif defined(WIN32)
                     this->_osPath.length() > 2 && (
                             StringUtils < char > :: isLetter ( this->_osPath.cStr()[0] ) &&

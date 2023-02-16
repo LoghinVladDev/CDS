@@ -5,7 +5,7 @@
 #include "SetTest.h"
 
 #include <CDS/HashSet>
-#include <CDS/experimental/TreeSet>
+#include <CDS/TreeSet>
 #include <CDS/LinkedHashSet>
 
 #include <CDS/Range>
@@ -173,7 +173,7 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP20 : STG-00002-MU-CPP20 : IntTreeSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP20 : STC-00003-MU-SetDuplicateProperty-CPP20 */
-        cds :: experimental :: TreeSet < int > intSetUnderTest;
+        cds :: TreeSet < int > intSetUnderTest;
         cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
@@ -242,7 +242,7 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-MemberUniqueness-CPP20 : STG-00002-MU-CPP20 : StringTreeSet", [& allOk, this] {
 
         /* SetTestCase-MemberUniqueness-SetDuplicateProperty-CPP20 : STC-00003-MU-SetDuplicateProperty-CPP20 */
-        cds :: experimental :: TreeSet < String > intSetUnderTest;
+        cds :: TreeSet < String > intSetUnderTest;
         cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 1, 2, 2, 2, 2, 3, 2,2, 3, 3,3, 5,5 , 5, 4, 5, 1, 1, 2, 4, 5, 3, 1, 2 };
         bool status = true;
@@ -324,7 +324,7 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP20 : STG-00050-FU-CPP20 : IntTreeSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP20 : STC-00051-MU-FindUniqueNotIn-CPP20 */
-        cds :: experimental :: TreeSet < int > intSetUnderTest;
+        cds :: TreeSet < int > intSetUnderTest;
         cds :: Set < int > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
@@ -429,7 +429,7 @@ auto SetTest :: execute () noexcept -> bool {
     this->executeSubtest ( "SetTestGroup-FindUnique-CPP20 : STG-00050-FU-CPP20 : StringTreeSet", [& allOk, this] {
 
         /* SetTestCase-FindUnique-FindUniqueNotIn-CPP20 : STC-00051-MU-FindUniqueNotIn-CPP20 */
-        cds :: experimental :: TreeSet < String > intSetUnderTest;
+        cds :: TreeSet < String > intSetUnderTest;
         cds :: Set < String > & underTest = intSetUnderTest;
         intSetUnderTest = { 1, 2, 3, 4, 5 };
 
@@ -526,7 +526,7 @@ auto SetTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP20 : STG-00100-MF-CPP20 : IntTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < int > intSet;
+        cds :: TreeSet < int > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
@@ -607,7 +607,7 @@ auto SetTest :: execute () noexcept -> bool {
     });
     this->executeSubtest ( "SetTestGroup-MemberFunctions-CPP20 : STG-00100-MF-CPP20 : StringTreeSet", [& allOk, this] {
 
-        cds :: experimental :: TreeSet < String > intSet;
+        cds :: TreeSet < String > intSet;
         intSet = { 1, 2, 3, 4, 5 };
 
         auto expectedToString       = "{ 1, 2, 3, 4, 5 }";
