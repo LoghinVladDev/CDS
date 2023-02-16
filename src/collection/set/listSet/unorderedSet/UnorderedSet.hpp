@@ -12,7 +12,7 @@ namespace cds {
 
     template <
             typename __ElementType  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > using UnorderedSet = cds :: HashSet < __ElementType >;
+    > using UnorderedSet __CDS_DeprecatedHint("UnorderedSet has been deprecated. Use HashSet instead.") = cds :: HashSet < __ElementType >;
 
 }
 
