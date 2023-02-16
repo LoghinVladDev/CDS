@@ -1,6 +1,6 @@
 #include <CDS/TreeMap>
-#include <CDS/experimental/TreeSet>
-#include <CDS/experimental/TreeMap>
+#include <CDS/TreeSet>
+
 using namespace std;
 
 template <std::string * temp> //pointer to object
@@ -18,10 +18,12 @@ void g()
 
 std::string s; //must not be local as it must have external linkage!
 
+using namespace cds;
+
 int main() {
-    s = "can assign values locally";
-    f<&s>();
-    g<s>();
-    cout << s << endl;
+
+    TreeSet <int> ts = {1, 2, 3};
+    TreeMap <int, int> tm = {{1, 1}, {2, 2}, {3, 3}};
+
     return 0;
 }
