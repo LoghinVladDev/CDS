@@ -19,7 +19,7 @@ Intended to provide support/accidental efficiency beyond what STL can offer.
       * Map
         * HashMap
         * LinkedHashMap
-        * TreeMap ( In Work, Planned for CDS 0.2 )
+        * TreeMap
       * Queue
         * ListQueue ( Planned for CDS 0.2 )
         * PriorityQueue ( Planned for CDS 0.2 )
@@ -27,7 +27,7 @@ Intended to provide support/accidental efficiency beyond what STL can offer.
     * Set
       * HashSet
       * LinkedHashSet
-      * TreeSet ( Integration Pending, Planned for CDS 0.2 )
+      * TreeSet
 * Primitives
   * Object
   * String - Scalable to any UTF format. std::string (stl) & QString (Qt) compatible
