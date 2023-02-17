@@ -1,4 +1,4 @@
-/*
+/*  NOLINT(llvm-header-guard)
  * Created by loghin on 16/02/23.
  */
 
@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    template < typename __ElementType, Size __size >
+    template < typename __ElementType, Size __size >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto StaticArray <
             __ElementType,
             __size
@@ -15,11 +15,11 @@ namespace cds {
             __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
 
-        return nullptr;
+        return this->__is_handlers () [static_cast <uint32> (requestType)];
     }
 
 
-    template < typename __ElementType, Size __size >
+    template < typename __ElementType, Size __size >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprOverride auto StaticArray <
             __ElementType,
             __size
@@ -27,7 +27,7 @@ namespace cds {
             __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
 
-        return nullptr;
+        return this->__is_constHandlers () [static_cast <uint32> (requestType)];
     }
 
 } /* namespace cds */

@@ -38,9 +38,11 @@ int main() {
     StaticArray <int, 5> a;
     StaticArray <int, 512> b;
 
-    std :: array < int, 5 > a2;
+    std :: array < int, 5 > a2 = {1, 2};
     std :: array < int, 5 > a3;
     a2 = a3;
+
+    std :: cout << a2.size() << '\n';
 
 
 
