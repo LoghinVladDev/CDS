@@ -68,112 +68,112 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 using ElementType                   = __ElementType;
 
             public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sab_Iterator                = ForwardAddressIterator < __ElementType >;
+                using __sab_Iterator                = ForwardAddressIterator < __ElementType >;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sab_ConstIterator           = ForwardAddressIterator < __ElementType const >;
+                using __sab_ConstIterator           = ForwardAddressIterator < __ElementType const >;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sab_ReverseIterator         = BackwardAddressIterator < __ElementType >;
+                using __sab_ReverseIterator         = BackwardAddressIterator < __ElementType >;        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sab_ConstReverseIterator    = BackwardAddressIterator < __ElementType const >;
+                using __sab_ConstReverseIterator    = BackwardAddressIterator < __ElementType const >;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            public:
+            public:     /* NOLINT(readability-redundant-access-specifiers) */
                 template < typename __ServerType >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 class __Dispatcher;                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             private:    /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoUniqueAddress __MemoryContainer _sab_memory;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr __StaticArrayBase () noexcept = default;
 
-            protected:
-                __StaticArrayBase (
-                        __StaticArrayBase const &
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                __StaticArrayBase ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __StaticArrayBase const & array
                 ) noexcept;
 
-            protected:
-                __StaticArrayBase (
-                        __StaticArrayBase &&
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
+                __StaticArrayBase ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __StaticArrayBase && array
                 ) noexcept;
 
-            public:
+            public:     /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr ~__StaticArrayBase () noexcept = default;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 auto operator = (
-                        __StaticArrayBase const &
+                        __StaticArrayBase const & array
                 ) noexcept -> __StaticArrayBase &;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 auto operator = (
-                        __StaticArrayBase &&
+                        __StaticArrayBase && array
                 ) noexcept -> __StaticArrayBase &;
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_size () const noexcept -> Size;
+            protected:                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_size () const noexcept -> Size;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_get (
+            protected:                                                                          /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_get (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Index index
                 ) noexcept -> __ElementType *;
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_get (
+            protected:                                      /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_get (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         Index index
                 ) const noexcept -> __ElementType const *;
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_begin () noexcept -> __sab_Iterator;
+            protected:                                                                                                          /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_begin () noexcept -> __sab_Iterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_end () noexcept -> __sab_Iterator;
+            protected:                                                                                                      /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_end () noexcept -> __sab_Iterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_cbegin () const noexcept -> __sab_ConstIterator;
+            protected:                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_cbegin () const noexcept -> __sab_ConstIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_cend () const noexcept -> __sab_ConstIterator;
+            protected:                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_cend () const noexcept -> __sab_ConstIterator;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_rbegin () noexcept -> __sab_ReverseIterator;
+            protected:                                                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_rbegin () noexcept -> __sab_ReverseIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_rend () noexcept -> __sab_ReverseIterator;
+            protected:                                                                                                              /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_rend () noexcept -> __sab_ReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_crbegin () const noexcept -> __sab_ConstReverseIterator;
+            protected:                                                                                          /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_crbegin () const noexcept -> __sab_ConstReverseIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_crend () const noexcept -> __sab_ConstReverseIterator;
+            protected:                                                                                      /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_crend () const noexcept -> __sab_ConstReverseIterator; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_data () noexcept -> __ElementType *;
+            protected:                                                                                                          /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sab_data () noexcept -> __ElementType *;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                __CDS_NoDiscard constexpr auto __sab_data () const noexcept -> __ElementType const *;
+            protected:                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard constexpr auto __sab_data () const noexcept -> __ElementType const *;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:
-                auto __sab_copy (
+            protected:              /* NOLINT(readability-redundant-access-specifiers) */
+                auto __sab_copy (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __StaticArrayBase const & array
                 ) noexcept -> void;
 
-            protected:
-                auto __sab_move (
+            protected:              /* NOLINT(readability-redundant-access-specifiers) */
+                auto __sab_move (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __StaticArrayBase && array
                 ) noexcept -> void;
 
-            protected:
-                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __sab_equals (
+            protected:                                                                  /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __sab_equals (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __StaticArrayBase const & array
                 ) noexcept -> bool;
 
-            protected:
+            protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 template <
-                        typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )
-                > auto __sab_sort (
+                        typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                > auto __sab_sort (                                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
                 ) noexcept -> void;
             };
@@ -185,7 +185,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __equals,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename                                                                            __MemoryContainer   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > template <
-                    typename __ServerType
+                    typename __ServerType                                                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __StaticArrayBase <
                     __ElementType,
                     __size,
@@ -199,7 +199,38 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                             ForwardAddressIterator < __ElementType const >,
                             & __StaticArrayBase < __ElementType, __size, __equals, __MemoryContainer > :: __sab_cbegin,
                             & __StaticArrayBase < __ElementType, __size, __equals, __MemoryContainer > :: __sab_cend
-                    > {};
+                    > {
+
+            protected:
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __beginLocal (
+                        __ServerType * pServer
+                ) noexcept -> __sab_Iterator;
+
+            protected:
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __endLocal (
+                        __ServerType * pServer
+                ) noexcept -> __sab_Iterator;
+
+            protected:
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rbeginLocal (
+                        __ServerType * pServer
+                ) noexcept -> __sab_ReverseIterator;
+
+            protected:
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rendLocal (
+                        __ServerType * pServer
+                ) noexcept -> __sab_ReverseIterator;
+
+            protected:
+                __CDS_NoDiscard constexpr static auto __crbeginLocal (
+                        __ServerType const * pServer
+                ) noexcept -> __sab_ConstReverseIterator;
+
+            protected:
+                __CDS_NoDiscard constexpr static auto __crendLocal (
+                        __ServerType const * pServer
+                ) noexcept -> __sab_ConstReverseIterator;
+            };
 
 
         } /* namespace __impl */

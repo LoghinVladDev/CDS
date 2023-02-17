@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 30/10/22.
  */
 
@@ -34,7 +34,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @static
                  * @private
                  */
-                static __GenericHandler const __routingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static __GenericHandler const __routingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                         static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
                 ];
 
@@ -44,7 +44,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @static
                  * @private
                  */
-                static __GenericConstHandler const __constRoutingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                static __GenericConstHandler const __constRoutingTable [   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                         static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
                 ];
 

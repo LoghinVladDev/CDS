@@ -1,42 +1,42 @@
-//
-// Created by stefan on 10.10.2022.
-//
+/* NOLINT(llvm-header-guard)
+ * Created by stefan on 10.10.2022.
+ */
 
-#ifndef __CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__
-#define __CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__  /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include "MapServerDispatcher.hpp"
 
-namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier) */
+namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
+    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             template <
-                    typename __ServerType,                                                                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseIteratorType,                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseConstIteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )             ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )               ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rbeginFunction )            ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rendFunction )              ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crbeginFunction )           ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crendFunction )             ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,                 /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )            ( __AbstractIteratorType const & )                              -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )       ( __AbstractIteratorType const * const *, Size )                -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findFunction )              ( __KeyType const & )                                           -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findConstFunction )         ( __KeyType const & )                                   const   -> __ConstIteratorType              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                                                                        __ServerType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ServiceType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __KeyType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractConstIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __IteratorType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ConstIteratorType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseIteratorType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseConstIteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __beginFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __endFunction,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crbeginFunction,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crendFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __ElementType *, __ElementType const *, bool * >            __newAddressFunction,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const & >                         __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                    __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractIteratorType const * const *, Size >        __removeArrayFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >   __removeConstArrayFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __IteratorType, __KeyType const & >                         __findFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperConstMemberFunction < __ServiceType, __ConstIteratorType, __KeyType const & >               __findConstFunction             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __TreeMapServerDispatcher <
                     __ServerType,
                     __ServiceType,
@@ -63,38 +63,40 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findFunction,
                     __findConstFunction
-            > :: __rbeginLocal () -> __ReverseIteratorType {
+            > :: __rbeginLocal (
+                    __ServerType * pServer
+            ) noexcept -> __ReverseIteratorType {
 
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __rbeginFunction ) ();
+                return ( pServer ->* __rbeginFunction ) (); /* NOLINT(*-reinterpret-cast) */
             }
 
 
             template <
-                    typename __ServerType,                                                                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseIteratorType,                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseConstIteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )             ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )               ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rbeginFunction )            ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rendFunction )              ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crbeginFunction )           ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crendFunction )             ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,                 /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )            ( __AbstractIteratorType const & )                              -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )       ( __AbstractIteratorType const * const *, Size )                -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findFunction )              ( __KeyType const & )                                           -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findConstFunction )         ( __KeyType const & )                                   const   -> __ConstIteratorType              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                                                                        __ServerType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ServiceType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __KeyType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractConstIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __IteratorType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ConstIteratorType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseIteratorType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseConstIteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __beginFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __endFunction,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crbeginFunction,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crendFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __ElementType *, __ElementType const *, bool * >            __newAddressFunction,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const & >                         __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                    __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractIteratorType const * const *, Size >        __removeArrayFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >   __removeConstArrayFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __IteratorType, __KeyType const & >                         __findFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperConstMemberFunction < __ServiceType, __ConstIteratorType, __KeyType const & >               __findConstFunction             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __TreeMapServerDispatcher <
                     __ServerType,
                     __ServiceType,
@@ -121,38 +123,40 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findFunction,
                     __findConstFunction
-            > :: __rendLocal () -> __ReverseIteratorType {
+            > :: __rendLocal (
+                    __ServerType * pServer
+            ) noexcept -> __ReverseIteratorType {
 
-                return ( reinterpret_cast < __ServerType * > ( this ) ->* __rendFunction ) ();
+                return ( pServer ->* __rendFunction ) ();   /* NOLINT(*-reinterpret-cast) */
             }
 
 
             template <
-                    typename __ServerType,                                                                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseIteratorType,                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseConstIteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )             ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )               ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rbeginFunction )            ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rendFunction )              ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crbeginFunction )           ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crendFunction )             ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,                 /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )            ( __AbstractIteratorType const & )                              -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )       ( __AbstractIteratorType const * const *, Size )                -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findFunction )              ( __KeyType const & )                                           -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findConstFunction )         ( __KeyType const & )                                   const   -> __ConstIteratorType              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                                                                        __ServerType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ServiceType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __KeyType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractConstIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __IteratorType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ConstIteratorType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseIteratorType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseConstIteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __beginFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __endFunction,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crbeginFunction,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crendFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __ElementType *, __ElementType const *, bool * >            __newAddressFunction,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const & >                         __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                    __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractIteratorType const * const *, Size >        __removeArrayFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >   __removeConstArrayFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __IteratorType, __KeyType const & >                         __findFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperConstMemberFunction < __ServiceType, __ConstIteratorType, __KeyType const & >               __findConstFunction             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __TreeMapServerDispatcher <
                     __ServerType,
                     __ServiceType,
@@ -179,38 +183,40 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findFunction,
                     __findConstFunction
-            > :: __crbeginLocal () const -> __ReverseConstIteratorType {
+            > :: __crbeginLocal (
+                    __ServerType const * pServer
+            ) noexcept -> __ReverseConstIteratorType {
 
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crbeginFunction ) ();
+                return ( pServer ->* __crbeginFunction ) ();  /* NOLINT(*-reinterpret-cast) */
             }
 
 
             template <
-                    typename __ServerType,                                                                                                                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ServiceType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ElementType,                                                                                                                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                                                                                                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractIteratorType,                                                                                                                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __AbstractConstIteratorType,                                                                                                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __IteratorType,                                                                                                                                    /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ConstIteratorType,                                                                                                                               /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseIteratorType,                                                                                                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ReverseConstIteratorType,                                                                                                                        /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __beginFunction )             ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __endFunction )               ()                                                              -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rbeginFunction )            ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __rendFunction )              ()                                                              -> __ReverseIteratorType,           /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cbeginFunction )            ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __cendFunction )              ()                                                      const   -> __ConstIteratorType,             /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crbeginFunction )           ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __crendFunction )             ()                                                      const   -> __ReverseConstIteratorType,      /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __newAddressFunction )        ( __ElementType const *, bool * )                               -> __ElementType *,                 /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeFunction )            ( __AbstractIteratorType const & )                              -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstFunction )       ( __AbstractConstIteratorType const & )                         -> bool,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeArrayFunction )       ( __AbstractIteratorType const * const *, Size )                -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __removeConstArrayFunction )  ( __AbstractConstIteratorType const * const *, Size )           -> Size,                            /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findFunction )              ( __KeyType const & )                                           -> __IteratorType,                  /* NOLINT(bugprone-reserved-identifier) */
-                    auto ( __ServiceType :: * __findConstFunction )         ( __KeyType const & )                                   const   -> __ConstIteratorType              /* NOLINT(bugprone-reserved-identifier) */
+                    typename                                                                                                        __ServerType,                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ServiceType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ElementType,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __KeyType,                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractIteratorType,         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __AbstractConstIteratorType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __IteratorType,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ConstIteratorType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseIteratorType,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename                                                                                                        __ReverseConstIteratorType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __beginFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __IteratorType >                                          __endFunction,                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierMemberFunction < __ServiceType, __ReverseIteratorType >                                   __rendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crbeginFunction,              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: SupplierConstMemberFunction < __ServiceType, __ReverseConstIteratorType >                         __crendFunction,                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __ElementType *, __ElementType const *, bool * >            __newAddressFunction,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const & >                         __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                    __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractIteratorType const * const *, Size >        __removeArrayFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >   __removeConstArrayFunction,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperMemberFunction < __ServiceType, __IteratorType, __KeyType const & >                         __findFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: MapperConstMemberFunction < __ServiceType, __ConstIteratorType, __KeyType const & >               __findConstFunction             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > auto __TreeMapServerDispatcher <
                     __ServerType,
                     __ServiceType,
@@ -237,12 +243,15 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __removeConstArrayFunction,
                     __findFunction,
                     __findConstFunction
-            > :: __crendLocal () const -> __ReverseConstIteratorType {
+            > :: __crendLocal (
+                    __ServerType const * pServer
+            ) noexcept -> __ReverseConstIteratorType {
 
-                return ( reinterpret_cast < __ServerType const * > ( this ) ->* __crendFunction ) ();
+                return ( pServer ->* __crendFunction ) ();    /* NOLINT(*-reinterpret-cast) */
             }
-        }
-    }
-}
 
-#endif //__CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__
+        } /* namespace __impl */
+    } /* namespace __hidden */
+} /* namespace cds */
+
+#endif /* __CDS_SHARED_TREE_MAP_SERVER_DISPATCHER_IMPL_HPP__ */

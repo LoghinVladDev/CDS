@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 16/02/23.
  */
 
@@ -10,13 +10,13 @@
 
 #include "../shared/iterator/AddressIterator.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/ReplaceCompositeClient.hpp" /* NOLINT(llvm-include-order) */
 #include "../shared/iterableInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
 #include "../shared/iterableInternalCommunication/client/composite/ReplaceByCompositeClient.hpp"
 
 #include "../shared/iterableInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/IndicesCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/IndicesCompositeClient.hpp"  /* NOLINT(llvm-include-order) */
 #include "../shared/iterableInternalCommunication/client/composite/IndicesOfCompositeClient.hpp"
 #include "../shared/iterableInternalCommunication/client/composite/IndicesByCompositeClient.hpp"
 
@@ -85,6 +85,23 @@ namespace cds {
     };
 
 } /* namespace cds */
+
+#include "../shared/iterator/impl/AddressIterator.hpp"
+
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp" /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+
+#include "../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"  /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
+
+#include "../shared/iterableInternalCommunication/server/impl/IterableServer.hpp"
+#include "../shared/iterableInternalCommunication/server/impl/IterableServerDispatcher.hpp"
+
+#include "../shared/array/impl/StaticArrayBase.hpp"
 
 #include "staticArray/impl/StaticArray.hpp"
 

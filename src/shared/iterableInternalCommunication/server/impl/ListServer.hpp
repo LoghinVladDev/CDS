@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 7/3/22.
  */
 
@@ -18,13 +18,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __ListServer <
+            > typename __ListServer <           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericHandler const __ListServer <
                     __ReceiverType,
                     __ElementType
-            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
 
@@ -53,27 +53,27 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),                  /* __cirt_begin                         - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                    /* __cirt_end                           - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rbegin ),                 /* __cirt_rbegin                        - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rend ),                   /* __cirt_rend                          - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),                 /* __cirt_remove                        - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),            /* __cirt_removeConst                   - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),            /* __cirt_removeArray                   - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),       /* __cirt_removeConstArray              - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),             /* __cirt_newAddress                    - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newFront ),               /* __cirt_newFrontAddress               - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBack ),                /* __cirt_newBackAddress                - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newFrontArray ),          /* __cirt_newFrontAddressArray          - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBackArray ),           /* __cirt_newBackAddressArray           - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBefore ),              /* __cirt_newBeforeAddress              - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeConst ),         /* __cirt_newBeforeAddressConst         - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfter ),               /* __cirt_newAfterAddress               - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterConst ),          /* __cirt_newAfterAddressConst          - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeArray ),         /* __cirt_newBeforeAddressArray         - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeArrayConst ),    /* __cirt_newBeforeAddressArrayConst    - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArray ),          /* __cirt_newAfterAddressArray          - expected part of List     */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArrayConst ),     /* __cirt_newAfterAddressArrayConst     - expected part of List     */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),                  /* __cirt_begin                         - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                    /* __cirt_end                           - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rbegin ),                 /* __cirt_rbegin                        - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __rend ),                   /* __cirt_rend                          - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),                 /* __cirt_remove                        - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),            /* __cirt_removeConst                   - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),            /* __cirt_removeArray                   - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),       /* __cirt_removeConstArray              - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),             /* __cirt_newAddress                    - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newFront ),               /* __cirt_newFrontAddress               - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBack ),                /* __cirt_newBackAddress                - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newFrontArray ),          /* __cirt_newFrontAddressArray          - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBackArray ),           /* __cirt_newBackAddressArray           - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBefore ),              /* __cirt_newBeforeAddress              - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeConst ),         /* __cirt_newBeforeAddressConst         - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfter ),               /* __cirt_newAfterAddress               - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterConst ),          /* __cirt_newAfterAddressConst          - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeArray ),         /* __cirt_newBeforeAddressArray         - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newBeforeArrayConst ),    /* __cirt_newBeforeAddressArrayConst    - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArray ),          /* __cirt_newAfterAddressArray          - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAfterArrayConst ),     /* __cirt_newAfterAddressArrayConst     - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 
@@ -85,13 +85,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __ListServer <
+            > typename __ListServer <           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericConstHandler const __ListServer <
                     __ReceiverType,
                     __ElementType
-            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
 
@@ -104,10 +104,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of List     */
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of List     */
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crbegin ),   /* __cirt_rbegin                        - expected part of List     */
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crend ),     /* __cirt_rend                          - expected part of List     */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crbegin ),   /* __cirt_rbegin                        - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __crend ),     /* __cirt_rend                          - expected part of List     */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 

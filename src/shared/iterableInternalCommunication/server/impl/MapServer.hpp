@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 7/3/22.
  */
 
@@ -18,13 +18,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __MapServer <
+            > typename __MapServer <            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericHandler const __MapServer <
                     __ReceiverType,
                     __ElementType
-            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
 
@@ -35,8 +35,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),              /* __cirt_begin                         - expected part of Map      */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                /* __cirt_end                           - expected part of Map      */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __begin ),              /* __cirt_begin                         - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __end ),                /* __cirt_end                           - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 
@@ -53,11 +53,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),             /* __cirt_remove                        - not expected part of Map  */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),        /* __cirt_removeConst                   - expected part of Map      */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),        /* __cirt_removeArray                   - expected part of Map      */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),   /* __cirt_removeConstArray              - expected part of Map      */
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),         /* __cirt_newAddress                    - expected part of Map      */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __remove ),             /* __cirt_remove                        - not expected part of Map  */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConst ),        /* __cirt_removeConst                   - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeArray ),        /* __cirt_removeArray                   - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __removeConstArray ),   /* __cirt_removeConstArray              - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __newAddress ),         /* __cirt_newAddress                    - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 
@@ -80,7 +80,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __find ),               /* __cirt_find                          - not expected part of Map  */
+                    reinterpret_cast < __GenericHandler > ( & __ReceiverType :: __find ),               /* __cirt_find                          - not expected part of Map  */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 
@@ -91,13 +91,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __MapServer <
+            > typename __MapServer <            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericConstHandler const __MapServer <
                     __ReceiverType,
                     __ElementType
-            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
 
@@ -108,8 +108,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of Map      */
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of Map      */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __cirt_begin                         - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __cirt_end                           - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 
@@ -140,7 +140,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
 #else
 
-                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __findConst )  /* __cirt_findConst                     - expected part of Map      */
+                    reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __findConst )  /* __cirt_findConst                     - expected part of Map      */  /* NOLINT(*-reinterpret-cast) */
 
 #endif
 

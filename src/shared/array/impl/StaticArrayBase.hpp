@@ -1,0 +1,8 @@
+//
+// Created by loghin on 2/17/2023.
+//
+
+#ifndef CDS_STATICARRAYBASE_HPP
+#define CDS_STATICARRAYBASE_HPP
+
+#endif //CDS_STATICARRAYBASE_HPP
