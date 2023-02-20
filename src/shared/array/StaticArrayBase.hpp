@@ -42,18 +42,68 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 __ElementType * _samc_data;     /* NOLINT(misc-non-private-member-variables-in-classes) */
 
                 __CDS_cpplang_ConstexprDynamicAllocation __StaticArrayMemoryContainer () {
+
                     this->_samc_data = __allocation :: __allocPrimitiveArray < __ElementType > (__size);
+                    for (Size index = 0U; index < __size; ++ index) {
+                        (void) new (& this->_samc_data [index]) __ElementType ();
+                    }
                 }
 
                 __CDS_cpplang_ConstexprDynamicAllocation ~__StaticArrayMemoryContainer () { /* NOLINT(*-default) */
+
+                    if (this->_samc_data == nullptr) {
+                        return;
+                    }
+
+                    for (Size index = 0U; index < __size; ++ index) {
+                        this->_samc_data [index].~__ElementType ();
+                    }
                     __allocation :: __freePrimitiveArray ( this->_samc_data );
                 }
 
-                __StaticArrayMemoryContainer (__StaticArrayMemoryContainer const &) = delete;
-                __StaticArrayMemoryContainer (__StaticArrayMemoryContainer &&) = delete;
+                __CDS_cpplang_ConstexprDynamicAllocation __StaticArrayMemoryContainer (
+                        __StaticArrayMemoryContainer const & array
+                ) noexcept {
 
-                auto operator = (__StaticArrayMemoryContainer const &) -> __StaticArrayMemoryContainer & = delete;
-                auto operator = (__StaticArrayMemoryContainer &&) -> __StaticArrayMemoryContainer & = delete;
+                    this->_samc_data = __allocation :: __allocPrimitiveArray < __ElementType > (__size);
+                    for (Size index = 0U; index < __size; ++ index) {
+                        (void) new (& this->_samc_data [index]) __ElementType (array._samc_data [index]);
+                    }
+                }
+
+                constexpr __StaticArrayMemoryContainer (
+                        __StaticArrayMemoryContainer && array
+                ) noexcept {
+
+                    this->_samc_data = cds :: exchange (array._samc_data, nullptr);
+                }
+
+                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                        __StaticArrayMemoryContainer const & array
+                ) noexcept -> __StaticArrayMemoryContainer & {
+
+                    if (this == & array) {
+                        return * this;
+                    }
+
+                    for (Size index = 0U; index < __size; ++ index) {
+                        this->_samc_data [index] = array._samc_data [index];
+                    }
+
+                    return * this;
+                }
+
+                __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                        __StaticArrayMemoryContainer && array
+                ) noexcept -> __StaticArrayMemoryContainer & {
+
+                    if (this == & array) {
+                        return * this;
+                    }
+
+                    this->_samc_data = cds :: exchange (array._samc_data, nullptr);
+                    return * this;
+                }
             };
 
 
@@ -91,26 +141,26 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 __StaticArrayBase ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __StaticArrayBase const & array
-                ) noexcept;
+                        __StaticArrayBase const &
+                ) noexcept = default;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 __StaticArrayBase ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __StaticArrayBase && array
-                ) noexcept;
+                        __StaticArrayBase &&
+                ) noexcept = default;
 
             public:     /* NOLINT(readability-redundant-access-specifiers) */
                 constexpr ~__StaticArrayBase () noexcept = default;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 auto operator = (
-                        __StaticArrayBase const & array
-                ) noexcept -> __StaticArrayBase &;
+                        __StaticArrayBase const &
+                ) noexcept -> __StaticArrayBase & = default;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 auto operator = (
-                        __StaticArrayBase && array
-                ) noexcept -> __StaticArrayBase &;
+                        __StaticArrayBase &&
+                ) noexcept -> __StaticArrayBase & = default;
 
             protected:                                                                  /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoDiscard constexpr auto __sab_size () const noexcept -> Size;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -155,20 +205,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             protected:                                                                                  /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoDiscard constexpr auto __sab_data () const noexcept -> __ElementType const *;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            protected:              /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sab_copy (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __StaticArrayBase const & array
-                ) noexcept -> void;
-
-            protected:              /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sab_move (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __StaticArrayBase && array
-                ) noexcept -> void;
-
             protected:                                                                  /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __sab_equals (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __StaticArrayBase const & array
-                ) noexcept -> bool;
+                ) const noexcept -> bool;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 template <

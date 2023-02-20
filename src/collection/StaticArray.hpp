@@ -6,9 +6,11 @@
 #define __CDS_STATIC_ARRAY_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Iterable>
+#include <CDS/Function>
 #include <CDS/meta/TypeTraits>
 
 #include "../shared/iterator/AddressIterator.hpp"
+#include "../shared/iterator/IteratorSort.hpp"
 
 #include "../shared/iterableInternalCommunication/client/composite/ReplaceCompositeClient.hpp" /* NOLINT(llvm-include-order) */
 #include "../shared/iterableInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
@@ -618,31 +620,131 @@ namespace cds {
                 __hidden :: __impl :: __IterableInternalRequestType requestType
         ) const noexcept -> __GenericConstHandler override;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr StaticArray () noexcept = default;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr StaticArray (
-                StaticArray const & array
+                StaticArray const &
+        ) noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        constexpr StaticArray (
+                StaticArray &&
+        ) noexcept = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody StaticArray (
+                std :: initializer_list < __ElementType > const & initializerList
         ) noexcept;
 
-    public:
-        constexpr StaticArray (
-                StaticArray && array
+    public:                                     /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Explicit __CDS_cpplang_ConstexprConstructorNonEmptyBody StaticArray (
+                __IterableType const & iterable
         ) noexcept;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr ~StaticArray () noexcept override = default;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                StaticArray const & array
-        ) noexcept;
+                StaticArray const &
+        ) noexcept -> StaticArray & = default;
 
-    public:
+    public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                StaticArray && array
-        ) noexcept;
+                StaticArray &&
+        ) noexcept -> StaticArray & = default;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                std :: initializer_list < __ElementType > const & initializerList
+        ) noexcept -> StaticArray &;
+
+    public:                                     /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __IterableType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                __IterableType const & iterable
+        ) noexcept -> StaticArray &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                StaticArray const & array
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                StaticArray const & array
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto size () const noexcept -> Size;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> __ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> __ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto front () const noexcept (false) -> __ElementType const &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto back () const noexcept (false) -> __ElementType const &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto get (
+                Index index
+        ) noexcept (false) -> __ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto get (
+                Index index
+        ) const noexcept (false) -> __ElementType const &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> __ElementType *;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard constexpr auto data () const noexcept -> __ElementType const *;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template <
+                typename __Comparator = decltype ( & cds :: predicates :: lessThan < __ElementType > )  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        > auto sort (
+                __Comparator const & comparator = & cds :: predicates :: lessThan < __ElementType >
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto sequence () & noexcept -> Sequence < StaticArray < __ElementType, __size > >;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto sequence () && noexcept -> Sequence < StaticArray < __ElementType, __size > >;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < StaticArray < __ElementType, __size > const >;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < StaticArray < __ElementType, __size > const >;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (
+                Index index
+        ) const noexcept (false) -> ElementType const &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (
+                Index index
+        ) noexcept (false) -> ElementType &;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+    private:  /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (
+                Index index
+        ) const noexcept -> Index;
     };
 
 } /* namespace cds */
