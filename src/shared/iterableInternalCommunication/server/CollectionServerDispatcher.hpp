@@ -1,9 +1,11 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 09/07/22.
  */
 
 #ifndef __CDS_SHARED_COLLECTION_SERVER_DISPATCHER_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_SHARED_COLLECTION_SERVER_DISPATCHER_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+#include "IterableServerDispatcher.hpp"
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -46,61 +48,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cbeginFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: SupplierConstMemberFunction < __ServiceType, __ConstIteratorType >                                __cendFunction,                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, __ElementType *, __ElementType const *, bool * >            __newAddressFunction,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractConstIteratorType const & >                 __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                    __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >   __removeConstArrayFunction      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > class __CollectionServerDispatcher {                                                                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Function provided by the dispatcher interface calling the received __cbeginFunction to construct a new delegate iterator using the received iterator
-                 * @exceptsafe
-                 * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
-                 *
-                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
-                 * @protected
-                 */
-                __CDS_NoDiscard static auto __cbegin (
-                        __ServerType const * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Function provided by the dispatcher interface calling the received __cendFunction to construct a new delegate iterator using the received iterator
-                 * @exceptsafe
-                 * @return __AbstractDelegateIterator ptr = Address to newly created delegate iterator
-                 *
-                 * @test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
-                 * @protected
-                 */
-                __CDS_NoDiscard static auto __cend (
-                        __ServerType const * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Function provided by the dispatcher interface calling the received __cbeginFunction to return the received iterator. Used by local clients
-                 * @exceptsafe
-                 * @return __ConstIteratorType = the const iterator returned by the function
-                 *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                 * @protected
-                 */
-                __CDS_NoDiscard constexpr static auto __cbeginLocal (
-                        __ServerType const * pServer
-                ) noexcept -> __ConstIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                /**
-                 * @brief Function provided by the dispatcher interface calling the received __cendFunction to return the received iterator. Used by local clients
-                 * @exceptsafe
-                 * @return __ConstIteratorType = the const iterator returned by the function
-                 *
-                 * @test Suite: TBA, Group: TBA, Test Cases: TBA
-                 * @protected
-                 */
-                __CDS_NoDiscard constexpr static auto __cendLocal (
-                        __ServerType const * pServer
-                ) noexcept -> __ConstIteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > class __CollectionServerDispatcher :                                                                                                                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    public __IterableServerDispatcher <
+                            __ServerType,
+                            __ServiceType,
+                            __ElementType,
+                            __ConstIteratorType,
+                            __cbeginFunction,
+                            __cendFunction
+                    > {
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

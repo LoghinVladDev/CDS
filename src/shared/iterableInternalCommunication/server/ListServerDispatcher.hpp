@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 09/07/22.
  */
 
@@ -92,12 +92,12 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: MapperMemberFunction < __ServiceType, __ElementType *, __AbstractConstIteratorType const & >              __newBeforeConstFunction,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, __ElementType *, __AbstractIteratorType const & >                   __newAfterFunction,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, __ElementType *, __AbstractConstIteratorType const & >              __newAfterConstFunction,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractIteratorType const &, Size, __ElementType ** >      __newBeforeArrayFunction,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractConstIteratorType const &, Size, __ElementType ** > __newBeforeArrayConstFunction,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractIteratorType const &, Size, __ElementType ** >      __newAfterArrayFunction,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractConstIteratorType const &, Size, __ElementType ** > __newAfterArrayConstFunction,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractIteratorType const & >                              __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: MapperMemberFunction < __ServiceType, bool, __AbstractConstIteratorType const & >                         __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const &, Size, __ElementType ** >         __newBeforeArrayFunction,       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const &, Size, __ElementType ** >    __newBeforeArrayConstFunction,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const &, Size, __ElementType ** >         __newAfterArrayFunction,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const &, Size, __ElementType ** >    __newAfterArrayConstFunction,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractIteratorType const & >                                 __removeFunction,               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    functional :: PredicateMemberFunction < __ServiceType, __AbstractConstIteratorType const & >                            __removeConstFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, Size, __AbstractIteratorType const * const *, Size >                __removeArrayFunction,          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: MapperMemberFunction < __ServiceType, Size, __AbstractConstIteratorType const * const *, Size >           __removeConstArrayFunction      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > class __ListServerDispatcher :                                                                                                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-member-init) */
@@ -129,9 +129,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard static auto __rbegin (
+                __CDS_NoDiscard static auto __rbegin (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -142,9 +142,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard static auto __rend (
+                __CDS_NoDiscard static auto __rend (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __AbstractDelegateIterator < __ElementType > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -155,9 +155,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard static auto __crbegin (
+                __CDS_NoDiscard static auto __crbegin ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType const * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -168,9 +168,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard static auto __crend (
+                __CDS_NoDiscard static auto __crend (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType const * pServer
-                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __AbstractDelegateIterator < __ElementType const > *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -181,9 +181,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rbeginLocal (
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rbeginLocal (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __ReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                ) noexcept -> __ReverseIteratorType;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -194,9 +194,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rendLocal (
+                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction static auto __rendLocal ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __ReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+                ) noexcept -> __ReverseIteratorType;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -207,9 +207,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr static auto __crbeginLocal (
+                __CDS_NoDiscard constexpr static auto __crbeginLocal (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType const * pServer
-                ) noexcept -> __ConstReverseIteratorType;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __ConstReverseIteratorType;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -220,9 +220,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                __CDS_NoDiscard constexpr static auto __crendLocal (
+                __CDS_NoDiscard constexpr static auto __crendLocal (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType const * pServer
-                ) noexcept -> __ConstReverseIteratorType;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __ConstReverseIteratorType;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -233,9 +233,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                static auto __newFront (
+                static auto __newFront (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __ElementType *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
@@ -246,9 +246,9 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                static auto __newBack (
+                static auto __newBack ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __ServerType * pServer
-                ) noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                ) noexcept -> __ElementType *;
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**

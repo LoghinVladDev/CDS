@@ -1,4 +1,4 @@
-/*
+/* NOLINT(llvm-header-guard)
  * Created by loghin on 7/3/22.
  */
 
@@ -12,13 +12,13 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __IterableServer <
+            > typename __IterableServer <       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericHandler const __IterableServer <
                     __ReceiverType,
                     __ElementType
-            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __routingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
                             nullptr,                                                                            /* __iirt_begin                         - not expected part of Iterable        */
@@ -50,17 +50,17 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template <
                     typename __ReceiverType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     typename __ElementType      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > typename __IterableServer <
+            > typename __IterableServer <       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     __ReceiverType,
                     __ElementType
             > :: __GenericConstHandler const __IterableServer <
                     __ReceiverType,
                     __ElementType
-            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > :: __constRoutingTable [ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-c-arrays) */
                     static_cast < uint32 > ( __IterableInternalRequestType :: __iirt_requestCountDoNotUse )
             ] = {
-                            reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __iirt_begin                         - expected part of Iterable        */
-                            reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __iirt_end                           - expected part of Iterable        */
+                            reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cbegin ),    /* __iirt_begin                         - expected part of Iterable        */ /* NOLINT(*-reinterpret-cast) */
+                            reinterpret_cast < __GenericConstHandler > ( & __ReceiverType :: __cend ),      /* __iirt_end                           - expected part of Iterable        */ /* NOLINT(*-reinterpret-cast) */
                             nullptr,                                                                        /* __iirt_rbegin                        - not expected part of Iterable    */
                             nullptr,                                                                        /* __iirt_rend                          - not expected part of Iterable    */
                             nullptr,                                                                        /* __iirt_remove                        - not expected part of Iterable    */

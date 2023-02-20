@@ -30,7 +30,7 @@ namespace cds {
             public List < __ElementType >,
             protected __hidden :: __impl :: __ArrayServer < __ElementType >,
             public __hidden :: __impl :: __ArrayImplementation < __ElementType >,
-            public __hidden :: __impl :: __ArrayDispatcher< __ElementType >,
+            public __hidden :: __impl :: __ArrayDispatcher < __ElementType >,
             public __hidden :: __impl :: __ArrayRandomInsertionClient < __ElementType >,
             public __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >,
             public __hidden :: __impl :: __ArrayIteratorRelativeInsertionClient < __ElementType >,
