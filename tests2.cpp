@@ -2,6 +2,7 @@
 #include <CDS/TreeSet>
 #include <CDS/StaticArray>
 #include <CDS/memory/UniquePointer>
+#include <CDS/Queue>
 
 using namespace std;
 
