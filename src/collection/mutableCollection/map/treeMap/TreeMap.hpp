@@ -98,6 +98,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     private: friend IteratorRemoveClient;
     private: friend ConstIteratorRemoveClient;
 
+    private: friend FindUniqueClient;
+    private: friend FindUniqueConstClient;
+
     public: using __ElementType =  typename MapBase :: ElementType;   /* NOLINT(bugprone-reserved-identifier) */
 
     using EntryType     = typename MapBase :: EntryType;

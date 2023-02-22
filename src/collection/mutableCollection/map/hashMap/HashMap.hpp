@@ -149,6 +149,12 @@ namespace cds {
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         friend DelegateForwardConstIterableClient;
 
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend FindUniqueClient;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
+        friend FindUniqueConstClient;
+
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         using typename MapBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
