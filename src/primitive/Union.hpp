@@ -8,6 +8,7 @@
 #include <CDS/Object>               /* NOLINT(llvm-include-order) */
 #include <CDS/FunctionalInterface>
 #include <CDS/exception/TypeException>
+#include <CDS/Utility>
 
 #include "union/VariadicUnion.hpp"
 

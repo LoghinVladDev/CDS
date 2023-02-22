@@ -5,6 +5,9 @@
 #ifndef __CDS_PATH_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_PATH_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include <CDS/Array>
+#include <CDS/exception/IllegalArgumentException>
+
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace filesystem {
 
