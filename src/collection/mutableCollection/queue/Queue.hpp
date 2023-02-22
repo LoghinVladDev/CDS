@@ -5,6 +5,8 @@
 #ifndef __CDS_QUEUE_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_QUEUE_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+#include <CDS/MutableCollection>
+
 namespace cds {
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */

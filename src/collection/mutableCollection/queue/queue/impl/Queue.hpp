@@ -1,5 +1,5 @@
 /* NOLINT(llvm-header-guard)
- * Created by uic70278 on 2/22/2023.
+ * Created by loghin on 2/22/2023.
  */
 
 #ifndef __CDS_QUEUE_IMPL_HPP__ /* NOLINT(llvm-header-guard) */
@@ -24,7 +24,7 @@ namespace cds {
 
 
     template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    __CDS_cpplang_ConstexprDestructor Queue < __ElementType > :: ~Queue () noexcept = default;
+    __CDS_cpplang_ConstexprDestructor Queue < __ElementType > :: virtual ~Queue () noexcept = default;
 
 } /* namespace cds */
 

@@ -3,6 +3,7 @@
 #include <CDS/StaticArray>
 #include <CDS/memory/UniquePointer>
 #include <CDS/Queue>
+#include <CDS/ListQueue>
 
 using namespace std;
 
