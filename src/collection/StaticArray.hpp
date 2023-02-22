@@ -32,7 +32,7 @@
 namespace cds {
 
     template < typename __ElementType, Size __size >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    class StaticArray :
+    class __CDS_InheritsEBOs StaticArray :
             public Iterable < __ElementType >,
             protected __hidden :: __impl :: __StaticArrayServer < __ElementType, __size >,
             public __hidden :: __impl :: __StaticArrayImplementation < __ElementType, __size >,
