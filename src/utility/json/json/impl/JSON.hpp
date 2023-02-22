@@ -132,8 +132,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                                 while ( String :: whitespace.contains ( string [index] ) ) { ++ index; }
 
                                 /* expecting json input -> "label" : object, "label" : object .... */
-                                if ( string [index] != '"' ) { throw JsonFormatException ( '"', '{', string [index] ); }
                                 if ( string [index] == '}' ) { return index - 1; }
+                                if ( string [index] != '"' ) { throw JsonFormatException ( '"', '{', string [index] ); }
                                 state = State :: ReadingLabel;
 
                                 break;
