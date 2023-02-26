@@ -73,7 +73,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept; /* NOLINT(*-explicit-*) */
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr explicit operator __ElementType * () const noexcept;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator __ElementType * () const noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard virtual auto exchange (
