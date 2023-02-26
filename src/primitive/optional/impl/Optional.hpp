@@ -304,7 +304,7 @@ namespace cds {
 
         return
                 this->_pObject == pOptional->_pObject ||
-                * this->_pObject == * pOptional->_pObject;
+                cds :: meta :: equals (* this->_pObject, * pOptional->_pObject);
     }
 
 
@@ -314,7 +314,8 @@ namespace cds {
         std :: stringstream oss;
         oss << "| ";
         if ( this->isPresent() ) {
-            oss << * this->_pObject;
+            cds::streamPrint (oss, * this->_pObject);
+//            oss << * this->_pObject;
         } else {
             oss << "none";
         }
