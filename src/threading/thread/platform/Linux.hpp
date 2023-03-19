@@ -7,6 +7,7 @@
 #define __CDS_THREAD_LINUX_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <pthread.h>
+#include <unistd.h>
 
 namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
