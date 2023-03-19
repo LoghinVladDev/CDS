@@ -7,8 +7,13 @@
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
-    template < typename __ElementType >                                                                 /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __iicch_obtainGenericHandler (    /* NOLINT(bugprone-reserved-identifier) */
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: __iicch_obtainGenericHandler (    /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
 
@@ -16,8 +21,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType >                                                                     /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: __iicch_obtainGenericConstHandler (   /* NOLINT(bugprone-reserved-identifier) */
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: __iicch_obtainGenericConstHandler (   /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
 
@@ -25,12 +35,22 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr TreeSet < __ElementType > :: TreeSet () noexcept = default;
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet () noexcept = default;
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline TreeSet < __ElementType > :: TreeSet (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet (
             TreeSet const & set
     ) noexcept {
 
@@ -38,8 +58,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    constexpr TreeSet < __ElementType > :: TreeSet (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > constexpr TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet (
             TreeSet && set
     ) noexcept :
             Implementation ( std :: move ( set ) ) {
@@ -47,14 +72,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
     template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > template <
             typename __IteratorType,     /* NOLINT(bugprone-reserved-identifier) */
             typename __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
-    > __CDS_OptimalInline TreeSet < __ElementType > :: TreeSet (
+    > __CDS_OptimalInline TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet (
             __IteratorType const & begin,
             __IteratorType const & end,
             Size                   count
@@ -66,13 +96,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
     template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > template <
             typename __TElementType,     /* NOLINT(bugprone-reserved-identifier) */
             cds :: meta :: EnableIf <
                     cds :: meta :: isCopyConstructible < __TElementType > ()
             >
-    > __CDS_OptimalInline TreeSet < __ElementType > :: TreeSet (
+    > __CDS_OptimalInline TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet (
             std :: initializer_list < __ElementType > const & initializerList
     ) noexcept :
         TreeSet (
@@ -83,9 +118,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType >  /* NOLINT(bugprone-reserved-identifier) */
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    >
     template < typename __IterableType >     /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline TreeSet < __ElementType > :: TreeSet (
+    __CDS_OptimalInline TreeSet <
+            __ElementType,
+            __Comparator
+    > :: TreeSet (
             __IterableType const & iterable
     ) noexcept :
         TreeSet (
@@ -96,15 +137,25 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprDestructor TreeSet < __ElementType > :: ~TreeSet () noexcept {
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprDestructor TreeSet <
+            __ElementType,
+            __Comparator
+    > :: ~TreeSet () noexcept {
 
         this->__rbt_clear();
     }
 
 
-    template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline auto TreeSet < __ElementType > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
             TreeSet const & set
     ) noexcept -> TreeSet & {
 
@@ -115,8 +166,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType >             /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline auto TreeSet < __ElementType > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: operator = (  /* NOLINT(bugprone-reserved-identifier) */
             TreeSet && set
     ) noexcept -> TreeSet & {
 
@@ -125,8 +181,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: contains (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: contains (
             __ElementType const & element
     ) const noexcept -> bool {
 
@@ -134,22 +195,37 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprOverride auto TreeSet < __ElementType > :: size ()  const noexcept -> Size {
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_cpplang_ConstexprOverride auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: size ()  const noexcept -> Size {
 
         return this->__rbt_size();
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline auto TreeSet < __ElementType > :: clear () noexcept -> void {
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > __CDS_OptimalInline auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: clear () noexcept -> void {
 
         this->__rbt_clear();
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_OptimalInline auto TreeSet < __ElementType > :: remove (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    >__CDS_OptimalInline auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: remove (
             __ElementType const & element
     ) noexcept -> bool {
 
@@ -157,8 +233,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprConditioned auto TreeSet < __ElementType > :: operator == (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    >__CDS_cpplang_ConstexprConditioned auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: operator == (
             TreeSet const & set
     ) const noexcept -> bool {
 
@@ -170,8 +251,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    __CDS_cpplang_ConstexprConditioned auto TreeSet < __ElementType > :: operator != (
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    >__CDS_cpplang_ConstexprConditioned auto TreeSet <
+            __ElementType,
+            __Comparator
+    > :: operator != (
             TreeSet const & set
     ) const noexcept -> bool {
 

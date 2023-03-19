@@ -26,45 +26,47 @@
 
 namespace cds {                             /* NOLINT(modernize-concat-nested-namespaces) */
 
-    template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier) */
-    class __CDS_InheritsEBOs TreeSet :
+    template <
+            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
+    > class __CDS_InheritsEBOs TreeSet :
             public Set < __ElementType >,
-            protected __hidden :: __impl :: __TreeSetServer < __ElementType >,
-            public __hidden :: __impl :: __TreeSetImplementation < __ElementType >,
-            public __hidden :: __impl :: __TreeSetDispatcher < __ElementType >,
-            public __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetFindByClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetRemoveOfCollectionClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetRemoveByClient < __ElementType >,
-            public __hidden :: __impl :: __TreeSetGenericStatementsClient < __ElementType > {
+            protected __hidden :: __impl :: __TreeSetServer < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetImplementation < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetDispatcher < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetFindByClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetRemoveOfCollectionClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetRemoveByClient < __ElementType, __Comparator >,
+            public __hidden :: __impl :: __TreeSetGenericStatementsClient < __ElementType, __Comparator > {
 
     protected:  using SetBase                                = Set < __ElementType >;
-    protected:  using Server                                 = __hidden :: __impl :: __TreeSetServer < __ElementType >;
-    protected:  using Implementation                         = __hidden :: __impl :: __TreeSetImplementation < __ElementType >;
-    protected:  using Dispatcher                             = __hidden :: __impl :: __TreeSetDispatcher < __ElementType >;
-    protected:  using DelegateForwardConstIterableClient     = __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType >;
-    protected:  using DelegateBackwardConstIterableClient    = __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType >;
-    protected:  using ConstIteratorRemoveClient              = __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType >;
-    protected:  using RandomInsertionClient                  = __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType >;
-    protected:  using FindUniqueClient                       = __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType >;
-    protected:  using ContainsOfCollectionClient             = __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType >;
-    protected:  using ContainsOfInitializerListClient        = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType >;
-    protected:  using FindOfCollectionClient                 = __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType >;
-    protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType >;
-    protected:  using FindByClient                           = __hidden :: __impl :: __TreeSetFindByClient< __ElementType >;
-    protected:  using RemoveOfCollectionClient               = __hidden :: __impl :: __TreeSetRemoveOfCollectionClient< __ElementType >;
-    protected:  using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType >;
-    protected:  using RemoveByClient                         = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType >;
-    protected:  using GenericStatementsClient                = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType >;
+    protected:  using Server                                 = __hidden :: __impl :: __TreeSetServer < __ElementType, __Comparator >;
+    protected:  using Implementation                         = __hidden :: __impl :: __TreeSetImplementation < __ElementType, __Comparator >;
+    protected:  using Dispatcher                             = __hidden :: __impl :: __TreeSetDispatcher < __ElementType, __Comparator >;
+    protected:  using DelegateForwardConstIterableClient     = __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType, __Comparator >;
+    protected:  using DelegateBackwardConstIterableClient    = __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType, __Comparator >;
+    protected:  using ConstIteratorRemoveClient              = __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType, __Comparator >;
+    protected:  using RandomInsertionClient                  = __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType, __Comparator >;
+    protected:  using FindUniqueClient                       = __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType, __Comparator >;
+    protected:  using ContainsOfCollectionClient             = __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType, __Comparator >;
+    protected:  using ContainsOfInitializerListClient        = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType, __Comparator >;
+    protected:  using FindOfCollectionClient                 = __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType, __Comparator >;
+    protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType, __Comparator >;
+    protected:  using FindByClient                           = __hidden :: __impl :: __TreeSetFindByClient< __ElementType, __Comparator >;
+    protected:  using RemoveOfCollectionClient               = __hidden :: __impl :: __TreeSetRemoveOfCollectionClient< __ElementType, __Comparator >;
+    protected:  using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType, __Comparator >;
+    protected:  using RemoveByClient                         = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType, __Comparator >;
+    protected:  using GenericStatementsClient                = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType, __Comparator >;
 
     protected:  friend Server;
 
@@ -220,7 +222,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
 
     public:
         template < typename __IterableType >                /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_Explicit TreeSet (                                           /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_Explicit TreeSet (                            /* NOLINT(bugprone-reserved-identifier) */
                 __IterableType const & iterable
         ) noexcept;
 

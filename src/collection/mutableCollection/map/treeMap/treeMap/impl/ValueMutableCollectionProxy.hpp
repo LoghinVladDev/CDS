@@ -9,10 +9,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprOverride auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
@@ -23,10 +25,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprOverride auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __iicch_obtainGenericConstHandler (         /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
@@ -37,12 +41,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: ValueMutableCollectionProxy (
-            TreeMap < __KeyType, __ValueType > * pMap
+            TreeMap < __KeyType, __ValueType, __Comparator > * pMap
     ) noexcept :
             AbstractValueMutableCollectionProxy ( pMap ) {
 
@@ -51,10 +57,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __begin (
             ValueMutableCollectionProxy * pObject
     ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
@@ -67,10 +75,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __end (
                 ValueMutableCollectionProxy * pObject
         ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType > * {
@@ -83,10 +93,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __beginLocal (
                 ValueMutableCollectionProxy * pObject
         ) noexcept -> Iterator {
@@ -97,10 +109,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __endLocal (
                 ValueMutableCollectionProxy * pObject
         ) noexcept -> Iterator {
@@ -111,10 +125,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __cbegin (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
@@ -127,10 +143,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __cend (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __ValueType const > * {
@@ -143,10 +161,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __cbeginLocal (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> ConstIterator {
@@ -157,10 +177,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __cendLocal (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> ConstIterator {
@@ -171,10 +193,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __rbeginLocal (
                 ValueMutableCollectionProxy * pObject
         ) noexcept -> ReverseIterator {
@@ -185,10 +209,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_NonConstConstexprMemberFunction auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __rendLocal (
                 ValueMutableCollectionProxy * pObject
         ) noexcept -> ReverseIterator {
@@ -199,10 +225,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __crbeginLocal (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> ConstReverseIterator {
@@ -213,10 +241,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __crendLocal (
                 ValueMutableCollectionProxy const * pObject
         ) noexcept -> ConstReverseIterator {
@@ -227,10 +257,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __remove (
             ValueMutableCollectionProxy * pObject,
             AbstractIterator const * iterator
@@ -245,10 +277,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __removeConst (
             ValueMutableCollectionProxy * pObject,
             AbstractConstIterator const * iterator
@@ -263,10 +297,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __removeArray (
             ValueMutableCollectionProxy * pObject,
             AbstractIterator const * const * ppIterators,
@@ -274,7 +310,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Size {
 
         auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
-                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator const *
+                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractIterator const *
             > ( iteratorCount );
 
         for ( auto iteratorIndex = 0U; iteratorIndex < iteratorCount; ++ iteratorIndex ) {
@@ -299,10 +335,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :: __removeConstArray (
             ValueMutableCollectionProxy * pObject,
             AbstractConstIterator const * const * ppIterators,
@@ -310,7 +348,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Size {
 
         auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
-                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator const *
+                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractConstIterator const *
             > ( iteratorCount );
 
         for ( auto iteratorIndex = 0U; iteratorIndex < iteratorCount; ++ iteratorIndex ) {

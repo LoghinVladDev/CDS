@@ -33,161 +33,174 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __KeyType,                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyAbstractIterator =        /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractIterator,
                             __ValueType,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractIterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractIterator,
                                     __ValueType
                             >
                     >;
 
 
             template <
-                    typename __KeyType,                              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyAbstractConstIterator =       /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractConstIterator,
                             __ValueType const,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractConstIterator,
                                     __ValueType const
                             >
                     >;
 
 
             template <
-                    typename __KeyType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyForwardIterator =        /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_Iterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_Iterator,
                             __ValueType,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_Iterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_Iterator,
                                     __ValueType
                             >
                     >;
 
 
             template <
-                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyForwardConstIterator =       /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ConstIterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ConstIterator,
                             __ValueType const,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ConstIterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ConstIterator,
                                     __ValueType const
                             >
                     >;
 
 
             template <
-                    typename __KeyType,                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyBackwardIterator =        /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseIterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ReverseIterator,
                             __ValueType,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseIterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ReverseIterator,
                                     __ValueType
                             >
                     >;
 
 
             template <
-                    typename __KeyType,                              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                             /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyBackwardConstIterator =       /* NOLINT(bugprone-reserved-identifier) */
                     BidirectionalIteratorGenericDecorator <
-                            typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseConstIterator,
+                            typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ReverseConstIterator,
                             __ValueType const,
                             & __treeMapValueMutableCollectionProxyIteratorDecoratorValueAt <
-                                    typename __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_ReverseConstIterator,
+                                    typename __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_ReverseConstIterator,
                                     __ValueType const
                             >
                     >;
 
 
             template <
-                    typename __ServerType,                              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyConstIteratorRemoveClient =      /* NOLINT(bugprone-reserved-identifier) */
                     __LocalConstIteratorRemovePrimitiveClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                            /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                           /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyIteratorRemoveClient =      /* NOLINT(bugprone-reserved-identifier) */
                     __LocalIteratorRemovePrimitiveClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyDelegateBackwardConstIterableClient =        /* NOLINT(bugprone-reserved-identifier) */
                     cds :: __hidden :: __impl :: __LocalDelegateBackwardConstIterablePrimitiveClient  <
                             __ServerType,
-                            __TreeMapValueProxyBackwardConstIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyBackwardConstIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyDelegateBackwardIterableClient =         /* NOLINT(bugprone-reserved-identifier) */
                     cds :: __hidden :: __impl :: __LocalDelegateBackwardIterablePrimitiveClient  <
                             __ServerType,
-                            __TreeMapValueProxyBackwardIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyBackwardIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                         /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                        /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyDelegateForwardConstIterableClient =     /* NOLINT(bugprone-reserved-identifier) */
                     __LocalDelegateForwardConstIterablePrimitiveClient  <
                             __ServerType,
-                            __TreeMapValueProxyForwardConstIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyForwardConstIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                                  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyDelegateForwardIterableClient =      /* NOLINT(bugprone-reserved-identifier) */
                     cds :: __hidden :: __impl :: __LocalDelegateForwardIterablePrimitiveClient  <
                             __ServerType,
-                            __TreeMapValueProxyForwardIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyForwardIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,                     /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator                     /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyRandomInsertionClient =      /* NOLINT(bugprone-reserved-identifier) */
                     __LocalRandomInsertionPrimitiveClient <
                             __ServerType,
@@ -197,9 +210,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                              /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                 /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyContainsOfCollectionClient =     /* NOLINT(bugprone-reserved-identifier) */
                     __LocalContainsOfCompositeClient <
                             __ServerType,
@@ -210,9 +224,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                                   /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                      /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                     /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,                       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,                     /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator                     /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyContainsOfInitializerListClient =     /* NOLINT(bugprone-reserved-identifier) */
                     cds :: __hidden :: __impl :: __LocalContainsOfCompositeClient <
                             __ServerType,
@@ -226,38 +241,41 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                            /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindByImmutableClient =      /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindByImmutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                        /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                           /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                          /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindByMutableClient =      /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindByMutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType >
+                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType, __Comparator >
                     >;
 
 
             template <
-                    typename __ServerType,                                  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindOfConstCollectionClient =        /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindOfImmutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType >,
+                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType, __Comparator >,
                             cds :: Iterable < __ValueType >,
                             & cds :: __hidden :: __impl :: __iterableContains < __ValueType >,
                             & cds :: __hidden :: __impl :: __iterableNotContains < __ValueType >
@@ -265,14 +283,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                                       /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                          /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindOfConstInitializerListClient =        /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindOfImmutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType >,
+                            __TreeMapValueProxyAbstractConstIterator < __KeyType, __ValueType, __Comparator >,
                             std :: initializer_list < __ValueType >,
                             & cds :: __hidden :: __impl :: __initializerListContains <
                                     __ValueType,
@@ -286,14 +305,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                               /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindOfCollectionClient =        /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindOfImmutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType >,
+                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType, __Comparator >,
                             cds :: Iterable < __ValueType >,
                             & cds :: __hidden :: __impl :: __iterableContains < __ValueType >,
                             & cds :: __hidden :: __impl :: __iterableNotContains < __ValueType >
@@ -301,14 +321,15 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                                  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyFindOfInitializerListClient =        /* NOLINT(bugprone-reserved-identifier) */
                     __LocalFindOfImmutableCompositeClient <
                             __ServerType,
                             __ValueType,
-                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType >,
+                            __TreeMapValueProxyAbstractIterator < __KeyType, __ValueType, __Comparator >,
                             std :: initializer_list < __ValueType >,
                             & cds :: __hidden :: __impl :: __initializerListContains <
                                     __ValueType,
@@ -322,9 +343,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                                  /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                     /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                                    /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyConstGenericStatementsClient =       /* NOLINT(bugprone-reserved-identifier) */
                     __LocalGenericImmutableStatementsCompositeClient <
                             __ServerType,
@@ -333,9 +355,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
-                    typename __ServerType,                             /* NOLINT(bugprone-reserved-identifier) */
-                    typename __KeyType,                                /* NOLINT(bugprone-reserved-identifier) */
-                    typename __ValueType                               /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ServerType,      /* NOLINT(bugprone-reserved-identifier) */
+                    typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
+                    typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
+                    typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
             > using __TreeMapValueProxyGenericStatementsClient =       /* NOLINT(bugprone-reserved-identifier) */
                     __LocalGenericMutableStatementsCompositeClient <
                             __ServerType,
@@ -387,53 +410,55 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > class __CDS_InheritsEBOs TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: ValueMutableCollectionProxy :
             public AbstractValueMutableCollectionProxy,
             private __hidden :: __impl :: __TreeMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
+            public __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >,
             public __hidden :: __impl :: __TreeMapValueProxyRemoveByClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
             public __hidden :: __impl :: __TreeMapValueProxyRemoveOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
             public __hidden :: __impl :: __TreeMapValueProxyRemoveOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType > {
 
-    protected: using TreeMapBase                                = TreeMap < __KeyType, __ValueType >;
+    protected: using TreeMapBase                                = TreeMap < __KeyType, __ValueType, __Comparator >;
     protected: using Server                                     = __hidden::__impl::__TreeMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using IteratorRemoveClient                       = __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using DelegateBackwardIterableClient             = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using DelegateForwardIterableClient              = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindByImmutableClient                      = __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindByMutableClient                        = __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindOfCollectionClient                     = __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using FindOfInitializerListClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using IteratorRemoveClient                       = __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateBackwardIterableClient             = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateForwardIterableClient              = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindByImmutableClient                      = __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindByMutableClient                        = __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfCollectionClient                     = __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfInitializerListClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
     protected: using RemoveByClient                             = __hidden :: __impl :: __TreeMapValueProxyRemoveByClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
     protected: using RemoveOfCollectionClient                   = __hidden :: __impl :: __TreeMapValueProxyRemoveOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
     protected: using RemoveOfInitializerListClient              = __hidden :: __impl :: __TreeMapValueProxyRemoveOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
@@ -598,7 +623,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     public:
         __CDS_Explicit ValueMutableCollectionProxy (
-                TreeMap < __KeyType, __ValueType > * pMap
+                TreeMap < __KeyType, __ValueType, __Comparator > * pMap
         ) noexcept;
 
     public:

@@ -31,61 +31,62 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > class __CDS_InheritsEBOs TreeMap :
             public cds :: Map < __KeyType, __ValueType >,
-            protected __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapDelegateBackwardIterableClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapDelegateForwardConstIterableClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapDelegateBackwardConstIterableClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapIteratorRemoveClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapConstIteratorRemoveClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindUniqueClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindUniqueConstClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapRandomInsertionClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapContainsOfCollectionClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapContainsOfInitializerListClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindByClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindByConstClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindOfCollectionClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindOfInitializerListClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindOfConstCollectionClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapFindOfConstInitializerListClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapGenericStatementsClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapConstGenericStatementsClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapRemoveByClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapRemoveOfCollectionClient < __KeyType, __ValueType >,
-            public __hidden :: __impl :: __TreeMapRemoveOfInitializerListClient < __KeyType, __ValueType > {
+            protected __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapDelegateBackwardIterableClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapDelegateForwardConstIterableClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapDelegateBackwardConstIterableClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapIteratorRemoveClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapConstIteratorRemoveClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindUniqueClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindUniqueConstClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapRandomInsertionClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapContainsOfCollectionClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapContainsOfInitializerListClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindByClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindByConstClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindOfCollectionClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindOfInitializerListClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindOfConstCollectionClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapFindOfConstInitializerListClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapGenericStatementsClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapConstGenericStatementsClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapRemoveByClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapRemoveOfCollectionClient < __KeyType, __ValueType, __Comparator >,
+            public __hidden :: __impl :: __TreeMapRemoveOfInitializerListClient < __KeyType, __ValueType, __Comparator > {
 
     protected: using MapBase                                    = Map < __KeyType, __ValueType >;
-    protected: using Server                                     = __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType >;
-    protected: using Implementation                             = __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType >;
-    protected: using Dispatcher                                 = __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType >;
-    protected: using DelegateForwardIterableClient              = __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType >;
-    protected: using DelegateBackwardIterableClient             = __hidden :: __impl :: __TreeMapDelegateBackwardIterableClient < __KeyType, __ValueType >;
-    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapDelegateForwardConstIterableClient < __KeyType, __ValueType >;
-    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapDelegateBackwardConstIterableClient < __KeyType, __ValueType >;
-    protected: using IteratorRemoveClient                       = __hidden :: __impl :: __TreeMapIteratorRemoveClient < __KeyType, __ValueType >;
-    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapConstIteratorRemoveClient < __KeyType, __ValueType >;
-    protected: using FindUniqueClient                           = __hidden :: __impl :: __TreeMapFindUniqueClient < __KeyType, __ValueType >;
-    protected: using FindUniqueConstClient                      = __hidden :: __impl :: __TreeMapFindUniqueConstClient < __KeyType, __ValueType >;
-    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapRandomInsertionClient < __KeyType, __ValueType >;
-    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapContainsOfCollectionClient < __KeyType, __ValueType >;
-    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapContainsOfInitializerListClient < __KeyType, __ValueType >;
-    protected: using FindByClient                               = __hidden :: __impl :: __TreeMapFindByClient < __KeyType, __ValueType >;
-    protected: using FindByConstClient                          = __hidden :: __impl :: __TreeMapFindByConstClient < __KeyType, __ValueType >;
-    protected: using FindOfCollectionClient                     = __hidden :: __impl :: __TreeMapFindOfCollectionClient < __KeyType, __ValueType >;
-    protected: using FindOfInitializerListClient                = __hidden :: __impl :: __TreeMapFindOfInitializerListClient < __KeyType, __ValueType >;
-    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapFindOfConstCollectionClient < __KeyType, __ValueType >;
-    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapFindOfConstInitializerListClient < __KeyType, __ValueType >;
-    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapGenericStatementsClient < __KeyType, __ValueType >;
-    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapConstGenericStatementsClient < __KeyType, __ValueType >;
-    protected: using RemoveByClient                             = __hidden :: __impl :: __TreeMapRemoveByClient < __KeyType, __ValueType >;
-    protected: using RemoveOfCollectionClient                   = __hidden :: __impl :: __TreeMapRemoveOfCollectionClient < __KeyType, __ValueType >;
-    protected: using RemoveOfInitializerListClient              = __hidden :: __impl :: __TreeMapRemoveOfInitializerListClient < __KeyType, __ValueType >;
+    protected: using Server                                     = __hidden :: __impl :: __TreeMapServer < __KeyType, __ValueType, __Comparator >;
+    protected: using Implementation                             = __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType, __Comparator >;
+    protected: using Dispatcher                                 = __hidden :: __impl :: __TreeMapDispatcher < __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateForwardIterableClient              = __hidden :: __impl :: __TreeMapDelegateForwardIterableClient < __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateBackwardIterableClient             = __hidden :: __impl :: __TreeMapDelegateBackwardIterableClient < __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapDelegateForwardConstIterableClient < __KeyType, __ValueType, __Comparator >;
+    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapDelegateBackwardConstIterableClient < __KeyType, __ValueType, __Comparator >;
+    protected: using IteratorRemoveClient                       = __hidden :: __impl :: __TreeMapIteratorRemoveClient < __KeyType, __ValueType, __Comparator >;
+    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapConstIteratorRemoveClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindUniqueClient                           = __hidden :: __impl :: __TreeMapFindUniqueClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindUniqueConstClient                      = __hidden :: __impl :: __TreeMapFindUniqueConstClient < __KeyType, __ValueType, __Comparator >;
+    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapRandomInsertionClient < __KeyType, __ValueType, __Comparator >;
+    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapContainsOfCollectionClient < __KeyType, __ValueType, __Comparator >;
+    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapContainsOfInitializerListClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindByClient                               = __hidden :: __impl :: __TreeMapFindByClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindByConstClient                          = __hidden :: __impl :: __TreeMapFindByConstClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfCollectionClient                     = __hidden :: __impl :: __TreeMapFindOfCollectionClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfInitializerListClient                = __hidden :: __impl :: __TreeMapFindOfInitializerListClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapFindOfConstCollectionClient < __KeyType, __ValueType, __Comparator >;
+    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapFindOfConstInitializerListClient < __KeyType, __ValueType, __Comparator >;
+    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapGenericStatementsClient < __KeyType, __ValueType, __Comparator >;
+    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapConstGenericStatementsClient < __KeyType, __ValueType, __Comparator >;
+    protected: using RemoveByClient                             = __hidden :: __impl :: __TreeMapRemoveByClient < __KeyType, __ValueType, __Comparator >;
+    protected: using RemoveOfCollectionClient                   = __hidden :: __impl :: __TreeMapRemoveOfCollectionClient < __KeyType, __ValueType, __Comparator >;
+    protected: using RemoveOfInitializerListClient              = __hidden :: __impl :: __TreeMapRemoveOfInitializerListClient < __KeyType, __ValueType, __Comparator >;
 
     private: friend Server;
 

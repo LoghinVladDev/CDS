@@ -10,10 +10,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprOverride auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) noexcept -> __GenericHandler {
@@ -24,10 +26,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprOverride auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __iicch_obtainGenericConstHandler (         /* NOLINT(bugprone-reserved-identifier) */
             cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
     ) const noexcept -> __GenericConstHandler {
@@ -38,12 +42,14 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: KeySetProxy (
-            TreeMap < __KeyType, __ValueType > * pMap
+            TreeMap < __KeyType, __ValueType, __Comparator > * pMap
     ) noexcept :
             AbstractKeySetProxy ( pMap ) {
 
@@ -52,10 +58,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_cpplang_ConstexprOverride auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: contains (
             __KeyType const & key
     ) const noexcept -> bool {
@@ -66,10 +74,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __cbegin (
             KeySetProxy const * pObject
     ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
@@ -82,10 +92,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __cend (
             KeySetProxy const * pObject
     ) noexcept -> cds :: __hidden :: __impl :: __AbstractDelegateIterator < __KeyType const > * {
@@ -98,10 +110,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __cbeginLocal (
             KeySetProxy const * pObject
     ) noexcept -> ConstIterator {
@@ -112,10 +126,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __cendLocal (
             KeySetProxy const * pObject
     ) noexcept -> ConstIterator {
@@ -126,10 +142,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __crbeginLocal (
             KeySetProxy const * pObject
     ) noexcept -> ConstReverseIterator {
@@ -140,10 +158,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > constexpr auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __crendLocal (
             KeySetProxy const * pObject
     ) noexcept -> ConstReverseIterator {
@@ -154,10 +174,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __removeConst (
             KeySetProxy * pObject,
             AbstractConstIterator const * iterator
@@ -172,10 +194,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __removeConstArray (
             KeySetProxy * pObject,
             AbstractConstIterator const * const * ppIterators,
@@ -183,7 +207,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     ) noexcept -> Size {
 
         auto ppWrappedIteratorArray = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray <
-                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType > :: __rbt_AbstractConstIterator const *
+                typename cds :: __hidden :: __impl :: __TreeMapImplementation < __KeyType, __ValueType, __Comparator > :: __rbt_AbstractConstIterator const *
         > ( iteratorCount );
 
         for ( auto iteratorIndex = 0U; iteratorIndex < iteratorCount; ++ iteratorIndex ) {
@@ -208,10 +232,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __findConst (
             KeySetProxy const * pObject,
             __KeyType const &  key
@@ -230,10 +256,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
     template <
             typename __KeyType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValueType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __Comparator   /* NOLINT(bugprone-reserved-identifier) */
     > __CDS_OptimalInline auto TreeMap <
             __KeyType,
-            __ValueType
+            __ValueType,
+            __Comparator
     > :: KeySetProxy :: __findConstLocal (
             KeySetProxy const * pObject,
             __KeyType const &  key
