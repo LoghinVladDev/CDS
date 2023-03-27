@@ -13,6 +13,10 @@ namespace cds {
     class UniquePointer : public SmartPointer < __ElementType > {
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __E, typename __D > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        friend class UniquePointer;
+
+    private:    /* NOLINT(readability-redundant-access-specifiers) */
         using Base = SmartPointer < __ElementType >;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
@@ -34,6 +38,12 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         constexpr UniquePointer (
                 UniquePointer && pointer
+        ) noexcept;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherType, typename __OtherDeleter >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Implicit constexpr UniquePointer (                    /* NOLINT(*-explicit-*) */
+                UniquePointer < __OtherType, __OtherDeleter > && pointer
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */

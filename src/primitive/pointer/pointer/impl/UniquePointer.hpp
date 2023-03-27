@@ -55,6 +55,19 @@ namespace cds {
     }
 
 
+    template < typename __ElementType, typename __Deleter >     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherType, typename __OtherDeleter >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr UniquePointer <
+            __ElementType,
+            __Deleter
+    > :: UniquePointer (
+            UniquePointer < __OtherType, __OtherDeleter > && pointer
+    ) noexcept :
+            _pObject ( cds :: exchange ( pointer._pObject, nullptr ) ) {
+
+    }
+
+
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_cpplang_ConstexprDestructor UniquePointer <
             __ElementType,
