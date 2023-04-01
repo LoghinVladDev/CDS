@@ -118,6 +118,32 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: SharedPointer (
+            SharedPointer < __OtherElementType, __OtherDeleter > const & pointer
+    ) noexcept :
+            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__use()->template __cast < __ElementType > () ) {
+
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline SharedPointer <
+            __ElementType,                               /* NOLINT(*-avoid-c-arrays) */
+            __Deleter
+    > :: SharedPointer (
+            SharedPointer < __OtherElementType, __OtherDeleter > && pointer
+    ) noexcept :
+            _pControl ( cds :: exchange ( pointer._pControl, nullptr )->template __cast < __ElementType > () ) {
+
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline SharedPointer <
             __ElementType,
             __Deleter
@@ -273,6 +299,42 @@ namespace cds {
         }
 
         this->_pControl = cds :: exchange ( pointer._pControl, nullptr );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            SharedPointer < __OtherElementType, __OtherDeleter > const & pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this->_pControl != nullptr ) {
+            __Deleter () ( this->_pControl->__release() );
+        }
+
+        this->_pControl = pointer._pControl == nullptr ? nullptr : pointer._pControl->__use()->template __cast < __ElementType > ();
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto SharedPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            SharedPointer < __OtherElementType, __OtherDeleter > && pointer
+    ) noexcept -> SharedPointer & {
+
+        if ( this->_pControl != nullptr ) {
+            __Deleter () ( this->_pControl->__release() );
+        }
+
+        this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->template __cast < __ElementType > ();
         return * this;
     }
 

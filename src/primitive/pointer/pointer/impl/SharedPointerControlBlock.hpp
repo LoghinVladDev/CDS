@@ -33,6 +33,19 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
+            template < typename __ElementType >         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < typename __OtherElementType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __cast () noexcept -> __SharedPointerControlBlock < __OtherElementType > * {
+
+                static_assert (
+                        cds :: meta :: isDerivedFrom < __ElementType, __OtherElementType > (),
+                        "Can only implicitly cast to base types"
+                );
+
+                return reinterpret_cast < __SharedPointerControlBlock < __OtherElementType > * > (this);
+            }
+
+
             template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             __CDS_OptimalInline auto __SharedPointerControlBlock < __ElementType > :: __checkAndUse () noexcept -> __SharedPointerControlBlock * {
 

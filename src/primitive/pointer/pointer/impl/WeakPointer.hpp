@@ -55,6 +55,32 @@ namespace cds {
     }
 
 
+    template < typename __ElementType, typename __Deleter >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: WeakPointer (
+            WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+    ) noexcept :
+            _pControl ( pointer._pControl == nullptr ? nullptr : pointer._pControl->__observe()->template __cast < __ElementType > () ) {
+
+    }
+
+
+    template < typename __ElementType, typename __Deleter >             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    constexpr WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: WeakPointer (
+            WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+    ) noexcept :
+            _pControl ( cds :: exchange ( pointer._pControl, nullptr )->template __cast < __ElementType > () ) {
+
+    }
+
+
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     __CDS_OptimalInline WeakPointer <
             __ElementType,
@@ -158,6 +184,34 @@ namespace cds {
 
 
     template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (                                       /* NOLINT(*-unhandled-self-assignment, cert-oop54-cpp) */
+            WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+    ) noexcept -> WeakPointer & {
+
+        this->reset ( pointer );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_cpplang_NonConstConstexprMemberFunction auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: operator = (
+            WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+    ) noexcept -> WeakPointer & {
+
+        this->reset ( std :: move ( pointer ) );
+        return * this;
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     constexpr auto WeakPointer <
             __ElementType,
             __Deleter
@@ -298,6 +352,44 @@ namespace cds {
         }
 
         this->_pControl = cds :: exchange ( pointer._pControl, nullptr );
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: reset (
+            WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+    ) noexcept -> void {
+
+        if ( this == & pointer ) {
+            return;
+        }
+
+        if ( this->_pControl != nullptr ) {
+            this->_pControl->__disposeObserver();
+        }
+
+        this->_pControl = pointer == nullptr ? nullptr : pointer._pControl->__observe()->template __cast < __ElementType > ();
+    }
+
+
+    template < typename __ElementType, typename __Deleter > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_OptimalInline auto WeakPointer <
+            __ElementType,
+            __Deleter
+    > :: reset (
+            WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+    ) noexcept -> void {
+
+        if ( this == & pointer ) {
+            return;
+        }
+
+        this->_pControl = cds :: exchange ( pointer._pControl, nullptr )->template __cast < __ElementType > ();
     }
 
 

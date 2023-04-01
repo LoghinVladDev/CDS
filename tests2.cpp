@@ -24,7 +24,29 @@ using namespace cds;
 #include <array>
 #include <CDS/Array>
 
+#include <CDS/memory/SmartPointer>
+#include <CDS/memory/RawPointer>
+#include <CDS/memory/UniquePointer>
+#include <CDS/memory/SharedPointer>
+#include <CDS/memory/WeakPointer>
+
+class A { public: virtual ~A() = default; };
+class B : public A { };
+
+
 int main() {
+
+    UniquePointer <A> uA = makeUnique <B> ();
+    SharedPointer <A> sA = makeShared <B> ();
+    SharedPointer <B> sB = makeShared <B> ();
+    WeakPointer <B> wB = sB;
+    WeakPointer <A> wA = sB;
+    SharedPointer <A> sA1 (wB);
+
+    wA = sB;
+    sA = wB;
+
+    return 0;
 
     Array < int > a1;
 

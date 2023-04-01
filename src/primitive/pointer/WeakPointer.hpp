@@ -36,6 +36,18 @@ namespace cds {
                 WeakPointer && pointer
         ) noexcept;
 
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Implicit WeakPointer (                                        /* NOLINT(*-explicit-*) */
+                WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Implicit constexpr WeakPointer (                              /* NOLINT(*-explicit-*) */
+                WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+        ) noexcept;
+
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_Implicit WeakPointer (    /* NOLINT(*-explicit-*) */
                 SharedPointer < __ElementType, __Deleter > const & pointer
@@ -44,6 +56,18 @@ namespace cds {
     public:                             /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_Implicit WeakPointer (    /* NOLINT(*-explicit-*) */
                 SharedPointer < __ElementType, __Deleter > && pointer
+        ) noexcept;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Implicit WeakPointer (                                        /* NOLINT(*-explicit-*) */
+                SharedPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_Implicit WeakPointer (                                        /* NOLINT(*-explicit-*) */
+                SharedPointer < __OtherElementType, __OtherDeleter > && pointer
         ) noexcept;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -64,6 +88,18 @@ namespace cds {
                 WeakPointer && pointer
         ) noexcept -> WeakPointer &;
 
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto operator = (
+                WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept -> WeakPointer &;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+                WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+        ) noexcept -> WeakPointer &;
+
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 SharedPointer < __ElementType, __Deleter > const & pointer
@@ -72,6 +108,18 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto operator = (
                 SharedPointer < __ElementType, __Deleter > && pointer
+        ) noexcept -> WeakPointer &;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto operator = (
+                SharedPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept -> WeakPointer &;
+
+    public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto operator = (
+                SharedPointer < __OtherElementType, __OtherDeleter > && pointer
         ) noexcept -> WeakPointer &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -105,6 +153,30 @@ namespace cds {
     public: /* NOLINT(readability-redundant-access-specifiers) */
         auto reset (
                 WeakPointer && pointer
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto reset (
+                WeakPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto reset (
+                WeakPointer < __OtherElementType, __OtherDeleter > && pointer
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto reset (
+                SharedPointer < __OtherElementType, __OtherDeleter > const & pointer
+        ) noexcept -> void;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        template < typename __OtherElementType, typename __OtherDeleter >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        auto reset (
+                SharedPointer < __OtherElementType, __OtherDeleter > && pointer
         ) noexcept -> void;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */

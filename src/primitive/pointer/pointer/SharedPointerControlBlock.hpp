@@ -35,6 +35,10 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             public:                                                         /* NOLINT(readability-redundant-access-specifiers) */
                 auto __use () noexcept -> __SharedPointerControlBlock *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
+            public:                                         /* NOLINT(readability-redundant-access-specifiers) */
+                template < typename __OtherElementType >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                auto __cast () noexcept -> __SharedPointerControlBlock < __OtherElementType > *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
             public:                                                                 /* NOLINT(readability-redundant-access-specifiers) */
                 auto __checkAndUse () noexcept -> __SharedPointerControlBlock *;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
@@ -56,11 +60,11 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             public:                                                                         /* NOLINT(readability-redundant-access-specifiers) */
                 __CDS_NoDiscard constexpr auto __get () const noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-use-nodiscard) */
 
-            public:
-                __CDS_NoDiscard auto __observerCount () const noexcept -> Size;
+            public:                                                             /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard auto __observerCount () const noexcept -> Size; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-use-nodiscard) */
 
-            public:
-                __CDS_NoDiscard auto __ownerCount () const noexcept -> Size;
+            public:                                                             /* NOLINT(readability-redundant-access-specifiers) */
+                __CDS_NoDiscard auto __ownerCount () const noexcept -> Size;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-use-nodiscard) */
             };
 
         } /* namespace __impl */
