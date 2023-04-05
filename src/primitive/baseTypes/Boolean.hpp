@@ -69,7 +69,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Constructor Test
          */
-        __CDS_cpplang_ConstexprDestructor ~Boolean() noexcept override { } /* NOLINT(modernize-use-equals-default) */ /* causes destructor to be created after the True/False constexpr variables (cpp20) */
+        __CDS_cpplang_ConstexprDestructor ~Boolean() noexcept override { } /* NOLINT(modernize-use-equals-default) */ /* causes destructor to be created after the True/False constexpr variables (generic) */
 
         /**
          * @brief Constructor from trivial boolean value

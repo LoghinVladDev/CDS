@@ -642,12 +642,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     public:
         auto operator = (
                 ValueMutableCollectionProxy const &
-        ) noexcept = delete;
+        ) noexcept -> ValueMutableCollectionProxy & = delete;
 
     public:
         auto operator = (
                 ValueMutableCollectionProxy &&
-        ) noexcept = delete;
+        ) noexcept -> ValueMutableCollectionProxy & = delete;
 
     public:
         __CDS_NoDiscard static constexpr auto __begin (

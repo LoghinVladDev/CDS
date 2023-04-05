@@ -450,12 +450,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     public:
         auto operator = (
                 KeySetProxy const &
-        ) noexcept = delete;
+        ) noexcept -> KeySetProxy & = delete;
 
     public:
         auto operator = (
                 KeySetProxy &&
-        ) noexcept = delete;
+        ) noexcept -> KeySetProxy & = delete;
 
     public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (

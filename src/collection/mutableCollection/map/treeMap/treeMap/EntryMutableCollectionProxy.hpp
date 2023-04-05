@@ -643,12 +643,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     public:
         auto operator = (
                 EntryMutableCollectionProxy const &
-        ) noexcept = delete;
+        ) noexcept -> EntryMutableCollectionProxy & = delete;
 
     public:
         auto operator = (
                 EntryMutableCollectionProxy &&
-        ) noexcept = delete;
+        ) noexcept -> EntryMutableCollectionProxy & = delete;
 
     protected:  /* NOLINT(readability-redundant-access-specifiers) */
         static auto __newAddress ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
