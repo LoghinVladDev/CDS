@@ -1,4 +1,4 @@
-name: SonarCloud-Analysis
+name: SonarCloud-Analysis-Cpp11-Test-All
 on:
   push:
     branches:
