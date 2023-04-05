@@ -1,4 +1,4 @@
-name: SonarCloud-Analysis-Cpp11-Test-All
+name: SonarCloud-Analysis-Cpp17-Test-All
 on:
   push:
     branches:
@@ -21,7 +21,7 @@ jobs:
         run: |
           mkdir build
           cmake -S . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --target cpp11_test_all
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --target cpp17_test_all
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
