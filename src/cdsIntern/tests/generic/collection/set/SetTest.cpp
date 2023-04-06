@@ -1,145 +1,152 @@
-//
-// Created by loghin on 13/09/22.
-//
+/*
+ * Created by loghin on 13/09/22.
+ */
 
 #include "SetTest.h"
 
 #include <CDS/HashSet>
-#include <CDS/TreeSet>
 #include <CDS/LinkedHashSet>
-
 #include <CDS/Range>
-#include <vector>
+#include <CDS/TreeSet>
+
 #include <array>
+#include <vector>
 
-template < typename __ElementType >
-inline auto equiv (
-        cds :: Set < __ElementType >    const & s,
-        std :: initializer_list < __ElementType >       const & l
-) noexcept -> bool {
+namespace {
 
-    if ( s.size() != l.size() ) {
-        return false;
-    }
+    using cds::String;
 
-    auto itS = s.begin();
-    auto itL = l.begin();
-    auto endS = s.end();
-    auto endL = l.end();
-    while ( itS != endS && itL != endL ) {
-        if ( * itS != * itL ) {
+
+    template < typename __ElementType >
+    inline auto equiv (
+            cds :: Set < __ElementType >                    const & s,
+            std :: initializer_list < __ElementType >       const & l
+    ) noexcept -> bool {
+
+        if ( s.size() != l.size() ) {
             return false;
         }
 
-        ++ itS; ++ itL;
+        auto itS = s.begin();
+        auto itL = l.begin();
+        auto endS = s.end();
+        auto endL = l.end();
+        while ( itS != endS && itL != endL ) {
+            if ( * itS != * itL ) {
+                return false;
+            }
+
+            ++ itS; ++ itL;
+        }
+
+        if ( itS != endS || itL != endL ) {
+            return false;
+        }
+
+        return true;
     }
 
-    if ( itS != endS || itL != endL ) {
-        return false;
+    /* SetTestGroup-MemberFunctions-cpp-xx : STS-00100-MF-cpp-xx. Tests STC-00101 to STC-001xx */
+    template <
+            typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
+    > auto setTestGroupMemberFunctions (
+            cds :: Set < __MemberType >       & collection,
+            Test                                              * pTestLib,
+            String                                      const & expectedToString,
+            __MemberType                                const & remove1,
+            bool                                                remove1Success,
+            std :: initializer_list < __MemberType >    const & remove1Equiv,
+            __MemberType                                const & remove2,
+            bool                                                remove2Success,
+            std :: initializer_list < __MemberType >    const & remove2Equiv,
+            __MemberType                                const & remove3,
+            bool                                                remove3Success,
+            std :: initializer_list < __MemberType >    const & remove3Equiv,
+            __MemberType                                const & remove4,
+            bool                                                remove4Success,
+            std :: initializer_list < __MemberType >    const & remove4Equiv,
+            __MemberType                                const & remove5,
+            bool                                                remove5Success,
+            std :: initializer_list < __MemberType >    const & remove5Equiv
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
+
+
+        /* SetTestGroup-MemberFunctions-toString-cpp-xx : STC-00101-MF-toString-cpp-xx */
+        auto asString = collection.toString();
+        pTestLib->log ( "object 'toString' : '%s'. expected 'toString' : '%s'", asString.cStr(), expectedToString.cStr() );
+        if ( asString != expectedToString ) {
+            pTestLib->logError ( "'STC-00101-MF-toString-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00101-MF-toString-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-removeScen1-cpp-xx : STC-00103-MF-removeScen1-cpp-xx */
+        bool resultRemove1 = collection.remove ( remove1 );
+        if ( resultRemove1 != remove1Success || ! equiv ( collection, remove1Equiv ) ) {
+            pTestLib->logError ( "'STC-00103-MF-removeScen1-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00103-MF-removeScen1-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-removeScen2-cpp-xx : STC-00104-MF-removeScen2-cpp-xx */
+        bool resultRemove2 = collection.remove ( remove2 );
+        if ( resultRemove2 != remove2Success || ! equiv ( collection, remove2Equiv ) ) {
+            pTestLib->logError ( "'STC-00104-MF-removeScen2-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00104-MF-removeScen2-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-removeScen3-cpp-xx : STC-00105-MF-removeScen3-cpp-xx */
+        bool resultRemove3 = collection.remove ( remove3 );
+        if ( resultRemove3 != remove3Success || ! equiv ( collection, remove3Equiv ) ) {
+            pTestLib->logError ( "'STC-00105-MF-removeScen3-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00105-MF-removeScen3-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-removeScen4-cpp-xx : STC-00106-MF-removeScen4-cpp-xx */
+        bool resultRemove4 = collection.remove ( remove4 );
+        if ( resultRemove4 != remove4Success || ! equiv ( collection, remove4Equiv ) ) {
+            pTestLib->logError ( "'STC-00106-MF-removeScen4-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00106-MF-removeScen4-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-removeScen5-cpp-xx : STC-00107-MF-removeScen5-cpp-xx */
+        bool resultRemove5 = collection.remove ( remove5 );
+        if ( resultRemove5 != remove5Success || ! equiv ( collection, remove5Equiv ) ) {
+            pTestLib->logError ( "'STC-00107-MF-removeScen5-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00107-MF-removeScen5-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* SetTestGroup-MemberFunctions-clear-cpp-xx : STC-00102-MF-clear-cpp-xx */
+        collection.clear();
+
+        asString                    = collection.toString();
+
+        pTestLib->log ( "Object Cleared using 'clear'. Re-execution after clear : " );
+        pTestLib->log ( "object 'toString' : '%s'. potential expected 'toString' : '%s'", asString.cStr(), "[]" );
+
+        if ( asString.length() > 2ULL ) {
+            pTestLib->logError( "'STC-00102-MF-clear-cpp-xx - toString' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'STC-00102-MF-clear-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+
+        return true;
     }
 
-    return true;
-}
-
-/* SetTestGroup-MemberFunctions-cpp-xx : STS-00100-MF-cpp-xx. Tests STC-00101 to STC-001xx */
-template <
-        typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
-> auto setTestGroupMemberFunctions (
-        cds :: Set < __MemberType >       & collection,
-        Test                                              * pTestLib,
-        String                                      const & expectedToString,
-        __MemberType                                const & remove1,
-        bool                                                remove1Success,
-        std :: initializer_list < __MemberType >    const & remove1Equiv,
-        __MemberType                                const & remove2,
-        bool                                                remove2Success,
-        std :: initializer_list < __MemberType >    const & remove2Equiv,
-        __MemberType                                const & remove3,
-        bool                                                remove3Success,
-        std :: initializer_list < __MemberType >    const & remove3Equiv,
-        __MemberType                                const & remove4,
-        bool                                                remove4Success,
-        std :: initializer_list < __MemberType >    const & remove4Equiv,
-        __MemberType                                const & remove5,
-        bool                                                remove5Success,
-        std :: initializer_list < __MemberType >    const & remove5Equiv
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
-
-
-    /* SetTestGroup-MemberFunctions-toString-cpp-xx : STC-00101-MF-toString-cpp-xx */
-    auto asString = collection.toString();
-    pTestLib->log ( "object 'toString' : '%s'. expected 'toString' : '%s'", asString.cStr(), expectedToString.cStr() );
-    if ( asString != expectedToString ) {
-        pTestLib->logError ( "'STC-00101-MF-toString-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00101-MF-toString-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-removeScen1-cpp-xx : STC-00103-MF-removeScen1-cpp-xx */
-    bool resultRemove1 = collection.remove ( remove1 );
-    if ( resultRemove1 != remove1Success || ! equiv ( collection, remove1Equiv ) ) {
-        pTestLib->logError ( "'STC-00103-MF-removeScen1-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00103-MF-removeScen1-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-removeScen2-cpp-xx : STC-00104-MF-removeScen2-cpp-xx */
-    bool resultRemove2 = collection.remove ( remove2 );
-    if ( resultRemove2 != remove2Success || ! equiv ( collection, remove2Equiv ) ) {
-        pTestLib->logError ( "'STC-00104-MF-removeScen2-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00104-MF-removeScen2-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-removeScen3-cpp-xx : STC-00105-MF-removeScen3-cpp-xx */
-    bool resultRemove3 = collection.remove ( remove3 );
-    if ( resultRemove3 != remove3Success || ! equiv ( collection, remove3Equiv ) ) {
-        pTestLib->logError ( "'STC-00105-MF-removeScen3-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00105-MF-removeScen3-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-removeScen4-cpp-xx : STC-00106-MF-removeScen4-cpp-xx */
-    bool resultRemove4 = collection.remove ( remove4 );
-    if ( resultRemove4 != remove4Success || ! equiv ( collection, remove4Equiv ) ) {
-        pTestLib->logError ( "'STC-00106-MF-removeScen4-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00106-MF-removeScen4-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-removeScen5-cpp-xx : STC-00107-MF-removeScen5-cpp-xx */
-    bool resultRemove5 = collection.remove ( remove5 );
-    if ( resultRemove5 != remove5Success || ! equiv ( collection, remove5Equiv ) ) {
-        pTestLib->logError ( "'STC-00107-MF-removeScen5-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00107-MF-removeScen5-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* SetTestGroup-MemberFunctions-clear-cpp-xx : STC-00102-MF-clear-cpp-xx */
-    collection.clear();
-
-    asString                    = collection.toString();
-
-    pTestLib->log ( "Object Cleared using 'clear'. Re-execution after clear : " );
-    pTestLib->log ( "object 'toString' : '%s'. potential expected 'toString' : '%s'", asString.cStr(), "[]" );
-
-    if ( asString.length() > 2ULL ) {
-        pTestLib->logError( "'STC-00102-MF-clear-cpp-xx - toString' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'STC-00102-MF-clear-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-
-    return true;
 }
 
 /* SetTestSuite-cpp-xx : STS-00001-cpp-xx */

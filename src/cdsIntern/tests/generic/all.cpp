@@ -1,12 +1,12 @@
-//
-// Created by loghin on 05.04.2021.
-//
+/*
+ * Created by loghin on 05.04.2021.
+ */
 
 #include "primitive/StringTest.h"
 #include "collection/CollectionTest.h"
 #include "collection/mutableCollection/MutableCollectionTest.h"
-#include "collection/set/SetTest.h"
 #include "collection/mutableCollection/list/ListTest.h"
+#include "collection/set/SetTest.h"
 #include "collection/unordered/JsonTest.h"
 
 #include <CDS/Array>
@@ -14,7 +14,16 @@
 #include <CDS/memory/SharedPointer>
 #include <CDS/util/JSON>
 
-int main () {
+
+auto main () -> int {
+
+    using cds::uint32;
+
+    using cds::String;
+    using cds::SharedPointer;
+    using cds::Pair;
+
+
     auto start = std::chrono::high_resolution_clock::now();
 
     auto test = [] ( Test & test, String const & name ) {

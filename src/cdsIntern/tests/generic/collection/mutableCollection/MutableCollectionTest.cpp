@@ -1,2959 +1,2988 @@
-//
-// Created by loghin on 04/09/22.
-//
+/*
+ * Created by loghin on 04/09/22.
+ */
 
 #include "MutableCollectionTest.h"
 
 #include <CDS/Array>
-#include <CDS/LinkedList>
 #include <CDS/HashMap>
-
+#include <CDS/LinkedList>
 #include <CDS/Range>
-#include <vector>
+
 #include <array>
-
-/* MutableCollectionTestGroup-MemberFunctions-cpp-xx : MCTG-00002-MF-cpp-xx. Tests MCTC-00003 to MCTC-00004 */
-template <
-        typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupMemberFunctions (
-        cds :: MutableCollection < __MemberType >        & collection,
-        Test                                                             * pTestLib,
-        String                                                     const & expectedToString
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
+#include <vector>
 
 
-    /* MutableCollectionTestGroup-MemberFunctions-toString-cpp-xx : MCTC-00003-MF-toString-cpp-xx */
-    auto asString = collection.toString();
-    pTestLib->log ( "object 'toString' : '%s'. expected 'toString' : '%s'", asString.cStr(), expectedToString.cStr() );
-    if ( asString != expectedToString ) {
-        pTestLib->logError ( "'MCTC-00003-MF-toString-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00003-MF-toString-" __CDS_cpplang_core_version_name "' OK" );
+namespace {
+
+    using cds::uint32;
+    using cds::Size;
+
+
+    using cds::Object;
+
+    using cds::String;
+    using cds::StringLiteral;
+    using cds::MapEntry;
+
+    using cds::MutableCollection;
+
+
+    using cds::meta::TrueType;
+    using cds::meta::FalseType;
+    using cds::meta::Void;
+    using cds::meta::EnableIf;
+
+    using cds::meta::addressOf;
+    using cds::meta::referenceOf;
+
+    /* MutableCollectionTestGroup-MemberFunctions-cpp-xx : MCTG-00002-MF-cpp-xx. Tests MCTC-00003 to MCTC-00004 */
+    template <
+            typename __MemberType /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupMemberFunctions (
+            cds :: MutableCollection < __MemberType >        & collection,
+            Test                                                             * pTestLib,
+            String                                                     const & expectedToString
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
+
+
+        /* MutableCollectionTestGroup-MemberFunctions-toString-cpp-xx : MCTC-00003-MF-toString-cpp-xx */
+        auto asString = collection.toString();
+        pTestLib->log ( "object 'toString' : '%s'. expected 'toString' : '%s'", asString.cStr(), expectedToString.cStr() );
+        if ( asString != expectedToString ) {
+            pTestLib->logError ( "'MCTC-00003-MF-toString-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00003-MF-toString-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestGroup-MemberFunctions-clear-cpp-xx : MCTC-00004-MF-clear-cpp-xx */
+        collection.clear();
+
+        asString                    = collection.toString();
+
+        pTestLib->log ( "Object Cleared using 'clear'. Re-execution after clear : " );
+        pTestLib->log ( "object 'toString' : '%s'. potential expected 'toString' : '%s'", asString.cStr(), "[]" );
+
+        if ( asString.length() > 2ULL ) {
+            pTestLib->logError( "'MCTC-00004-MF-clear-cpp-xx - toString' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00004-MF-clear-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+
+        return true;
     }
 
-    /* MutableCollectionTestGroup-MemberFunctions-clear-cpp-xx : MCTC-00004-MF-clear-cpp-xx */
-    collection.clear();
 
-    asString                    = collection.toString();
+    template <
+            typename __T,       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ItType,  /* NOLINT(bugprone-reserved-identifier) */
+            typename __LastArg  /* NOLINT(bugprone-reserved-identifier) */
+    > auto fwdCheckIterator (
+            __ItType const & cur,
+            __ItType const & end,
+            __LastArg const & lastE
+    ) -> bool {
 
-    pTestLib->log ( "Object Cleared using 'clear'. Re-execution after clear : " );
-    pTestLib->log ( "object 'toString' : '%s'. potential expected 'toString' : '%s'", asString.cStr(), "[]" );
+        if ( cur == end ) {
+            return false;
+        }
 
-    if ( asString.length() > 2ULL ) {
-        pTestLib->logError( "'MCTC-00004-MF-clear-cpp-xx - toString' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00004-MF-clear-" __CDS_cpplang_core_version_name "' OK" );
+        if ( ! cds :: meta :: equals ( __T ( lastE ), * cur ) ) {
+            return false;
+        }
+
+        auto next = cur;
+        return ++ next == end;
     }
 
+    template <
+            typename __T,                   /* NOLINT(bugprone-reserved-identifier) */
+            typename __ItType,              /* NOLINT(bugprone-reserved-identifier) */
+            typename __CurrArg,             /* NOLINT(bugprone-reserved-identifier) */
+            typename ... __RemainingArgs    /* NOLINT(bugprone-reserved-identifier) */
+    > auto fwdCheckIterator (
+            __ItType const & cur,
+            __ItType const & end,
+            __CurrArg const & currE,
+            __RemainingArgs const & ... remE
+    ) noexcept -> bool {
 
-    return true;
-}
+        if ( cur == end ) {
+            return false;
+        }
 
+        if ( ! cds :: meta :: equals ( __T ( currE ), * cur ) ) {
+            return false;
+        }
 
-template <
-        typename __T,       /* NOLINT(bugprone-reserved-identifier) */
-        typename __ItType,  /* NOLINT(bugprone-reserved-identifier) */
-        typename __LastArg  /* NOLINT(bugprone-reserved-identifier) */
-> auto fwdCheckIterator (
-        __ItType const & cur,
-        __ItType const & end,
-        __LastArg const & lastE
-) -> bool {
-
-    if ( cur == end ) {
-        return false;
+        auto next = cur;
+        return fwdCheckIterator < __T > ( ++ next, end, remE ... );
     }
 
-    if ( ! cds :: meta :: equals ( __T ( lastE ), * cur ) ) {
-        return false;
-    }
+    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-cpp-xx : MCTG-00050-IT-cpp-xx. Tests MCTC-00051 to MCTC-00056 */
+    template <
+            typename __MemberType,                              /* NOLINT(bugprone-reserved-identifier) */
+            typename ... __OrderedValues                        /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupDelegateForwardIterableClientImports (
+            MutableCollection < __MemberType > & collection,
+            Test                  *     pTestLib,
+            bool                        mutabilityTestExecute,
+            __MemberType    const &     mutabilityTestValue,
+            __MemberType    const &     mutabilityTestValue2,
+            __OrderedValues const & ... orderedValues
+    ) -> bool {
 
-    auto next = cur;
-    return ++ next == end;
-}
+        pTestLib->log ( "Object under test, to be iterated : '%s'", collection.toString().cStr() );
 
-template <
-        typename __T,                   /* NOLINT(bugprone-reserved-identifier) */
-        typename __ItType,              /* NOLINT(bugprone-reserved-identifier) */
-        typename __CurrArg,             /* NOLINT(bugprone-reserved-identifier) */
-        typename ... __RemainingArgs    /* NOLINT(bugprone-reserved-identifier) */
-> auto fwdCheckIterator (
-        __ItType const & cur,
-        __ItType const & end,
-        __CurrArg const & currE,
-        __RemainingArgs const & ... remE
-) noexcept -> bool {
-
-    if ( cur == end ) {
-        return false;
-    }
-
-    if ( ! cds :: meta :: equals ( __T ( currE ), * cur ) ) {
-        return false;
-    }
-
-    auto next = cur;
-    return fwdCheckIterator < __T > ( ++ next, end, remE ... );
-}
-
-/* MutableCollectionTestGroup-DelegateForwardIterableClientImports-cpp-xx : MCTG-00050-IT-cpp-xx. Tests MCTC-00051 to MCTC-00056 */
-template <
-        typename __MemberType,                              /* NOLINT(bugprone-reserved-identifier) */
-        typename ... __OrderedValues                        /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupDelegateForwardIterableClientImports (
-        MutableCollection < __MemberType > & collection,
-        Test                  *     pTestLib,
-        bool                        mutabilityTestExecute,
-        __MemberType    const &     mutabilityTestValue,
-        __MemberType    const &     mutabilityTestValue2,
-        __OrderedValues const & ... orderedValues
-) -> bool {
-
-    pTestLib->log ( "Object under test, to be iterated : '%s'", collection.toString().cStr() );
-
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-range-cpp-xx : MCTC-00051-IT-range-cpp-xx */
-    pTestLib->log ( "Standard iteration : " );
-    for ( auto & e : collection ) {
-        std :: stringstream oss;
-        cds :: streamPrint ( oss, e );
-        pTestLib->log ( "'%s'", cds :: String ( oss.str() ).toString().cStr() );
-    }
-
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-begin_endIteration-cpp-xx : MCTC-00052-IT-begin_end-cpp-xx */
-    auto stdIterResult = fwdCheckIterator < __MemberType > ( collection.begin(), collection.end(), orderedValues ... );
-    if ( ! stdIterResult ) {
-        pTestLib->logError( "'MCTC-00052-IT-begin_end-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00052-IT-begin_end-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-begin_endIteration-cpp-xx : MCTC-00053-IT-begin_end-cpp-xx */
-    auto stdCIterResult = fwdCheckIterator < __MemberType > ( collection.begin(), collection.end(), orderedValues ... );
-    if ( ! stdCIterResult ) {
-        pTestLib->logError( "'MCTC-00053-IT-begin_end-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00053-IT-begin_end-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    if ( mutabilityTestExecute ) {
-        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityRange-cpp-xx : MCTC-00058-IT-mutabilityRange-cpp-xx */
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-range-cpp-xx : MCTC-00051-IT-range-cpp-xx */
+        pTestLib->log ( "Standard iteration : " );
         for ( auto & e : collection ) {
-            e = mutabilityTestValue;
+            std :: stringstream oss;
+            cds :: streamPrint ( oss, e );
+            pTestLib->log ( "'%s'", cds :: String ( oss.str() ).toString().cStr() );
         }
 
-        if ( collection.any ( [& mutabilityTestValue](__MemberType const & e) { return e != mutabilityTestValue; } ) ) {
-            pTestLib->logError ( "'MCTC-00058-IT-mutabilityRange-" __CDS_cpplang_core_version_name "' failed" );
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-begin_endIteration-cpp-xx : MCTC-00052-IT-begin_end-cpp-xx */
+        auto stdIterResult = fwdCheckIterator < __MemberType > ( collection.begin(), collection.end(), orderedValues ... );
+        if ( ! stdIterResult ) {
+            pTestLib->logError( "'MCTC-00052-IT-begin_end-" __CDS_cpplang_core_version_name "' failed" );
             return false;
         } else {
-            pTestLib->logOK ( "'MCTC-00058-IT-mutabilityRange-" __CDS_cpplang_core_version_name "' OK" );
-        };
-
-        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityIteration-cpp-xx : MCTC-00059-IT-mutabilityIteration-cpp-xx */
-        for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-            * it = mutabilityTestValue2;
+            pTestLib->logOK ( "'MCTC-00052-IT-begin_end-" __CDS_cpplang_core_version_name "' OK" );
         }
 
-        if ( collection.any ( [& mutabilityTestValue2](__MemberType const & e) { return e != mutabilityTestValue2; } ) ) {
-            pTestLib->logError ( "'MCTC-00059-IT-mutabilityIteration-" __CDS_cpplang_core_version_name "' failed" );
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-begin_endIteration-cpp-xx : MCTC-00053-IT-begin_end-cpp-xx */
+        auto stdCIterResult = fwdCheckIterator < __MemberType > ( collection.begin(), collection.end(), orderedValues ... );
+        if ( ! stdCIterResult ) {
+            pTestLib->logError( "'MCTC-00053-IT-begin_end-" __CDS_cpplang_core_version_name "' failed" );
             return false;
         } else {
-            pTestLib->logOK ( "'MCTC-00059-IT-mutabilityIteration-" __CDS_cpplang_core_version_name "' OK" );
-        };
-    }
+            pTestLib->logOK ( "'MCTC-00053-IT-begin_end-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        if ( mutabilityTestExecute ) {
+            /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityRange-cpp-xx : MCTC-00058-IT-mutabilityRange-cpp-xx */
+            for ( auto & e : collection ) {
+                e = mutabilityTestValue;
+            }
+
+            if ( collection.any ( [& mutabilityTestValue](__MemberType const & e) { return e != mutabilityTestValue; } ) ) {
+                pTestLib->logError ( "'MCTC-00058-IT-mutabilityRange-" __CDS_cpplang_core_version_name "' failed" );
+                return false;
+            } else {
+                pTestLib->logOK ( "'MCTC-00058-IT-mutabilityRange-" __CDS_cpplang_core_version_name "' OK" );
+            };
+
+            /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-mutabilityIteration-cpp-xx : MCTC-00059-IT-mutabilityIteration-cpp-xx */
+            for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
+                * it = mutabilityTestValue2;
+            }
+
+            if ( collection.any ( [& mutabilityTestValue2](__MemberType const & e) { return e != mutabilityTestValue2; } ) ) {
+                pTestLib->logError ( "'MCTC-00059-IT-mutabilityIteration-" __CDS_cpplang_core_version_name "' failed" );
+                return false;
+            } else {
+                pTestLib->logOK ( "'MCTC-00059-IT-mutabilityIteration-" __CDS_cpplang_core_version_name "' OK" );
+            };
+        }
 
 
-    collection.clear();
+        collection.clear();
 
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-emptybegin_end-cpp-xx : MCTC-00054-IT-e_begin_end-cpp-xx */
-    {
-        auto it = collection.begin();
-        if (it != collection.end()) {
-            pTestLib->logError( "'MCTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed" );
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-emptybegin_end-cpp-xx : MCTC-00054-IT-e_begin_end-cpp-xx */
+        {
+            auto it = collection.begin();
+            if (it != collection.end()) {
+                pTestLib->logError( "'MCTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed" );
+                return false;
+            }
+        }
+
+        pTestLib->logOK ( "'MCTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' OK" );
+
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-emptycbegin_cend-cpp-xx : MCTC-00055-IT-e_cbegin_cend-cpp-xx */
+        {
+            auto it = collection.cbegin();
+            if (it != collection.cend()) {
+                pTestLib->logError( "'MCTC-00055-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed" );
+                return false;
+            }
+        }
+
+        pTestLib->logOK ( "'MCTC-00055-IT-e_begin_end-" __CDS_cpplang_core_version_name "' OK" );
+
+        /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-e_emptyRange-cpp-xx : MCTC-00056-IT-e_emptyRange-cpp-xx */
+        /* validated by begin / end tests */
+        /*
+        for ( auto & e : collection ) {
+            pTestLib->logError( "'MCTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' failed" );
             return false;
         }
+        */
+
+        pTestLib->logOK ( "'MCTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' OK" );
+
+        return true;
     }
 
-    pTestLib->logOK ( "'MCTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' OK" );
+    template <
+            typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
+            typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestCasePredicateHandle (
+            StringLiteral testCaseName,
+            MutableCollection < __MemberType > const & collection,
+            Test                                              * pTestLib,
+            auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( __Predicate const & ) const -> __PredicateReturnType,
+            __Predicate const & predicate,
+            __PredicateReturnType                       const & expectedReturn
+    ) -> bool {
 
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-emptycbegin_cend-cpp-xx : MCTC-00055-IT-e_cbegin_cend-cpp-xx */
-    {
-        auto it = collection.cbegin();
-        if (it != collection.cend()) {
-            pTestLib->logError( "'MCTC-00055-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed" );
+        auto returned = (collection.*pFunctionalCall) ( predicate );
+        if ( returned != expectedReturn ) {
+            pTestLib->logError( "'%s' failed", testCaseName);
             return false;
         }
+
+        pTestLib->logOK ( "'%s' OK", testCaseName );
+        return true;
     }
 
-    pTestLib->logOK ( "'MCTC-00055-IT-e_begin_end-" __CDS_cpplang_core_version_name "' OK" );
-
-    /* MutableCollectionTestGroup-DelegateForwardIterableClientImports-e_emptyRange-cpp-xx : MCTC-00056-IT-e_emptyRange-cpp-xx */
-    /* validated by begin / end tests */
-    /*
-    for ( auto & e : collection ) {
-        pTestLib->logError( "'MCTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    }
-    */
-
-    pTestLib->logOK ( "'MCTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' OK" );
-
-    return true;
-}
-
-template <
-        typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
-        typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
-        typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestCasePredicateHandle (
-        StringLiteral testCaseName,
-        MutableCollection < __MemberType > const & collection,
-        Test                                              * pTestLib,
-        auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( __Predicate const & ) const -> __PredicateReturnType,
-        __Predicate const & predicate,
-        __PredicateReturnType                       const & expectedReturn
-) -> bool {
-
-    auto returned = (collection.*pFunctionalCall) ( predicate );
-    if ( returned != expectedReturn ) {
-        pTestLib->logError( "'%s' failed", testCaseName);
-        return false;
-    }
-
-    pTestLib->logOK ( "'%s' OK", testCaseName );
-    return true;
-}
-
-template <
-        typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
-        typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
-        typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestCasePredicateCountedHandle (
-        StringLiteral testCaseName,
-        MutableCollection < __MemberType > const & collection,
-        Test                                              * pTestLib,
-        auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( Size, __Predicate const & ) const -> __PredicateReturnType,
-        __Predicate const & predicate,
-        Size desiredCount,
-        __PredicateReturnType                       const & expectedReturn
-) -> bool {
-
-    auto returned = (collection.*pFunctionalCall) ( desiredCount, predicate );
-    if ( returned != expectedReturn ) {
-        pTestLib->logError( "'%s' failed", testCaseName);
-        return false;
-    }
-
-    pTestLib->logOK ( "'%s' OK", testCaseName );
-    return true;
-}
-
-/* MutableCollectionTestGroup-RemoveAbsIt-cpp-xx : MCTG-00350-RAIT-cpp-xx. MCTC-00351-RAIT to MCTC-00356-RAIT */
-template <
-        typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupRemoveAbstractIterator (
-        cds :: MutableCollection < __MemberType >       & collection,
-        Test                                                     * pTestLib,
-        cds :: MutableCollection < __MemberType > const & equivAfter1,
-        cds :: MutableCollection < __MemberType >  & equivAfter2,
-        cds :: MutableCollection < __MemberType > const & equivAfter3,
-//        cds :: Collection < __MemberType > const & equivAfter3,                                   N/A with Collection
-//        typename cds :: Collection < __MemberType > :: Iterator const & toRemoveBeforeFront,
-        cds :: MutableCollection < __MemberType > const & equivAfter5,
-        cds :: MutableCollection < __MemberType > const & equivAfter6
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeAtFront-cpp-xx : MCTC-00351-RAIT-removeAtFront-cpp-xx */
-    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtFront = collection.begin();
-    auto const resultToRemoveAtFront = collection.remove( toRemoveAtFront );
-    auto const expectedResultToRemoveAtFront = true;
-    pTestLib->log ( "object after 'removeAtFront' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter1.toString().cStr() );
-    if ( resultToRemoveAtFront != expectedResultToRemoveAtFront || ! collection.equals ( equivAfter1 ) ) {
-        pTestLib->logError( "'MCTC-00351-RAIT-removeAtFront-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00351-RAIT-removeAtFront-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeInBounds-cpp-xx : MCTC-00352-RAIT-removeInBounds-cpp-xx */
-    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveInBounds = collection.begin();
-    for ( uint32 i = 0; i * 2 < collection.size(); ++ i ) {
-        ++ toRemoveInBounds;
-    }
-
-    auto const resultToRemoveAtInBounds = collection.remove( toRemoveInBounds );
-    auto const expectedResultToRemoveAtInBounds = true;
-    pTestLib->log ( "object after 'removeInBounds' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter2.toString().cStr() );
-    if ( resultToRemoveAtInBounds != expectedResultToRemoveAtInBounds || ! collection.equals ( equivAfter2 ) ) {
-        pTestLib->logError( "'MCTC-00352-RAIT-removeInBounds-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00352-RAIT-removeInBounds-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeAtEnd-cpp-xx : MCTC-00353-RAIT-removeAtEnd-cpp-xx */
-    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtEnd = collection.begin();
-    for ( uint32 i = 0; i + 1 < collection.size(); ++ i ) {
-        ++ toRemoveAtEnd;
-    }
-
-    auto const resultToRemoveAtEnd = collection.remove( toRemoveAtEnd );
-    auto const expectedResultToRemoveAtEnd = true;
-    pTestLib->log ( "object after 'removeAtEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter3.toString().cStr() );
-    if ( resultToRemoveAtEnd != expectedResultToRemoveAtEnd || ! collection.equals ( equivAfter3 ) ) {
-        pTestLib->logError( "'MCTC-00353-RAIT-removeAtEnd-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00353-RAIT-removeAtEnd-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeBeforeFront-" __CDS_cpplang_core_version_name " : MCTC-00354-RAIT-removeBeforeFront-cpp-xx : N/A */
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeAfterEnd-cpp-xx : MCTC-00355-RAIT-removeAfterEnd-cpp-xx */
-    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAfterBack = collection.end();
-    auto const resultToRemoveAfterEnd = collection.remove( toRemoveAfterBack );
-    auto const expectedResultToRemoveAfterEnd = false;
-    pTestLib->log ( "object after 'removeAfterEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
-    if ( resultToRemoveAfterEnd != expectedResultToRemoveAfterEnd || ! collection.equals ( equivAfter5 ) ) {
-        pTestLib->logError( "'MCTC-00355-RAIT-removeAfterEnd-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00355-RAIT-removeAfterEnd-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestGroup-RemoveAbsIt-removeFromOther-cpp-xx : MCTC-00355-RAIT-removeFromOther-cpp-xx */
-    typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveFromSimilar = equivAfter2.begin();
-    auto const resultToRemoveFromSimilar = collection.remove( toRemoveFromSimilar );
-    auto const expectedResultToRemoveFromSimilar = false;
-    pTestLib->log ( "object after 'removeFromOther' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
-    if ( resultToRemoveFromSimilar != expectedResultToRemoveFromSimilar || ! collection.equals ( equivAfter6 ) ) {
-        pTestLib->logError( "'MCTC-00356-RAIT-removeFromOther-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00356-RAIT-removeFromOther-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    return true;
-}
-
-
-
-/* MutableCollectionTestGroup-RemoveBy-cpp-xx : MCTG-00400-RB-cpp-xx. MCTC-00401-RB to MCTC-00418-RB */
-template <
-        typename __Original,                        /* NOLINT(bugprone-reserved-identifier) */
-        typename __MemberType,                      /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingNonePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingOnePredicateType,        /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingMoreLTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingMorePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingMoreMTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
-        typename __MatchingAllPredicateType         /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupRemoveBy (
-        __Original const & original,
-        Test                                                     * pTestLib,
-        Size                                                       removeThatLimit,
-        Size                                                       removeThatResultWhenLessThanLimit,
-        __MatchingNonePredicateType                        const & matchingNone,
-        __MatchingOnePredicateType                         const & matchingOne,
-        __MatchingMoreLTLPredicateType                     const & matchingMoreLessThanLimit,
-        __MatchingMorePredicateType                        const & matchingMore,
-        __MatchingMoreMTLPredicateType                     const & matchingMoreMoreThanLimit,
-        __MatchingAllPredicateType                         const & matchingAll,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesNone,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesOne,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreLessThanLimit,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreExact,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreMoreThanLimit,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesAll,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesNone,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesOne,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesMore,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesAll,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesNone,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesOne,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesMore,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesAll,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesNone,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesOne,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesMore,
-        cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesAll
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", original.toString().cStr() );
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesNone-cpp-xx : MCTC-00401-RB-removeThatMatchesNone-cpp-xx */
-    auto       copyRB401            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB401 = copyRB401;
-    auto       removedCountRB401    = collectionRB401.removeThat ( removeThatLimit, matchingNone );
-    auto const expectedRemovedCountRB401 = 0;
-    pTestLib->log ( "object after 'removeThat with none matching' : '%s'. expected : '%s'", collectionRB401.toString().cStr(), equivAfterRemoveThatMatchesNone.toString().cStr() );
-    if ( removedCountRB401 != expectedRemovedCountRB401 || ! collectionRB401.equals ( equivAfterRemoveThatMatchesNone ) ) {
-        pTestLib->logError( "'MCTC-00401-RB-removeThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00401-RB-removeThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesOne-cpp-xx : MCTC-00402-RB-removeThatMatchesOne-cpp-xx */
-    auto       copyRB402            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB402 = copyRB402;
-    auto       removedCountRB402    = collectionRB402.removeThat ( removeThatLimit, matchingOne );
-    auto const expectedRemovedCountRB402 = 1;
-    pTestLib->log ( "object after 'removeThat with one matching' : '%s'. expected : '%s'", collectionRB402.toString().cStr(), equivAfterRemoveThatMatchesOne.toString().cStr() );
-    if ( removedCountRB402 != expectedRemovedCountRB402 || ! collectionRB402.equals ( equivAfterRemoveThatMatchesOne ) ) {
-        pTestLib->logError( "'MCTC-00402-RB-removeThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00402-RB-removeThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreLessThanLimit-cpp-xx : MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-cpp-xx */
-    auto       copyRB403            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB403 = copyRB403;
-    auto       removedCountRB403    = collectionRB403.removeThat ( removeThatLimit, matchingMoreLessThanLimit );
-    auto const expectedRemovedCountRB403 = removeThatResultWhenLessThanLimit;
-    pTestLib->log ( "object after 'removeThat with more matching, less than limit' : '%s'. expected : '%s'", collectionRB403.toString().cStr(), equivAfterRemoveThatMatchesMoreLessThanLimit.toString().cStr() );
-    if ( removedCountRB403 != expectedRemovedCountRB403 || ! collectionRB403.equals ( equivAfterRemoveThatMatchesMoreLessThanLimit ) ) {
-        pTestLib->logError( "'MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreExact-cpp-xx : MCTC-00404-RB-removeThatMatchesMoreExact-cpp-xx */
-    auto       copyRB404            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB404 = copyRB404;
-    auto       removedCountRB404    = collectionRB404.removeThat ( removeThatLimit, matchingMore );
-    auto const expectedRemovedCountRB404 = removeThatLimit;
-    pTestLib->log ( "object after 'removeThat with more matching, exact' : '%s'. expected : '%s'", collectionRB404.toString().cStr(), equivAfterRemoveThatMatchesMoreExact.toString().cStr() );
-    if ( removedCountRB404 != expectedRemovedCountRB404 || ! collectionRB404.equals ( equivAfterRemoveThatMatchesMoreExact ) ) {
-        pTestLib->logError( "'MCTC-00404-RB-removeThatMatchesMoreExact-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00404-RB-removeThatMatchesMoreExact-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreMoreThanLimit-cpp-xx : MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-cpp-xx */
-    auto       copyRB405            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB405 = copyRB405;
-    auto       removedCountRB405    = collectionRB405.removeThat ( removeThatLimit, matchingMoreMoreThanLimit );
-    auto const expectedRemovedCountRB405 = removeThatLimit;
-    pTestLib->log ( "object after 'removeThat with more matching' : '%s'. expected : '%s'", collectionRB405.toString().cStr(), equivAfterRemoveThatMatchesMoreMoreThanLimit.toString().cStr() );
-    if ( removedCountRB405 != expectedRemovedCountRB405 || ! collectionRB405.equals ( equivAfterRemoveThatMatchesMoreMoreThanLimit ) ) {
-        pTestLib->logError( "'MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeThatMatchesAll-cpp-xx : MCTC-00406-RB-removeThatMatchesAll-cpp-xx */
-    auto       copyRB406            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB406 = copyRB406;
-    auto       removedCountRB406    = collectionRB406.removeThat ( removeThatLimit, matchingAll );
-    auto const expectedRemovedCountRB406 = removeThatLimit;
-    pTestLib->log ( "object after 'removeThat with all matching, less than limit' : '%s'. expected : '%s'", collectionRB406.toString().cStr(), equivAfterRemoveThatMatchesAll.toString().cStr() );
-    if ( removedCountRB406 != expectedRemovedCountRB406 || ! collectionRB406.equals ( equivAfterRemoveThatMatchesAll ) ) {
-        pTestLib->logError( "'MCTC-00406-RB-removeThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00406-RB-removeThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesNone-cpp-xx : MCTC-00407-RB-removeFirstThatMatchesNone-cpp-xx */
-    auto       copyRB407            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB407 = copyRB407;
-    auto       removedCountRB407    = collectionRB407.removeFirstThat ( matchingNone );
-    auto const expectedRemovedCountRB407 = false;
-    pTestLib->log ( "object after 'removeFirstThat with no matches' : '%s'. expected : '%s'", collectionRB407.toString().cStr(), equivAfterRemoveFirstThatMatchesNone.toString().cStr() );
-    if ( removedCountRB407 != expectedRemovedCountRB407 || ! collectionRB407.equals ( equivAfterRemoveFirstThatMatchesNone ) ) {
-        pTestLib->logError( "'MCTC-00407-RB-removeFirstThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00407-RB-removeFirstThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesOne-cpp-xx : MCTC-00408-RB-removeFirstThatMatchesOne-cpp-xx */
-    auto       copyRB408            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB408 = copyRB408;
-    auto       removedCountRB408    = collectionRB408.removeFirstThat ( matchingOne );
-    auto const expectedRemovedCountRB408 = true;
-    pTestLib->log ( "object after 'removeFirstThat with one match' : '%s'. expected : '%s'", collectionRB408.toString().cStr(), equivAfterRemoveFirstThatMatchesOne.toString().cStr() );
-    if ( removedCountRB408 != expectedRemovedCountRB408 || ! collectionRB408.equals ( equivAfterRemoveFirstThatMatchesOne ) ) {
-        pTestLib->logError( "'MCTC-00408-RB-removeFirstThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00408-RB-removeFirstThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesMore-cpp-xx : MCTC-00409-RB-removeFirstThatMatchesMore-cpp-xx */
-    auto       copyRB409            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB409 = copyRB409;
-    auto       removedCountRB409    = collectionRB409.removeFirstThat ( matchingMore );
-    auto const expectedRemovedCountRB409 = true;
-    pTestLib->log ( "object after 'removeFirstThat with one or more matches' : '%s'. expected : '%s'", collectionRB409.toString().cStr(), equivAfterRemoveFirstThatMatchesMore.toString().cStr() );
-    if ( removedCountRB409 != expectedRemovedCountRB409 || ! collectionRB409.equals ( equivAfterRemoveFirstThatMatchesMore ) ) {
-        pTestLib->logError( "'MCTC-00409-RB-removeFirstThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00409-RB-removeFirstThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesAll-cpp-xx : MCTC-00410-RB-removeFirstThatMatchesAll-cpp-xx */
-    auto       copyRB410            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB410 = copyRB410;
-    auto       removedCountRB410    = collectionRB410.removeFirstThat ( matchingAll );
-    auto const expectedRemovedCountRB410 = true;
-    pTestLib->log ( "object after 'removeFirstThat matches all' : '%s'. expected : '%s'", collectionRB410.toString().cStr(), equivAfterRemoveFirstThatMatchesAll.toString().cStr() );
-    if ( removedCountRB410 != expectedRemovedCountRB410 || ! collectionRB410.equals ( equivAfterRemoveFirstThatMatchesAll ) ) {
-        pTestLib->logError( "'MCTC-00410-RB-removeFirstThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00410-RB-removeFirstThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesNone-cpp-xx : MCTC-00411-RB-removeLastThatMatchesNone-cpp-xx */
-    auto       copyRB411            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB411 = copyRB411;
-    auto       removedCountRB411    = collectionRB411.removeLastThat ( matchingNone );
-    auto const expectedRemovedCountRB411 = false;
-    pTestLib->log ( "object after 'removeLastThat with no matches' : '%s'. expected : '%s'", collectionRB411.toString().cStr(), equivAfterRemoveLastThatMatchesNone.toString().cStr() );
-    if ( removedCountRB411 != expectedRemovedCountRB411 || ! collectionRB411.equals ( equivAfterRemoveLastThatMatchesNone ) ) {
-        pTestLib->logError( "'MCTC-00411-RB-removeLastThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00411-RB-removeLastThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesOne-cpp-xx : MCTC-00412-RB-removeLastThatMatchesOne-cpp-xx */
-    auto       copyRB412            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB412 = copyRB412;
-    auto       removedCountRB412    = collectionRB412.removeLastThat ( matchingOne );
-    auto const expectedRemovedCountRB412 = true;
-    pTestLib->log ( "object after 'removeLastThat with one match' : '%s'. expected : '%s'", collectionRB412.toString().cStr(), equivAfterRemoveLastThatMatchesOne.toString().cStr() );
-    if ( removedCountRB412 != expectedRemovedCountRB412 || ! collectionRB412.equals ( equivAfterRemoveLastThatMatchesOne ) ) {
-        pTestLib->logError( "'MCTC-00412-RB-removeLastThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00412-RB-removeLastThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesMore-cpp-xx : MCTC-00413-RB-removeLastThatMatchesMore-cpp-xx */
-    auto       copyRB413            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB413 = copyRB413;
-    auto       removedCountRB413    = collectionRB413.removeLastThat ( matchingMore );
-    auto const expectedRemovedCountRB413 = true;
-    pTestLib->log ( "object after 'removeLastThat with one or more matches' : '%s'. expected : '%s'", collectionRB413.toString().cStr(), equivAfterRemoveLastThatMatchesMore.toString().cStr() );
-    if ( removedCountRB413 != expectedRemovedCountRB413 || ! collectionRB413.equals ( equivAfterRemoveLastThatMatchesMore ) ) {
-        pTestLib->logError( "'MCTC-00413-RB-removeLastThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00413-RB-removeLastThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesAll-cpp-xx : MCTC-00414-RB-removeLastThatMatchesAll-cpp-xx */
-    auto       copyRB414            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB414 = copyRB414;
-    auto       removedCountRB414    = collectionRB414.removeLastThat ( matchingAll );
-    auto const expectedRemovedCountRB414 = true;
-    pTestLib->log ( "object after 'removeLastThat matching all' : '%s'. expected : '%s'", collectionRB414.toString().cStr(), equivAfterRemoveLastThatMatchesAll.toString().cStr() );
-    if ( removedCountRB414 != expectedRemovedCountRB414 || ! collectionRB414.equals ( equivAfterRemoveLastThatMatchesAll ) ) {
-        pTestLib->logError( "'MCTC-00414-RB-removeLastThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00414-RB-removeLastThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesNone-cpp-xx : MCTC-00415-RB-removeAllThatMatchesNone-cpp-xx */
-    auto       copyRB415            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB415 = copyRB415;
-    auto const expectedRemovedCountRB415 = collectionRB415.count ( matchingNone );
-    auto       removedCountRB415    = collectionRB415.removeAllThat ( matchingNone );
-    pTestLib->log ( "object after 'removeAllThat match none' : '%s'. expected : '%s'", collectionRB415.toString().cStr(), equivAfterRemoveAllThatMatchesNone.toString().cStr() );
-    if ( removedCountRB415 != expectedRemovedCountRB415 || ! collectionRB415.equals ( equivAfterRemoveAllThatMatchesNone ) ) {
-        pTestLib->logError( "'MCTC-00415-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00415-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesOne-cpp-xx : MCTC-00416-RB-removeAllThatMatchesOne-cpp-xx */
-    auto       copyRB416            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB416 = copyRB416;
-    auto const expectedRemovedCountRB416 = collectionRB416.count ( matchingOne );
-    auto       removedCountRB416    = collectionRB416.removeAllThat ( matchingOne );
-    pTestLib->log ( "object after 'removeAllThat matching one' : '%s'. expected : '%s'", collectionRB416.toString().cStr(), equivAfterRemoveAllThatMatchesOne.toString().cStr() );
-    if ( removedCountRB416 != expectedRemovedCountRB416 || ! collectionRB416.equals ( equivAfterRemoveAllThatMatchesOne ) ) {
-        pTestLib->logError( "'MCTC-00416-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00416-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesMore-cpp-xx : MCTC-00417-RB-removeAllThatMatchesMore-cpp-xx */
-    auto       copyRB417            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB417 = copyRB417;
-    auto const expectedRemovedCountRB417 = collectionRB417.count ( matchingMore );
-    auto       removedCountRB417    = collectionRB417.removeAllThat ( matchingMore );
-    pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB417.toString().cStr(), equivAfterRemoveAllThatMatchesMore.toString().cStr() );
-    if ( removedCountRB417 != expectedRemovedCountRB417 || ! collectionRB417.equals ( equivAfterRemoveAllThatMatchesMore ) ) {
-        pTestLib->logError( "'MCTC-00417-RB-removeAllThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00417-RB-removeAllThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesAll-cpp-xx : MCTC-00418-RB-removeAllThatMatchesAll-cpp-xx */
-    auto       copyRB418            = original;
-    cds :: MutableCollection < __MemberType > & collectionRB418 = copyRB418;
-    auto const expectedRemovedCountRB418 = collectionRB418.count ( matchingAll );
-    auto       removedCountRB418    = collectionRB418.removeAllThat ( matchingAll );
-    pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB418.toString().cStr(), equivAfterRemoveAllThatMatchesAll.toString().cStr() );
-    if ( removedCountRB418 != expectedRemovedCountRB418 || ! collectionRB418.equals ( equivAfterRemoveAllThatMatchesAll ) ) {
-        pTestLib->logError( "'MCTC-00418-RB-removeAllThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00418-RB-removeAllThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    return true;
-}
-
-template < typename T, typename = void > struct _HasToString : meta :: FalseType {};    /* NOLINT(bugprone-reserved-identifier) */
-template < typename T > struct _HasToString < T, meta :: Void < decltype ( meta :: addressOf < T > ()->toString () ) > > : meta :: TrueType {}; /* NOLINT(bugprone-reserved-identifier) */
-
-template < typename T, typename = void > struct _HasEquals : meta :: FalseType {};  /* NOLINT(bugprone-reserved-identifier) */
-template < typename T > struct _HasEquals < T, meta :: Void < decltype ( meta :: addressOf < T > ()->equals ( meta :: referenceOf < Object const > () ) ) > > : meta :: TrueType {};    /* NOLINT(bugprone-reserved-identifier) */
-
-template <
-        typename T,
-        meta :: EnableIf < _HasToString < T > :: value > = 0
-> auto toString (T const & v) -> String {
-
-    return v.toString ();
-}
-
-template <
-        typename T,
-        meta :: EnableIf < ! _HasToString < T > :: value > = 0
-> auto toString (T const & v) -> String {
-
-    if ( v.size() == 0ULL ) {
-        return "[]";
-    }
-
-    String s = "[ ";
-    for ( auto & e : v ) {
-        s += e;
-        s += ", ";
-    }
-
-    return s.removeSuffix (", ") + " ]";
-}
-
-template <
-        typename T,
-        typename V,
-        meta :: EnableIf < _HasEquals < T > :: value && _HasEquals < V > :: value > = 0
-> auto equals (T const & t, V const & v) -> bool {
-
-    return t.equals (v);
-}
-
-template <
-        typename T,
-        typename V,
-        meta :: EnableIf < ! _HasEquals < T > :: value || ! _HasEquals < V > :: value > = 0
-> auto equals (T const & t, V const & v) -> bool {
-
-    auto lIt = t.begin();
-    auto le = t.end();
-    auto rIt = v.begin();
-    auto re = v.end();
-    for (
-            ;   lIt != le && rIt != re; ++ lIt, ++ rIt
-            )
-        if ( ! meta :: equals ( * lIt, * rIt ) )
-            return false;
-
-    return true;
-}
-
-
-/* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MCTC-00451-RO to MCTC-00464-RO */
-template <
-        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
-        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
-        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupItemRemoveOf (
-        Test                      * pTestLib,
-        cds :: String       const & groupVariant,
-        StringLiteral               subvariant,
-        Size                        subvariantOffset,
-        __IterableType      const & iterableUnderTest,
-        Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
-        Size                        limit,
-        __OtherIterableType const & noneCommon,
-        __OtherIterableType const & oneCommon,
-        __OtherIterableType const & moreLessThanLimitCommon,
-        __OtherIterableType const & moreCommon,
-        __OtherIterableType const & moreMoreThanLimitCommon,
-        __OtherIterableType const & allCommon,
-        __OtherIterableType const & allAndMoreCommon,
-        Size                        expectedResultFromNone,
-        __OtherIterableType const & expectedCollectionFromNone,
-        Size                        expectedResultFromOne,
-        __OtherIterableType const & expectedCollectionFromOne,
-        Size                        expectedResultFromMoreLessThanLimit,
-        __OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
-        Size                        expectedResultFromMore,
-        __OtherIterableType const & expectedCollectionFromMore,
-        Size                        expectedResultFromMoreMoreThanLimit,
-        __OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
-        Size                        expectedResultFromAll,
-        __OtherIterableType const & expectedCollectionFromAll,
-        Size                        expectedResultFromAllAndMore,
-        __OtherIterableType const & expectedCollectionFromAllAndMore
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
-
-/* MutableCollectionTestCase-RemoveOf-removeOfNoneCommon-cpp-xx : MCTC-00451-RO-removeOfNoneCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfNoneCommon-cpp-xx : MCTC-00458-RO-removeNotOfNoneCommon-cpp-xx */
-    auto       copyRO451            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO451 = copyRO451;
-    auto       removedCountRB451    = ( collectionRO451.* removePfnVariant ) ( limit, noneCommon );
-    pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO451.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
-    if ( removedCountRB451 != expectedResultFromNone || ! equals ( collectionRO451, expectedCollectionFromNone ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfOneCommon-cpp-xx : MCTC-00452-RO-removeOfOneCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfOneCommon-cpp-xx : MCTC-00459-RO-removeNotOfOneCommon-cpp-xx */
-    auto       copyRO452            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO452 = copyRO452;
-    auto       removedCountRB452    = ( collectionRO452.* removePfnVariant ) ( limit, oneCommon );
-    pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO452.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
-    if ( removedCountRB452 != expectedResultFromOne || ! equals ( collectionRO452, expectedCollectionFromOne ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfMoreLessThanLimitCommon-cpp-xx : MCTC-00453-RO-removeOfMoreLessThanLimitCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfMoreLessThanLimitCommon-cpp-xx : MCTC-00460-RO-removeOfMoreLessThanLimitCommon-cpp-xx */
-    auto       copyRO453            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO453 = copyRO453;
-    auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
-    pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() );
-    if ( removedCountRB453 != expectedResultFromMoreLessThanLimit || ! equals ( collectionRO453, expectedCollectionFromMoreLessThanLimit ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' OK", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfMoreCommon-cpp-xx : MCTC-00454-RO-removeOfMoreCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfMoreCommon-cpp-xx : MCTC-00461-RO-removeNotOfMoreCommon-cpp-xx */
-    auto       copyRO454            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO454 = copyRO454;
-    auto       removedCountRB454    = ( collectionRO454.* removePfnVariant ) ( limit, moreCommon );
-    pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO454.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
-    if ( removedCountRB454 != expectedResultFromMore || ! equals ( collectionRO454, expectedCollectionFromMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00455-RO-removeOfMoreMoreThanLimitCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00462-RO-removeNotOfMoreMoreThanLimitCommon-cpp-xx */
-    auto       copyRO455            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO455 = copyRO455;
-    auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
-    pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() );
-    if ( removedCountRB455 != expectedResultFromMoreMoreThanLimit || ! equals ( collectionRO455, expectedCollectionFromMoreMoreThanLimit ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' OK", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfAllCommon-cpp-xx : MCTC-00456-RO-removeOfAllCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfAllCommon-cpp-xx : MCTC-00463-RO-removeNotOfAllCommon-cpp-xx */
-    auto       copyRO456            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO456 = copyRO456;
-    auto       removedCountRB456    = ( collectionRO456.* removePfnVariant ) ( limit, allCommon );
-    pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO456.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
-    if ( removedCountRB456 != expectedResultFromAll || ! equals ( collectionRO456, expectedCollectionFromAll ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-/* MutableCollectionTestCase-RemoveOf-removeOfAllAndMoreCommon-cpp-xx : MCTC-00457-RO-removeOfAllAndMoreCommon-cpp-xx */
-/* MutableCollectionTestCase-RemoveOf-removeNotOfAllAndMoreCommon-cpp-xx : MCTC-00464-RO-removeNotOfAllAndMoreCommon-cpp-xx */
-    auto       copyRO457            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO457 = copyRO457;
-    auto       removedCountRB457    = ( collectionRO457.* removePfnVariant ) ( limit, allAndMoreCommon );
-    pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO457.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
-    if ( removedCountRB457 != expectedResultFromAllAndMore || ! equals ( collectionRO457, expectedCollectionFromAllAndMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    return true;
-}
-
-
-
-/* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MMCTC-00501-RO to MMCTC-00520-RO. */
-template <
-        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
-        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
-        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupItemRemoveFirstLastOf (
-        Test                      * pTestLib,
-        cds :: String       const & groupVariant,
-        StringLiteral               subvariant,
-        Size                        subvariantOffset,
-        __IterableType      const & iterableUnderTest,
-        bool ( cds :: MutableCollection < __ElementType > :: * removeFirstLastPfnVariant ) ( __OtherIterableType const & ),
-        __OtherIterableType const & noneCommon,
-        __OtherIterableType const & oneCommon,
-        __OtherIterableType const & moreCommon,
-        __OtherIterableType const & allCommon,
-        __OtherIterableType const & allAndMoreCommon,
-        bool                        expectedResultFromNone,
-        __OtherIterableType const & expectedCollectionFromNone,
-        bool                        expectedResultFromOne,
-        __OtherIterableType const & expectedCollectionFromOne,
-        bool                        expectedResultFromMore,
-        __OtherIterableType const & expectedCollectionFromMore,
-        bool                        expectedResultFromAll,
-        __OtherIterableType const & expectedCollectionFromAll,
-        bool                        expectedResultFromAllAndMore,
-        __OtherIterableType const & expectedCollectionFromAllAndMore
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
-
-    /* MutableCollectionTestCase-RemoveOf-removeFirstOfNoneCommon-cpp-xx : MCTC-00501-RO-removeFirstOfNoneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastOfNoneCommon-cpp-xx : MCTC-00506-RO-removeLastOfNoneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfNoneCommon-cpp-xx : MCTC-00511-RO-removeFirstNotOfNoneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastNotOfNoneCommon-cpp-xx : MCTC-00516-RO-removeLastNotOfNoneCommon-cpp-xx */
-    auto       copyRO501            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO501 = copyRO501;
-    auto       removedCountRB501    = ( collectionRO501.* removeFirstLastPfnVariant ) ( noneCommon );
-    pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO501.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
-    if ( removedCountRB501 != expectedResultFromNone || ! equals ( collectionRO501, expectedCollectionFromNone ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeFirstOfOneCommon-cpp-xx : MCTC-00502-RO-removeFirstOfOneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastOfOneCommon-cpp-xx : MCTC-00507-RO-removeLastOfOneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfOneCommon-cpp-xx : MCTC-00512-RO-removeFirstNotOfOneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastNotOfOneCommon-cpp-xx : MCTC-00517-RO-removeLastNotOfOneCommon-cpp-xx */
-    auto       copyRO502            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO502 = copyRO502;
-    auto       removedCountRB502    = ( collectionRO502.* removeFirstLastPfnVariant ) ( oneCommon );
-    pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO502.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
-    if ( removedCountRB502 != expectedResultFromOne || ! equals ( collectionRO502, expectedCollectionFromOne ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeFirstOfMoreCommon-cpp-xx : MCTC-00503-RO-removeFirstOfMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastOfMoreCommon-cpp-xx : MCTC-00508-RO-removeLastOfMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfMoreCommon-cpp-xx : MCTC-00513-RO-removeFirstNotOfMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastNotOfMoreCommon-cpp-xx : MCTC-00518-RO-removeLastNotOfMoreCommon-cpp-xx */
-    auto       copyRO503            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO503 = copyRO503;
-    auto       removedCountRB503    = ( collectionRO503.* removeFirstLastPfnVariant ) ( moreCommon );
-    pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO503.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
-    if ( removedCountRB503 != expectedResultFromMore || ! equals ( collectionRO503, expectedCollectionFromMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeFirstOfAllCommon-cpp-xx : MCTC-00504-RO-removeFirstOfAllCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastOfAllCommon-cpp-xx : MCTC-00509-RO-removeLastOfAllCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllCommon-cpp-xx : MCTC-00514-RO-removeFirstNotOfAllCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllCommon-cpp-xx : MCTC-00519-RO-removeLastNotOfAllCommon-cpp-xx */
-    auto       copyRO504            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO504 = copyRO504;
-    auto       removedCountRB504    = ( collectionRO504.* removeFirstLastPfnVariant ) ( allCommon );
-    pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO504.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
-    if ( removedCountRB504 != expectedResultFromAll || ! equals ( collectionRO504, expectedCollectionFromAll ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeFirstOfAllAndMoreCommon-cpp-xx : MCTC-00505-RO-removeFirstOfAllAndMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastOfAllAndMoreCommon-cpp-xx : MCTC-00510-RO-removeLastOfAllAndMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllAndMoreCommon-cpp-xx : MCTC-00515-RO-removeFirstNotOfAllAndMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllAndMoreCommon-cpp-xx : MCTC-00520-RO-removeLastNotOfAllAndMoreCommon-cpp-xx */
-    auto       copyRO505            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO505 = copyRO505;
-    auto       removedCountRB505    = ( collectionRO505.* removeFirstLastPfnVariant ) ( allAndMoreCommon );
-    pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO505.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
-    if ( removedCountRB505 != expectedResultFromAllAndMore || ! equals ( collectionRO505, expectedCollectionFromAllAndMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    return true;
-}
-
-/* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTC-00450-RO-cpp-xx. MCTC-00481-RO to MCTC-00490-RO. */
-template <
-        typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
-        typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
-        typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupItemRemoveAllOf (
-        Test                      * pTestLib,
-        cds :: String       const & groupVariant,
-        StringLiteral               subvariant,
-        Size                        subvariantOffset,
-        __IterableType      const & iterableUnderTest,
-        Size ( cds :: MutableCollection < __ElementType > :: * removeAllPfnVariant ) ( __OtherIterableType const & ),
-        __OtherIterableType const & noneCommon,
-        __OtherIterableType const & oneCommon,
-        __OtherIterableType const & moreCommon,
-        __OtherIterableType const & allCommon,
-        __OtherIterableType const & allAndMoreCommon,
-        Size                        expectedResultFromNone,
-        __OtherIterableType const & expectedCollectionFromNone,
-        Size                        expectedResultFromOne,
-        __OtherIterableType const & expectedCollectionFromOne,
-        Size                        expectedResultFromMore,
-        __OtherIterableType const & expectedCollectionFromMore,
-        Size                        expectedResultFromAll,
-        __OtherIterableType const & expectedCollectionFromAll,
-        Size                        expectedResultFromAllAndMore,
-        __OtherIterableType const & expectedCollectionFromAllAndMore
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
-
-    /* MutableCollectionTestCase-RemoveOf-removeAllOfNoneCommon-cpp-xx : MCTC-00481-RO-removeAllOfNoneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeAllNotOfNoneCommon-cpp-xx : MCTC-00486-RO-removeAllNotOfNoneCommon-cpp-xx */
-    auto       copyRO481            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO481 = copyRO481;
-    auto       removedCountRB481    = ( collectionRO481.* removeAllPfnVariant ) ( noneCommon );
-    pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO481.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
-    if ( removedCountRB481 != expectedResultFromNone || ! equals ( collectionRO481, expectedCollectionFromNone ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 481 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 481 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeAllOfOneCommon-cpp-xx : MCTC-00482-RO-removeAllOfOneCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeAllNotOfOneCommon-cpp-xx : MCTC-00487-RO-removeAllNotOfOneCommon-cpp-xx */
-    auto       copyRO482            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO482 = copyRO482;
-    auto       removedCountRB482    = ( collectionRO482.* removeAllPfnVariant ) ( oneCommon );
-    pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO482.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
-    if ( removedCountRB482 != expectedResultFromOne || ! equals ( collectionRO482, expectedCollectionFromOne ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 482 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 482 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeAllOfMoreCommon-cpp-xx : MCTC-00483-RO-removeAllOfMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeAllNotOfMoreCommon-cpp-xx : MCTC-00488-RO-removeAllNotOfMoreCommon-cpp-xx */
-    auto       copyRO483            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO483 = copyRO483;
-    auto       removedCountRB483    = ( collectionRO483.* removeAllPfnVariant ) ( moreCommon );
-    pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO483.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
-    if ( removedCountRB483 != expectedResultFromMore || ! equals ( collectionRO483, expectedCollectionFromMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 483 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 483 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeAllOfAllCommon-cpp-xx : MCTC-00484-RO-removeAllOfAllCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllCommon-cpp-xx : MCTC-00489-RO-removeAllNotOfAllCommon-cpp-xx */
-    auto       copyRO484            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO484 = copyRO484;
-    auto       removedCountRB484    = ( collectionRO484.* removeAllPfnVariant ) ( allCommon );
-    pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO484.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
-    if ( removedCountRB484 != expectedResultFromAll || ! equals ( collectionRO484, expectedCollectionFromAll ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 484 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 484 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    /* MutableCollectionTestCase-RemoveOf-removeAllOfAllAndMoreCommon-cpp-xx : MCTC-00485-RO-removeAllOfAllAndMoreCommon-cpp-xx */
-    /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllAndMoreCommon-cpp-xx : MCTC-00490-RO-removeAllNotOfAllAndMoreCommon-cpp-xx */
-    auto       copyRO485            = iterableUnderTest;
-    cds :: MutableCollection < __ElementType > & collectionRO485 = copyRO485;
-    auto       removedCountRB485    = ( collectionRO485.* removeAllPfnVariant ) ( allAndMoreCommon );
-    pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO485.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
-    if ( removedCountRB485 != expectedResultFromAllAndMore || ! equals ( collectionRO485, expectedCollectionFromAllAndMore ) ) {
-        pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 485 + subvariantOffset, subvariant, groupVariant.cStr() );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 485 + subvariantOffset, subvariant, groupVariant.cStr() );
-    }
-
-    return true;
-}
-
-template <
-        typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __CollectionType,                                                       /* NOLINT(bugprone-reserved-identifier) */
-        typename __ValidatorPredicate,                                                                          /* NOLINT(bugprone-reserved-identifier) */
-        typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
-> auto iteratorListEqualityCheck (
-        __ValidatorPredicate                const & validator,
-        __CollectionType < __IteratorType > const & iteratorCollection,
-        __CollectionType < __ElementType >  const & elementCollection
-) -> bool {
-
-    auto leftIt = iteratorCollection.begin();
-    auto leftEnd = iteratorCollection.end();
-    auto rightIt = elementCollection.begin();
-    auto rightEnd = elementCollection.end();
-
-    if ( iteratorCollection.size() != elementCollection.size() ) {
-        return false;
-    }
-
-    for ( ; leftIt != leftEnd && rightIt != rightEnd; ++ leftIt, ++ rightIt ) {
-        if ( ! validator ( * ( * leftIt ) ) || ! validator ( * rightIt ) || * ( * leftIt ) != * rightIt ) {
+    template <
+            typename __PredicateReturnType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __MemberType,          /* NOLINT(bugprone-reserved-identifier) */
+            typename __Predicate            /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestCasePredicateCountedHandle (
+            StringLiteral testCaseName,
+            MutableCollection < __MemberType > const & collection,
+            Test                                              * pTestLib,
+            auto ( MutableCollection < __MemberType > :: * pFunctionalCall ) ( Size, __Predicate const & ) const -> __PredicateReturnType,
+            __Predicate const & predicate,
+            Size desiredCount,
+            __PredicateReturnType                       const & expectedReturn
+    ) -> bool {
+
+        auto returned = (collection.*pFunctionalCall) ( desiredCount, predicate );
+        if ( returned != expectedReturn ) {
+            pTestLib->logError( "'%s' failed", testCaseName);
             return false;
         }
+
+        pTestLib->logOK ( "'%s' OK", testCaseName );
+        return true;
     }
 
-    return true;
-}
+    /* MutableCollectionTestGroup-RemoveAbsIt-cpp-xx : MCTG-00350-RAIT-cpp-xx. MCTC-00351-RAIT to MCTC-00356-RAIT */
+    template <
+            typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupRemoveAbstractIterator (
+            cds :: MutableCollection < __MemberType >       & collection,
+            Test                                                     * pTestLib,
+            cds :: MutableCollection < __MemberType > const & equivAfter1,
+            cds :: MutableCollection < __MemberType >  & equivAfter2,
+            cds :: MutableCollection < __MemberType > const & equivAfter3,
+    //        cds :: Collection < __MemberType > const & equivAfter3,                                   N/A with Collection
+    //        typename cds :: Collection < __MemberType > :: Iterator const & toRemoveBeforeFront,
+            cds :: MutableCollection < __MemberType > const & equivAfter5,
+            cds :: MutableCollection < __MemberType > const & equivAfter6
+    ) -> bool {
 
-template <
-        typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __CollectionType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
-        typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
-> auto iteratorListEqualityCheckNoPred (
-        __CollectionType < __IteratorType > const & iteratorCollection,
-        __CollectionType < __ElementType >  const & elementCollection
-) -> bool {
+        pTestLib->log ( "Object Under Test : %s", collection.toString().cStr() );
 
-    auto leftIt = iteratorCollection.begin();
-    auto leftEnd = iteratorCollection.end();
-    auto rightIt = elementCollection.begin();
-    auto rightEnd = elementCollection.end();
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeAtFront-cpp-xx : MCTC-00351-RAIT-removeAtFront-cpp-xx */
+        typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtFront = collection.begin();
+        auto const resultToRemoveAtFront = collection.remove( toRemoveAtFront );
+        auto const expectedResultToRemoveAtFront = true;
+        pTestLib->log ( "object after 'removeAtFront' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter1.toString().cStr() );
+        if ( resultToRemoveAtFront != expectedResultToRemoveAtFront || ! collection.equals ( equivAfter1 ) ) {
+            pTestLib->logError( "'MCTC-00351-RAIT-removeAtFront-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00351-RAIT-removeAtFront-" __CDS_cpplang_core_version_name "' OK" );
+        }
 
-    if ( iteratorCollection.size() != elementCollection.size() ) {
-        return false;
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeInBounds-cpp-xx : MCTC-00352-RAIT-removeInBounds-cpp-xx */
+        typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveInBounds = collection.begin();
+        for ( uint32 i = 0; i * 2 < collection.size(); ++ i ) {
+            ++ toRemoveInBounds;
+        }
+
+        auto const resultToRemoveAtInBounds = collection.remove( toRemoveInBounds );
+        auto const expectedResultToRemoveAtInBounds = true;
+        pTestLib->log ( "object after 'removeInBounds' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter2.toString().cStr() );
+        if ( resultToRemoveAtInBounds != expectedResultToRemoveAtInBounds || ! collection.equals ( equivAfter2 ) ) {
+            pTestLib->logError( "'MCTC-00352-RAIT-removeInBounds-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00352-RAIT-removeInBounds-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeAtEnd-cpp-xx : MCTC-00353-RAIT-removeAtEnd-cpp-xx */
+        typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAtEnd = collection.begin();
+        for ( uint32 i = 0; i + 1 < collection.size(); ++ i ) {
+            ++ toRemoveAtEnd;
+        }
+
+        auto const resultToRemoveAtEnd = collection.remove( toRemoveAtEnd );
+        auto const expectedResultToRemoveAtEnd = true;
+        pTestLib->log ( "object after 'removeAtEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter3.toString().cStr() );
+        if ( resultToRemoveAtEnd != expectedResultToRemoveAtEnd || ! collection.equals ( equivAfter3 ) ) {
+            pTestLib->logError( "'MCTC-00353-RAIT-removeAtEnd-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00353-RAIT-removeAtEnd-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeBeforeFront-" __CDS_cpplang_core_version_name " : MCTC-00354-RAIT-removeBeforeFront-cpp-xx : N/A */
+
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeAfterEnd-cpp-xx : MCTC-00355-RAIT-removeAfterEnd-cpp-xx */
+        typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveAfterBack = collection.end();
+        auto const resultToRemoveAfterEnd = collection.remove( toRemoveAfterBack );
+        auto const expectedResultToRemoveAfterEnd = false;
+        pTestLib->log ( "object after 'removeAfterEnd' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
+        if ( resultToRemoveAfterEnd != expectedResultToRemoveAfterEnd || ! collection.equals ( equivAfter5 ) ) {
+            pTestLib->logError( "'MCTC-00355-RAIT-removeAfterEnd-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00355-RAIT-removeAfterEnd-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestGroup-RemoveAbsIt-removeFromOther-cpp-xx : MCTC-00355-RAIT-removeFromOther-cpp-xx */
+        typename cds :: MutableCollection < __MemberType > :: Iterator toRemoveFromSimilar = equivAfter2.begin();
+        auto const resultToRemoveFromSimilar = collection.remove( toRemoveFromSimilar );
+        auto const expectedResultToRemoveFromSimilar = false;
+        pTestLib->log ( "object after 'removeFromOther' : '%s'. expected : '%s'", collection.toString().cStr(), equivAfter5.toString().cStr() );
+        if ( resultToRemoveFromSimilar != expectedResultToRemoveFromSimilar || ! collection.equals ( equivAfter6 ) ) {
+            pTestLib->logError( "'MCTC-00356-RAIT-removeFromOther-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00356-RAIT-removeFromOther-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        return true;
     }
 
-    for ( ; leftIt != leftEnd && rightIt != rightEnd; ++ leftIt, ++ rightIt ) {
-        if ( * ( * leftIt ) != * rightIt ) {
+
+
+    /* MutableCollectionTestGroup-RemoveBy-cpp-xx : MCTG-00400-RB-cpp-xx. MCTC-00401-RB to MCTC-00418-RB */
+    template <
+            typename __Original,                        /* NOLINT(bugprone-reserved-identifier) */
+            typename __MemberType,                      /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingNonePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingOnePredicateType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingMoreLTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingMorePredicateType,       /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingMoreMTLPredicateType,    /* NOLINT(bugprone-reserved-identifier) */
+            typename __MatchingAllPredicateType         /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupRemoveBy (
+            __Original const & original,
+            Test                                                     * pTestLib,
+            Size                                                       removeThatLimit,
+            Size                                                       removeThatResultWhenLessThanLimit,
+            __MatchingNonePredicateType                        const & matchingNone,
+            __MatchingOnePredicateType                         const & matchingOne,
+            __MatchingMoreLTLPredicateType                     const & matchingMoreLessThanLimit,
+            __MatchingMorePredicateType                        const & matchingMore,
+            __MatchingMoreMTLPredicateType                     const & matchingMoreMoreThanLimit,
+            __MatchingAllPredicateType                         const & matchingAll,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesNone,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesOne,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreLessThanLimit,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreExact,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesMoreMoreThanLimit,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveThatMatchesAll,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesNone,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesOne,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesMore,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveFirstThatMatchesAll,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesNone,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesOne,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesMore,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveLastThatMatchesAll,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesNone,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesOne,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesMore,
+            cds :: MutableCollection < __MemberType > const & equivAfterRemoveAllThatMatchesAll
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", original.toString().cStr() );
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesNone-cpp-xx : MCTC-00401-RB-removeThatMatchesNone-cpp-xx */
+        auto       copyRB401            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB401 = copyRB401;
+        auto       removedCountRB401    = collectionRB401.removeThat ( removeThatLimit, matchingNone );
+        auto const expectedRemovedCountRB401 = 0;
+        pTestLib->log ( "object after 'removeThat with none matching' : '%s'. expected : '%s'", collectionRB401.toString().cStr(), equivAfterRemoveThatMatchesNone.toString().cStr() );
+        if ( removedCountRB401 != expectedRemovedCountRB401 || ! collectionRB401.equals ( equivAfterRemoveThatMatchesNone ) ) {
+            pTestLib->logError( "'MCTC-00401-RB-removeThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00401-RB-removeThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesOne-cpp-xx : MCTC-00402-RB-removeThatMatchesOne-cpp-xx */
+        auto       copyRB402            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB402 = copyRB402;
+        auto       removedCountRB402    = collectionRB402.removeThat ( removeThatLimit, matchingOne );
+        auto const expectedRemovedCountRB402 = 1;
+        pTestLib->log ( "object after 'removeThat with one matching' : '%s'. expected : '%s'", collectionRB402.toString().cStr(), equivAfterRemoveThatMatchesOne.toString().cStr() );
+        if ( removedCountRB402 != expectedRemovedCountRB402 || ! collectionRB402.equals ( equivAfterRemoveThatMatchesOne ) ) {
+            pTestLib->logError( "'MCTC-00402-RB-removeThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00402-RB-removeThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreLessThanLimit-cpp-xx : MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-cpp-xx */
+        auto       copyRB403            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB403 = copyRB403;
+        auto       removedCountRB403    = collectionRB403.removeThat ( removeThatLimit, matchingMoreLessThanLimit );
+        auto const expectedRemovedCountRB403 = removeThatResultWhenLessThanLimit;
+        pTestLib->log ( "object after 'removeThat with more matching, less than limit' : '%s'. expected : '%s'", collectionRB403.toString().cStr(), equivAfterRemoveThatMatchesMoreLessThanLimit.toString().cStr() );
+        if ( removedCountRB403 != expectedRemovedCountRB403 || ! collectionRB403.equals ( equivAfterRemoveThatMatchesMoreLessThanLimit ) ) {
+            pTestLib->logError( "'MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00403-RB-removeThatMatchesMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreExact-cpp-xx : MCTC-00404-RB-removeThatMatchesMoreExact-cpp-xx */
+        auto       copyRB404            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB404 = copyRB404;
+        auto       removedCountRB404    = collectionRB404.removeThat ( removeThatLimit, matchingMore );
+        auto const expectedRemovedCountRB404 = removeThatLimit;
+        pTestLib->log ( "object after 'removeThat with more matching, exact' : '%s'. expected : '%s'", collectionRB404.toString().cStr(), equivAfterRemoveThatMatchesMoreExact.toString().cStr() );
+        if ( removedCountRB404 != expectedRemovedCountRB404 || ! collectionRB404.equals ( equivAfterRemoveThatMatchesMoreExact ) ) {
+            pTestLib->logError( "'MCTC-00404-RB-removeThatMatchesMoreExact-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00404-RB-removeThatMatchesMoreExact-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesMoreMoreThanLimit-cpp-xx : MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-cpp-xx */
+        auto       copyRB405            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB405 = copyRB405;
+        auto       removedCountRB405    = collectionRB405.removeThat ( removeThatLimit, matchingMoreMoreThanLimit );
+        auto const expectedRemovedCountRB405 = removeThatLimit;
+        pTestLib->log ( "object after 'removeThat with more matching' : '%s'. expected : '%s'", collectionRB405.toString().cStr(), equivAfterRemoveThatMatchesMoreMoreThanLimit.toString().cStr() );
+        if ( removedCountRB405 != expectedRemovedCountRB405 || ! collectionRB405.equals ( equivAfterRemoveThatMatchesMoreMoreThanLimit ) ) {
+            pTestLib->logError( "'MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00405-RB-removeThatMatchesMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeThatMatchesAll-cpp-xx : MCTC-00406-RB-removeThatMatchesAll-cpp-xx */
+        auto       copyRB406            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB406 = copyRB406;
+        auto       removedCountRB406    = collectionRB406.removeThat ( removeThatLimit, matchingAll );
+        auto const expectedRemovedCountRB406 = removeThatLimit;
+        pTestLib->log ( "object after 'removeThat with all matching, less than limit' : '%s'. expected : '%s'", collectionRB406.toString().cStr(), equivAfterRemoveThatMatchesAll.toString().cStr() );
+        if ( removedCountRB406 != expectedRemovedCountRB406 || ! collectionRB406.equals ( equivAfterRemoveThatMatchesAll ) ) {
+            pTestLib->logError( "'MCTC-00406-RB-removeThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00406-RB-removeThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesNone-cpp-xx : MCTC-00407-RB-removeFirstThatMatchesNone-cpp-xx */
+        auto       copyRB407            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB407 = copyRB407;
+        auto       removedCountRB407    = collectionRB407.removeFirstThat ( matchingNone );
+        auto const expectedRemovedCountRB407 = false;
+        pTestLib->log ( "object after 'removeFirstThat with no matches' : '%s'. expected : '%s'", collectionRB407.toString().cStr(), equivAfterRemoveFirstThatMatchesNone.toString().cStr() );
+        if ( removedCountRB407 != expectedRemovedCountRB407 || ! collectionRB407.equals ( equivAfterRemoveFirstThatMatchesNone ) ) {
+            pTestLib->logError( "'MCTC-00407-RB-removeFirstThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00407-RB-removeFirstThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesOne-cpp-xx : MCTC-00408-RB-removeFirstThatMatchesOne-cpp-xx */
+        auto       copyRB408            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB408 = copyRB408;
+        auto       removedCountRB408    = collectionRB408.removeFirstThat ( matchingOne );
+        auto const expectedRemovedCountRB408 = true;
+        pTestLib->log ( "object after 'removeFirstThat with one match' : '%s'. expected : '%s'", collectionRB408.toString().cStr(), equivAfterRemoveFirstThatMatchesOne.toString().cStr() );
+        if ( removedCountRB408 != expectedRemovedCountRB408 || ! collectionRB408.equals ( equivAfterRemoveFirstThatMatchesOne ) ) {
+            pTestLib->logError( "'MCTC-00408-RB-removeFirstThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00408-RB-removeFirstThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesMore-cpp-xx : MCTC-00409-RB-removeFirstThatMatchesMore-cpp-xx */
+        auto       copyRB409            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB409 = copyRB409;
+        auto       removedCountRB409    = collectionRB409.removeFirstThat ( matchingMore );
+        auto const expectedRemovedCountRB409 = true;
+        pTestLib->log ( "object after 'removeFirstThat with one or more matches' : '%s'. expected : '%s'", collectionRB409.toString().cStr(), equivAfterRemoveFirstThatMatchesMore.toString().cStr() );
+        if ( removedCountRB409 != expectedRemovedCountRB409 || ! collectionRB409.equals ( equivAfterRemoveFirstThatMatchesMore ) ) {
+            pTestLib->logError( "'MCTC-00409-RB-removeFirstThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00409-RB-removeFirstThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeFirstThatMatchesAll-cpp-xx : MCTC-00410-RB-removeFirstThatMatchesAll-cpp-xx */
+        auto       copyRB410            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB410 = copyRB410;
+        auto       removedCountRB410    = collectionRB410.removeFirstThat ( matchingAll );
+        auto const expectedRemovedCountRB410 = true;
+        pTestLib->log ( "object after 'removeFirstThat matches all' : '%s'. expected : '%s'", collectionRB410.toString().cStr(), equivAfterRemoveFirstThatMatchesAll.toString().cStr() );
+        if ( removedCountRB410 != expectedRemovedCountRB410 || ! collectionRB410.equals ( equivAfterRemoveFirstThatMatchesAll ) ) {
+            pTestLib->logError( "'MCTC-00410-RB-removeFirstThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00410-RB-removeFirstThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesNone-cpp-xx : MCTC-00411-RB-removeLastThatMatchesNone-cpp-xx */
+        auto       copyRB411            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB411 = copyRB411;
+        auto       removedCountRB411    = collectionRB411.removeLastThat ( matchingNone );
+        auto const expectedRemovedCountRB411 = false;
+        pTestLib->log ( "object after 'removeLastThat with no matches' : '%s'. expected : '%s'", collectionRB411.toString().cStr(), equivAfterRemoveLastThatMatchesNone.toString().cStr() );
+        if ( removedCountRB411 != expectedRemovedCountRB411 || ! collectionRB411.equals ( equivAfterRemoveLastThatMatchesNone ) ) {
+            pTestLib->logError( "'MCTC-00411-RB-removeLastThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00411-RB-removeLastThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesOne-cpp-xx : MCTC-00412-RB-removeLastThatMatchesOne-cpp-xx */
+        auto       copyRB412            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB412 = copyRB412;
+        auto       removedCountRB412    = collectionRB412.removeLastThat ( matchingOne );
+        auto const expectedRemovedCountRB412 = true;
+        pTestLib->log ( "object after 'removeLastThat with one match' : '%s'. expected : '%s'", collectionRB412.toString().cStr(), equivAfterRemoveLastThatMatchesOne.toString().cStr() );
+        if ( removedCountRB412 != expectedRemovedCountRB412 || ! collectionRB412.equals ( equivAfterRemoveLastThatMatchesOne ) ) {
+            pTestLib->logError( "'MCTC-00412-RB-removeLastThatMatchesOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00412-RB-removeLastThatMatchesOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesMore-cpp-xx : MCTC-00413-RB-removeLastThatMatchesMore-cpp-xx */
+        auto       copyRB413            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB413 = copyRB413;
+        auto       removedCountRB413    = collectionRB413.removeLastThat ( matchingMore );
+        auto const expectedRemovedCountRB413 = true;
+        pTestLib->log ( "object after 'removeLastThat with one or more matches' : '%s'. expected : '%s'", collectionRB413.toString().cStr(), equivAfterRemoveLastThatMatchesMore.toString().cStr() );
+        if ( removedCountRB413 != expectedRemovedCountRB413 || ! collectionRB413.equals ( equivAfterRemoveLastThatMatchesMore ) ) {
+            pTestLib->logError( "'MCTC-00413-RB-removeLastThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00413-RB-removeLastThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeLastThatMatchesAll-cpp-xx : MCTC-00414-RB-removeLastThatMatchesAll-cpp-xx */
+        auto       copyRB414            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB414 = copyRB414;
+        auto       removedCountRB414    = collectionRB414.removeLastThat ( matchingAll );
+        auto const expectedRemovedCountRB414 = true;
+        pTestLib->log ( "object after 'removeLastThat matching all' : '%s'. expected : '%s'", collectionRB414.toString().cStr(), equivAfterRemoveLastThatMatchesAll.toString().cStr() );
+        if ( removedCountRB414 != expectedRemovedCountRB414 || ! collectionRB414.equals ( equivAfterRemoveLastThatMatchesAll ) ) {
+            pTestLib->logError( "'MCTC-00414-RB-removeLastThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00414-RB-removeLastThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesNone-cpp-xx : MCTC-00415-RB-removeAllThatMatchesNone-cpp-xx */
+        auto       copyRB415            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB415 = copyRB415;
+        auto const expectedRemovedCountRB415 = collectionRB415.count ( matchingNone );
+        auto       removedCountRB415    = collectionRB415.removeAllThat ( matchingNone );
+        pTestLib->log ( "object after 'removeAllThat match none' : '%s'. expected : '%s'", collectionRB415.toString().cStr(), equivAfterRemoveAllThatMatchesNone.toString().cStr() );
+        if ( removedCountRB415 != expectedRemovedCountRB415 || ! collectionRB415.equals ( equivAfterRemoveAllThatMatchesNone ) ) {
+            pTestLib->logError( "'MCTC-00415-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00415-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesOne-cpp-xx : MCTC-00416-RB-removeAllThatMatchesOne-cpp-xx */
+        auto       copyRB416            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB416 = copyRB416;
+        auto const expectedRemovedCountRB416 = collectionRB416.count ( matchingOne );
+        auto       removedCountRB416    = collectionRB416.removeAllThat ( matchingOne );
+        pTestLib->log ( "object after 'removeAllThat matching one' : '%s'. expected : '%s'", collectionRB416.toString().cStr(), equivAfterRemoveAllThatMatchesOne.toString().cStr() );
+        if ( removedCountRB416 != expectedRemovedCountRB416 || ! collectionRB416.equals ( equivAfterRemoveAllThatMatchesOne ) ) {
+            pTestLib->logError( "'MCTC-00416-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00416-RB-removeAllThatMatchesNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesMore-cpp-xx : MCTC-00417-RB-removeAllThatMatchesMore-cpp-xx */
+        auto       copyRB417            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB417 = copyRB417;
+        auto const expectedRemovedCountRB417 = collectionRB417.count ( matchingMore );
+        auto       removedCountRB417    = collectionRB417.removeAllThat ( matchingMore );
+        pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB417.toString().cStr(), equivAfterRemoveAllThatMatchesMore.toString().cStr() );
+        if ( removedCountRB417 != expectedRemovedCountRB417 || ! collectionRB417.equals ( equivAfterRemoveAllThatMatchesMore ) ) {
+            pTestLib->logError( "'MCTC-00417-RB-removeAllThatMatchesMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00417-RB-removeAllThatMatchesMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RemoveBy-removeAllThatMatchesAll-cpp-xx : MCTC-00418-RB-removeAllThatMatchesAll-cpp-xx */
+        auto       copyRB418            = original;
+        cds :: MutableCollection < __MemberType > & collectionRB418 = copyRB418;
+        auto const expectedRemovedCountRB418 = collectionRB418.count ( matchingAll );
+        auto       removedCountRB418    = collectionRB418.removeAllThat ( matchingAll );
+        pTestLib->log ( "object after 'removeAllThat matching one or more' : '%s'. expected : '%s'", collectionRB418.toString().cStr(), equivAfterRemoveAllThatMatchesAll.toString().cStr() );
+        if ( removedCountRB418 != expectedRemovedCountRB418 || ! collectionRB418.equals ( equivAfterRemoveAllThatMatchesAll ) ) {
+            pTestLib->logError( "'MCTC-00418-RB-removeAllThatMatchesAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00418-RB-removeAllThatMatchesAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        return true;
+    }
+
+    template < typename T, typename = void > struct _HasToString : FalseType {};    /* NOLINT(bugprone-reserved-identifier) */
+    template < typename T > struct _HasToString < T, Void < decltype ( addressOf < T > ()->toString () ) > > : TrueType {}; /* NOLINT(bugprone-reserved-identifier) */
+
+    template < typename T, typename = void > struct _HasEquals : FalseType {};  /* NOLINT(bugprone-reserved-identifier) */
+    template < typename T > struct _HasEquals < T, Void < decltype ( addressOf < T > ()->equals ( referenceOf < Object const > () ) ) > > : TrueType {};    /* NOLINT(bugprone-reserved-identifier) */
+
+    template <
+            typename T,
+            EnableIf < _HasToString < T > :: value > = 0
+    > auto toString (T const & v) -> String {
+
+        return v.toString ();
+    }
+
+    template <
+            typename T,
+            EnableIf < ! _HasToString < T > :: value > = 0
+    > auto toString (T const & v) -> String {
+
+        if ( v.size() == 0ULL ) {
+            return "[]";
+        }
+
+        String s = "[ ";
+        for ( auto & e : v ) {
+            s += e;
+            s += ", ";
+        }
+
+        return s.removeSuffix (", ") + " ]";
+    }
+
+    template <
+            typename T,
+            typename V,
+            EnableIf < _HasEquals < T > :: value && _HasEquals < V > :: value > = 0
+    > auto equals (T const & t, V const & v) -> bool {
+
+        return t.equals (v);
+    }
+
+    template <
+            typename T,
+            typename V,
+            EnableIf < ! _HasEquals < T > :: value || ! _HasEquals < V > :: value > = 0
+    > auto equals (T const & t, V const & v) -> bool {
+
+        auto lIt = t.begin();
+        auto le = t.end();
+        auto rIt = v.begin();
+        auto re = v.end();
+        for (
+                ;   lIt != le && rIt != re; ++ lIt, ++ rIt
+        ) {
+            if (!cds::meta::equals(*lIt, *rIt)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MCTC-00451-RO to MCTC-00464-RO */
+    template <
+            typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupItemRemoveOf (
+            Test                      * pTestLib,
+            cds :: String       const & groupVariant,
+            StringLiteral               subvariant,
+            Size                        subvariantOffset,
+            __IterableType      const & iterableUnderTest,
+            Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
+            Size                        limit,
+            __OtherIterableType const & noneCommon,
+            __OtherIterableType const & oneCommon,
+            __OtherIterableType const & moreLessThanLimitCommon,
+            __OtherIterableType const & moreCommon,
+            __OtherIterableType const & moreMoreThanLimitCommon,
+            __OtherIterableType const & allCommon,
+            __OtherIterableType const & allAndMoreCommon,
+            Size                        expectedResultFromNone,
+            __OtherIterableType const & expectedCollectionFromNone,
+            Size                        expectedResultFromOne,
+            __OtherIterableType const & expectedCollectionFromOne,
+            Size                        expectedResultFromMoreLessThanLimit,
+            __OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
+            Size                        expectedResultFromMore,
+            __OtherIterableType const & expectedCollectionFromMore,
+            Size                        expectedResultFromMoreMoreThanLimit,
+            __OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
+            Size                        expectedResultFromAll,
+            __OtherIterableType const & expectedCollectionFromAll,
+            Size                        expectedResultFromAllAndMore,
+            __OtherIterableType const & expectedCollectionFromAllAndMore
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfNoneCommon-cpp-xx : MCTC-00451-RO-removeOfNoneCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfNoneCommon-cpp-xx : MCTC-00458-RO-removeNotOfNoneCommon-cpp-xx */
+        auto       copyRO451            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO451 = copyRO451;
+        auto       removedCountRB451    = ( collectionRO451.* removePfnVariant ) ( limit, noneCommon );
+        pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO451.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
+        if ( removedCountRB451 != expectedResultFromNone || ! equals ( collectionRO451, expectedCollectionFromNone ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 451 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfOneCommon-cpp-xx : MCTC-00452-RO-removeOfOneCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfOneCommon-cpp-xx : MCTC-00459-RO-removeNotOfOneCommon-cpp-xx */
+        auto       copyRO452            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO452 = copyRO452;
+        auto       removedCountRB452    = ( collectionRO452.* removePfnVariant ) ( limit, oneCommon );
+        pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO452.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
+        if ( removedCountRB452 != expectedResultFromOne || ! equals ( collectionRO452, expectedCollectionFromOne ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 452 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfMoreLessThanLimitCommon-cpp-xx : MCTC-00453-RO-removeOfMoreLessThanLimitCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreLessThanLimitCommon-cpp-xx : MCTC-00460-RO-removeOfMoreLessThanLimitCommon-cpp-xx */
+        auto       copyRO453            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO453 = copyRO453;
+        auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
+        pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() );
+        if ( removedCountRB453 != expectedResultFromMoreLessThanLimit || ! equals ( collectionRO453, expectedCollectionFromMoreLessThanLimit ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreLessThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' OK", 453 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfMoreCommon-cpp-xx : MCTC-00454-RO-removeOfMoreCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreCommon-cpp-xx : MCTC-00461-RO-removeNotOfMoreCommon-cpp-xx */
+        auto       copyRO454            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO454 = copyRO454;
+        auto       removedCountRB454    = ( collectionRO454.* removePfnVariant ) ( limit, moreCommon );
+        pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO454.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
+        if ( removedCountRB454 != expectedResultFromMore || ! equals ( collectionRO454, expectedCollectionFromMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00455-RO-removeOfMoreMoreThanLimitCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00462-RO-removeNotOfMoreMoreThanLimitCommon-cpp-xx */
+        auto       copyRO455            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO455 = copyRO455;
+        auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
+        pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() );
+        if ( removedCountRB455 != expectedResultFromMoreMoreThanLimit || ! equals ( collectionRO455, expectedCollectionFromMoreMoreThanLimit ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' OK", 455 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfAllCommon-cpp-xx : MCTC-00456-RO-removeOfAllCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfAllCommon-cpp-xx : MCTC-00463-RO-removeNotOfAllCommon-cpp-xx */
+        auto       copyRO456            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO456 = copyRO456;
+        auto       removedCountRB456    = ( collectionRO456.* removePfnVariant ) ( limit, allCommon );
+        pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO456.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
+        if ( removedCountRB456 != expectedResultFromAll || ! equals ( collectionRO456, expectedCollectionFromAll ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 456 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+    /* MutableCollectionTestCase-RemoveOf-removeOfAllAndMoreCommon-cpp-xx : MCTC-00457-RO-removeOfAllAndMoreCommon-cpp-xx */
+    /* MutableCollectionTestCase-RemoveOf-removeNotOfAllAndMoreCommon-cpp-xx : MCTC-00464-RO-removeNotOfAllAndMoreCommon-cpp-xx */
+        auto       copyRO457            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO457 = copyRO457;
+        auto       removedCountRB457    = ( collectionRO457.* removePfnVariant ) ( limit, allAndMoreCommon );
+        pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO457.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
+        if ( removedCountRB457 != expectedResultFromAllAndMore || ! equals ( collectionRO457, expectedCollectionFromAllAndMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 457 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        return true;
+    }
+
+
+
+    /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MMCTC-00501-RO to MMCTC-00520-RO. */
+    template <
+            typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupItemRemoveFirstLastOf (
+            Test                      * pTestLib,
+            cds :: String       const & groupVariant,
+            StringLiteral               subvariant,
+            Size                        subvariantOffset,
+            __IterableType      const & iterableUnderTest,
+            bool ( cds :: MutableCollection < __ElementType > :: * removeFirstLastPfnVariant ) ( __OtherIterableType const & ),
+            __OtherIterableType const & noneCommon,
+            __OtherIterableType const & oneCommon,
+            __OtherIterableType const & moreCommon,
+            __OtherIterableType const & allCommon,
+            __OtherIterableType const & allAndMoreCommon,
+            bool                        expectedResultFromNone,
+            __OtherIterableType const & expectedCollectionFromNone,
+            bool                        expectedResultFromOne,
+            __OtherIterableType const & expectedCollectionFromOne,
+            bool                        expectedResultFromMore,
+            __OtherIterableType const & expectedCollectionFromMore,
+            bool                        expectedResultFromAll,
+            __OtherIterableType const & expectedCollectionFromAll,
+            bool                        expectedResultFromAllAndMore,
+            __OtherIterableType const & expectedCollectionFromAllAndMore
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+
+        /* MutableCollectionTestCase-RemoveOf-removeFirstOfNoneCommon-cpp-xx : MCTC-00501-RO-removeFirstOfNoneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastOfNoneCommon-cpp-xx : MCTC-00506-RO-removeLastOfNoneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfNoneCommon-cpp-xx : MCTC-00511-RO-removeFirstNotOfNoneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastNotOfNoneCommon-cpp-xx : MCTC-00516-RO-removeLastNotOfNoneCommon-cpp-xx */
+        auto       copyRO501            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO501 = copyRO501;
+        auto       removedCountRB501    = ( collectionRO501.* removeFirstLastPfnVariant ) ( noneCommon );
+        pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO501.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
+        if ( removedCountRB501 != expectedResultFromNone || ! equals ( collectionRO501, expectedCollectionFromNone ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 501 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeFirstOfOneCommon-cpp-xx : MCTC-00502-RO-removeFirstOfOneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastOfOneCommon-cpp-xx : MCTC-00507-RO-removeLastOfOneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfOneCommon-cpp-xx : MCTC-00512-RO-removeFirstNotOfOneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastNotOfOneCommon-cpp-xx : MCTC-00517-RO-removeLastNotOfOneCommon-cpp-xx */
+        auto       copyRO502            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO502 = copyRO502;
+        auto       removedCountRB502    = ( collectionRO502.* removeFirstLastPfnVariant ) ( oneCommon );
+        pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO502.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
+        if ( removedCountRB502 != expectedResultFromOne || ! equals ( collectionRO502, expectedCollectionFromOne ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 502 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeFirstOfMoreCommon-cpp-xx : MCTC-00503-RO-removeFirstOfMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastOfMoreCommon-cpp-xx : MCTC-00508-RO-removeLastOfMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfMoreCommon-cpp-xx : MCTC-00513-RO-removeFirstNotOfMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastNotOfMoreCommon-cpp-xx : MCTC-00518-RO-removeLastNotOfMoreCommon-cpp-xx */
+        auto       copyRO503            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO503 = copyRO503;
+        auto       removedCountRB503    = ( collectionRO503.* removeFirstLastPfnVariant ) ( moreCommon );
+        pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO503.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
+        if ( removedCountRB503 != expectedResultFromMore || ! equals ( collectionRO503, expectedCollectionFromMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 503 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeFirstOfAllCommon-cpp-xx : MCTC-00504-RO-removeFirstOfAllCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastOfAllCommon-cpp-xx : MCTC-00509-RO-removeLastOfAllCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllCommon-cpp-xx : MCTC-00514-RO-removeFirstNotOfAllCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllCommon-cpp-xx : MCTC-00519-RO-removeLastNotOfAllCommon-cpp-xx */
+        auto       copyRO504            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO504 = copyRO504;
+        auto       removedCountRB504    = ( collectionRO504.* removeFirstLastPfnVariant ) ( allCommon );
+        pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO504.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
+        if ( removedCountRB504 != expectedResultFromAll || ! equals ( collectionRO504, expectedCollectionFromAll ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 504 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeFirstOfAllAndMoreCommon-cpp-xx : MCTC-00505-RO-removeFirstOfAllAndMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastOfAllAndMoreCommon-cpp-xx : MCTC-00510-RO-removeLastOfAllAndMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeFirstNotOfAllAndMoreCommon-cpp-xx : MCTC-00515-RO-removeFirstNotOfAllAndMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeLastNotOfAllAndMoreCommon-cpp-xx : MCTC-00520-RO-removeLastNotOfAllAndMoreCommon-cpp-xx */
+        auto       copyRO505            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO505 = copyRO505;
+        auto       removedCountRB505    = ( collectionRO505.* removeFirstLastPfnVariant ) ( allAndMoreCommon );
+        pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO505.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
+        if ( removedCountRB505 != expectedResultFromAllAndMore || ! equals ( collectionRO505, expectedCollectionFromAllAndMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 505 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        return true;
+    }
+
+    /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTC-00450-RO-cpp-xx. MCTC-00481-RO to MCTC-00490-RO. */
+    template <
+            typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupItemRemoveAllOf (
+            Test                      * pTestLib,
+            cds :: String       const & groupVariant,
+            StringLiteral               subvariant,
+            Size                        subvariantOffset,
+            __IterableType      const & iterableUnderTest,
+            Size ( cds :: MutableCollection < __ElementType > :: * removeAllPfnVariant ) ( __OtherIterableType const & ),
+            __OtherIterableType const & noneCommon,
+            __OtherIterableType const & oneCommon,
+            __OtherIterableType const & moreCommon,
+            __OtherIterableType const & allCommon,
+            __OtherIterableType const & allAndMoreCommon,
+            Size                        expectedResultFromNone,
+            __OtherIterableType const & expectedCollectionFromNone,
+            Size                        expectedResultFromOne,
+            __OtherIterableType const & expectedCollectionFromOne,
+            Size                        expectedResultFromMore,
+            __OtherIterableType const & expectedCollectionFromMore,
+            Size                        expectedResultFromAll,
+            __OtherIterableType const & expectedCollectionFromAll,
+            Size                        expectedResultFromAllAndMore,
+            __OtherIterableType const & expectedCollectionFromAllAndMore
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
+
+        /* MutableCollectionTestCase-RemoveOf-removeAllOfNoneCommon-cpp-xx : MCTC-00481-RO-removeAllOfNoneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeAllNotOfNoneCommon-cpp-xx : MCTC-00486-RO-removeAllNotOfNoneCommon-cpp-xx */
+        auto       copyRO481            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO481 = copyRO481;
+        auto       removedCountRB481    = ( collectionRO481.* removeAllPfnVariant ) ( noneCommon );
+        pTestLib->log ( "object after '%s with none common' : '%s'. expected : '%s'", subvariant, collectionRO481.toString().cStr(), toString ( expectedCollectionFromNone ).cStr() );
+        if ( removedCountRB481 != expectedResultFromNone || ! equals ( collectionRO481, expectedCollectionFromNone ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 481 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sNoneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 481 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeAllOfOneCommon-cpp-xx : MCTC-00482-RO-removeAllOfOneCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeAllNotOfOneCommon-cpp-xx : MCTC-00487-RO-removeAllNotOfOneCommon-cpp-xx */
+        auto       copyRO482            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO482 = copyRO482;
+        auto       removedCountRB482    = ( collectionRO482.* removeAllPfnVariant ) ( oneCommon );
+        pTestLib->log ( "object after '%s with one common' : '%s'. expected : '%s'", subvariant, collectionRO482.toString().cStr(), toString ( expectedCollectionFromOne ).cStr() );
+        if ( removedCountRB482 != expectedResultFromOne || ! equals ( collectionRO482, expectedCollectionFromOne ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' failed", 482 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sOneCommon-%s-" __CDS_cpplang_core_version_name "' OK", 482 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeAllOfMoreCommon-cpp-xx : MCTC-00483-RO-removeAllOfMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeAllNotOfMoreCommon-cpp-xx : MCTC-00488-RO-removeAllNotOfMoreCommon-cpp-xx */
+        auto       copyRO483            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO483 = copyRO483;
+        auto       removedCountRB483    = ( collectionRO483.* removeAllPfnVariant ) ( moreCommon );
+        pTestLib->log ( "object after '%s with more common' : '%s'. expected : '%s'", subvariant, collectionRO483.toString().cStr(), toString ( expectedCollectionFromMore ).cStr() );
+        if ( removedCountRB483 != expectedResultFromMore || ! equals ( collectionRO483, expectedCollectionFromMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 483 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 483 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeAllOfAllCommon-cpp-xx : MCTC-00484-RO-removeAllOfAllCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllCommon-cpp-xx : MCTC-00489-RO-removeAllNotOfAllCommon-cpp-xx */
+        auto       copyRO484            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO484 = copyRO484;
+        auto       removedCountRB484    = ( collectionRO484.* removeAllPfnVariant ) ( allCommon );
+        pTestLib->log ( "object after '%s with all common' : '%s'. expected : '%s'", subvariant, collectionRO484.toString().cStr(), toString ( expectedCollectionFromAll ).cStr() );
+        if ( removedCountRB484 != expectedResultFromAll || ! equals ( collectionRO484, expectedCollectionFromAll ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' failed", 484 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllCommon-%s-" __CDS_cpplang_core_version_name "' OK", 484 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        /* MutableCollectionTestCase-RemoveOf-removeAllOfAllAndMoreCommon-cpp-xx : MCTC-00485-RO-removeAllOfAllAndMoreCommon-cpp-xx */
+        /* MutableCollectionTestCase-RemoveOf-removeAllNotOfAllAndMoreCommon-cpp-xx : MCTC-00490-RO-removeAllNotOfAllAndMoreCommon-cpp-xx */
+        auto       copyRO485            = iterableUnderTest;
+        cds :: MutableCollection < __ElementType > & collectionRO485 = copyRO485;
+        auto       removedCountRB485    = ( collectionRO485.* removeAllPfnVariant ) ( allAndMoreCommon );
+        pTestLib->log ( "object after '%s with all and more common' : '%s'. expected : '%s'", subvariant, collectionRO485.toString().cStr(), toString ( expectedCollectionFromAllAndMore ).cStr() );
+        if ( removedCountRB485 != expectedResultFromAllAndMore || ! equals ( collectionRO485, expectedCollectionFromAllAndMore ) ) {
+            pTestLib->logError( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' failed", 485 + subvariantOffset, subvariant, groupVariant.cStr() );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00%d-RO-%sAllAndMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 485 + subvariantOffset, subvariant, groupVariant.cStr() );
+        }
+
+        return true;
+    }
+
+    template <
+            typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+            template < typename ... > class __CollectionType,                                                       /* NOLINT(bugprone-reserved-identifier) */
+            typename __ValidatorPredicate,                                                                          /* NOLINT(bugprone-reserved-identifier) */
+            typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
+    > auto iteratorListEqualityCheck (
+            __ValidatorPredicate                const & validator,
+            __CollectionType < __IteratorType > const & iteratorCollection,
+            __CollectionType < __ElementType >  const & elementCollection
+    ) -> bool {
+
+        auto leftIt = iteratorCollection.begin();
+        auto leftEnd = iteratorCollection.end();
+        auto rightIt = elementCollection.begin();
+        auto rightEnd = elementCollection.end();
+
+        if ( iteratorCollection.size() != elementCollection.size() ) {
             return false;
         }
-    }
-
-    return true;
-}
-
-
-
-/* MutableCollectionTestGroup-FindThat-cpp-xx : MCTG-00600-FT-cpp-xx. MCTC-00601-FT to MCTC-00634-FT */
-template <
-        typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        typename __NonePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
-        typename __OnePredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
-        typename __MorePredicateLessThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
-        typename __MorePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
-        typename __MorePredicateMoreThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
-        typename __AllPredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
-        typename __AllAndMorePredicate,                                                         /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupFindThat (
-        Test                                                      * pTestLib,
-        cds :: MutableCollection < __ElementType > & underTest,
-        Size                                                        limit,
-        __NonePredicate                                     const & none,
-        __OnePredicate                                      const & one,
-        __MorePredicateLessThanLimit                        const & moreLessThanLimit,
-        __MorePredicate                                     const & more,
-        __MorePredicateMoreThanLimit                        const & moreMoreThanLimit,
-        __AllPredicate                                      const & all,
-        __AllAndMorePredicate                               const & allAndMore,
-        Size                                                        expectedSizeFindThatNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatNone,
-        Size                                                        expectedSizeFindThatOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatOne,
-        Size                                                        expectedSizeFindThatMoreLessThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatMoreLessThanLimit,
-        Size                                                        expectedSizeFindThatMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatMore,
-        Size                                                        expectedSizeFindThatMoreMoreThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatMoreMoreThanLimit,
-        Size                                                        expectedSizeFindThatAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatAll,
-        Size                                                        expectedSizeFindThatAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindThatAllAndMore,
-        bool                                                        expectedResultFindFirstThatNone,
-        __ElementType                                       const & expectedFindFirstThatNone,
-        bool                                                        expectedResultFindFirstThatOne,
-        __ElementType                                       const & expectedFindFirstThatOne,
-        bool                                                        expectedResultFindFirstThatMore,
-        __ElementType                                       const & expectedFindFirstThatMore,
-        bool                                                        expectedResultFindFirstThatAll,
-        __ElementType                                       const & expectedFindFirstThatAll,
-        bool                                                        expectedResultFindFirstThatAllAndMore,
-        __ElementType                                       const & expectedFindFirstThatAllAndMore,
-        bool                                                        expectedResultFindLastThatNone,
-        __ElementType                                       const & expectedFindLastThatNone,
-        bool                                                        expectedResultFindLastThatOne,
-        __ElementType                                       const & expectedFindLastThatOne,
-        bool                                                        expectedResultFindLastThatMore,
-        __ElementType                                       const & expectedFindLastThatMore,
-        bool                                                        expectedResultFindLastThatAll,
-        __ElementType                                       const & expectedFindLastThatAll,
-        bool                                                        expectedResultFindLastThatAllAndMore,
-        __ElementType                                       const & expectedFindLastThatAllAndMore,
-        Size                                                        expectedSizeFindAllThatNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatNone,
-        Size                                                        expectedSizeFindAllThatOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatOne,
-        Size                                                        expectedSizeFindAllThatMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatMore,
-        Size                                                        expectedSizeFindAllThatAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatAll,
-        Size                                                        expectedSizeFindAllThatAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatAllAndMore
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
-    using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingNone-cpp-xx : MCTC-00601-FT-findThatStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00601 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00601;
-    auto                                                        expectedSize00601 = expectedSizeFindThatNone;
-    auto                                                const & expected00601 = expectedFindThatNone;
-    auto                                                const & predicate00601 = none;
-
-    (void) collection00601.findThat ( limit, storeIn00601, predicate00601 );
-    if ( storeIn00601.size() != expectedSize00601 || ! iteratorListEqualityCheck ( predicate00601, storeIn00601, expected00601 ) ) {
-        pTestLib->logError( "'MCTC-00601-FT-findThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00601-FT-findThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingOne-cpp-xx : MCTC-00602-FT-findThatStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00602 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00602;
-    auto                                                        expectedSize00602 = expectedSizeFindThatOne;
-    auto                                                const & expected00602 = expectedFindThatOne;
-    auto                                                const & predicate00602 = one;
-
-    (void) collection00602.findThat ( limit, storeIn00602, predicate00602 );
-    if ( storeIn00602.size() != expectedSize00602 || ! iteratorListEqualityCheck ( predicate00602, storeIn00602, expected00602 ) ) {
-        pTestLib->logError( "'MCTC-00602-FT-findThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00602-FT-findThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00603 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00603;
-    auto                                                        expectedSize00603 = expectedSizeFindThatMoreLessThanLimit;
-    auto                                                const & expected00603 = expectedFindThatMoreLessThanLimit;
-    auto                                                const & predicate00603 = moreLessThanLimit;
-
-    (void) collection00603.findThat ( limit, storeIn00603, predicate00603 );
-    if ( storeIn00603.size() != expectedSize00603 || ! iteratorListEqualityCheck ( predicate00603, storeIn00603, expected00603 ) ) {
-        pTestLib->logError( "'MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMore-cpp-xx : MCTC-00604-FT-findThatStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00604 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00604;
-    auto                                                        expectedSize00604 = expectedSizeFindThatMore;
-    auto                                                const & expected00604 = expectedFindThatMore;
-    auto                                                const & predicate00604 = more;
-
-    (void) collection00604.findThat ( limit, storeIn00604, predicate00604 );
-    if ( storeIn00604.size() != expectedSize00604 || ! iteratorListEqualityCheck ( predicate00604, storeIn00604, expected00604 ) ) {
-        pTestLib->logError( "'MCTC-00604-FT-findThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00604-FT-findThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00605 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00605;
-    auto                                                        expectedSize00605 = expectedSizeFindThatMoreMoreThanLimit;
-    auto                                                const & expected00605 = expectedFindThatMoreMoreThanLimit;
-    auto                                                const & predicate00605 = moreMoreThanLimit;
-
-    (void) collection00605.findThat ( limit, storeIn00605, predicate00605 );
-    if ( storeIn00605.size() != expectedSize00605 || ! iteratorListEqualityCheck ( predicate00605, storeIn00605, expected00605 ) ) {
-        pTestLib->logError( "'MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAll-cpp-xx : MCTC-00606-FT-findThatStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00606 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00606;
-    auto                                                        expectedSize00606 = expectedSizeFindThatAll;
-    auto                                                const & expected00606 = expectedFindThatAll;
-    auto                                                const & predicate00606 = all;
-
-    (void) collection00606.findThat ( limit, storeIn00606, predicate00606 );
-    if ( storeIn00606.size() != expectedSize00606 || ! iteratorListEqualityCheck ( predicate00606, storeIn00606, expected00606 ) ) {
-        pTestLib->logError( "'MCTC-00606-FT-findThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00606-FT-findThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAllAndMore-cpp-xx : MCTC-00607-FT-findThatStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00607 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00607;
-    auto                                                        expectedSize00607 = expectedSizeFindThatAllAndMore;
-    auto                                                const & expected00607 = expectedFindThatAllAndMore;
-    auto                                                const & predicate00607 = allAndMore;
-
-    (void) collection00607.findThat ( limit, storeIn00607, predicate00607 );
-    if ( storeIn00607.size() != expectedSize00607 || ! iteratorListEqualityCheck ( predicate00607, storeIn00607, expected00607 ) ) {
-        pTestLib->logError( "'MCTC-00607-FT-findThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00607-FT-findThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingNone-cpp-xx : MCTC-00608-FT-findThatReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00608 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00608;
-    auto                                                        expectedSize00608 = expectedSizeFindThatNone;
-    auto                                                const & expected00608 = expectedFindThatNone;
-    auto                                                const & predicate00608 = none;
-
-    storeIn00608 = collection00608.template findThat < __ComparisonEquivalent > ( limit, predicate00608 );
-    if ( storeIn00608.size() != expectedSize00608 || ! iteratorListEqualityCheck ( predicate00608, storeIn00608, expected00608 ) ) {
-        pTestLib->logError( "'MCTC-00608-FT-findThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00608-FT-findThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingOne-cpp-xx : MCTC-00609-FT-findThatReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00609 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00609;
-    auto                                                        expectedSize00609 = expectedSizeFindThatOne;
-    auto                                                const & expected00609 = expectedFindThatOne;
-    auto                                                const & predicate00609 = one;
-
-    storeIn00609 = collection00609.template findThat < __ComparisonEquivalent > ( limit, predicate00609 );
-    if ( storeIn00609.size() != expectedSize00609 || ! iteratorListEqualityCheck ( predicate00609, storeIn00609, expected00609 ) ) {
-        pTestLib->logError( "'MCTC-00609-FT-findThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00609-FT-findThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00610 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00610;
-    auto                                                        expectedSize00610 = expectedSizeFindThatMoreLessThanLimit;
-    auto                                                const & expected00610 = expectedFindThatMoreLessThanLimit;
-    auto                                                const & predicate00610 = moreLessThanLimit;
-
-    storeIn00610 = collection00610.template findThat < __ComparisonEquivalent > ( limit, predicate00610 );
-    if ( storeIn00610.size() != expectedSize00610 || ! iteratorListEqualityCheck ( predicate00610, storeIn00610, expected00610 ) ) {
-        pTestLib->logError( "'MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMore-cpp-xx : MCTC-00611-FT-findThatReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00611 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00611;
-    auto                                                        expectedSize00611 = expectedSizeFindThatMore;
-    auto                                                const & expected00611 = expectedFindThatMore;
-    auto                                                const & predicate00611 = more;
-
-    storeIn00611 = collection00611.template findThat < __ComparisonEquivalent > ( limit, predicate00611 );
-    if ( storeIn00611.size() != expectedSize00611 || ! iteratorListEqualityCheck ( predicate00611, storeIn00611, expected00611 ) ) {
-        pTestLib->logError( "'MCTC-00611-FT-findThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00611-FT-findThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00612 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00612;
-    auto                                                        expectedSize00612 = expectedSizeFindThatMoreMoreThanLimit;
-    auto                                                const & expected00612 = expectedFindThatMoreMoreThanLimit;
-    auto                                                const & predicate00612 = moreMoreThanLimit;
-
-    storeIn00612 = collection00612.template findThat < __ComparisonEquivalent > ( limit, predicate00612 );
-    if ( storeIn00612.size() != expectedSize00612 || ! iteratorListEqualityCheck ( predicate00612, storeIn00612, expected00612 ) ) {
-        pTestLib->logError( "'MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAll-cpp-xx : MCTC-00613-FT-findThatReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00613 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00613;
-    auto                                                        expectedSize00613 = expectedSizeFindThatAll;
-    auto                                                const & expected00613 = expectedFindThatAll;
-    auto                                                const & predicate00613 = all;
-
-    storeIn00613 = collection00613.template findThat < __ComparisonEquivalent > ( limit, predicate00613 );
-    if ( storeIn00613.size() != expectedSize00613 || ! iteratorListEqualityCheck ( predicate00613, storeIn00613, expected00613 ) ) {
-        pTestLib->logError( "'MCTC-00613-FT-findThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00613-FT-findThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAllAndMore-cpp-xx : MCTC-00614-FT-findThatReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00614 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00614;
-    auto                                                        expectedSize00614 = expectedSizeFindThatAllAndMore;
-    auto                                                const & expected00614 = expectedFindThatAllAndMore;
-    auto                                                const & predicate00614 = allAndMore;
-
-    storeIn00614 = collection00614.template findThat < __ComparisonEquivalent > ( limit, predicate00614 );
-    if ( storeIn00614.size() != expectedSize00614 || ! iteratorListEqualityCheck ( predicate00614, storeIn00614, expected00614 ) ) {
-        pTestLib->logError( "'MCTC-00614-FT-findThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00614-FT-findThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findFirstThatMatchingNone-cpp-xx : MCTC-00615-FT-findFirstThatMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00615 = underTest;
-    Iterator                                               result00615;
-    auto                                                        expectedValid00615 = expectedResultFindFirstThatNone;
-    auto                                                        expectedValue00615 = expectedFindFirstThatNone;
-    auto                                                const & predicate00615 = none;
-
-    result00615 = collection00615.findFirstThat ( predicate00615 );
-    if ( ( result00615 != collection00615.end() ) != expectedValid00615 || expectedValid00615 && expectedValue00615 != * result00615 ) {
-        pTestLib->logError( "'MCTC-00615-FT-findFirstThatMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00615-FT-findFirstThatMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findFirstThatMatchingOne-cpp-xx : MCTC-00616-FT-findFirstThatMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00616 = underTest;
-    Iterator                                               result00616;
-    auto                                                        expectedValid00616 = expectedResultFindFirstThatOne;
-    auto                                                        expectedValue00616 = expectedFindFirstThatOne;
-    auto                                                const & predicate00616 = one;
-
-    result00616 = collection00616.findFirstThat ( predicate00616 );
-    if ( ( result00616 != collection00616.end() ) != expectedValid00616 || expectedValid00616 && expectedValue00616 != * result00616 ) {
-        pTestLib->logError( "'MCTC-00616-FT-findFirstThatMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00616-FT-findFirstThatMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findFirstThatMatchingMore-cpp-xx : MCTC-00617-FT-findFirstThatMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00617 = underTest;
-    Iterator                                               result00617;
-    auto                                                        expectedValid00617 = expectedResultFindFirstThatMore;
-    auto                                                        expectedValue00617 = expectedFindFirstThatMore;
-    auto                                                const & predicate00617 = more;
-
-    result00617 = collection00617.findFirstThat ( predicate00617 );
-    if ( ( result00617 != collection00617.end() ) != expectedValid00617 || expectedValid00617 && expectedValue00617 != * result00617 ) {
-        pTestLib->logError( "'MCTC-00617-FT-findFirstThatMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00617-FT-findFirstThatMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAll-cpp-xx : MCTC-00618-FT-findFirstThatMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00618 = underTest;
-    Iterator                                               result00618;
-    auto                                                        expectedValid00618 = expectedResultFindFirstThatAll;
-    auto                                                        expectedValue00618 = expectedFindFirstThatAll;
-    auto                                                const & predicate00618 = all;
-
-    result00618 = collection00618.findFirstThat ( predicate00618 );
-    if ( ( result00618 != collection00618.end() ) != expectedValid00618 || expectedValid00618 && expectedValue00618 != * result00618 ) {
-        pTestLib->logError( "'MCTC-00618-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00618-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAllAndMore-cpp-xx : MCTC-00619-FT-findFirstThatMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00619 = underTest;
-    Iterator                                               result00619;
-    auto                                                        expectedValid00619 = expectedResultFindFirstThatAllAndMore;
-    auto                                                        expectedValue00619 = expectedFindFirstThatAllAndMore;
-    auto                                                const & predicate00619 = allAndMore;
-
-    result00619 = collection00619.findFirstThat ( predicate00619 );
-    if ( ( result00619 != collection00619.end() ) != expectedValid00619 || expectedValid00619 && expectedValue00619 != * result00619 ) {
-        pTestLib->logError( "'MCTC-00619-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00619-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findLastThatMatchingNone-cpp-xx : MCTC-00620-FT-findLastThatMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00620 = underTest;
-    Iterator                                               result00620;
-    auto                                                        expectedValid00620 = expectedResultFindLastThatNone;
-    auto                                                        expectedValue00620 = expectedFindLastThatNone;
-    auto                                                const & predicate00620 = none;
-
-    result00620 = collection00620.findLastThat ( predicate00620 );
-    if ( ( result00620 != collection00620.end() ) != expectedValid00620 || expectedValid00620 && expectedValue00620 != * result00620 ) {
-        pTestLib->logError( "'MCTC-00620-FT-findLastThatMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00620-FT-findLastThatMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findLastThatMatchingOne-cpp-xx : MCTC-00621-FT-findLastThatMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00621 = underTest;
-    Iterator                                               result00621;
-    auto                                                        expectedValid00621 = expectedResultFindLastThatOne;
-    auto                                                        expectedValue00621 = expectedFindLastThatOne;
-    auto                                                const & predicate00621 = one;
-
-    result00621 = collection00621.findLastThat ( predicate00621 );
-    if ( ( result00621 != collection00621.end() ) != expectedValid00621 || expectedValid00621 && expectedValue00621 != * result00621 ) {
-        pTestLib->logError( "'MCTC-00621-FT-findLastThatMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00621-FT-findLastThatMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findLastThatMatchingMore-cpp-xx : MCTC-00622-FT-findLastThatMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00622 = underTest;
-    Iterator                                               result00622;
-    auto                                                        expectedValid00622 = expectedResultFindLastThatMore;
-    auto                                                        expectedValue00622 = expectedFindLastThatMore;
-    auto                                                const & predicate00622 = more;
-
-    result00622 = collection00622.findLastThat ( predicate00622 );
-    if ( ( result00622 != collection00622.end() ) != expectedValid00622 || expectedValid00622 && expectedValue00622 != * result00622 ) {
-        pTestLib->logError( "'MCTC-00622-FT-findLastThatMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00622-FT-findLastThatMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findLastThatMatchingAll-cpp-xx : MCTC-00623-FT-findLastThatMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00623 = underTest;
-    Iterator                                               result00623;
-    auto                                                        expectedValid00623 = expectedResultFindLastThatAll;
-    auto                                                        expectedValue00623 = expectedFindLastThatAll;
-    auto                                                const & predicate00623 = all;
-
-    result00623 = collection00623.findLastThat ( predicate00623 );
-    if ( ( result00623 != collection00623.end() ) != expectedValid00623 || expectedValid00623 && expectedValue00623 != * result00623 ) {
-        pTestLib->logError( "'MCTC-00623-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00623-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findLastThatMatchingAllAndMore-cpp-xx : MCTC-00624-FT-findLastThatMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00624 = underTest;
-    Iterator                                               result00624;
-    auto                                                        expectedValid00624 = expectedResultFindLastThatAllAndMore;
-    auto                                                        expectedValue00624 = expectedFindLastThatAllAndMore;
-    auto                                                const & predicate00624 = allAndMore;
-
-    result00624 = collection00624.findLastThat ( predicate00624 );
-    if ( ( result00624 != collection00624.end() ) != expectedValid00624 || expectedValid00624 && expectedValue00624 != * result00624 ) {
-        pTestLib->logError( "'MCTC-00624-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00624-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingNone-cpp-xx : MCTC-00625-FT-findAllThatStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00625 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00625;
-    auto                                                        expectedSize00625 = expectedSizeFindAllThatNone;
-    auto                                                const & expected00625 = expectedFindAllThatNone;
-    auto                                                const & predicate00625 = none;
-
-    (void) collection00625.findAllThat ( storeIn00625, predicate00625 );
-    if ( storeIn00625.size() != expectedSize00625 || ! iteratorListEqualityCheck ( predicate00625, storeIn00625, expected00625 ) ) {
-        pTestLib->logError( "'MCTC-00625-FT-findAllThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00625-FT-findAllThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingOne-cpp-xx : MCTC-00626-FT-findAllThatStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00626 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00626;
-    auto                                                        expectedSize00626 = expectedSizeFindAllThatOne;
-    auto                                                const & expected00626 = expectedFindAllThatOne;
-    auto                                                const & predicate00626 = one;
-
-    (void) collection00626.findAllThat ( storeIn00626, predicate00626 );
-    if ( storeIn00626.size() != expectedSize00626 || ! iteratorListEqualityCheck ( predicate00626, storeIn00626, expected00626 ) ) {
-        pTestLib->logError( "'MCTC-00626-FT-findAllThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00626-FT-findAllThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingMore-cpp-xx : MCTC-00627-FT-findAllThatStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00627 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00627;
-    auto                                                        expectedSize00627 = expectedSizeFindAllThatMore;
-    auto                                                const & expected00627 = expectedFindAllThatMore;
-    auto                                                const & predicate00627 = more;
-
-    (void) collection00627.findAllThat ( storeIn00627, predicate00627 );
-    if ( storeIn00627.size() != expectedSize00627 || ! iteratorListEqualityCheck ( predicate00627, storeIn00627, expected00627 ) ) {
-        pTestLib->logError( "'MCTC-00627-FT-findAllThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00627-FT-findAllThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAll-cpp-xx : MCTC-00628-FT-findAllThatStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00628 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00628;
-    auto                                                        expectedSize00628 = expectedSizeFindAllThatAll;
-    auto                                                const & expected00628 = expectedFindAllThatAll;
-    auto                                                const & predicate00628 = all;
-
-    (void) collection00628.findAllThat ( storeIn00628, predicate00628 );
-    if ( storeIn00628.size() != expectedSize00628 || ! iteratorListEqualityCheck ( predicate00628, storeIn00628, expected00628 ) ) {
-        pTestLib->logError( "'MCTC-00628-FT-findAllThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00628-FT-findAllThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAllAndMore-cpp-xx : MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00629 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00629;
-    auto                                                        expectedSize00629 = expectedSizeFindAllThatAllAndMore;
-    auto                                                const & expected00629 = expectedFindAllThatAllAndMore;
-    auto                                                const & predicate00629 = allAndMore;
-
-    (void) collection00629.findAllThat ( storeIn00629, predicate00629 );
-    if ( storeIn00629.size() != expectedSize00629 || ! iteratorListEqualityCheck ( predicate00629, storeIn00629, expected00629 ) ) {
-        pTestLib->logError( "'MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingNone-cpp-xx : MCTC-00630-FT-findAllThatReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00630 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00630;
-    auto                                                        expectedSize00630 = expectedSizeFindAllThatNone;
-    auto                                                const & expected00630 = expectedFindAllThatNone;
-    auto                                                const & predicate00630 = none;
-
-    storeIn00630 = collection00630.template findAllThat < __ComparisonEquivalent > ( predicate00630 );
-    if ( storeIn00630.size() != expectedSize00630 || ! iteratorListEqualityCheck ( predicate00630, storeIn00630, expected00630 ) ) {
-        pTestLib->logError( "'MCTC-00630-FT-findAllThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00630-FT-findAllThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingOne-cpp-xx : MCTC-00631-FT-findAllThatReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00631 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00631;
-    auto                                                        expectedSize00631 = expectedSizeFindAllThatOne;
-    auto                                                const & expected00631 = expectedFindAllThatOne;
-    auto                                                const & predicate00631 = one;
-
-    storeIn00631 = collection00631.template findAllThat < __ComparisonEquivalent > ( predicate00631 );
-    if ( storeIn00631.size() != expectedSize00631 || ! iteratorListEqualityCheck ( predicate00631, storeIn00631, expected00631 ) ) {
-        pTestLib->logError( "'MCTC-00631-FT-findAllThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00631-FT-findAllThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingMore-cpp-xx : MCTC-00632-FT-findAllThatReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00632 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00632;
-    auto                                                        expectedSize00632 = expectedSizeFindAllThatMore;
-    auto                                                const & expected00632 = expectedFindAllThatMore;
-    auto                                                const & predicate00632 = more;
-
-    storeIn00632 = collection00632.template findAllThat < __ComparisonEquivalent > ( predicate00632 );
-    if ( storeIn00632.size() != expectedSize00632 || ! iteratorListEqualityCheck ( predicate00632, storeIn00632, expected00632 ) ) {
-        pTestLib->logError( "'MCTC-00632-FT-findAllThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00632-FT-findAllThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAll-cpp-xx : MCTC-00633-FT-findAllThatReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00633 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00633;
-    auto                                                        expectedSize00633 = expectedSizeFindAllThatAll;
-    auto                                                const & expected00633 = expectedFindAllThatAll;
-    auto                                                const & predicate00633 = all;
-
-    storeIn00633 = collection00633.template findAllThat < __ComparisonEquivalent > ( predicate00633 );
-    if ( storeIn00633.size() != expectedSize00633 || ! iteratorListEqualityCheck ( predicate00633, storeIn00633, expected00633 ) ) {
-        pTestLib->logError( "'MCTC-00633-FT-findAllThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00633-FT-findAllThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAllAndMore-cpp-xx : MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00634 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00634;
-    auto                                                        expectedSize00634 = expectedSizeFindAllThatAllAndMore;
-    auto                                                const & expected00634 = expectedFindAllThatAllAndMore;
-    auto                                                const & predicate00634 = allAndMore;
-
-    storeIn00634 = collection00634.template findAllThat < __ComparisonEquivalent > ( predicate00634 );
-    if ( storeIn00634.size() != expectedSize00634 || ! iteratorListEqualityCheck ( predicate00634, storeIn00634, expected00634 ) ) {
-        pTestLib->logError( "'MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    return true;
-}
-
-/* MutableCollectionTestGroup-FindOf-cpp-xx : MCTG-00700-FO-cpp-xx. MCTC-00701-FO to MCTC-00768-FO */
-template <
-        typename __IterableType,                                                                /* NOLINT(bugprone-reserved-identifier) */
-        typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
-        template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
-> auto mutableCollectionTestGroupFindOf (
-        Test                                                      * pTestLib,
-        StringLiteral                                               variant,
-        cds :: MutableCollection < __ElementType > & underTest,
-        Size                                                        limit,
-        __IterableType                                      const & none,
-        __IterableType                                      const & one,
-        __IterableType                                      const & moreLessThanLimit,
-        __IterableType                                      const & more,
-        __IterableType                                      const & moreMoreThanLimit,
-        __IterableType                                      const & all,
-        __IterableType                                      const & allAndMore,
-        Size                                                        expectedSizeFindOfNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfNone,
-        Size                                                        expectedSizeFindOfOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfOne,
-        Size                                                        expectedSizeFindOfMoreLessThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreLessThanLimit,
-        Size                                                        expectedSizeFindOfMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfMore,
-        Size                                                        expectedSizeFindOfMoreMoreThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreMoreThanLimit,
-        Size                                                        expectedSizeFindOfAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfAll,
-        Size                                                        expectedSizeFindOfAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindOfAllAndMore,
-        bool                                                        expectedResultFindFirstOfNone,
-        __ElementType                                       const & expectedFindFirstOfNone,
-        bool                                                        expectedResultFindFirstOfOne,
-        __ElementType                                       const & expectedFindFirstOfOne,
-        bool                                                        expectedResultFindFirstOfMore,
-        __ElementType                                       const & expectedFindFirstOfMore,
-        bool                                                        expectedResultFindFirstOfAll,
-        __ElementType                                       const & expectedFindFirstOfAll,
-        bool                                                        expectedResultFindFirstOfAllAndMore,
-        __ElementType                                       const & expectedFindFirstOfAllAndMore,
-        bool                                                        expectedResultFindLastOfNone,
-        __ElementType                                       const & expectedFindLastOfNone,
-        bool                                                        expectedResultFindLastOfOne,
-        __ElementType                                       const & expectedFindLastOfOne,
-        bool                                                        expectedResultFindLastOfMore,
-        __ElementType                                       const & expectedFindLastOfMore,
-        bool                                                        expectedResultFindLastOfAll,
-        __ElementType                                       const & expectedFindLastOfAll,
-        bool                                                        expectedResultFindLastOfAllAndMore,
-        __ElementType                                       const & expectedFindLastOfAllAndMore,
-        Size                                                        expectedSizeFindAllOfNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfNone,
-        Size                                                        expectedSizeFindAllOfOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfOne,
-        Size                                                        expectedSizeFindAllOfMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfMore,
-        Size                                                        expectedSizeFindAllOfAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAll,
-        Size                                                        expectedSizeFindAllOfAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAllAndMore,
-        Size                                                        expectedSizeFindNotOfNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfNone,
-        Size                                                        expectedSizeFindNotOfOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfOne,
-        Size                                                        expectedSizeFindNotOfMoreLessThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreLessThanLimit,
-        Size                                                        expectedSizeFindNotOfMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMore,
-        Size                                                        expectedSizeFindNotOfMoreMoreThanLimit,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreMoreThanLimit,
-        Size                                                        expectedSizeFindNotOfAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAll,
-        Size                                                        expectedSizeFindNotOfAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAllAndMore,
-        bool                                                        expectedResultFindFirstNotOfNone,
-        __ElementType                                       const & expectedFindFirstNotOfNone,
-        bool                                                        expectedResultFindFirstNotOfOne,
-        __ElementType                                       const & expectedFindFirstNotOfOne,
-        bool                                                        expectedResultFindFirstNotOfMore,
-        __ElementType                                       const & expectedFindFirstNotOfMore,
-        bool                                                        expectedResultFindFirstNotOfAll,
-        __ElementType                                       const & expectedFindFirstNotOfAll,
-        bool                                                        expectedResultFindFirstNotOfAllAndMore,
-        __ElementType                                       const & expectedFindFirstNotOfAllAndMore,
-        bool                                                        expectedResultFindLastNotOfNone,
-        __ElementType                                       const & expectedFindLastNotOfNone,
-        bool                                                        expectedResultFindLastNotOfOne,
-        __ElementType                                       const & expectedFindLastNotOfOne,
-        bool                                                        expectedResultFindLastNotOfMore,
-        __ElementType                                       const & expectedFindLastNotOfMore,
-        bool                                                        expectedResultFindLastNotOfAll,
-        __ElementType                                       const & expectedFindLastNotOfAll,
-        bool                                                        expectedResultFindLastNotOfAllAndMore,
-        __ElementType                                       const & expectedFindLastNotOfAllAndMore,
-        Size                                                        expectedSizeFindAllNotOfNone,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfNone,
-        Size                                                        expectedSizeFindAllNotOfOne,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfOne,
-        Size                                                        expectedSizeFindAllNotOfMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfMore,
-        Size                                                        expectedSizeFindAllNotOfAll,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAll,
-        Size                                                        expectedSizeFindAllNotOfAllAndMore,
-        __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAllAndMore
-) -> bool {
-
-    pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
-    using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingNone-cpp-xx : MCTC-00701-FO-findOfStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00701 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00701;
-    auto                                                        expectedSize00701 = expectedSizeFindOfNone;
-    auto                                                const & expected00701 = expectedFindOfNone;
-    auto                                                const & target00701 = none;
-
-    (void) collection00701.findOf ( limit, storeIn00701, target00701 );
-    if ( storeIn00701.size() != expectedSize00701 || ! iteratorListEqualityCheckNoPred ( storeIn00701, expected00701 ) ) {
-        pTestLib->logError( "'MCTC-00701-FO-findOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00701-FO-findOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingOne-cpp-xx : MCTC-00702-FO-findOfStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00702 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00702;
-    auto                                                        expectedSize00702 = expectedSizeFindOfOne;
-    auto                                                const & expected00702 = expectedFindOfOne;
-    auto                                                const & target00702 = one;
-
-    (void) collection00702.findOf ( limit, storeIn00702, target00702 );
-    if ( storeIn00702.size() != expectedSize00702 || ! iteratorListEqualityCheckNoPred ( storeIn00702, expected00702 ) ) {
-        pTestLib->logError( "'MCTC-00702-FO-findOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00702-FO-findOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00703 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00703;
-    auto                                                        expectedSize00703 = expectedSizeFindOfMoreLessThanLimit;
-    auto                                                const & expected00703 = expectedFindOfMoreLessThanLimit;
-    auto                                                const & target00703 = moreLessThanLimit;
-
-    (void) collection00703.findOf ( limit, storeIn00703, target00703 );
-    if ( storeIn00703.size() != expectedSize00703 || ! iteratorListEqualityCheckNoPred ( storeIn00703, expected00703 ) ) {
-        pTestLib->logError( "'MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMore-cpp-xx : MCTC-00704-FO-findOfStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00704 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00704;
-    auto                                                        expectedSize00704 = expectedSizeFindOfMore;
-    auto                                                const & expected00704 = expectedFindOfMore;
-    auto                                                const & target00704 = more;
-
-    (void) collection00704.findOf ( limit, storeIn00704, target00704 );
-    if ( storeIn00704.size() != expectedSize00704 || ! iteratorListEqualityCheckNoPred ( storeIn00704, expected00704 ) ) {
-        pTestLib->logError( "'MCTC-00704-FO-findOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00704-FO-findOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00705 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00705;
-    auto                                                        expectedSize00705 = expectedSizeFindOfMoreMoreThanLimit;
-    auto                                                const & expected00705 = expectedFindOfMoreMoreThanLimit;
-    auto                                                const & target00705 = moreMoreThanLimit;
-
-    (void) collection00705.findOf ( limit, storeIn00705, target00705 );
-    if ( storeIn00705.size() != expectedSize00705 || ! iteratorListEqualityCheckNoPred ( storeIn00705, expected00705 ) ) {
-        pTestLib->logError( "'MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAll-cpp-xx : MCTC-00706-FO-findOfStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00706 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00706;
-    auto                                                        expectedSize00706 = expectedSizeFindOfAll;
-    auto                                                const & expected00706 = expectedFindOfAll;
-    auto                                                const & target00706 = all;
-
-    (void) collection00706.findOf ( limit, storeIn00706, target00706 );
-    if ( storeIn00706.size() != expectedSize00706 || ! iteratorListEqualityCheckNoPred ( storeIn00706, expected00706 ) ) {
-        pTestLib->logError( "'MCTC-00706-FO-findOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00706-FO-findOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00707-FO-findOfStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00707 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00707;
-    auto                                                        expectedSize00707 = expectedSizeFindOfAllAndMore;
-    auto                                                const & expected00707 = expectedFindOfAllAndMore;
-    auto                                                const & target00707 = allAndMore;
-
-    (void) collection00707.findOf ( limit, storeIn00707, target00707 );
-    if ( storeIn00707.size() != expectedSize00707 || ! iteratorListEqualityCheckNoPred ( storeIn00707, expected00707 ) ) {
-        pTestLib->logError( "'MCTC-00707-FO-findOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00707-FO-findOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingNone-cpp-xx : MCTC-00708-FO-findOfReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00708 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00708;
-    auto                                                        expectedSize00708 = expectedSizeFindOfNone;
-    auto                                                const & expected00708 = expectedFindOfNone;
-    auto                                                const & target00708 = none;
-
-    storeIn00708 = collection00708.template findOf < __ComparisonEquivalent > ( limit, target00708 );
-    if ( storeIn00708.size() != expectedSize00708 || ! iteratorListEqualityCheckNoPred ( storeIn00708, expected00708 ) ) {
-        pTestLib->logError( "'MCTC-00708-FO-findOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00708-FO-findOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingOne-cpp-xx : MCTC-00709-FO-findOfReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00709 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00709;
-    auto                                                        expectedSize00709 = expectedSizeFindOfOne;
-    auto                                                const & expected00709 = expectedFindOfOne;
-    auto                                                const & target00709 = one;
-
-    storeIn00709 = collection00709.template findOf < __ComparisonEquivalent > ( limit, target00709 );
-    if ( storeIn00709.size() != expectedSize00709 || ! iteratorListEqualityCheckNoPred ( storeIn00709, expected00709 ) ) {
-        pTestLib->logError( "'MCTC-00709-FO-findOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00709-FO-findOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00710 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00710;
-    auto                                                        expectedSize00710 = expectedSizeFindOfMoreLessThanLimit;
-    auto                                                const & expected00710 = expectedFindOfMoreLessThanLimit;
-    auto                                                const & target00710 = moreLessThanLimit;
-
-    storeIn00710 = collection00710.template findOf < __ComparisonEquivalent > ( limit, target00710 );
-    if ( storeIn00710.size() != expectedSize00710 || ! iteratorListEqualityCheckNoPred ( storeIn00710, expected00710 ) ) {
-        pTestLib->logError( "'MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMore-cpp-xx : MCTC-00711-FO-findOfReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00711 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00711;
-    auto                                                        expectedSize00711 = expectedSizeFindOfMore;
-    auto                                                const & expected00711 = expectedFindOfMore;
-    auto                                                const & target00711 = more;
-
-    storeIn00711 = collection00711.template findOf < __ComparisonEquivalent > ( limit, target00711 );
-    if ( storeIn00711.size() != expectedSize00711 || ! iteratorListEqualityCheckNoPred ( storeIn00711, expected00711 ) ) {
-        pTestLib->logError( "'MCTC-00711-FO-findOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00711-FO-findOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00712 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00712;
-    auto                                                        expectedSize00712 = expectedSizeFindOfMoreMoreThanLimit;
-    auto                                                const & expected00712 = expectedFindOfMoreMoreThanLimit;
-    auto                                                const & target00712 = moreMoreThanLimit;
-
-    storeIn00712 = collection00712.template findOf < __ComparisonEquivalent > ( limit, target00712 );
-    if ( storeIn00712.size() != expectedSize00712 || ! iteratorListEqualityCheckNoPred ( storeIn00712, expected00712 ) ) {
-        pTestLib->logError( "'MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAll-cpp-xx : MCTC-00713-FO-findOfReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00713 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00713;
-    auto                                                        expectedSize00713 = expectedSizeFindOfAll;
-    auto                                                const & expected00713 = expectedFindOfAll;
-    auto                                                const & target00713 = all;
-
-    storeIn00713 = collection00713.template findOf < __ComparisonEquivalent > ( limit, target00713 );
-    if ( storeIn00713.size() != expectedSize00713 || ! iteratorListEqualityCheckNoPred ( storeIn00713, expected00713 ) ) {
-        pTestLib->logError( "'MCTC-00713-FO-findOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00713-FO-findOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00714-FO-findOfReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00714 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00714;
-    auto                                                        expectedSize00714 = expectedSizeFindOfAllAndMore;
-    auto                                                const & expected00714 = expectedFindOfAllAndMore;
-    auto                                                const & target00714 = allAndMore;
-
-    storeIn00714 = collection00714.template findOf < __ComparisonEquivalent > ( limit, target00714 );
-    if ( storeIn00714.size() != expectedSize00714 || ! iteratorListEqualityCheckNoPred ( storeIn00714, expected00714 ) ) {
-        pTestLib->logError( "'MCTC-00714-FO-findOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00714-FO-findOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstOfMatchingNone-cpp-xx : MCTC-00715-FO-findFirstOfMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00715 = underTest;
-    Iterator                                               result00715;
-    auto                                                        expectedResult00715 = expectedResultFindFirstOfNone;
-    auto                                                const & expected00715 = expectedFindFirstOfNone;
-    auto                                                const & target00715 = none;
-
-    result00715 = collection00715.findFirstOf ( target00715 );
-    if ( ( result00715 != collection00715.end() ) != expectedResult00715 || expectedResult00715 && expected00715 != * result00715 ) {
-        pTestLib->logError( "'MCTC-00715-FO-findFirstOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00715-FO-findFirstOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstOfMatchingOne-cpp-xx : MCTC-00716-FO-findFirstOfMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00716 = underTest;
-    Iterator                                               result00716;
-    auto                                                        expectedResult00716 = expectedResultFindFirstOfOne;
-    auto                                                const & expected00716 = expectedFindFirstOfOne;
-    auto                                                const & target00716 = one;
-
-    result00716 = collection00716.findFirstOf ( target00716 );
-    if ( ( result00716 != collection00716.end() ) != expectedResult00716 || expectedResult00716 && expected00716 != * result00716 ) {
-        pTestLib->logError( "'MCTC-00716-FO-findFirstOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00716-FO-findFirstOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstOfMatchingMore-cpp-xx : MCTC-00717-FO-findFirstOfMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00717 = underTest;
-    Iterator                                               result00717;
-    auto                                                        expectedResult00717 = expectedResultFindFirstOfMore;
-    auto                                                const & expected00717 = expectedFindFirstOfMore;
-    auto                                                const & target00717 = more;
-
-    result00717 = collection00717.findFirstOf ( target00717 );
-    if ( ( result00717 != collection00717.end() ) != expectedResult00717 || expectedResult00717 && expected00717 != * result00717 ) {
-        pTestLib->logError( "'MCTC-00717-FO-findFirstOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00717-FO-findFirstOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAll-cpp-xx : MCTC-00718-FO-findFirstOfMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00718 = underTest;
-    Iterator                                               result00718;
-    auto                                                        expectedResult00718 = expectedResultFindFirstOfAll;
-    auto                                                const & expected00718 = expectedFindFirstOfAll;
-    auto                                                const & target00718 = all;
-
-    result00718 = collection00718.findFirstOf ( target00718 );
-    if ( ( result00718 != collection00718.end() ) != expectedResult00718 || expectedResult00718 && expected00718 != * result00718 ) {
-        pTestLib->logError( "'MCTC-00718-FO-findFirstOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00718-FO-findFirstOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAllAndMore-cpp-xx : MCTC-00719-FO-findFirstOfMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00719 = underTest;
-    Iterator                                               result00719;
-    auto                                                        expectedResult00719 = expectedResultFindFirstOfAllAndMore;
-    auto                                                const & expected00719 = expectedFindFirstOfAllAndMore;
-    auto                                                const & target00719 = allAndMore;
-
-    result00719 = collection00719.findFirstOf ( target00719 );
-    if ( ( result00719 != collection00719.end() ) != expectedResult00719 || expectedResult00719 && expected00719 != * result00719 ) {
-        pTestLib->logError( "'MCTC-00719-FO-findFirstOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00719-FO-findFirstOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingNone-cpp-xx : MCTC-00720-FO-findLastOfMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00720 = underTest;
-    Iterator                                               result00720;
-    auto                                                        expectedResult00720 = expectedResultFindLastOfNone;
-    auto                                                const & expected00720 = expectedFindLastOfNone;
-    auto                                                const & target00720 = none;
-
-    result00720 = collection00720.findLastOf ( target00720 );
-    if ( ( result00720 != collection00720.end() ) != expectedResult00720 || expectedResult00720 && expected00720 != * result00720 ) {
-        pTestLib->logError( "'MCTC-00720-FO-findLastOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00720-FO-findLastOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingOne-cpp-xx : MCTC-00721-FO-findLastOfMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00721 = underTest;
-    Iterator                                               result00721;
-    auto                                                        expectedResult00721 = expectedResultFindLastOfOne;
-    auto                                                const & expected00721 = expectedFindLastOfOne;
-    auto                                                const & target00721 = one;
-
-    result00721 = collection00721.findLastOf ( target00721 );
-    if ( ( result00721 != collection00721.end() ) != expectedResult00721 || expectedResult00721 && expected00721 != * result00721 ) {
-        pTestLib->logError( "'MCTC-00721-FO-findLastOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00721-FO-findLastOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingMore-cpp-xx : MCTC-00722-FO-findLastOfMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00722 = underTest;
-    Iterator                                               result00722;
-    auto                                                        expectedResult00722 = expectedResultFindLastOfMore;
-    auto                                                const & expected00722 = expectedFindLastOfMore;
-    auto                                                const & target00722 = more;
-
-    result00722 = collection00722.findLastOf ( target00722 );
-    if ( ( result00722 != collection00722.end() ) != expectedResult00722 || expectedResult00722 && expected00722 != * result00722 ) {
-        pTestLib->logError( "'MCTC-00722-FO-findLastOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00722-FO-findLastOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingAll-cpp-xx : MCTC-00723-FO-findLastOfMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00723 = underTest;
-    Iterator                                               result00723;
-    auto                                                        expectedResult00723 = expectedResultFindLastOfAll;
-    auto                                                const & expected00723 = expectedFindLastOfAll;
-    auto                                                const & target00723 = all;
-
-    result00723 = collection00723.findLastOf ( target00723 );
-    if ( ( result00723 != collection00723.end() ) != expectedResult00723 || expectedResult00723 && expected00723 != * result00723 ) {
-        pTestLib->logError( "'MCTC-00723-FO-findLastOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00723-FO-findLastOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-cpp-xx : MCTC-00724-FO-findLastOfMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00724 = underTest;
-    Iterator                                               result00724;
-    auto                                                        expectedResult00724 = expectedResultFindLastOfAllAndMore;
-    auto                                                const & expected00724 = expectedFindLastOfAllAndMore;
-    auto                                                const & target00724 = allAndMore;
-
-    result00724 = collection00724.findLastOf ( target00724 );
-    if ( ( result00724 != collection00724.end() ) != expectedResult00724 || expectedResult00724 && expected00724 != * result00724 ) {
-        pTestLib->logError( "'MCTC-00724-FO-findLastOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00724-FO-findLastOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingNone-cpp-xx : MCTC-00725-FO-findAllOfStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00725 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00725;
-    auto                                                        expectedSize00725 = expectedSizeFindAllOfNone;
-    auto                                                const & expected00725 = expectedFindAllOfNone;
-    auto                                                const & target00725 = none;
-
-    (void) collection00725.findAllOf ( storeIn00725, target00725 );
-    if ( storeIn00725.size() != expectedSize00725 || ! iteratorListEqualityCheckNoPred ( storeIn00725, expected00725 ) ) {
-        pTestLib->logError( "'MCTC-00725-FO-findAllOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00725-FO-findAllOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingOne-cpp-xx : MCTC-00726-FO-findAllOfStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00726 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00726;
-    auto                                                        expectedSize00726 = expectedSizeFindAllOfOne;
-    auto                                                const & expected00726 = expectedFindAllOfOne;
-    auto                                                const & target00726 = one;
-
-    (void) collection00726.findAllOf ( storeIn00726, target00726 );
-    if ( storeIn00726.size() != expectedSize00726 || ! iteratorListEqualityCheckNoPred ( storeIn00726, expected00726 ) ) {
-        pTestLib->logError( "'MCTC-00726-FO-findAllOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00726-FO-findAllOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingMore-cpp-xx : MCTC-00727-FO-findAllOfStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00727 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00727;
-    auto                                                        expectedSize00727 = expectedSizeFindAllOfMore;
-    auto                                                const & expected00727 = expectedFindAllOfMore;
-    auto                                                const & target00727 = more;
-
-    (void) collection00727.findAllOf ( storeIn00727, target00727 );
-    if ( storeIn00727.size() != expectedSize00727 || ! iteratorListEqualityCheckNoPred ( storeIn00727, expected00727 ) ) {
-        pTestLib->logError( "'MCTC-00727-FO-findAllOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00727-FO-findAllOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAll-cpp-xx : MCTC-00728-FO-findAllOfStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00728 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00728;
-    auto                                                        expectedSize00728 = expectedSizeFindAllOfAll;
-    auto                                                const & expected00728 = expectedFindAllOfAll;
-    auto                                                const & target00728 = all;
-
-    (void) collection00728.findAllOf ( storeIn00728, target00728 );
-    if ( storeIn00728.size() != expectedSize00728 || ! iteratorListEqualityCheckNoPred ( storeIn00728, expected00728 ) ) {
-        pTestLib->logError( "'MCTC-00728-FO-findAllOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00728-FO-findAllOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00729 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00729;
-    auto                                                        expectedSize00729 = expectedSizeFindAllOfAllAndMore;
-    auto                                                const & expected00729 = expectedFindAllOfAllAndMore;
-    auto                                                const & target00729 = allAndMore;
-
-    (void) collection00729.findAllOf ( storeIn00729, target00729 );
-    if ( storeIn00729.size() != expectedSize00729 || ! iteratorListEqualityCheckNoPred ( storeIn00729, expected00729 ) ) {
-        pTestLib->logError( "'MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingNone-cpp-xx : MCTC-00730-FO-findAllOfReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00730 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00730;
-    auto                                                        expectedSize00730 = expectedSizeFindAllOfNone;
-    auto                                                const & expected00730 = expectedFindAllOfNone;
-    auto                                                const & target00730 = none;
-
-    storeIn00730 = collection00730.template findAllOf < __ComparisonEquivalent > ( target00730 );
-    if ( storeIn00730.size() != expectedSize00730 || ! iteratorListEqualityCheckNoPred ( storeIn00730, expected00730 ) ) {
-        pTestLib->logError( "'MCTC-00730-FO-findAllOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00730-FO-findAllOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingOne-cpp-xx : MCTC-00731-FO-findAllOfReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00731 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00731;
-    auto                                                        expectedSize00731 = expectedSizeFindAllOfOne;
-    auto                                                const & expected00731 = expectedFindAllOfOne;
-    auto                                                const & target00731 = one;
-
-    storeIn00731 = collection00731.template findAllOf < __ComparisonEquivalent > ( target00731 );
-    if ( storeIn00731.size() != expectedSize00731 || ! iteratorListEqualityCheckNoPred ( storeIn00731, expected00731 ) ) {
-        pTestLib->logError( "'MCTC-00731-FO-findAllOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00731-FO-findAllOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingMore-cpp-xx : MCTC-00732-FO-findAllOfReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00732 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00732;
-    auto                                                        expectedSize00732 = expectedSizeFindAllOfMore;
-    auto                                                const & expected00732 = expectedFindAllOfMore;
-    auto                                                const & target00732 = more;
-
-    storeIn00732 = collection00732.template findAllOf < __ComparisonEquivalent > ( target00732 );
-    if ( storeIn00732.size() != expectedSize00732 || ! iteratorListEqualityCheckNoPred ( storeIn00732, expected00732 ) ) {
-        pTestLib->logError( "'MCTC-00732-FO-findAllOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00732-FO-findAllOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAll-cpp-xx : MCTC-00733-FO-findAllOfReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00733 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00733;
-    auto                                                        expectedSize00733 = expectedSizeFindAllOfAll;
-    auto                                                const & expected00733 = expectedFindAllOfAll;
-    auto                                                const & target00733 = all;
-
-    storeIn00733 = collection00733.template findAllOf < __ComparisonEquivalent > ( target00733 );
-    if ( storeIn00733.size() != expectedSize00733 || ! iteratorListEqualityCheckNoPred ( storeIn00733, expected00733 ) ) {
-        pTestLib->logError( "'MCTC-00733-FO-findAllOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00733-FO-findAllOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00734 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00734;
-    auto                                                        expectedSize00734 = expectedSizeFindAllOfAllAndMore;
-    auto                                                const & expected00734 = expectedFindAllOfAllAndMore;
-    auto                                                const & target00734 = allAndMore;
-
-    storeIn00734 = collection00734.template findAllOf < __ComparisonEquivalent > ( target00734 );
-    if ( storeIn00734.size() != expectedSize00734 || ! iteratorListEqualityCheckNoPred ( storeIn00734, expected00734 ) ) {
-        pTestLib->logError( "'MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingNone-cpp-xx : MCTC-00735-FO-findNotOfStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00735 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00735;
-    auto                                                        expectedSize00735 = expectedSizeFindNotOfNone;
-    auto                                                const & expected00735 = expectedFindNotOfNone;
-    auto                                                const & target00735 = none;
-
-    (void) collection00735.findNotOf ( limit, storeIn00735, target00735 );
-    if ( storeIn00735.size() != expectedSize00735 || ! iteratorListEqualityCheckNoPred ( storeIn00735, expected00735 ) ) {
-        pTestLib->logError( "'MCTC-00735-FO-findNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00735-FO-findNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingOne-cpp-xx : MCTC-00736-FO-findNotOfStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00736 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00736;
-    auto                                                        expectedSize00736 = expectedSizeFindNotOfOne;
-    auto                                                const & expected00736 = expectedFindNotOfOne;
-    auto                                                const & target00736 = one;
-
-    (void) collection00736.findNotOf ( limit, storeIn00736, target00736 );
-    if ( storeIn00736.size() != expectedSize00736 || ! iteratorListEqualityCheckNoPred ( storeIn00736, expected00736 ) ) {
-        pTestLib->logError( "'MCTC-00736-FO-findNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00736-FO-findNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00737 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00737;
-    auto                                                        expectedSize00737 = expectedSizeFindNotOfMoreLessThanLimit;
-    auto                                                const & expected00737 = expectedFindNotOfMoreLessThanLimit;
-    auto                                                const & target00737 = moreLessThanLimit;
-
-    (void) collection00737.findNotOf ( limit, storeIn00737, target00737 );
-    if ( storeIn00737.size() != expectedSize00737 || ! iteratorListEqualityCheckNoPred ( storeIn00737, expected00737 ) ) {
-        pTestLib->logError( "'MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMore-cpp-xx : MCTC-00738-FO-findNotOfStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00738 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00738;
-    auto                                                        expectedSize00738 = expectedSizeFindNotOfMore;
-    auto                                                const & expected00738 = expectedFindNotOfMore;
-    auto                                                const & target00738 = more;
-
-    (void) collection00738.findNotOf ( limit, storeIn00738, target00738 );
-    if ( storeIn00738.size() != expectedSize00738 || ! iteratorListEqualityCheckNoPred ( storeIn00738, expected00738 ) ) {
-        pTestLib->logError( "'MCTC-00738-FO-findNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00738-FO-findNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00739 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00739;
-    auto                                                        expectedSize00739 = expectedSizeFindNotOfMoreMoreThanLimit;
-    auto                                                const & expected00739 = expectedFindNotOfMoreMoreThanLimit;
-    auto                                                const & target00739 = moreMoreThanLimit;
-
-    (void) collection00739.findNotOf ( limit, storeIn00739, target00739 );
-    if ( storeIn00739.size() != expectedSize00739 || ! iteratorListEqualityCheckNoPred ( storeIn00739, expected00739 ) ) {
-        pTestLib->logError( "'MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAll-cpp-xx : MCTC-00740-FO-findNotOfStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00740 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00740;
-    auto                                                        expectedSize00740 = expectedSizeFindNotOfAll;
-    auto                                                const & expected00740 = expectedFindNotOfAll;
-    auto                                                const & target00740 = all;
-
-    (void) collection00740.findNotOf ( limit, storeIn00740, target00740 );
-    if ( storeIn00740.size() != expectedSize00740 || ! iteratorListEqualityCheckNoPred ( storeIn00740, expected00740 ) ) {
-        pTestLib->logError( "'MCTC-00740-FO-findNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00740-FO-findNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00741 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00741;
-    auto                                                        expectedSize00741 = expectedSizeFindNotOfAllAndMore;
-    auto                                                const & expected00741 = expectedFindNotOfAllAndMore;
-    auto                                                const & target00741 = allAndMore;
-
-    (void) collection00741.findNotOf ( limit, storeIn00741, target00741 );
-    if ( storeIn00741.size() != expectedSize00741 || ! iteratorListEqualityCheckNoPred ( storeIn00741, expected00741 ) ) {
-        pTestLib->logError( "'MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingNone-cpp-xx : MCTC-00742-FO-findNotOfReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00742 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00742;
-    auto                                                        expectedSize00742 = expectedSizeFindNotOfNone;
-    auto                                                const & expected00742 = expectedFindNotOfNone;
-    auto                                                const & target00742 = none;
-
-    storeIn00742 = collection00742.template findNotOf < __ComparisonEquivalent > ( limit, target00742 );
-    if ( storeIn00742.size() != expectedSize00742 || ! iteratorListEqualityCheckNoPred ( storeIn00742, expected00742 ) ) {
-        pTestLib->logError( "'MCTC-00742-FO-findNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00742-FO-findNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingOne-cpp-xx : MCTC-00743-FO-findNotOfReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00743 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00743;
-    auto                                                        expectedSize00743 = expectedSizeFindNotOfOne;
-    auto                                                const & expected00743 = expectedFindNotOfOne;
-    auto                                                const & target00743 = one;
-
-    storeIn00743 = collection00743.template findNotOf < __ComparisonEquivalent > ( limit, target00743 );
-    if ( storeIn00743.size() != expectedSize00743 || ! iteratorListEqualityCheckNoPred ( storeIn00743, expected00743 ) ) {
-        pTestLib->logError( "'MCTC-00743-FO-findNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00743-FO-findNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00744 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00744;
-    auto                                                        expectedSize00744 = expectedSizeFindNotOfMoreLessThanLimit;
-    auto                                                const & expected00744 = expectedFindNotOfMoreLessThanLimit;
-    auto                                                const & target00744 = moreLessThanLimit;
-
-    storeIn00744 = collection00744.template findNotOf < __ComparisonEquivalent > ( limit, target00744 );
-    if ( storeIn00744.size() != expectedSize00744 || ! iteratorListEqualityCheckNoPred ( storeIn00744, expected00744 ) ) {
-        pTestLib->logError( "'MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMore-cpp-xx : MCTC-00745-FO-findNotOfReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00745 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00745;
-    auto                                                        expectedSize00745 = expectedSizeFindNotOfMore;
-    auto                                                const & expected00745 = expectedFindNotOfMore;
-    auto                                                const & target00745 = more;
-
-    storeIn00745 = collection00745.template findNotOf < __ComparisonEquivalent > ( limit, target00745 );
-    if ( storeIn00745.size() != expectedSize00745 || ! iteratorListEqualityCheckNoPred ( storeIn00745, expected00745 ) ) {
-        pTestLib->logError( "'MCTC-00745-FO-findNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00745-FO-findNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00746 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00746;
-    auto                                                        expectedSize00746 = expectedSizeFindNotOfMoreMoreThanLimit;
-    auto                                                const & expected00746 = expectedFindNotOfMoreMoreThanLimit;
-    auto                                                const & target00746 = moreMoreThanLimit;
-
-    storeIn00746 = collection00746.template findNotOf < __ComparisonEquivalent > ( limit, target00746 );
-    if ( storeIn00746.size() != expectedSize00746 || ! iteratorListEqualityCheckNoPred ( storeIn00746, expected00746 ) ) {
-        pTestLib->logError( "'MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAll-cpp-xx : MCTC-00747-FO-findNotOfReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00747 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00747;
-    auto                                                        expectedSize00747 = expectedSizeFindNotOfAll;
-    auto                                                const & expected00747 = expectedFindNotOfAll;
-    auto                                                const & target00747 = all;
-
-    storeIn00747 = collection00747.template findNotOf < __ComparisonEquivalent > ( limit, target00747 );
-    if ( storeIn00747.size() != expectedSize00747 || ! iteratorListEqualityCheckNoPred ( storeIn00747, expected00747 ) ) {
-        pTestLib->logError( "'MCTC-00747-FO-findNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00747-FO-findNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00748 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00748;
-    auto                                                        expectedSize00748 = expectedSizeFindNotOfAllAndMore;
-    auto                                                const & expected00748 = expectedFindNotOfAllAndMore;
-    auto                                                const & target00748 = allAndMore;
-
-    storeIn00748 = collection00748.template findNotOf < __ComparisonEquivalent > ( limit, target00748 );
-    if ( storeIn00748.size() != expectedSize00748 || ! iteratorListEqualityCheckNoPred ( storeIn00748, expected00748 ) ) {
-        pTestLib->logError( "'MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingNone-cpp-xx : MCTC-00749-FO-findFirstNotOfMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00749 = underTest;
-    Iterator                                               result00749;
-    auto                                                        expectedResult00749 = expectedResultFindFirstNotOfNone;
-    auto                                                const & expected00749 = expectedFindFirstNotOfNone;
-    auto                                                const & target00749 = none;
-
-    result00749 = collection00749.findFirstNotOf ( target00749 );
-    if ( ( result00749 != collection00749.end() ) != expectedResult00749 || expectedResult00749 && expected00749 != * result00749 ) {
-        pTestLib->logError( "'MCTC-00749-FO-findFirstNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00749-FO-findFirstNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingOne-cpp-xx : MCTC-00750-FO-findFirstNotOfMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00750 = underTest;
-    Iterator                                               result00750;
-    auto                                                        expectedResult00750 = expectedResultFindFirstNotOfOne;
-    auto                                                const & expected00750 = expectedFindFirstNotOfOne;
-    auto                                                const & target00750 = one;
-
-    result00750 = collection00750.findFirstNotOf ( target00750 );
-    if ( ( result00750 != collection00750.end() ) != expectedResult00750 || expectedResult00750 && expected00750 != * result00750 ) {
-        pTestLib->logError( "'MCTC-00750-FO-findFirstNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00750-FO-findFirstNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingMore-cpp-xx : MCTC-00751-FO-findFirstNotOfMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00751 = underTest;
-    Iterator                                               result00751;
-    auto                                                        expectedResult00751 = expectedResultFindFirstNotOfMore;
-    auto                                                const & expected00751 = expectedFindFirstNotOfMore;
-    auto                                                const & target00751 = more;
-
-    result00751 = collection00751.findFirstNotOf ( target00751 );
-    if ( ( result00751 != collection00751.end() ) != expectedResult00751 || expectedResult00751 && expected00751 != * result00751 ) {
-        pTestLib->logError( "'MCTC-00751-FO-findFirstNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00751-FO-findFirstNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAll-cpp-xx : MCTC-00752-FO-findFirstNotOfMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00752 = underTest;
-    Iterator                                               result00752;
-    auto                                                        expectedResult00752 = expectedResultFindFirstNotOfAll;
-    auto                                                const & expected00752 = expectedFindFirstNotOfAll;
-    auto                                                const & target00752 = all;
-
-    result00752 = collection00752.findFirstNotOf ( target00752 );
-    if ( ( result00752 != collection00752.end() ) != expectedResult00752 || expectedResult00752 && expected00752 != * result00752 ) {
-        pTestLib->logError( "'MCTC-00752-FO-findFirstNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00752-FO-findFirstNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAllAndMore-cpp-xx : MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00753 = underTest;
-    Iterator                                               result00753;
-    auto                                                        expectedResult00753 = expectedResultFindFirstNotOfAllAndMore;
-    auto                                                const & expected00753 = expectedFindFirstNotOfAllAndMore;
-    auto                                                const & target00753 = allAndMore;
-
-    result00753 = collection00753.findFirstNotOf ( target00753 );
-    if ( ( result00753 != collection00753.end() ) != expectedResult00753 || expectedResult00753 && expected00753 != * result00753 ) {
-        pTestLib->logError( "'MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingNone-cpp-xx : MCTC-00754-FO-findLastNotOfMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00754 = underTest;
-    Iterator                                               result00754;
-    auto                                                        expectedResult00754 = expectedResultFindLastNotOfNone;
-    auto                                                const & expected00754 = expectedFindLastNotOfNone;
-    auto                                                const & target00754 = none;
-
-    result00754 = collection00754.findLastNotOf ( target00754 );
-    if ( ( result00754 != collection00754.end() ) != expectedResult00754 || expectedResult00754 && expected00754 != * result00754 ) {
-        pTestLib->logError( "'MCTC-00754-FO-findLastNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00754-FO-findLastNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingOne-cpp-xx : MCTC-00755-FO-findLastNotOfMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00755 = underTest;
-    Iterator                                               result00755;
-    auto                                                        expectedResult00755 = expectedResultFindLastNotOfOne;
-    auto                                                const & expected00755 = expectedFindLastNotOfOne;
-    auto                                                const & target00755 = one;
-
-    result00755 = collection00755.findLastNotOf ( target00755 );
-    if ( ( result00755 != collection00755.end() ) != expectedResult00755 || expectedResult00755 && expected00755 != * result00755 ) {
-        pTestLib->logError( "'MCTC-00755-FO-findLastNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00755-FO-findLastNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingMore-cpp-xx : MCTC-00756-FO-findLastNotOfMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00756 = underTest;
-    Iterator                                               result00756;
-    auto                                                        expectedResult00756 = expectedResultFindLastNotOfMore;
-    auto                                                const & expected00756 = expectedFindLastNotOfMore;
-    auto                                                const & target00756 = more;
-
-    result00756 = collection00756.findLastNotOf ( target00756 );
-    if ( ( result00756 != collection00756.end() ) != expectedResult00756 || expectedResult00756 && expected00756 != * result00756 ) {
-        pTestLib->logError( "'MCTC-00756-FO-findLastNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00756-FO-findLastNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingAll-cpp-xx : MCTC-00757-FO-findLastNotOfMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00757 = underTest;
-    Iterator                                               result00757;
-    auto                                                        expectedResult00757 = expectedResultFindLastNotOfAll;
-    auto                                                const & expected00757 = expectedFindLastNotOfAll;
-    auto                                                const & target00757 = all;
-
-    result00757 = collection00757.findLastNotOf ( target00757 );
-    if ( ( result00757 != collection00757.end() ) != expectedResult00757 || expectedResult00757 && expected00757 != * result00757 ) {
-        pTestLib->logError( "'MCTC-00757-FO-findLastNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00757-FO-findLastNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-cpp-xx : MCTC-00758-FO-findLastNotOfMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00758 = underTest;
-    Iterator                                               result00758;
-    auto                                                        expectedResult00758 = expectedResultFindLastNotOfAllAndMore;
-    auto                                                const & expected00758 = expectedFindLastNotOfAllAndMore;
-    auto                                                const & target00758 = allAndMore;
-
-    result00758 = collection00758.findLastNotOf ( target00758 );
-    if ( ( result00758 != collection00758.end() ) != expectedResult00758 || expectedResult00758 && expected00758 != * result00758 ) {
-        pTestLib->logError( "'MCTC-00758-FO-findLastNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00758-FO-findLastNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingNone-cpp-xx : MCTC-00759-FO-findAllNotOfStoreInMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00759 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00759;
-    auto                                                        expectedSize00759 = expectedSizeFindAllNotOfNone;
-    auto                                                const & expected00759 = expectedFindAllNotOfNone;
-    auto                                                const & target00759 = none;
-
-    (void) collection00759.findAllNotOf ( storeIn00759, target00759 );
-    if ( storeIn00759.size() != expectedSize00759 || ! iteratorListEqualityCheckNoPred ( storeIn00759, expected00759 ) ) {
-        pTestLib->logError( "'MCTC-00759-FO-findAllNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00759-FO-findAllNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingOne-cpp-xx : MCTC-00760-FO-findAllNotOfStoreInMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00760 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00760;
-    auto                                                        expectedSize00760 = expectedSizeFindAllNotOfOne;
-    auto                                                const & expected00760 = expectedFindAllNotOfOne;
-    auto                                                const & target00760 = one;
-
-    (void) collection00760.findAllNotOf ( storeIn00760, target00760 );
-    if ( storeIn00760.size() != expectedSize00760 || ! iteratorListEqualityCheckNoPred ( storeIn00760, expected00760 ) ) {
-        pTestLib->logError( "'MCTC-00760-FO-findAllNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00760-FO-findAllNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingMore-cpp-xx : MCTC-00761-FO-findAllNotOfStoreInMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00761 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00761;
-    auto                                                        expectedSize00761 = expectedSizeFindAllNotOfMore;
-    auto                                                const & expected00761 = expectedFindAllNotOfMore;
-    auto                                                const & target00761 = more;
-
-    (void) collection00761.findAllNotOf ( storeIn00761, target00761 );
-    if ( storeIn00761.size() != expectedSize00761 || ! iteratorListEqualityCheckNoPred ( storeIn00761, expected00761 ) ) {
-        pTestLib->logError( "'MCTC-00761-FO-findAllNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00761-FO-findAllNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAll-cpp-xx : MCTC-00762-FO-findAllNotOfStoreInMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00762 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00762;
-    auto                                                        expectedSize00762 = expectedSizeFindAllNotOfAll;
-    auto                                                const & expected00762 = expectedFindAllNotOfAll;
-    auto                                                const & target00762 = all;
-
-    (void) collection00762.findAllNotOf ( storeIn00762, target00762 );
-    if ( storeIn00762.size() != expectedSize00762 || ! iteratorListEqualityCheckNoPred ( storeIn00762, expected00762 ) ) {
-        pTestLib->logError( "'MCTC-00762-FO-findAllNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00762-FO-findAllNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00763 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00763;
-    auto                                                        expectedSize00763 = expectedSizeFindAllNotOfAllAndMore;
-    auto                                                const & expected00763 = expectedFindAllNotOfAllAndMore;
-    auto                                                const & target00763 = allAndMore;
-
-    (void) collection00763.findAllNotOf ( storeIn00763, target00763 );
-    if ( storeIn00763.size() != expectedSize00763 || ! iteratorListEqualityCheckNoPred ( storeIn00763, expected00763 ) ) {
-        pTestLib->logError( "'MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingNone-cpp-xx : MCTC-00764-FO-findAllNotOfReturnedMatchingNone-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00764 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00764;
-    auto                                                        expectedSize00764 = expectedSizeFindAllNotOfNone;
-    auto                                                const & expected00764 = expectedFindAllNotOfNone;
-    auto                                                const & target00764 = none;
-
-    storeIn00764 = collection00764.template findAllNotOf < __ComparisonEquivalent > ( target00764 );
-    if ( storeIn00764.size() != expectedSize00764 || ! iteratorListEqualityCheckNoPred ( storeIn00764, expected00764 ) ) {
-        pTestLib->logError( "'MCTC-00764-FO-findAllNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00764-FO-findAllNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingOne-cpp-xx : MCTC-00765-FO-findAllNotOfReturnedMatchingOne-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00765 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00765;
-    auto                                                        expectedSize00765 = expectedSizeFindAllNotOfOne;
-    auto                                                const & expected00765 = expectedFindAllNotOfOne;
-    auto                                                const & target00765 = one;
-
-    storeIn00765 = collection00765.template findAllNotOf < __ComparisonEquivalent > ( target00765 );
-    if ( storeIn00765.size() != expectedSize00765 || ! iteratorListEqualityCheckNoPred ( storeIn00765, expected00765 ) ) {
-        pTestLib->logError( "'MCTC-00765-FO-findAllNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00765-FO-findAllNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingMore-cpp-xx : MCTC-00766-FO-findAllNotOfReturnedMatchingMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00766 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00766;
-    auto                                                        expectedSize00766 = expectedSizeFindAllNotOfMore;
-    auto                                                const & expected00766 = expectedFindAllNotOfMore;
-    auto                                                const & target00766 = more;
-
-    storeIn00766 = collection00766.template findAllNotOf < __ComparisonEquivalent > ( target00766 );
-    if ( storeIn00766.size() != expectedSize00766 || ! iteratorListEqualityCheckNoPred ( storeIn00766, expected00766 ) ) {
-        pTestLib->logError( "'MCTC-00766-FO-findAllNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00766-FO-findAllNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAll-cpp-xx : MCTC-00767-FO-findAllNotOfReturnedMatchingAll-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00767 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00767;
-    auto                                                        expectedSize00767 = expectedSizeFindAllNotOfAll;
-    auto                                                const & expected00767 = expectedFindAllNotOfAll;
-    auto                                                const & target00767 = all;
-
-    storeIn00767 = collection00767.template findAllNotOf < __ComparisonEquivalent > ( target00767 );
-    if ( storeIn00767.size() != expectedSize00767 || ! iteratorListEqualityCheckNoPred ( storeIn00767, expected00767 ) ) {
-        pTestLib->logError( "'MCTC-00767-FO-findAllNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00767-FO-findAllNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-cpp-xx */
-    cds :: MutableCollection < __ElementType > & collection00768 = underTest;
-    __ComparisonEquivalent < Iterator >                    storeIn00768;
-    auto                                                        expectedSize00768 = expectedSizeFindAllNotOfAllAndMore;
-    auto                                                const & expected00768 = expectedFindAllNotOfAllAndMore;
-    auto                                                const & target00768 = allAndMore;
-
-    storeIn00768 = collection00768.template findAllNotOf < __ComparisonEquivalent > ( target00768 );
-    if ( storeIn00768.size() != expectedSize00768 || ! iteratorListEqualityCheckNoPred ( storeIn00768, expected00768 ) ) {
-        pTestLib->logError( "'MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
-    }
-
-    return true;
-}
-
-/* MutableCollectionTestGroup-RandomInsertion-cpp-xx : MCTG-00800-RI-cpp-xx. MCTC-00801-RI to MCTC-008xx-RI */
-template <
-        typename __DerivedType,
-        typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
-        typename __FwdElementType1,
-        typename __FwdElementType2,
-        typename __FwdElementType3,
-        typename __ItType1,
-        typename __ItType2,
-        typename __ItType3,
-        typename ... __Pack
-> auto mutableCollectionTestGroupRandomInsertion (
-        Test * pTestLib,
-        __ElementType const & insertByCopy,
-        __ElementType && insertByMove,
-        __FwdElementType1 && insertByEmplace1,
-        __FwdElementType2 && insertByEmplace2,
-        __FwdElementType3 && insertByEmplace3,
-        cds :: MutableCollection < __ElementType > const & toInsertAll,
-        std :: initializer_list < __ElementType > const & toInsertAllList,
-        __ItType1 const & r1Begin, __ItType1 const & r1End,
-        __ItType2 const & r2Begin, __ItType2 const & r2End,
-        __ItType3 const & r3Begin, __ItType3 const & r3End,
-        cds :: MutableCollection < __ElementType > const & expectedInsertByCopy,
-        cds :: MutableCollection < __ElementType > const & expectedInsertByMove,
-        cds :: MutableCollection < __ElementType > const & expectedAfterAllInsertByEmplace,
-        cds :: MutableCollection < __ElementType > const & expectedAfterPackInsertion,
-        cds :: MutableCollection < __ElementType > const & expectedAfterInsertAll,
-        cds :: MutableCollection < __ElementType > const & expectedAfterInsertAllList,
-        cds :: MutableCollection < __ElementType > const & expectedAfterR1Insert,
-        cds :: MutableCollection < __ElementType > const & expectedAfterR2Insert,
-        cds :: MutableCollection < __ElementType > const & expectedAfterR3Insert,
-
-        __Pack && ... insertedPack
-) -> bool {
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByCopy-cpp-xx : MCTC-00801-RI-insertByCopy-cpp-xx */
-    __DerivedType RI00801;
-    cds :: MutableCollection < __ElementType > & baseRI00801 = RI00801;
-
-    baseRI00801.insert ( insertByCopy );
-    if ( ! RI00801.equals ( expectedInsertByCopy ) ) {
-        pTestLib->logError( "'MCTC-00801-RI-insertByCopy-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00801-RI-insertByCopy-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByMove-cpp-xx : MCTC-00802-RI-insertByMove-cpp-xx */
-    __DerivedType RI00802;
-    cds :: MutableCollection < __ElementType > & baseRI00802 = RI00802;
-
-    baseRI00802.insert ( std :: forward < __ElementType > ( insertByMove ) );
-    if ( ! RI00802.equals ( expectedInsertByMove ) ) {
-        pTestLib->logError( "'MCTC-00802-RI-insertByMove-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00802-RI-insertByMove-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByEmplace-cpp-xx : MCTC-00803-RI-insertByEmplace-cpp-xx */
-    __DerivedType RI00803;
-    cds :: MutableCollection < __ElementType > & baseRI00803 = RI00803;
-
-    baseRI00803.emplace ( std :: forward < __FwdElementType1 > ( insertByEmplace1 ) );
-    baseRI00803.emplace ( std :: forward < __FwdElementType2 > ( insertByEmplace2 ) );
-    baseRI00803.emplace ( std :: forward < __FwdElementType3 > ( insertByEmplace3 ) );
-    if ( ! RI00803.equals ( expectedAfterAllInsertByEmplace ) ) {
-        pTestLib->logError( "'MCTC-00803-RI-insertByEmplace-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00803-RI-insertByEmplace-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByPack-cpp-xx : MCTC-00804-RI-insertByPack-cpp-xx */
-    __DerivedType RI00804;
-    cds :: MutableCollection < __ElementType > & baseRI00804 = RI00804;
-
-    baseRI00804.insertAll ( std :: forward < __Pack > ( insertedPack ) ... );
-    if ( ! RI00804.equals ( expectedAfterPackInsertion ) ) {
-        pTestLib->logError( "'MCTC-00804-RI-insertByPack-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00804-RI-insertByPack-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllIterable-cpp-xx : MCTC-00805-RI-insertByInsertAllIterable-cpp-xx */
-    __DerivedType RI00805;
-    cds :: MutableCollection < __ElementType > & baseRI00805 = RI00805;
-
-    baseRI00805.insertAllOf ( toInsertAll );
-    if ( ! RI00805.equals ( expectedAfterInsertAll ) ) {
-        pTestLib->logError( "'MCTC-00805-RI-insertByInsertAllIterable-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00805-RI-insertByInsertAllIterable-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllList-cpp-xx : MCTC-00806-RI-insertByInsertAllList-cpp-xx */
-    __DerivedType RI00806;
-    cds :: MutableCollection < __ElementType > & baseRI00806 = RI00806;
-
-    baseRI00806.insertAllOf ( toInsertAllList );
-    if ( ! RI00806.equals ( expectedAfterInsertAllList ) ) {
-        pTestLib->logError( "'MCTC-00806-RI-insertByInsertAllList-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00806-RI-insertByInsertAllList-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByRange1-cpp-xx : MCTC-00807-RI-insertByRange1-cpp-xx */
-    __DerivedType RI00807;
-    cds :: MutableCollection < __ElementType > & baseRI00807 = RI00807;
-
-    baseRI00807.insertAllOf ( r1Begin, r1End );
-    if ( ! RI00807.equals ( expectedAfterR1Insert ) ) {
-        pTestLib->logError( "'MCTC-00807-RI-insertByRange1-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00807-RI-insertByRange1-" __CDS_cpplang_core_version_name "' OK" );
-    }
-
-    /* MutableCollectionTestCase-RandomInsertion-insertByRange2-cpp-xx : MCTC-00808-RI-insertByRange2-cpp-xx */
-    __DerivedType RI00808;
-    cds :: MutableCollection < __ElementType > & baseRI00808 = RI00808;
-
-    baseRI00808.insertAllOf ( r2Begin, r2End );
-    if ( ! RI00808.equals ( expectedAfterR2Insert ) ) {
-        pTestLib->logError( "'MCTC-00808-RI-insertByRange2-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00808-RI-insertByRange2-" __CDS_cpplang_core_version_name "' OK" );
-    }
 
-    /* MutableCollectionTestCase-RandomInsertion-insertByRange3-cpp-xx : MCTC-00809-RI-insertByRange3-cpp-xx */
-    __DerivedType RI00809;
-    cds :: MutableCollection < __ElementType > & baseRI00809 = RI00809;
-
-    baseRI00809.insertAllOf ( r3Begin, r3End );
-    if ( ! RI00809.equals ( expectedAfterR3Insert ) ) {
-        pTestLib->logError( "'MCTC-00809-RI-insertByRange3-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
-    } else {
-        pTestLib->logOK ( "'MCTC-00809-RI-insertByRange3-" __CDS_cpplang_core_version_name "' OK" );
+        for ( ; leftIt != leftEnd && rightIt != rightEnd; ++ leftIt, ++ rightIt ) {
+            if ( ! validator ( * ( * leftIt ) ) || ! validator ( * rightIt ) || * ( * leftIt ) != * rightIt ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    template <
+            typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
+            template < typename ... > class __CollectionType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
+            typename __IteratorType = typename cds :: Collection < __ElementType > :: Iterator /* NOLINT(bugprone-reserved-identifier) */
+    > auto iteratorListEqualityCheckNoPred (
+            __CollectionType < __IteratorType > const & iteratorCollection,
+            __CollectionType < __ElementType >  const & elementCollection
+    ) -> bool {
+
+        auto leftIt = iteratorCollection.begin();
+        auto leftEnd = iteratorCollection.end();
+        auto rightIt = elementCollection.begin();
+        auto rightEnd = elementCollection.end();
+
+        if ( iteratorCollection.size() != elementCollection.size() ) {
+            return false;
+        }
+
+        for ( ; leftIt != leftEnd && rightIt != rightEnd; ++ leftIt, ++ rightIt ) {
+            if ( * ( * leftIt ) != * rightIt ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
+    /* MutableCollectionTestGroup-FindThat-cpp-xx : MCTG-00600-FT-cpp-xx. MCTC-00601-FT to MCTC-00634-FT */
+    template <
+            typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+            typename __NonePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
+            typename __OnePredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
+            typename __MorePredicateLessThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
+            typename __MorePredicate,                                                               /* NOLINT(bugprone-reserved-identifier) */
+            typename __MorePredicateMoreThanLimit,                                                  /* NOLINT(bugprone-reserved-identifier) */
+            typename __AllPredicate,                                                                /* NOLINT(bugprone-reserved-identifier) */
+            typename __AllAndMorePredicate,                                                         /* NOLINT(bugprone-reserved-identifier) */
+            template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupFindThat (
+            Test                                                      * pTestLib,
+            cds :: MutableCollection < __ElementType > & underTest,
+            Size                                                        limit,
+            __NonePredicate                                     const & none,
+            __OnePredicate                                      const & one,
+            __MorePredicateLessThanLimit                        const & moreLessThanLimit,
+            __MorePredicate                                     const & more,
+            __MorePredicateMoreThanLimit                        const & moreMoreThanLimit,
+            __AllPredicate                                      const & all,
+            __AllAndMorePredicate                               const & allAndMore,
+            Size                                                        expectedSizeFindThatNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatNone,
+            Size                                                        expectedSizeFindThatOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatOne,
+            Size                                                        expectedSizeFindThatMoreLessThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatMoreLessThanLimit,
+            Size                                                        expectedSizeFindThatMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatMore,
+            Size                                                        expectedSizeFindThatMoreMoreThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatMoreMoreThanLimit,
+            Size                                                        expectedSizeFindThatAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatAll,
+            Size                                                        expectedSizeFindThatAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindThatAllAndMore,
+            bool                                                        expectedResultFindFirstThatNone,
+            __ElementType                                       const & expectedFindFirstThatNone,
+            bool                                                        expectedResultFindFirstThatOne,
+            __ElementType                                       const & expectedFindFirstThatOne,
+            bool                                                        expectedResultFindFirstThatMore,
+            __ElementType                                       const & expectedFindFirstThatMore,
+            bool                                                        expectedResultFindFirstThatAll,
+            __ElementType                                       const & expectedFindFirstThatAll,
+            bool                                                        expectedResultFindFirstThatAllAndMore,
+            __ElementType                                       const & expectedFindFirstThatAllAndMore,
+            bool                                                        expectedResultFindLastThatNone,
+            __ElementType                                       const & expectedFindLastThatNone,
+            bool                                                        expectedResultFindLastThatOne,
+            __ElementType                                       const & expectedFindLastThatOne,
+            bool                                                        expectedResultFindLastThatMore,
+            __ElementType                                       const & expectedFindLastThatMore,
+            bool                                                        expectedResultFindLastThatAll,
+            __ElementType                                       const & expectedFindLastThatAll,
+            bool                                                        expectedResultFindLastThatAllAndMore,
+            __ElementType                                       const & expectedFindLastThatAllAndMore,
+            Size                                                        expectedSizeFindAllThatNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatNone,
+            Size                                                        expectedSizeFindAllThatOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatOne,
+            Size                                                        expectedSizeFindAllThatMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatMore,
+            Size                                                        expectedSizeFindAllThatAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatAll,
+            Size                                                        expectedSizeFindAllThatAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllThatAllAndMore
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
+        using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingNone-cpp-xx : MCTC-00601-FT-findThatStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00601 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00601;
+        auto                                                        expectedSize00601 = expectedSizeFindThatNone;
+        auto                                                const & expected00601 = expectedFindThatNone;
+        auto                                                const & predicate00601 = none;
+
+        (void) collection00601.findThat ( limit, storeIn00601, predicate00601 );
+        if ( storeIn00601.size() != expectedSize00601 || ! iteratorListEqualityCheck ( predicate00601, storeIn00601, expected00601 ) ) {
+            pTestLib->logError( "'MCTC-00601-FT-findThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00601-FT-findThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingOne-cpp-xx : MCTC-00602-FT-findThatStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00602 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00602;
+        auto                                                        expectedSize00602 = expectedSizeFindThatOne;
+        auto                                                const & expected00602 = expectedFindThatOne;
+        auto                                                const & predicate00602 = one;
+
+        (void) collection00602.findThat ( limit, storeIn00602, predicate00602 );
+        if ( storeIn00602.size() != expectedSize00602 || ! iteratorListEqualityCheck ( predicate00602, storeIn00602, expected00602 ) ) {
+            pTestLib->logError( "'MCTC-00602-FT-findThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00602-FT-findThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00603 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00603;
+        auto                                                        expectedSize00603 = expectedSizeFindThatMoreLessThanLimit;
+        auto                                                const & expected00603 = expectedFindThatMoreLessThanLimit;
+        auto                                                const & predicate00603 = moreLessThanLimit;
+
+        (void) collection00603.findThat ( limit, storeIn00603, predicate00603 );
+        if ( storeIn00603.size() != expectedSize00603 || ! iteratorListEqualityCheck ( predicate00603, storeIn00603, expected00603 ) ) {
+            pTestLib->logError( "'MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00603-FT-findThatStoreInMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMore-cpp-xx : MCTC-00604-FT-findThatStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00604 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00604;
+        auto                                                        expectedSize00604 = expectedSizeFindThatMore;
+        auto                                                const & expected00604 = expectedFindThatMore;
+        auto                                                const & predicate00604 = more;
+
+        (void) collection00604.findThat ( limit, storeIn00604, predicate00604 );
+        if ( storeIn00604.size() != expectedSize00604 || ! iteratorListEqualityCheck ( predicate00604, storeIn00604, expected00604 ) ) {
+            pTestLib->logError( "'MCTC-00604-FT-findThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00604-FT-findThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00605 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00605;
+        auto                                                        expectedSize00605 = expectedSizeFindThatMoreMoreThanLimit;
+        auto                                                const & expected00605 = expectedFindThatMoreMoreThanLimit;
+        auto                                                const & predicate00605 = moreMoreThanLimit;
+
+        (void) collection00605.findThat ( limit, storeIn00605, predicate00605 );
+        if ( storeIn00605.size() != expectedSize00605 || ! iteratorListEqualityCheck ( predicate00605, storeIn00605, expected00605 ) ) {
+            pTestLib->logError( "'MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00605-FT-findThatStoreInMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAll-cpp-xx : MCTC-00606-FT-findThatStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00606 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00606;
+        auto                                                        expectedSize00606 = expectedSizeFindThatAll;
+        auto                                                const & expected00606 = expectedFindThatAll;
+        auto                                                const & predicate00606 = all;
+
+        (void) collection00606.findThat ( limit, storeIn00606, predicate00606 );
+        if ( storeIn00606.size() != expectedSize00606 || ! iteratorListEqualityCheck ( predicate00606, storeIn00606, expected00606 ) ) {
+            pTestLib->logError( "'MCTC-00606-FT-findThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00606-FT-findThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatStoreInMatchingAllAndMore-cpp-xx : MCTC-00607-FT-findThatStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00607 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00607;
+        auto                                                        expectedSize00607 = expectedSizeFindThatAllAndMore;
+        auto                                                const & expected00607 = expectedFindThatAllAndMore;
+        auto                                                const & predicate00607 = allAndMore;
+
+        (void) collection00607.findThat ( limit, storeIn00607, predicate00607 );
+        if ( storeIn00607.size() != expectedSize00607 || ! iteratorListEqualityCheck ( predicate00607, storeIn00607, expected00607 ) ) {
+            pTestLib->logError( "'MCTC-00607-FT-findThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00607-FT-findThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingNone-cpp-xx : MCTC-00608-FT-findThatReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00608 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00608;
+        auto                                                        expectedSize00608 = expectedSizeFindThatNone;
+        auto                                                const & expected00608 = expectedFindThatNone;
+        auto                                                const & predicate00608 = none;
+
+        storeIn00608 = collection00608.template findThat < __ComparisonEquivalent > ( limit, predicate00608 );
+        if ( storeIn00608.size() != expectedSize00608 || ! iteratorListEqualityCheck ( predicate00608, storeIn00608, expected00608 ) ) {
+            pTestLib->logError( "'MCTC-00608-FT-findThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00608-FT-findThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingOne-cpp-xx : MCTC-00609-FT-findThatReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00609 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00609;
+        auto                                                        expectedSize00609 = expectedSizeFindThatOne;
+        auto                                                const & expected00609 = expectedFindThatOne;
+        auto                                                const & predicate00609 = one;
+
+        storeIn00609 = collection00609.template findThat < __ComparisonEquivalent > ( limit, predicate00609 );
+        if ( storeIn00609.size() != expectedSize00609 || ! iteratorListEqualityCheck ( predicate00609, storeIn00609, expected00609 ) ) {
+            pTestLib->logError( "'MCTC-00609-FT-findThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00609-FT-findThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00610 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00610;
+        auto                                                        expectedSize00610 = expectedSizeFindThatMoreLessThanLimit;
+        auto                                                const & expected00610 = expectedFindThatMoreLessThanLimit;
+        auto                                                const & predicate00610 = moreLessThanLimit;
+
+        storeIn00610 = collection00610.template findThat < __ComparisonEquivalent > ( limit, predicate00610 );
+        if ( storeIn00610.size() != expectedSize00610 || ! iteratorListEqualityCheck ( predicate00610, storeIn00610, expected00610 ) ) {
+            pTestLib->logError( "'MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00610-FT-findThatReturnedMatchingMoreLessThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMore-cpp-xx : MCTC-00611-FT-findThatReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00611 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00611;
+        auto                                                        expectedSize00611 = expectedSizeFindThatMore;
+        auto                                                const & expected00611 = expectedFindThatMore;
+        auto                                                const & predicate00611 = more;
+
+        storeIn00611 = collection00611.template findThat < __ComparisonEquivalent > ( limit, predicate00611 );
+        if ( storeIn00611.size() != expectedSize00611 || ! iteratorListEqualityCheck ( predicate00611, storeIn00611, expected00611 ) ) {
+            pTestLib->logError( "'MCTC-00611-FT-findThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00611-FT-findThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00612 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00612;
+        auto                                                        expectedSize00612 = expectedSizeFindThatMoreMoreThanLimit;
+        auto                                                const & expected00612 = expectedFindThatMoreMoreThanLimit;
+        auto                                                const & predicate00612 = moreMoreThanLimit;
+
+        storeIn00612 = collection00612.template findThat < __ComparisonEquivalent > ( limit, predicate00612 );
+        if ( storeIn00612.size() != expectedSize00612 || ! iteratorListEqualityCheck ( predicate00612, storeIn00612, expected00612 ) ) {
+            pTestLib->logError( "'MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00612-FT-findThatReturnedMatchingMoreMoreThanLimit-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAll-cpp-xx : MCTC-00613-FT-findThatReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00613 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00613;
+        auto                                                        expectedSize00613 = expectedSizeFindThatAll;
+        auto                                                const & expected00613 = expectedFindThatAll;
+        auto                                                const & predicate00613 = all;
+
+        storeIn00613 = collection00613.template findThat < __ComparisonEquivalent > ( limit, predicate00613 );
+        if ( storeIn00613.size() != expectedSize00613 || ! iteratorListEqualityCheck ( predicate00613, storeIn00613, expected00613 ) ) {
+            pTestLib->logError( "'MCTC-00613-FT-findThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00613-FT-findThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findThatReturnedMatchingAllAndMore-cpp-xx : MCTC-00614-FT-findThatReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00614 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00614;
+        auto                                                        expectedSize00614 = expectedSizeFindThatAllAndMore;
+        auto                                                const & expected00614 = expectedFindThatAllAndMore;
+        auto                                                const & predicate00614 = allAndMore;
+
+        storeIn00614 = collection00614.template findThat < __ComparisonEquivalent > ( limit, predicate00614 );
+        if ( storeIn00614.size() != expectedSize00614 || ! iteratorListEqualityCheck ( predicate00614, storeIn00614, expected00614 ) ) {
+            pTestLib->logError( "'MCTC-00614-FT-findThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00614-FT-findThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findFirstThatMatchingNone-cpp-xx : MCTC-00615-FT-findFirstThatMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00615 = underTest;
+        Iterator                                               result00615;
+        auto                                                        expectedValid00615 = expectedResultFindFirstThatNone;
+        auto                                                        expectedValue00615 = expectedFindFirstThatNone;
+        auto                                                const & predicate00615 = none;
+
+        result00615 = collection00615.findFirstThat ( predicate00615 );
+        if ( ( result00615 != collection00615.end() ) != expectedValid00615 || expectedValid00615 && expectedValue00615 != * result00615 ) {
+            pTestLib->logError( "'MCTC-00615-FT-findFirstThatMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00615-FT-findFirstThatMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findFirstThatMatchingOne-cpp-xx : MCTC-00616-FT-findFirstThatMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00616 = underTest;
+        Iterator                                               result00616;
+        auto                                                        expectedValid00616 = expectedResultFindFirstThatOne;
+        auto                                                        expectedValue00616 = expectedFindFirstThatOne;
+        auto                                                const & predicate00616 = one;
+
+        result00616 = collection00616.findFirstThat ( predicate00616 );
+        if ( ( result00616 != collection00616.end() ) != expectedValid00616 || expectedValid00616 && expectedValue00616 != * result00616 ) {
+            pTestLib->logError( "'MCTC-00616-FT-findFirstThatMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00616-FT-findFirstThatMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findFirstThatMatchingMore-cpp-xx : MCTC-00617-FT-findFirstThatMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00617 = underTest;
+        Iterator                                               result00617;
+        auto                                                        expectedValid00617 = expectedResultFindFirstThatMore;
+        auto                                                        expectedValue00617 = expectedFindFirstThatMore;
+        auto                                                const & predicate00617 = more;
+
+        result00617 = collection00617.findFirstThat ( predicate00617 );
+        if ( ( result00617 != collection00617.end() ) != expectedValid00617 || expectedValid00617 && expectedValue00617 != * result00617 ) {
+            pTestLib->logError( "'MCTC-00617-FT-findFirstThatMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00617-FT-findFirstThatMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAll-cpp-xx : MCTC-00618-FT-findFirstThatMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00618 = underTest;
+        Iterator                                               result00618;
+        auto                                                        expectedValid00618 = expectedResultFindFirstThatAll;
+        auto                                                        expectedValue00618 = expectedFindFirstThatAll;
+        auto                                                const & predicate00618 = all;
+
+        result00618 = collection00618.findFirstThat ( predicate00618 );
+        if ( ( result00618 != collection00618.end() ) != expectedValid00618 || expectedValid00618 && expectedValue00618 != * result00618 ) {
+            pTestLib->logError( "'MCTC-00618-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00618-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findFirstThatMatchingAllAndMore-cpp-xx : MCTC-00619-FT-findFirstThatMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00619 = underTest;
+        Iterator                                               result00619;
+        auto                                                        expectedValid00619 = expectedResultFindFirstThatAllAndMore;
+        auto                                                        expectedValue00619 = expectedFindFirstThatAllAndMore;
+        auto                                                const & predicate00619 = allAndMore;
+
+        result00619 = collection00619.findFirstThat ( predicate00619 );
+        if ( ( result00619 != collection00619.end() ) != expectedValid00619 || expectedValid00619 && expectedValue00619 != * result00619 ) {
+            pTestLib->logError( "'MCTC-00619-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00619-FT-findFirstThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findLastThatMatchingNone-cpp-xx : MCTC-00620-FT-findLastThatMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00620 = underTest;
+        Iterator                                               result00620;
+        auto                                                        expectedValid00620 = expectedResultFindLastThatNone;
+        auto                                                        expectedValue00620 = expectedFindLastThatNone;
+        auto                                                const & predicate00620 = none;
+
+        result00620 = collection00620.findLastThat ( predicate00620 );
+        if ( ( result00620 != collection00620.end() ) != expectedValid00620 || expectedValid00620 && expectedValue00620 != * result00620 ) {
+            pTestLib->logError( "'MCTC-00620-FT-findLastThatMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00620-FT-findLastThatMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findLastThatMatchingOne-cpp-xx : MCTC-00621-FT-findLastThatMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00621 = underTest;
+        Iterator                                               result00621;
+        auto                                                        expectedValid00621 = expectedResultFindLastThatOne;
+        auto                                                        expectedValue00621 = expectedFindLastThatOne;
+        auto                                                const & predicate00621 = one;
+
+        result00621 = collection00621.findLastThat ( predicate00621 );
+        if ( ( result00621 != collection00621.end() ) != expectedValid00621 || expectedValid00621 && expectedValue00621 != * result00621 ) {
+            pTestLib->logError( "'MCTC-00621-FT-findLastThatMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00621-FT-findLastThatMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findLastThatMatchingMore-cpp-xx : MCTC-00622-FT-findLastThatMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00622 = underTest;
+        Iterator                                               result00622;
+        auto                                                        expectedValid00622 = expectedResultFindLastThatMore;
+        auto                                                        expectedValue00622 = expectedFindLastThatMore;
+        auto                                                const & predicate00622 = more;
+
+        result00622 = collection00622.findLastThat ( predicate00622 );
+        if ( ( result00622 != collection00622.end() ) != expectedValid00622 || expectedValid00622 && expectedValue00622 != * result00622 ) {
+            pTestLib->logError( "'MCTC-00622-FT-findLastThatMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00622-FT-findLastThatMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findLastThatMatchingAll-cpp-xx : MCTC-00623-FT-findLastThatMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00623 = underTest;
+        Iterator                                               result00623;
+        auto                                                        expectedValid00623 = expectedResultFindLastThatAll;
+        auto                                                        expectedValue00623 = expectedFindLastThatAll;
+        auto                                                const & predicate00623 = all;
+
+        result00623 = collection00623.findLastThat ( predicate00623 );
+        if ( ( result00623 != collection00623.end() ) != expectedValid00623 || expectedValid00623 && expectedValue00623 != * result00623 ) {
+            pTestLib->logError( "'MCTC-00623-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00623-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findLastThatMatchingAllAndMore-cpp-xx : MCTC-00624-FT-findLastThatMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00624 = underTest;
+        Iterator                                               result00624;
+        auto                                                        expectedValid00624 = expectedResultFindLastThatAllAndMore;
+        auto                                                        expectedValue00624 = expectedFindLastThatAllAndMore;
+        auto                                                const & predicate00624 = allAndMore;
+
+        result00624 = collection00624.findLastThat ( predicate00624 );
+        if ( ( result00624 != collection00624.end() ) != expectedValid00624 || expectedValid00624 && expectedValue00624 != * result00624 ) {
+            pTestLib->logError( "'MCTC-00624-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00624-FT-findLastThatMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingNone-cpp-xx : MCTC-00625-FT-findAllThatStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00625 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00625;
+        auto                                                        expectedSize00625 = expectedSizeFindAllThatNone;
+        auto                                                const & expected00625 = expectedFindAllThatNone;
+        auto                                                const & predicate00625 = none;
+
+        (void) collection00625.findAllThat ( storeIn00625, predicate00625 );
+        if ( storeIn00625.size() != expectedSize00625 || ! iteratorListEqualityCheck ( predicate00625, storeIn00625, expected00625 ) ) {
+            pTestLib->logError( "'MCTC-00625-FT-findAllThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00625-FT-findAllThatStoreInMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingOne-cpp-xx : MCTC-00626-FT-findAllThatStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00626 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00626;
+        auto                                                        expectedSize00626 = expectedSizeFindAllThatOne;
+        auto                                                const & expected00626 = expectedFindAllThatOne;
+        auto                                                const & predicate00626 = one;
+
+        (void) collection00626.findAllThat ( storeIn00626, predicate00626 );
+        if ( storeIn00626.size() != expectedSize00626 || ! iteratorListEqualityCheck ( predicate00626, storeIn00626, expected00626 ) ) {
+            pTestLib->logError( "'MCTC-00626-FT-findAllThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00626-FT-findAllThatStoreInMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingMore-cpp-xx : MCTC-00627-FT-findAllThatStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00627 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00627;
+        auto                                                        expectedSize00627 = expectedSizeFindAllThatMore;
+        auto                                                const & expected00627 = expectedFindAllThatMore;
+        auto                                                const & predicate00627 = more;
+
+        (void) collection00627.findAllThat ( storeIn00627, predicate00627 );
+        if ( storeIn00627.size() != expectedSize00627 || ! iteratorListEqualityCheck ( predicate00627, storeIn00627, expected00627 ) ) {
+            pTestLib->logError( "'MCTC-00627-FT-findAllThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00627-FT-findAllThatStoreInMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAll-cpp-xx : MCTC-00628-FT-findAllThatStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00628 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00628;
+        auto                                                        expectedSize00628 = expectedSizeFindAllThatAll;
+        auto                                                const & expected00628 = expectedFindAllThatAll;
+        auto                                                const & predicate00628 = all;
+
+        (void) collection00628.findAllThat ( storeIn00628, predicate00628 );
+        if ( storeIn00628.size() != expectedSize00628 || ! iteratorListEqualityCheck ( predicate00628, storeIn00628, expected00628 ) ) {
+            pTestLib->logError( "'MCTC-00628-FT-findAllThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00628-FT-findAllThatStoreInMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatStoreInMatchingAllAndMore-cpp-xx : MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00629 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00629;
+        auto                                                        expectedSize00629 = expectedSizeFindAllThatAllAndMore;
+        auto                                                const & expected00629 = expectedFindAllThatAllAndMore;
+        auto                                                const & predicate00629 = allAndMore;
+
+        (void) collection00629.findAllThat ( storeIn00629, predicate00629 );
+        if ( storeIn00629.size() != expectedSize00629 || ! iteratorListEqualityCheck ( predicate00629, storeIn00629, expected00629 ) ) {
+            pTestLib->logError( "'MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00629-FT-findAllThatStoreInMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingNone-cpp-xx : MCTC-00630-FT-findAllThatReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00630 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00630;
+        auto                                                        expectedSize00630 = expectedSizeFindAllThatNone;
+        auto                                                const & expected00630 = expectedFindAllThatNone;
+        auto                                                const & predicate00630 = none;
+
+        storeIn00630 = collection00630.template findAllThat < __ComparisonEquivalent > ( predicate00630 );
+        if ( storeIn00630.size() != expectedSize00630 || ! iteratorListEqualityCheck ( predicate00630, storeIn00630, expected00630 ) ) {
+            pTestLib->logError( "'MCTC-00630-FT-findAllThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00630-FT-findAllThatReturnedMatchingNone-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingOne-cpp-xx : MCTC-00631-FT-findAllThatReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00631 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00631;
+        auto                                                        expectedSize00631 = expectedSizeFindAllThatOne;
+        auto                                                const & expected00631 = expectedFindAllThatOne;
+        auto                                                const & predicate00631 = one;
+
+        storeIn00631 = collection00631.template findAllThat < __ComparisonEquivalent > ( predicate00631 );
+        if ( storeIn00631.size() != expectedSize00631 || ! iteratorListEqualityCheck ( predicate00631, storeIn00631, expected00631 ) ) {
+            pTestLib->logError( "'MCTC-00631-FT-findAllThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00631-FT-findAllThatReturnedMatchingOne-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingMore-cpp-xx : MCTC-00632-FT-findAllThatReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00632 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00632;
+        auto                                                        expectedSize00632 = expectedSizeFindAllThatMore;
+        auto                                                const & expected00632 = expectedFindAllThatMore;
+        auto                                                const & predicate00632 = more;
+
+        storeIn00632 = collection00632.template findAllThat < __ComparisonEquivalent > ( predicate00632 );
+        if ( storeIn00632.size() != expectedSize00632 || ! iteratorListEqualityCheck ( predicate00632, storeIn00632, expected00632 ) ) {
+            pTestLib->logError( "'MCTC-00632-FT-findAllThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00632-FT-findAllThatReturnedMatchingMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAll-cpp-xx : MCTC-00633-FT-findAllThatReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00633 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00633;
+        auto                                                        expectedSize00633 = expectedSizeFindAllThatAll;
+        auto                                                const & expected00633 = expectedFindAllThatAll;
+        auto                                                const & predicate00633 = all;
+
+        storeIn00633 = collection00633.template findAllThat < __ComparisonEquivalent > ( predicate00633 );
+        if ( storeIn00633.size() != expectedSize00633 || ! iteratorListEqualityCheck ( predicate00633, storeIn00633, expected00633 ) ) {
+            pTestLib->logError( "'MCTC-00633-FT-findAllThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00633-FT-findAllThatReturnedMatchingAll-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-FindThat-findAllThatReturnedMatchingAllAndMore-cpp-xx : MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00634 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00634;
+        auto                                                        expectedSize00634 = expectedSizeFindAllThatAllAndMore;
+        auto                                                const & expected00634 = expectedFindAllThatAllAndMore;
+        auto                                                const & predicate00634 = allAndMore;
+
+        storeIn00634 = collection00634.template findAllThat < __ComparisonEquivalent > ( predicate00634 );
+        if ( storeIn00634.size() != expectedSize00634 || ! iteratorListEqualityCheck ( predicate00634, storeIn00634, expected00634 ) ) {
+            pTestLib->logError( "'MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00634-FT-findAllThatReturnedMatchingAllAndMore-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        return true;
+    }
+
+    /* MutableCollectionTestGroup-FindOf-cpp-xx : MCTG-00700-FO-cpp-xx. MCTC-00701-FO to MCTC-00768-FO */
+    template <
+            typename __IterableType,                                                                /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType,                                                                 /* NOLINT(bugprone-reserved-identifier) */
+            template < typename ... > class __ComparisonEquivalent = cds :: Array   /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupFindOf (
+            Test                                                      * pTestLib,
+            StringLiteral                                               variant,
+            cds :: MutableCollection < __ElementType > & underTest,
+            Size                                                        limit,
+            __IterableType                                      const & none,
+            __IterableType                                      const & one,
+            __IterableType                                      const & moreLessThanLimit,
+            __IterableType                                      const & more,
+            __IterableType                                      const & moreMoreThanLimit,
+            __IterableType                                      const & all,
+            __IterableType                                      const & allAndMore,
+            Size                                                        expectedSizeFindOfNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfNone,
+            Size                                                        expectedSizeFindOfOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfOne,
+            Size                                                        expectedSizeFindOfMoreLessThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreLessThanLimit,
+            Size                                                        expectedSizeFindOfMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMore,
+            Size                                                        expectedSizeFindOfMoreMoreThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreMoreThanLimit,
+            Size                                                        expectedSizeFindOfAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfAll,
+            Size                                                        expectedSizeFindOfAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindOfAllAndMore,
+            bool                                                        expectedResultFindFirstOfNone,
+            __ElementType                                       const & expectedFindFirstOfNone,
+            bool                                                        expectedResultFindFirstOfOne,
+            __ElementType                                       const & expectedFindFirstOfOne,
+            bool                                                        expectedResultFindFirstOfMore,
+            __ElementType                                       const & expectedFindFirstOfMore,
+            bool                                                        expectedResultFindFirstOfAll,
+            __ElementType                                       const & expectedFindFirstOfAll,
+            bool                                                        expectedResultFindFirstOfAllAndMore,
+            __ElementType                                       const & expectedFindFirstOfAllAndMore,
+            bool                                                        expectedResultFindLastOfNone,
+            __ElementType                                       const & expectedFindLastOfNone,
+            bool                                                        expectedResultFindLastOfOne,
+            __ElementType                                       const & expectedFindLastOfOne,
+            bool                                                        expectedResultFindLastOfMore,
+            __ElementType                                       const & expectedFindLastOfMore,
+            bool                                                        expectedResultFindLastOfAll,
+            __ElementType                                       const & expectedFindLastOfAll,
+            bool                                                        expectedResultFindLastOfAllAndMore,
+            __ElementType                                       const & expectedFindLastOfAllAndMore,
+            Size                                                        expectedSizeFindAllOfNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfNone,
+            Size                                                        expectedSizeFindAllOfOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfOne,
+            Size                                                        expectedSizeFindAllOfMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfMore,
+            Size                                                        expectedSizeFindAllOfAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAll,
+            Size                                                        expectedSizeFindAllOfAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAllAndMore,
+            Size                                                        expectedSizeFindNotOfNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfNone,
+            Size                                                        expectedSizeFindNotOfOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfOne,
+            Size                                                        expectedSizeFindNotOfMoreLessThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreLessThanLimit,
+            Size                                                        expectedSizeFindNotOfMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMore,
+            Size                                                        expectedSizeFindNotOfMoreMoreThanLimit,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreMoreThanLimit,
+            Size                                                        expectedSizeFindNotOfAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAll,
+            Size                                                        expectedSizeFindNotOfAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAllAndMore,
+            bool                                                        expectedResultFindFirstNotOfNone,
+            __ElementType                                       const & expectedFindFirstNotOfNone,
+            bool                                                        expectedResultFindFirstNotOfOne,
+            __ElementType                                       const & expectedFindFirstNotOfOne,
+            bool                                                        expectedResultFindFirstNotOfMore,
+            __ElementType                                       const & expectedFindFirstNotOfMore,
+            bool                                                        expectedResultFindFirstNotOfAll,
+            __ElementType                                       const & expectedFindFirstNotOfAll,
+            bool                                                        expectedResultFindFirstNotOfAllAndMore,
+            __ElementType                                       const & expectedFindFirstNotOfAllAndMore,
+            bool                                                        expectedResultFindLastNotOfNone,
+            __ElementType                                       const & expectedFindLastNotOfNone,
+            bool                                                        expectedResultFindLastNotOfOne,
+            __ElementType                                       const & expectedFindLastNotOfOne,
+            bool                                                        expectedResultFindLastNotOfMore,
+            __ElementType                                       const & expectedFindLastNotOfMore,
+            bool                                                        expectedResultFindLastNotOfAll,
+            __ElementType                                       const & expectedFindLastNotOfAll,
+            bool                                                        expectedResultFindLastNotOfAllAndMore,
+            __ElementType                                       const & expectedFindLastNotOfAllAndMore,
+            Size                                                        expectedSizeFindAllNotOfNone,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfNone,
+            Size                                                        expectedSizeFindAllNotOfOne,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfOne,
+            Size                                                        expectedSizeFindAllNotOfMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfMore,
+            Size                                                        expectedSizeFindAllNotOfAll,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAll,
+            Size                                                        expectedSizeFindAllNotOfAllAndMore,
+            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAllAndMore
+    ) -> bool {
+
+        pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
+        using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingNone-cpp-xx : MCTC-00701-FO-findOfStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00701 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00701;
+        auto                                                        expectedSize00701 = expectedSizeFindOfNone;
+        auto                                                const & expected00701 = expectedFindOfNone;
+        auto                                                const & target00701 = none;
+
+        (void) collection00701.findOf ( limit, storeIn00701, target00701 );
+        if ( storeIn00701.size() != expectedSize00701 || ! iteratorListEqualityCheckNoPred ( storeIn00701, expected00701 ) ) {
+            pTestLib->logError( "'MCTC-00701-FO-findOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00701-FO-findOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingOne-cpp-xx : MCTC-00702-FO-findOfStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00702 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00702;
+        auto                                                        expectedSize00702 = expectedSizeFindOfOne;
+        auto                                                const & expected00702 = expectedFindOfOne;
+        auto                                                const & target00702 = one;
+
+        (void) collection00702.findOf ( limit, storeIn00702, target00702 );
+        if ( storeIn00702.size() != expectedSize00702 || ! iteratorListEqualityCheckNoPred ( storeIn00702, expected00702 ) ) {
+            pTestLib->logError( "'MCTC-00702-FO-findOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00702-FO-findOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00703 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00703;
+        auto                                                        expectedSize00703 = expectedSizeFindOfMoreLessThanLimit;
+        auto                                                const & expected00703 = expectedFindOfMoreLessThanLimit;
+        auto                                                const & target00703 = moreLessThanLimit;
+
+        (void) collection00703.findOf ( limit, storeIn00703, target00703 );
+        if ( storeIn00703.size() != expectedSize00703 || ! iteratorListEqualityCheckNoPred ( storeIn00703, expected00703 ) ) {
+            pTestLib->logError( "'MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00703-FO-findOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMore-cpp-xx : MCTC-00704-FO-findOfStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00704 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00704;
+        auto                                                        expectedSize00704 = expectedSizeFindOfMore;
+        auto                                                const & expected00704 = expectedFindOfMore;
+        auto                                                const & target00704 = more;
+
+        (void) collection00704.findOf ( limit, storeIn00704, target00704 );
+        if ( storeIn00704.size() != expectedSize00704 || ! iteratorListEqualityCheckNoPred ( storeIn00704, expected00704 ) ) {
+            pTestLib->logError( "'MCTC-00704-FO-findOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00704-FO-findOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00705 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00705;
+        auto                                                        expectedSize00705 = expectedSizeFindOfMoreMoreThanLimit;
+        auto                                                const & expected00705 = expectedFindOfMoreMoreThanLimit;
+        auto                                                const & target00705 = moreMoreThanLimit;
+
+        (void) collection00705.findOf ( limit, storeIn00705, target00705 );
+        if ( storeIn00705.size() != expectedSize00705 || ! iteratorListEqualityCheckNoPred ( storeIn00705, expected00705 ) ) {
+            pTestLib->logError( "'MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00705-FO-findOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAll-cpp-xx : MCTC-00706-FO-findOfStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00706 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00706;
+        auto                                                        expectedSize00706 = expectedSizeFindOfAll;
+        auto                                                const & expected00706 = expectedFindOfAll;
+        auto                                                const & target00706 = all;
+
+        (void) collection00706.findOf ( limit, storeIn00706, target00706 );
+        if ( storeIn00706.size() != expectedSize00706 || ! iteratorListEqualityCheckNoPred ( storeIn00706, expected00706 ) ) {
+            pTestLib->logError( "'MCTC-00706-FO-findOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00706-FO-findOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00707-FO-findOfStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00707 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00707;
+        auto                                                        expectedSize00707 = expectedSizeFindOfAllAndMore;
+        auto                                                const & expected00707 = expectedFindOfAllAndMore;
+        auto                                                const & target00707 = allAndMore;
+
+        (void) collection00707.findOf ( limit, storeIn00707, target00707 );
+        if ( storeIn00707.size() != expectedSize00707 || ! iteratorListEqualityCheckNoPred ( storeIn00707, expected00707 ) ) {
+            pTestLib->logError( "'MCTC-00707-FO-findOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00707-FO-findOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingNone-cpp-xx : MCTC-00708-FO-findOfReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00708 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00708;
+        auto                                                        expectedSize00708 = expectedSizeFindOfNone;
+        auto                                                const & expected00708 = expectedFindOfNone;
+        auto                                                const & target00708 = none;
+
+        storeIn00708 = collection00708.template findOf < __ComparisonEquivalent > ( limit, target00708 );
+        if ( storeIn00708.size() != expectedSize00708 || ! iteratorListEqualityCheckNoPred ( storeIn00708, expected00708 ) ) {
+            pTestLib->logError( "'MCTC-00708-FO-findOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00708-FO-findOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingOne-cpp-xx : MCTC-00709-FO-findOfReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00709 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00709;
+        auto                                                        expectedSize00709 = expectedSizeFindOfOne;
+        auto                                                const & expected00709 = expectedFindOfOne;
+        auto                                                const & target00709 = one;
+
+        storeIn00709 = collection00709.template findOf < __ComparisonEquivalent > ( limit, target00709 );
+        if ( storeIn00709.size() != expectedSize00709 || ! iteratorListEqualityCheckNoPred ( storeIn00709, expected00709 ) ) {
+            pTestLib->logError( "'MCTC-00709-FO-findOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00709-FO-findOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00710 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00710;
+        auto                                                        expectedSize00710 = expectedSizeFindOfMoreLessThanLimit;
+        auto                                                const & expected00710 = expectedFindOfMoreLessThanLimit;
+        auto                                                const & target00710 = moreLessThanLimit;
+
+        storeIn00710 = collection00710.template findOf < __ComparisonEquivalent > ( limit, target00710 );
+        if ( storeIn00710.size() != expectedSize00710 || ! iteratorListEqualityCheckNoPred ( storeIn00710, expected00710 ) ) {
+            pTestLib->logError( "'MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00710-FO-findOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMore-cpp-xx : MCTC-00711-FO-findOfReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00711 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00711;
+        auto                                                        expectedSize00711 = expectedSizeFindOfMore;
+        auto                                                const & expected00711 = expectedFindOfMore;
+        auto                                                const & target00711 = more;
+
+        storeIn00711 = collection00711.template findOf < __ComparisonEquivalent > ( limit, target00711 );
+        if ( storeIn00711.size() != expectedSize00711 || ! iteratorListEqualityCheckNoPred ( storeIn00711, expected00711 ) ) {
+            pTestLib->logError( "'MCTC-00711-FO-findOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00711-FO-findOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00712 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00712;
+        auto                                                        expectedSize00712 = expectedSizeFindOfMoreMoreThanLimit;
+        auto                                                const & expected00712 = expectedFindOfMoreMoreThanLimit;
+        auto                                                const & target00712 = moreMoreThanLimit;
+
+        storeIn00712 = collection00712.template findOf < __ComparisonEquivalent > ( limit, target00712 );
+        if ( storeIn00712.size() != expectedSize00712 || ! iteratorListEqualityCheckNoPred ( storeIn00712, expected00712 ) ) {
+            pTestLib->logError( "'MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00712-FO-findOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAll-cpp-xx : MCTC-00713-FO-findOfReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00713 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00713;
+        auto                                                        expectedSize00713 = expectedSizeFindOfAll;
+        auto                                                const & expected00713 = expectedFindOfAll;
+        auto                                                const & target00713 = all;
+
+        storeIn00713 = collection00713.template findOf < __ComparisonEquivalent > ( limit, target00713 );
+        if ( storeIn00713.size() != expectedSize00713 || ! iteratorListEqualityCheckNoPred ( storeIn00713, expected00713 ) ) {
+            pTestLib->logError( "'MCTC-00713-FO-findOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00713-FO-findOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00714-FO-findOfReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00714 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00714;
+        auto                                                        expectedSize00714 = expectedSizeFindOfAllAndMore;
+        auto                                                const & expected00714 = expectedFindOfAllAndMore;
+        auto                                                const & target00714 = allAndMore;
+
+        storeIn00714 = collection00714.template findOf < __ComparisonEquivalent > ( limit, target00714 );
+        if ( storeIn00714.size() != expectedSize00714 || ! iteratorListEqualityCheckNoPred ( storeIn00714, expected00714 ) ) {
+            pTestLib->logError( "'MCTC-00714-FO-findOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00714-FO-findOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstOfMatchingNone-cpp-xx : MCTC-00715-FO-findFirstOfMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00715 = underTest;
+        Iterator                                               result00715;
+        auto                                                        expectedResult00715 = expectedResultFindFirstOfNone;
+        auto                                                const & expected00715 = expectedFindFirstOfNone;
+        auto                                                const & target00715 = none;
+
+        result00715 = collection00715.findFirstOf ( target00715 );
+        if ( ( result00715 != collection00715.end() ) != expectedResult00715 || expectedResult00715 && expected00715 != * result00715 ) {
+            pTestLib->logError( "'MCTC-00715-FO-findFirstOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00715-FO-findFirstOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstOfMatchingOne-cpp-xx : MCTC-00716-FO-findFirstOfMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00716 = underTest;
+        Iterator                                               result00716;
+        auto                                                        expectedResult00716 = expectedResultFindFirstOfOne;
+        auto                                                const & expected00716 = expectedFindFirstOfOne;
+        auto                                                const & target00716 = one;
+
+        result00716 = collection00716.findFirstOf ( target00716 );
+        if ( ( result00716 != collection00716.end() ) != expectedResult00716 || expectedResult00716 && expected00716 != * result00716 ) {
+            pTestLib->logError( "'MCTC-00716-FO-findFirstOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00716-FO-findFirstOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstOfMatchingMore-cpp-xx : MCTC-00717-FO-findFirstOfMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00717 = underTest;
+        Iterator                                               result00717;
+        auto                                                        expectedResult00717 = expectedResultFindFirstOfMore;
+        auto                                                const & expected00717 = expectedFindFirstOfMore;
+        auto                                                const & target00717 = more;
+
+        result00717 = collection00717.findFirstOf ( target00717 );
+        if ( ( result00717 != collection00717.end() ) != expectedResult00717 || expectedResult00717 && expected00717 != * result00717 ) {
+            pTestLib->logError( "'MCTC-00717-FO-findFirstOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00717-FO-findFirstOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAll-cpp-xx : MCTC-00718-FO-findFirstOfMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00718 = underTest;
+        Iterator                                               result00718;
+        auto                                                        expectedResult00718 = expectedResultFindFirstOfAll;
+        auto                                                const & expected00718 = expectedFindFirstOfAll;
+        auto                                                const & target00718 = all;
+
+        result00718 = collection00718.findFirstOf ( target00718 );
+        if ( ( result00718 != collection00718.end() ) != expectedResult00718 || expectedResult00718 && expected00718 != * result00718 ) {
+            pTestLib->logError( "'MCTC-00718-FO-findFirstOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00718-FO-findFirstOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstOfMatchingAllAndMore-cpp-xx : MCTC-00719-FO-findFirstOfMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00719 = underTest;
+        Iterator                                               result00719;
+        auto                                                        expectedResult00719 = expectedResultFindFirstOfAllAndMore;
+        auto                                                const & expected00719 = expectedFindFirstOfAllAndMore;
+        auto                                                const & target00719 = allAndMore;
+
+        result00719 = collection00719.findFirstOf ( target00719 );
+        if ( ( result00719 != collection00719.end() ) != expectedResult00719 || expectedResult00719 && expected00719 != * result00719 ) {
+            pTestLib->logError( "'MCTC-00719-FO-findFirstOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00719-FO-findFirstOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingNone-cpp-xx : MCTC-00720-FO-findLastOfMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00720 = underTest;
+        Iterator                                               result00720;
+        auto                                                        expectedResult00720 = expectedResultFindLastOfNone;
+        auto                                                const & expected00720 = expectedFindLastOfNone;
+        auto                                                const & target00720 = none;
+
+        result00720 = collection00720.findLastOf ( target00720 );
+        if ( ( result00720 != collection00720.end() ) != expectedResult00720 || expectedResult00720 && expected00720 != * result00720 ) {
+            pTestLib->logError( "'MCTC-00720-FO-findLastOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00720-FO-findLastOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingOne-cpp-xx : MCTC-00721-FO-findLastOfMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00721 = underTest;
+        Iterator                                               result00721;
+        auto                                                        expectedResult00721 = expectedResultFindLastOfOne;
+        auto                                                const & expected00721 = expectedFindLastOfOne;
+        auto                                                const & target00721 = one;
+
+        result00721 = collection00721.findLastOf ( target00721 );
+        if ( ( result00721 != collection00721.end() ) != expectedResult00721 || expectedResult00721 && expected00721 != * result00721 ) {
+            pTestLib->logError( "'MCTC-00721-FO-findLastOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00721-FO-findLastOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingMore-cpp-xx : MCTC-00722-FO-findLastOfMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00722 = underTest;
+        Iterator                                               result00722;
+        auto                                                        expectedResult00722 = expectedResultFindLastOfMore;
+        auto                                                const & expected00722 = expectedFindLastOfMore;
+        auto                                                const & target00722 = more;
+
+        result00722 = collection00722.findLastOf ( target00722 );
+        if ( ( result00722 != collection00722.end() ) != expectedResult00722 || expectedResult00722 && expected00722 != * result00722 ) {
+            pTestLib->logError( "'MCTC-00722-FO-findLastOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00722-FO-findLastOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingAll-cpp-xx : MCTC-00723-FO-findLastOfMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00723 = underTest;
+        Iterator                                               result00723;
+        auto                                                        expectedResult00723 = expectedResultFindLastOfAll;
+        auto                                                const & expected00723 = expectedFindLastOfAll;
+        auto                                                const & target00723 = all;
+
+        result00723 = collection00723.findLastOf ( target00723 );
+        if ( ( result00723 != collection00723.end() ) != expectedResult00723 || expectedResult00723 && expected00723 != * result00723 ) {
+            pTestLib->logError( "'MCTC-00723-FO-findLastOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00723-FO-findLastOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-cpp-xx : MCTC-00724-FO-findLastOfMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00724 = underTest;
+        Iterator                                               result00724;
+        auto                                                        expectedResult00724 = expectedResultFindLastOfAllAndMore;
+        auto                                                const & expected00724 = expectedFindLastOfAllAndMore;
+        auto                                                const & target00724 = allAndMore;
+
+        result00724 = collection00724.findLastOf ( target00724 );
+        if ( ( result00724 != collection00724.end() ) != expectedResult00724 || expectedResult00724 && expected00724 != * result00724 ) {
+            pTestLib->logError( "'MCTC-00724-FO-findLastOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00724-FO-findLastOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingNone-cpp-xx : MCTC-00725-FO-findAllOfStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00725 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00725;
+        auto                                                        expectedSize00725 = expectedSizeFindAllOfNone;
+        auto                                                const & expected00725 = expectedFindAllOfNone;
+        auto                                                const & target00725 = none;
+
+        (void) collection00725.findAllOf ( storeIn00725, target00725 );
+        if ( storeIn00725.size() != expectedSize00725 || ! iteratorListEqualityCheckNoPred ( storeIn00725, expected00725 ) ) {
+            pTestLib->logError( "'MCTC-00725-FO-findAllOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00725-FO-findAllOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingOne-cpp-xx : MCTC-00726-FO-findAllOfStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00726 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00726;
+        auto                                                        expectedSize00726 = expectedSizeFindAllOfOne;
+        auto                                                const & expected00726 = expectedFindAllOfOne;
+        auto                                                const & target00726 = one;
+
+        (void) collection00726.findAllOf ( storeIn00726, target00726 );
+        if ( storeIn00726.size() != expectedSize00726 || ! iteratorListEqualityCheckNoPred ( storeIn00726, expected00726 ) ) {
+            pTestLib->logError( "'MCTC-00726-FO-findAllOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00726-FO-findAllOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingMore-cpp-xx : MCTC-00727-FO-findAllOfStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00727 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00727;
+        auto                                                        expectedSize00727 = expectedSizeFindAllOfMore;
+        auto                                                const & expected00727 = expectedFindAllOfMore;
+        auto                                                const & target00727 = more;
+
+        (void) collection00727.findAllOf ( storeIn00727, target00727 );
+        if ( storeIn00727.size() != expectedSize00727 || ! iteratorListEqualityCheckNoPred ( storeIn00727, expected00727 ) ) {
+            pTestLib->logError( "'MCTC-00727-FO-findAllOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00727-FO-findAllOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAll-cpp-xx : MCTC-00728-FO-findAllOfStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00728 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00728;
+        auto                                                        expectedSize00728 = expectedSizeFindAllOfAll;
+        auto                                                const & expected00728 = expectedFindAllOfAll;
+        auto                                                const & target00728 = all;
+
+        (void) collection00728.findAllOf ( storeIn00728, target00728 );
+        if ( storeIn00728.size() != expectedSize00728 || ! iteratorListEqualityCheckNoPred ( storeIn00728, expected00728 ) ) {
+            pTestLib->logError( "'MCTC-00728-FO-findAllOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00728-FO-findAllOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00729 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00729;
+        auto                                                        expectedSize00729 = expectedSizeFindAllOfAllAndMore;
+        auto                                                const & expected00729 = expectedFindAllOfAllAndMore;
+        auto                                                const & target00729 = allAndMore;
+
+        (void) collection00729.findAllOf ( storeIn00729, target00729 );
+        if ( storeIn00729.size() != expectedSize00729 || ! iteratorListEqualityCheckNoPred ( storeIn00729, expected00729 ) ) {
+            pTestLib->logError( "'MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00729-FO-findAllOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingNone-cpp-xx : MCTC-00730-FO-findAllOfReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00730 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00730;
+        auto                                                        expectedSize00730 = expectedSizeFindAllOfNone;
+        auto                                                const & expected00730 = expectedFindAllOfNone;
+        auto                                                const & target00730 = none;
+
+        storeIn00730 = collection00730.template findAllOf < __ComparisonEquivalent > ( target00730 );
+        if ( storeIn00730.size() != expectedSize00730 || ! iteratorListEqualityCheckNoPred ( storeIn00730, expected00730 ) ) {
+            pTestLib->logError( "'MCTC-00730-FO-findAllOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00730-FO-findAllOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingOne-cpp-xx : MCTC-00731-FO-findAllOfReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00731 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00731;
+        auto                                                        expectedSize00731 = expectedSizeFindAllOfOne;
+        auto                                                const & expected00731 = expectedFindAllOfOne;
+        auto                                                const & target00731 = one;
+
+        storeIn00731 = collection00731.template findAllOf < __ComparisonEquivalent > ( target00731 );
+        if ( storeIn00731.size() != expectedSize00731 || ! iteratorListEqualityCheckNoPred ( storeIn00731, expected00731 ) ) {
+            pTestLib->logError( "'MCTC-00731-FO-findAllOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00731-FO-findAllOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingMore-cpp-xx : MCTC-00732-FO-findAllOfReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00732 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00732;
+        auto                                                        expectedSize00732 = expectedSizeFindAllOfMore;
+        auto                                                const & expected00732 = expectedFindAllOfMore;
+        auto                                                const & target00732 = more;
+
+        storeIn00732 = collection00732.template findAllOf < __ComparisonEquivalent > ( target00732 );
+        if ( storeIn00732.size() != expectedSize00732 || ! iteratorListEqualityCheckNoPred ( storeIn00732, expected00732 ) ) {
+            pTestLib->logError( "'MCTC-00732-FO-findAllOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00732-FO-findAllOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAll-cpp-xx : MCTC-00733-FO-findAllOfReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00733 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00733;
+        auto                                                        expectedSize00733 = expectedSizeFindAllOfAll;
+        auto                                                const & expected00733 = expectedFindAllOfAll;
+        auto                                                const & target00733 = all;
+
+        storeIn00733 = collection00733.template findAllOf < __ComparisonEquivalent > ( target00733 );
+        if ( storeIn00733.size() != expectedSize00733 || ! iteratorListEqualityCheckNoPred ( storeIn00733, expected00733 ) ) {
+            pTestLib->logError( "'MCTC-00733-FO-findAllOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00733-FO-findAllOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00734 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00734;
+        auto                                                        expectedSize00734 = expectedSizeFindAllOfAllAndMore;
+        auto                                                const & expected00734 = expectedFindAllOfAllAndMore;
+        auto                                                const & target00734 = allAndMore;
+
+        storeIn00734 = collection00734.template findAllOf < __ComparisonEquivalent > ( target00734 );
+        if ( storeIn00734.size() != expectedSize00734 || ! iteratorListEqualityCheckNoPred ( storeIn00734, expected00734 ) ) {
+            pTestLib->logError( "'MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00734-FO-findAllOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingNone-cpp-xx : MCTC-00735-FO-findNotOfStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00735 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00735;
+        auto                                                        expectedSize00735 = expectedSizeFindNotOfNone;
+        auto                                                const & expected00735 = expectedFindNotOfNone;
+        auto                                                const & target00735 = none;
+
+        (void) collection00735.findNotOf ( limit, storeIn00735, target00735 );
+        if ( storeIn00735.size() != expectedSize00735 || ! iteratorListEqualityCheckNoPred ( storeIn00735, expected00735 ) ) {
+            pTestLib->logError( "'MCTC-00735-FO-findNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00735-FO-findNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingOne-cpp-xx : MCTC-00736-FO-findNotOfStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00736 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00736;
+        auto                                                        expectedSize00736 = expectedSizeFindNotOfOne;
+        auto                                                const & expected00736 = expectedFindNotOfOne;
+        auto                                                const & target00736 = one;
+
+        (void) collection00736.findNotOf ( limit, storeIn00736, target00736 );
+        if ( storeIn00736.size() != expectedSize00736 || ! iteratorListEqualityCheckNoPred ( storeIn00736, expected00736 ) ) {
+            pTestLib->logError( "'MCTC-00736-FO-findNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00736-FO-findNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreLessThanLimit-cpp-xx : MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00737 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00737;
+        auto                                                        expectedSize00737 = expectedSizeFindNotOfMoreLessThanLimit;
+        auto                                                const & expected00737 = expectedFindNotOfMoreLessThanLimit;
+        auto                                                const & target00737 = moreLessThanLimit;
+
+        (void) collection00737.findNotOf ( limit, storeIn00737, target00737 );
+        if ( storeIn00737.size() != expectedSize00737 || ! iteratorListEqualityCheckNoPred ( storeIn00737, expected00737 ) ) {
+            pTestLib->logError( "'MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00737-FO-findNotOfStoreInMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMore-cpp-xx : MCTC-00738-FO-findNotOfStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00738 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00738;
+        auto                                                        expectedSize00738 = expectedSizeFindNotOfMore;
+        auto                                                const & expected00738 = expectedFindNotOfMore;
+        auto                                                const & target00738 = more;
+
+        (void) collection00738.findNotOf ( limit, storeIn00738, target00738 );
+        if ( storeIn00738.size() != expectedSize00738 || ! iteratorListEqualityCheckNoPred ( storeIn00738, expected00738 ) ) {
+            pTestLib->logError( "'MCTC-00738-FO-findNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00738-FO-findNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingMoreMoreThanLimit-cpp-xx : MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00739 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00739;
+        auto                                                        expectedSize00739 = expectedSizeFindNotOfMoreMoreThanLimit;
+        auto                                                const & expected00739 = expectedFindNotOfMoreMoreThanLimit;
+        auto                                                const & target00739 = moreMoreThanLimit;
+
+        (void) collection00739.findNotOf ( limit, storeIn00739, target00739 );
+        if ( storeIn00739.size() != expectedSize00739 || ! iteratorListEqualityCheckNoPred ( storeIn00739, expected00739 ) ) {
+            pTestLib->logError( "'MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00739-FO-findNotOfStoreInMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAll-cpp-xx : MCTC-00740-FO-findNotOfStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00740 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00740;
+        auto                                                        expectedSize00740 = expectedSizeFindNotOfAll;
+        auto                                                const & expected00740 = expectedFindNotOfAll;
+        auto                                                const & target00740 = all;
+
+        (void) collection00740.findNotOf ( limit, storeIn00740, target00740 );
+        if ( storeIn00740.size() != expectedSize00740 || ! iteratorListEqualityCheckNoPred ( storeIn00740, expected00740 ) ) {
+            pTestLib->logError( "'MCTC-00740-FO-findNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00740-FO-findNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00741 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00741;
+        auto                                                        expectedSize00741 = expectedSizeFindNotOfAllAndMore;
+        auto                                                const & expected00741 = expectedFindNotOfAllAndMore;
+        auto                                                const & target00741 = allAndMore;
+
+        (void) collection00741.findNotOf ( limit, storeIn00741, target00741 );
+        if ( storeIn00741.size() != expectedSize00741 || ! iteratorListEqualityCheckNoPred ( storeIn00741, expected00741 ) ) {
+            pTestLib->logError( "'MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00741-FO-findNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingNone-cpp-xx : MCTC-00742-FO-findNotOfReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00742 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00742;
+        auto                                                        expectedSize00742 = expectedSizeFindNotOfNone;
+        auto                                                const & expected00742 = expectedFindNotOfNone;
+        auto                                                const & target00742 = none;
+
+        storeIn00742 = collection00742.template findNotOf < __ComparisonEquivalent > ( limit, target00742 );
+        if ( storeIn00742.size() != expectedSize00742 || ! iteratorListEqualityCheckNoPred ( storeIn00742, expected00742 ) ) {
+            pTestLib->logError( "'MCTC-00742-FO-findNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00742-FO-findNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingOne-cpp-xx : MCTC-00743-FO-findNotOfReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00743 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00743;
+        auto                                                        expectedSize00743 = expectedSizeFindNotOfOne;
+        auto                                                const & expected00743 = expectedFindNotOfOne;
+        auto                                                const & target00743 = one;
+
+        storeIn00743 = collection00743.template findNotOf < __ComparisonEquivalent > ( limit, target00743 );
+        if ( storeIn00743.size() != expectedSize00743 || ! iteratorListEqualityCheckNoPred ( storeIn00743, expected00743 ) ) {
+            pTestLib->logError( "'MCTC-00743-FO-findNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00743-FO-findNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreLessThanLimit-cpp-xx : MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00744 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00744;
+        auto                                                        expectedSize00744 = expectedSizeFindNotOfMoreLessThanLimit;
+        auto                                                const & expected00744 = expectedFindNotOfMoreLessThanLimit;
+        auto                                                const & target00744 = moreLessThanLimit;
+
+        storeIn00744 = collection00744.template findNotOf < __ComparisonEquivalent > ( limit, target00744 );
+        if ( storeIn00744.size() != expectedSize00744 || ! iteratorListEqualityCheckNoPred ( storeIn00744, expected00744 ) ) {
+            pTestLib->logError( "'MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00744-FO-findNotOfReturnedMatchingMoreLessThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMore-cpp-xx : MCTC-00745-FO-findNotOfReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00745 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00745;
+        auto                                                        expectedSize00745 = expectedSizeFindNotOfMore;
+        auto                                                const & expected00745 = expectedFindNotOfMore;
+        auto                                                const & target00745 = more;
+
+        storeIn00745 = collection00745.template findNotOf < __ComparisonEquivalent > ( limit, target00745 );
+        if ( storeIn00745.size() != expectedSize00745 || ! iteratorListEqualityCheckNoPred ( storeIn00745, expected00745 ) ) {
+            pTestLib->logError( "'MCTC-00745-FO-findNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00745-FO-findNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingMoreMoreThanLimit-cpp-xx : MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00746 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00746;
+        auto                                                        expectedSize00746 = expectedSizeFindNotOfMoreMoreThanLimit;
+        auto                                                const & expected00746 = expectedFindNotOfMoreMoreThanLimit;
+        auto                                                const & target00746 = moreMoreThanLimit;
+
+        storeIn00746 = collection00746.template findNotOf < __ComparisonEquivalent > ( limit, target00746 );
+        if ( storeIn00746.size() != expectedSize00746 || ! iteratorListEqualityCheckNoPred ( storeIn00746, expected00746 ) ) {
+            pTestLib->logError( "'MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00746-FO-findNotOfReturnedMatchingMoreMoreThanLimit-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAll-cpp-xx : MCTC-00747-FO-findNotOfReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00747 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00747;
+        auto                                                        expectedSize00747 = expectedSizeFindNotOfAll;
+        auto                                                const & expected00747 = expectedFindNotOfAll;
+        auto                                                const & target00747 = all;
+
+        storeIn00747 = collection00747.template findNotOf < __ComparisonEquivalent > ( limit, target00747 );
+        if ( storeIn00747.size() != expectedSize00747 || ! iteratorListEqualityCheckNoPred ( storeIn00747, expected00747 ) ) {
+            pTestLib->logError( "'MCTC-00747-FO-findNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00747-FO-findNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findNotOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00748 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00748;
+        auto                                                        expectedSize00748 = expectedSizeFindNotOfAllAndMore;
+        auto                                                const & expected00748 = expectedFindNotOfAllAndMore;
+        auto                                                const & target00748 = allAndMore;
+
+        storeIn00748 = collection00748.template findNotOf < __ComparisonEquivalent > ( limit, target00748 );
+        if ( storeIn00748.size() != expectedSize00748 || ! iteratorListEqualityCheckNoPred ( storeIn00748, expected00748 ) ) {
+            pTestLib->logError( "'MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00748-FO-findNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingNone-cpp-xx : MCTC-00749-FO-findFirstNotOfMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00749 = underTest;
+        Iterator                                               result00749;
+        auto                                                        expectedResult00749 = expectedResultFindFirstNotOfNone;
+        auto                                                const & expected00749 = expectedFindFirstNotOfNone;
+        auto                                                const & target00749 = none;
+
+        result00749 = collection00749.findFirstNotOf ( target00749 );
+        if ( ( result00749 != collection00749.end() ) != expectedResult00749 || expectedResult00749 && expected00749 != * result00749 ) {
+            pTestLib->logError( "'MCTC-00749-FO-findFirstNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00749-FO-findFirstNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingOne-cpp-xx : MCTC-00750-FO-findFirstNotOfMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00750 = underTest;
+        Iterator                                               result00750;
+        auto                                                        expectedResult00750 = expectedResultFindFirstNotOfOne;
+        auto                                                const & expected00750 = expectedFindFirstNotOfOne;
+        auto                                                const & target00750 = one;
+
+        result00750 = collection00750.findFirstNotOf ( target00750 );
+        if ( ( result00750 != collection00750.end() ) != expectedResult00750 || expectedResult00750 && expected00750 != * result00750 ) {
+            pTestLib->logError( "'MCTC-00750-FO-findFirstNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00750-FO-findFirstNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingMore-cpp-xx : MCTC-00751-FO-findFirstNotOfMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00751 = underTest;
+        Iterator                                               result00751;
+        auto                                                        expectedResult00751 = expectedResultFindFirstNotOfMore;
+        auto                                                const & expected00751 = expectedFindFirstNotOfMore;
+        auto                                                const & target00751 = more;
+
+        result00751 = collection00751.findFirstNotOf ( target00751 );
+        if ( ( result00751 != collection00751.end() ) != expectedResult00751 || expectedResult00751 && expected00751 != * result00751 ) {
+            pTestLib->logError( "'MCTC-00751-FO-findFirstNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00751-FO-findFirstNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAll-cpp-xx : MCTC-00752-FO-findFirstNotOfMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00752 = underTest;
+        Iterator                                               result00752;
+        auto                                                        expectedResult00752 = expectedResultFindFirstNotOfAll;
+        auto                                                const & expected00752 = expectedFindFirstNotOfAll;
+        auto                                                const & target00752 = all;
+
+        result00752 = collection00752.findFirstNotOf ( target00752 );
+        if ( ( result00752 != collection00752.end() ) != expectedResult00752 || expectedResult00752 && expected00752 != * result00752 ) {
+            pTestLib->logError( "'MCTC-00752-FO-findFirstNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00752-FO-findFirstNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findFirstNotOfMatchingAllAndMore-cpp-xx : MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00753 = underTest;
+        Iterator                                               result00753;
+        auto                                                        expectedResult00753 = expectedResultFindFirstNotOfAllAndMore;
+        auto                                                const & expected00753 = expectedFindFirstNotOfAllAndMore;
+        auto                                                const & target00753 = allAndMore;
+
+        result00753 = collection00753.findFirstNotOf ( target00753 );
+        if ( ( result00753 != collection00753.end() ) != expectedResult00753 || expectedResult00753 && expected00753 != * result00753 ) {
+            pTestLib->logError( "'MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00753-FO-findFirstNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingNone-cpp-xx : MCTC-00754-FO-findLastNotOfMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00754 = underTest;
+        Iterator                                               result00754;
+        auto                                                        expectedResult00754 = expectedResultFindLastNotOfNone;
+        auto                                                const & expected00754 = expectedFindLastNotOfNone;
+        auto                                                const & target00754 = none;
+
+        result00754 = collection00754.findLastNotOf ( target00754 );
+        if ( ( result00754 != collection00754.end() ) != expectedResult00754 || expectedResult00754 && expected00754 != * result00754 ) {
+            pTestLib->logError( "'MCTC-00754-FO-findLastNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00754-FO-findLastNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingOne-cpp-xx : MCTC-00755-FO-findLastNotOfMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00755 = underTest;
+        Iterator                                               result00755;
+        auto                                                        expectedResult00755 = expectedResultFindLastNotOfOne;
+        auto                                                const & expected00755 = expectedFindLastNotOfOne;
+        auto                                                const & target00755 = one;
+
+        result00755 = collection00755.findLastNotOf ( target00755 );
+        if ( ( result00755 != collection00755.end() ) != expectedResult00755 || expectedResult00755 && expected00755 != * result00755 ) {
+            pTestLib->logError( "'MCTC-00755-FO-findLastNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00755-FO-findLastNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingMore-cpp-xx : MCTC-00756-FO-findLastNotOfMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00756 = underTest;
+        Iterator                                               result00756;
+        auto                                                        expectedResult00756 = expectedResultFindLastNotOfMore;
+        auto                                                const & expected00756 = expectedFindLastNotOfMore;
+        auto                                                const & target00756 = more;
+
+        result00756 = collection00756.findLastNotOf ( target00756 );
+        if ( ( result00756 != collection00756.end() ) != expectedResult00756 || expectedResult00756 && expected00756 != * result00756 ) {
+            pTestLib->logError( "'MCTC-00756-FO-findLastNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00756-FO-findLastNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastNotOfMatchingAll-cpp-xx : MCTC-00757-FO-findLastNotOfMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00757 = underTest;
+        Iterator                                               result00757;
+        auto                                                        expectedResult00757 = expectedResultFindLastNotOfAll;
+        auto                                                const & expected00757 = expectedFindLastNotOfAll;
+        auto                                                const & target00757 = all;
+
+        result00757 = collection00757.findLastNotOf ( target00757 );
+        if ( ( result00757 != collection00757.end() ) != expectedResult00757 || expectedResult00757 && expected00757 != * result00757 ) {
+            pTestLib->logError( "'MCTC-00757-FO-findLastNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00757-FO-findLastNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findLastOfMatchingAllAndMore-cpp-xx : MCTC-00758-FO-findLastNotOfMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00758 = underTest;
+        Iterator                                               result00758;
+        auto                                                        expectedResult00758 = expectedResultFindLastNotOfAllAndMore;
+        auto                                                const & expected00758 = expectedFindLastNotOfAllAndMore;
+        auto                                                const & target00758 = allAndMore;
+
+        result00758 = collection00758.findLastNotOf ( target00758 );
+        if ( ( result00758 != collection00758.end() ) != expectedResult00758 || expectedResult00758 && expected00758 != * result00758 ) {
+            pTestLib->logError( "'MCTC-00758-FO-findLastNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00758-FO-findLastNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingNone-cpp-xx : MCTC-00759-FO-findAllNotOfStoreInMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00759 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00759;
+        auto                                                        expectedSize00759 = expectedSizeFindAllNotOfNone;
+        auto                                                const & expected00759 = expectedFindAllNotOfNone;
+        auto                                                const & target00759 = none;
+
+        (void) collection00759.findAllNotOf ( storeIn00759, target00759 );
+        if ( storeIn00759.size() != expectedSize00759 || ! iteratorListEqualityCheckNoPred ( storeIn00759, expected00759 ) ) {
+            pTestLib->logError( "'MCTC-00759-FO-findAllNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00759-FO-findAllNotOfStoreInMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingOne-cpp-xx : MCTC-00760-FO-findAllNotOfStoreInMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00760 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00760;
+        auto                                                        expectedSize00760 = expectedSizeFindAllNotOfOne;
+        auto                                                const & expected00760 = expectedFindAllNotOfOne;
+        auto                                                const & target00760 = one;
+
+        (void) collection00760.findAllNotOf ( storeIn00760, target00760 );
+        if ( storeIn00760.size() != expectedSize00760 || ! iteratorListEqualityCheckNoPred ( storeIn00760, expected00760 ) ) {
+            pTestLib->logError( "'MCTC-00760-FO-findAllNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00760-FO-findAllNotOfStoreInMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingMore-cpp-xx : MCTC-00761-FO-findAllNotOfStoreInMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00761 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00761;
+        auto                                                        expectedSize00761 = expectedSizeFindAllNotOfMore;
+        auto                                                const & expected00761 = expectedFindAllNotOfMore;
+        auto                                                const & target00761 = more;
+
+        (void) collection00761.findAllNotOf ( storeIn00761, target00761 );
+        if ( storeIn00761.size() != expectedSize00761 || ! iteratorListEqualityCheckNoPred ( storeIn00761, expected00761 ) ) {
+            pTestLib->logError( "'MCTC-00761-FO-findAllNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00761-FO-findAllNotOfStoreInMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAll-cpp-xx : MCTC-00762-FO-findAllNotOfStoreInMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00762 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00762;
+        auto                                                        expectedSize00762 = expectedSizeFindAllNotOfAll;
+        auto                                                const & expected00762 = expectedFindAllNotOfAll;
+        auto                                                const & target00762 = all;
+
+        (void) collection00762.findAllNotOf ( storeIn00762, target00762 );
+        if ( storeIn00762.size() != expectedSize00762 || ! iteratorListEqualityCheckNoPred ( storeIn00762, expected00762 ) ) {
+            pTestLib->logError( "'MCTC-00762-FO-findAllNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00762-FO-findAllNotOfStoreInMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfStoreInMatchingAllAndMore-cpp-xx : MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00763 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00763;
+        auto                                                        expectedSize00763 = expectedSizeFindAllNotOfAllAndMore;
+        auto                                                const & expected00763 = expectedFindAllNotOfAllAndMore;
+        auto                                                const & target00763 = allAndMore;
+
+        (void) collection00763.findAllNotOf ( storeIn00763, target00763 );
+        if ( storeIn00763.size() != expectedSize00763 || ! iteratorListEqualityCheckNoPred ( storeIn00763, expected00763 ) ) {
+            pTestLib->logError( "'MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00763-FO-findAllNotOfStoreInMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingNone-cpp-xx : MCTC-00764-FO-findAllNotOfReturnedMatchingNone-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00764 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00764;
+        auto                                                        expectedSize00764 = expectedSizeFindAllNotOfNone;
+        auto                                                const & expected00764 = expectedFindAllNotOfNone;
+        auto                                                const & target00764 = none;
+
+        storeIn00764 = collection00764.template findAllNotOf < __ComparisonEquivalent > ( target00764 );
+        if ( storeIn00764.size() != expectedSize00764 || ! iteratorListEqualityCheckNoPred ( storeIn00764, expected00764 ) ) {
+            pTestLib->logError( "'MCTC-00764-FO-findAllNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00764-FO-findAllNotOfReturnedMatchingNone-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingOne-cpp-xx : MCTC-00765-FO-findAllNotOfReturnedMatchingOne-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00765 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00765;
+        auto                                                        expectedSize00765 = expectedSizeFindAllNotOfOne;
+        auto                                                const & expected00765 = expectedFindAllNotOfOne;
+        auto                                                const & target00765 = one;
+
+        storeIn00765 = collection00765.template findAllNotOf < __ComparisonEquivalent > ( target00765 );
+        if ( storeIn00765.size() != expectedSize00765 || ! iteratorListEqualityCheckNoPred ( storeIn00765, expected00765 ) ) {
+            pTestLib->logError( "'MCTC-00765-FO-findAllNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00765-FO-findAllNotOfReturnedMatchingOne-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingMore-cpp-xx : MCTC-00766-FO-findAllNotOfReturnedMatchingMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00766 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00766;
+        auto                                                        expectedSize00766 = expectedSizeFindAllNotOfMore;
+        auto                                                const & expected00766 = expectedFindAllNotOfMore;
+        auto                                                const & target00766 = more;
+
+        storeIn00766 = collection00766.template findAllNotOf < __ComparisonEquivalent > ( target00766 );
+        if ( storeIn00766.size() != expectedSize00766 || ! iteratorListEqualityCheckNoPred ( storeIn00766, expected00766 ) ) {
+            pTestLib->logError( "'MCTC-00766-FO-findAllNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00766-FO-findAllNotOfReturnedMatchingMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAll-cpp-xx : MCTC-00767-FO-findAllNotOfReturnedMatchingAll-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00767 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00767;
+        auto                                                        expectedSize00767 = expectedSizeFindAllNotOfAll;
+        auto                                                const & expected00767 = expectedFindAllNotOfAll;
+        auto                                                const & target00767 = all;
+
+        storeIn00767 = collection00767.template findAllNotOf < __ComparisonEquivalent > ( target00767 );
+        if ( storeIn00767.size() != expectedSize00767 || ! iteratorListEqualityCheckNoPred ( storeIn00767, expected00767 ) ) {
+            pTestLib->logError( "'MCTC-00767-FO-findAllNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00767-FO-findAllNotOfReturnedMatchingAll-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        /* MutableCollectionTestCase-FindOf-findAllNotOfReturnedMatchingAllAndMore-cpp-xx : MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-cpp-xx */
+        cds :: MutableCollection < __ElementType > & collection00768 = underTest;
+        __ComparisonEquivalent < Iterator >                    storeIn00768;
+        auto                                                        expectedSize00768 = expectedSizeFindAllNotOfAllAndMore;
+        auto                                                const & expected00768 = expectedFindAllNotOfAllAndMore;
+        auto                                                const & target00768 = allAndMore;
+
+        storeIn00768 = collection00768.template findAllNotOf < __ComparisonEquivalent > ( target00768 );
+        if ( storeIn00768.size() != expectedSize00768 || ! iteratorListEqualityCheckNoPred ( storeIn00768, expected00768 ) ) {
+            pTestLib->logError( "'MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00768-FO-findAllNotOfReturnedMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' OK", variant );
+        }
+
+        return true;
+    }
+
+    /* MutableCollectionTestGroup-RandomInsertion-cpp-xx : MCTG-00800-RI-cpp-xx. MCTC-00801-RI to MCTC-008xx-RI */
+    template <
+            typename __DerivedType,
+            typename __ElementType, /* NOLINT(bugprone-reserved-identifier) */
+            typename __FwdElementType1,
+            typename __FwdElementType2,
+            typename __FwdElementType3,
+            typename __ItType1,
+            typename __ItType2,
+            typename __ItType3,
+            typename ... __Pack
+    > auto mutableCollectionTestGroupRandomInsertion (
+            Test * pTestLib,
+            __ElementType const & insertByCopy,
+            __ElementType && insertByMove,
+            __FwdElementType1 && insertByEmplace1,
+            __FwdElementType2 && insertByEmplace2,
+            __FwdElementType3 && insertByEmplace3,
+            cds :: MutableCollection < __ElementType > const & toInsertAll,
+            std :: initializer_list < __ElementType > const & toInsertAllList,
+            __ItType1 const & r1Begin, __ItType1 const & r1End,
+            __ItType2 const & r2Begin, __ItType2 const & r2End,
+            __ItType3 const & r3Begin, __ItType3 const & r3End,
+            cds :: MutableCollection < __ElementType > const & expectedInsertByCopy,
+            cds :: MutableCollection < __ElementType > const & expectedInsertByMove,
+            cds :: MutableCollection < __ElementType > const & expectedAfterAllInsertByEmplace,
+            cds :: MutableCollection < __ElementType > const & expectedAfterPackInsertion,
+            cds :: MutableCollection < __ElementType > const & expectedAfterInsertAll,
+            cds :: MutableCollection < __ElementType > const & expectedAfterInsertAllList,
+            cds :: MutableCollection < __ElementType > const & expectedAfterR1Insert,
+            cds :: MutableCollection < __ElementType > const & expectedAfterR2Insert,
+            cds :: MutableCollection < __ElementType > const & expectedAfterR3Insert,
+
+            __Pack && ... insertedPack
+    ) -> bool {
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByCopy-cpp-xx : MCTC-00801-RI-insertByCopy-cpp-xx */
+        __DerivedType RI00801;
+        cds :: MutableCollection < __ElementType > & baseRI00801 = RI00801;
+
+        baseRI00801.insert ( insertByCopy );
+        if ( ! RI00801.equals ( expectedInsertByCopy ) ) {
+            pTestLib->logError( "'MCTC-00801-RI-insertByCopy-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00801-RI-insertByCopy-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByMove-cpp-xx : MCTC-00802-RI-insertByMove-cpp-xx */
+        __DerivedType RI00802;
+        cds :: MutableCollection < __ElementType > & baseRI00802 = RI00802;
+
+        baseRI00802.insert ( std :: forward < __ElementType > ( insertByMove ) );
+        if ( ! RI00802.equals ( expectedInsertByMove ) ) {
+            pTestLib->logError( "'MCTC-00802-RI-insertByMove-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00802-RI-insertByMove-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByEmplace-cpp-xx : MCTC-00803-RI-insertByEmplace-cpp-xx */
+        __DerivedType RI00803;
+        cds :: MutableCollection < __ElementType > & baseRI00803 = RI00803;
+
+        baseRI00803.emplace ( std :: forward < __FwdElementType1 > ( insertByEmplace1 ) );
+        baseRI00803.emplace ( std :: forward < __FwdElementType2 > ( insertByEmplace2 ) );
+        baseRI00803.emplace ( std :: forward < __FwdElementType3 > ( insertByEmplace3 ) );
+        if ( ! RI00803.equals ( expectedAfterAllInsertByEmplace ) ) {
+            pTestLib->logError( "'MCTC-00803-RI-insertByEmplace-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00803-RI-insertByEmplace-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByPack-cpp-xx : MCTC-00804-RI-insertByPack-cpp-xx */
+        __DerivedType RI00804;
+        cds :: MutableCollection < __ElementType > & baseRI00804 = RI00804;
+
+        baseRI00804.insertAll ( std :: forward < __Pack > ( insertedPack ) ... );
+        if ( ! RI00804.equals ( expectedAfterPackInsertion ) ) {
+            pTestLib->logError( "'MCTC-00804-RI-insertByPack-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00804-RI-insertByPack-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllIterable-cpp-xx : MCTC-00805-RI-insertByInsertAllIterable-cpp-xx */
+        __DerivedType RI00805;
+        cds :: MutableCollection < __ElementType > & baseRI00805 = RI00805;
+
+        baseRI00805.insertAllOf ( toInsertAll );
+        if ( ! RI00805.equals ( expectedAfterInsertAll ) ) {
+            pTestLib->logError( "'MCTC-00805-RI-insertByInsertAllIterable-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00805-RI-insertByInsertAllIterable-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByInsertAllList-cpp-xx : MCTC-00806-RI-insertByInsertAllList-cpp-xx */
+        __DerivedType RI00806;
+        cds :: MutableCollection < __ElementType > & baseRI00806 = RI00806;
+
+        baseRI00806.insertAllOf ( toInsertAllList );
+        if ( ! RI00806.equals ( expectedAfterInsertAllList ) ) {
+            pTestLib->logError( "'MCTC-00806-RI-insertByInsertAllList-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00806-RI-insertByInsertAllList-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByRange1-cpp-xx : MCTC-00807-RI-insertByRange1-cpp-xx */
+        __DerivedType RI00807;
+        cds :: MutableCollection < __ElementType > & baseRI00807 = RI00807;
+
+        baseRI00807.insertAllOf ( r1Begin, r1End );
+        if ( ! RI00807.equals ( expectedAfterR1Insert ) ) {
+            pTestLib->logError( "'MCTC-00807-RI-insertByRange1-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00807-RI-insertByRange1-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByRange2-cpp-xx : MCTC-00808-RI-insertByRange2-cpp-xx */
+        __DerivedType RI00808;
+        cds :: MutableCollection < __ElementType > & baseRI00808 = RI00808;
+
+        baseRI00808.insertAllOf ( r2Begin, r2End );
+        if ( ! RI00808.equals ( expectedAfterR2Insert ) ) {
+            pTestLib->logError( "'MCTC-00808-RI-insertByRange2-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00808-RI-insertByRange2-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        /* MutableCollectionTestCase-RandomInsertion-insertByRange3-cpp-xx : MCTC-00809-RI-insertByRange3-cpp-xx */
+        __DerivedType RI00809;
+        cds :: MutableCollection < __ElementType > & baseRI00809 = RI00809;
+
+        baseRI00809.insertAllOf ( r3Begin, r3End );
+        if ( ! RI00809.equals ( expectedAfterR3Insert ) ) {
+            pTestLib->logError( "'MCTC-00809-RI-insertByRange3-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        } else {
+            pTestLib->logOK ( "'MCTC-00809-RI-insertByRange3-" __CDS_cpplang_core_version_name "' OK" );
+        }
+
+        return true;
     }
 
-    return true;
 }
 
 /* MutableCollectionTestSuite-cpp-xx : MCTS-00001-cpp-xx */
 auto MutableCollectionTest :: execute () noexcept -> bool {
+
     bool allOk = true;
 
     this->executeSubtest ( "MutableCollectionTestGroup-MemberFunctions-" __CDS_cpplang_core_version_name " : MCTG-00002-MF-" __CDS_cpplang_core_version_name " : IntArray", [& allOk, this] {
