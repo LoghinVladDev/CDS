@@ -44,6 +44,15 @@ namespace {
     using cds::meta::referenceOf;
 
 
+    template <typename T> auto make_a_empty () noexcept -> cds::Array<T> {
+        return {};
+    }
+
+    template <typename ... T> auto make_a (T && ... elements) noexcept -> decltype (cds::arrayOf (std :: forward <T> (elements) ...)) {
+        return cds::arrayOf (std :: forward <T> (elements) ...);
+    }
+
+
     /* CollectionTestGroup-RemoveAbsIt-cpp-xx : CTG-00350-RAIT-cpp-xx. CTC-00351-RAIT to CTC-00356-RAIT */
     template <
             typename __MemberType  /* NOLINT(bugprone-reserved-identifier) */
@@ -13005,7 +13014,7 @@ auto CollectionTest :: execute () noexcept -> bool {
         );
     });
 
-#define make_a(type, ...) cds :: Array < type > { __VA_ARGS__ }
+//#define make_a(type, ...) cds :: Array < type > { __VA_ARGS__ }
 #define make_ll(type, ...) cds :: LinkedList < type > { __VA_ARGS__ }
 #define make_hs(type, ...) cds :: HashSet < type > { __VA_ARGS__ }
 #define make_lhs(type, ...) cds :: LinkedHashSet < type > { __VA_ARGS__ }
@@ -13031,24 +13040,24 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* matchingMore = */                                    [](int x) { return x >= 4 && x <= 6; },
                 /* matchingMoreMoreThanLimit = */                       [](int x) { return x >= 4 && x <= 7; },
                 /* matchingAll = */                                     [](int x) { return x >= 1 && x <= 9; },
-                /* equivAfterRemoveThatMatchesNone = */                 make_a ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveThatMatchesOne = */                  make_a ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_a ( int, 1, 2, 3, 6, 7, 8, 9 ),
-                /* equivAfterRemoveThatMatchesMoreExact = */            make_a ( int, 1, 2, 3, 7, 8, 9 ),
-                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_a ( int, 1, 2, 3, 7, 8, 9 ),
-                /* equivAfterRemoveThatMatchesAll = */                  make_a ( int, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveFirstThatMatchesNone = */            make_a ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveFirstThatMatchesOne = */             make_a ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveFirstThatMatchesMore = */            make_a ( int, 1, 2, 3, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveFirstThatMatchesAll = */             make_a ( int, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveLastThatMatchesNone = */             make_a ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveLastThatMatchesOne = */              make_a ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveLastThatMatchesMore = */             make_a ( int, 1, 2, 3, 4, 5, 7, 8, 9 ),
-                /* equivAfterRemoveLastThatMatchesAll = */              make_a ( int, 1, 2, 3, 4, 5, 6, 7, 8 ),
-                /* equivAfterRemoveAllThatMatchesNone = */              make_a ( int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveAllThatMatchesOne = */               make_a ( int, 1, 2, 4, 5, 6, 7, 8, 9 ),
-                /* equivAfterRemoveAllThatMatchesMore = */              make_a ( int, 1, 2, 3, 7, 8, 9 ),
-                /* equivAfterRemoveAllThatMatchesAll = */               make_a ( int )
+                /* equivAfterRemoveThatMatchesNone = */                 make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_a <int> ( 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_a <int> ( 1, 2, 3, 6, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_a <int> ( 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_a <int> ( 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_a <int> ( 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_a <int> ( 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_a <int> ( 1, 2, 3, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_a <int> ( 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_a <int> ( 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_a <int> ( 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_a <int> ( 1, 2, 3, 7, 8, 9 ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_a_empty <int> ()
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-" __CDS_cpplang_core_version_name " : CTG-00400-RB-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, & allOk]{
@@ -13319,24 +13328,24 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* matchingMore = */                                    [](String const & x) { return x.startsWith ("bb"); },
                 /* matchingMoreMoreThanLimit = */                       [](String const & x) { return x.startsWith ("bb") || x.endsWith ("b"); },
                 /* matchingAll = */                                     [](String const & x) { return ! x.empty(); },
-                /* equivAfterRemoveThatMatchesNone = */                 make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveThatMatchesOne = */                  make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_a ( String, "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveThatMatchesMoreExact = */            make_a ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_a ( String, "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveThatMatchesAll = */                  make_a ( String, "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveFirstThatMatchesNone = */            make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveFirstThatMatchesOne = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveFirstThatMatchesMore = */            make_a ( String, "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveFirstThatMatchesAll = */             make_a ( String, "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveLastThatMatchesNone = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveLastThatMatchesOne = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveLastThatMatchesMore = */             make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveLastThatMatchesAll = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
-                /* equivAfterRemoveAllThatMatchesNone = */              make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveAllThatMatchesOne = */               make_a ( String, "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveAllThatMatchesMore = */              make_a ( String, "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
-                /* equivAfterRemoveAllThatMatchesAll = */               make_a ( String )
+                /* equivAfterRemoveThatMatchesNone = */                 make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesOne = */                  make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreLessThanLimit = */    make_a <String> ( "aaa", "aab", "aac", "bba", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreExact = */            make_a <String> ( "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesMoreMoreThanLimit = */    make_a <String> ( "aaa", "aac", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveThatMatchesAll = */                  make_a <String> ( "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesNone = */            make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesOne = */             make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesMore = */            make_a <String> ( "aaa", "aab", "aac", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveFirstThatMatchesAll = */             make_a <String> ( "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesNone = */             make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesOne = */              make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesMore = */             make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveLastThatMatchesAll = */              make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb" ),
+                /* equivAfterRemoveAllThatMatchesNone = */              make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "bbc", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesOne = */               make_a <String> ( "aaa", "aab", "aac", "bba", "bbb", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesMore = */              make_a <String> ( "aaa", "aab", "aac", "cca", "ccb", "ccc" ),
+                /* equivAfterRemoveAllThatMatchesAll = */               make_a_empty < String > ()
         );
     });
     this->executeSubtest ( "CollectionTestGroup-RemoveBy-" __CDS_cpplang_core_version_name " : CTG-00400-RB-" __CDS_cpplang_core_version_name " : StringLinkedList", [this, & allOk]{
@@ -13690,27 +13699,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* iterableUnderTest= */                        underTest,
                 /* removePfnVariant= */                         & cds :: Collection < int > :: removeOf,
                 /* limit= */                                    3U,
-                /* noneCommon= */                               make(int, 10, 11, 12, 13),
-                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                               make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                                make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make_a <int> ( 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make_a <int> ( 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */                   0U,
-                /* expectedCollectionFromNone= */               make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromNone= */               make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromOne= */                    1U,
-                /* expectedCollectionFromOne= */                make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedCollectionFromOne= */                make_a <int> ( 1, 2, 3, 4, 5, 7, 8, 9 ),
                 /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 1, 2, 4, 6, 7, 8, 9 ),
+                /* expectedCollectionFromMoreLessThanLimit= */  make_a <int> ( 1, 2, 4, 6, 7, 8, 9 ),
                 /* expectedResultFromMore= */                   3U,
-                /* expectedCollectionFromMore= */               make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedCollectionFromMore= */               make_a <int> ( 1, 2, 4, 6, 8, 9 ),
                 /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 1, 4, 6, 7, 8, 9 ),
+                /* expectedCollectionFromMoreMoreThanLimit= */  make_a <int> ( 1, 4, 6, 7, 8, 9 ),
                 /* expectedResultFromAll= */                    3U,
-                /* expectedCollectionFromAll= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromAll= */                make_a <int> ( 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromAllAndMore= */             3U,
-                /* expectedCollectionFromAllAndMore= */         make(int, 4, 5, 6, 7, 8, 9 )
+                /* expectedCollectionFromAllAndMore= */         make_a <int> ( 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13720,21 +13729,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
                 /* removeAllPfnVariant= */              & cds :: Collection < int > :: removeAllOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           0U,
-                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromNone= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromOne= */            1U,
-                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedCollectionFromOne= */        make_a <int> ( 1, 2, 3, 4, 5, 7, 8, 9 ),
                 /* expectedResultFromMore= */           3U,
-                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 6, 8, 9 ),
+                /* expectedCollectionFromMore= */       make_a <int> ( 1, 2, 4, 6, 8, 9 ),
                 /* expectedResultFromAll= */            9U,
-                /* expectedCollectionFromAll= */        make(int ),
+                /* expectedCollectionFromAll= */        make_a_empty <int> (),
                 /* expectedResultFromAllAndMore= */     9U,
-                /* expectedCollectionFromAllAndMore= */ make(int )
+                /* expectedCollectionFromAllAndMore= */ make_a_empty <int >()
         );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13744,21 +13753,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 0,
                 /* iterableUnderTest= */                underTest,
                 /* removeFirstLastPfnVariant= */        & cds :: Collection < int > :: removeFirstOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           false,
-                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromNone= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromOne= */            true,
-                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedCollectionFromOne= */        make_a <int> ( 1, 2, 3, 4, 5, 7, 8, 9 ),
                 /* expectedResultFromMore= */           true,
-                /* expectedCollectionFromMore= */       make(int, 1, 2, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromMore= */       make_a <int> ( 1, 2, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromAll= */            true,
-                /* expectedCollectionFromAll= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromAll= */        make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromAllAndMore= */     true,
-                /* expectedCollectionFromAllAndMore= */ make(int, 2, 3, 4, 5, 6, 7, 8, 9 )
+                /* expectedCollectionFromAllAndMore= */ make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13768,21 +13777,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
                 /* removeFirstLastPfnVariant= */        & cds :: Collection < int > :: removeLastOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           false,
-                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromNone= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromOne= */            true,
-                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 7, 8, 9 ),
+                /* expectedCollectionFromOne= */        make_a <int> ( 1, 2, 3, 4, 5, 7, 8, 9 ),
                 /* expectedResultFromMore= */           true,
-                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 8, 9 ),
+                /* expectedCollectionFromMore= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 8, 9 ),
                 /* expectedResultFromAll= */            true,
-                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedCollectionFromAll= */        make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8 ),
                 /* expectedResultFromAllAndMore= */     true,
-                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8 )
+                /* expectedCollectionFromAllAndMore= */ make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13793,27 +13802,27 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* iterableUnderTest= */                        underTest,
                 /* removePfnVariant= */                         & cds :: Collection < int > :: removeNotOf,
                 /* limit= */                                    3U,
-                /* noneCommon= */                               make(int, 10, 11, 12, 13),
-                /* oneCommon= */                                make(int, 16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make(int, 20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make(int, 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                               make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                                make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreLessThanLimitCommon= */                  make_a <int> ( 20, 123, 5, 1230, 435, 3, 1235, 9534),
+                /* moreCommon= */                               make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* moreMoreThanLimitCommon= */                  make_a <int> ( 2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                                make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                         make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */                   3U,
-                /* expectedCollectionFromNone= */               make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromNone= */               make_a <int> ( 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromOne= */                    3U,
-                /* expectedCollectionFromOne= */                make(int, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromOne= */                make_a <int> ( 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedCollectionFromMoreLessThanLimit= */  make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromMoreLessThanLimit= */  make_a <int> ( 3, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromMore= */                   3U,
-                /* expectedCollectionFromMore= */               make(int, 3, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromMore= */               make_a <int> ( 3, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedCollectionFromMoreMoreThanLimit= */  make(int, 2, 3, 5, 7, 8, 9 ),
+                /* expectedCollectionFromMoreMoreThanLimit= */  make_a <int> ( 2, 3, 5, 7, 8, 9 ),
                 /* expectedResultFromAll= */                    0U,
-                /* expectedCollectionFromAll= */                make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromAll= */                make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromAllAndMore= */             0U,
-                /* expectedCollectionFromAllAndMore= */         make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                /* expectedCollectionFromAllAndMore= */         make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13823,21 +13832,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 5,
                 /* iterableUnderTest= */                underTest,
                 /* removeAllPfnVariant= */              & cds :: Collection < int > :: removeAllNotOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           9U,
-                /* expectedCollectionFromNone= */       make(int),
+                /* expectedCollectionFromNone= */       make_a_empty <int> (),
                 /* expectedResultFromOne= */            8U,
-                /* expectedCollectionFromOne= */        make(int, 6 ),
+                /* expectedCollectionFromOne= */        make_a <int> ( 6 ),
                 /* expectedResultFromMore= */           6U,
-                /* expectedCollectionFromMore= */       make(int, 3, 5, 7 ),
+                /* expectedCollectionFromMore= */       make_a <int> ( 3, 5, 7 ),
                 /* expectedResultFromAll= */            0U,
-                /* expectedCollectionFromAll= */        make(int, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
+                /* expectedCollectionFromAll= */        make_a <int> ( 1 ,2, 3, 4, 5, 6, 7, 8, 9 ),
                 /* expectedResultFromAllAndMore= */     0U,
-                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                /* expectedCollectionFromAllAndMore= */ make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9 )
         );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13847,21 +13856,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 10,
                 /* iterableUnderTest= */                underTest,
                 /* removeFirstLastPfnVariant= */        & cds :: Collection < int > :: removeFirstNotOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           true,
-                /* expectedCollectionFromNone= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedCollectionFromNone= */       make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9),
                 /* expectedResultFromOne= */            true,
-                /* expectedCollectionFromOne= */        make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedCollectionFromOne= */        make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9),
                 /* expectedResultFromMore= */           true,
-                /* expectedCollectionFromMore= */       make(int, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedCollectionFromMore= */       make_a <int> ( 2, 3, 4, 5, 6, 7, 8, 9),
                 /* expectedResultFromAll= */            false,
-                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedCollectionFromAll= */        make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9),
                 /* expectedResultFromAllAndMore= */     false,
-                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+                /* expectedCollectionFromAllAndMore= */ make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -13871,21 +13880,21 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* subvariantOffset= */                 15,
                 /* iterableUnderTest= */                underTest,
                 /* removeFirstLastPfnVariant= */        & cds :: Collection < int > :: removeLastNotOf,
-                /* noneCommon= */                       make(int, 10, 11, 12, 13),
-                /* oneCommon= */                        make(int, 16, 6, 11, 12, 13),
-                /* moreCommon= */                       make(int, 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                        make(int, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                 make(int, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
+                /* noneCommon= */                       make_a <int> ( 10, 11, 12, 13),
+                /* oneCommon= */                        make_a <int> ( 16, 6, 11, 12, 13),
+                /* moreCommon= */                       make_a <int> ( 20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
+                /* allCommon= */                        make_a <int> ( 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
+                /* allAndMoreCommon= */                 make_a <int> ( 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           true,
-                /* expectedCollectionFromNone= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8 ),
+                /* expectedCollectionFromNone= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8 ),
                 /* expectedResultFromOne= */            true,
-                /* expectedCollectionFromOne= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedCollectionFromOne= */        make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8),
                 /* expectedResultFromMore= */           true,
-                /* expectedCollectionFromMore= */       make(int, 1, 2, 3, 4, 5, 6, 7, 8),
+                /* expectedCollectionFromMore= */       make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8),
                 /* expectedResultFromAll= */            false,
-                /* expectedCollectionFromAll= */        make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                /* expectedCollectionFromAll= */        make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9),
                 /* expectedResultFromAllAndMore= */     false,
-                /* expectedCollectionFromAllAndMore= */ make(int, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+                /* expectedCollectionFromAllAndMore= */ make_a <int> ( 1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
 #undef make
@@ -17064,7 +17073,7 @@ auto CollectionTest :: execute () noexcept -> bool {
 
         cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-#define make(t, ...) make_a(t, __VA_ARGS__)
+#define make(t, ...) make_a <t> (__VA_ARGS__)
 
         allOk = allOk && collectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
                 /* pTestLib= */                                 this,
@@ -17116,9 +17125,9 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* expectedResultFromMore= */           3U,
                 /* expectedCollectionFromMore= */       make(String, 1, 2, 4, 6, 8, 9 ),
                 /* expectedResultFromAll= */            9U,
-                /* expectedCollectionFromAll= */        make(String ),
+                /* expectedCollectionFromAll= */        make_a_empty <String>(),
                 /* expectedResultFromAllAndMore= */     9U,
-                /* expectedCollectionFromAllAndMore= */ make(String )
+                /* expectedCollectionFromAllAndMore= */ make_a_empty <String>()
         );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < cds :: Iterable < String >, decltype (underTest), String > (
@@ -17213,7 +17222,7 @@ auto CollectionTest :: execute () noexcept -> bool {
                 /* allCommon= */                        make(String, 9, 2, 5, 1, 4, 3, 7, 8, 6 ),
                 /* allAndMoreCommon= */                 make(String, 91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
                 /* expectedResultFromNone= */           9U,
-                /* expectedCollectionFromNone= */       make(String),
+                /* expectedCollectionFromNone= */       make_a_empty <String> (),
                 /* expectedResultFromOne= */            8U,
                 /* expectedCollectionFromOne= */        make(String, 6 ),
                 /* expectedResultFromMore= */           6U,

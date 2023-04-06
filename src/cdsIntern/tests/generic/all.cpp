@@ -11,17 +11,25 @@
 
 #include <CDS/Array>
 #include <CDS/Pair>
-#include <CDS/memory/SharedPointer>
+#include <CDS/memory/UniquePointer>
 #include <CDS/util/JSON>
 
-
-auto main () -> int {
+namespace {
 
     using cds::uint32;
 
     using cds::String;
-    using cds::SharedPointer;
+    using cds::UniquePointer;
     using cds::Pair;
+
+    template <typename TestType>
+    __CDS_NoDiscard auto createTest (cds::StringView name) noexcept -> Pair <UniquePointer <Test>, String> {
+        return {cds::makeUnique <TestType> (), name};
+    }
+}
+
+
+auto main () -> int {
 
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -30,14 +38,14 @@ auto main () -> int {
         return test.start(name);
     };
 
-    cds :: Array < Pair < SharedPointer < Test >, String > > tests = {
-            Pair < SharedPointer < Test >, String > { new StringTest (),  "StringTest" },
-            Pair < SharedPointer < Test >, String > { new CollectionTest (),  "CollectionTest" },
-            Pair < SharedPointer < Test >, String > { new MutableCollectionTest (),  "MutableCollectionTest" },
-            Pair < SharedPointer < Test >, String > { new SetTest (),  "SetTest" },
-            Pair < SharedPointer < Test >, String > { new ListTest (),  "ListTest" },
-            Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
-    };
+    auto tests = cds :: arrayOf (
+            createTest <StringTest> ("StringTest"),
+            createTest <CollectionTest> ("CollectionTest"),
+            createTest <MutableCollectionTest> ("MutableCollectionTest"),
+            createTest <SetTest> ("SetTest"),
+            createTest <ListTest> ("ListTest"),
+            createTest <JsonTest> ("JsonTest")
+    );
 
     uint32 failedTestCount = 0U;
     uint32 successfulTestCount = 0U;
