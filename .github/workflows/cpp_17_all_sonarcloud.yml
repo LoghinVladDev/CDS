@@ -17,14 +17,30 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v1
+      - name: Install Clang and LLVM (including llvm-cov)
+        uses: KyleMayes/install-llvm-action@v1.6.1
+        with:
+          version: "15.0.6"
       - name: Run build-wrapper
         run: |
           mkdir build
           cmake -S . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS=" ${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping -O0 -g"
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --target cpp17_test_all
+      - name: Run tests to generate coverage information
+        run: |
+          ./build/cpp17_test_all
+          mv default.profraw cpp17_test_all.profraw
+      - name: Merge counters from different runs and convert the result into an llvm-cov-compatible form
+        run: |
+          llvm-profdata merge -o merged.profdata *.profraw
+      - name: Collect the coverage
+        run: |
+          llvm-cov show --instr-profile merged.profdata build/cpp17_test_all > cpp17_test_all_coverage.txt
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+          sonar-scanner \
+            --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" \
+            --define sonar.cfamily.llvm-cov.reportPath=cpp17_test_all_coverage.txt
