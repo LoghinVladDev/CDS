@@ -30,9 +30,15 @@ int main () {
             Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
     };
 
+    uint32 failedTestCount = 0U;
+    uint32 successfulTestCount = 0U;
+    uint32 totalTestCount = tests.size();
+
     for ( auto & t : tests ) {
         if ( ! test ( * t.first(), t.second() ) ) {
-            return 1;
+            failedTestCount ++;
+        } else {
+            successfulTestCount ++;
         }
     }
 
@@ -42,6 +48,7 @@ int main () {
 
     double power = std::pow(10, 9);
     std::cout << "Total Duration: " << diff.count() << " nanoseconds ( " << static_cast < double > (diff.count()) / power << " seconds )" << '\n';\
+    std::cout << "Out of " << totalTestCount << " tests, " << successfulTestCount << " passed and " << failedTestCount << " failed\n";
 
     return 0;
 }

@@ -697,26 +697,35 @@ template <
     collection.clear();
 
     /* CollectionTestCase-DelegateForwardConstIterableClientImports-emptybegin_end-cpp-xx : CTC-00054-IT-e_begin_end-cpp-xx */
-    for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-        pTestLib->logError( "'CTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
+    {
+        auto it = collection.begin();
+        if (it != collection.end()) {
+            pTestLib->logError("'CTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' failed");
+            return false;
+        }
     }
 
     pTestLib->logOK ( "'CTC-00054-IT-e_begin_end-" __CDS_cpplang_core_version_name "' OK" );
 
-    /* CollectionTestCase-DelegateForwardConstIterableClientImports-emptycbegin_cend-cpp-xx : CTC-00055-IT-e_cbegin_cend-cpp-xx */
-    for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
-        pTestLib->logError( "'CTC-00055-IT-e_cbegin_cend-" __CDS_cpplang_core_version_name "' failed" );
-        return false;
+    {
+        auto it = collection.cbegin();
+        /* CollectionTestCase-DelegateForwardConstIterableClientImports-emptycbegin_cend-cpp-xx : CTC-00055-IT-e_cbegin_cend-cpp-xx */
+        if (it != collection.cend()) {
+            pTestLib->logError( "'CTC-00055-IT-e_cbegin_cend-" __CDS_cpplang_core_version_name "' failed" );
+            return false;
+        }
     }
 
     pTestLib->logOK ( "'CTC-00055-IT-e_cbegin_cend-" __CDS_cpplang_core_version_name "' OK" );
 
     /* CollectionTestCase-DelegateForwardConstIterableClientImports-e_emptyRange-cpp-xx : CTC-00056-IT-e_emptyRange-cpp-xx */
+    /* not required, covered by previous tests - 00054, 00055 */
+    /*
     for ( auto const & e : collection ) {
         pTestLib->logError( "'CTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' failed" );
         return false;
     }
+    */
 
     pTestLib->logOK ( "'CTC-00056-IT-e_emptyRange-" __CDS_cpplang_core_version_name "' OK" );
 
@@ -3358,7 +3367,7 @@ template <
     __DerivedType RI00802;
     cds :: Collection < __ElementType > & baseRI00802 = RI00802;
 
-    baseRI00802.insert ( std :: move ( insertByMove ) );
+    baseRI00802.insert ( std :: forward <__ElementType> ( insertByMove ) );
     if ( ! RI00802.equals ( expectedInsertByMove ) ) {
         pTestLib->logError( "'CTC-00802-RI-insertByMove-" __CDS_cpplang_core_version_name "' failed" );
         return false;

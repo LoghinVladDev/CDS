@@ -1066,17 +1066,17 @@ auto StringTest::execute() noexcept -> bool {
         this->log("'%c' is uppercase : '%s'", 'a', StringUtils < char > :: isUpper('a') ? "true" : "false");
         this->log("'%c' is uppercase : '%s'", '0', StringUtils < char > :: isUpper('0') ? "true" : "false");
 
-        if (StringUtils < char > :: isUpper('A') != true) {
+        if (! StringUtils < char > :: isUpper('A')) {
             this->logWarning("isUpperChar Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isUpper('a') != false) {
+        if (StringUtils < char > :: isUpper('a')) {
             this->logWarning("isUpperChar Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isUpper('0') != false) {
+        if (StringUtils < char > :: isUpper('0')) {
             this->logWarning("isUpperChar Error");
             allOk = false;
         }
@@ -1085,17 +1085,17 @@ auto StringTest::execute() noexcept -> bool {
         this->log("'%c' is lowercase : '%s'", 'a', StringUtils < char > :: isLower('a') ? "true" : "false");
         this->log("'%c' is lowercase : '%s'", '0', StringUtils < char > :: isLower('0') ? "true" : "false");
 
-        if (StringUtils < char > :: isLower('A') != false) {
+        if (StringUtils < char > :: isLower('A')) {
             this->logWarning("isLowerChar Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isLower('a') != true) {
+        if (! StringUtils < char > :: isLower('a')) {
             this->logWarning("isLowerChar Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isLower('0') != false) {
+        if (StringUtils < char > :: isLower('0')) {
             this->logWarning("isLowerChar Error");
             allOk = false;
         }
@@ -1104,17 +1104,17 @@ auto StringTest::execute() noexcept -> bool {
         this->log("'%c' is digit : '%s'", 'a', StringUtils < char > :: isDigit('a') ? "true" : "false");
         this->log("'%c' is digit : '%s'", '0', StringUtils < char > :: isDigit('0') ? "true" : "false");
 
-        if (StringUtils < char > :: isDigit('A') != false) {
+        if (StringUtils < char > :: isDigit('A')) {
             this->logWarning("isDigit Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isDigit('a') != false) {
+        if (StringUtils < char > :: isDigit('a')) {
             this->logWarning("isDigit Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isDigit('0') != true) {
+        if (! StringUtils < char > :: isDigit('0')) {
             this->logWarning("isDigit Error");
             allOk = false;
         }
@@ -1123,17 +1123,17 @@ auto StringTest::execute() noexcept -> bool {
         this->log("'%c' is letter : '%s'", 'a', StringUtils < char > :: isLetter('a') ? "true" : "false");
         this->log("'%c' is letter : '%s'", '0', StringUtils < char > :: isLetter('0') ? "true" : "false");
 
-        if (StringUtils < char > :: isLetter('A') != true) {
+        if (! StringUtils < char > :: isLetter('A')) {
             this->logWarning("isLetter Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isLetter('a') != true) {
+        if (! StringUtils < char > :: isLetter('a')) {
             this->logWarning("isLetter Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isLetter('0') != false) {
+        if (StringUtils < char > :: isLetter('0')) {
             this->logWarning("isLetter Error");
             allOk = false;
         }
@@ -1143,22 +1143,22 @@ auto StringTest::execute() noexcept -> bool {
         this->log("'%c' is alpha : '%s'", '0', StringUtils < char > :: isAlpha('0') ? "true" : "false");
         this->log("'%c' is alpha : '%s'", '-', StringUtils < char > :: isAlpha('-') ? "true" : "false");
 
-        if (StringUtils < char > :: isAlpha('A') != true) {
+        if (! StringUtils < char > :: isAlpha('A')) {
             this->logWarning("isAlpha Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isAlpha('a') != true) {
+        if (! StringUtils < char > :: isAlpha('a')) {
             this->logWarning("isAlpha Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isAlpha('0') != true) {
+        if (! StringUtils < char > :: isAlpha('0')) {
             this->logWarning("isAlpha Error");
             allOk = false;
         }
 
-        if (StringUtils < char > :: isAlpha('-') != false) {
+        if (StringUtils < char > :: isAlpha('-')) {
             this->logWarning("isAlpha Error");
             allOk = false;
         }

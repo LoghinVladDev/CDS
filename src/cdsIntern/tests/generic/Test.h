@@ -81,7 +81,7 @@ public:
 
                 __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
 
-                if ( colorMap.containsKey( static_cast<Modifier>(i) ) && ( f & i ) ) {
+                if ( colorMap.containsKey( static_cast<Modifier>(i) ) && (( f & i ) != 0U) ) {
                     res.append( colorMap.get( static_cast<Modifier>(i) ) ).append(";");
                 }
 
