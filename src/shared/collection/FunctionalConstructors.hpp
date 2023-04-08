@@ -110,7 +110,7 @@ namespace cds {
 
 
 
-#if defined (__CDS_TREE_SET_HPP__) && ! defined ( __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR__ ) && defined ( __CDS_TREE_SET_REMOVE_WHEN_IMPLEMENTED )
+#if defined (__CDS_TREE_SET_HPP__) && ! defined ( __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR__ )
 #define __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #if ! defined (__CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR__)
@@ -171,7 +171,7 @@ namespace cds {
 
 
 
-#if defined (__CDS_TREE_MAP_HPP__) && ! defined ( __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR__ ) && defined ( __CDS_TREE_MAP_REMOVE_WHEN_IMPLEMENTED )
+#if defined (__CDS_TREE_MAP_HPP__) && ! defined ( __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR__ )
 #define __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #if ! defined (__CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR__)
