@@ -1,6 +1,6 @@
-//
-// Created by loghin on 05.04.2021.
-//
+/*
+ * Created by loghin on 05.04.2021.
+ */
 
 #include "Test.h"
 #include <CDS/Pair>

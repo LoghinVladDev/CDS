@@ -1,6 +1,6 @@
-//
-// Created by loghin on 13/09/22.
-//
+/*
+ * Created by loghin on 13/09/22.
+ */
 
 #include "SetTest.h"
 

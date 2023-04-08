@@ -1,6 +1,6 @@
-//
-// Created by loghin on 04/09/22.
-//
+/*
+ * Created by loghin on 04/09/22.
+ */
 
 #ifndef __CDS_MUTABLE_COLLECTION_TEST_H__
 #define __CDS_MUTABLE_COLLECTION_TEST_H__

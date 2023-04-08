@@ -1,6 +1,6 @@
-//
-// Created by loghin on 04/09/22.
-//
+/*
+ * Created by loghin on 04/09/22.
+ */
 
 #include "MutableCollectionTest.h"
 

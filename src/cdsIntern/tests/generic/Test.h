@@ -193,4 +193,4 @@ public:
     virtual ~Test() noexcept = default;
 };
 
-#endif //CDS_TEST_H
+#endif /* CDS_TEST_H */

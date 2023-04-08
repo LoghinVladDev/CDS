@@ -1,6 +1,6 @@
-//
-// Created by loghin on 18/09/22.
-//
+/*
+ * Created by loghin on 18/09/22.
+ */
 
 #include "ListTest.h"
 
@@ -507,10 +507,6 @@ template <
 template <
         template < typename ... > class __TestedType,
         typename __EnclosedType,
-//        auto ( List < __EnclosedType > :: * pFnBeginMut ) () -> __IteratorType,
-//        auto ( List < __EnclosedType > :: * pFnEndMut ) () -> __IteratorType,
-//        auto ( List < __EnclosedType > :: * pFnBeginImmut ) () const -> __ConstIteratorType,
-//        auto ( List < __EnclosedType > :: * pFnEndImmut ) () const -> __ConstIteratorType,
         typename ... __ValuesInOrder
 > auto listTestGroupDelegateBidirectionalIterableClientImports (
         Test * pTestLib,

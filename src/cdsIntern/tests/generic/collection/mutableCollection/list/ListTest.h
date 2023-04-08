@@ -1,6 +1,6 @@
-//
-// Created by loghin on 18/09/22.
-//
+/*
+ * Created by loghin on 18/09/22.
+ */
 
 #ifndef __CDS_LIST_TEST_H__
 #define __CDS_LIST_TEST_H__

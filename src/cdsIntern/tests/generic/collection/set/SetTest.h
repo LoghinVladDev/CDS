@@ -1,6 +1,6 @@
-//
-// Created by loghin on 13/09/22.
-//
+/*
+ * Created by loghin on 13/09/22.
+ */
 
 #ifndef __CDS_SET_TEST_H__
 #define __CDS_SET_TEST_H__
@@ -13,4 +13,4 @@ public:
 };
 
 
-#endif // __CDS_SET_TEST_H__
+#endif /* __CDS_SET_TEST_H__ */

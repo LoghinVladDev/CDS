@@ -1,6 +1,6 @@
-//
-// Created by loghin on 19/09/22.
-//
+/*
+ * Created by loghin on 19/09/22.
+ */
 
 #include "ListTest.h"
 

@@ -1,6 +1,6 @@
-//
-// Created by loghin on 15.05.2021.
-//
+/*
+ * Created by loghin on 15.05.2021.
+ */
 
 #ifndef CDS_JSONTEST_H
 #define CDS_JSONTEST_H
@@ -14,4 +14,4 @@ public:
 
 
 
-#endif //CDS_JSONTEST_H
+#endif /* CDS_JSONTEST_H */

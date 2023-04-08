@@ -1,6 +1,6 @@
-//
-// Created by loghin on 15.05.2021.
-//
+/*
+ * Created by loghin on 15.05.2021.
+ */
 
 #include "JsonTest.h"
 #include <iostream>
