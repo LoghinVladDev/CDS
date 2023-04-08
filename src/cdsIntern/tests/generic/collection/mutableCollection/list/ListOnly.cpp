@@ -5,6 +5,6 @@
 #include "ListTest.h"
 
 int main () {
-    ListTest ().start("ListTest");
+    glob::ListTest ().start("ListTest");
     return 0;
 }

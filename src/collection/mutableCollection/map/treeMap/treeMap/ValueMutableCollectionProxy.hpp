@@ -1,9 +1,9 @@
-//
-// Created by stefan on 13.10.2022.
-//
+/*
+ * Created by stefan on 13.10.2022.
+ */
 
-#ifndef __CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP_
-#define __CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP_  /* NOLINT(bugprone-reserved-identifier) */
+#ifndef __CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP__
+#define __CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier) */
@@ -440,28 +440,72 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             public __hidden :: __impl :: __TreeMapValueProxyRemoveOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >,
             public __hidden :: __impl :: __TreeMapValueProxyRemoveOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType > {
 
-    protected: using TreeMapBase                                = TreeMap < __KeyType, __ValueType, __Comparator >;
-    protected: using Server                                     = __hidden::__impl::__TreeMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using IteratorRemoveClient                       = __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateBackwardIterableClient             = __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateForwardIterableClient              = __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindByImmutableClient                      = __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindByMutableClient                        = __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfCollectionClient                     = __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfInitializerListClient                = __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using RemoveByClient                             = __hidden :: __impl :: __TreeMapValueProxyRemoveByClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using RemoveOfCollectionClient                   = __hidden :: __impl :: __TreeMapValueProxyRemoveOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
-    protected: using RemoveOfInitializerListClient              = __hidden :: __impl :: __TreeMapValueProxyRemoveOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+    protected: using TreeMapBase                                = 
+            TreeMap < __KeyType, __ValueType, __Comparator >;
+
+    protected: using Server                                     = 
+            __hidden::__impl::__TreeMapValueProxyServer < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+
+    protected: using ConstIteratorRemoveClient                  = 
+            __hidden :: __impl :: __TreeMapValueProxyConstIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using IteratorRemoveClient                       = 
+            __hidden :: __impl :: __TreeMapValueProxyIteratorRemoveClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateBackwardConstIterableClient        = 
+            __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateBackwardIterableClient             = 
+            __hidden :: __impl :: __TreeMapValueProxyDelegateBackwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateForwardConstIterableClient         = 
+            __hidden :: __impl :: __TreeMapValueProxyDelegateForwardConstIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateForwardIterableClient              = 
+            __hidden :: __impl :: __TreeMapValueProxyDelegateForwardIterableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using RandomInsertionClient                      = 
+            __hidden :: __impl :: __TreeMapValueProxyRandomInsertionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ContainsOfCollectionClient                 = 
+            __hidden :: __impl :: __TreeMapValueProxyContainsOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ContainsOfInitializerListClient            = 
+            __hidden :: __impl :: __TreeMapValueProxyContainsOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindByImmutableClient                      = 
+            __hidden :: __impl :: __TreeMapValueProxyFindByImmutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindByMutableClient                        = 
+            __hidden :: __impl :: __TreeMapValueProxyFindByMutableClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfConstCollectionClient                = 
+            __hidden :: __impl :: __TreeMapValueProxyFindOfConstCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfConstInitializerListClient           = 
+            __hidden :: __impl :: __TreeMapValueProxyFindOfConstInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfCollectionClient                     = 
+            __hidden :: __impl :: __TreeMapValueProxyFindOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfInitializerListClient                = 
+            __hidden :: __impl :: __TreeMapValueProxyFindOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ConstGenericStatementsClient               = 
+            __hidden :: __impl :: __TreeMapValueProxyConstGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using GenericStatementsClient                    = 
+            __hidden :: __impl :: __TreeMapValueProxyGenericStatementsClient < ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using RemoveByClient                             = 
+            __hidden :: __impl :: __TreeMapValueProxyRemoveByClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+
+    protected: using RemoveOfCollectionClient                   = 
+            __hidden :: __impl :: __TreeMapValueProxyRemoveOfCollectionClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+
+    protected: using RemoveOfInitializerListClient              = 
+            __hidden :: __impl :: __TreeMapValueProxyRemoveOfInitializerListClient < ValueMutableCollectionProxy, __KeyType, __ValueType >;
+
 
     private: friend Server;
 
@@ -622,11 +666,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) const noexcept -> __GenericConstHandler override;
 
     public:
-        __CDS_Explicit ValueMutableCollectionProxy (
-                TreeMap < __KeyType, __ValueType, __Comparator > * pMap
-        ) noexcept;
-
-    public:
         ValueMutableCollectionProxy () noexcept = delete;
 
     public:
@@ -638,6 +677,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ValueMutableCollectionProxy (
                 ValueMutableCollectionProxy &&
         ) noexcept = delete;
+
+    public:
+        __CDS_Explicit ValueMutableCollectionProxy (
+                TreeMap < __KeyType, __ValueType, __Comparator > * pMap
+        ) noexcept;
 
     public:
         auto operator = (
@@ -738,4 +782,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 }
 
-#endif //__CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP_
+#endif /* __CDS_TREE_MAP_VALUE_MUTABLE_COLLECTION_PROXY_HPP__ */

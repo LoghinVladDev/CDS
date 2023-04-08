@@ -5,11 +5,8 @@
 #include "CollectionTest.h"
 
 int main () {
-    CollectionTest ().start ( "CollectionTest" );
+    glob::CollectionTest ().start ( "CollectionTest" );
 
     return 0;
 }
 
-
-//   (/\*.*)\" __CDS_cpplang_core_version_name \"(.*\*/)
-//   $1cpp-xx$2

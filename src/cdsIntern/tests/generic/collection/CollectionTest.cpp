@@ -22,6 +22,10 @@
 
 namespace {
 
+    using glob::Test;
+    using glob::CollectionTest;
+
+
     using cds::uint32;
     using cds::Size;
 

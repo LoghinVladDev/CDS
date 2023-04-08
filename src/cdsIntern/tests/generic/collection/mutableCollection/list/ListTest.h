@@ -7,9 +7,11 @@
 
 #include "../../../Test.h"
 
-class ListTest : public Test {
-public:
-    auto execute () noexcept -> bool override;
-};
+namespace glob {
+    class ListTest : public Test {
+    public:
+        auto execute () noexcept -> bool override;
+    };
+}
 
 #endif

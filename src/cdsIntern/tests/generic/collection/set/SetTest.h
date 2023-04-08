@@ -7,10 +7,12 @@
 
 #include "../../Test.h"
 
-class SetTest : public Test {
-public:
-    bool execute () noexcept override;
-};
+namespace glob {
+    class SetTest : public Test {
+    public:
+        bool execute () noexcept override;
+    };
+}
 
 
 #endif /* __CDS_SET_TEST_H__ */

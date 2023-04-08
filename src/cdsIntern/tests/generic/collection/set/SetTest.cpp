@@ -16,6 +16,9 @@ namespace {
 
     using cds::String;
 
+    using glob::SetTest;
+    using glob::Test;
+
 
     template < typename __ElementType >
     inline auto equiv (

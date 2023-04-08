@@ -7,10 +7,12 @@
 
 #include "../../Test.h"
 
-class JsonTest : public Test {
-public:
-    bool execute() noexcept override;
-};
+namespace glob {
+    class JsonTest : public Test {
+    public:
+        bool execute() noexcept override;
+    };
+}
 
 
 

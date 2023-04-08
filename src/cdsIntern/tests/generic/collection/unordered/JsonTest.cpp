@@ -9,10 +9,23 @@
 #include <CDS/util/JSON>
 #include <CDS/filesystem/Path>
 
-using namespace cds;
+namespace {
+    using glob::JsonTest;
+
+    using cds::String;
+    using cds::StringLiteral;
+
+    using cds::filesystem::Path;
+
+    using cds::json::parseJson;
+    using cds::json::loadJson;
+    using cds::json::dump;
+
+    using cds::json::JsonObject;
+    using cds::json::JsonArray;
+}
 
 bool JsonTest::execute() noexcept {
-    using namespace filesystem;
     bool allOk = true;
     this->logBold("Starting of test Json...");
 
@@ -26,14 +39,14 @@ bool JsonTest::execute() noexcept {
     this->executeSubtest("settings.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this]{
         std::stringstream iss;
         iss << std::ifstream(in1Path).rdbuf();
-        auto json = json :: parseJson (iss.str());
+        auto json = parseJson (iss.str());
         this->log("JSON as String : '%s'", json.toString().cStr());
 
         this->log("Value for 'theme' : '%s'", json.getString("theme").cStr());
     });
 
     this->executeSubtest("theme.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this]{
-        auto json = json :: loadJson ( in2Path );
+        auto json = loadJson ( in2Path );
 
         this->log("JSON as String : '%s'", json.toString().cStr());
 
@@ -72,12 +85,12 @@ bool JsonTest::execute() noexcept {
             this->log("\tNode : '%s'", item.toString().cStr());
         }
 
-        std::cout << json :: dump ( json ) << '\n';
+        std::cout << dump ( json ) << '\n';
     });
 
     this->executeSubtest("test3", [in1Path, in2Path, &allOk, this]{
 
-        json :: JsonObject j;
+        JsonObject j;
         j.put("a", 1);
         j.put("b", true);
         j.put("c", 1ll);
@@ -86,10 +99,10 @@ bool JsonTest::execute() noexcept {
         j.put("f", "abcd");
         j.put("g", String("dcef"));
 
-        json ::  JsonArray a;
-        json ::  JsonObject j1;
-        json ::  JsonObject j2;
-        json ::  JsonObject j3;
+        JsonArray a;
+        JsonObject j1;
+        JsonObject j2;
+        JsonObject j3;
 
         j1.put("a", 1);
         j2.put("b", 2);
@@ -99,10 +112,10 @@ bool JsonTest::execute() noexcept {
         a.pushBack(j3);
         a.pushBack(j2);
 
-        a.pushBack( json ::  JsonObject().put("b", json ::  JsonArray().pushBack(json ::  JsonObject().put("a", 3)).pushBack(4)).put("c", false));
+        a.pushBack( JsonObject().put("b", JsonArray().pushBack(JsonObject().put("a", 3)).pushBack(4)).put("c", false));
         j.put("h", a);
 
-        std :: cout << json::dump ( j, 10 ) << '\n';
+        std :: cout << dump ( j, 10 ) << '\n';
     });
 
     allOk ? this->logOK("Json test OK") : this->logError("String test Not OK");

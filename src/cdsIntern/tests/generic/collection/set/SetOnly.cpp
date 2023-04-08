@@ -5,6 +5,6 @@
 #include "SetTest.h"
 
 int main () {
-    SetTest ().start("SetTest");
+    glob::SetTest ().start("SetTest");
     return 0;
 }

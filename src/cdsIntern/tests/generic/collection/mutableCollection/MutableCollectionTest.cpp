@@ -37,6 +37,10 @@ namespace {
     using cds::meta::referenceOf;
 
 
+    using glob::Test;
+    using glob::MutableCollectionTest;
+
+
     template <typename ... T> auto make_a (T && ... elements) noexcept -> decltype (cds::arrayOf (std :: forward <T> (elements) ...)) {
         return cds::arrayOf (std :: forward <T> (elements) ...);
     }

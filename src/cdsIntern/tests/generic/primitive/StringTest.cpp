@@ -12,16 +12,43 @@
 
 #include <CDS/String>
 
-using namespace cds;
+#include <CDS/Integer>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+
+namespace {
+
+    using glob::StringTest;
+
+    using cds::uint8;
+    using cds::uint16;
+    using cds::uint32;
+    using cds::uint64;
+
+    using cds::sint8;
+    using cds::sint16;
+    using cds::sint32;
+    using cds::sint64;
+
+    using cds::Size;
+    using cds::Index;
+
+    using cds::String;
+    using cds::StringView;
+    using cds::StringLiteral;
+    using cds::StringUtils;
+
+    using cds::Integer;
+    using cds::Range;
+
+    using cds::Array;
+
+}
 
 #if defined(_MSC_VER)
 #undef min
 #undef max
 #endif
-
-#include <CDS/Integer>
-#include <CDS/Array>
-#include <CDS/LinkedList>
 
 auto StringTest::execute() noexcept -> bool {
 

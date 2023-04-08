@@ -1,6 +1,6 @@
-//
-// Created by stefan on 13.10.2022.
-//
+/*
+ * Created by stefan on 13.10.2022.
+ */
 
 #ifndef __CDS_TREE_MAP_KEY_SET_PROXY_HPP__
 #define __CDS_TREE_MAP_KEY_SET_PROXY_HPP__  /* NOLINT(bugprone-reserved-identifier) */
@@ -302,22 +302,54 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             public __hidden :: __impl :: __TreeMapKeyProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType >,
             public __hidden :: __impl :: __TreeMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType > {
 
-    protected: using TreeMapBase                                = TreeMap < __KeyType, __ValueType, __Comparator >;
-    protected: using Server                                     = __hidden::__impl::__TreeMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType >;
-    protected: using ConstIteratorRemoveClient                  = __hidden :: __impl :: __TreeMapKeyProxyConstIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateBackwardConstIterableClient        = __hidden :: __impl :: __TreeMapKeyProxyDelegateBackwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using DelegateForwardConstIterableClient         = __hidden :: __impl :: __TreeMapKeyProxyDelegateForwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using RandomInsertionClient                      = __hidden :: __impl :: __TreeMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ContainsOfCollectionClient                 = __hidden :: __impl :: __TreeMapKeyProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ContainsOfInitializerListClient            = __hidden :: __impl :: __TreeMapKeyProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindByImmutableClient                      = __hidden :: __impl :: __TreeMapKeyProxyFindByImmutableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfConstCollectionClient                = __hidden :: __impl :: __TreeMapKeyProxyFindOfConstCollectionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using FindOfConstInitializerListClient           = __hidden :: __impl :: __TreeMapKeyProxyFindOfConstInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using ConstGenericStatementsClient               = __hidden :: __impl :: __TreeMapKeyProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using GenericStatementsClient                    = __hidden :: __impl :: __TreeMapKeyProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using RemoveByClient                             = __hidden :: __impl :: __TreeMapKeyProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
-    protected: using RemoveOfCollectionClient                   = __hidden :: __impl :: __TreeMapKeyProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType >;
-    protected: using RemoveOfInitializerListClient              = __hidden :: __impl :: __TreeMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType >;
+    protected: using TreeMapBase                                = 
+            TreeMap < __KeyType, __ValueType, __Comparator >;
+
+    protected: using Server                                     = 
+            __hidden::__impl::__TreeMapKeyProxyServer < KeySetProxy, __KeyType, __ValueType >;
+
+    protected: using ConstIteratorRemoveClient                  = 
+            __hidden :: __impl :: __TreeMapKeyProxyConstIteratorRemoveClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateBackwardConstIterableClient        = 
+            __hidden :: __impl :: __TreeMapKeyProxyDelegateBackwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using DelegateForwardConstIterableClient         = 
+            __hidden :: __impl :: __TreeMapKeyProxyDelegateForwardConstIterableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using RandomInsertionClient                      = 
+            __hidden :: __impl :: __TreeMapKeyProxyRandomInsertionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ContainsOfCollectionClient                 = 
+            __hidden :: __impl :: __TreeMapKeyProxyContainsOfCollectionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ContainsOfInitializerListClient            = 
+            __hidden :: __impl :: __TreeMapKeyProxyContainsOfInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindByImmutableClient                      = 
+            __hidden :: __impl :: __TreeMapKeyProxyFindByImmutableClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfConstCollectionClient                = 
+            __hidden :: __impl :: __TreeMapKeyProxyFindOfConstCollectionClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using FindOfConstInitializerListClient           = 
+            __hidden :: __impl :: __TreeMapKeyProxyFindOfConstInitializerListClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using ConstGenericStatementsClient               = 
+            __hidden :: __impl :: __TreeMapKeyProxyConstGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using GenericStatementsClient                    = 
+            __hidden :: __impl :: __TreeMapKeyProxyGenericStatementsClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using RemoveByClient                             = 
+            __hidden :: __impl :: __TreeMapKeyProxyRemoveByClient < KeySetProxy, __KeyType, __ValueType, __Comparator >;
+
+    protected: using RemoveOfCollectionClient                   = 
+            __hidden :: __impl :: __TreeMapKeyProxyRemoveOfCollectionClient < KeySetProxy, __KeyType, __ValueType >;
+
+    protected: using RemoveOfInitializerListClient              = 
+            __hidden :: __impl :: __TreeMapKeyProxyRemoveOfInitializerListClient < KeySetProxy, __KeyType, __ValueType >;
+
 
     private: friend Server;
 
@@ -430,11 +462,6 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         ) const noexcept -> __GenericConstHandler override;
 
     public:
-        __CDS_Explicit KeySetProxy (
-                TreeMap < __KeyType, __ValueType, __Comparator > * pMap
-        ) noexcept;
-
-    public:
         KeySetProxy () noexcept = delete;
 
     public:
@@ -446,6 +473,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         KeySetProxy (
                 KeySetProxy &&
         ) noexcept = delete;
+
+    public:
+        __CDS_Explicit KeySetProxy (
+                TreeMap < __KeyType, __ValueType, __Comparator > * pMap
+        ) noexcept;
 
     public:
         auto operator = (
@@ -520,4 +552,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 }
 
-#endif //__CDS_TREE_MAP_KEY_SET_PROXY_HPP__
+#endif /* __CDS_TREE_MAP_KEY_SET_PROXY_HPP__ */

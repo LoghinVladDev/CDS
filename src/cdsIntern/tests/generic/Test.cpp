@@ -5,12 +5,29 @@
 #include "Test.h"
 #include <CDS/Pair>
 
-using namespace cds;
+#include <iostream>
+#include <cstdio>
+#include <cstdarg>
+#include <CDS/threading/Mutex>
+
+namespace {
+    using glob::Test;
+    using cds::Pair;
+    using cds::HashMap;
+    using cds::String;
+
+    Pair < Test :: TerminalColor :: Modifier, int > p;
+
+    Test::TerminalColor testOK ( Test::TerminalColor::Modifier::FOREGROUND_GREEN | Test::TerminalColor::Modifier::ENABLE_BOLD );
+    Test::TerminalColor testWarn ( Test::TerminalColor::Modifier::FOREGROUND_YELLOW );
+    Test::TerminalColor subtestOK ( Test::TerminalColor::Modifier::FOREGROUND_GREEN );
+    Test::TerminalColor testNOK ( Test::TerminalColor::Modifier::FOREGROUND_RED | Test::TerminalColor::Modifier::ENABLE_BOLD );
+    Test::TerminalColor bold (Test::TerminalColor::Modifier::ENABLE_BOLD );
+
+    cds::Mutex printLock;
+}
 
 Test::TerminalColor Test::TerminalColor::clear(DISABLE_INVERSE_COLOR | DISABLE_UNDERLINE | DISABLE_BOLD | RESET );
-
-Pair < Test :: TerminalColor :: Modifier, int > p;
-
 HashMap < Test::TerminalColor::Modifier, int > Test::TerminalColor::colorMap = {
         {RESET, 0},
         {ENABLE_BOLD, 1},
@@ -39,130 +56,117 @@ HashMap < Test::TerminalColor::Modifier, int > Test::TerminalColor::colorMap = {
         {BACKGROUND_WHITE, 47}
 };
 
-static Test::TerminalColor testOK ( Test::TerminalColor::Modifier::FOREGROUND_GREEN | Test::TerminalColor::Modifier::ENABLE_BOLD );
-static Test::TerminalColor testWarn ( Test::TerminalColor::Modifier::FOREGROUND_YELLOW );
-static Test::TerminalColor subtestOK ( Test::TerminalColor::Modifier::FOREGROUND_GREEN );
-static Test::TerminalColor testNOK ( Test::TerminalColor::Modifier::FOREGROUND_RED | Test::TerminalColor::Modifier::ENABLE_BOLD );
-static Test::TerminalColor bold (Test::TerminalColor::Modifier::ENABLE_BOLD );
-
-#include <iostream>
-#include <cstdio>
-#include <cstdarg>
-#include <CDS/threading/Mutex>
-
-static Mutex printLock;
-
-auto Test::log(const String & text) noexcept -> void {
+auto Test::log(const String & text) const noexcept -> void {
     printLock.lock();
     std::cout << Test::TerminalColor::clear << this->getDepthString() << text << '\n';
     printLock.unlock();
 }
 
-auto Test::log(const char * format, ...) noexcept -> void {
+auto Test::log(const char * format, ...) const noexcept -> void {
     printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
 #endif
-    printf("%s", this->getDepthString().cStr());
-    vprintf(format, args);
-    printf("\n");
+    ::printf("%s", this->getDepthString().cStr());
+    ::vprintf(format, args);
+    ::printf("\n");
     va_end(args);
     printLock.unlock();
 }
 
-auto Test::logBold(const String & text) noexcept -> void {
+auto Test::logBold(const String & text) const noexcept -> void {
     printLock.lock();
     std::cout << this->getDepthString() << bold << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
-auto Test::logBold(const char * format, ...) noexcept -> void {
+auto Test::logBold(const char * format, ...) const noexcept -> void {
     printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(bold.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(bold.format()).cStr());
 #endif
-    printf("%s", this->getDepthString().cStr());
-    vprintf(format, args);
+    ::printf("%s", this->getDepthString().cStr());
+    ::vprintf(format, args);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
 #endif
-    printf("\n");
+    ::printf("\n");
     va_end(args);
     printLock.unlock();
 }
 
-auto Test::logOK(const String & text) noexcept -> void {
+auto Test::logOK(const String & text) const noexcept -> void {
     printLock.lock();
     std::cout << this->getDepthString() << testOK << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
-auto Test::logOK(const char * format, ...) noexcept -> void {
+auto Test::logOK(const char * format, ...) const noexcept -> void {
     printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(testOK.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(testOK.format()).cStr());
 #endif
-    printf("%s", this->getDepthString().cStr());
-    vprintf(format, args);
+    ::printf("%s", this->getDepthString().cStr());
+    ::vprintf(format, args);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
 #endif
-    printf("\n");
+    ::printf("\n");
     va_end(args);
     printLock.unlock();
 }
 
 
-auto Test::logWarning(const String & text) noexcept -> void {
+auto Test::logWarning(const String & text) const noexcept -> void {
     printLock.lock();
     std::cout << this->getDepthString() << testWarn << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
-auto Test::logWarning(const char * format, ...) noexcept -> void {
+auto Test::logWarning(const char * format, ...) const noexcept -> void {
     printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(testWarn.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(testWarn.format()).cStr());
 #endif
-    printf("%s", this->getDepthString().cStr());
-    vprintf(format, args);
+    ::printf("%s", this->getDepthString().cStr());
+    ::vprintf(format, args);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
 #endif
-    printf("\n");
+    ::printf("\n");
     va_end(args);
     printLock.unlock();
 }
 
 
 
-auto Test::logError(const String & text) noexcept -> void {
+auto Test::logError(const String & text) const noexcept -> void {
     printLock.lock();
     std::cout << this->getDepthString() << testNOK << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
-auto Test::logError(const char * format, ...) noexcept -> void {
+auto Test::logError(const char * format, ...) const noexcept -> void {
     printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(testNOK.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(testNOK.format()).cStr());
 #endif
-    printf("%s", this->getDepthString().cStr());
-    vprintf(format, args);
+    ::printf("%s", this->getDepthString().cStr());
+    ::vprintf(format, args);
 #if !defined(_WIN32)
-    printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    ::printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
 #endif
-    printf("\n");
+    ::printf("\n");
     va_end(args);
     printLock.unlock();
 }

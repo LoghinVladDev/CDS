@@ -11,7 +11,24 @@
 #include <array>
 #include <CDS/Range>
 
-using namespace cds;
+
+namespace {
+    
+    using glob::Test;
+    using glob::ListTest;
+
+
+    using cds::Index;
+    using cds::Size;
+
+    using cds::String;
+
+    using cds::List;
+    using cds::Array;
+    using cds::LinkedList;
+
+}
+
 
 template < typename I, typename C >
 auto sortCheck ( I const & iterable, C const & comparator ) -> bool {

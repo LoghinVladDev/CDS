@@ -5,6 +5,6 @@
 #include "StringTest.h"
 
 int main () {
-    StringTest().start("StringTest");
+    glob::StringTest().start("StringTest");
     return 0;
 }

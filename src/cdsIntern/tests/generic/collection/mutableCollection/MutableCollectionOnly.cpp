@@ -5,6 +5,6 @@
 #include "MutableCollectionTest.h"
 
 int main () {
-    MutableCollectionTest ().start("MutableCollectionTest");
+    glob::MutableCollectionTest ().start("MutableCollectionTest");
     return 0;
 }

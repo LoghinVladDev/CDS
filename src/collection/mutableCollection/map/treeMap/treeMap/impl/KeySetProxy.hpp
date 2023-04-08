@@ -1,6 +1,6 @@
-//
-// Created by stefan on 13.10.2022.
-//
+/*
+ * Created by stefan on 13.10.2022.
+ */
 
 #ifndef __CDS_TREE_MAP_KEY_SET_PROXY_IMPL_HPP__
 #define __CDS_TREE_MAP_KEY_SET_PROXY_IMPL_HPP__     /* NOLINT(bugprone-reserved-identifier) */
@@ -276,4 +276,4 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     }
 }
 
-#endif //__CDS_TREE_MAP_KEY_SET_PROXY_IMPL_HPP__
+#endif /* __CDS_TREE_MAP_KEY_SET_PROXY_IMPL_HPP__ */
