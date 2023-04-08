@@ -377,7 +377,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     ) const noexcept -> bool {
 
         for ( auto it = this->__rbt_cbegin(); it != this->__rbt_cend(); ++ it ) {
-            if ( cds :: meta :: equals ( ( * it ).value(), value ) == true )
+            if ( cds :: meta :: equals ( ( * it ).value(), value ) )
                 return true;
         }
 

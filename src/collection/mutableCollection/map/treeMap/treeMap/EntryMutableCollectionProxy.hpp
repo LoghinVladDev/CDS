@@ -1,6 +1,6 @@
-//
-// Created by stefan on 13.10.2022.
-//
+/*
+ * Created by stefan on 13.10.2022.
+ */
 
 #ifndef __CDS_TREE_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__
 #define __CDS_TREE_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__  /* NOLINT(bugprone-reserved-identifier) */
