@@ -43,7 +43,7 @@ namespace {
 auto main () -> int {
 
 
-    auto start = std::chrono::high_resolution_clock::now();
+    auto const start = std::chrono::high_resolution_clock::now();
 
     auto test = [] ( Test & lTest, String const & name ) {
         return lTest.start(name);
@@ -60,7 +60,7 @@ auto main () -> int {
 
     uint32 failedTestCount = 0U;
     uint32 successfulTestCount = 0U;
-    auto totalTestCount = static_cast <uint32> (tests.size());
+    auto const totalTestCount = static_cast <uint32> (tests.size());
 
     for ( auto & t : tests ) {
         if ( ! test ( * t.first(), t.second() ) ) {
@@ -70,11 +70,11 @@ auto main () -> int {
         }
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    auto const end = std::chrono::high_resolution_clock::now();
 
-    auto diff = std::chrono::duration_cast < std::chrono::nanoseconds > ( (end - start) );
+    auto const diff = std::chrono::duration_cast < std::chrono::nanoseconds > ( (end - start) );
 
-    double power = std::pow(10, 9);
+    double const power = std::pow(10, 9);
     std::cout << "Total Duration: " << diff.count() << " nanoseconds ( " << (static_cast < double > (diff.count()) / power) << " seconds )" << '\n';
     std::cout << "Out of " << totalTestCount << " tests, " << successfulTestCount << " passed and " << failedTestCount << " failed\n";
 
