@@ -153,10 +153,18 @@ macro(test_set)
 endmacro()
 
 macro(test_suite_nodup)
+
+    file(
+        GLOB
+        ${ARGV1}_SOURCES
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.cpp    
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.h    
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.hpp    
+    )
+
     set(
             CPP${ARGV0}_${ARGV2}_SRC
-            src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test.cpp
-            src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test.h
+            ${${ARGV1}_SOURCES}
     )
 
     set(
