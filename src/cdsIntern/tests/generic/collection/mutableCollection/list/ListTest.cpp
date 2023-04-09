@@ -7,6 +7,7 @@
 #include <CDS/Array>
 #include <CDS/LinkedList>
 
+#include <initializer_list>
 #include <vector>
 #include <array>
 #include <CDS/Range>
@@ -976,6 +977,722 @@ template <
 }
 
 
+namespace relIns {
+
+    enum TFlags {
+        TNoMask         = 0x0000FFFFU,
+        ItCase1         = 0x00010000U,
+        ItCase2         = 0x00020000U,
+        ItCase3         = 0x00040000U,
+        ItCase4         = 0x00080000U,
+        ItCaseMask      = 0x000F0000U,
+        ValueCase1      = 0x00100000U,
+        ValueCase2      = 0x00200000U,
+        ValueCase3      = 0x00400000U,
+        ValueCase4      = 0x00800000U,
+        ValueCaseMask   = 0x00F00000U,
+        OffsetCase1     = 0x01000000U,
+        OffsetCase2     = 0x02000000U,
+        OffsetCase3     = 0x04000000U,
+        OffsetCase4     = 0x08000000U,
+        OffsetCaseMask  = 0x0F000000U
+    };
+
+    struct TData {
+        cds::uint32 tNo;
+        cds::uint32 itCaseNo;
+        cds::uint32 valueCaseNo;
+        cds::uint32 offsetCaseNo;
+    };
+
+    inline auto tFlagsToTData (cds::uint32 flags) noexcept -> TData {
+
+        TData data;
+        data.tNo = flags & TFlags::TNoMask;
+
+        switch (flags & TFlags::ItCaseMask) {
+            case TFlags::ItCase1: {
+                data.itCaseNo = 1;
+                break;
+            }
+            case TFlags::ItCase2: {
+                data.itCaseNo = 2;
+                break;
+            }
+            case TFlags::ItCase3: {
+                data.itCaseNo = 3;
+                break;
+            }
+            case TFlags::ItCase4: {
+                data.itCaseNo = 4;
+                break;
+            }
+            default: {
+                return {};
+            }
+        }
+
+        switch (flags & TFlags::ValueCaseMask) {
+            case TFlags::ValueCase1: {
+                data.valueCaseNo = 1;
+                break;
+            }
+            case TFlags::ValueCase2: {
+                data.valueCaseNo = 2;
+                break;
+            }
+            case TFlags::ValueCase3: {
+                data.valueCaseNo = 3;
+                break;
+            }
+            case TFlags::ValueCase4: {
+                data.valueCaseNo = 4;
+                break;
+            }
+            default: {
+                return {};
+            }
+        }
+
+        switch (flags & TFlags::OffsetCaseMask) {
+            case TFlags::OffsetCase1: {
+                data.offsetCaseNo = 1;
+                break;
+            }
+            case TFlags::OffsetCase2: {
+                data.offsetCaseNo = 2;
+                break;
+            }
+            case TFlags::OffsetCase3: {
+                data.offsetCaseNo = 3;
+                break;
+            }
+            case TFlags::OffsetCase4: {
+                data.offsetCaseNo = 4;
+                break;
+            }
+
+            default: {
+                return {};
+            }
+        }
+
+        return data;
+    }
+
+    template <typename E> using BeginPfn = 
+            typename List<E> :: Iterator (List <E> :: *) ();
+
+    template <typename E> using RBeginPfn = 
+            typename List<E> :: ReverseIterator (List <E> :: *) ();
+
+    template <typename E> using CBeginPfn = 
+            typename List<E> :: ConstIterator (List <E> :: *) () const;
+
+    template <typename E> using CRBeginPfn = 
+            typename List<E> :: ConstReverseIterator (List <E> :: *) () const;
+
+    template <typename, bool, typename = void> struct ItCaseDet {};
+
+    template <typename E> struct ItCaseDet <BeginPfn<E>, false> {
+        constexpr static TFlags const itCase = ItCase1;
+    };
+    
+    template <typename E> struct ItCaseDet <RBeginPfn<E>, true> {
+        constexpr static TFlags const itCase = ItCase3;
+    };
+    
+    template <typename E> struct ItCaseDet <CBeginPfn<E>, false> {
+        constexpr static TFlags const itCase = ItCase2;
+    };
+    
+    template <typename E> struct ItCaseDet <CRBeginPfn<E>, true> {
+        constexpr static TFlags const itCase = ItCase4;
+    };
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R
+    > auto singleInsBefIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            E const & singleValue,
+            bool opStatus,
+            R const & opResult
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertBefore (it, singleValue)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertBefore"
+                "ItCase%zu"
+                "SingleValue%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertBefore"
+            "ItCase%zu"
+            "SingleValue%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed
+    > auto singleInsBefAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <E> const & singleValues,
+            cds::Array <cds::Array <bool>> const & statuses,
+            cds::Array <cds::Array <cds::Array <E>>> const & results
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+        cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+
+        for (cds::uint32 vIdx = 0; vIdx < singleValues.size(); ++ vIdx) {
+            for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+                result = result && singleInsBefIt <E, C, IGen> (
+                        tNo | ItCaseDet <IGen, reversed> :: itCase | valueDatas [vIdx] | offsetDatas [offIdx],
+                        initValues, pTestLib, pfn,
+                        offsets [offIdx], singleValues [vIdx],
+                        statuses [vIdx] [offIdx],
+                        results [vIdx] [offIdx]
+                );
+
+                tNo ++;
+            }
+        }
+
+        return result;
+    }
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R
+    > auto singleInsAftIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            E const & singleValue,
+            bool opStatus,
+            R const & opResult
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertAfter (it, singleValue)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertAfter"
+                "ItCase%zu"
+                "SingleValue%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertAfter"
+            "ItCase%zu"
+            "SingleValue%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed
+    > auto singleInsAftAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <E> const & singleValues,
+            cds::Array <cds::Array <bool>> const & statuses,
+            cds::Array <cds::Array <cds::Array <E>>> const & results
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+        cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+
+        for (cds::uint32 vIdx = 0; vIdx < singleValues.size(); ++ vIdx) {
+            for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+                result = result && singleInsAftIt <E, C, IGen> (
+                        tNo | ItCaseDet <IGen, reversed> :: itCase | valueDatas [vIdx] | offsetDatas [offIdx],
+                        initValues, pTestLib, pfn,
+                        offsets [offIdx], singleValues [vIdx],
+                        statuses [vIdx] [offIdx],
+                        results [vIdx] [offIdx]
+                );
+
+                tNo ++;
+            }
+        }
+
+        return result;
+    }
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R
+    > auto mulInsBefIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            cds::Array <E> const & mValues,
+            bool opStatus,
+            R const & opResult
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertAllOfBefore (it, mValues)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertAllOfBefore"
+                "ItCase%zu"
+                "MultipleValues%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertAllOfBefore"
+            "ItCase%zu"
+            "MultipleValues%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed
+    > auto mulInsBefAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <cds::Array<E>> const & mValues,
+            cds::Array <cds::Array <bool>> const & statuses,
+            cds::Array <cds::Array <cds::Array <E>>> const & results
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+        cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+
+        for (cds::uint32 vIdx = 0; vIdx < mValues.size(); ++ vIdx) {
+            for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+                result = result && mulInsBefIt <E, C, IGen> (
+                        tNo | ItCaseDet <IGen, reversed> :: itCase | valueDatas [vIdx] | offsetDatas [offIdx],
+                        initValues, pTestLib, pfn,
+                        offsets [offIdx], mValues [vIdx],
+                        statuses [vIdx] [offIdx],
+                        results [vIdx] [offIdx]
+                );
+
+                tNo ++;
+            }
+        }
+
+        return result;
+    }
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R
+    > auto mulInsAftIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            cds::Array <E> const & mValues,
+            bool opStatus,
+            R const & opResult
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertAllOfAfter (it, mValues)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertAllOfAfter"
+                "ItCase%zu"
+                "MultipleValues%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertAllOfAfter"
+            "ItCase%zu"
+            "MultipleValues%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed
+    > auto mulInsAftAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <cds::Array <E>> const & mValues,
+            cds::Array <cds::Array <bool>> const & statuses,
+            cds::Array <cds::Array <cds::Array <E>>> const & results
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+        cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+
+        for (cds::uint32 vIdx = 0; vIdx < mValues.size(); ++ vIdx) {
+            for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+                result = result && mulInsAftIt <E, C, IGen> (
+                        tNo | ItCaseDet <IGen, reversed> :: itCase | valueDatas [vIdx] | offsetDatas [offIdx],
+                        initValues, pTestLib, pfn,
+                        offsets [offIdx], mValues [vIdx],
+                        statuses [vIdx] [offIdx],
+                        results [vIdx] [offIdx]
+                );
+
+                tNo ++;
+            }
+        }
+
+        return result;
+    }
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R,
+            typename ... P
+    > auto packInsBefIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            bool opStatus,
+            R const & opResult,
+            P && ... pack
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertAllBefore (it, std::forward <P> (pack) ...)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertAllBefore"
+                "ItCase%zu"
+                "Pack%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertAllBefore"
+            "ItCase%zu"
+            "Pack%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed, typename ... P
+    > auto packInsBefAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <bool> const & statuses,
+            cds::Array <cds::Array <E>> const & results,
+            P const & ... pack
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+
+        for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+            result = result && packInsBefIt <E, C, IGen> (
+                    tNo | ItCaseDet <IGen, reversed> :: itCase | ValueCase1 | offsetDatas [offIdx],
+                    initValues, pTestLib, pfn,
+                    offsets [offIdx], 
+                    statuses [offIdx],
+                    results [offIdx],
+                    pack ...
+            );
+
+            tNo ++;
+        }
+
+        return result;
+    }
+    
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename F,
+            typename R,
+            typename ... P
+    > auto packInsAftIt (
+            cds::uint32 testData,
+            C <E> underTest,
+            Test const * pTestLib,
+            F pfnBegin,
+            cds::uint32 offset,
+            bool opStatus,
+            R const & opResult,
+            P && ... pack
+    ) noexcept -> bool {
+
+        auto const tData = tFlagsToTData(testData);
+        List <E> & lRef = underTest;
+        auto it = (lRef.*pfnBegin) ();
+        for (int i = 0; i < offset; ++ i) {
+            ++ it;
+        }
+
+        if (
+                (opStatus != lRef.insertAllAfter (it, std::forward <P> (pack) ...)) ||
+                ! equals (lRef, opResult)
+        ) {
+
+            pTestLib->logError (
+                "'LTC-%zu-"
+                "insertAllAfter"
+                "ItCase%zu"
+                "Pack%zu"
+                "OffsetCase%zu"
+                "-" __CDS_cpplang_core_version_name "' failed",
+                tData.tNo,
+                tData.itCaseNo,
+                tData.valueCaseNo,
+                tData.offsetCaseNo
+            );
+            return false;
+        }
+        
+
+        pTestLib->logOK (
+            "'LTC-%zu-"
+            "insertAllAfter"
+            "ItCase%zu"
+            "Pack%zu"
+            "OffsetCase%zu"
+            "-" __CDS_cpplang_core_version_name "' OK",
+            tData.tNo,
+            tData.itCaseNo,
+            tData.valueCaseNo,
+            tData.offsetCaseNo
+        );
+        return true;
+    }
+
+
+    template <
+            typename E,
+            template <typename ...> class C,
+            typename IGen, bool reversed, typename ... P
+    > auto packInsAftAll (
+            cds::uint32 & tNo,
+            std::initializer_list<E> const & initValues,
+            Test const * pTestLib,
+            IGen pfn,
+            cds::Array <cds::Size> const & offsets,
+            cds::Array <bool> const & statuses,
+            cds::Array <cds::Array <E>> const & results,
+            P const & ... pack
+    ) -> bool {
+
+        bool result = true;
+        cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+
+        for (cds::uint32 offIdx = 0; offIdx < offsets.size(); ++ offIdx) {
+            result = result && packInsAftIt <E, C, IGen> (
+                    tNo | ItCaseDet <IGen, reversed> :: itCase | ValueCase1 | offsetDatas [offIdx],
+                    initValues, pTestLib, pfn,
+                    offsets [offIdx], 
+                    statuses [offIdx],
+                    results [offIdx],
+                    pack ...
+            );
+
+            tNo ++;
+        }
+
+        return result;
+    }
+
+}
+
+
 /* ListTestGroup-RelativeInsertion-cpp-xx : LTG-00400-RI-cpp-xx. Tests LTC-00401-RI to LTC-00624-RI */
 template <
         template < typename ... > class __TestedType,
@@ -1134,698 +1851,314 @@ template <
     __TestedType < __EnclosedType > underTest = initValues;
     List < __EnclosedType > & lref = underTest;
 
-#define resetData() underTest = initValues
-#define __b1 (lref .* pBeginFn)()
-#define __b2 (lref .* pBeginCFn)()
-#define __b3 (lref .* pRBeginFn)()
-#define __b4 (lref .* pRBeginCFn)()
-#define __e1 (lref .* pEndFn)()
-#define __e2 (lref .* pEndCFn)()
-#define __e3 (lref .* pREndFn)()
-#define __e4 (lref .* pREndCFn)()
-#define __b(c) __b ## c
-#define __e(c) __e ## c
-#define b(c) __b(c)
-#define e(c) __e(c)
-
-#define sInsCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, resSingle ## c ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define sInsRevCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, resSingle ## c ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define saInsCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, aresSingle ## c ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define saInsRevCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, singleValue ## c ) || ! equals ( lref, aresSingle ## c ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "SingleValue" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvInsCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, multipleValues ## c ) || ! equals ( lref, resMultiple ## c ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvInsRevCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, multipleValues ## c ) || ! equals ( lref, resMultiple ## c ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "MultipleValues" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvaInsCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, multipleValues ## c ) || ! equals ( lref, aresMultiple ## c ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvaInsRevCase(name, no, ic, c, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, multipleValues ## c ) || ! equals ( lref, aresMultiple ## c ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "MultipleValues" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "MultipleValues" #c "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvpInsCase(name, no, ic, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, values ... ) || ! equals ( lref, resMultipleV ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvpInsRevCase(name, no, ic, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, values ... ) || ! equals ( lref, resMultipleV ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "Pack" "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvpaInsCase(name, no, ic, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, values ... ) || ! equals ( lref, aresMultipleV ## Case ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-#define mvpaInsRevCase(name, no, ic, oc, suc) \
-    resetData();                          \
-    auto it ## no = b(ic);                 \
-    for (int i = 0; i < case ## oc ## Offset; ++ i) \
-        ++ it ## no;  \
-    if ( suc != lref.name( it ## no, values ... ) || ! equals ( lref, aresMultipleV ## RevCase ## oc ) ) { \
-        pTestLib->logError ("'LTC-" # no "-" # name "ItCase" #ic "Pack" "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' failed" ); \
-        return false;                              \
-    }                                              \
-                                                   \
-    pTestLib->logOK ("'LTC-" # no "-" #name "ItCase" #ic "Pack" "OffsetRevCase" # oc "-" __CDS_cpplang_core_version_name "' OK" );
-
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase1-cpp-xx : LTC-00401-IT-insertBeforeItCase1SingleValue1OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 401, 1, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase2-cpp-xx : LTC-00402-IT-insertBeforeItCase1SingleValue1OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 402, 1, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase3-cpp-xx : LTC-00403-IT-insertBeforeItCase1SingleValue1OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 403, 1, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue1OffsetCase4-cpp-xx : LTC-00404-IT-insertBeforeItCase1SingleValue1OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 404, 1, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase1-cpp-xx : LTC-00405-IT-insertBeforeItCase1SingleValue2OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 405, 1, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase2-cpp-xx : LTC-00406-IT-insertBeforeItCase1SingleValue2OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 406, 1, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase3-cpp-xx : LTC-00407-IT-insertBeforeItCase1SingleValue2OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 407, 1, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue2OffsetCase4-cpp-xx : LTC-00408-IT-insertBeforeItCase1SingleValue2OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 408, 1, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase1-cpp-xx : LTC-00409-IT-insertBeforeItCase1SingleValue3OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 409, 1, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase2-cpp-xx : LTC-00410-IT-insertBeforeItCase1SingleValue3OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 410, 1, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase3-cpp-xx : LTC-00411-IT-insertBeforeItCase1SingleValue3OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 411, 1, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase1SingleValue3OffsetCase4-cpp-xx : LTC-00412-IT-insertBeforeItCase1SingleValue3OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 412, 1, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase1-cpp-xx : LTC-00413-IT-insertBeforeItCase3SingleValue1OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 413, 3, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase2-cpp-xx : LTC-00414-IT-insertBeforeItCase3SingleValue1OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 414, 3, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase3-cpp-xx : LTC-00415-IT-insertBeforeItCase3SingleValue1OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 415, 3, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue1OffsetCase4-cpp-xx : LTC-00416-IT-insertBeforeItCase3SingleValue1OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 416, 3, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase1-cpp-xx : LTC-00417-IT-insertBeforeItCase3SingleValue2OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 417, 3, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase2-cpp-xx : LTC-00418-IT-insertBeforeItCase3SingleValue2OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 418, 3, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase3-cpp-xx : LTC-00419-IT-insertBeforeItCase3SingleValue2OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 419, 3, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue2OffsetCase4-cpp-xx : LTC-00420-IT-insertBeforeItCase3SingleValue2OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 420, 3, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase1-cpp-xx : LTC-00421-IT-insertBeforeItCase3SingleValue3OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 421, 3, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase2-cpp-xx : LTC-00422-IT-insertBeforeItCase3SingleValue3OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 422, 3, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase3-cpp-xx : LTC-00423-IT-insertBeforeItCase3SingleValue3OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 423, 3, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase3SingleValue3OffsetCase4-cpp-xx : LTC-00424-IT-insertBeforeItCase3SingleValue3OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 424, 3, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase1-cpp-xx : LTC-00425-IT-insertBeforeItCase2SingleValue1OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 425, 2, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase2-cpp-xx : LTC-00426-IT-insertBeforeItCase2SingleValue1OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 426, 2, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase3-cpp-xx : LTC-00427-IT-insertBeforeItCase2SingleValue1OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 427, 2, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue1OffsetCase4-cpp-xx : LTC-00428-IT-insertBeforeItCase2SingleValue1OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 428, 2, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase1-cpp-xx : LTC-00429-IT-insertBeforeItCase2SingleValue2OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 429, 2, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase2-cpp-xx : LTC-00430-IT-insertBeforeItCase2SingleValue2OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 430, 2, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase3-cpp-xx : LTC-00431-IT-insertBeforeItCase2SingleValue2OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 431, 2, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue2OffsetCase4-cpp-xx : LTC-00432-IT-insertBeforeItCase2SingleValue2OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 432, 2, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase1-cpp-xx : LTC-00433-IT-insertBeforeItCase2SingleValue3OffsetCase1-cpp-xx */
-    sInsCase ( insertBefore, 433, 2, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase2-cpp-xx : LTC-00434-IT-insertBeforeItCase2SingleValue3OffsetCase2-cpp-xx */
-    sInsCase ( insertBefore, 434, 2, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase3-cpp-xx : LTC-00435-IT-insertBeforeItCase2SingleValue3OffsetCase3-cpp-xx */
-    sInsCase ( insertBefore, 435, 2, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase2SingleValue3OffsetCase4-cpp-xx : LTC-00436-IT-insertBeforeItCase2SingleValue3OffsetCase4-cpp-xx */
-    sInsCase ( insertBefore, 436, 2, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase1-cpp-xx : LTC-00437-IT-insertBeforeItCase4SingleValue1OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 437, 4, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase2-cpp-xx : LTC-00438-IT-insertBeforeItCase4SingleValue1OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 438, 4, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase3-cpp-xx : LTC-00439-IT-insertBeforeItCase4SingleValue1OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 439, 4, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue1OffsetCase4-cpp-xx : LTC-00440-IT-insertBeforeItCase4SingleValue1OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 440, 4, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase1-cpp-xx : LTC-00441-IT-insertBeforeItCase4SingleValue2OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 441, 4, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase2-cpp-xx : LTC-00442-IT-insertBeforeItCase4SingleValue2OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 442, 4, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase3-cpp-xx : LTC-00443-IT-insertBeforeItCase4SingleValue2OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 443, 4, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue2OffsetCase4-cpp-xx : LTC-00444-IT-insertBeforeItCase4SingleValue2OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 444, 4, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase1-cpp-xx : LTC-00445-IT-insertBeforeItCase4SingleValue3OffsetCase1-cpp-xx */
-    sInsRevCase ( insertBefore, 445, 4, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase2-cpp-xx : LTC-00446-IT-insertBeforeItCase4SingleValue3OffsetCase2-cpp-xx */
-    sInsRevCase ( insertBefore, 446, 4, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase3-cpp-xx : LTC-00447-IT-insertBeforeItCase4SingleValue3OffsetCase3-cpp-xx */
-    sInsRevCase ( insertBefore, 447, 4, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertBeforeItCase4SingleValue3OffsetCase4-cpp-xx : LTC-00448-IT-insertBeforeItCase4SingleValue3OffsetCase4-cpp-xx */
-    sInsRevCase ( insertBefore, 448, 4, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase1-cpp-xx : LTC-00449-IT-insertAfterItCase1SingleValue1OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 449, 1, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase2-cpp-xx : LTC-00450-IT-insertAfterItCase1SingleValue1OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 450, 1, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase3-cpp-xx : LTC-00451-IT-insertAfterItCase1SingleValue1OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 451, 1, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue1OffsetCase4-cpp-xx : LTC-00452-IT-insertAfterItCase1SingleValue1OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 452, 1, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase1-cpp-xx : LTC-00453-IT-insertAfterItCase1SingleValue2OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 453, 1, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase2-cpp-xx : LTC-00454-IT-insertAfterItCase1SingleValue2OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 454, 1, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase3-cpp-xx : LTC-00455-IT-insertAfterItCase1SingleValue2OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 455, 1, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue2OffsetCase4-cpp-xx : LTC-00456-IT-insertAfterItCase1SingleValue2OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 456, 1, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase1-cpp-xx : LTC-00457-IT-insertAfterItCase1SingleValue3OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 457, 1, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase2-cpp-xx : LTC-00458-IT-insertAfterItCase1SingleValue3OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 458, 1, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase3-cpp-xx : LTC-00459-IT-insertAfterItCase1SingleValue3OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 459, 1, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase1SingleValue3OffsetCase4-cpp-xx : LTC-00460-IT-insertAfterItCase1SingleValue3OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 460, 1, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase1-cpp-xx : LTC-00461-IT-insertAfterItCase3SingleValue1OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 461, 3, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase2-cpp-xx : LTC-00462-IT-insertAfterItCase3SingleValue1OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 462, 3, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase3-cpp-xx : LTC-00463-IT-insertAfterItCase3SingleValue1OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 463, 3, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue1OffsetCase4-cpp-xx : LTC-00464-IT-insertAfterItCase3SingleValue1OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 464, 3, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase1-cpp-xx : LTC-00465-IT-insertAfterItCase3SingleValue2OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 465, 3, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase2-cpp-xx : LTC-00466-IT-insertAfterItCase3SingleValue2OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 466, 3, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase3-cpp-xx : LTC-00467-IT-insertAfterItCase3SingleValue2OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 467, 3, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue2OffsetCase4-cpp-xx : LTC-00468-IT-insertAfterItCase3SingleValue2OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 468, 3, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase1-cpp-xx : LTC-00469-IT-insertAfterItCase3SingleValue3OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 469, 3, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase2-cpp-xx : LTC-00470-IT-insertAfterItCase3SingleValue3OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 470, 3, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase3-cpp-xx : LTC-00471-IT-insertAfterItCase3SingleValue3OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 471, 3, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase3SingleValue3OffsetCase4-cpp-xx : LTC-00472-IT-insertAfterItCase3SingleValue3OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 472, 3, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase1-cpp-xx : LTC-00473-IT-insertAfterItCase2SingleValue1OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 473, 2, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase2-cpp-xx : LTC-00474-IT-insertAfterItCase2SingleValue1OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 474, 2, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase3-cpp-xx : LTC-00475-IT-insertAfterItCase2SingleValue1OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 475, 2, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue1OffsetCase4-cpp-xx : LTC-00476-IT-insertAfterItCase2SingleValue1OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 476, 2, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase1-cpp-xx : LTC-00477-IT-insertAfterItCase2SingleValue2OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 477, 2, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase2-cpp-xx : LTC-00478-IT-insertAfterItCase2SingleValue2OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 478, 2, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase3-cpp-xx : LTC-00479-IT-insertAfterItCase2SingleValue2OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 479, 2, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue2OffsetCase4-cpp-xx : LTC-00480-IT-insertAfterItCase2SingleValue2OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 480, 2, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase1-cpp-xx : LTC-00481-IT-insertAfterItCase2SingleValue3OffsetCase1-cpp-xx */
-    saInsCase ( insertAfter, 481, 2, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase2-cpp-xx : LTC-00482-IT-insertAfterItCase2SingleValue3OffsetCase2-cpp-xx */
-    saInsCase ( insertAfter, 482, 2, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase3-cpp-xx : LTC-00483-IT-insertAfterItCase2SingleValue3OffsetCase3-cpp-xx */
-    saInsCase ( insertAfter, 483, 2, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase2SingleValue3OffsetCase4-cpp-xx : LTC-00484-IT-insertAfterItCase2SingleValue3OffsetCase4-cpp-xx */
-    saInsCase ( insertAfter, 484, 2, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase1-cpp-xx : LTC-00485-IT-insertAfterItCase4SingleValue1OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 485, 4, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase2-cpp-xx : LTC-00486-IT-insertAfterItCase4SingleValue1OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 486, 4, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase3-cpp-xx : LTC-00487-IT-insertAfterItCase4SingleValue1OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 487, 4, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue1OffsetCase4-cpp-xx : LTC-00488-IT-insertAfterItCase4SingleValue1OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 488, 4, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase1-cpp-xx : LTC-00489-IT-insertAfterItCase4SingleValue2OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 489, 4, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase2-cpp-xx : LTC-00490-IT-insertAfterItCase4SingleValue2OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 490, 4, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase3-cpp-xx : LTC-00491-IT-insertAfterItCase4SingleValue2OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 491, 4, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue2OffsetCase4-cpp-xx : LTC-00492-IT-insertAfterItCase4SingleValue2OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 492, 4, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase1-cpp-xx : LTC-00493-IT-insertAfterItCase4SingleValue3OffsetCase1-cpp-xx */
-    saInsRevCase ( insertAfter, 493, 4, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase2-cpp-xx : LTC-00494-IT-insertAfterItCase4SingleValue3OffsetCase2-cpp-xx */
-    saInsRevCase ( insertAfter, 494, 4, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase3-cpp-xx : LTC-00495-IT-insertAfterItCase4SingleValue3OffsetCase3-cpp-xx */
-    saInsRevCase ( insertAfter, 495, 4, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAfterItCase4SingleValue3OffsetCase4-cpp-xx : LTC-00496-IT-insertAfterItCase4SingleValue3OffsetCase4-cpp-xx */
-    saInsRevCase ( insertAfter, 496, 4, 3, 4, false )
-
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues1OffsetCase1-cpp-xx : LTC-00497-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 497, 1, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues1OffsetCase2-cpp-xx : LTC-00498-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 498, 1, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues1OffsetCase3-cpp-xx : LTC-00499-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 499, 1, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues1OffsetCase4-cpp-xx : LTC-00500-IT-insertAllOfBeforeItCase1MultipleValues1OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 500, 1, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues2OffsetCase1-cpp-xx : LTC-00501-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 501, 1, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues2OffsetCase2-cpp-xx : LTC-00502-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 502, 1, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues2OffsetCase3-cpp-xx : LTC-00503-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 503, 1, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues2OffsetCase4-cpp-xx : LTC-00504-IT-insertAllOfBeforeItCase1MultipleValues2OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 504, 1, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues3OffsetCase1-cpp-xx : LTC-00505-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 505, 1, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues3OffsetCase2-cpp-xx : LTC-00506-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 506, 1, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues3OffsetCase3-cpp-xx : LTC-00507-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 507, 1, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase1MultipleValues3OffsetCase4-cpp-xx : LTC-00508-IT-insertAllOfBeforeItCase1MultipleValues3OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 508, 1, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues1OffsetCase1-cpp-xx : LTC-00509-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 509, 3, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues1OffsetCase2-cpp-xx : LTC-00510-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 510, 3, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues1OffsetCase3-cpp-xx : LTC-00511-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 511, 3, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues1OffsetCase4-cpp-xx : LTC-00512-IT-insertAllOfBeforeItCase3MultipleValues1OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 512, 3, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues2OffsetCase1-cpp-xx : LTC-00513-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 513, 3, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues2OffsetCase2-cpp-xx : LTC-00514-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 514, 3, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues2OffsetCase3-cpp-xx : LTC-00515-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 515, 3, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues2OffsetCase4-cpp-xx : LTC-00516-IT-insertAllOfBeforeItCase3MultipleValues2OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 516, 3, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues3OffsetCase1-cpp-xx : LTC-00517-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 517, 3, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues3OffsetCase2-cpp-xx : LTC-00518-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 518, 3, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues3OffsetCase3-cpp-xx : LTC-00519-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 519, 3, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase3MultipleValues3OffsetCase4-cpp-xx : LTC-00520-IT-insertAllOfBeforeItCase3MultipleValues3OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 520, 3, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues1OffsetCase1-cpp-xx : LTC-00521-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 521, 2, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues1OffsetCase2-cpp-xx : LTC-00522-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 522, 2, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues1OffsetCase3-cpp-xx : LTC-00523-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 523, 2, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues1OffsetCase4-cpp-xx : LTC-00524-IT-insertAllOfBeforeItCase2MultipleValues1OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 524, 2, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues2OffsetCase1-cpp-xx : LTC-00525-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 525, 2, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues2OffsetCase2-cpp-xx : LTC-00526-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 526, 2, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues2OffsetCase3-cpp-xx : LTC-00527-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 527, 2, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues2OffsetCase4-cpp-xx : LTC-00528-IT-insertAllOfBeforeItCase2MultipleValues2OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 528, 2, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues3OffsetCase1-cpp-xx : LTC-00529-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase1-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 529, 2, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues3OffsetCase2-cpp-xx : LTC-00530-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase2-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 530, 2, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues3OffsetCase3-cpp-xx : LTC-00531-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase3-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 531, 2, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase2MultipleValues3OffsetCase4-cpp-xx : LTC-00532-IT-insertAllOfBeforeItCase2MultipleValues3OffsetCase4-cpp-xx */
-    mvInsCase ( insertAllOfBefore, 532, 2, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues1OffsetCase1-cpp-xx : LTC-00533-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 533, 4, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues1OffsetCase2-cpp-xx : LTC-00534-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 534, 4, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues1OffsetCase3-cpp-xx : LTC-00535-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 535, 4, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues1OffsetCase4-cpp-xx : LTC-00536-IT-insertAllOfBeforeItCase4MultipleValues1OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 536, 4, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues2OffsetCase1-cpp-xx : LTC-00537-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 537, 4, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues2OffsetCase2-cpp-xx : LTC-00538-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 538, 4, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues2OffsetCase3-cpp-xx : LTC-00539-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 539, 4, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues2OffsetCase4-cpp-xx : LTC-00540-IT-insertAllOfBeforeItCase4MultipleValues2OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 540, 4, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues3OffsetCase1-cpp-xx : LTC-00541-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase1-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 541, 4, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues3OffsetCase2-cpp-xx : LTC-00542-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase2-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 542, 4, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues3OffsetCase3-cpp-xx : LTC-00543-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase3-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 543, 4, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfBeforeItCase4MultipleValues3OffsetCase4-cpp-xx : LTC-00544-IT-insertAllOfBeforeItCase4MultipleValues3OffsetCase4-cpp-xx */
-    mvInsRevCase ( insertAllOfBefore, 544, 4, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues1OffsetCase1-cpp-xx : LTC-00545-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 545, 1, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues1OffsetCase2-cpp-xx : LTC-00546-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 546, 1, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues1OffsetCase3-cpp-xx : LTC-00547-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 547, 1, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues1OffsetCase4-cpp-xx : LTC-00548-IT-insertAllOfAfterItCase1MultipleValues1OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 548, 1, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues2OffsetCase1-cpp-xx : LTC-00549-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 549, 1, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues2OffsetCase2-cpp-xx : LTC-00550-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 550, 1, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues2OffsetCase3-cpp-xx : LTC-00551-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 551, 1, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues2OffsetCase4-cpp-xx : LTC-00552-IT-insertAllOfAfterItCase1MultipleValues2OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 552, 1, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues3OffsetCase1-cpp-xx : LTC-00553-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 553, 1, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues3OffsetCase2-cpp-xx : LTC-00554-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 554, 1, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues3OffsetCase3-cpp-xx : LTC-00555-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 555, 1, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase1MultipleValues3OffsetCase4-cpp-xx : LTC-00556-IT-insertAllOfAfterItCase1MultipleValues3OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 556, 1, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues1OffsetCase1-cpp-xx : LTC-00557-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 557, 3, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues1OffsetCase2-cpp-xx : LTC-00558-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 558, 3, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues1OffsetCase3-cpp-xx : LTC-00559-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 559, 3, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues1OffsetCase4-cpp-xx : LTC-00560-IT-insertAllOfAfterItCase3MultipleValues1OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 560, 3, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues2OffsetCase1-cpp-xx : LTC-00561-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 561, 3, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues2OffsetCase2-cpp-xx : LTC-00562-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 562, 3, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues2OffsetCase3-cpp-xx : LTC-00563-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 563, 3, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues2OffsetCase4-cpp-xx : LTC-00564-IT-insertAllOfAfterItCase3MultipleValues2OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 564, 3, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues3OffsetCase1-cpp-xx : LTC-00565-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 565, 3, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues3OffsetCase2-cpp-xx : LTC-00566-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 566, 3, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues3OffsetCase3-cpp-xx : LTC-00567-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 567, 3, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase3MultipleValues3OffsetCase4-cpp-xx : LTC-00568-IT-insertAllOfAfterItCase3MultipleValues3OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 568, 3, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues1OffsetCase1-cpp-xx : LTC-00569-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 569, 2, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues1OffsetCase2-cpp-xx : LTC-00570-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 570, 2, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues1OffsetCase3-cpp-xx : LTC-00571-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 571, 2, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues1OffsetCase4-cpp-xx : LTC-00572-IT-insertAllOfAfterItCase2MultipleValues1OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 572, 2, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues2OffsetCase1-cpp-xx : LTC-00573-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 573, 2, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues2OffsetCase2-cpp-xx : LTC-00574-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 574, 2, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues2OffsetCase3-cpp-xx : LTC-00575-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 575, 2, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues2OffsetCase4-cpp-xx : LTC-00576-IT-insertAllOfAfterItCase2MultipleValues2OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 576, 2, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues3OffsetCase1-cpp-xx : LTC-00577-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase1-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 577, 2, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues3OffsetCase2-cpp-xx : LTC-00578-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase2-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 578, 2, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues3OffsetCase3-cpp-xx : LTC-00579-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase3-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 579, 2, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase2MultipleValues3OffsetCase4-cpp-xx : LTC-00580-IT-insertAllOfAfterItCase2MultipleValues3OffsetCase4-cpp-xx */
-    mvaInsCase ( insertAllOfAfter, 580, 2, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues1OffsetCase1-cpp-xx : LTC-00581-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 581, 4, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues1OffsetCase2-cpp-xx : LTC-00582-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 582, 4, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues1OffsetCase3-cpp-xx : LTC-00583-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 583, 4, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues1OffsetCase4-cpp-xx : LTC-00584-IT-insertAllOfAfterItCase4MultipleValues1OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 584, 4, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues2OffsetCase1-cpp-xx : LTC-00585-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 585, 4, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues2OffsetCase2-cpp-xx : LTC-00586-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 586, 4, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues2OffsetCase3-cpp-xx : LTC-00587-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 587, 4, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues2OffsetCase4-cpp-xx : LTC-00588-IT-insertAllOfAfterItCase4MultipleValues2OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 588, 4, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues3OffsetCase1-cpp-xx : LTC-00589-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase1-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 589, 4, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues3OffsetCase2-cpp-xx : LTC-00590-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase2-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 590, 4, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues3OffsetCase3-cpp-xx : LTC-00591-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase3-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 591, 4, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllOfAfterItCase4MultipleValues3OffsetCase4-cpp-xx : LTC-00592-IT-insertAllOfAfterItCase4MultipleValues3OffsetCase4-cpp-xx */
-    mvaInsRevCase ( insertAllOfAfter, 592, 4, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase1PackOffsetCase1-cpp-xx : LTC-00593-IT-insertAllBeforeItCase1PackOffsetCase1-cpp-xx */
-    mvpInsCase ( insertAllBefore, 593, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase1PackOffsetCase2-cpp-xx : LTC-00594-IT-insertAllBeforeItCase1PackOffsetCase2-cpp-xx */
-    mvpInsCase ( insertAllBefore, 594, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase1PackOffsetCase3-cpp-xx : LTC-00595-IT-insertAllBeforeItCase1PackOffsetCase3-cpp-xx */
-    mvpInsCase ( insertAllBefore, 595, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase1PackOffsetCase4-cpp-xx : LTC-00596-IT-insertAllBeforeItCase1PackOffsetCase4-cpp-xx */
-    mvpInsCase ( insertAllBefore, 596, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase2PackOffsetCase1-cpp-xx : LTC-00597-IT-insertAllBeforeItCase1PackOffsetCase1-cpp-xx */
-    mvpInsCase ( insertAllBefore, 597, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase2PackOffsetCase2-cpp-xx : LTC-00598-IT-insertAllBeforeItCase1PackOffsetCase2-cpp-xx */
-    mvpInsCase ( insertAllBefore, 598, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase2PackOffsetCase3-cpp-xx : LTC-00599-IT-insertAllBeforeItCase1PackOffsetCase3-cpp-xx */
-    mvpInsCase ( insertAllBefore, 599, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase2PackOffsetCase4-cpp-xx : LTC-00600-IT-insertAllBeforeItCase1PackOffsetCase4-cpp-xx */
-    mvpInsCase ( insertAllBefore, 600, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase3PackOffsetCase1-cpp-xx : LTC-00601-IT-insertAllBeforeItCase1PackOffsetCase1-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 601, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase3PackOffsetCase2-cpp-xx : LTC-00602-IT-insertAllBeforeItCase1PackOffsetCase2-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 602, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase3PackOffsetCase3-cpp-xx : LTC-00603-IT-insertAllBeforeItCase1PackOffsetCase3-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 603, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase3PackOffsetCase4-cpp-xx : LTC-00604-IT-insertAllBeforeItCase1PackOffsetCase4-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 604, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase4PackOffsetCase1-cpp-xx : LTC-00605-IT-insertAllBeforeItCase1PackOffsetCase1-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 605, 4, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase4PackOffsetCase2-cpp-xx : LTC-00606-IT-insertAllBeforeItCase1PackOffsetCase2-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 606, 4, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase4PackOffsetCase3-cpp-xx : LTC-00607-IT-insertAllBeforeItCase1PackOffsetCase3-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 607, 4, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllBeforeItCase4PackOffsetCase4-cpp-xx : LTC-00608-IT-insertAllBeforeItCase1PackOffsetCase4-cpp-xx */
-    mvpInsRevCase ( insertAllBefore, 608, 4, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase1PackOffsetCase1-cpp-xx : LTC-00609-IT-insertAllAfterItCase1PackOffsetCase1-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 609, 1, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase1PackOffsetCase2-cpp-xx : LTC-00610-IT-insertAllAfterItCase1PackOffsetCase2-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 610, 1, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase1PackOffsetCase3-cpp-xx : LTC-00611-IT-insertAllAfterItCase1PackOffsetCase3-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 611, 1, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase1PackOffsetCase4-cpp-xx : LTC-00612-IT-insertAllAfterItCase1PackOffsetCase4-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 612, 1, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase2PackOffsetCase1-cpp-xx : LTC-00613-IT-insertAllAfterItCase1PackOffsetCase1-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 613, 2, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase2PackOffsetCase2-cpp-xx : LTC-00614-IT-insertAllAfterItCase1PackOffsetCase2-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 614, 2, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase2PackOffsetCase3-cpp-xx : LTC-00615-IT-insertAllAfterItCase1PackOffsetCase3-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 615, 2, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase2PackOffsetCase4-cpp-xx : LTC-00616-IT-insertAllAfterItCase1PackOffsetCase4-cpp-xx */
-    mvpaInsCase ( insertAllAfter, 616, 2, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase3PackOffsetCase1-cpp-xx : LTC-00617-IT-insertAllAfterItCase1PackOffsetCase1-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 617, 3, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase3PackOffsetCase2-cpp-xx : LTC-00618-IT-insertAllAfterItCase1PackOffsetCase2-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 618, 3, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase3PackOffsetCase3-cpp-xx : LTC-00619-IT-insertAllAfterItCase1PackOffsetCase3-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 619, 3, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase3PackOffsetCase4-cpp-xx : LTC-00620-IT-insertAllAfterItCase1PackOffsetCase4-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 620, 3, 4, false )
-
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase4PackOffsetCase1-cpp-xx : LTC-00621-IT-insertAllAfterItCase1PackOffsetCase1-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 621, 4, 1, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase4PackOffsetCase2-cpp-xx : LTC-00622-IT-insertAllAfterItCase1PackOffsetCase2-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 622, 4, 2, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase4PackOffsetCase3-cpp-xx : LTC-00623-IT-insertAllAfterItCase1PackOffsetCase3-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 623, 4, 3, true )
-    /* ListTestGroup-BoundaryInsertion-insertAllAfterItCase4PackOffsetCase4-cpp-xx : LTC-00624-IT-insertAllAfterItCase1PackOffsetCase4-cpp-xx */
-    mvpaInsRevCase ( insertAllAfter, 624, 4, 4, false )
-
-
-#undef resetData
-#undef __b1
-#undef __b2
-#undef __b3
-#undef __b4
-#undef __e1
-#undef __e2
-#undef __e3
-#undef __e4
-#undef __b
-#undef __e
-#undef b
-#undef e
-#undef sInsCase
-#undef sInsRevCase
-#undef saInsRevCase
-#undef saInsCase
-#undef mvInsCase
-#undef mvInsRevCase
-#undef mvaInsCase
-#undef mvaInsRevCase
-#undef mvpInsCase
-#undef mvpInsRevCase
-#undef mvpaInsCase
-#undef mvpaInsRevCase
-
-    return true;
+    bool status = true;
+    cds::uint32 tNo = 401U;
+    
+    status = relIns::singleInsBefAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resSingle1Case1, resSingle1Case2, resSingle1Case3, resSingle1Case4 },
+                    { resSingle2Case1, resSingle2Case2, resSingle2Case3, resSingle2Case4 },
+                    { resSingle3Case1, resSingle3Case2, resSingle3Case3, resSingle3Case4 }
+            }
+    );
+    
+    status = status && relIns::singleInsBefAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resSingle1RevCase1, resSingle1RevCase2, resSingle1RevCase3, resSingle1RevCase4 },
+                    { resSingle2RevCase1, resSingle2RevCase2, resSingle2RevCase3, resSingle2RevCase4 },
+                    { resSingle3RevCase1, resSingle3RevCase2, resSingle3RevCase3, resSingle3RevCase4 }
+            }
+    );
+    
+    status = status && relIns::singleInsBefAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resSingle1Case1, resSingle1Case2, resSingle1Case3, resSingle1Case4 },
+                    { resSingle2Case1, resSingle2Case2, resSingle2Case3, resSingle2Case4 },
+                    { resSingle3Case1, resSingle3Case2, resSingle3Case3, resSingle3Case4 }
+            }
+    );
+    
+    status = status && relIns::singleInsBefAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resSingle1RevCase1, resSingle1RevCase2, resSingle1RevCase3, resSingle1RevCase4 },
+                    { resSingle2RevCase1, resSingle2RevCase2, resSingle2RevCase3, resSingle2RevCase4 },
+                    { resSingle3RevCase1, resSingle3RevCase2, resSingle3RevCase3, resSingle3RevCase4 }
+            }
+    );
+    
+    status = status && relIns::singleInsAftAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresSingle1Case1, aresSingle1Case2, aresSingle1Case3, aresSingle1Case4 },
+                    { aresSingle2Case1, aresSingle2Case2, aresSingle2Case3, aresSingle2Case4 },
+                    { aresSingle3Case1, aresSingle3Case2, aresSingle3Case3, aresSingle3Case4 }
+            }
+    );
+    
+    status = status && relIns::singleInsAftAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresSingle1RevCase1, aresSingle1RevCase2, aresSingle1RevCase3, aresSingle1RevCase4 },
+                    { aresSingle2RevCase1, aresSingle2RevCase2, aresSingle2RevCase3, aresSingle2RevCase4 },
+                    { aresSingle3RevCase1, aresSingle3RevCase2, aresSingle3RevCase3, aresSingle3RevCase4 }
+            }
+    );
+    
+    status = status && relIns::singleInsAftAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresSingle1Case1, aresSingle1Case2, aresSingle1Case3, aresSingle1Case4 },
+                    { aresSingle2Case1, aresSingle2Case2, aresSingle2Case3, aresSingle2Case4 },
+                    { aresSingle3Case1, aresSingle3Case2, aresSingle3Case3, aresSingle3Case4 }
+            }
+    );
+    
+    status = status && relIns::singleInsAftAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { singleValue1, singleValue2, singleValue3 },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresSingle1RevCase1, aresSingle1RevCase2, aresSingle1RevCase3, aresSingle1RevCase4 },
+                    { aresSingle2RevCase1, aresSingle2RevCase2, aresSingle2RevCase3, aresSingle2RevCase4 },
+                    { aresSingle3RevCase1, aresSingle3RevCase2, aresSingle3RevCase3, aresSingle3RevCase4 }
+            }
+    );
+    
+    status = status && relIns::mulInsBefAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
+                    { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
+                    { resMultiple3Case1, resMultiple3Case2, resMultiple3Case3, resMultiple3Case4 },
+            }
+    );
+    
+    status = status && relIns::mulInsBefAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
+                    { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
+                    { resMultiple3RevCase1, resMultiple3RevCase2, resMultiple3RevCase3, resMultiple3RevCase4 },
+            }
+    );
+    
+    status = status && relIns::mulInsBefAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
+                    { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
+                    { resMultiple3Case1, resMultiple3Case2, resMultiple3Case3, resMultiple3Case4 },
+            }
+    );
+    
+    status = status && relIns::mulInsBefAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
+                    { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
+                    { resMultiple3RevCase1, resMultiple3RevCase2, resMultiple3RevCase3, resMultiple3RevCase4 },
+            }
+    );
+    
+    status = status && relIns::mulInsAftAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
+                    { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
+                    { aresMultiple3Case1, aresMultiple3Case2, aresMultiple3Case3, aresMultiple3Case4 },
+            }
+    );
+    
+    status = status && relIns::mulInsAftAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
+                    { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },
+                    { aresMultiple3RevCase1, aresMultiple3RevCase2, aresMultiple3RevCase3, aresMultiple3RevCase4 },
+            }
+    );
+    
+    status = status && relIns::mulInsAftAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
+                    { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
+                    { aresMultiple3Case1, aresMultiple3Case2, aresMultiple3Case3, aresMultiple3Case4 },
+            }
+    );
+    
+    status = status && relIns::mulInsAftAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+            {
+                    { true, true, true, false },
+                    { true, true, true, false },
+                    { true, true, true, false }
+            }, {
+                    { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
+                    { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },
+                    { aresMultiple3RevCase1, aresMultiple3RevCase2, aresMultiple3RevCase3, aresMultiple3RevCase4 },
+            }
+    );
+    
+    status = status && relIns::packInsBefAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {resMultipleVCase1, resMultipleVCase2, resMultipleVCase3, resMultipleVCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsBefAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {resMultipleVRevCase1, resMultipleVRevCase2, resMultipleVRevCase3, resMultipleVRevCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsBefAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {resMultipleVCase1, resMultipleVCase2, resMultipleVCase3, resMultipleVCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsBefAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {resMultipleVRevCase1, resMultipleVRevCase2, resMultipleVRevCase3, resMultipleVRevCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsAftAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {aresMultipleVCase1, aresMultipleVCase2, aresMultipleVCase3, aresMultipleVCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsAftAll <__EnclosedType, __TestedType, relIns::RBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {aresMultipleVRevCase1, aresMultipleVRevCase2, aresMultipleVRevCase3, aresMultipleVRevCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsAftAll <__EnclosedType, __TestedType, relIns::CBeginPfn<__EnclosedType>, false> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {aresMultipleVCase1, aresMultipleVCase2, aresMultipleVCase3, aresMultipleVCase4},
+            values ...
+    );
+    
+    status = status && relIns::packInsAftAll <__EnclosedType, __TestedType, relIns::CRBeginPfn<__EnclosedType>, true> (
+            tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
+            {case1Offset, case2Offset, case3Offset, case4Offset },
+            {true, true, true, false}, 
+            {aresMultipleVRevCase1, aresMultipleVRevCase2, aresMultipleVRevCase3, aresMultipleVRevCase4},
+            values ...
+    );
+
+    return status;
 }
 
 

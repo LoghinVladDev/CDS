@@ -43,4 +43,4 @@ jobs:
         run: |
           sonar-scanner \
             --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" \
-            --define sonar.cfamily.llvm-cov.reportPath=cpp11_test_all_coverage.txt -X
+            --define sonar.cfamily.llvm-cov.reportPath=cpp11_test_all_coverage.txt
