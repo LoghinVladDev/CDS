@@ -1,42 +1,57 @@
 #include "MutableCollectionTest.h"
 #include "MutableCollectionTest_common.hpp"
+#include <initializer_list>
+#include <CDS/Tuple>
 
 namespace {
+
     /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MCTC-00451-RO to MCTC-00464-RO */
     template <
             typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
             typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
             typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
-    > auto mutableCollectionTestGroupItemRemoveOf (
-            Test                      * pTestLib,
-            cds :: String       const & groupVariant,
-            StringLiteral               subvariant,
-            Size                        subvariantOffset,
+    > auto mutableCollectionTestGroupItemRemoveOfFirstHalf (
+            cds::Tuple <Test const *, cds::String, cds::StringLiteral, Size> const & tData,
             __IterableType      const & iterableUnderTest,
             Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
             Size                        limit,
-            __OtherIterableType const & noneCommon,
-            __OtherIterableType const & oneCommon,
-            __OtherIterableType const & moreLessThanLimitCommon,
-            __OtherIterableType const & moreCommon,
-            __OtherIterableType const & moreMoreThanLimitCommon,
-            __OtherIterableType const & allCommon,
-            __OtherIterableType const & allAndMoreCommon,
-            Size                        expectedResultFromNone,
-            __OtherIterableType const & expectedCollectionFromNone,
-            Size                        expectedResultFromOne,
-            __OtherIterableType const & expectedCollectionFromOne,
-            Size                        expectedResultFromMoreLessThanLimit,
-            __OtherIterableType const & expectedCollectionFromMoreLessThanLimit,
-            Size                        expectedResultFromMore,
-            __OtherIterableType const & expectedCollectionFromMore,
-            Size                        expectedResultFromMoreMoreThanLimit,
-            __OtherIterableType const & expectedCollectionFromMoreMoreThanLimit,
-            Size                        expectedResultFromAll,
-            __OtherIterableType const & expectedCollectionFromAll,
-            Size                        expectedResultFromAllAndMore,
-            __OtherIterableType const & expectedCollectionFromAllAndMore
+            std::initializer_list <__OtherIterableType const *> const & cases,
+            std::initializer_list <Size> const & statuses,
+            std::initializer_list <__OtherIterableType const *> const & results
     ) -> bool {
+
+        auto pTestLib = tData.template get <0> ();
+        auto const & groupVariant = tData.template get <1> ();
+        auto subvariant = tData.template get <2> ();
+        auto subvariantOffset = tData.template get <3> ();
+
+        auto casesIt = cases.begin();
+        auto const & noneCommon = ** casesIt; 
+        ++ casesIt;
+        auto const & oneCommon = ** casesIt; 
+        ++ casesIt;
+        auto const & moreLessThanLimitCommon = ** casesIt; 
+        ++ casesIt;
+        auto const & moreCommon = ** casesIt;
+
+        auto statusesIt = statuses.begin();
+        auto const expectedResultFromNone = * statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromOne = * statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromMoreLessThanLimit = * statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromMore = * statusesIt;
+
+        auto resultsIt = results.begin();
+        auto const & expectedCollectionFromNone = ** resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromOne= ** resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromMoreLessThanLimit = ** resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromMore = ** resultsIt;
+
 
         pTestLib->log ( "Object Under Test : %s", iterableUnderTest.toString().cStr() );
 
@@ -92,6 +107,62 @@ namespace {
             pTestLib->logOK ( "'MCTC-00%d-RO-%sMoreCommon-%s-" __CDS_cpplang_core_version_name "' OK", 454 + subvariantOffset, subvariant, groupVariant.cStr() );
         }
 
+        return true;
+    }
+    
+    /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MCTC-00451-RO to MCTC-00464-RO */
+    template <
+            typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupItemRemoveOfLastHalf (
+            cds::Tuple <Test const *, cds::String, cds::StringLiteral, Size> const & tData,
+            __IterableType      const & iterableUnderTest,
+            Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
+            Size                        limit,
+            std::initializer_list <__OtherIterableType const *> const & cases,
+            std::initializer_list <Size> const & statuses,
+            std::initializer_list <__OtherIterableType const *> const & results
+    ) -> bool {
+
+        auto pTestLib = tData.template get <0> ();
+        auto const & groupVariant = tData.template get <1> ();
+        auto subvariant = tData.template get <2> ();
+        auto subvariantOffset = tData.template get <3> ();
+
+        auto casesIt = cases.begin();
+        ++ casesIt;
+        ++ casesIt;
+        ++ casesIt;
+        ++ casesIt;
+        auto const & moreMoreThanLimitCommon = ** casesIt; 
+        ++ casesIt;
+        auto const & allCommon = ** casesIt; 
+        ++ casesIt;
+        auto const & allAndMoreCommon = ** casesIt;
+
+        auto statusesIt = statuses.begin();
+        ++ statusesIt;
+        ++ statusesIt;
+        ++ statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromMoreMoreThanLimit = * statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromAll = * statusesIt;
+        ++ statusesIt;
+        auto const expectedResultFromAllAndMore = * statusesIt;
+
+        auto resultsIt = results.begin();
+        ++ resultsIt;
+        ++ resultsIt;
+        ++ resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromMoreMoreThanLimit = ** resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromAll = ** resultsIt;
+        ++ resultsIt;
+        auto const & expectedCollectionFromAllAndMore = ** resultsIt;
+
         /* MutableCollectionTestCase-RemoveOf-removeOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00455-RO-removeOfMoreMoreThanLimitCommon-cpp-xx */
         /* MutableCollectionTestCase-RemoveOf-removeNotOfMoreMoreThanLimitCommon-cpp-xx : MCTC-00462-RO-removeNotOfMoreMoreThanLimitCommon-cpp-xx */
         auto       copyRO455            = iterableUnderTest;
@@ -132,6 +203,31 @@ namespace {
         }
 
         return true;
+    }
+    
+    /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MCTC-00451-RO to MCTC-00464-RO */
+    template <
+            typename __OtherIterableType,   /* NOLINT(bugprone-reserved-identifier) */
+            typename __IterableType,        /* NOLINT(bugprone-reserved-identifier) */
+            typename __ElementType          /* NOLINT(bugprone-reserved-identifier) */
+    > auto mutableCollectionTestGroupItemRemoveOf (
+            cds::Tuple <Test const *, cds::String, cds::StringLiteral, Size> const & tData,
+            __IterableType      const & iterableUnderTest,
+            Size ( cds :: MutableCollection < __ElementType > :: * removePfnVariant ) ( Size, __OtherIterableType const & ),
+            Size                        limit,
+            std::initializer_list <__OtherIterableType const *> const & cases,
+            std::initializer_list <Size> const & statuses,
+            std::initializer_list <__OtherIterableType const *> const & results
+    ) -> bool {
+
+        return
+                mutableCollectionTestGroupItemRemoveOfFirstHalf (
+                        tData, iterableUnderTest, removePfnVariant, limit,
+                        cases, statuses, results
+                ) && mutableCollectionTestGroupItemRemoveOfLastHalf (
+                        tData, iterableUnderTest, removePfnVariant, limit,
+                        cases, statuses, results
+                );
     }
 
     /* MutableCollectionTestGroup-RemoveOf-cpp-xx : MCTG-00450-RO-cpp-xx. MMCTC-00501-RO to MMCTC-00520-RO. */
@@ -350,37 +446,37 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
 
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntArray", [this, & allOk]{
 
-        cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds :: Array < int > const underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        auto const c1 = make_a <int> (10, 11, 12, 13);
+        auto const c2 = make_a <int> (16, 6, 11, 12, 13);
+        auto const c3 = make_a <int> (20, 123, 5, 1230, 435, 3, 1235, 9534);
+        auto const c4 = make_a <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c5 = make_a <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c6 = make_a <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 );
+        auto const c7 = make_a <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 );
+
+        auto const r1 = make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r2 = make_a <int> (1, 2, 3, 4, 5, 7, 8, 9 );
+        auto const r3 = make_a <int> (1, 2, 4, 6, 7, 8, 9 );
+        auto const r4 = make_a <int> (1, 2, 4, 6, 8, 9 );
+        auto const r5 = make_a <int> (1, 4, 6, 7, 8, 9 );
+        auto const r6 = make_a <int> (4, 5, 6, 7, 8, 9 );
+        auto const r7 = make_a <int> (4, 5, 6, 7, 8, 9 );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_a <int> (10, 11, 12, 13),
-                /* oneCommon= */                                make_a <int> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_a <int> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_a <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_a <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_a <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_a <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                make_a <int> (1, 2, 3, 4, 5, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_a <int> (1, 2, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_a <int> (1, 2, 4, 6, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_a <int> (1, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                make_a <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_a <int> (4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -455,35 +551,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_a <int> (1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
+        auto const r8 = make_a <int>  (4, 5, 6, 7, 8, 9 );
+        auto const r9 = make_a <int>  (4, 5, 6, 7, 8, 9 );
+        auto const r10 = make_a <int> (3, 5, 6, 7, 8, 9 );
+        auto const r11 = make_a <int> (3, 5, 6, 7, 8, 9 );
+        auto const r12 = make_a <int> (2, 3, 5, 7, 8, 9 );
+        auto const r13 = make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r14 = make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_a <int> (10, 11, 12, 13),
-                /* oneCommon= */                                make_a <int> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_a <int> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_a <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_a <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_a <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_a <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               make_a <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                make_a <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_a <int> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_a <int> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_a <int> (2, 3, 5, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -558,35 +646,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_a <int> (1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {1, 2, 3, 4, 5, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {1, 2, 4, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {1, 2, 4, 6, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {1, 4, 6, 7, 8, 9 },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {4, 5, 6, 7, 8, 9}
+        std::initializer_list <int> const c8  = {10, 11, 12, 13};
+        std::initializer_list <int> const c9  = {16, 6, 11, 12, 13};
+        std::initializer_list <int> const c10 = {20, 123, 5, 1230, 435, 3, 1235, 9534};
+        std::initializer_list <int> const c11 = {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <int> const c12 = {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <int> const c13 = {9, 2, 5, 1, 4, 3, 7, 8, 6 };
+        std::initializer_list <int> const c14 = {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 };
+
+        std::initializer_list <int> const r15 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r16 = {1, 2, 3, 4, 5, 7, 8, 9 };
+        std::initializer_list <int> const r17 = {1, 2, 4, 6, 7, 8, 9 };
+        std::initializer_list <int> const r18 = {1, 2, 4, 6, 8, 9 };
+        std::initializer_list <int> const r19 = {1, 4, 6, 7, 8, 9 };
+        std::initializer_list <int> const r20 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r21 = {4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < int >, decltype (underTest), int > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
@@ -661,35 +749,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {1, 2, 3, 4, 5, 6, 7, 8 }
         );
 
+        std::initializer_list <int> const r22 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r23 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r24 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r25 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r26 = {2, 3, 5, 7, 8, 9 };
+        std::initializer_list <int> const r27 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r28 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {2, 3, 5, 7, 8, 9 },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {1, 2, 3, 4, 5, 6, 7, 8, 9 }
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7U
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
@@ -768,36 +848,36 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, & allOk]{
 
         cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        
+        auto const c1 = make_ll <int> (10, 11, 12, 13);
+        auto const c2 = make_ll <int> (16, 6, 11, 12, 13);
+        auto const c3 = make_ll <int> (20, 123, 5, 1230, 435, 3, 1235, 9534);
+        auto const c4 = make_ll <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c5 = make_ll <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c6 = make_ll <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 );
+        auto const c7 = make_ll <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 );
+
+        auto const r1 = make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r2 = make_ll <int> (1, 2, 3, 4, 5, 7, 8, 9 );
+        auto const r3 = make_ll <int> (1, 2, 4, 6, 7, 8, 9 );
+        auto const r4 = make_ll <int> (1, 2, 4, 6, 8, 9 );
+        auto const r5 = make_ll <int> (1, 4, 6, 7, 8, 9 );
+        auto const r6 = make_ll <int> (4, 5, 6, 7, 8, 9 );
+        auto const r7 = make_ll <int> (4, 5, 6, 7, 8, 9 );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_ll <int> (10, 11, 12, 13),
-                /* oneCommon= */                                make_ll <int> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_ll <int> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_ll <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_ll <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_ll <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_ll <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                make_ll <int> (1, 2, 3, 4, 5, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_ll <int> (1, 2, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_ll <int> (1, 2, 4, 6, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_ll <int> (1, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                make_ll <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_ll <int> (4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -872,35 +952,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
+        auto const r8  = make_ll <int>  (4, 5, 6, 7, 8, 9 );
+        auto const r9  = make_ll <int>  (4, 5, 6, 7, 8, 9 );
+        auto const r10 = make_ll <int> (3, 5, 6, 7, 8, 9 );
+        auto const r11 = make_ll <int> (3, 5, 6, 7, 8, 9 );
+        auto const r12 = make_ll <int> (2, 3, 5, 7, 8, 9 );
+        auto const r13 = make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r14 = make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_ll <int> (10, 11, 12, 13),
-                /* oneCommon= */                                make_ll <int> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_ll <int> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_ll <int> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_ll <int> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_ll <int> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_ll <int> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               make_ll <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                make_ll <int> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_ll <int> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_ll <int> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_ll <int> (2, 3, 5, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < int >, decltype (underTest), int > (
@@ -975,36 +1047,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_ll <int> (1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
+        std::initializer_list <int> const c8  = {10, 11, 12, 13};
+        std::initializer_list <int> const c9  = {16, 6, 11, 12, 13};
+        std::initializer_list <int> const c10 = {20, 123, 5, 1230, 435, 3, 1235, 9534};
+        std::initializer_list <int> const c11 = {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <int> const c12 = {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <int> const c13 = {9, 2, 5, 1, 4, 3, 7, 8, 6 };
+        std::initializer_list <int> const c14 = {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 };
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {1, 2, 3, 4, 5, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {1, 2, 4, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {1, 2, 4, 6, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {1, 4, 6, 7, 8, 9 },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {4, 5, 6, 7, 8, 9 }
+        std::initializer_list <int> const r15 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r16 = {1, 2, 3, 4, 5, 7, 8, 9 };
+        std::initializer_list <int> const r17 = {1, 2, 4, 6, 7, 8, 9 };
+        std::initializer_list <int> const r18 = {1, 2, 4, 6, 8, 9 };
+        std::initializer_list <int> const r19 = {1, 4, 6, 7, 8, 9 };
+        std::initializer_list <int> const r20 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r21 = {4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < int >, decltype (underTest), int > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
@@ -1079,35 +1150,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {1, 2, 3, 4, 5, 6, 7, 8 }
         );
 
+        std::initializer_list <int> const r22 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r23 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r24 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r25 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r26 = {2, 3, 5, 7, 8, 9 };
+        std::initializer_list <int> const r27 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <int> const r28 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < int >, decltype (underTest), int > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < int > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {2, 3, 5, 7, 8, 9 },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {1, 2, 3, 4, 5, 6, 7, 8, 9 }
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < int > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < int >, decltype (underTest), int > (
@@ -1185,36 +1248,36 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntHashMap", [this, & allOk]{
 
         cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        
+        auto const c1 = cds::HashMap <int, int> {{10, 10}, {11, 11}, {12, 12}, {13, 13}};
+        auto const c2 = cds::HashMap <int, int> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}};
+        auto const c3 = cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}};
+        auto const c4 = cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        auto const c5 = cds::HashMap <int, int> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        auto const c6 = cds::HashMap <int, int> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} };
+        auto const c7 = cds::HashMap <int, int> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} };
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               cds::HashMap <int, int> {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                cds::HashMap <int, int> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  cds::HashMap <int, int> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                cds::HashMap <int, int> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         cds::HashMap <int, int> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  cds::HashMap <int, int> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               cds::HashMap <int, int> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  cds::HashMap <int, int> {{1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        auto const r1 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r2 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r3 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r4 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} };
+        auto const r5 = cds::HashMap <int, int> {{1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r6 = cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r7 = cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry <int, int> >, decltype (underTest), MapEntry <int, int> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <int, int> > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
@@ -1287,37 +1350,29 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAll= */        cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
                 /* expectedResultFromAllAndMore= */     true,
                 /* expectedMutableCollectionFromAllAndMore= */ cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} }
-        );
+        );        
+        
+        auto const r8 = cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r9 = cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r10 = cds::HashMap <int, int> {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r11 = cds::HashMap <int, int> {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r12 = cds::HashMap <int, int> {{2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r13 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r14 = cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               cds::HashMap <int, int> {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                cds::HashMap <int, int> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               cds::HashMap <int, int> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  cds::HashMap <int, int> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                cds::HashMap <int, int> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         cds::HashMap <int, int> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                cds::HashMap <int, int> {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  cds::HashMap <int, int> {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               cds::HashMap <int, int> {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  cds::HashMap <int, int> {{2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry <int, int> >, decltype (underTest), MapEntry <int, int> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <int, int> > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
@@ -1392,35 +1447,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ cds::HashMap <int, int> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {{1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        std::initializer_list <MapEntry <int, int>> const c8  = {{10, 10}, {11, 11}, {12, 12}, {13, 13}};
+        std::initializer_list <MapEntry <int, int>> const c9  = {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}};
+        std::initializer_list <MapEntry <int, int>> const c10 = {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}};
+        std::initializer_list <MapEntry <int, int>> const c11 = {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        std::initializer_list <MapEntry <int, int>> const c12 = {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        std::initializer_list <MapEntry <int, int>> const c13 = {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} };
+        std::initializer_list <MapEntry <int, int>> const c14 = {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} };
+
+        std::initializer_list <MapEntry <int, int>> const r15 = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r16 = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r17 = {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r18 = {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r19 = {{1, 1}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r20 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r21 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < MapEntry <int, int> >, decltype (underTest), MapEntry <int, int> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <int, int> > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
@@ -1495,35 +1550,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} }
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < int, int > > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {{2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        std::initializer_list <MapEntry <int, int>> const r22 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r23 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r24 = {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r25 = {{3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r26 = {{2, 2}, {3, 3}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r27 = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        std::initializer_list <MapEntry <int, int>> const r28 = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < MapEntry <int, int> >, decltype (underTest), MapEntry <int, int> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <int, int> > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < int, int > >, decltype (underTest), MapEntry < int, int > > (
@@ -1603,35 +1650,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
 
         cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
+        auto const c1 = make_a <String> (10, 11, 12, 13);
+        auto const c2 = make_a <String> (16, 6, 11, 12, 13);
+        auto const c3 = make_a <String> (20, 123, 5, 1230, 435, 3, 1235, 9534);
+        auto const c4 = make_a <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c5 = make_a <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c6 = make_a <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 );
+        auto const c7 = make_a <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 );
+
+        auto const r1 = make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r2 = make_a <String> (1, 2, 3, 4, 5, 7, 8, 9 );
+        auto const r3 = make_a <String> (1, 2, 4, 6, 7, 8, 9 );
+        auto const r4 = make_a <String> (1, 2, 4, 6, 8, 9 );
+        auto const r5 = make_a <String> (1, 4, 6, 7, 8, 9 );
+        auto const r6 = make_a <String> (4, 5, 6, 7, 8, 9 );
+        auto const r7 = make_a <String> (4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_a <String> (10, 11, 12, 13),
-                /* oneCommon= */                                make_a <String> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_a <String> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_a <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_a <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_a <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_a <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                make_a <String> (1, 2, 3, 4, 5, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_a <String> (1, 2, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_a <String> (1, 2, 4, 6, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_a <String> (1, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                make_a <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_a <String> (4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
@@ -1706,35 +1753,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_a <String> (1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
+        auto const r8 = make_a <String>  (4, 5, 6, 7, 8, 9 );
+        auto const r9 = make_a <String>  (4, 5, 6, 7, 8, 9 );
+        auto const r10 = make_a <String> (3, 5, 6, 7, 8, 9 );
+        auto const r11 = make_a <String> (3, 5, 6, 7, 8, 9 );
+        auto const r12 = make_a <String> (2, 3, 5, 7, 8, 9 );
+        auto const r13 = make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r14 = make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_a <String> (10, 11, 12, 13),
-                /* oneCommon= */                                make_a <String> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_a <String> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_a <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_a <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_a <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_a <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               make_a <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                make_a <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_a <String> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_a <String> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_a <String> (2, 3, 5, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7U
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
@@ -1809,35 +1848,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_a <String> (1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {1, 2, 3, 4, 5, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {1, 2, 4, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {1, 2, 4, 6, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {1, 4, 6, 7, 8, 9 },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {4, 5, 6, 7, 8, 9 }
+        std::initializer_list <String> const c8  = {10, 11, 12, 13};
+        std::initializer_list <String> const c9  = {16, 6, 11, 12, 13};
+        std::initializer_list <String> const c10 = {20, 123, 5, 1230, 435, 3, 1235, 9534};
+        std::initializer_list <String> const c11 = {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <String> const c12 = {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <String> const c13 = {9, 2, 5, 1, 4, 3, 7, 8, 6 };
+        std::initializer_list <String> const c14 = {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 };
+
+        std::initializer_list <String> const r15 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r16 = {1, 2, 3, 4, 5, 7, 8, 9 };
+        std::initializer_list <String> const r17 = {1, 2, 4, 6, 7, 8, 9 };
+        std::initializer_list <String> const r18 = {1, 2, 4, 6, 8, 9 };
+        std::initializer_list <String> const r19 = {1, 4, 6, 7, 8, 9 };
+        std::initializer_list <String> const r20 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r21 = {4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < String >, decltype (underTest), String > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
@@ -1912,35 +1951,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {1, 2, 3, 4, 5, 6, 7, 8 }
         );
 
+        std::initializer_list <String> const r22 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r23 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r24 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r25 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r26 = {2, 3, 5, 7, 8, 9 };
+        std::initializer_list <String> const r27 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r28 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {2, 3, 5, 7, 8, 9 },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {1, 2, 3, 4, 5, 6, 7, 8, 9 }
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7U
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
@@ -2020,35 +2051,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
 
         cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
+        auto const c1 = make_ll <String> (10, 11, 12, 13);
+        auto const c2 = make_ll <String> (16, 6, 11, 12, 13);
+        auto const c3 = make_ll <String> (20, 123, 5, 1230, 435, 3, 1235, 9534);
+        auto const c4 = make_ll <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c5 = make_ll <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245);
+        auto const c6 = make_ll <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 );
+        auto const c7 = make_ll <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 );
+
+        auto const r1 = make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r2 = make_ll <String> (1, 2, 3, 4, 5, 7, 8, 9 );
+        auto const r3 = make_ll <String> (1, 2, 4, 6, 7, 8, 9 );
+        auto const r4 = make_ll <String> (1, 2, 4, 6, 8, 9 );
+        auto const r5 = make_ll <String> (1, 4, 6, 7, 8, 9 );
+        auto const r6 = make_ll <String> (4, 5, 6, 7, 8, 9 );
+        auto const r7 = make_ll <String> (4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_ll <String> (10, 11, 12, 13),
-                /* oneCommon= */                                make_ll <String> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_ll <String> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_ll <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_ll <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_ll <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_ll <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                make_ll <String> (1, 2, 3, 4, 5, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_ll <String> (1, 2, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_ll <String> (1, 2, 4, 6, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_ll <String> (1, 4, 6, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                make_ll <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_ll <String> (4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
@@ -2123,35 +2154,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8 )
         );
 
+        auto const r8 = make_ll <String>  (4, 5, 6, 7, 8, 9 );
+        auto const r9 = make_ll <String>  (4, 5, 6, 7, 8, 9 );
+        auto const r10 = make_ll <String> (3, 5, 6, 7, 8, 9 );
+        auto const r11 = make_ll <String> (3, 5, 6, 7, 8, 9 );
+        auto const r12 = make_ll <String> (2, 3, 5, 7, 8, 9 );
+        auto const r13 = make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        auto const r14 = make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 );
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               make_ll <String> (10, 11, 12, 13),
-                /* oneCommon= */                                make_ll <String> (16, 6, 11, 12, 13),
-                /* moreLessThanLimitCommon= */                  make_ll <String> (20, 123, 5, 1230, 435, 3, 1235, 9534),
-                /* moreCommon= */                               make_ll <String> (20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* moreMoreThanLimitCommon= */                  make_ll <String> (2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245),
-                /* allCommon= */                                make_ll <String> (9, 2, 5, 1, 4, 3, 7, 8, 6 ),
-                /* allAndMoreCommon= */                         make_ll <String> (91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 ),
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               make_ll <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                make_ll <String> (4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  make_ll <String> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               make_ll <String> (3, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  make_ll <String> (2, 3, 5, 7, 8, 9 ),
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 ),
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9 )
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7U
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < String >, decltype (underTest), String > (
@@ -2226,35 +2249,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ make_ll <String> (1, 2, 3, 4, 5, 6, 7, 8, 9)
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {1, 2, 3, 4, 5, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {1, 2, 4, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {1, 2, 4, 6, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {1, 4, 6, 7, 8, 9 },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {4, 5, 6, 7, 8, 9 }
+        std::initializer_list <String> const c8  = {10, 11, 12, 13};
+        std::initializer_list <String> const c9  = {16, 6, 11, 12, 13};
+        std::initializer_list <String> const c10 = {20, 123, 5, 1230, 435, 3, 1235, 9534};
+        std::initializer_list <String> const c11 = {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <String> const c12 = {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245};
+        std::initializer_list <String> const c13 = {9, 2, 5, 1, 4, 3, 7, 8, 6 };
+        std::initializer_list <String> const c14 = {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 };
+
+        std::initializer_list <String> const r15 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r16 = {1, 2, 3, 4, 5, 7, 8, 9 };
+        std::initializer_list <String> const r17 = {1, 2, 4, 6, 7, 8, 9 };
+        std::initializer_list <String> const r18 = {1, 2, 4, 6, 8, 9 };
+        std::initializer_list <String> const r19 = {1, 4, 6, 7, 8, 9 };
+        std::initializer_list <String> const r20 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r21 = {4, 5, 6, 7, 8, 9 };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < String >, decltype (underTest), String > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
@@ -2329,35 +2352,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {1, 2, 3, 4, 5, 6, 7, 8 }
         );
 
+        std::initializer_list <String> const r22 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r23 = {4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r24 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r25 = {3, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r26 = {2, 3, 5, 7, 8, 9 };
+        std::initializer_list <String> const r27 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        std::initializer_list <String> const r28 = {1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
         allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < String >, decltype (underTest), String > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < String > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {10, 11, 12, 13},
-                /* oneCommon= */                                {16, 6, 11, 12, 13},
-                /* moreLessThanLimitCommon= */                  {20, 123, 5, 1230, 435, 3, 1235, 9534},
-                /* moreCommon= */                               {20, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* moreMoreThanLimitCommon= */                  {2, 123, 5, 1230, 435, 3, 7, 1235, 9534, 1245},
-                /* allCommon= */                                {9, 2, 5, 1, 4, 3, 7, 8, 6 },
-                /* allAndMoreCommon= */                         {91245, 9, 2, 5532, 5, 1, 4, 647, 1324, 3, 7, 45, 234, 2365, 2436, 56, 8, 6 },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {3, 5, 6, 7, 8, 9 },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {2, 3, 5, 7, 8, 9 },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {1, 2, 3, 4, 5, 6, 7, 8, 9 }
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7U
+                ),
+                underTest,
+                & cds :: MutableCollection < String > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < String >, decltype (underTest), String > (
@@ -2436,36 +2451,36 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
     this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : StringToStringHashMap", [this, & allOk]{
 
         cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        
+        auto const c1 = cds::HashMap <String, String> {{10, 10}, {11, 11}, {12, 12}, {13, 13}};
+        auto const c2 = cds::HashMap <String, String> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}};
+        auto const c3 = cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}};
+        auto const c4 = cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        auto const c5 = cds::HashMap <String, String> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        auto const c6 = cds::HashMap <String, String> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} };
+        auto const c7 = cds::HashMap <String, String> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} };
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               cds::HashMap <String, String> {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                cds::HashMap <String, String> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  cds::HashMap <String, String> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                cds::HashMap <String, String> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         cds::HashMap <String, String> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  cds::HashMap <String, String> {{1, 1}, {3, 3}, {4, 4}, {6, 6}, {8, 8}, {9, 9} },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9}}
+        auto const r1 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r2 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r3 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r4 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {6, 6}, {8, 8}, {9, 9} };
+        auto const r5 = cds::HashMap <String, String> {{1, 1}, {3, 3}, {4, 4}, {6, 6}, {8, 8}, {9, 9} };
+        auto const r6 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r7 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {7, 7}, {8, 8}, {9, 9} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry <String, String> >, decltype (underTest), MapEntry <String, String> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <String, String> > :: removeOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
@@ -2538,37 +2553,29 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAll= */        cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
                 /* expectedResultFromAllAndMore= */     true,
                 /* expectedMutableCollectionFromAllAndMore= */ cds::HashMap <String, String> {{1, 1}, {2, 2}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
-        );
+        );        
+        
+        auto const r8 = cds::HashMap <String, String> {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        auto const r9 = cds::HashMap <String, String> {{6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        auto const r10 = cds::HashMap <String, String> {{5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        auto const r11 = cds::HashMap <String, String> {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        auto const r12 = cds::HashMap <String, String> {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        auto const r13 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        auto const r14 = cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "MutableCollection",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               cds::HashMap <String, String> {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                cds::HashMap <String, String> {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               cds::HashMap <String, String> {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  cds::HashMap <String, String> {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                cds::HashMap <String, String> {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         cds::HashMap <String, String> {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               cds::HashMap <String, String> {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                cds::HashMap <String, String> {{6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  cds::HashMap <String, String> {{5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               cds::HashMap <String, String> {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  cds::HashMap <String, String> {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} }
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < cds :: Iterable < MapEntry <String, String> >, decltype (underTest), MapEntry <String, String> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "MutableCollection",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <String, String> > :: removeNotOf,
+                3U,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < cds :: Iterable < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
@@ -2643,35 +2650,35 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ cds::HashMap <String, String> {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeOf",
-                /* subvariantOffset= */                         0,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   0U,
-                /* expectedMutableCollectionFromNone= */               {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromOne= */                    1U,
-                /* expectedMutableCollectionFromOne= */                {{4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMoreLessThanLimit= */      2U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {{4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {{4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {{4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {3, 3} },
-                /* expectedResultFromAll= */                    3U,
-                /* expectedMutableCollectionFromAll= */                {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromAllAndMore= */             3U,
-                /* expectedMutableCollectionFromAllAndMore= */         {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} }
+        std::initializer_list <MapEntry <String, String>> const c8  = {{10, 10}, {11, 11}, {12, 12}, {13, 13}};
+        std::initializer_list <MapEntry <String, String>> const c9  = {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}};
+        std::initializer_list <MapEntry <String, String>> const c10 = {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}};
+        std::initializer_list <MapEntry <String, String>> const c11 = {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        std::initializer_list <MapEntry <String, String>> const c12 = {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}};
+        std::initializer_list <MapEntry <String, String>> const c13 = {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} };
+        std::initializer_list <MapEntry <String, String>> const c14 = {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} };
+
+        std::initializer_list <MapEntry <String, String>> const r15 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r16 = {{4, 4}, {5, 5}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r17 = {{4, 4}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} };
+        std::initializer_list <MapEntry <String, String>> const r18 = {{4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2} };
+        std::initializer_list <MapEntry <String, String>> const r19 = {{4, 4}, {6, 6}, {8, 8}, {9, 9}, {1, 1}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r20 = {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r21 = {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < MapEntry <String, String> >, decltype (underTest), MapEntry <String, String> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeOf",
+                        0
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <String, String> > :: removeOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {0U, 1U, 2U, 3U, 3U, 3U, 3U},
+                { &r15, &r16, &r17, &r18, &r19, &r20, &r21 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
@@ -2746,35 +2753,27 @@ auto MutableCollectionTest::tests_00450_00499 () noexcept -> bool {
                 /* expectedMutableCollectionFromAllAndMore= */ {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2} }
         );
 
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
-                /* pTestLib= */                                 this,
-                /* groupVariant= */                             "InitializerList",
-                /* subvariant= */                               "removeNotOf",
-                /* subvariantOffset= */                         7,
-                /* iterableUnderTest= */                        underTest,
-                /* removePfnVariant= */                         & cds :: MutableCollection < MapEntry < String, String > > :: removeNotOf,
-                /* limit= */                                    3U,
-                /* noneCommon= */                               {{10, 10}, {11, 11}, {12, 12}, {13, 13}},
-                /* oneCommon= */                                {{16, 16}, {6, 6}, {11, 11}, {12, 12}, {13, 13}},
-                /* moreLessThanLimitCommon= */                  {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {1235, 1235}, {9534, 9534}},
-                /* moreCommon= */                               {{20, 20}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* moreMoreThanLimitCommon= */                  {{2, 2}, {123, 123}, {5, 5}, {1230, 1230}, {435, 435}, {3, 3}, {7, 7}, {1235, 1235}, {9534, 9534}, {1245, 1245}},
-                /* allCommon= */                                {{9, 9}, {2, 2}, {5, 5}, {1, 1} , {4, 4}, {3, 3}, {7, 7}, {8, 8}, {6, 6} },
-                /* allAndMoreCommon= */                         {{91245, 91245}, {9, 9}, {2, 2}, {5532, 5532}, {5, 5}, {1, 1}, {4, 4}, {647, 647}, {1324, 1324}, {3, 3}, {7, 7}, {45, 45}, {234, 234}, {2365, 2365}, {2436, 2436}, {56, 56}, {8, 8}, {6, 6} },
-                /* expectedResultFromNone= */                   3U,
-                /* expectedMutableCollectionFromNone= */               {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromOne= */                    3U,
-                /* expectedMutableCollectionFromOne= */                {{6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMoreLessThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreLessThanLimit= */  {{5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMore= */                   3U,
-                /* expectedMutableCollectionFromMore= */               {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromMoreMoreThanLimit= */      3U,
-                /* expectedMutableCollectionFromMoreMoreThanLimit= */  {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromAll= */                    0U,
-                /* expectedMutableCollectionFromAll= */                {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedResultFromAllAndMore= */             0U,
-                /* expectedMutableCollectionFromAllAndMore= */         {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} }
+        std::initializer_list <MapEntry <String, String>> const r22 = {{7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r23 = {{6, 6}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r24 = {{5, 5}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r25 = {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r26 = {{5, 5}, {7, 7}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r27 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+        std::initializer_list <MapEntry <String, String>> const r28 = {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} };
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < std::initializer_list < MapEntry <String, String> >, decltype (underTest), MapEntry <String, String> > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral, Size> (
+                        this,
+                        "InitializerList",
+                        "removeNotOf",
+                        7
+                ),
+                underTest,
+                & cds :: MutableCollection < MapEntry <String, String> > :: removeNotOf,
+                3U,
+                { &c8, &c9, &c10, &c11, &c12, &c13, &c14 },
+                {3U, 3U, 3U, 3U, 3U, 0U, 0U},
+                { &r22, &r23, &r24, &r25, &r26, &r27, &r28 }
         );
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < std :: initializer_list < MapEntry < String, String > >, decltype (underTest), MapEntry < String, String > > (
