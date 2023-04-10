@@ -1,7 +1,82 @@
 #include "MutableCollectionTest.h"
 #include "MutableCollectionTest_common.hpp"
 
+#include <CDS/TreeMap>
+#include <CDS/LinkedHashMap>
+#include <CDS/Tuple>
+
 namespace {
+
+    using cds::Tuple;
+    using cds::Size;
+    using cds::Array;
+
+    template <typename E>
+    using TestDataSRes = Tuple <bool, E>;
+
+    template <typename E>
+    using TestDataMRes = Tuple <Size, Array <E>>;
+
+    template <typename E>
+    using TestDataFindOf = Tuple <
+            Size,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>
+    >;
+
+    template <typename E>
+    using TestDataFindNotOf = TestDataFindOf <E>;
+
+    template <typename E>
+    using TestDataFindFirstOf = Tuple <
+            TestDataSRes <E>,
+            TestDataSRes <E>,
+            TestDataSRes <E>,
+            TestDataSRes <E>,
+            TestDataSRes <E>
+    >;
+
+    template <typename E>
+    using TestDataFindFirstNotOf = TestDataFindFirstOf <E>;
+
+    template <typename E>
+    using TestDataFindLastOf = TestDataFindFirstOf <E>;
+
+    template <typename E>
+    using TestDataFindLastNotOf = TestDataFindFirstOf <E>;
+
+    template <typename E>
+    using TestDataFindAllOf = Tuple <
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>,
+            TestDataMRes <E>
+    >;
+
+    template <typename E>
+    using TestDataFindAllNotOf = TestDataFindAllOf <E>;
+
+    template <typename E>
+    using TestData = Tuple <
+            TestDataFindOf <E>,
+            TestDataFindFirstOf <E>,
+            TestDataFindLastOf <E>,
+            TestDataFindAllOf <E>,
+            TestDataFindNotOf <E>,
+            TestDataFindFirstNotOf <E>,
+            TestDataFindLastNotOf <E>,
+            TestDataFindAllNotOf <E>
+    >;
+
+    template <typename T>
+    using __ComparisonEquivalent = cds::Array <T>;
+
     template <
             typename __ElementType,                                                                                 /* NOLINT(bugprone-reserved-identifier) */
             template < typename ... > class __CollectionType,                                                                           /* NOLINT(bugprone-reserved-identifier) */
@@ -38,103 +113,142 @@ namespace {
             Test                                                      * pTestLib,
             StringLiteral                                               variant,
             cds :: MutableCollection < __ElementType > & underTest,
-            Size                                                        limit,
-            __IterableType                                      const & none,
-            __IterableType                                      const & one,
-            __IterableType                                      const & moreLessThanLimit,
-            __IterableType                                      const & more,
-            __IterableType                                      const & moreMoreThanLimit,
-            __IterableType                                      const & all,
-            __IterableType                                      const & allAndMore,
-            Size                                                        expectedSizeFindOfNone,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfNone,
-            Size                                                        expectedSizeFindOfOne,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfOne,
-            Size                                                        expectedSizeFindOfMoreLessThanLimit,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreLessThanLimit,
-            Size                                                        expectedSizeFindOfMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMore,
-            Size                                                        expectedSizeFindOfMoreMoreThanLimit,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfMoreMoreThanLimit,
-            Size                                                        expectedSizeFindOfAll,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfAll,
-            Size                                                        expectedSizeFindOfAllAndMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindOfAllAndMore,
-            bool                                                        expectedResultFindFirstOfNone,
-            __ElementType                                       const & expectedFindFirstOfNone,
-            bool                                                        expectedResultFindFirstOfOne,
-            __ElementType                                       const & expectedFindFirstOfOne,
-            bool                                                        expectedResultFindFirstOfMore,
-            __ElementType                                       const & expectedFindFirstOfMore,
-            bool                                                        expectedResultFindFirstOfAll,
-            __ElementType                                       const & expectedFindFirstOfAll,
-            bool                                                        expectedResultFindFirstOfAllAndMore,
-            __ElementType                                       const & expectedFindFirstOfAllAndMore,
-            bool                                                        expectedResultFindLastOfNone,
-            __ElementType                                       const & expectedFindLastOfNone,
-            bool                                                        expectedResultFindLastOfOne,
-            __ElementType                                       const & expectedFindLastOfOne,
-            bool                                                        expectedResultFindLastOfMore,
-            __ElementType                                       const & expectedFindLastOfMore,
-            bool                                                        expectedResultFindLastOfAll,
-            __ElementType                                       const & expectedFindLastOfAll,
-            bool                                                        expectedResultFindLastOfAllAndMore,
-            __ElementType                                       const & expectedFindLastOfAllAndMore,
-            Size                                                        expectedSizeFindAllOfNone,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfNone,
-            Size                                                        expectedSizeFindAllOfOne,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfOne,
-            Size                                                        expectedSizeFindAllOfMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfMore,
-            Size                                                        expectedSizeFindAllOfAll,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAll,
-            Size                                                        expectedSizeFindAllOfAllAndMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllOfAllAndMore,
-            Size                                                        expectedSizeFindNotOfNone,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfNone,
-            Size                                                        expectedSizeFindNotOfOne,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfOne,
-            Size                                                        expectedSizeFindNotOfMoreLessThanLimit,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreLessThanLimit,
-            Size                                                        expectedSizeFindNotOfMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMore,
-            Size                                                        expectedSizeFindNotOfMoreMoreThanLimit,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfMoreMoreThanLimit,
-            Size                                                        expectedSizeFindNotOfAll,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAll,
-            Size                                                        expectedSizeFindNotOfAllAndMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindNotOfAllAndMore,
-            bool                                                        expectedResultFindFirstNotOfNone,
-            __ElementType                                       const & expectedFindFirstNotOfNone,
-            bool                                                        expectedResultFindFirstNotOfOne,
-            __ElementType                                       const & expectedFindFirstNotOfOne,
-            bool                                                        expectedResultFindFirstNotOfMore,
-            __ElementType                                       const & expectedFindFirstNotOfMore,
-            bool                                                        expectedResultFindFirstNotOfAll,
-            __ElementType                                       const & expectedFindFirstNotOfAll,
-            bool                                                        expectedResultFindFirstNotOfAllAndMore,
-            __ElementType                                       const & expectedFindFirstNotOfAllAndMore,
-            bool                                                        expectedResultFindLastNotOfNone,
-            __ElementType                                       const & expectedFindLastNotOfNone,
-            bool                                                        expectedResultFindLastNotOfOne,
-            __ElementType                                       const & expectedFindLastNotOfOne,
-            bool                                                        expectedResultFindLastNotOfMore,
-            __ElementType                                       const & expectedFindLastNotOfMore,
-            bool                                                        expectedResultFindLastNotOfAll,
-            __ElementType                                       const & expectedFindLastNotOfAll,
-            bool                                                        expectedResultFindLastNotOfAllAndMore,
-            __ElementType                                       const & expectedFindLastNotOfAllAndMore,
-            Size                                                        expectedSizeFindAllNotOfNone,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfNone,
-            Size                                                        expectedSizeFindAllNotOfOne,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfOne,
-            Size                                                        expectedSizeFindAllNotOfMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfMore,
-            Size                                                        expectedSizeFindAllNotOfAll,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAll,
-            Size                                                        expectedSizeFindAllNotOfAllAndMore,
-            __ComparisonEquivalent < __ElementType >            const & expectedFindAllNotOfAllAndMore
+            std::initializer_list <__IterableType const *>      const & targets, 
+            TestData <__ElementType>                            const & tData
     ) -> bool {
+
+
+
+        auto targetIt = targets.begin();
+        auto const & none = ** targetIt;
+        ++ targetIt;
+        auto const & one = ** targetIt;
+        ++ targetIt;
+        auto const & moreLessThanLimit = ** targetIt;
+        ++ targetIt;
+        auto const & more = ** targetIt;
+        ++ targetIt;
+        auto const & moreMoreThanLimit = ** targetIt;
+        ++ targetIt;
+        auto const & all = ** targetIt;
+        ++ targetIt;
+        auto const & allAndMore = ** targetIt;
+
+        auto const & tDataFO = tData.template get <0> ();
+        auto const & tDataFFO = tData.template get <1> ();
+        auto const & tDataFLO = tData.template get <2> ();
+        auto const & tDataFAO = tData.template get <3> ();
+        auto const & tDataFNO = tData.template get <4> ();
+        auto const & tDataFFNO = tData.template get <5> ();
+        auto const & tDataFLNO = tData.template get <6> ();
+        auto const & tDataFANO = tData.template get <7> ();
+
+        auto const limit = tDataFO.template get <0> ();
+
+        auto const expectedSizeFindOfNone = tDataFO.template get<1> ().template get<0> ();
+        auto const expectedSizeFindOfOne = tDataFO.template get<2> ().template get<0> ();
+        auto const expectedSizeFindOfMoreLessThanLimit = tDataFO.template get<3> ().template get<0> ();
+        auto const expectedSizeFindOfMore = tDataFO.template get<4> ().template get<0> ();
+        auto const expectedSizeFindOfMoreMoreThanLimit = tDataFO.template get<5> ().template get<0> ();
+        auto const expectedSizeFindOfAll = tDataFO.template get<6> ().template get<0> ();
+        auto const expectedSizeFindOfAllAndMore = tDataFO.template get<7> ().template get<0> ();
+
+        auto const & expectedFindOfNone = tDataFO.template get<1> ().template get<1> ();
+        auto const & expectedFindOfOne = tDataFO.template get<2> ().template get<1> ();
+        auto const & expectedFindOfMoreLessThanLimit = tDataFO.template get<3> ().template get<1> ();
+        auto const & expectedFindOfMore = tDataFO.template get<4> ().template get<1> ();
+        auto const & expectedFindOfMoreMoreThanLimit = tDataFO.template get<5> ().template get<1> ();
+        auto const & expectedFindOfAll = tDataFO.template get<6> ().template get<1> ();
+        auto const & expectedFindOfAllAndMore = tDataFO.template get<7> ().template get<1> ();
+
+        auto const expectedResultFindFirstOfNone = tDataFFO.template get <0> ().template get<0> ();
+        auto const expectedResultFindFirstOfOne = tDataFFO.template get <1> ().template get<0> ();
+        auto const expectedResultFindFirstOfMore = tDataFFO.template get <2> ().template get<0> ();
+        auto const expectedResultFindFirstOfAll = tDataFFO.template get <3> ().template get<0> ();
+        auto const expectedResultFindFirstOfAllAndMore = tDataFFO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindFirstOfNone = tDataFFO.template get <0> ().template get<1> ();
+        auto const & expectedFindFirstOfOne = tDataFFO.template get <1> ().template get<1> ();
+        auto const & expectedFindFirstOfMore = tDataFFO.template get <2> ().template get<1> ();
+        auto const & expectedFindFirstOfAll = tDataFFO.template get <3> ().template get<1> ();
+        auto const & expectedFindFirstOfAllAndMore = tDataFFO.template get <4> ().template get<1> ();
+
+        auto const expectedResultFindLastOfNone = tDataFLO.template get <0> ().template get<0> ();
+        auto const expectedResultFindLastOfOne = tDataFLO.template get <1> ().template get<0> ();
+        auto const expectedResultFindLastOfMore = tDataFLO.template get <2> ().template get<0> ();
+        auto const expectedResultFindLastOfAll = tDataFLO.template get <3> ().template get<0> ();
+        auto const expectedResultFindLastOfAllAndMore = tDataFLO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindLastOfNone = tDataFLO.template get <0> ().template get<1> ();
+        auto const & expectedFindLastOfOne = tDataFLO.template get <1> ().template get<1> ();
+        auto const & expectedFindLastOfMore = tDataFLO.template get <2> ().template get<1> ();
+        auto const & expectedFindLastOfAll = tDataFLO.template get <3> ().template get<1> ();
+        auto const & expectedFindLastOfAllAndMore = tDataFLO.template get <4> ().template get<1> ();
+
+        auto const expectedSizeFindAllOfNone = tDataFAO.template get <0> ().template get<0> ();
+        auto const expectedSizeFindAllOfOne = tDataFAO.template get <1> ().template get<0> ();
+        auto const expectedSizeFindAllOfMore = tDataFAO.template get <2> ().template get<0> ();
+        auto const expectedSizeFindAllOfAll = tDataFAO.template get <3> ().template get<0> ();
+        auto const expectedSizeFindAllOfAllAndMore = tDataFAO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindAllOfNone = tDataFAO.template get <0> ().template get<1> ();
+        auto const & expectedFindAllOfOne = tDataFAO.template get <1> ().template get<1> ();
+        auto const & expectedFindAllOfMore = tDataFAO.template get <2> ().template get<1> ();
+        auto const & expectedFindAllOfAll = tDataFAO.template get <3> ().template get<1> ();
+        auto const & expectedFindAllOfAllAndMore = tDataFAO.template get <4> ().template get<1> ();
+
+        auto const expectedSizeFindNotOfNone = tDataFNO.template get<1> ().template get<0> ();
+        auto const expectedSizeFindNotOfOne = tDataFNO.template get<2> ().template get<0> ();
+        auto const expectedSizeFindNotOfMoreLessThanLimit = tDataFNO.template get<3> ().template get<0> ();
+        auto const expectedSizeFindNotOfMore = tDataFNO.template get<4> ().template get<0> ();
+        auto const expectedSizeFindNotOfMoreMoreThanLimit = tDataFNO.template get<5> ().template get<0> ();
+        auto const expectedSizeFindNotOfAll = tDataFNO.template get<6> ().template get<0> ();
+        auto const expectedSizeFindNotOfAllAndMore = tDataFNO.template get<7> ().template get<0> ();
+
+        auto const & expectedFindNotOfNone = tDataFNO.template get<1> ().template get<1> ();
+        auto const & expectedFindNotOfOne = tDataFNO.template get<2> ().template get<1> ();
+        auto const & expectedFindNotOfMoreLessThanLimit = tDataFNO.template get<3> ().template get<1> ();
+        auto const & expectedFindNotOfMore = tDataFNO.template get<4> ().template get<1> ();
+        auto const & expectedFindNotOfMoreMoreThanLimit = tDataFNO.template get<5> ().template get<1> ();
+        auto const & expectedFindNotOfAll = tDataFNO.template get<6> ().template get<1> ();
+        auto const & expectedFindNotOfAllAndMore = tDataFNO.template get<7> ().template get<1> ();
+
+        auto const expectedResultFindFirstNotOfNone = tDataFFNO.template get <0> ().template get<0> ();
+        auto const expectedResultFindFirstNotOfOne = tDataFFNO.template get <1> ().template get<0> ();
+        auto const expectedResultFindFirstNotOfMore = tDataFFNO.template get <2> ().template get<0> ();
+        auto const expectedResultFindFirstNotOfAll = tDataFFNO.template get <3> ().template get<0> ();
+        auto const expectedResultFindFirstNotOfAllAndMore = tDataFFNO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindFirstNotOfNone = tDataFFNO.template get <0> ().template get<1> ();
+        auto const & expectedFindFirstNotOfOne = tDataFFNO.template get <1> ().template get<1> ();
+        auto const & expectedFindFirstNotOfMore = tDataFFNO.template get <2> ().template get<1> ();
+        auto const & expectedFindFirstNotOfAll = tDataFFNO.template get <3> ().template get<1> ();
+        auto const & expectedFindFirstNotOfAllAndMore = tDataFFNO.template get <4> ().template get<1> ();
+
+        auto const expectedResultFindLastNotOfNone = tDataFLNO.template get <0> ().template get<0> ();
+        auto const expectedResultFindLastNotOfOne = tDataFLNO.template get <1> ().template get<0> ();
+        auto const expectedResultFindLastNotOfMore = tDataFLNO.template get <2> ().template get<0> ();
+        auto const expectedResultFindLastNotOfAll = tDataFLNO.template get <3> ().template get<0> ();
+        auto const expectedResultFindLastNotOfAllAndMore = tDataFLNO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindLastNotOfNone = tDataFLNO.template get <0> ().template get<1> ();
+        auto const & expectedFindLastNotOfOne = tDataFLNO.template get <1> ().template get<1> ();
+        auto const & expectedFindLastNotOfMore = tDataFLNO.template get <2> ().template get<1> ();
+        auto const & expectedFindLastNotOfAll = tDataFLNO.template get <3> ().template get<1> ();
+        auto const & expectedFindLastNotOfAllAndMore = tDataFLNO.template get <4> ().template get<1> ();
+
+        auto const expectedSizeFindAllNotOfNone = tDataFANO.template get <0> ().template get<0> ();
+        auto const expectedSizeFindAllNotOfOne = tDataFANO.template get <1> ().template get<0> ();
+        auto const expectedSizeFindAllNotOfMore = tDataFANO.template get <2> ().template get<0> ();
+        auto const expectedSizeFindAllNotOfAll = tDataFANO.template get <3> ().template get<0> ();
+        auto const expectedSizeFindAllNotOfAllAndMore = tDataFANO.template get <4> ().template get<0> ();
+
+        auto const & expectedFindAllNotOfNone = tDataFANO.template get <0> ().template get<1> ();
+        auto const & expectedFindAllNotOfOne = tDataFANO.template get <1> ().template get<1> ();
+        auto const & expectedFindAllNotOfMore = tDataFANO.template get <2> ().template get<1> ();
+        auto const & expectedFindAllNotOfAll = tDataFANO.template get <3> ().template get<1> ();
+        auto const & expectedFindAllNotOfAllAndMore = tDataFANO.template get <4> ().template get<1> ();
+
 
         pTestLib->log ( "Object Under Test : %s", underTest.toString().cStr() );
         using Iterator = typename cds :: MutableCollection < __ElementType > :: Iterator;
@@ -1161,6 +1275,428 @@ namespace {
 
         return true;
     }
+
+
+    using cds::makeTuple;
+
+    std::initializer_list <int> const iv1 = {-1, -4, -7, 20};
+    std::initializer_list <int> const iv2 = {-9, -8, -7, -6, -5, 4, -3, -2, -1};
+    std::initializer_list <int> const iv3 = {-9, -8, -7, -6, 5, 4, 3, -2, -1};
+    std::initializer_list <int> const iv4 = {-9, -8, -7, 6, 5, 4, 3, 2, -1};
+    std::initializer_list <int> const iv5 = {-9, 8, 7, 6, 5, -4, 3, 2, 1};
+    std::initializer_list <int> const iv6 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+    std::initializer_list <int> const iv7 = {-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20};
+
+    std::initializer_list <std::initializer_list <int> const *> const ivList = {& iv1, & iv2, & iv3, & iv4, & iv5, & iv6, & iv7};
+
+    std::initializer_list <MapEntry <int, int>> const iiv1 = {{-1, -1}, {-4, -4}, {-7, -7}, {20, 20}};
+    std::initializer_list <MapEntry <int, int>> const iiv2 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}};
+    std::initializer_list <MapEntry <int, int>> const iiv3 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}};
+    std::initializer_list <MapEntry <int, int>> const iiv4 = {{-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}};
+    std::initializer_list <MapEntry <int, int>> const iiv5 = {{-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}};
+    std::initializer_list <MapEntry <int, int>> const iiv6 = {{9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}};
+    std::initializer_list <MapEntry <int, int>> const iiv7 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+            {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}};
+
+    std::initializer_list <std::initializer_list <MapEntry <int, int>> const *> const iivList = {& iiv1, & iiv2, & iiv3, & iiv4, & iiv5, & iiv6, & iiv7};
+
+    Size const iLimit = 5U;
+
+    auto const ifo = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <int>> (0U, {}),
+            makeTuple <Size, Array <int>> (1U, {4}),
+            makeTuple <Size, Array <int>> (3U, {3, 4, 5}),
+            makeTuple <Size, Array <int>> (5U, {2, 3, 4, 5, 6}),
+            makeTuple <Size, Array <int>> (5U, {1, 2, 3, 5, 6}),
+            makeTuple <Size, Array <int>> (5U, {1, 2, 3, 4, 5}),
+            makeTuple <Size, Array <int>> (5U, {1, 2, 3, 4, 5})
+    );
+
+    auto const iffo = makeTuple (
+            makeTuple <bool, int> (false, -1),
+            makeTuple <bool, int> (true, 4),
+            makeTuple <bool, int> (true, 2),
+            makeTuple <bool, int> (true, 1),
+            makeTuple <bool, int> (true, 1)
+    );
+
+    auto const iflo = makeTuple (
+            makeTuple <bool, int> (false, -1),
+            makeTuple <bool, int> (true, 4),
+            makeTuple <bool, int> (true, 6),
+            makeTuple <bool, int> (true, 9),
+            makeTuple <bool, int> (true, 9)
+    );
+
+    auto const ifao = makeTuple (
+            makeTuple <Size, Array <int>> (0U, {}),
+            makeTuple <Size, Array <int>> (1U, {4}),
+            makeTuple <Size, Array <int>> (5U, {2, 3, 4, 5, 6}),
+            makeTuple <Size, Array <int>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <int>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9})
+    );
+
+    auto const ifno = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <int>> (5U, {1, 2, 3, 4, 5}),
+            makeTuple <Size, Array <int>> (5U, {1, 2, 3, 5, 6}),
+            makeTuple <Size, Array <int>> (5U, {1, 2, 6, 7, 8}),
+            makeTuple <Size, Array <int>> (4U, {1, 7, 8, 9}),
+            makeTuple <Size, Array <int>> (2U, {4, 9}),
+            makeTuple <Size, Array <int>> (0U, {}),
+            makeTuple <Size, Array <int>> (0U, {})
+    );
+
+    auto const iffno = makeTuple (
+            makeTuple <bool, int> (true, 1),
+            makeTuple <bool, int> (true, 1),
+            makeTuple <bool, int> (true, 1),
+            makeTuple <bool, int> (false, -1),
+            makeTuple <bool, int> (false, -1)
+    );
+
+    auto const iflno = makeTuple (
+            makeTuple <bool, int> (true, 9),
+            makeTuple <bool, int> (true, 9),
+            makeTuple <bool, int> (true, 9),
+            makeTuple <bool, int> (false, -1),
+            makeTuple <bool, int> (false, -1)
+    );
+
+    auto const ifano = makeTuple (
+            makeTuple <Size, Array <int>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <int>> (8U, {1, 2, 3, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <int>> (4U, {1, 7, 8, 9}),
+            makeTuple <Size, Array <int>> (0U, {}),
+            makeTuple <Size, Array <int>> (0U, {})
+    );
+
+    auto const iData = makeTuple (
+            ifo, iffo, iflo, ifao,
+            ifno, iffno, iflno, ifano
+    );
+
+    auto const iifo = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (3U, {{3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}})
+    );
+
+    auto const iiffo = makeTuple (
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, 1}),
+            makeTuple <bool, MapEntry <int, int>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <int, int>> (true, {2, 2}),
+            makeTuple <bool, MapEntry <int, int>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <int, int>> (true, {1, 1})
+    );
+
+    auto const iiflo = makeTuple (
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <int, int>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <int, int>> (true, {6, 6}),
+            makeTuple <bool, MapEntry <int, int>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <int, int>> (true, {9, 9})
+    );
+
+    auto const iifao = makeTuple (
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}})
+    );
+
+    auto const iifno = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (5U, {{1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (4U, {{1, 1}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (2U, {{4, 4}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {})
+    );
+
+    auto const iiffno = makeTuple (
+            makeTuple <bool, MapEntry <int, int>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <int, int>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <int, int>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, -1})
+    );
+
+    auto const iiflno = makeTuple (
+            makeTuple <bool, MapEntry <int, int>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <int, int>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <int, int>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <int, int>> (false, {-1, -1})
+    );
+
+    auto const iifano = makeTuple (
+            makeTuple <Size, Array <MapEntry <int, int>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (8U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (4U, {{1, 1}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <int, int>>> (0U, {})
+    );
+
+    auto const iiData = makeTuple (
+            iifo, iiffo, iiflo, iifao,
+            iifno, iiffno, iiflno, iifano
+    );
+
+    std::initializer_list <String> const sv1 = {-1, -4, -7, 20};
+    std::initializer_list <String> const sv2 = {-9, -8, -7, -6, -5, 4, -3, -2, -1};
+    std::initializer_list <String> const sv3 = {-9, -8, -7, -6, 5, 4, 3, -2, -1};
+    std::initializer_list <String> const sv4 = {-9, -8, -7, 6, 5, 4, 3, 2, -1};
+    std::initializer_list <String> const sv5 = {-9, 8, 7, 6, 5, -4, 3, 2, 1};
+    std::initializer_list <String> const sv6 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+    std::initializer_list <String> const sv7 = {-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20};
+
+    std::initializer_list <std::initializer_list <String> const *> const svList = {& sv1, & sv2, & sv3, & sv4, & sv5, & sv6, & sv7};
+
+    std::initializer_list <MapEntry <String, String>> const ssv1 = {{-1, -1}, {-4, -4}, {-7, -7}, {20, 20}};
+    std::initializer_list <MapEntry <String, String>> const ssv2 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}};
+    std::initializer_list <MapEntry <String, String>> const ssv3 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}};
+    std::initializer_list <MapEntry <String, String>> const ssv4 = {{-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}};
+    std::initializer_list <MapEntry <String, String>> const ssv5 = {{-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}};
+    std::initializer_list <MapEntry <String, String>> const ssv6 = {{9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}};
+    std::initializer_list <MapEntry <String, String>> const ssv7 = {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
+            {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}};
+
+    std::initializer_list <std::initializer_list <MapEntry <String, String>> const *> const ssvList = {& ssv1, & ssv2, & ssv3, & ssv4, & ssv5, & ssv6, & ssv7};
+
+    auto const sfo = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <String>> (0U, {}),
+            makeTuple <Size, Array <String>> (1U, {4}),
+            makeTuple <Size, Array <String>> (3U, {3, 4, 5}),
+            makeTuple <Size, Array <String>> (5U, {2, 3, 4, 5, 6}),
+            makeTuple <Size, Array <String>> (5U, {1, 2, 3, 5, 6}),
+            makeTuple <Size, Array <String>> (5U, {1, 2, 3, 4, 5}),
+            makeTuple <Size, Array <String>> (5U, {1, 2, 3, 4, 5})
+    );
+
+    auto const sffo = makeTuple (
+            makeTuple <bool, String> (false, -1),
+            makeTuple <bool, String> (true, 4),
+            makeTuple <bool, String> (true, 2),
+            makeTuple <bool, String> (true, 1),
+            makeTuple <bool, String> (true, 1)
+    );
+
+    auto const sflo = makeTuple (
+            makeTuple <bool, String> (false, -1),
+            makeTuple <bool, String> (true, 4),
+            makeTuple <bool, String> (true, 6),
+            makeTuple <bool, String> (true, 9),
+            makeTuple <bool, String> (true, 9)
+    );
+
+    auto const sfao = makeTuple (
+            makeTuple <Size, Array <String>> (0U, {}),
+            makeTuple <Size, Array <String>> (1U, {4}),
+            makeTuple <Size, Array <String>> (5U, {2, 3, 4, 5, 6}),
+            makeTuple <Size, Array <String>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <String>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9})
+    );
+
+    auto const sfno = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <String>> (5U, {1, 2, 3, 4, 5}),
+            makeTuple <Size, Array <String>> (5U, {1, 2, 3, 5, 6}),
+            makeTuple <Size, Array <String>> (5U, {1, 2, 6, 7, 8}),
+            makeTuple <Size, Array <String>> (4U, {1, 7, 8, 9}),
+            makeTuple <Size, Array <String>> (2U, {4, 9}),
+            makeTuple <Size, Array <String>> (0U, {}),
+            makeTuple <Size, Array <String>> (0U, {})
+    );
+
+    auto const sffno = makeTuple (
+            makeTuple <bool, String> (true, 1),
+            makeTuple <bool, String> (true, 1),
+            makeTuple <bool, String> (true, 1),
+            makeTuple <bool, String> (false, -1),
+            makeTuple <bool, String> (false, -1)
+    );
+
+    auto const sflno = makeTuple (
+            makeTuple <bool, String> (true, 9),
+            makeTuple <bool, String> (true, 9),
+            makeTuple <bool, String> (true, 9),
+            makeTuple <bool, String> (false, -1),
+            makeTuple <bool, String> (false, -1)
+    );
+
+    auto const sfano = makeTuple (
+            makeTuple <Size, Array <String>> (9U, {1, 2, 3, 4, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <String>> (8U, {1, 2, 3, 5, 6, 7, 8, 9}),
+            makeTuple <Size, Array <String>> (4U, {1, 7, 8, 9}),
+            makeTuple <Size, Array <String>> (0U, {}),
+            makeTuple <Size, Array <String>> (0U, {})
+    );
+
+    auto const sData = makeTuple (
+            sfo, sffo, sflo, sfao,
+            sfno, sffno, sflno, sfano
+    );
+
+    auto const ssfo = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (3U, {{3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}})
+    );
+
+    auto const ssffo = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {2, 2}),
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1})
+    );
+
+    auto const ssflo = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {6, 6}),
+            makeTuple <bool, MapEntry <String, String>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <String, String>> (true, {9, 9})
+    );
+
+    auto const ssfao = makeTuple (
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}})
+    );
+
+    auto const ssfno = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (4U, {{1, 1}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (2U, {{4, 4}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {})
+    );
+
+    auto const ssffno = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1})
+    );
+
+    auto const ssflno = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <String, String>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <String, String>> (true, {9, 9}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1})
+    );
+
+    auto const ssfano = makeTuple (
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (8U, {{1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (4U, {{1, 1}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {})
+    );
+
+    auto const ssData = makeTuple (
+            ssfo, ssffo, ssflo, ssfao,
+            ssfno, ssffno, ssflno, ssfano
+    );
+
+    auto const ossfo = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (3U, {{4, 4}, {5, 5}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}})
+    );
+
+    auto const ossffo = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4})
+    );
+
+    auto const ossflo = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {3, 3}),
+            makeTuple <bool, MapEntry <String, String>> (true, {3, 3}),
+            makeTuple <bool, MapEntry <String, String>> (true, {3, 3})
+    );
+
+    auto const ossfao = makeTuple (
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (1U, {{4, 4}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}})
+    );
+
+    auto const ossfno = makeTuple (
+            iLimit,
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (5U, {{6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (4U, {{7, 7}, {8, 8}, {9, 9}, {1, 1}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (2U, {{4, 4}, {9, 9}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {})
+    );
+
+    auto const ossffno = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (true, {4, 4}),
+            makeTuple <bool, MapEntry <String, String>> (true, {5, 5}),
+            makeTuple <bool, MapEntry <String, String>> (true, {7, 7}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1})
+    );
+
+    auto const ossflno = makeTuple (
+            makeTuple <bool, MapEntry <String, String>> (true, {3, 3}),
+            makeTuple <bool, MapEntry <String, String>> (true, {3, 3}),
+            makeTuple <bool, MapEntry <String, String>> (true, {1, 1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1}),
+            makeTuple <bool, MapEntry <String, String>> (false, {-1, -1})
+    );
+
+    auto const ossfano = makeTuple (
+            makeTuple <Size, Array <MapEntry <String, String>>> (9U, {{4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (8U, {{5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (4U, {{7, 7}, {8, 8}, {9, 9}, {1, 1}}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {}),
+            makeTuple <Size, Array <MapEntry <String, String>>> (0U, {})
+    );
+
+    auto const ossData = makeTuple (
+            ossfo, ossffo, ossflo, ossfao,
+            ossfno, ossffno, ossflno, ossfano
+    );
 }
 
 auto MutableCollectionTest::tests_00700_00799 () noexcept -> bool {
@@ -1171,1264 +1707,246 @@ auto MutableCollectionTest::tests_00700_00799 () noexcept -> bool {
 
         cds :: Array < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     make_a <int> (-1, -4, -7, 20),
-                /* one= */                                      make_a <int> (-9, -8, -7, -6, -5, 4, -3, -2, -1),
-                /* moreLessThanLimit= */                        make_a <int> (-9, -8, -7, -6, 5, 4, 3, -2, -1),
-                /* more= */                                     make_a <int> (-9, -8, -7, 6, 5, 4, 3, 2, -1),
-                /* moreMoreThanLimit= */                        make_a <int> (-9, 8, 7, 6, 5, -4, 3, 2, 1),
-                /* all= */                                      make_a <int> (9, 8, 7, 6, 5, 4, 3, 2, 1),
-                /* allAndMore= */                               make_a <int> (-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20),
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+        cds::Array <int> const v1 = iv1;
+        cds::Array <int> const v2 = iv2;
+        cds::Array <int> const v3 = iv3;
+        cds::Array <int> const v4 = iv4;
+        cds::Array <int> const v5 = iv5;
+        cds::Array <int> const v6 = iv6;
+        cds::Array <int> const v7 = iv7;
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                iData
         );
 
         allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < int > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { -1, -4, -7, 20 },
-                /* one= */                                      { -9, -8, -7, -6, -5, 4, -3, -2, -1 },
-                /* moreLessThanLimit= */                        { -9, -8, -7, -6, 5, 4, 3, -2, -1 },
-                /* more= */                                     { -9, -8, -7, 6, 5, 4, 3, 2, -1 },
-                /* moreMoreThanLimit= */                        { -9, 8, 7, 6, 5, -4, 3, 2, 1 },
-                /* all= */                                      { 9, 8, 7, 6, 5, 4, 3, 2, 1 },
-                /* allAndMore= */                               { -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20 },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+                this, "InitializerList", underTest,
+                ivList,
+                iData
         );
     });
+
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, & allOk] {
 
         cds :: LinkedList < int > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     make_ll <int> (-1, -4, -7, 20),
-                /* one= */                                      make_ll <int> (-9, -8, -7, -6, -5, 4, -3, -2, -1),
-                /* moreLessThanLimit= */                        make_ll <int> (-9, -8, -7, -6, 5, 4, 3, -2, -1),
-                /* more= */                                     make_ll <int> (-9, -8, -7, 6, 5, 4, 3, 2, -1),
-                /* moreMoreThanLimit= */                        make_ll <int> (-9, 8, 7, 6, 5, -4, 3, 2, 1),
-                /* all= */                                      make_ll <int> (9, 8, 7, 6, 5, 4, 3, 2, 1),
-                /* allAndMore= */                               make_ll <int> (-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20),
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+        cds::LinkedList <int> const v1 = iv1;
+        cds::LinkedList <int> const v2 = iv2;
+        cds::LinkedList <int> const v3 = iv3;
+        cds::LinkedList <int> const v4 = iv4;
+        cds::LinkedList <int> const v5 = iv5;
+        cds::LinkedList <int> const v6 = iv6;
+        cds::LinkedList <int> const v7 = iv7;
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < int > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                iData
         );
 
         allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < int > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { -1, -4, -7, 20 },
-                /* one= */                                      { -9, -8, -7, -6, -5, 4, -3, -2, -1 },
-                /* moreLessThanLimit= */                        { -9, -8, -7, -6, 5, 4, 3, -2, -1 },
-                /* more= */                                     { -9, -8, -7, 6, 5, 4, 3, 2, -1 },
-                /* moreMoreThanLimit= */                        { -9, 8, 7, 6, 5, -4, 3, 2, 1 },
-                /* all= */                                      { 9, 8, 7, 6, 5, 4, 3, 2, 1 },
-                /* allAndMore= */                               { -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20 },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+                this, "InitializerList", underTest,
+                ivList,
+                iData
         );
     });
+
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : IntToIntHashMap", [this, & allOk] {
 
-        cds :: HashMap < int, int > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds::HashMap <int, int> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds::HashMap <int, int> const v1 = iiv1;
+        cds::HashMap <int, int> const v2 = iiv2;
+        cds::HashMap <int, int> const v3 = iiv3;
+        cds::HashMap <int, int> const v4 = iiv4;
+        cds::HashMap <int, int> const v5 = iiv5;
+        cds::HashMap <int, int> const v6 = iiv6;
+        cds::HashMap <int, int> const v7 = iiv7;
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry < int, int > > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     cds::HashMap <int, int> {{-1, -1}, {-4, -4}, {-7, -7}, {20, 20}},
-                /* one= */                                      cds::HashMap <int, int> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}},
-                /* moreLessThanLimit= */                        cds::HashMap <int, int> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}},
-                /* more= */                                     cds::HashMap <int, int> {{-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}},
-                /* moreMoreThanLimit= */                        cds::HashMap <int, int> {{-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}},
-                /* all= */                                      cds::HashMap <int, int> {{9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}},
-                /* allAndMore= */                               cds::HashMap <int, int> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
-                                                                        {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}},
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { {4, 4} },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  {-1, -1},
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   {4, 4},
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  {2, 2},
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   {1, 1},
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            {1, 1},
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   {-1, -1},
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    {4, 4},
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   {6, 6},
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    {9, 9},
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             {9, 9},
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { {4, 4} },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               {1, 1},
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                {1, 1},
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               {1, 1},
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                {-1, -1},
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                {9, 9},
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 {9, 9},
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                {9, 9},
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 {-1, -1},
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <int, int> > >(
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                iiData
         );
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry < int, int > > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { {-1, -1}, {-4, -4}, {-7, -7}, {20, 20} },
-                /* one= */                                      { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1} },
-                /* moreLessThanLimit= */                        { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1} },
-                /* more= */                                     { {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1} },
-                /* moreMoreThanLimit= */                        { {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1} },
-                /* all= */                                      { {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1} },
-                /* allAndMore= */                               { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
-                                                                  {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20} },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { {4, 4} },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  {-1, -1},
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   {4, 4},
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  {2, 2},
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   {1, 1},
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            {1, 1},
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   {-1, -1},
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    {4, 4},
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   {6, 6},
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    {9, 9},
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             {9, 9},
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { {4, 4} },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6} },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5} },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6} },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { {1, 1}, {2, 2}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               {1, 1},
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                {1, 1},
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               {1, 1},
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                {-1, -1},
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                {9, 9},
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 {9, 9},
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                {9, 9},
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 {-1, -1},
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { {1, 1}, {2, 2}, {3, 3}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { {1, 1}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <int, int> > >(
+                this, "InitializerList", underTest,
+                iivList,
+                iiData
         );
     });
+
+    this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : IntToIntTreeMap", [this, & allOk] {
+
+        cds::TreeMap <int, int> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds::TreeMap <int, int> const v1 = iiv1;
+        cds::TreeMap <int, int> const v2 = iiv2;
+        cds::TreeMap <int, int> const v3 = iiv3;
+        cds::TreeMap <int, int> const v4 = iiv4;
+        cds::TreeMap <int, int> const v5 = iiv5;
+        cds::TreeMap <int, int> const v6 = iiv6;
+        cds::TreeMap <int, int> const v7 = iiv7;
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <int, int> > >(
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                iiData
+        );
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <int, int> > >(
+                this, "InitializerList", underTest,
+                iivList,
+                iiData
+        );
+    });
+
+    this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : IntToIntLinkedHashMap", [this, & allOk] {
+
+        cds::LinkedHashMap <int, int> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds::LinkedHashMap <int, int> const v1 = iiv1;
+        cds::LinkedHashMap <int, int> const v2 = iiv2;
+        cds::LinkedHashMap <int, int> const v3 = iiv3;
+        cds::LinkedHashMap <int, int> const v4 = iiv4;
+        cds::LinkedHashMap <int, int> const v5 = iiv5;
+        cds::LinkedHashMap <int, int> const v6 = iiv6;
+        cds::LinkedHashMap <int, int> const v7 = iiv7;
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <int, int> > >(
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                iiData
+        );
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <int, int> > >(
+                this, "InitializerList", underTest,
+                iivList,
+                iiData
+        );
+    });
+
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : StringArray", [this, & allOk] {
 
-        cds :: Array < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds::Array <String> underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String >, String > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     make_a <String> (-1, -4, -7, 20),
-                /* one= */                                      make_a <String> (-9, -8, -7, -6, -5, 4, -3, -2, -1),
-                /* moreLessThanLimit= */                        make_a <String> (-9, -8, -7, -6, 5, 4, 3, -2, -1),
-                /* more= */                                     make_a <String> (-9, -8, -7, 6, 5, 4, 3, 2, -1),
-                /* moreMoreThanLimit= */                        make_a <String> (-9, 8, 7, 6, 5, -4, 3, 2, 1),
-                /* all= */                                      make_a <String> (9, 8, 7, 6, 5, 4, 3, 2, 1),
-                /* allAndMore= */                               make_a <String> (-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20),
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+        cds::Array <String> const v1 = sv1;
+        cds::Array <String> const v2 = sv2;
+        cds::Array <String> const v3 = sv3;
+        cds::Array <String> const v4 = sv4;
+        cds::Array <String> const v5 = sv5;
+        cds::Array <String> const v6 = sv6;
+        cds::Array <String> const v7 = sv7;
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                sData
         );
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < String >, String > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { -1, -4, -7, 20 },
-                /* one= */                                      { -9, -8, -7, -6, -5, 4, -3, -2, -1 },
-                /* moreLessThanLimit= */                        { -9, -8, -7, -6, 5, 4, 3, -2, -1 },
-                /* more= */                                     { -9, -8, -7, 6, 5, 4, 3, 2, -1 },
-                /* moreMoreThanLimit= */                        { -9, 8, 7, 6, 5, -4, 3, 2, 1 },
-                /* all= */                                      { 9, 8, 7, 6, 5, 4, 3, 2, 1 },
-                /* allAndMore= */                               { -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20 },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < String > > (
+                this, "InitializerList", underTest,
+                svList,
+                sData
         );
     });
+
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : StringLinkedList", [this, & allOk] {
 
-        cds :: LinkedList < String > underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        cds::LinkedList <String> underTest = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String >, String > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     make_ll <String> (-1, -4, -7, 20),
-                /* one= */                                      make_ll <String> (-9, -8, -7, -6, -5, 4, -3, -2, -1),
-                /* moreLessThanLimit= */                        make_ll <String> (-9, -8, -7, -6, 5, 4, 3, -2, -1),
-                /* more= */                                     make_ll <String> (-9, -8, -7, 6, 5, 4, 3, 2, -1),
-                /* moreMoreThanLimit= */                        make_ll <String> (-9, 8, 7, 6, 5, -4, 3, 2, 1),
-                /* all= */                                      make_ll <String> (9, 8, 7, 6, 5, 4, 3, 2, 1),
-                /* allAndMore= */                               make_ll <String> (-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20),
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+        cds::LinkedList <String> const v1 = sv1;
+        cds::LinkedList <String> const v2 = sv2;
+        cds::LinkedList <String> const v3 = sv3;
+        cds::LinkedList <String> const v4 = sv4;
+        cds::LinkedList <String> const v5 = sv5;
+        cds::LinkedList <String> const v6 = sv6;
+        cds::LinkedList <String> const v7 = sv7;
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < String > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                sData
         );
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < String >, String > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { -1, -4, -7, 20 },
-                /* one= */                                      { -9, -8, -7, -6, -5, 4, -3, -2, -1 },
-                /* moreLessThanLimit= */                        { -9, -8, -7, -6, 5, 4, 3, -2, -1 },
-                /* more= */                                     { -9, -8, -7, 6, 5, 4, 3, 2, -1 },
-                /* moreMoreThanLimit= */                        { -9, 8, 7, 6, 5, -4, 3, 2, 1 },
-                /* all= */                                      { 9, 8, 7, 6, 5, 4, 3, 2, 1 },
-                /* allAndMore= */                               { -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ,15 , 16, 17, 18, 19, 20 },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { 4U },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { 3, 4, 5 },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { 1, 2, 3, 4, 5 },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  -1,
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   4,
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  2,
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   1,
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            1,
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   -1,
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    4,
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   6,
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    9,
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             9,
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { 4 },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { 2, 3, 4, 5, 6 },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { 1, 2, 3, 4, 5 },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { 1, 2, 3, 5, 6 },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { 1, 2, 6, 7, 8 },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { 1, 7, 8, 9 },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { 4, 9 },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               1,
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                1,
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               1,
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                -1,
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         -1,
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                9,
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 9,
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                9,
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 -1,
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          -1,
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { 1, 2, 3, 5, 6, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { 1, 7, 8, 9 },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < String > > (
+                this, "InitializerList", underTest,
+                svList,
+                sData
         );
     });
+
     this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : StringToStringHashMap", [this, & allOk] {
 
-        cds :: HashMap < String, String > underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+        cds::HashMap <String, String> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry < String, String > > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "MutableCollection",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     cds::HashMap <String, String> {{-1, -1}, {-4, -4}, {-7, -7}, {20, 20}},
-                /* one= */                                      cds::HashMap <String, String> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1}},
-                /* moreLessThanLimit= */                        cds::HashMap <String, String> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1}},
-                /* more= */                                     cds::HashMap <String, String> {{-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1}},
-                /* moreMoreThanLimit= */                        cds::HashMap <String, String> {{-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1}},
-                /* all= */                                      cds::HashMap <String, String> {{9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}},
-                /* allAndMore= */                               cds::HashMap <String, String> {{-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
-                                                                        {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}},
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { {4, 4} },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { {4, 4}, {5, 5}, {3, 3} },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { {4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3} },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1} },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  {-1, -1},
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   {4, 4},
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  {4, 4},
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   {4, 4},
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            {4, 4},
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   {-1, -1},
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    {4, 4},
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   {3, 3},
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    {3, 3},
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             {3, 3},
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { {4, 4} },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { {4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
+        cds::HashMap <String, String> const v1 = ssv1;
+        cds::HashMap <String, String> const v2 = ssv2;
+        cds::HashMap <String, String> const v3 = ssv3;
+        cds::HashMap <String, String> const v4 = ssv4;
+        cds::HashMap <String, String> const v5 = ssv5;
+        cds::HashMap <String, String> const v6 = ssv6;
+        cds::HashMap <String, String> const v7 = ssv7;
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               {4, 4},
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                {5, 5},
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               {7, 7},
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                {-1, -1},
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                {3, 3},
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 {3, 3},
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                {1, 1},
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 {-1, -1},
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <String, String> > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                ossData
         );
 
-        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry < String, String > > > (
-                /* pTestLib= */                                 this,
-                /* variant= */                                  "InitializerList",
-                /* underTest= */                                underTest,
-                /* limit= */                                    5U,
-                /* none= */                                     { {-1, -1}, {-4, -4}, {-7, -7}, {20, 20} },
-                /* one= */                                      { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {4, 4}, {-3, -3}, {-2, -2}, {-1, -1} },
-                /* moreLessThanLimit= */                        { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {5, 5}, {4, 4}, {3, 3}, {-2, -2}, {-1, -1} },
-                /* more= */                                     { {-9, -9}, {-8, -8}, {-7, -7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {-1, -1} },
-                /* moreMoreThanLimit= */                        { {-9, -9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {-4, -4}, {3, 3}, {2, 2}, {1, 1} },
-                /* all= */                                      { {9, 9}, {8, 8}, {7, 7}, {6, 6}, {5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1} },
-                /* allAndMore= */                               { {-9, -9}, {-8, -8}, {-7, -7}, {-6, -6}, {-5, -5}, {-4, -4}, {-3, -3}, {-2, -2}, {-1, -1}, {0, 0}, {1, 1}, {2, 2}, {3, 3},
-                                                                  {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20} },
-                /* expectedSizeFindOfNone= */                   0U,
-                /* expectedFindOfNone= */                       {},
-                /* expectedSizeFindOfOne= */                    1U,
-                /* expectedFindOfOne= */                        { {4, 4} },
-                /* expectedSizeFindOfMoreLessThanLimit= */      3U,
-                /* expectedFindOfMoreLessThanLimit= */          { {4, 4}, {5, 5}, {3, 3} },
-                /* expectedSizeFindOfMore= */                   5U,
-                /* expectedFindOfMore= */                       { {4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3} },
-                /* expectedSizeFindOfMoreMoreThanLimit= */      5U,
-                /* expectedFindOfMoreMoreThanLimit= */          { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {1, 1} },
-                /* expectedSizeFindOfAll= */                    5U,
-                /* expectedFindOfAll= */                        { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindOfAllAndMore= */             5U,
-                /* expectedFindOfAllAndMore= */                 { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedResultFindFirstOfNone= */            false,
-                /* expectedFindFirstOfNone= */                  {-1, -1},
-                /* expectedResultFindFirstOfOne= */             true,
-                /* expectedFindFirstOfOne= */                   {4, 4},
-                /* expectedResultFindFirstOfMore= */            true,
-                /* expectedFindFirstOfMore= */                  {4, 4},
-                /* expectedResultFindFirstOfAll= */             true,
-                /* expectedFindFirstOfAll= */                   {4, 4},
-                /* expectedResultFindFirstOfAllAndMore= */      true,
-                /* expectedFindFirstOfAllAndMore= */            {4, 4},
-                /* expectedResultFindLastOfNone= */             false,
-                /* expectedFindLastOfNone= */                   {-1, -1},
-                /* expectedResultFindLastOfOne= */              true,
-                /* expectedFindLastOfOne= */                    {4, 4},
-                /* expectedResultFindLastOfMore= */             true,
-                /* expectedFindLastOfMore= */                   {3, 3},
-                /* expectedResultFindLastOfAll= */              true,
-                /* expectedFindLastOfAll= */                    {3, 3},
-                /* expectedResultFindLastOfAllAndMore= */       true,
-                /* expectedFindLastOfAllAndMore= */             {3, 3},
-                /* expectedSizeFindAllOfNone= */                0U,
-                /* expectedFindAllOfNone= */                    {},
-                /* expectedSizeFindAllOfOne= */                 1U,
-                /* expectedFindAllOfOne= */                     { {4, 4} },
-                /* expectedSizeFindAllOfMore= */                5U,
-                /* expectedFindAllOfMore= */                    { {4, 4}, {5, 5}, {6, 6}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllOfAll= */                 9U,
-                /* expectedFindAllOfAll= */                     { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllOfAllAndMore= */          9U,
-                /* expectedFindAllOfAllAndMore= */              { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <String, String> > > (
+                this, "InitializerList", underTest,
+                ssvList,
+                ossData
+        );
+    });
 
-                /* expectedSizeFindNotOfNone= */                5U,
-                /* expectedFindNotOfNone= */                    { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8} },
-                /* expectedSizeFindNotOfOne= */                 5U,
-                /* expectedFindNotOfOne= */                     { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} },
-                /* expectedSizeFindNotOfMoreLessThanLimit= */   5U,
-                /* expectedFindNotOfMoreLessThanLimit= */       { {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindNotOfMore= */                4U,
-                /* expectedFindNotOfMore= */                    { {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindNotOfMoreMoreThanLimit= */   2U,
-                /* expectedFindNotOfMoreMoreThanLimit= */       { {4, 4}, {9, 9} },
-                /* expectedSizeFindNotOfAll= */                 0U,
-                /* expectedFindNotOfAll= */                     {},
-                /* expectedSizeFindNotOfAllAndMore= */          0U,
-                /* expectedFindNotOfAllAndMore= */              {},
-                /* expectedResultFindFirstNotOfNone= */         true,
-                /* expectedFindFirstNotOfNone= */               {4, 4},
-                /* expectedResultFindFirstNotOfOne= */          true,
-                /* expectedFindFirstNotOfOne= */                {5, 5},
-                /* expectedResultFindFirstNotOfMore= */         true,
-                /* expectedFindFirstNotOfMore= */               {7, 7},
-                /* expectedResultFindFirstNotOfAll= */          false,
-                /* expectedFindFirstNotOfAll= */                {-1, -1},
-                /* expectedResultFindFirstNotOfAllAndMore= */   false,
-                /* expectedFindFirstNotOfAllAndMore= */         {-1, -1},
-                /* expectedResultFindLastNotOfNone= */          true,
-                /* expectedFindLastNotOfNone= */                {3, 3},
-                /* expectedResultFindLastNotOfOne= */           true,
-                /* expectedFindLastNotOfOne= */                 {3, 3},
-                /* expectedResultFindLastNotOfMore= */          true,
-                /* expectedFindLastNotOfMore= */                {1, 1},
-                /* expectedResultFindLastNotOfAll= */           false,
-                /* expectedFindLastNotOfAll= */                 {-1, -1},
-                /* expectedResultFindLastNotOfAllAndMore= */    false,
-                /* expectedFindLastNotOfAllAndMore= */          {-1, -1},
-                /* expectedSizeFindAllNotOfNone= */             9U,
-                /* expectedFindAllNotOfNone= */                 { {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllNotOfOne= */              8U,
-                /* expectedFindAllNotOfOne= */                  { {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {1, 1}, {2, 2}, {3, 3} },
-                /* expectedSizeFindAllNotOfMore= */             4U,
-                /* expectedFindAllNotOfMore= */                 { {7, 7}, {8, 8}, {9, 9}, {1, 1} },
-                /* expectedSizeFindAllNotOfAll= */              0U,
-                /* expectedFindAllNotOfAll= */                  {},
-                /* expectedSizeFindAllNotOfAllAndMore= */       0U,
-                /* expectedFindAllNotOfAllAndMore= */           {}
+    this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : StringToStringTreeMap", [this, & allOk] {
+
+        cds::TreeMap <String, String> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        cds::TreeMap <String, String> const v1 = ssv1;
+        cds::TreeMap <String, String> const v2 = ssv2;
+        cds::TreeMap <String, String> const v3 = ssv3;
+        cds::TreeMap <String, String> const v4 = ssv4;
+        cds::TreeMap <String, String> const v5 = ssv5;
+        cds::TreeMap <String, String> const v6 = ssv6;
+        cds::TreeMap <String, String> const v7 = ssv7;
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <String, String> > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                ssData
+        );
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <String, String> > > (
+                this, "InitializerList", underTest,
+                ssvList,
+                ssData
+        );
+    });
+
+    this->executeSubtest ( "MutableCollectionTestGroup-FindOf-" __CDS_cpplang_core_version_name " : MCTG-00700-FO-" __CDS_cpplang_core_version_name " : StringToStringLinkedHashMap", [this, & allOk] {
+
+        cds::LinkedHashMap <String, String> underTest = { {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9} };
+
+        cds::LinkedHashMap <String, String> const v1 = ssv1;
+        cds::LinkedHashMap <String, String> const v2 = ssv2;
+        cds::LinkedHashMap <String, String> const v3 = ssv3;
+        cds::LinkedHashMap <String, String> const v4 = ssv4;
+        cds::LinkedHashMap <String, String> const v5 = ssv5;
+        cds::LinkedHashMap <String, String> const v6 = ssv6;
+        cds::LinkedHashMap <String, String> const v7 = ssv7;
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < cds :: MutableCollection < MapEntry <String, String> > > (
+                this, "MutableCollection", underTest,
+                { & v1, & v2, & v3, & v4, & v5, & v6, & v7 },
+                ssData
+        );
+
+        allOk = allOk && mutableCollectionTestGroupFindOf < std :: initializer_list < MapEntry <String, String> > > (
+                this, "InitializerList", underTest,
+                ssvList,
+                ssData
         );
     });
 

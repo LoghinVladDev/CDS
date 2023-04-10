@@ -351,7 +351,7 @@ auto CollectionTest::tests_00700_00799_p2 () noexcept -> bool {
         );
 
         allOk = allOk && collectionTestGroupFindOf < std :: initializer_list < String > > (
-                this, "Collection", underTest,
+                this, "InitializerList", underTest,
                 svList,
                 sData
         );
