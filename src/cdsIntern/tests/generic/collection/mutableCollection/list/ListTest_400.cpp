@@ -7,7 +7,7 @@ namespace {
 
         using cds::Tuple;
 
-        enum TFlags {
+        enum class TFlags {
             TNoMask         = 0x0000FFFFU,
             ItCase1         = 0x00010000U,
             ItCase2         = 0x00020000U,
@@ -33,17 +33,17 @@ namespace {
             cds::uint32 offsetCaseNo;
         };
 
-        __CDS_NoDiscard inline auto tFlagsToTData (cds::uint32 flags) noexcept -> TData {
+        __CDS_NoDiscard inline auto tFlagsToTData (cds::uint32 const flags) noexcept -> TData {
 
             TData data;
-            data.tNo = flags & TFlags::TNoMask;
+            data.tNo = flags & static_cast <cds::uint32> (TFlags::TNoMask);
 
             auto const case1Value = 1;
             auto const case2Value = 2;
             auto const case3Value = 3;
             auto const case4Value = 4;
 
-            switch (flags & TFlags::ItCaseMask) {
+            switch (static_cast <TFlags> (flags & static_cast <cds::uint32> (TFlags::ItCaseMask))) {
                 case TFlags::ItCase1: {
                     data.itCaseNo = case1Value;
                     break;
@@ -65,7 +65,7 @@ namespace {
                 }
             }
 
-            switch (flags & TFlags::ValueCaseMask) {
+            switch (static_cast <TFlags> (flags & static_cast <cds::uint32> (TFlags::ValueCaseMask))) {
                 case TFlags::ValueCase1: {
                     data.valueCaseNo = case1Value;
                     break;
@@ -87,7 +87,7 @@ namespace {
                 }
             }
 
-            switch (flags & TFlags::OffsetCaseMask) {
+            switch (static_cast <TFlags> (flags & static_cast <cds::uint32> (TFlags::OffsetCaseMask))) {
                 case TFlags::OffsetCase1: {
                     data.offsetCaseNo = case1Value;
                     break;
@@ -128,19 +128,19 @@ namespace {
         template <typename, bool, typename = void> struct ItCaseDet {};
 
         template <typename E> struct ItCaseDet <BeginPfn<E>, false> {
-            constexpr static TFlags const itCase = ItCase1;
+            constexpr static TFlags const itCase = TFlags::ItCase1;
         };
         
         template <typename E> struct ItCaseDet <RBeginPfn<E>, true> {
-            constexpr static TFlags const itCase = ItCase3;
+            constexpr static TFlags const itCase = TFlags::ItCase3;
         };
         
         template <typename E> struct ItCaseDet <CBeginPfn<E>, false> {
-            constexpr static TFlags const itCase = ItCase2;
+            constexpr static TFlags const itCase = TFlags::ItCase2;
         };
         
         template <typename E> struct ItCaseDet <CRBeginPfn<E>, true> {
-            constexpr static TFlags const itCase = ItCase4;
+            constexpr static TFlags const itCase = TFlags::ItCase4;
         };
         
 
@@ -152,9 +152,9 @@ namespace {
         > auto singleInsBefIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
+                cds::uint32 const offset,
                 E const & singleValue,
-                bool opStatus,
+                bool const opStatus,
                 R const & opResult
         ) noexcept -> bool {
 
@@ -163,7 +163,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -227,8 +227,8 @@ namespace {
             auto const & results = data.template get <3> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
-            cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
+            cds::Array <TFlags> const valueDatas = {TFlags::ValueCase1, TFlags::ValueCase2, TFlags::ValueCase3};
 
             auto const svSize = singleValues.size();
             auto const oSize = offsets.size();
@@ -236,9 +236,9 @@ namespace {
                 for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                     result = result && singleInsBefIt <E, C, IGen> (
                             { 
-                                    tNo                                                     | 
-                                            ItCaseDet <IGen, reversed> :: itCase            | 
-                                            static_cast <cds::uint32> (valueDatas [vIdx])   | 
+                                    tNo                                                                         | 
+                                            static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    | 
+                                            static_cast <cds::uint32> (valueDatas [vIdx])                       | 
                                             static_cast <cds::uint32> (offsetDatas [offIdx]), 
                                     initValues,
                                     pTestLib 
@@ -247,7 +247,7 @@ namespace {
                             statuses [vIdx] [offIdx], results [vIdx] [offIdx]
                     );
 
-                    tNo ++;
+                    ++ tNo;
                 }
             }
 
@@ -263,9 +263,9 @@ namespace {
         > auto singleInsAftIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
+                cds::uint32 const offset,
                 E const & singleValue,
-                bool opStatus,
+                bool const opStatus,
                 R const & opResult
         ) noexcept -> bool {
 
@@ -274,7 +274,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -338,8 +338,8 @@ namespace {
             auto const & results = data.template get <3> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
-            cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
+            cds::Array <TFlags> const valueDatas = {TFlags::ValueCase1, TFlags::ValueCase2, TFlags::ValueCase3};
 
             auto const svSize = singleValues.size();
             auto const oSize = offsets.size();
@@ -347,9 +347,9 @@ namespace {
                 for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                     result = result && singleInsAftIt <E, C, IGen> (
                             {
-                                    tNo                                                     | 
-                                            ItCaseDet <IGen, reversed> :: itCase            | 
-                                            static_cast <cds::uint32> (valueDatas [vIdx])   | 
+                                    tNo                                                                         | 
+                                            static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    | 
+                                            static_cast <cds::uint32> (valueDatas [vIdx])                       | 
                                             static_cast <cds::uint32> (offsetDatas [offIdx]),
                                     initValues, pTestLib
                             },
@@ -357,7 +357,7 @@ namespace {
                             statuses [vIdx] [offIdx], results [vIdx] [offIdx]
                     );
 
-                    tNo ++;
+                    ++ tNo;
                 }
             }
 
@@ -373,9 +373,9 @@ namespace {
         > auto mulInsBefIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
+                cds::uint32 const offset,
                 cds::Array <E> const & mValues,
-                bool opStatus,
+                bool const opStatus,
                 R const & opResult
         ) noexcept -> bool {
 
@@ -384,7 +384,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -448,8 +448,8 @@ namespace {
             auto const & results = data.template get <3> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
-            cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
+            cds::Array <TFlags> const valueDatas = {TFlags::ValueCase1, TFlags::ValueCase2, TFlags::ValueCase3};
 
             auto const mSize = mValues.size();
             auto const oSize = offsets.size();
@@ -457,9 +457,9 @@ namespace {
                 for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                     result = result && mulInsBefIt <E, C, IGen> (
                             {
-                                    tNo                                                     |
-                                            ItCaseDet <IGen, reversed> :: itCase            |
-                                            static_cast <cds::uint32> (valueDatas[vIdx])    |
+                                    tNo                                                                         |
+                                            static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    |
+                                            static_cast <cds::uint32> (valueDatas[vIdx])                        |
                                             static_cast <cds::uint32> (offsetDatas[offIdx]),
                                     initValues, pTestLib
                             },
@@ -467,7 +467,7 @@ namespace {
                             statuses [vIdx] [offIdx], results [vIdx] [offIdx]
                     );
 
-                    tNo ++;
+                    ++ tNo;
                 }
             }
 
@@ -483,9 +483,9 @@ namespace {
         > auto mulInsAftIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
+                cds::uint32 const offset,
                 cds::Array <E> const & mValues,
-                bool opStatus,
+                bool const opStatus,
                 R const & opResult
         ) noexcept -> bool {
 
@@ -494,7 +494,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -558,8 +558,8 @@ namespace {
             auto const & results = data.template get <3> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
-            cds::Array <TFlags> const valueDatas = {ValueCase1, ValueCase2, ValueCase3};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
+            cds::Array <TFlags> const valueDatas = {TFlags::ValueCase1, TFlags::ValueCase2, TFlags::ValueCase3};
 
             auto const mSize = mValues.size();
             auto const oSize = offsets.size();
@@ -567,9 +567,9 @@ namespace {
                 for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                     result = result && mulInsAftIt <E, C, IGen> (
                             {
-                                    tNo                                                     |
-                                            ItCaseDet <IGen, reversed> :: itCase            |
-                                            static_cast <cds::uint32> (valueDatas[vIdx])    |
+                                    tNo                                                                         |
+                                            static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    |
+                                            static_cast <cds::uint32> (valueDatas[vIdx])                        |
                                             static_cast <cds::uint32> (offsetDatas[offIdx]),
                                     initValues, pTestLib
                             },
@@ -577,7 +577,7 @@ namespace {
                             statuses [vIdx] [offIdx], results [vIdx] [offIdx]
                     );
 
-                    tNo ++;
+                    ++ tNo;
                 }
             }
 
@@ -594,8 +594,8 @@ namespace {
         > auto packInsBefIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
-                bool opStatus,
+                cds::uint32 const offset,
+                bool const opStatus,
                 R const & opResult,
                 P && ... pack
         ) noexcept -> bool {
@@ -605,7 +605,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -653,7 +653,7 @@ namespace {
         > auto packInsBefAll (
                 cds::uint32 & tNo,
                 std::initializer_list<E> const & initValues,
-                Test const * pTestLib,
+                Test const * const pTestLib,
                 IGen pfn,
                 Tuple <
                         cds::Array <cds::Size>,
@@ -668,15 +668,15 @@ namespace {
             auto const & results = data.template get <2> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
 
             auto const oSize = offsets.size();
             for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                 result = result && packInsBefIt <E, C, IGen> (
                         {
-                                tNo                                                     |
-                                        ItCaseDet <IGen, reversed> :: itCase            |
-                                        ValueCase1                                      |
+                                tNo                                                                         |
+                                        static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    |
+                                        static_cast <cds::uint32> (TFlags::ValueCase1)                      |
                                         static_cast <cds::uint32> (offsetDatas[offIdx]),
                                 initValues, pTestLib
                         },
@@ -684,7 +684,7 @@ namespace {
                         results [offIdx], pack ...
                 );
 
-                tNo ++;
+                ++ tNo;
             }
 
             return result;
@@ -700,8 +700,8 @@ namespace {
         > auto packInsAftIt (
                 Tuple <cds::uint32, C<E>, Test const *> testData,
                 F pfnBegin,
-                cds::uint32 offset,
-                bool opStatus,
+                cds::uint32 const offset,
+                bool const opStatus,
                 R const & opResult,
                 P && ... pack
         ) noexcept -> bool {
@@ -711,7 +711,7 @@ namespace {
             List <E> & lRef = testData.template get <1> ();
 
             auto it = (lRef.*pfnBegin) ();
-            for (int i = 0; i < offset; ++ i) {
+            for (cds::uint32 i = 0; i < offset; ++ i) {
                 ++ it;
             }
 
@@ -759,7 +759,7 @@ namespace {
         > auto packInsAftAll (
                 cds::uint32 & tNo,
                 std::initializer_list<E> const & initValues,
-                Test const * pTestLib,
+                Test const * const pTestLib,
                 IGen pfn,
                 Tuple <
                         cds::Array <cds::Size>,
@@ -774,15 +774,15 @@ namespace {
             auto const & results = data.template get <2> ();
 
             bool result = true;
-            cds::Array <TFlags> const offsetDatas = {OffsetCase1, OffsetCase2, OffsetCase3, OffsetCase4};
+            cds::Array <TFlags> const offsetDatas = {TFlags::OffsetCase1, TFlags::OffsetCase2, TFlags::OffsetCase3, TFlags::OffsetCase4};
 
             auto const oSize = offsets.size();
             for (cds::uint32 offIdx = 0; offIdx < oSize; ++ offIdx) {
                 result = result && packInsAftIt <E, C, IGen> (
                         {
-                                tNo                                                     |
-                                        ItCaseDet <IGen, reversed> :: itCase            |
-                                        ValueCase1                                      |
+                                tNo                                                                         |
+                                        static_cast <cds::uint32> (ItCaseDet <IGen, reversed> :: itCase)    |
+                                        static_cast <cds::uint32> (TFlags::ValueCase1)                      |
                                         static_cast <cds::uint32> (offsetDatas[offIdx]),
                                 initValues, pTestLib
                         },
@@ -790,7 +790,7 @@ namespace {
                         results [offIdx], pack ...
                 );
 
-                tNo ++;
+                ++ tNo;
             }
 
             return result;
@@ -816,11 +816,47 @@ namespace {
     using RelSCaseResPack   = Tuple <RelItCaseResPack <E>, RelItCaseResPack <E>, RelItCaseResPack <E>>;
 
     template <typename E>
+    using RelMCaseResPack   = Tuple <RelItCaseResPack <E>, RelItCaseResPack <E>, RelItCaseResPack <E>>;
+
+    template <typename E>
     using RelSingleValueCaseData    = Tuple <RelOffsetPack, RelSingleValPack <E>, RelSCaseResPack <E>>;
 
     template <typename E>
     using RelSingleValueBefAftData  = Tuple <RelOffsetPack, RelSingleValPack <E>, RelSCaseResPack <E>, RelSCaseResPack <E>>;
 
+    template <typename E>
+    using RelMulValPack     = Tuple <Array <E>, Array <E>, Array <E>>;
+
+    template <typename E>
+    using RelMulValueCaseData   = Tuple <RelOffsetPack, RelMulValPack <E>, RelMCaseResPack <E>>;
+
+    template <typename E>
+    using RelMulValueBefAftData = Tuple <RelOffsetPack, RelMulValPack <E>, RelMCaseResPack <E>, RelMCaseResPack <E>>;
+
+    template <typename E>
+    using RelPackValueCaseData   = Tuple <RelOffsetPack, RelItCaseResPack <E>>;
+
+    template <typename E>
+    using RelPackValueBefAftData = Tuple <RelOffsetPack, RelItCaseResPack <E>, RelItCaseResPack <E>>;
+
+    template <typename E>
+    using RelPackBefAftResData = Tuple <RelItCaseResPack <E>, RelItCaseResPack <E>>;
+
+    template <typename E>
+    using RelMulBefAftResData = Tuple <RelMCaseResPack <E>, RelMCaseResPack <E>>;
+
+    template <typename E>
+    using RelSBefAftResData = Tuple <RelSCaseResPack <E>, RelSCaseResPack <E>>;
+
+    template <typename E>
+    using RelFullDataPack = Tuple <
+            RelOffsetPack,
+            RelSingleValPack <E>,
+            RelMulValPack <E>,
+            RelSBefAftResData <E>,
+            RelMulBefAftResData <E>,
+            RelPackBefAftResData <E>
+    >;
 
     /* ListTestGroup-RelativeInsertion-cpp-xx : LTG-00400-RI-cpp-xx. Tests LTC-00401-RI to LTC-00624-RI */
     template <
@@ -903,11 +939,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         { case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resSingle1RevCase1, resSingle1RevCase2, resSingle1RevCase3, resSingle1RevCase4 },
                                 { resSingle2RevCase1, resSingle2RevCase2, resSingle2RevCase3, resSingle2RevCase4 },
                                 { resSingle3RevCase1, resSingle3RevCase2, resSingle3RevCase3, resSingle3RevCase4 }
@@ -920,11 +952,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         { case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resSingle1Case1, resSingle1Case2, resSingle1Case3, resSingle1Case4 },
                                 { resSingle2Case1, resSingle2Case2, resSingle2Case3, resSingle2Case4 },
                                 { resSingle3Case1, resSingle3Case2, resSingle3Case3, resSingle3Case4 }
@@ -937,11 +965,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         { case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resSingle1RevCase1, resSingle1RevCase2, resSingle1RevCase3, resSingle1RevCase4 },
                                 { resSingle2RevCase1, resSingle2RevCase2, resSingle2RevCase3, resSingle2RevCase4 },
                                 { resSingle3RevCase1, resSingle3RevCase2, resSingle3RevCase3, resSingle3RevCase4 }
@@ -1027,11 +1051,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         { case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresSingle1Case1, aresSingle1Case2, aresSingle1Case3, aresSingle1Case4 },
                                 { aresSingle2Case1, aresSingle2Case2, aresSingle2Case3, aresSingle2Case4 },
                                 { aresSingle3Case1, aresSingle3Case2, aresSingle3Case3, aresSingle3Case4 }
@@ -1044,11 +1064,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresSingle1RevCase1, aresSingle1RevCase2, aresSingle1RevCase3, aresSingle1RevCase4 },
                                 { aresSingle2RevCase1, aresSingle2RevCase2, aresSingle2RevCase3, aresSingle2RevCase4 },
                                 { aresSingle3RevCase1, aresSingle3RevCase2, aresSingle3RevCase3, aresSingle3RevCase4 }
@@ -1061,11 +1077,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresSingle1Case1, aresSingle1Case2, aresSingle1Case3, aresSingle1Case4 },
                                 { aresSingle2Case1, aresSingle2Case2, aresSingle2Case3, aresSingle2Case4 },
                                 { aresSingle3Case1, aresSingle3Case2, aresSingle3Case3, aresSingle3Case4 }
@@ -1078,11 +1090,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <__EnclosedType>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { singleValue1, singleValue2, singleValue3 },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresSingle1RevCase1, aresSingle1RevCase2, aresSingle1RevCase3, aresSingle1RevCase4 },
                                 { aresSingle2RevCase1, aresSingle2RevCase2, aresSingle2RevCase3, aresSingle2RevCase4 },
                                 { aresSingle3RevCase1, aresSingle3RevCase2, aresSingle3RevCase3, aresSingle3RevCase4 }
@@ -1109,7 +1117,6 @@ namespace {
         auto const & valuePack = data.template get <1> ();
         auto const & beforeData = data.template get <2> ();
         auto const & afterData = data.template get <3> ();
-
 
         return listTestGroupRelativeInsertionSingleValuesBefore <
                 __TestedType,
@@ -1139,41 +1146,58 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-            std :: initializer_list < __EnclosedType > const & multipleValues1,
-            std :: initializer_list < __EnclosedType > const & multipleValues2,
-            std :: initializer_list < __EnclosedType > const & multipleValues3,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase4
+            RelMulValueCaseData <__EnclosedType> const & data 
     ) -> bool {
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & valuePack = data.template get <1> ();
+        auto const & mvResultPack = data.template get <2> ();
+
+        auto case1Offset = offsetPack.template get<0> ();
+        auto case2Offset = offsetPack.template get<1> ();
+        auto case3Offset = offsetPack.template get<2> ();
+        auto case4Offset = offsetPack.template get<3> ();
+
+        auto const & multipleValues1 = valuePack.template get<0> ();
+        auto const & multipleValues2 = valuePack.template get<1> ();
+        auto const & multipleValues3 = valuePack.template get<2> ();
+
+        auto const & mv1ItResultPack = mvResultPack.template get <0> ();
+        auto const & mv2ItResultPack = mvResultPack.template get <1> ();
+        auto const & mv3ItResultPack = mvResultPack.template get <2> ();
+
+        auto const & mv1FwdResultPack = mv1ItResultPack.template get <0> ();
+        auto const & mv2FwdResultPack = mv2ItResultPack.template get <0> ();
+        auto const & mv3FwdResultPack = mv3ItResultPack.template get <0> ();
+        auto const & mv1BwdResultPack = mv1ItResultPack.template get <1> ();;
+        auto const & mv2BwdResultPack = mv2ItResultPack.template get <1> ();;
+        auto const & mv3BwdResultPack = mv3ItResultPack.template get <1> ();
+
+        auto const & resMultiple1Case1 = mv1FwdResultPack.template get <0> ();
+        auto const & resMultiple1Case2 = mv1FwdResultPack.template get <1> ();
+        auto const & resMultiple1Case3 = mv1FwdResultPack.template get <2> ();
+        auto const & resMultiple1Case4 = mv1FwdResultPack.template get <3> ();
+        auto const & resMultiple2Case1 = mv2FwdResultPack.template get <0> ();
+        auto const & resMultiple2Case2 = mv2FwdResultPack.template get <1> ();
+        auto const & resMultiple2Case3 = mv2FwdResultPack.template get <2> ();
+        auto const & resMultiple2Case4 = mv2FwdResultPack.template get <3> ();
+        auto const & resMultiple3Case1 = mv3FwdResultPack.template get <0> ();
+        auto const & resMultiple3Case2 = mv3FwdResultPack.template get <1> ();
+        auto const & resMultiple3Case3 = mv3FwdResultPack.template get <2> ();
+        auto const & resMultiple3Case4 = mv3FwdResultPack.template get <3> ();
+
+        auto const & resMultiple1RevCase1 = mv1BwdResultPack.template get <0> ();
+        auto const & resMultiple1RevCase2 = mv1BwdResultPack.template get <1> ();
+        auto const & resMultiple1RevCase3 = mv1BwdResultPack.template get <2> ();
+        auto const & resMultiple1RevCase4 = mv1BwdResultPack.template get <3> ();
+        auto const & resMultiple2RevCase1 = mv2BwdResultPack.template get <0> ();
+        auto const & resMultiple2RevCase2 = mv2BwdResultPack.template get <1> ();
+        auto const & resMultiple2RevCase3 = mv2BwdResultPack.template get <2> ();
+        auto const & resMultiple2RevCase4 = mv2BwdResultPack.template get <3> ();
+        auto const & resMultiple3RevCase1 = mv3BwdResultPack.template get <0> ();
+        auto const & resMultiple3RevCase2 = mv3BwdResultPack.template get <1> ();
+        auto const & resMultiple3RevCase3 = mv3BwdResultPack.template get <2> ();
+        auto const & resMultiple3RevCase4 = mv3BwdResultPack.template get <3> ();
 
         bool status = true;
         
@@ -1182,11 +1206,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
                                 { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
                                 { resMultiple3Case1, resMultiple3Case2, resMultiple3Case3, resMultiple3Case4 },
@@ -1199,11 +1219,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
                                 { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
                                 { resMultiple3RevCase1, resMultiple3RevCase2, resMultiple3RevCase3, resMultiple3RevCase4 },
@@ -1216,11 +1232,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
                                 { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
                                 { resMultiple3Case1, resMultiple3Case2, resMultiple3Case3, resMultiple3Case4 },
@@ -1233,11 +1245,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
                                 { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
                                 { resMultiple3RevCase1, resMultiple3RevCase2, resMultiple3RevCase3, resMultiple3RevCase4 },
@@ -1257,41 +1265,58 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-            std :: initializer_list < __EnclosedType > const & multipleValues1,
-            std :: initializer_list < __EnclosedType > const & multipleValues2,
-            std :: initializer_list < __EnclosedType > const & multipleValues3,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase4
+            RelMulValueCaseData <__EnclosedType> const & data 
     ) -> bool {
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & valuePack = data.template get <1> ();
+        auto const & mvResultPack = data.template get <2> ();
+
+        auto case1Offset = offsetPack.template get<0> ();
+        auto case2Offset = offsetPack.template get<1> ();
+        auto case3Offset = offsetPack.template get<2> ();
+        auto case4Offset = offsetPack.template get<3> ();
+
+        auto const & multipleValues1 = valuePack.template get<0> ();
+        auto const & multipleValues2 = valuePack.template get<1> ();
+        auto const & multipleValues3 = valuePack.template get<2> ();
+
+        auto const & mv1ItResultPack = mvResultPack.template get <0> ();
+        auto const & mv2ItResultPack = mvResultPack.template get <1> ();
+        auto const & mv3ItResultPack = mvResultPack.template get <2> ();
+
+        auto const & mv1FwdResultPack = mv1ItResultPack.template get <0> ();
+        auto const & mv2FwdResultPack = mv2ItResultPack.template get <0> ();
+        auto const & mv3FwdResultPack = mv3ItResultPack.template get <0> ();
+        auto const & mv1BwdResultPack = mv1ItResultPack.template get <1> ();;
+        auto const & mv2BwdResultPack = mv2ItResultPack.template get <1> ();;
+        auto const & mv3BwdResultPack = mv3ItResultPack.template get <1> ();
+
+        auto const & aresMultiple1Case1 = mv1FwdResultPack.template get <0> ();
+        auto const & aresMultiple1Case2 = mv1FwdResultPack.template get <1> ();
+        auto const & aresMultiple1Case3 = mv1FwdResultPack.template get <2> ();
+        auto const & aresMultiple1Case4 = mv1FwdResultPack.template get <3> ();
+        auto const & aresMultiple2Case1 = mv2FwdResultPack.template get <0> ();
+        auto const & aresMultiple2Case2 = mv2FwdResultPack.template get <1> ();
+        auto const & aresMultiple2Case3 = mv2FwdResultPack.template get <2> ();
+        auto const & aresMultiple2Case4 = mv2FwdResultPack.template get <3> ();
+        auto const & aresMultiple3Case1 = mv3FwdResultPack.template get <0> ();
+        auto const & aresMultiple3Case2 = mv3FwdResultPack.template get <1> ();
+        auto const & aresMultiple3Case3 = mv3FwdResultPack.template get <2> ();
+        auto const & aresMultiple3Case4 = mv3FwdResultPack.template get <3> ();
+
+        auto const & aresMultiple1RevCase1 = mv1BwdResultPack.template get <0> ();
+        auto const & aresMultiple1RevCase2 = mv1BwdResultPack.template get <1> ();
+        auto const & aresMultiple1RevCase3 = mv1BwdResultPack.template get <2> ();
+        auto const & aresMultiple1RevCase4 = mv1BwdResultPack.template get <3> ();
+        auto const & aresMultiple2RevCase1 = mv2BwdResultPack.template get <0> ();
+        auto const & aresMultiple2RevCase2 = mv2BwdResultPack.template get <1> ();
+        auto const & aresMultiple2RevCase3 = mv2BwdResultPack.template get <2> ();
+        auto const & aresMultiple2RevCase4 = mv2BwdResultPack.template get <3> ();
+        auto const & aresMultiple3RevCase1 = mv3BwdResultPack.template get <0> ();
+        auto const & aresMultiple3RevCase2 = mv3BwdResultPack.template get <1> ();
+        auto const & aresMultiple3RevCase3 = mv3BwdResultPack.template get <2> ();
+        auto const & aresMultiple3RevCase4 = mv3BwdResultPack.template get <3> ();
 
         bool status = true;
         
@@ -1300,11 +1325,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
                                 { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
                                 { aresMultiple3Case1, aresMultiple3Case2, aresMultiple3Case3, aresMultiple3Case4 },
@@ -1317,11 +1338,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
                                 { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },
                                 { aresMultiple3RevCase1, aresMultiple3RevCase2, aresMultiple3RevCase3, aresMultiple3RevCase4 },
@@ -1334,11 +1351,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
                                 { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
                                 { aresMultiple3Case1, aresMultiple3Case2, aresMultiple3Case3, aresMultiple3Case4 },
@@ -1351,11 +1364,7 @@ namespace {
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
                         { {multipleValues1}, {multipleValues2}, {multipleValues3} },
-                        {
-                                { true, true, true, false },
-                                { true, true, true, false },
-                                { true, true, true, false }
-                        }, {
+                        { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
                                 { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },
                                 { aresMultiple3RevCase1, aresMultiple3RevCase2, aresMultiple3RevCase3, aresMultiple3RevCase4 },
@@ -1375,68 +1384,13 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-            std :: initializer_list < __EnclosedType > const & multipleValues1,
-            std :: initializer_list < __EnclosedType > const & multipleValues2,
-            std :: initializer_list < __EnclosedType > const & multipleValues3,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase4
+            RelMulValueBefAftData <__EnclosedType> const & data
     ) -> bool {
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & valuePack = data.template get <1> ();
+        auto const & beforeData = data.template get <2> ();
+        auto const & afterData = data.template get <3> ();
 
         return 
                 listTestGroupRelativeInsertionMultipleValuesBefore <
@@ -1444,79 +1398,17 @@ namespace {
                         __EnclosedType
                 > (
                         tNo, pTestLib, initValues,
-                        case1Offset,
-                        case2Offset,
-                        case3Offset,
-                        case4Offset,
-                        multipleValues1,
-                        multipleValues2,
-                        multipleValues3,
-
-                        resMultiple1Case1,
-                        resMultiple1Case2,
-                        resMultiple1Case3,
-                        resMultiple1Case4,
-                        resMultiple1RevCase1,
-                        resMultiple1RevCase2,
-                        resMultiple1RevCase3,
-                        resMultiple1RevCase4,
-
-                        resMultiple2Case1,
-                        resMultiple2Case2,
-                        resMultiple2Case3,
-                        resMultiple2Case4,
-                        resMultiple2RevCase1,
-                        resMultiple2RevCase2,
-                        resMultiple2RevCase3,
-                        resMultiple2RevCase4,
-
-                        resMultiple3Case1,
-                        resMultiple3Case2,
-                        resMultiple3Case3,
-                        resMultiple3Case4,
-                        resMultiple3RevCase1,
-                        resMultiple3RevCase2,
-                        resMultiple3RevCase3,
-                        resMultiple3RevCase4
+                        cds::makeTuple (
+                                offsetPack, valuePack, beforeData
+                        )
                 ) && listTestGroupRelativeInsertionMultipleValuesAfter <
                         __TestedType,
                         __EnclosedType
                 > (
                         tNo, pTestLib, initValues,
-                        case1Offset,
-                        case2Offset,
-                        case3Offset,
-                        case4Offset,
-                        multipleValues1,
-                        multipleValues2,
-                        multipleValues3,
-
-                        aresMultiple1Case1,
-                        aresMultiple1Case2,
-                        aresMultiple1Case3,
-                        aresMultiple1Case4,
-                        aresMultiple1RevCase1,
-                        aresMultiple1RevCase2,
-                        aresMultiple1RevCase3,
-                        aresMultiple1RevCase4,
-
-                        aresMultiple2Case1,
-                        aresMultiple2Case2,
-                        aresMultiple2Case3,
-                        aresMultiple2Case4,
-                        aresMultiple2RevCase1,
-                        aresMultiple2RevCase2,
-                        aresMultiple2RevCase3,
-                        aresMultiple2RevCase4,
-
-                        aresMultiple3Case1,
-                        aresMultiple3Case2,
-                        aresMultiple3Case3,
-                        aresMultiple3Case4,
-                        aresMultiple3RevCase1,
-                        aresMultiple3RevCase2,
-                        aresMultiple3RevCase3,
-                        aresMultiple3RevCase4
+                        cds::makeTuple (
+                                offsetPack, valuePack, afterData
+                        )
                 );
     }
 
@@ -1530,24 +1422,32 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase4,
-
+            RelPackValueCaseData <__EnclosedType> const & data,
             __Values const & ... values
     ) -> bool {
 
         bool status = true;
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & resultPack = data.template get <1> ();
+
+        auto const case1Offset = offsetPack.template get <0> ();
+        auto const case2Offset = offsetPack.template get <1> ();
+        auto const case3Offset = offsetPack.template get <2> ();
+        auto const case4Offset = offsetPack.template get <3> ();
+
+        auto const & fwdResPack = resultPack.template get <0> ();
+        auto const & bwdResPack = resultPack.template get <1> ();
+
+        auto const & resMultipleVCase1 = fwdResPack.template get <0> ();
+        auto const & resMultipleVCase2 = fwdResPack.template get <1> ();
+        auto const & resMultipleVCase3 = fwdResPack.template get <2> ();
+        auto const & resMultipleVCase4 = fwdResPack.template get <3> ();
+
+        auto const & resMultipleVRevCase1 = bwdResPack.template get <0> ();
+        auto const & resMultipleVRevCase2 = bwdResPack.template get <1> ();
+        auto const & resMultipleVRevCase3 = bwdResPack.template get <2> ();
+        auto const & resMultipleVRevCase4 = bwdResPack.template get <3> ();
         
         status = status && relIns::packInsBefAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
                 tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
@@ -1602,24 +1502,33 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase4,
+            RelPackValueCaseData <__EnclosedType> const & data,
 
             __Values const & ... values
     ) -> bool {
 
         bool status = true;
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & resultPack = data.template get <1> ();
+
+        auto const case1Offset = offsetPack.template get <0> ();
+        auto const case2Offset = offsetPack.template get <1> ();
+        auto const case3Offset = offsetPack.template get <2> ();
+        auto const case4Offset = offsetPack.template get <3> ();
+
+        auto const & fwdResPack = resultPack.template get <0> ();
+        auto const & bwdResPack = resultPack.template get <1> ();
+
+        auto const & aresMultipleVCase1 = fwdResPack.template get <0> ();
+        auto const & aresMultipleVCase2 = fwdResPack.template get <1> ();
+        auto const & aresMultipleVCase3 = fwdResPack.template get <2> ();
+        auto const & aresMultipleVCase4 = fwdResPack.template get <3> ();
+
+        auto const & aresMultipleVRevCase1 = bwdResPack.template get <0> ();
+        auto const & aresMultipleVRevCase2 = bwdResPack.template get <1> ();
+        auto const & aresMultipleVRevCase3 = bwdResPack.template get <2> ();
+        auto const & aresMultipleVRevCase4 = bwdResPack.template get <3> ();
         
         status = status && relIns::packInsAftAll <__EnclosedType, __TestedType, relIns::BeginPfn<__EnclosedType>, false> (
                 tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
@@ -1674,31 +1583,14 @@ namespace {
             cds::uint32 & tNo,
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase4,
+            RelPackValueBefAftData <__EnclosedType> const & data,
 
             __Values const & ... values
     ) -> bool {
+
+        auto const & offsetPack = data.template get <0> ();
+        auto const & beforeData = data.template get <1> ();
+        auto const & afterData = data.template get <2> ();
 
         return
                 listTestGroupRelativeInsertionPackBefore <
@@ -1706,16 +1598,7 @@ namespace {
                         __EnclosedType
                 > (
                         tNo, pTestLib, initValues,
-                        case1Offset, case2Offset, case3Offset, case4Offset, 
-                        
-                        resMultipleVCase1,
-                        resMultipleVCase2,
-                        resMultipleVCase3,
-                        resMultipleVCase4,
-                        resMultipleVRevCase1,
-                        resMultipleVRevCase2,
-                        resMultipleVRevCase3,
-                        resMultipleVRevCase4,
+                        cds::makeTuple (offsetPack, beforeData),
 
                         values ...
                 ) && listTestGroupRelativeInsertionPackAfter <
@@ -1723,16 +1606,7 @@ namespace {
                         __EnclosedType
                 > (
                         tNo, pTestLib, initValues,
-                        case1Offset, case2Offset, case3Offset, case4Offset,
-                
-                        aresMultipleVCase1,
-                        aresMultipleVCase2,
-                        aresMultipleVCase3,
-                        aresMultipleVCase4,
-                        aresMultipleVRevCase1,
-                        aresMultipleVRevCase2,
-                        aresMultipleVRevCase3,
-                        aresMultipleVRevCase4,
+                        cds::makeTuple (offsetPack, afterData),
 
                         values ...
                 );
@@ -1747,361 +1621,592 @@ namespace {
     > auto listTestGroupRelativeInsertion (
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            Size case1Offset,
-            Size case2Offset,
-            Size case3Offset,
-            Size case4Offset,
-            __EnclosedType const & singleValue1,
-            __EnclosedType const & singleValue2,
-            __EnclosedType const & singleValue3,
-            std :: initializer_list < __EnclosedType > const & multipleValues1,
-            std :: initializer_list < __EnclosedType > const & multipleValues2,
-            std :: initializer_list < __EnclosedType > const & multipleValues3,
-
-            std :: initializer_list < __EnclosedType > const & resSingle1Case1,
-            std :: initializer_list < __EnclosedType > const & resSingle1Case2,
-            std :: initializer_list < __EnclosedType > const & resSingle1Case3,
-            std :: initializer_list < __EnclosedType > const & resSingle1Case4,
-            std :: initializer_list < __EnclosedType > const & resSingle1RevCase1,
-            std :: initializer_list < __EnclosedType > const & resSingle1RevCase2,
-            std :: initializer_list < __EnclosedType > const & resSingle1RevCase3,
-            std :: initializer_list < __EnclosedType > const & resSingle1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resSingle2Case1,
-            std :: initializer_list < __EnclosedType > const & resSingle2Case2,
-            std :: initializer_list < __EnclosedType > const & resSingle2Case3,
-            std :: initializer_list < __EnclosedType > const & resSingle2Case4,
-            std :: initializer_list < __EnclosedType > const & resSingle2RevCase1,
-            std :: initializer_list < __EnclosedType > const & resSingle2RevCase2,
-            std :: initializer_list < __EnclosedType > const & resSingle2RevCase3,
-            std :: initializer_list < __EnclosedType > const & resSingle2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resSingle3Case1,
-            std :: initializer_list < __EnclosedType > const & resSingle3Case2,
-            std :: initializer_list < __EnclosedType > const & resSingle3Case3,
-            std :: initializer_list < __EnclosedType > const & resSingle3Case4,
-            std :: initializer_list < __EnclosedType > const & resSingle3RevCase1,
-            std :: initializer_list < __EnclosedType > const & resSingle3RevCase2,
-            std :: initializer_list < __EnclosedType > const & resSingle3RevCase3,
-            std :: initializer_list < __EnclosedType > const & resSingle3RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultiple3RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & resMultipleVRevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresSingle1Case1,
-            std :: initializer_list < __EnclosedType > const & aresSingle1Case2,
-            std :: initializer_list < __EnclosedType > const & aresSingle1Case3,
-            std :: initializer_list < __EnclosedType > const & aresSingle1Case4,
-            std :: initializer_list < __EnclosedType > const & aresSingle1RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresSingle1RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresSingle1RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresSingle1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresSingle2Case1,
-            std :: initializer_list < __EnclosedType > const & aresSingle2Case2,
-            std :: initializer_list < __EnclosedType > const & aresSingle2Case3,
-            std :: initializer_list < __EnclosedType > const & aresSingle2Case4,
-            std :: initializer_list < __EnclosedType > const & aresSingle2RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresSingle2RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresSingle2RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresSingle2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresSingle3Case1,
-            std :: initializer_list < __EnclosedType > const & aresSingle3Case2,
-            std :: initializer_list < __EnclosedType > const & aresSingle3Case3,
-            std :: initializer_list < __EnclosedType > const & aresSingle3Case4,
-            std :: initializer_list < __EnclosedType > const & aresSingle3RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresSingle3RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresSingle3RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresSingle3RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple1RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple2RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3Case4,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultiple3RevCase4,
-
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVCase4,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase1,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase2,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase3,
-            std :: initializer_list < __EnclosedType > const & aresMultipleVRevCase4,
+            RelFullDataPack <__EnclosedType> const & data,
             __Values const & ... values
     ) -> bool {
 
         cds::uint32 tNo = 401U;
         using E = __EnclosedType;
 
+        auto const & offsetData = data.template get <0> ();
+        auto const & sValPack = data.template get <1> ();
+        auto const & mValPack = data.template get <2> ();
+
+        auto const & sResPack = data.template get <3> ();
+        auto const & mResPack = data.template get <4> ();
+        auto const & pResPack = data.template get <5> ();
+
+        auto const & sResBefPack = sResPack.template get<0> ();
+        auto const & sResAftPack = sResPack.template get<1> ();
+
+        auto const & mResBefPack = mResPack.template get<0> ();
+        auto const & mResAftPack = mResPack.template get<1> ();
+
+        auto const & pResBefPack = pResPack.template get<0> ();
+        auto const & pResAftPack = pResPack.template get<1> ();
+
         return listTestGroupRelativeInsertionSingleValues <
                 __TestedType,
                 E
         > (
                 tNo, pTestLib, initValues,
-                cds::makeTuple <
-                        RelOffsetPack,
-                        RelSingleValPack <E>,
-                        RelSCaseResPack <E>,
-                        RelSCaseResPack <E>
-                > (
-
-                        cds::makeTuple (
-                                case1Offset, 
-                                case2Offset,
-                                case3Offset,
-                                case4Offset
-                        ),
-
-                        cds::makeTuple (
-                                singleValue1, 
-                                singleValue2, 
-                                singleValue3
-                        ),
-
-                        cds::makeTuple <RelItCaseResPack <E>, RelItCaseResPack <E>, RelItCaseResPack <E>> (
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle1Case1, 
-                                                resSingle1Case2,
-                                                resSingle1Case3,
-                                                resSingle1Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle1RevCase1,
-                                                resSingle1RevCase2,
-                                                resSingle1RevCase3,
-                                                resSingle1RevCase4
-                                        )
-                                ),
-
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle2Case1,
-                                                resSingle2Case2,
-                                                resSingle2Case3,
-                                                resSingle2Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle2RevCase1,
-                                                resSingle2RevCase2,
-                                                resSingle2RevCase3,
-                                                resSingle2RevCase4
-                                        )
-                                ),
-
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle3Case1,
-                                                resSingle3Case2,
-                                                resSingle3Case3,
-                                                resSingle3Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                resSingle3RevCase1,
-                                                resSingle3RevCase2,
-                                                resSingle3RevCase3,
-                                                resSingle3RevCase4
-                                        )
-                                )
-                        ),
-
-                        cds::makeTuple <RelItCaseResPack <E>, RelItCaseResPack <E>, RelItCaseResPack <E>> (
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle1Case1, 
-                                                aresSingle1Case2,
-                                                aresSingle1Case3,
-                                                aresSingle1Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle1RevCase1,
-                                                aresSingle1RevCase2,
-                                                aresSingle1RevCase3,
-                                                aresSingle1RevCase4
-                                        )
-                                ),
-
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle2Case1,
-                                                aresSingle2Case2,
-                                                aresSingle2Case3,
-                                                aresSingle2Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle2RevCase1,
-                                                aresSingle2RevCase2,
-                                                aresSingle2RevCase3,
-                                                aresSingle2RevCase4
-                                        )
-                                ),
-
-                                cds::makeTuple <RelCaseResPack <E>, RelCaseResPack <E>> (
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle3Case1,
-                                                aresSingle3Case2,
-                                                aresSingle3Case3,
-                                                aresSingle3Case4
-                                        ),
-                                        cds::makeTuple <Array <E>, Array <E>, Array <E>, Array <E>> (
-                                                aresSingle3RevCase1,
-                                                aresSingle3RevCase2,
-                                                aresSingle3RevCase3,
-                                                aresSingle3RevCase4
-                                        )
-                                )
-                        )
-                )
+                cds::makeTuple ( offsetData, sValPack, sResBefPack, sResAftPack )
         ) && listTestGroupRelativeInsertionMultipleValues <
                 __TestedType,
                 __EnclosedType
         > (
                 tNo, pTestLib, initValues,
-                case1Offset,
-                case2Offset,
-                case3Offset,
-                case4Offset,
-                multipleValues1,
-                multipleValues2,
-                multipleValues3,
-
-                resMultiple1Case1,
-                resMultiple1Case2,
-                resMultiple1Case3,
-                resMultiple1Case4,
-                resMultiple1RevCase1,
-                resMultiple1RevCase2,
-                resMultiple1RevCase3,
-                resMultiple1RevCase4,
-
-                resMultiple2Case1,
-                resMultiple2Case2,
-                resMultiple2Case3,
-                resMultiple2Case4,
-                resMultiple2RevCase1,
-                resMultiple2RevCase2,
-                resMultiple2RevCase3,
-                resMultiple2RevCase4,
-
-                resMultiple3Case1,
-                resMultiple3Case2,
-                resMultiple3Case3,
-                resMultiple3Case4,
-                resMultiple3RevCase1,
-                resMultiple3RevCase2,
-                resMultiple3RevCase3,
-                resMultiple3RevCase4,
-
-                aresMultiple1Case1,
-                aresMultiple1Case2,
-                aresMultiple1Case3,
-                aresMultiple1Case4,
-                aresMultiple1RevCase1,
-                aresMultiple1RevCase2,
-                aresMultiple1RevCase3,
-                aresMultiple1RevCase4,
-
-                aresMultiple2Case1,
-                aresMultiple2Case2,
-                aresMultiple2Case3,
-                aresMultiple2Case4,
-                aresMultiple2RevCase1,
-                aresMultiple2RevCase2,
-                aresMultiple2RevCase3,
-                aresMultiple2RevCase4,
-
-                aresMultiple3Case1,
-                aresMultiple3Case2,
-                aresMultiple3Case3,
-                aresMultiple3Case4,
-                aresMultiple3RevCase1,
-                aresMultiple3RevCase2,
-                aresMultiple3RevCase3,
-                aresMultiple3RevCase4
+                cds::makeTuple ( offsetData, mValPack, mResBefPack, mResAftPack )
         ) && listTestGroupRelativeInsertionPack <
                 __TestedType,
                 __EnclosedType
         > (
                 tNo, pTestLib, initValues,
-                case1Offset, case2Offset, case3Offset, case4Offset, 
-                
-                resMultipleVCase1,
-                resMultipleVCase2,
-                resMultipleVCase3,
-                resMultipleVCase4,
-                resMultipleVRevCase1,
-                resMultipleVRevCase2,
-                resMultipleVRevCase3,
-                resMultipleVRevCase4,
-                
-                aresMultipleVCase1,
-                aresMultipleVCase2,
-                aresMultipleVCase3,
-                aresMultipleVCase4,
-                aresMultipleVRevCase1,
-                aresMultipleVRevCase2,
-                aresMultipleVRevCase3,
-                aresMultipleVRevCase4,
-
+                cds::makeTuple ( offsetData, pResBefPack, pResAftPack ),
                 values ...
         );
     }
+
+    RelFullDataPack <int> const intData = cds::makeTuple (
+            cds::makeTuple <Size, Size, Size, Size> (0, 2, 4, 6),
+            cds::makeTuple <int, int, int> (7, 9, 20),
+            cds::makeTuple <Array<int>, Array<int>, Array<int>> (
+                {1, 2, 3}, {20, 30, 40}, {100, 200, 300}
+            ),
+            cds::makeTuple (
+                /* bef, aft */
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 7, 1, 2, 3, 4, 5 },
+                            { 1, 2, 7, 3, 4, 5 },
+                            { 1, 2, 3, 4, 7, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 7 },
+                            { 1, 2, 3, 7, 4, 5 },
+                            { 1, 7, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 9, 1, 2, 3, 4, 5 },
+                            { 1, 2, 9, 3, 4, 5 },
+                            { 1, 2, 3, 4, 9, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 9 },
+                            { 1, 2, 3, 9, 4, 5 },
+                            { 1, 9, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 20, 1, 2, 3, 4, 5 },
+                            { 1, 2, 20, 3, 4, 5 },
+                            { 1, 2, 3, 4, 20, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 20 },
+                            { 1, 2, 3, 20, 4, 5 },
+                            { 1, 20, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                ),
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 7, 2, 3, 4, 5 },
+                            { 1, 2, 3, 7, 4, 5 },
+                            { 1, 2, 3, 4, 5, 7 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 7, 5 },
+                            { 1, 2, 7, 3, 4, 5 },
+                            { 7, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 9, 2, 3, 4, 5 },
+                            { 1, 2, 3, 9, 4, 5 },
+                            { 1, 2, 3, 4, 5, 9 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 9, 5 },
+                            { 1, 2, 9, 3, 4, 5 },
+                            { 9, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 20, 2, 3, 4, 5 },
+                            { 1, 2, 3, 20, 4, 5 },
+                            { 1, 2, 3, 4, 5, 20 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 20, 5 },
+                            { 1, 2, 20, 3, 4, 5 },
+                            { 20, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                )
+            ),
+            cds::makeTuple (
+                /* bef, aft */
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 1, 2, 3, 3, 4, 5 },
+                            { 1, 2, 3, 4, 1, 2, 3, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 1, 2, 3 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 1, 2, 3, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 20, 30, 40, 1, 2, 3, 4, 5 },
+                            { 1, 2, 20, 30, 40, 3, 4, 5 },
+                            { 1, 2, 3, 4, 20, 30, 40, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 20, 30, 40 },
+                            { 1, 2, 3, 20, 30, 40, 4, 5 },
+                            { 1, 20, 30, 40, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 100, 200, 300, 1, 2, 3, 4, 5 },
+                            { 1, 2, 100, 200, 300, 3, 4, 5 },
+                            { 1, 2, 3, 4, 100, 200, 300, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 100, 200, 300 },
+                            { 1, 2, 3, 100, 200, 300, 4, 5 },
+                            { 1, 100, 200, 300, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                ),
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 1, 2, 3, 2, 3, 4, 5 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5, 1, 2, 3 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 1, 2, 3, 5 },
+                            { 1, 2, 1, 2, 3, 3, 4, 5 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 20, 30, 40, 2, 3, 4, 5 },
+                            { 1, 2, 3, 20, 30, 40, 4, 5 },
+                            { 1, 2, 3, 4, 5, 20, 30, 40 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 20, 30, 40, 5 },
+                            { 1, 2, 20, 30, 40, 3, 4, 5 },
+                            { 20, 30, 40, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 100, 200, 300, 2, 3, 4, 5 },
+                            { 1, 2, 3, 100, 200, 300, 4, 5 },
+                            { 1, 2, 3, 4, 5, 100, 200, 300 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 100, 200, 300, 5 },
+                            { 1, 2, 100, 200, 300, 3, 4, 5 },
+                            { 100, 200, 300, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                )
+            ),
+            cds::makeTuple (
+                /* bef aft */
+                cds::makeTuple (
+                    /* fwd bwd */
+                    cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                        { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                        { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                        { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    ),
+                    cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                        { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                        { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                        { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    )
+                ),
+                /* bef aft */
+                cds::makeTuple (
+                    /* fwd bwd */
+                    cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                        { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                        { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                        { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                        { 1, 2, 3, 4, 5 }
+                    ),
+                    cds::makeTuple <Array <int>, Array <int>, Array <int>, Array <int>> (
+                        { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                        { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                        { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    )
+                )
+            )
+    );
+
+    RelFullDataPack <String> const stringData = cds::makeTuple (
+            cds::makeTuple <Size, Size, Size, Size> (0, 2, 4, 6),
+            cds::makeTuple <String, String, String> (7, 9, 20),
+            cds::makeTuple <Array<String>, Array<String>, Array<String>> (
+                {1, 2, 3}, {20, 30, 40}, {100, 200, 300}
+            ),
+            cds::makeTuple (
+                /* bef, aft */
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 7, 1, 2, 3, 4, 5 },
+                            { 1, 2, 7, 3, 4, 5 },
+                            { 1, 2, 3, 4, 7, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 7 },
+                            { 1, 2, 3, 7, 4, 5 },
+                            { 1, 7, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 9, 1, 2, 3, 4, 5 },
+                            { 1, 2, 9, 3, 4, 5 },
+                            { 1, 2, 3, 4, 9, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 9 },
+                            { 1, 2, 3, 9, 4, 5 },
+                            { 1, 9, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 20, 1, 2, 3, 4, 5 },
+                            { 1, 2, 20, 3, 4, 5 },
+                            { 1, 2, 3, 4, 20, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 20 },
+                            { 1, 2, 3, 20, 4, 5 },
+                            { 1, 20, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                ),
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 7, 2, 3, 4, 5 },
+                            { 1, 2, 3, 7, 4, 5 },
+                            { 1, 2, 3, 4, 5, 7 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 7, 5 },
+                            { 1, 2, 7, 3, 4, 5 },
+                            { 7, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 9, 2, 3, 4, 5 },
+                            { 1, 2, 3, 9, 4, 5 },
+                            { 1, 2, 3, 4, 5, 9 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 9, 5 },
+                            { 1, 2, 9, 3, 4, 5 },
+                            { 9, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 20, 2, 3, 4, 5 },
+                            { 1, 2, 3, 20, 4, 5 },
+                            { 1, 2, 3, 4, 5, 20 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 20, 5 },
+                            { 1, 2, 20, 3, 4, 5 },
+                            { 20, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                )
+            ),
+            cds::makeTuple (
+                /* bef, aft */
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 1, 2, 3, 3, 4, 5 },
+                            { 1, 2, 3, 4, 1, 2, 3, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 1, 2, 3 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 1, 2, 3, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 20, 30, 40, 1, 2, 3, 4, 5 },
+                            { 1, 2, 20, 30, 40, 3, 4, 5 },
+                            { 1, 2, 3, 4, 20, 30, 40, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 20, 30, 40 },
+                            { 1, 2, 3, 20, 30, 40, 4, 5 },
+                            { 1, 20, 30, 40, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 100, 200, 300, 1, 2, 3, 4, 5 },
+                            { 1, 2, 100, 200, 300, 3, 4, 5 },
+                            { 1, 2, 3, 4, 100, 200, 300, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 5, 100, 200, 300 },
+                            { 1, 2, 3, 100, 200, 300, 4, 5 },
+                            { 1, 100, 200, 300, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                ),
+                cds::makeTuple (
+                    /* s1, s2, s3 */
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 1, 2, 3, 2, 3, 4, 5 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5, 1, 2, 3 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 1, 2, 3, 5 },
+                            { 1, 2, 1, 2, 3, 3, 4, 5 },
+                            { 1, 2, 3, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 20, 30, 40, 2, 3, 4, 5 },
+                            { 1, 2, 3, 20, 30, 40, 4, 5 },
+                            { 1, 2, 3, 4, 5, 20, 30, 40 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 20, 30, 40, 5 },
+                            { 1, 2, 20, 30, 40, 3, 4, 5 },
+                            { 20, 30, 40, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    ),
+                    cds::makeTuple (
+                        /* fwd, bwd */
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 100, 200, 300, 2, 3, 4, 5 },
+                            { 1, 2, 3, 100, 200, 300, 4, 5 },
+                            { 1, 2, 3, 4, 5, 100, 200, 300 },
+                            { 1, 2, 3, 4, 5 }
+                        ),
+                        cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                            /*r1, r2, r3, r4*/
+                            { 1, 2, 3, 4, 100, 200, 300, 5 },
+                            { 1, 2, 100, 200, 300, 3, 4, 5 },
+                            { 100, 200, 300, 1, 2, 3, 4, 5 },
+                            { 1, 2, 3, 4, 5 }
+                        )
+                    )
+                )
+            ),
+            cds::makeTuple (
+                /* bef aft */
+                cds::makeTuple (
+                    /* fwd bwd */
+                    cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                        { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                        { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                        { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    ),
+                    cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                        { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                        { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                        { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    )
+                ),
+                /* bef aft */
+                cds::makeTuple (
+                    /* fwd bwd */
+                    cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                        { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
+                        { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
+                        { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
+                        { 1, 2, 3, 4, 5 }
+                    ),
+                    cds::makeTuple <Array <String>, Array <String>, Array <String>, Array <String>> (
+                        { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
+                        { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
+                        { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
+                        { 1, 2, 3, 4, 5 }
+                    )
+                )
+            )
+    );
+
+    std::initializer_list <int> const intTValues = {1, 2, 3, 4, 5};
+    std::initializer_list <String> const stringTValues = {1, 2, 3, 4, 5};
+    
+    int const pIntValue1 = 1000; 
+    int const pIntValue2 = 2000; 
+    int const pIntValue3 = 3000; 
+    int const pIntValue4 = 4000; 
+    
+    String const pStringValue1 = 1000; 
+    String const pStringValue2 = 2000; 
+    String const pStringValue3 = 3000; 
+    String const pStringValue4 = 4000; 
 }
 
 auto ListTest::tests_00400_00599 () noexcept -> bool {
@@ -2115,141 +2220,9 @@ auto ListTest::tests_00400_00599 () noexcept -> bool {
                 int
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                0,
-                2,
-                4,
-                6,
-                7, 9, 20,
-                { 1, 2, 3 }, { 20, 30, 40 }, { 100, 200, 300 },
-
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                1000, 2000, 3000, 4000
+                intTValues,
+                intData,
+                pIntValue1, pIntValue2, pIntValue3, pIntValue4
         );
     });
     this->executeSubtest ( "ListTestGroup-RelativeInsertion-" __CDS_cpplang_core_version_name " : LTG-00400-RI-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, & allOk] {
@@ -2259,141 +2232,9 @@ auto ListTest::tests_00400_00599 () noexcept -> bool {
                 int
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                0,
-                2,
-                4,
-                6,
-                7, 9, 20,
-                { 1, 2, 3 }, { 20, 30, 40 }, { 100, 200, 300 },
-
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                1000, 2000, 3000, 4000
+                intTValues,
+                intData,
+                pIntValue1, pIntValue2, pIntValue3, pIntValue4
         );
     });
     this->executeSubtest ( "ListTestGroup-RelativeInsertion-" __CDS_cpplang_core_version_name " : LTG-00400-RI-" __CDS_cpplang_core_version_name " : StringArray", [this, & allOk] {
@@ -2403,141 +2244,9 @@ auto ListTest::tests_00400_00599 () noexcept -> bool {
                 String
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                0,
-                2,
-                4,
-                6,
-                7, 9, 20,
-                { 1, 2, 3 }, { 20, 30, 40 }, { 100, 200, 300 },
-
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                1000, 2000, 3000, 4000
+                stringTValues,
+                stringData,
+                pStringValue1, pStringValue2, pStringValue3, pStringValue4
         );
     });
     this->executeSubtest ( "ListTestGroup-RelativeInsertion-" __CDS_cpplang_core_version_name " : LTG-00400-RI-" __CDS_cpplang_core_version_name " : StringLinkedList", [this, & allOk] {
@@ -2547,141 +2256,9 @@ auto ListTest::tests_00400_00599 () noexcept -> bool {
                 String
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                0,
-                2,
-                4,
-                6,
-                7, 9, 20,
-                { 1, 2, 3 }, { 20, 30, 40 }, { 100, 200, 300 },
-
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 7, 2, 3, 4, 5 },
-                { 1, 2, 3, 7, 4, 5 },
-                { 1, 2, 3, 4, 5, 7 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 7, 5 },
-                { 1, 2, 7, 3, 4, 5 },
-                { 7, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 9, 2, 3, 4, 5 },
-                { 1, 2, 3, 9, 4, 5 },
-                { 1, 2, 3, 4, 5, 9 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 9, 5 },
-                { 1, 2, 9, 3, 4, 5 },
-                { 9, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 4, 5 },
-                { 1, 2, 3, 4, 5, 20 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 5 },
-                { 1, 2, 20, 3, 4, 5 },
-                { 20, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1, 2, 3, 2, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1, 2, 3, 5 },
-                { 1, 2, 1, 2, 3, 3, 4, 5 },
-                { 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 20, 30, 40, 2, 3, 4, 5 },
-                { 1, 2, 3, 20, 30, 40, 4, 5 },
-                { 1, 2, 3, 4, 5, 20, 30, 40 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 20, 30, 40, 5 },
-                { 1, 2, 20, 30, 40, 3, 4, 5 },
-                { 20, 30, 40, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 100, 200, 300, 2, 3, 4, 5 },
-                { 1, 2, 3, 100, 200, 300, 4, 5 },
-                { 1, 2, 3, 4, 5, 100, 200, 300 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 100, 200, 300, 5 },
-                { 1, 2, 100, 200, 300, 3, 4, 5 },
-                { 100, 200, 300, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                { 1, 1000, 2000, 3000, 4000, 2, 3, 4, 5 },
-                { 1, 2, 3, 1000, 2000, 3000, 4000, 4, 5 },
-                { 1, 2, 3, 4, 5, 1000, 2000, 3000, 4000 },
-                { 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 1000, 2000, 3000, 4000, 5 },
-                { 1, 2, 1000, 2000, 3000, 4000, 3, 4, 5 },
-                { 1000, 2000, 3000, 4000, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5 },
-
-                1000, 2000, 3000, 4000
+                stringTValues,
+                stringData,
+                pStringValue1, pStringValue2, pStringValue3, pStringValue4
         );
     });
 
