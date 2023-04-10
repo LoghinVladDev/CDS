@@ -15,7 +15,8 @@ auto MutableCollectionTest :: execute () noexcept -> bool {
             this->tests_00200_00349 () &&
             this->tests_00350_00399 () &&
             this->tests_00400_00449 () &&
-            this->tests_00450_00499 () &&
+            this->tests_00450_00499_i () &&
+            this->tests_00450_00499_s () &&
             this->tests_00600_00699 () &&
             this->tests_00700_00799 () &&
             this->tests_00800_00899 ();
