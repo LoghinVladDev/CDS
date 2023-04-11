@@ -1,5 +1,6 @@
 name: SonarCloud-Analysis-Cpp11-Test-All
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
