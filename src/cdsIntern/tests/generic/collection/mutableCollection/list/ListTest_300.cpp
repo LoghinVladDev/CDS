@@ -1,6 +1,37 @@
 #include "ListTest_common.hpp"
 
+#include <CDS/Tuple>
+
 namespace {
+
+    using cds::Size;
+    using cds::Array;
+    using cds::Tuple;
+    using cds::makeTuple;
+
+    template <typename E>
+    using STC = Tuple <E, Array <E>>;
+
+    template <typename E>
+    using MTC = Tuple <std::initializer_list <E> const *, Array <E>, Array <E>>;
+
+    template <typename I, typename E>
+    using ITC = Tuple <I, I, Array <E>, Array <E>>;
+
+    template <typename E>
+    using PTC = Tuple <Array <E>, Array <E>>;
+
+    template <typename E, typename I1, typename I2, typename I3>
+    using TData = Tuple <
+            STC <E>, STC <E>, STC <E>, STC <E>, STC <E>, /* pb */
+            STC <E>, STC <E>, STC <E>, STC <E>, STC <E>, /* pf */
+            MTC <E>, MTC <E>,
+            ITC <I1, E>,
+            ITC <I2, E>,
+            ITC <I3, E>,
+            PTC <E>
+    >;
+
     /* ListTestGroup-BoundaryInsertion-cpp-xx : LTG-00300-BI-cpp-xx. Tests LTC-00301-BI to LTC-00322-BI */
     template <
             template < typename ... > class __TestedType,
@@ -12,45 +43,61 @@ namespace {
     > auto listTestGroupBoundaryInsertion (
             Test * pTestLib,
             std :: initializer_list < __EnclosedType > const & initValues,
-            __EnclosedType const & pbFirst,
-            std :: initializer_list < __EnclosedType > const & equiv1,
-            __EnclosedType const & pbSecond,
-            std :: initializer_list < __EnclosedType > const & equiv2,
-            __EnclosedType const & pbThird,
-            std :: initializer_list < __EnclosedType > const & equiv3,
-            __EnclosedType pbFourth,
-            std :: initializer_list < __EnclosedType > const & equiv4,
-            __EnclosedType pbFifth,
-            std :: initializer_list < __EnclosedType > const & equiv5,
-            __EnclosedType const & pfFirst,
-            std :: initializer_list < __EnclosedType > const & equiv6,
-            __EnclosedType const & pfSecond,
-            std :: initializer_list < __EnclosedType > const & equiv7,
-            __EnclosedType const & pfThird,
-            std :: initializer_list < __EnclosedType > const & equiv8,
-            __EnclosedType pfFourth,
-            std :: initializer_list < __EnclosedType > const & equiv9,
-            __EnclosedType pfFifth,
-            std :: initializer_list < __EnclosedType > const & equiv10,
-            std :: initializer_list < __EnclosedType > const & pbValues,
-            std :: initializer_list < __EnclosedType > const & equiv11,
-            std :: initializer_list < __EnclosedType > const & equiv12,
-            std :: initializer_list < __EnclosedType > const & pfValues,
-            std :: initializer_list < __EnclosedType > const & equiv13,
-            std :: initializer_list < __EnclosedType > const & equiv14,
-            __ItType1 const & b1, __ItType1 const & e1,
-            std :: initializer_list < __EnclosedType > const & equiv15,
-            std :: initializer_list < __EnclosedType > const & equiv16,
-            __ItType2 const & b2, __ItType2 const & e2,
-            std :: initializer_list < __EnclosedType > const & equiv17,
-            std :: initializer_list < __EnclosedType > const & equiv18,
-            __ItType3 const & b3, __ItType3 const & e3,
-            std :: initializer_list < __EnclosedType > const & equiv19,
-            std :: initializer_list < __EnclosedType > const & equiv20,
-            std :: initializer_list < __EnclosedType > const & equiv21,
-            std :: initializer_list < __EnclosedType > const & equiv22,
+            TData <__EnclosedType, __ItType1, __ItType2, __ItType3> const & tData,
             __Values const & ... values
     ) noexcept -> bool {
+
+        auto const & pbFirst = tData.template get <0> ().template get <0> ();
+        auto const & equiv1 = tData.template get <0> ().template get <1> ();
+        auto const & pbSecond = tData.template get <1> ().template get <0> ();
+        auto const & equiv2 = tData.template get <1> ().template get <1> ();
+        auto const & pbThird = tData.template get <2> ().template get <0> ();
+        auto const & equiv3 = tData.template get <2> ().template get <1> ();
+
+        auto pbFourth = tData.template get <3> ().template get <0> ();
+        auto const & equiv4 = tData.template get <3> ().template get <1> ();
+        auto pbFifth = tData.template get <4> ().template get <0> ();
+        auto const & equiv5 = tData.template get <4> ().template get <1> ();
+
+        auto const & pfFirst = tData.template get <5> ().template get <0> ();
+        auto const & equiv6 = tData.template get <5> ().template get <1> ();
+        auto const & pfSecond = tData.template get <6> ().template get <0> ();
+        auto const & equiv7 = tData.template get <6> ().template get <1> ();
+        auto const & pfThird = tData.template get <7> ().template get <0> ();
+        auto const & equiv8 = tData.template get <7> ().template get <1> ();
+
+        auto pfFourth = tData.template get <8> ().template get <0> ();
+        auto const & equiv9 = tData.template get <8> ().template get <1> ();
+        auto pfFifth = tData.template get <9> ().template get <0> ();
+        auto const & equiv10 = tData.template get <9> ().template get <1> ();
+
+
+        auto const & pbValues = * tData.template get <10> ().template get <0> ();
+        auto const & equiv11 = tData.template get <10> ().template get <1> ();
+        auto const & equiv12 = tData.template get <10> ().template get <2> ();
+
+        auto const & pfValues = * tData.template get <11> ().template get <0> ();
+        auto const & equiv13 = tData.template get <11> ().template get <1> ();
+        auto const & equiv14 = tData.template get <11> ().template get <2> ();
+
+        auto const & b1 = tData.template get <12> ().template get <0> ();
+        auto const & e1 = tData.template get <12> ().template get <1> ();
+        auto const & equiv15 = tData.template get <12> ().template get <2> ();
+        auto const & equiv16 = tData.template get <12> ().template get <3> ();
+
+        auto const & b2 = tData.template get <13> ().template get <0> ();
+        auto const & e2 = tData.template get <13> ().template get <1> ();
+        auto const & equiv17 = tData.template get <13> ().template get <2> ();
+        auto const & equiv18 = tData.template get <13> ().template get <3> ();
+
+        auto const & b3 = tData.template get <14> ().template get <0> ();
+        auto const & e3 = tData.template get <14> ().template get <1> ();
+        auto const & equiv19 = tData.template get <14> ().template get <2> ();
+        auto const & equiv20 = tData.template get <14> ().template get <3> ();
+
+        auto const & equiv21 = tData.template get <15> ().template get<0> ();
+        auto const & equiv22 = tData.template get <15> ().template get<1> ();
+
 
         __TestedType < __EnclosedType > underTest = initValues;
         List < __EnclosedType > & lref = underTest;
@@ -255,7 +302,128 @@ namespace {
 
         return true;
     }
+
+    auto const irange1 = Array < int > { 1, 2, 3, 4, 5 };
+    auto const irange2 = cds :: Range (5, 10);
+    auto const irange3 = std :: vector < int > { 20, 21, 23, 24 };
+
+    auto const istc1 = makeTuple <int, Array <int>> (6, { 1, 2, 3, 4, 5, 6 });
+    auto const istc2 = makeTuple <int, Array <int>> (7, { 1, 2, 3, 4, 5, 6, 7 });
+    auto const istc3 = makeTuple <int, Array <int>> (8, { 1, 2, 3, 4, 5, 6, 7, 8 });
+    auto const istc4 = makeTuple <int, Array <int>> (9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+    auto const istc5 = makeTuple <int, Array <int>> (10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const istc6 = makeTuple <int, Array <int>> (0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const istc7 = makeTuple <int, Array <int>> (1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const istc8 = makeTuple <int, Array <int>> (2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const istc9 = makeTuple <int, Array <int>> (3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const istc10 = makeTuple <int, Array <int>> (4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+
+    std::initializer_list <int> const imtc1Val = { 1, 2, 3 };
+    auto const imtc1 = makeTuple <std::initializer_list <int> const *, Array <int>, Array <int>> (
+            & imtc1Val,
+            { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 },
+            { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }
+    );
+
+    std::initializer_list <int> const imtc2Val = { 1, 2, 3 };
+    auto const imtc2 = makeTuple <std::initializer_list <int> const *, Array <int>, Array <int>> (
+            & imtc2Val,
+            { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+            { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }
+    );
+
+    auto const iitc1 = makeTuple <decltype (irange1.begin()), decltype (irange1.end()), Array <int>, Array <int>> (
+            irange1.begin(), irange1.end(),
+            { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+            { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 }
+    );
+
+    auto const iitc2 = makeTuple <decltype (irange2.begin()), decltype (irange2.end()), Array <int>, Array <int>> (
+            irange2.begin(), irange2.end(),
+            { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+            { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 }
+    );
+
+    auto const iitc3 = makeTuple <decltype (irange3.begin()), decltype (irange3.end()), Array <int>, Array <int>> (
+            irange3.begin(), irange3.end(),
+            { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+            { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 }
+    );
+
+    auto const iptc = makeTuple <Array <int>, Array <int>> (
+            { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+            { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 }
+    );
+
+    auto const itd = makeTuple (
+            istc1, istc2, istc3, istc4, istc5,
+            istc6, istc7, istc8, istc9, istc10,
+            imtc1, imtc2,
+            iitc1, iitc2, iitc3,
+            iptc
+    );
+
+    auto const srange1 = Array < String > { 1, 2, 3, 4, 5 };
+    auto const srange2 = cds :: Range (5, 10);
+    auto const srange3 = std :: vector < String > { 20, 21, 23, 24 };
+
+    auto const sstc1 = makeTuple <String, Array <String>> (6, { 1, 2, 3, 4, 5, 6 });
+    auto const sstc2 = makeTuple <String, Array <String>> (7, { 1, 2, 3, 4, 5, 6, 7 });
+    auto const sstc3 = makeTuple <String, Array <String>> (8, { 1, 2, 3, 4, 5, 6, 7, 8 });
+    auto const sstc4 = makeTuple <String, Array <String>> (9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+    auto const sstc5 = makeTuple <String, Array <String>> (10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const sstc6 = makeTuple <String, Array <String>> (0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const sstc7 = makeTuple <String, Array <String>> (1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const sstc8 = makeTuple <String, Array <String>> (2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const sstc9 = makeTuple <String, Array <String>> (3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+    auto const sstc10 = makeTuple <String, Array <String>> (4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+
+    std::initializer_list <String> const smtc1Val = { 1, 2, 3 };
+    auto const smtc1 = makeTuple <std::initializer_list <String> const *, Array <String>, Array <String>> (
+            & smtc1Val,
+            { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 },
+            { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }
+    );
+
+    std::initializer_list <String> const smtc2Val = { 1, 2, 3 };
+    auto const smtc2 = makeTuple <std::initializer_list <String> const *, Array <String>, Array <String>> (
+            & smtc2Val,
+            { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
+            { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }
+    );
+
+    auto const sitc1 = makeTuple <decltype (srange1.begin()), decltype (srange1.end()), Array <String>, Array <String>> (
+            srange1.begin(), srange1.end(),
+            { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
+            { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 }
+    );
+
+    auto const sitc2 = makeTuple <decltype (srange2.begin()), decltype (srange2.end()), Array <String>, Array <String>> (
+            srange2.begin(), srange2.end(),
+            { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
+            { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 }
+    );
+
+    auto const sitc3 = makeTuple <decltype (srange3.begin()), decltype (srange3.end()), Array <String>, Array <String>> (
+            srange3.begin(), srange3.end(),
+            { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+            { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 }
+    );
+
+    auto const sptc = makeTuple <Array <String>, Array <String>> (
+            { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
+            { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 }
+    );
+
+    auto const _std = makeTuple (
+            sstc1, sstc2, sstc3, sstc4, sstc5,
+            sstc6, sstc7, sstc8, sstc9, sstc10,
+            smtc1, smtc2,
+            sitc1, sitc2, sitc3,
+            sptc
+    );
 }
+
 
 auto ListTest::tests_00300_00399 () noexcept -> bool {
 
@@ -263,118 +431,43 @@ auto ListTest::tests_00300_00399 () noexcept -> bool {
 
     this->executeSubtest ( "ListTestGroup-BoundaryInsertion-" __CDS_cpplang_core_version_name " : LTG-00300-BI-" __CDS_cpplang_core_version_name " : IntArray", [this, & allOk] {
 
-        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
-        auto range2 = cds :: Range (5, 10);
-        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+        std::initializer_list <int> const initValues = {1, 2, 3, 4, 5};
 
         allOk = allOk && listTestGroupBoundaryInsertion <
                 Array,
                 int
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                6, { 1, 2, 3, 4, 5, 6 },
-                7, { 1, 2, 3, 4, 5, 6, 7 },
-                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
-                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                range1.begin(), range1.end(),
-                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                range2.begin(), range2.end(),
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                range3.begin(), range3.end(),
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
-                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                initValues,
+                itd,
                 9, 8, 7, 6, 5
         );
     });
     this->executeSubtest ( "ListTestGroup-BoundaryInsertion-" __CDS_cpplang_core_version_name " : LTG-00300-BI-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, & allOk] {
 
-        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
-        auto range2 = cds :: Range (5, 10);
-        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+        std::initializer_list <int> const initValues = {1, 2, 3, 4, 5};
 
         allOk = allOk && listTestGroupBoundaryInsertion <
                 LinkedList,
                 int
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                6, { 1, 2, 3, 4, 5, 6 },
-                7, { 1, 2, 3, 4, 5, 6, 7 },
-                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
-                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                range1.begin(), range1.end(),
-                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                range2.begin(), range2.end(),
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                range3.begin(), range3.end(),
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
-                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                initValues,
+                itd,
                 9, 8, 7, 6, 5
         );
     });
     this->executeSubtest ( "ListTestGroup-BoundaryInsertion-" __CDS_cpplang_core_version_name " : LTG-00300-BI-" __CDS_cpplang_core_version_name " : StringArray", [this, & allOk] {
 
-        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
-        auto range2 = cds :: Range (5, 10);
-        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+        std::initializer_list <String> const initValues = {1, 2, 3, 4, 5};
 
         allOk = allOk && listTestGroupBoundaryInsertion <
                 Array,
                 String
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                6, { 1, 2, 3, 4, 5, 6 },
-                7, { 1, 2, 3, 4, 5, 6, 7 },
-                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
-                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                range1.begin(), range1.end(),
-                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                range2.begin(), range2.end(),
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                range3.begin(), range3.end(),
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
-                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                initValues,
+                _std,
                 9, 8, 7, 6, 5
         );
 
@@ -400,40 +493,15 @@ auto ListTest::tests_00300_00399 () noexcept -> bool {
     });
     this->executeSubtest ( "ListTestGroup-BoundaryInsertion-" __CDS_cpplang_core_version_name " : LTG-00300-BI-" __CDS_cpplang_core_version_name " : StringLinkedList", [this, & allOk] {
 
-        auto range1 = Array < int > { 1, 2, 3, 4, 5 };
-        auto range2 = cds :: Range (5, 10);
-        auto range3 = std :: vector < int > { 20, 21, 23, 24 };
+        std::initializer_list <String> const initValues = {1, 2, 3, 4, 5};
 
         allOk = allOk && listTestGroupBoundaryInsertion <
                 LinkedList,
                 String
         > (
                 this,
-                { 1, 2, 3, 4, 5 },
-                6, { 1, 2, 3, 4, 5, 6 },
-                7, { 1, 2, 3, 4, 5, 6, 7 },
-                8, { 1, 2, 3, 4, 5, 6, 7, 8 },
-                9, { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-                10, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                0, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                1, { 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                2, { 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                3, { 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                4, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                { 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3 }, { 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                { 1, 2, 3 }, { 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 }, { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3 },
-                range1.begin(), range1.end(),
-                { 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5 },
-                range2.begin(), range2.end(),
-                { 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9 },
-                range3.begin(), range3.end(),
-                { 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
-
-                { 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24, 9, 8, 7, 6, 5 },
-                { 9, 8, 7, 6, 5, 20, 21, 23, 24, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 20, 21, 23, 24 },
+                initValues,
+                _std,
                 9, 8, 7, 6, 5
         );
 
