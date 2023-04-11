@@ -1,147 +1,93 @@
 #include "CollectionTest.h"
 #include "CollectionTest_100_common.hpp"
+#include <initializer_list>
+
+namespace {
+    template <typename E, typename R>
+    auto mSingleTD (
+            cds::StringView const & name, cds::Array <E> const & e, R ex, Function <R (E)> const & f
+    ) noexcept -> cds::Tuple <cds::StringView, cds::Array <E>, R, Function <R (E)>> {
+        return {name, e, ex, f};
+    }
+
+    template <typename C, typename E, typename R>
+    auto makeTestDataItems (
+            cds::Array <cds::Tuple <cds::StringView, cds::Array <E>, R, Function <R (E)>>> const & data
+    ) noexcept -> cds::Array <cds::Tuple <cds::StringView, C, R, Function <R (E)>>> {
+
+        cds::Array <cds::Tuple <cds::StringView, C, R, Function <R (E)>>> res;
+        for (auto const & e : data) {
+            C converted;
+            for (auto const & sConv : e.template get <1> ()) {
+                converted.pushBack (sConv);
+            }
+
+            res.emplaceBack (e.template get<0> (), converted, e.template get<2>(), e.template get <3> ());
+        }
+
+        return res;
+    }
+
+}
 
 auto CollectionTest::tests_00100_00299_p1 () noexcept -> bool {
     
     bool allOk = true;
+    auto makeiBData = [this] (Size const tNo, cds::StringView const name, CPred <int, Function <bool (int)>, bool> const & pfn) {
+        return TBaseData <int, bool> (this, tNo, name, pfn);
+    };
 
 #ifdef _MSC_VER
 #pragma message("You are testing this on MSVC. Some Functions will not be tested. While compatbility should be OK, I am not bothering to actually do these tests until microsoft gets their member function pointer acquisiton code to standard.")
 #else
 
     /* CollectionTestGroup-FunctionalStatements-cpp-xx : CTG-00100-FS-cpp-xx - Tests CTC-00101-FS to CTC-10139-FS - located directly below due to varability of these tests */
-    /* IntArray */                      this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-" __CDS_cpplang_core_version_name " : CTG-00100-FS-" __CDS_cpplang_core_version_name " : IntArray", [& allOk, this] {
+    /* IntArray */
+    this->executeSubtest ( "CollectionTestGroup-FunctionalStatements-" __CDS_cpplang_core_version_name " : CTG-00100-FS-" __CDS_cpplang_core_version_name " : IntArray", [& allOk, & makeiBData, this] {
 
-        /* CollectionTestCase-FunctionalStatements-anyNoneApplicable-cpp-xx : CTC-00101-FS-anyNone-cpp-xx : IntArray */
-        cds :: Array < int > const fs101 = { 1, 3, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00101-FS-anyNone-cpp-xx",
-                /* objUnderTest */  fs101,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: any,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
+        using E = int;
+        using R = bool;
+        using C = cds::Array <E>;
+
+        auto const tId1 = 101;
+        auto const tId2 = 105;
+        auto const tId3 = 109;
+
+        std::initializer_list<E> const td1 = {1, 3, 5, 7, 9};
+        std::initializer_list<E> const td2 = {1, 4, 5, 7, 9};
+        std::initializer_list<E> const td3 = { 1, 4, 5, 6, 8 };
+        std::initializer_list<E> const td4 = { 2, 4, 6, 8, 10 };
+
+        auto const p1 = [](E const & e) {return e % 2 == 0;};
+
+        allOk = allOk && collectionTestGroupPredicate <E, C, Function <R (E)>, R> (
+                makeiBData(tId1, "any", & Collection <E> :: any), 
+                makeTestDataItems <C, E, R> ({
+                        mSingleTD <E, R> ("None", td1, false, p1),
+                        mSingleTD <E, R> ("One", td2, true, p1),
+                        mSingleTD <E, R> ("More", td3, true, p1),
+                        mSingleTD <E, R> ("All", td4, true, p1),
+                })
         );
 
-        /* CollectionTestCase-FunctionalStatements-anyOneApplicable-cpp-xx : CTC-00102-FS-anyOne-cpp-xx : IntArray */
-        cds :: Array < int > const fs102 = { 1, 4, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00102-FS-anyOne-cpp-xx",
-                /* objUnderTest */  fs102,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: any,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  true
+        allOk = allOk && collectionTestGroupPredicate <E, C, Function <R (E)>, R> (
+                makeiBData(tId2, "all", & Collection <E> :: all), 
+                makeTestDataItems <C, E, R> ({
+                        mSingleTD <E, R> ("None", td1, false, p1),
+                        mSingleTD <E, R> ("One", td2, false, p1),
+                        mSingleTD <E, R> ("More", td3, false, p1),
+                        mSingleTD <E, R> ("More", td4, true, p1),
+                })
         );
 
-        /* CollectionTestCase-FunctionalStatements-anyMoreApplicable-cpp-xx : CTC-00103-FS-anyMore-cpp-xx : IntArray */
-        cds :: Array < int > const fs103 = { 1, 4, 5, 6, 8 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00103-FS-anyMore-cpp-xx",
-                /* objUnderTest */  fs103,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: any,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  true
-        );
-
-        /* CollectionTestCase-FunctionalStatements-anyAllApplicable-cpp-xx : CTC-00104-FS-anyAll-cpp-xx : IntArray */
-        cds :: Array < int > const fs104 = { 2, 4, 6, 8, 10 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00104-FS-anyAll-cpp-xx",
-                /* objUnderTest */  fs104,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: any,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  true
-        );
-
-        /* CollectionTestCase-FunctionalStatements-allNoneApplicable-cpp-xx : CTC-00105-FS-allNone-cpp-xx : IntArray */
-        cds :: Array < int > const fs105 = { 1, 3, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00105-FS-allNone-cpp-xx",
-                /* objUnderTest */  fs105,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: all,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
-        );
-
-        /* CollectionTestCase-FunctionalStatements-allOneApplicable-cpp-xx : CTC-00106-FS-allOne-cpp-xx : IntArray */
-        cds :: Array < int > const fs106 = { 1, 4, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00106-FS-allOne-cpp-xx",
-                /* objUnderTest */  fs106,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: all,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
-        );
-
-        /* CollectionTestCase-FunctionalStatements-allMoreApplicable-cpp-xx : CTC-00107-FS-allMore-cpp-xx : IntArray */
-        cds :: Array < int > const fs107 = { 1, 4, 5, 6, 8 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00107-FS-allMore-cpp-xx",
-                /* objUnderTest */  fs107,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: all,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
-        );
-
-        /* CollectionTestCase-FunctionalStatements-allAllApplicable-cpp-xx : CTC-00108-FS-allAll-cpp-xx : IntArray */
-        cds :: Array < int > const fs108 = { 2, 4, 6, 8, 10 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00108-FS-allAll-cpp-xx",
-                /* objUnderTest */  fs108,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: all,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  true
-        );
-
-        /* CollectionTestCase-FunctionalStatements-noneNoneApplicable-cpp-xx : CTC-00109-FS-noneNone-cpp-xx : IntArray */
-        cds :: Array < int > const fs109 = { 1, 3, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00109-FS-noneNone-cpp-xx",
-                /* objUnderTest */  fs109,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: none,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  true
-        );
-
-        /* CollectionTestCase-FunctionalStatements-noneOneApplicable-cpp-xx : CTC-00110-FS-noneOne-cpp-xx : IntArray */
-        cds :: Array < int > const fs110 = { 1, 4, 5, 7, 9 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00110-FS-noneOne-cpp-xx",
-                /* objUnderTest */  fs110,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: none,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
-        );
-
-        /* CollectionTestCase-FunctionalStatements-noneMoreApplicable-cpp-xx : CTC-00111-FS-noneMore-cpp-xx : IntArray */
-        cds :: Array < int > const fs111 = { 1, 4, 5, 6, 8 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00111-FS-noneMore-cpp-xx",
-                /* objUnderTest */  fs111,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: none,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
-        );
-
-        /* CollectionTestCase-FunctionalStatements-noneAllApplicable-cpp-xx : CTC-00112-FS-noneAll-cpp-xx : IntArray */
-        cds :: Array < int > const fs112 = { 2, 4, 6, 8, 10 };
-        allOk = allOk && collectionTestCasePredicateHandle (
-                /* tName */         "CTC-00112-FS-noneAll-cpp-xx",
-                /* objUnderTest */  fs112,
-                /* testLib */       this,
-                /* funcCaller */    & Collection < int > :: none,
-                /* predicate */     [] (int e) { return e % 2 == 0; },
-                /* expectedRes. */  false
+        allOk = allOk && collectionTestGroupPredicate <E, C, Function <R (E)>, R> (
+                makeiBData(tId3, "none", & Collection <E> :: none), 
+                makeTestDataItems <C, E, R> ({
+                        mSingleTD <E, R> ("None", td1, true, p1),
+                        mSingleTD <E, R> ("One", td2, false, p1),
+                        mSingleTD <E, R> ("More", td3, false, p1),
+                        mSingleTD <E, R> ("More", td4, false, p1),
+                })
         );
 
         /* CollectionTestCase-FunctionalStatements-countProp1-cpp-xx : CTC-00113-FS-countProp1-cpp-xx : IntArray */
