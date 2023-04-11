@@ -6,7 +6,7 @@
 
 #include <CDS/Tuple>
 
-namespace {
+inline namespace ctc700 {
 
     using cds::Tuple;
     using cds::Size;
@@ -83,8 +83,8 @@ namespace {
             typename __IterableType,                                                                /* NOLINT(bugprone-reserved-identifier) */
             typename __ElementType                                                                  /* NOLINT(bugprone-reserved-identifier) */
     > auto collectionTestGroupFindOf (
-            Test                                                      * pTestLib,
-            StringLiteral                                               variant,
+            Test                                          const * const pTestLib,
+            StringLiteral                                       const   variant,
             cds :: Collection < __ElementType >                 const & underTest,
             std::initializer_list <__IterableType const *>      const & targets, 
             TestData <__ElementType>                            const & tData
@@ -442,7 +442,7 @@ namespace {
         auto                                                const & target00715 = none;
 
         result00715 = collection00715.findFirstOf ( target00715 );
-        if (( ( result00715 != collection00715.cend() ) != expectedResult00715 )||( expectedResult00715 && expected00715 != * result00715 )) {
+        if (( ( result00715 != collection00715.cend() ) != expectedResult00715 )||(  expectedResult00715  && ( expected00715  !=  * result00715 ) )) {
             pTestLib->logError( "'CTC-00715-FO-findFirstOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -457,7 +457,7 @@ namespace {
         auto                                                const & target00716 = one;
 
         result00716 = collection00716.findFirstOf ( target00716 );
-        if (( ( result00716 != collection00716.cend() ) != expectedResult00716 )||( expectedResult00716 && expected00716 != * result00716 )) {
+        if (( ( result00716 != collection00716.cend() ) != expectedResult00716 )||(  expectedResult00716  && ( expected00716  !=  * result00716 ) )) {
             pTestLib->logError( "'CTC-00716-FO-findFirstOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -472,7 +472,7 @@ namespace {
         auto                                                const & target00717 = more;
 
         result00717 = collection00717.findFirstOf ( target00717 );
-        if (( ( result00717 != collection00717.cend() ) != expectedResult00717 )||( expectedResult00717 && expected00717 != * result00717 )) {
+        if (( ( result00717 != collection00717.cend() ) != expectedResult00717 )||(  expectedResult00717  && ( expected00717  !=  * result00717 ) )) {
             pTestLib->logError( "'CTC-00717-FO-findFirstOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -487,7 +487,7 @@ namespace {
         auto                                                const & target00718 = all;
 
         result00718 = collection00718.findFirstOf ( target00718 );
-        if (( ( result00718 != collection00718.cend() ) != expectedResult00718 )||( expectedResult00718 && expected00718 != * result00718 )) {
+        if (( ( result00718 != collection00718.cend() ) != expectedResult00718 )||(  expectedResult00718  && ( expected00718  !=  * result00718 ) )) {
             pTestLib->logError( "'CTC-00718-FO-findFirstOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -502,7 +502,7 @@ namespace {
         auto                                                const & target00719 = allAndMore;
 
         result00719 = collection00719.findFirstOf ( target00719 );
-        if (( ( result00719 != collection00719.cend() ) != expectedResult00719 )||( expectedResult00719 && expected00719 != * result00719 )) {
+        if (( ( result00719 != collection00719.cend() ) != expectedResult00719 )||(  expectedResult00719  && ( expected00719  !=  * result00719 ) )) {
             pTestLib->logError( "'CTC-00719-FO-findFirstOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -517,7 +517,7 @@ namespace {
         auto                                                const & target00720 = none;
 
         result00720 = collection00720.findLastOf ( target00720 );
-        if (( ( result00720 != collection00720.cend() ) != expectedResult00720 )||( expectedResult00720 && expected00720 != * result00720 )) {
+        if (( ( result00720 != collection00720.cend() ) != expectedResult00720 )||(  expectedResult00720  && ( expected00720  !=  * result00720 ) )) {
             pTestLib->logError( "'CTC-00720-FO-findLastOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -532,7 +532,7 @@ namespace {
         auto                                                const & target00721 = one;
 
         result00721 = collection00721.findLastOf ( target00721 );
-        if (( ( result00721 != collection00721.cend() ) != expectedResult00721 )||( expectedResult00721 && expected00721 != * result00721 )) {
+        if (( ( result00721 != collection00721.cend() ) != expectedResult00721 )||(  expectedResult00721  && ( expected00721  !=  * result00721 ) )) {
             pTestLib->logError( "'CTC-00721-FO-findLastOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -547,7 +547,7 @@ namespace {
         auto                                                const & target00722 = more;
 
         result00722 = collection00722.findLastOf ( target00722 );
-        if (( ( result00722 != collection00722.cend() ) != expectedResult00722 )||( expectedResult00722 && expected00722 != * result00722 )) {
+        if (( ( result00722 != collection00722.cend() ) != expectedResult00722 )||(  expectedResult00722  && ( expected00722  !=  * result00722 ) )) {
             pTestLib->logError( "'CTC-00722-FO-findLastOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -562,7 +562,7 @@ namespace {
         auto                                                const & target00723 = all;
 
         result00723 = collection00723.findLastOf ( target00723 );
-        if (( ( result00723 != collection00723.cend() ) != expectedResult00723 )||( expectedResult00723 && expected00723 != * result00723 )) {
+        if (( ( result00723 != collection00723.cend() ) != expectedResult00723 )||(  expectedResult00723  && ( expected00723  !=  * result00723 ) )) {
             pTestLib->logError( "'CTC-00723-FO-findLastOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -577,7 +577,7 @@ namespace {
         auto                                                const & target00724 = allAndMore;
 
         result00724 = collection00724.findLastOf ( target00724 );
-        if (( ( result00724 != collection00724.cend() ) != expectedResult00724 )||( expectedResult00724 && expected00724 != * result00724 )) {
+        if (( ( result00724 != collection00724.cend() ) != expectedResult00724 )||(  expectedResult00724  && ( expected00724  !=  * result00724 ) )) {
             pTestLib->logError( "'CTC-00724-FO-findLastOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -952,7 +952,7 @@ namespace {
         auto                                                const & target00749 = none;
 
         result00749 = collection00749.findFirstNotOf ( target00749 );
-        if (( ( result00749 != collection00749.cend() ) != expectedResult00749 )||( expectedResult00749 && expected00749 != * result00749 )) {
+        if (( ( result00749 != collection00749.cend() ) != expectedResult00749 )||(  expectedResult00749  && ( expected00749  !=  * result00749 ) )) {
             pTestLib->logError( "'CTC-00749-FO-findFirstNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -967,7 +967,7 @@ namespace {
         auto                                                const & target00750 = one;
 
         result00750 = collection00750.findFirstNotOf ( target00750 );
-        if (( ( result00750 != collection00750.cend() ) != expectedResult00750 )||( expectedResult00750 && expected00750 != * result00750 )) {
+        if (( ( result00750 != collection00750.cend() ) != expectedResult00750 )||(  expectedResult00750  && ( expected00750  !=  * result00750 ) )) {
             pTestLib->logError( "'CTC-00750-FO-findFirstNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -982,7 +982,7 @@ namespace {
         auto                                                const & target00751 = more;
 
         result00751 = collection00751.findFirstNotOf ( target00751 );
-        if (( ( result00751 != collection00751.cend() ) != expectedResult00751 )||( expectedResult00751 && expected00751 != * result00751 )) {
+        if (( ( result00751 != collection00751.cend() ) != expectedResult00751 )||(  expectedResult00751  && ( expected00751  !=  * result00751 ) )) {
             pTestLib->logError( "'CTC-00751-FO-findFirstNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -997,7 +997,7 @@ namespace {
         auto                                                const & target00752 = all;
 
         result00752 = collection00752.findFirstNotOf ( target00752 );
-        if (( ( result00752 != collection00752.cend() ) != expectedResult00752 )||( expectedResult00752 && expected00752 != * result00752 )) {
+        if (( ( result00752 != collection00752.cend() ) != expectedResult00752 )||(  expectedResult00752  && ( expected00752  !=  * result00752 ) )) {
             pTestLib->logError( "'CTC-00752-FO-findFirstNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1012,7 +1012,7 @@ namespace {
         auto                                                const & target00753 = allAndMore;
 
         result00753 = collection00753.findFirstNotOf ( target00753 );
-        if (( ( result00753 != collection00753.cend() ) != expectedResult00753 )||( expectedResult00753 && expected00753 != * result00753 )) {
+        if (( ( result00753 != collection00753.cend() ) != expectedResult00753 )||(  expectedResult00753  && ( expected00753  !=  * result00753 ) )) {
             pTestLib->logError( "'CTC-00753-FO-findFirstNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1027,7 +1027,7 @@ namespace {
         auto                                                const & target00754 = none;
 
         result00754 = collection00754.findLastNotOf ( target00754 );
-        if (( ( result00754 != collection00754.cend() ) != expectedResult00754 )||( expectedResult00754 && expected00754 != * result00754 )) {
+        if (( ( result00754 != collection00754.cend() ) != expectedResult00754 )||(  expectedResult00754  && ( expected00754  !=  * result00754 ) )) {
             pTestLib->logError( "'CTC-00754-FO-findLastNotOfMatchingNone-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1042,7 +1042,7 @@ namespace {
         auto                                                const & target00755 = one;
 
         result00755 = collection00755.findLastNotOf ( target00755 );
-        if (( ( result00755 != collection00755.cend() ) != expectedResult00755 )||( expectedResult00755 && expected00755 != * result00755 )) {
+        if (( ( result00755 != collection00755.cend() ) != expectedResult00755 )||(  expectedResult00755  && ( expected00755  !=  * result00755 ) )) {
             pTestLib->logError( "'CTC-00755-FO-findLastNotOfMatchingOne-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1057,7 +1057,7 @@ namespace {
         auto                                                const & target00756 = more;
 
         result00756 = collection00756.findLastNotOf ( target00756 );
-        if (( ( result00756 != collection00756.cend() ) != expectedResult00756 )||( expectedResult00756 && expected00756 != * result00756 )) {
+        if (( ( result00756 != collection00756.cend() ) != expectedResult00756 )||(  expectedResult00756  && ( expected00756  !=  * result00756 ) )) {
             pTestLib->logError( "'CTC-00756-FO-findLastNotOfMatchingMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1072,7 +1072,7 @@ namespace {
         auto                                                const & target00757 = all;
 
         result00757 = collection00757.findLastNotOf ( target00757 );
-        if (( ( result00757 != collection00757.cend() ) != expectedResult00757 )||( expectedResult00757 && expected00757 != * result00757 )) {
+        if (( ( result00757 != collection00757.cend() ) != expectedResult00757 )||(  expectedResult00757  && ( expected00757  !=  * result00757 ) )) {
             pTestLib->logError( "'CTC-00757-FO-findLastNotOfMatchingAll-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
@@ -1087,7 +1087,7 @@ namespace {
         auto                                                const & target00758 = allAndMore;
 
         result00758 = collection00758.findLastNotOf ( target00758 );
-        if (( ( result00758 != collection00758.cend() ) != expectedResult00758 )||( expectedResult00758 && expected00758 != * result00758 )) {
+        if (( ( result00758 != collection00758.cend() ) != expectedResult00758 )||(  expectedResult00758  && ( expected00758  !=  * result00758 ) )) {
             pTestLib->logError( "'CTC-00758-FO-findLastNotOfMatchingAllAndMore-%s-" __CDS_cpplang_core_version_name "' failed", variant );
             return false;
         } else {
