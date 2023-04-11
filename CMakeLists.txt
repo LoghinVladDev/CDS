@@ -3,6 +3,9 @@ project(CDS)
 
 set(CMAKE_CXX_STANDARD 23)
 
+# DCMAKE_EXPORT_COMPILE_COMMANDS=1
+set (CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
 if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set(GCC_COMPILE_OPTIONS "-Wa,-mbig-obj")
@@ -149,7 +152,74 @@ macro(test_set)
     )
 endmacro()
 
-test_set(17)
-test_set(14)
-test_set(11)
-test_set(20)
+macro(test_suite_nodup)
+
+    file(
+        GLOB
+        ${ARGV1}_SOURCES
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.cpp    
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.h    
+        src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Test*.hpp    
+    )
+
+    set(
+            CPP${ARGV0}_${ARGV2}_SRC
+            ${${ARGV1}_SOURCES}
+    )
+
+    set(
+            CPP${ARGV0}_TEST_ALL_SRC
+            ${CPP${ARGV0}_TEST_ALL_SRC}
+            ${CPP${ARGV0}_${ARGV2}_SRC}
+    )
+
+    add_executable(
+            cpp${ARGV0}_test_${ARGV2}_only
+            ${CPP${ARGV0}_TEST_DEFAULT_SRC}
+            ${CPP${ARGV0}_${ARGV2}_SRC}
+            src/cdsIntern/tests/generic/${ARGV1}/${ARGV2}Only.cpp
+    )
+
+    target_link_libraries(
+            cpp${ARGV0}_test_${ARGV2}_only
+            ${CDS_LIBRARIES}
+    )
+endmacro()
+
+macro(test_set_nodup)
+    set(CMAKE_CXX_STANDARD ${ARGV0})
+
+    set(
+            CPP${ARGV0}_TEST_DEFAULT_SRC
+            src/cdsIntern/tests/generic/Test.cpp
+            src/cdsIntern/tests/generic/Test.h
+    )
+
+    set(
+            CPP${ARGV0}_TEST_ALL_SRC
+            ${CPP${ARGV0}_TEST_DEFAULT_SRC}
+    )
+
+    test_suite_nodup(${ARGV0} primitive String)
+    test_suite_nodup(${ARGV0} collection Collection)
+    test_suite_nodup(${ARGV0} collection/mutableCollection MutableCollection)
+    test_suite_nodup(${ARGV0} collection/mutableCollection/list List)
+    test_suite_nodup(${ARGV0} collection/set Set)
+    test_suite_nodup(${ARGV0} collection/unordered Json)
+
+    add_executable(
+            cpp${ARGV0}_test_all
+            src/cdsIntern/tests/generic/all.cpp
+            ${CPP${ARGV0}_TEST_ALL_SRC}
+    )
+
+    target_link_libraries(
+            cpp${ARGV0}_test_all
+            ${CDS_LIBRARIES}
+    )
+endmacro()
+
+test_set_nodup(11)
+test_set_nodup(14)
+test_set_nodup(17)
+test_set_nodup(20)

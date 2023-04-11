@@ -99,7 +99,7 @@ namespace cds {
 #endif /* __CDS_SHARED_LINKED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ */
 
 
-#if defined (__CDS_TREE_SET_HPP__) && ! defined ( __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ ) && defined ( __CDS_TREE_SET_REMOVE_WHEN_IMPLEMENTED )
+#if defined (__CDS_TREE_SET_HPP__) && ! defined ( __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
 #define __CDS_SHARED_TREE_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template < typename ... __ArgumentTypes > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -149,7 +149,7 @@ namespace cds {
 #endif /* __CDS_SHARED_LINKED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ */
 
 
-#if defined (__CDS_TREE_MAP_HPP__) && ! defined ( __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ ) && defined ( __CDS_TREE_MAP_REMOVE_WHEN_IMPLEMENTED )
+#if defined (__CDS_TREE_MAP_HPP__) && ! defined ( __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
 #define __CDS_SHARED_TREE_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
     template <

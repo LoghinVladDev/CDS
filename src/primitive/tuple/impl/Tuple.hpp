@@ -46,10 +46,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         return output.str();
     }
 
+
     template < typename ... __TypePack > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     inline auto Tuple < __TypePack ... > :: hash () const noexcept -> Size {
 
         return this->node.hash();
+    }
+
+
+    template <typename ... __TypePack>
+    __CDS_NoDiscard inline auto makeTuple (__TypePack && ... members) noexcept -> Tuple <
+            meta::Decay <meta::RemoveReference <__TypePack>> ...
+    > {
+
+        return { std::forward <__TypePack> (members) ... };
     }
 
 } /* namespace cds */

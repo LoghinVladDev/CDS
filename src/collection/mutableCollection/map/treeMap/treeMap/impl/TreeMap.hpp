@@ -1,6 +1,6 @@
-//
-// Created by stefan on 26.09.2022.
-//
+/*
+ * Created by stefan on 26.09.2022.
+ */
 
 #ifndef __CDS_TREE_MAP_IMPL_HPP__
 #define __CDS_TREE_MAP_IMPL_HPP__    /* NOLINT(bugprone-reserved-identifier) */
@@ -377,7 +377,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
     ) const noexcept -> bool {
 
         for ( auto it = this->__rbt_cbegin(); it != this->__rbt_cend(); ++ it ) {
-            if ( cds :: meta :: equals ( ( * it ).value(), value ) == true )
+            if ( cds :: meta :: equals ( ( * it ).value(), value ) )
                 return true;
         }
 
@@ -417,4 +417,4 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         return this->__rbt_get ( key );
     }
 }
-#endif //__CDS_TREE_MAP_IMPL_HPP__
+#endif /* __CDS_TREE_MAP_IMPL_HPP__ */

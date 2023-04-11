@@ -112,7 +112,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     std :: ostream & out
             ) const noexcept -> void {
 
-                out << this->data;
+                cds::streamPrint (out, this->data);
             }
 
 
@@ -122,7 +122,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     std :: ostream & out
             ) const noexcept -> void {
 
-                out << this->data << ", ";
+                cds::streamPrint (out, this->data) << ", ";
                 this-> __TupleNode < __index + 1U, __RemainingTypes ... > :: toString ( out );
             }
 

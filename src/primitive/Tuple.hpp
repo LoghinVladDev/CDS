@@ -99,6 +99,12 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         __CDS_NoDiscard auto hash () const noexcept -> Size override;
     };
 
+
+    template <typename ... __TypePack> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    __CDS_NoDiscard auto makeTuple (__TypePack && ... members) noexcept -> Tuple <
+            meta::Decay <meta::RemoveReference <__TypePack>> ...
+    >;
+
 } /* namespace cds */
 
 #include "tuple/impl/CTAD.hpp"
