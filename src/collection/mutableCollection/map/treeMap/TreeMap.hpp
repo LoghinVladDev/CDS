@@ -391,6 +391,16 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 TreeMap && map
         ) noexcept -> TreeMap &;
 
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                TreeMap const & map
+        ) const noexcept -> bool;
+
+    public: /* NOLINT(readability-redundant-access-specifiers) */
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                TreeMap const & map
+        ) const noexcept -> bool;
+
     public:
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 

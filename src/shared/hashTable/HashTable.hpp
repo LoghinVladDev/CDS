@@ -739,9 +739,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                  * @test Suite: TBA, Group: TBA, Test Cases: TBA
                  * @protected
                  */
-                template <
-                        functional :: PredicateFunction < __ElementType const &, __ElementType const & > __comparator   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_equals (                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __ht_equals (                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         __HashTable const & table
                 ) const noexcept -> bool;
             };

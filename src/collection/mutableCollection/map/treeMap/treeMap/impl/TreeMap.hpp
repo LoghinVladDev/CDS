@@ -416,5 +416,45 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 
         return this->__rbt_get ( key );
     }
+
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_ConstexprConditioned auto TreeMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: operator == (
+            TreeMap const & map
+    ) const noexcept -> bool {
+
+        if ( this == & map ) {
+            return true;
+        }
+
+        return this->__rbt_equals (map);
+    }
+
+
+    template <
+            typename __KeyType,             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __ValueType,           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            typename __Hasher               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+    > __CDS_cpplang_ConstexprConditioned auto TreeMap <
+            __KeyType,
+            __ValueType,
+            __Hasher
+    > :: operator != (
+            TreeMap const & map
+    ) const noexcept -> bool {
+
+        if ( this == & map ) {
+            return false;
+        }
+
+        return ! this->__rbt_equals (map);
+    }
 }
 #endif /* __CDS_TREE_MAP_IMPL_HPP__ */

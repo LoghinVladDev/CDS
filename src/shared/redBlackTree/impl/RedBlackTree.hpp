@@ -975,8 +975,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: MapperFunction < __KeyType const &, __ElementType const & >           __keyExtractor,         /* NOLINT(bugprone-reserved-identifier) */
                     functional :: PredicateFunction < __KeyType const &, __KeyType const & >            __keyEqualsComparator,  /* NOLINT(bugprone-reserved-identifier) */
                     functional :: ConsumerFunction < __ElementType & >                                  __nodeDestructor        /* NOLINT(bugprone-reserved-identifier) */
-            > template < functional :: PredicateFunction < __KeyType const &, __KeyType const & > __comparator >                /* NOLINT(bugprone-reserved-identifier) */
-            __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
+            > __CDS_cpplang_ConstexprConditioned auto __RedBlackTree <
                     __ElementType,
                     __KeyType,
                     __Comparator,
@@ -1011,7 +1010,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         return false;
                     }
 
-                    if ( ! __comparator ( pTraversalThis->_data, pTraversalOther->_data ) ) {
+                    if ( ! __keyEqualsComparator ( __keyExtractor (pTraversalThis->_data), __keyExtractor (pTraversalOther->_data) ) ) {
                         return false;
                     }
 

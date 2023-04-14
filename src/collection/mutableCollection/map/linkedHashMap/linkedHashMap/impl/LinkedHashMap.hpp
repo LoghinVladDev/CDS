@@ -941,7 +941,7 @@ namespace cds {
             return true;
         }
 
-        return this-> template __ht_equals < & __hidden :: __impl :: __linkedHashMapEquals < __KeyType, __ValueType > > ( map );
+        return this->__ht_equals (map);
     }
 
 
@@ -961,7 +961,7 @@ namespace cds {
             return false;
         }
 
-        return ! this-> template __ht_equals < & __hidden :: __impl :: __linkedHashMapEquals < __KeyType, __ValueType > > ( map ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
+        return ! this->__ht_equals (map);
     }
 
 

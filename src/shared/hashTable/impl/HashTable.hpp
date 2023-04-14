@@ -1542,8 +1542,6 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     functional :: MapperFunction < __KeyType const &, __ElementType const & >           __keyExtractor,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: PredicateFunction < __KeyType const &, __KeyType const & >            __keyComparator,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     functional :: ConsumerFunction < __ElementType & >                                  __nodeDestructor    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > template <
-                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __comparator        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             > __CDS_cpplang_ConstexprConditioned auto __HashTable <
                     __ElementType,
                     __KeyType,
@@ -1582,7 +1580,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     while ( pThisBucketHead != nullptr && pOtherBucketHead != nullptr ) {
 
                         /* if a node difference is found ( not key, element comparison ) */
-                        if ( ! __comparator ( pThisBucketHead->_data, pOtherBucketHead->_data ) ) {
+                        if ( ! __keyComparator ( __keyExtractor (pThisBucketHead->_data), __keyExtractor (pOtherBucketHead->_data) ) ) {
 
                             /* tables are not equal */
                             return false;
