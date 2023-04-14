@@ -17,7 +17,6 @@ namespace glob {
         bool tests_00000_00099 () noexcept;
         bool tests_00100_00299_p1 () noexcept;
         bool tests_00100_00299_p2 () noexcept;
-        bool tests_00100_00299_p3 () noexcept;
         bool tests_00300_00399 () noexcept;
         bool tests_00400_00449 () noexcept;
         bool tests_00450_00599_p1 () noexcept;

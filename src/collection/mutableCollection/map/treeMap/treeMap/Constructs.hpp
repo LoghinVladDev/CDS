@@ -56,6 +56,20 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 
             template <
+                    typename __KeyType,                                                     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename __ValueType                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            > constexpr auto __treeMapEquals (                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    typename Map < __KeyType, __ValueType > :: EntryType const & leftEntry, /* NOLINT(bugprone-easily-swappable-parameters) */
+                    typename Map < __KeyType, __ValueType > :: EntryType const & rightEntry /* NOLINT(bugprone-easily-swappable-parameters) */
+            ) noexcept -> bool {
+
+                return
+                        cds :: meta :: equals ( leftEntry.key(), rightEntry.key() ) &&
+                        cds :: meta :: equals ( leftEntry.value(), rightEntry.value() );
+            }
+
+
+            template <
                     typename __KeyType,         /* NOLINT(bugprone-reserved-identifier) */
                     typename __ValueType,       /* NOLINT(bugprone-reserved-identifier) */
                     typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */

@@ -600,7 +600,7 @@ namespace cds {
             return true;
         }
 
-        return this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        return this->__ht_equals (set);
     }
 
 
@@ -618,7 +618,7 @@ namespace cds {
             return false;
         }
 
-        return ! this-> template __ht_equals < & cds :: meta :: equals < __ElementType > > ( set ); /* NOLINT(clion-misra-cpp2008-5-3-1) */
+        return ! this->__ht_equals (set); /* NOLINT(clion-misra-cpp2008-5-3-1) */
     }
 
 } /* namespace cds */

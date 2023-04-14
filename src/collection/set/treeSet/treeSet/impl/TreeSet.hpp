@@ -247,7 +247,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return true;
         }
 
-        return this-> template __rbt_equals < & cds :: meta :: equals < __ElementType > > ( set );
+        return this->__rbt_equals (set);
     }
 
 
@@ -261,7 +261,11 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             TreeSet const & set
     ) const noexcept -> bool {
 
-        return ! this->operator== ( set );
+        if ( this == & set ) {
+            return false;
+        }
+
+        return ! this->__rbt_equals (set);
     }
 
 }
