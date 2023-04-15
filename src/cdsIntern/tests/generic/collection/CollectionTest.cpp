@@ -16,7 +16,6 @@ auto CollectionTest :: execute () noexcept -> bool {
             this->tests_00400_00449 () &&
             this->tests_00450_00599_p1 () &&
             this->tests_00450_00599_p2 () &&
-            this->tests_00450_00599_p3 () &&
             this->tests_00600_00699 () &&
             this->tests_00700_00799_p1 () &&
             this->tests_00700_00799_p2 () &&

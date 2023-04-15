@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include <CDS/Tuple>
 
-namespace {
+inline namespace mctc450 {
     template <typename E, typename I>
     using RemovePfn = Size (cds::MutableCollection <E> :: *) (Size, I const &);
 
@@ -533,13 +533,14 @@ namespace {
     std::initializer_list<bool> const statusSetRLNO = { true, true, true, false, false };
 
     template <typename E, typename C, typename T, typename TC = T>
-    auto mutableCollectionTest_450_Group (
+    auto mutableCollectionTest_450_Group1 (
         Test const * const pTestLib, cds::StringLiteral const gName,
         std::initializer_list<E> const & underTestData,
         std::initializer_list<std::initializer_list<E>> const & dataGroups,
         std::initializer_list<std::initializer_list<E>> const & resultGroups
     ) noexcept -> bool {
 
+        auto tLib = [& pTestLib] () {return pTestLib;};
         C const underTest = underTestData;
         auto getData = [& dataGroups] () {
             static auto it = dataGroups.begin();
@@ -589,6 +590,94 @@ namespace {
         TC const ra9 = getResult();
         TC const ra10 = getResult();
 
+        bool allOk = true;
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib (), gName, "removeOf", vOffsetRO
+                ),
+                underTest,
+                & cds :: MutableCollection < E > :: removeOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRO,
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
+        );
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib (), gName, "removeNotOf", vOffsetRNO
+                ),
+                underTest,
+                & cds :: MutableCollection < E > :: removeNotOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRNO,
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
+        );
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib (), gName, "removeAllOf", vOffsetRAO
+                ),
+                underTest,
+                & cds :: MutableCollection < E > :: removeAllOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRAO,
+                { &ra1, &ra2, &ra3, &ra4, &ra5 }
+        );
+
+        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib (), gName, "removeAllNotOf", vOffsetRANO
+                ),
+                underTest,
+                & cds :: MutableCollection < E > :: removeAllNotOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRANO,
+                { &ra6, &ra7, &ra8, &ra9, &ra10 }
+        );
+
+        return allOk;
+    }
+
+    template <typename E, typename C, typename T, typename TC = T>
+    auto mutableCollectionTest_450_Group2 (
+        Test const * const pTestLib, cds::StringLiteral const gName,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+
+        auto tLib = [& pTestLib] () {return pTestLib;};
+        C const underTest = underTestData;
+        auto getData = [& dataGroups] () {
+            static auto it = dataGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        auto getResult = [& resultGroups] () {
+            static auto it = resultGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        TC const c1 = getData();
+        TC const c2 = getData();
+        (void) getData();
+        TC const c4 = getData();
+        (void) getData();
+        TC const c6 = getData();
+        TC const c7 = getData();
+        
+        auto skipCount = 24;
+        while (skipCount > 0) {
+            (void) getResult ();
+            -- skipCount;
+        }
+
         TC const rf1 = getResult();
         TC const rf2 = getResult();
         TC const rf3 = getResult();
@@ -612,70 +701,9 @@ namespace {
         TC const rl10 = getResult();
 
         bool allOk = true;
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeOf",
-                        vOffsetRO
-                ),
-                underTest,
-                & cds :: MutableCollection < E > :: removeOf,
-                limitR1,
-                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
-                statusSetRO,
-                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
-        );
-
-        allOk = allOk && mutableCollectionTestGroupItemRemoveOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeNotOf",
-                        vOffsetRNO
-                ),
-                underTest,
-                & cds :: MutableCollection < E > :: removeNotOf,
-                limitR1,
-                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
-                statusSetRNO,
-                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
-        );
-
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeAllOf",
-                        vOffsetRAO
-                ),
-                underTest,
-                & cds :: MutableCollection < E > :: removeAllOf,
-                { &c1, &c2, &c4, &c6, &c7 },
-                statusSetRAO,
-                { &ra1, &ra2, &ra3, &ra4, &ra5 }
-        );
-
-        allOk = allOk && mutableCollectionTestGroupItemRemoveAllOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeAllNotOf",
-                        vOffsetRANO
-                ),
-                underTest,
-                & cds :: MutableCollection < E > :: removeAllNotOf,
-                { &c1, &c2, &c4, &c6, &c7 },
-                statusSetRANO,
-                { &ra6, &ra7, &ra8, &ra9, &ra10 }
-        );
-
         allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeFirstOf",
-                        vOffsetRFO
+                        tLib (), gName, "removeFirstOf", vOffsetRFO
                 ),
                 underTest,
                 & cds :: MutableCollection < E > :: removeFirstOf,
@@ -686,10 +714,7 @@ namespace {
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeFirstNotOf",
-                        vOffsetRFNO
+                        tLib (), gName, "removeFirstNotOf", vOffsetRFNO
                 ),
                 underTest,
                 & cds :: MutableCollection < E > :: removeFirstNotOf,
@@ -700,10 +725,7 @@ namespace {
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeLastOf",
-                        vOffsetRLO
+                        tLib (), gName, "removeLastOf", vOffsetRLO
                 ),
                 underTest,
                 & cds :: MutableCollection < E > :: removeLastOf,
@@ -714,10 +736,7 @@ namespace {
 
         allOk = allOk && mutableCollectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeLastNotOf",
-                        vOffsetRLNO
+                        tLib (), gName, "removeLastNotOf", vOffsetRLNO
                 ),
                 underTest,
                 & cds :: MutableCollection < E > :: removeLastNotOf,
@@ -727,6 +746,19 @@ namespace {
         );
 
         return allOk;
+    }
+
+    template <typename E, typename C, typename T, typename TC = T>
+    auto mutableCollectionTest_450_Group (
+        Test const * const pTestLib, cds::StringLiteral const gName,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+
+        return
+                mutableCollectionTest_450_Group1 <E, C, T, TC> (pTestLib, gName, underTestData, dataGroups, resultGroups) &&
+                mutableCollectionTest_450_Group2 <E, C, T, TC> (pTestLib, gName, underTestData, dataGroups, resultGroups);
     }
 
     template <typename E, typename C>
