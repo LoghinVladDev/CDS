@@ -533,6 +533,226 @@ namespace {
     std::initializer_list<Size> const statusSetRANO = {9U, 8U, 6U, 0U, 0U };
     std::initializer_list<bool> const statusSetRFNO = { true, true, true, false, false };
     std::initializer_list<bool> const statusSetRLNO = { true, true, true, false, false };
+
+
+    template <typename E, typename C, typename T, typename TC = T>
+    auto collectionTest_450_Group (
+        Test const * const pTestLib, cds::StringLiteral const gName,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+
+        C const underTest = underTestData;
+        auto getData = [& dataGroups] () {
+            static auto it = dataGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        auto getResult = [& resultGroups] () {
+            static auto it = resultGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        TC const c1 = getData();
+        TC const c2 = getData();
+        TC const c3 = getData();
+        TC const c4 = getData();
+        TC const c5 = getData();
+        TC const c6 = getData();
+        TC const c7 = getData();
+
+        TC const r1 = getResult();
+        TC const r2 = getResult();
+        TC const r3 = getResult();
+        TC const r4 = getResult();
+        TC const r5 = getResult();
+        TC const r6 = getResult();
+        TC const r7 = getResult();
+        TC const r8 = getResult();
+        TC const r9 = getResult();
+        TC const r10 = getResult();
+        TC const r11 = getResult();
+        TC const r12 = getResult();
+        TC const r13 = getResult();
+        TC const r14 = getResult();
+
+        TC const ra1 = getResult();
+        TC const ra2 = getResult();
+        TC const ra3 = getResult();
+        TC const ra4 = getResult();
+        TC const ra5 = getResult();
+        TC const ra6 = getResult();
+        TC const ra7 = getResult();
+        TC const ra8 = getResult();
+        TC const ra9 = getResult();
+        TC const ra10 = getResult();
+
+        TC const rf1 = getResult();
+        TC const rf2 = getResult();
+        TC const rf3 = getResult();
+        TC const rf4 = getResult();
+        TC const rf5 = getResult();
+        TC const rf6 = getResult();
+        TC const rf7 = getResult();
+        TC const rf8 = getResult();
+        TC const rf9 = getResult();
+        TC const rf10 = getResult();
+
+        TC const rl1 = getResult();
+        TC const rl2 = getResult();
+        TC const rl3 = getResult();
+        TC const rl4 = getResult();
+        TC const rl5 = getResult();
+        TC const rl6 = getResult();
+        TC const rl7 = getResult();
+        TC const rl8 = getResult();
+        TC const rl9 = getResult();
+        TC const rl10 = getResult();
+
+        bool allOk = true;
+        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeOf",
+                        vOffsetRO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRO,
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeNotOf",
+                        vOffsetRNO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeNotOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRNO,
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeAllOf",
+                        vOffsetRAO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeAllOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRAO,
+                { &ra1, &ra2, &ra3, &ra4, &ra5 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeAllNotOf",
+                        vOffsetRANO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeAllNotOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRANO,
+                { &ra6, &ra7, &ra8, &ra9, &ra10 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeFirstOf",
+                        vOffsetRFO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeFirstOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRFO,
+                { &rf1, &rf2, &rf3, &rf4, &rf5 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeFirstNotOf",
+                        vOffsetRFNO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeFirstNotOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRFNO,
+                { &rf6, &rf7, &rf8, &rf9, &rf10 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeLastOf",
+                        vOffsetRLO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeLastOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRLO,
+                { &rl1, &rl2, &rl3, &rl4, &rl5 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        (Test const *) pTestLib,
+                        gName,
+                        "removeLastNotOf",
+                        vOffsetRLNO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeLastNotOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRLNO,
+                { &rl6, &rl7, &rl8, &rl9, &rl10 }
+        );
+
+        return allOk;
+    }
+
+    template <typename E, typename C>
+    auto collectionTest_450_All (
+        Test const * const pTestLib,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+        
+        bool allOk = true;
+        allOk = allOk && collectionTest_450_Group <E, C, cds::Iterable <E>, C> (
+                pTestLib, "Collection",
+                underTestData, dataGroups, resultGroups
+        );
+
+        allOk = allOk && collectionTest_450_Group <E, C, std::initializer_list<E>> (
+                pTestLib, "InitializerList",
+                underTestData, dataGroups, resultGroups
+        );
+
+        return allOk;
+    }
 }
 
 #endif /* COLLECTION_TEST_450_COMMON_H */
