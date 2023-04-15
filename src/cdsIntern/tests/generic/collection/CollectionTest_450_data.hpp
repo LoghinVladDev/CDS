@@ -268,6 +268,24 @@ namespace data {
 
         return data;
     }
+
+    static auto const iData = composeTestObject <int> ();
+    static auto const iDataGroups = composeTestDataGroups <int> ();
+    static auto const iResultGroups = composeTestResultGroups <int> ();
+
+    static auto const iiData = composeMapTestObject <int> ();
+    static auto const iiDataGroups = composeMapTestDataGroups <int> ();
+    static auto const iiResultGroups = composeMapTestResultGroups <int> ();
+
+    static auto const sData = composeTestObject <cds::String> ();
+    static auto const sDataGroups = composeTestDataGroups <cds::String> ();
+    static auto const sResultGroups = composeTestResultGroups <cds::String> ();
+    static auto const usResultGroups = hashComposeTestResultGroups <cds::String> ();
+
+    static auto const ssData = composeMapTestObject <cds::String> ();
+    static auto const ssDataGroups = composeMapTestDataGroups <cds::String> ();
+    static auto const ossResultGroups = composeMapTestResultGroups <cds::String> ();
+    static auto const ssResultGroups = hashMapComposeTestResultGroups <cds::String> ();
 }
 
 #endif 

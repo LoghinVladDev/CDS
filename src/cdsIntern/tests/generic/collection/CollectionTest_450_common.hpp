@@ -34,7 +34,7 @@ inline namespace ctc450 {
 
         auto const * const pTestLib = tData.template get <0> ();
         auto const & groupVariant = tData.template get <1> ();
-        auto const subvariant = tData.template get <2> ();
+        auto const * subvariant = tData.template get <2> ();
         auto const subvariantOffset = tData.template get <3> ();
 
         auto casesIt = cases.begin();
@@ -101,7 +101,9 @@ inline namespace ctc450 {
         auto       copyRO453            = iterableUnderTest;
         cds :: Collection < __ElementType > & collectionRO453 = copyRO453;
         auto       removedCountRB453    = ( collectionRO453.* removePfnVariant ) ( limit, moreLessThanLimitCommon );
-        pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() );
+        pTestLib->log ( "object after '%s with more less than limit common' : '%s'. expected : '%s'", 
+                subvariant, collectionRO453.toString().cStr(), toString ( expectedCollectionFromMoreLessThanLimit ).cStr() 
+        );
         if ( (removedCountRB453 != expectedResultFromMoreLessThanLimit) || (! equals ( collectionRO453, expectedCollectionFromMoreLessThanLimit )) ) {
             pTestLib->logError( "'CTC-00%d-RO-%sMoreLessThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", variantBase + subvariantOffset, subvariant, groupVariant.cStr() );
             return false;
@@ -143,7 +145,7 @@ inline namespace ctc450 {
 
         auto const * const pTestLib = tData.template get <0> ();
         auto const & groupVariant = tData.template get <1> ();
-        auto const subvariant = tData.template get <2> ();
+        auto const * subvariant = tData.template get <2> ();
         auto const subvariantOffset = tData.template get <3> ();
 
         auto casesIt = cases.begin();
@@ -187,7 +189,9 @@ inline namespace ctc450 {
         auto       copyRO455            = iterableUnderTest;
         cds :: Collection < __ElementType > & collectionRO455 = copyRO455;
         auto       removedCountRB455    = ( collectionRO455.* removePfnVariant ) ( limit, moreMoreThanLimitCommon );
-        pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() );
+        pTestLib->log ( "object after '%s with more than limit common' : '%s'. expected : '%s'", 
+                subvariant, collectionRO455.toString().cStr(), toString ( expectedCollectionFromMoreMoreThanLimit ).cStr() 
+        );
         if ( (removedCountRB455 != expectedResultFromMoreMoreThanLimit) || (! equals ( collectionRO455, expectedCollectionFromMoreMoreThanLimit )) ) {
             pTestLib->logError( "'CTC-00%d-RO-%sMoreMoreThanLimitCommon-%s-" __CDS_cpplang_core_version_name "' failed", variantBase + subvariantOffset, subvariant, groupVariant.cStr() );
             return false;
@@ -267,7 +271,7 @@ inline namespace ctc450 {
 
         auto const * const pTestLib = tData.template get <0> ();
         auto const & groupVariant = tData.template get <1> ();
-        auto const subvariant = tData.template get <2> ();
+        auto const * subvariant = tData.template get <2> ();
         auto const subvariantOffset = tData.template get <3> ();
 
         auto casesIt = cases.begin();
@@ -394,7 +398,7 @@ inline namespace ctc450 {
 
         auto const * const pTestLib = tData.template get <0> ();
         auto const & groupVariant = tData.template get <1> ();
-        auto const subvariant = tData.template get <2> ();
+        auto const * subvariant = tData.template get <2> ();
         auto const subvariantOffset = tData.template get <3> ();
 
         auto casesIt = cases.begin();
@@ -538,13 +542,14 @@ inline namespace ctc450 {
 
 
     template <typename E, typename C, typename T, typename TC = T>
-    auto collectionTest_450_Group (
+    auto collectionTest_450_Group1 (
         Test const * const pTestLib, cds::StringLiteral const gName,
         std::initializer_list<E> const & underTestData,
         std::initializer_list<std::initializer_list<E>> const & dataGroups,
         std::initializer_list<std::initializer_list<E>> const & resultGroups
     ) noexcept -> bool {
 
+        auto tLib = [pTestLib] () {return pTestLib;};
         C const underTest = underTestData;
         auto getData = [& dataGroups] () {
             static auto it = dataGroups.begin();
@@ -594,6 +599,98 @@ inline namespace ctc450 {
         TC const ra9 = getResult();
         TC const ra10 = getResult();
 
+        bool allOk = true;
+        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib(),
+                        gName,
+                        "removeOf",
+                        vOffsetRO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRO,
+                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib(), gName, "removeNotOf", vOffsetRNO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeNotOf,
+                limitR1,
+                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
+                statusSetRNO,
+                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib(), gName, "removeAllOf", vOffsetRAO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeAllOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRAO,
+                { &ra1, &ra2, &ra3, &ra4, &ra5 }
+        );
+
+        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
+                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
+                        tLib(), gName, "removeAllNotOf", vOffsetRANO
+                ),
+                underTest,
+                & cds :: Collection < E > :: removeAllNotOf,
+                { &c1, &c2, &c4, &c6, &c7 },
+                statusSetRANO,
+                { &ra6, &ra7, &ra8, &ra9, &ra10 }
+        );
+
+        return allOk;
+    }
+
+
+    template <typename E, typename C, typename T, typename TC = T>
+    auto collectionTest_450_Group2 (
+        Test const * const pTestLib, cds::StringLiteral const gName,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+
+        auto tLib = [pTestLib] () {return pTestLib;};
+        C const underTest = underTestData;
+        auto getData = [& dataGroups] () {
+            static auto it = dataGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        auto getResult = [& resultGroups] () {
+            static auto it = resultGroups.begin();
+            auto const & v = * it;
+            ++ it;
+            return v;
+        };
+
+        TC const c1 = getData();
+        TC const c2 = getData();
+        (void) getData();
+        TC const c4 = getData();
+        (void) getData();
+        TC const c6 = getData();
+        TC const c7 = getData();
+
+        auto skipCount = 24;
+        while (skipCount > 0) {
+            (void) getResult ();
+            -- skipCount;
+        }
+
         TC const rf1 = getResult();
         TC const rf2 = getResult();
         TC const rf3 = getResult();
@@ -617,70 +714,10 @@ inline namespace ctc450 {
         TC const rl10 = getResult();
 
         bool allOk = true;
-        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeOf",
-                        vOffsetRO
-                ),
-                underTest,
-                & cds :: Collection < E > :: removeOf,
-                limitR1,
-                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
-                statusSetRO,
-                { &r1, &r2, &r3, &r4, &r5, &r6, &r7 }
-        );
-
-        allOk = allOk && collectionTestGroupItemRemoveOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeNotOf",
-                        vOffsetRNO
-                ),
-                underTest,
-                & cds :: Collection < E > :: removeNotOf,
-                limitR1,
-                { &c1, &c2, &c3, &c4, &c5, &c6, &c7 },
-                statusSetRNO,
-                { &r8, &r9, &r10, &r11, &r12, &r13, &r14 }
-        );
-
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeAllOf",
-                        vOffsetRAO
-                ),
-                underTest,
-                & cds :: Collection < E > :: removeAllOf,
-                { &c1, &c2, &c4, &c6, &c7 },
-                statusSetRAO,
-                { &ra1, &ra2, &ra3, &ra4, &ra5 }
-        );
-
-        allOk = allOk && collectionTestGroupItemRemoveAllOf < T, C, E > (
-                cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeAllNotOf",
-                        vOffsetRANO
-                ),
-                underTest,
-                & cds :: Collection < E > :: removeAllNotOf,
-                { &c1, &c2, &c4, &c6, &c7 },
-                statusSetRANO,
-                { &ra6, &ra7, &ra8, &ra9, &ra10 }
-        );
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeFirstOf",
-                        vOffsetRFO
+                        tLib (), gName, "removeFirstOf", vOffsetRFO 
                 ),
                 underTest,
                 & cds :: Collection < E > :: removeFirstOf,
@@ -691,10 +728,7 @@ inline namespace ctc450 {
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeFirstNotOf",
-                        vOffsetRFNO
+                        tLib (), gName, "removeFirstNotOf", vOffsetRFNO
                 ),
                 underTest,
                 & cds :: Collection < E > :: removeFirstNotOf,
@@ -705,10 +739,7 @@ inline namespace ctc450 {
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeLastOf",
-                        vOffsetRLO
+                        tLib (), gName, "removeLastOf", vOffsetRLO
                 ),
                 underTest,
                 & cds :: Collection < E > :: removeLastOf,
@@ -719,10 +750,7 @@ inline namespace ctc450 {
 
         allOk = allOk && collectionTestGroupItemRemoveFirstLastOf < T, C, E > (
                 cds::makeTuple <Test const *, cds::String, cds::StringLiteral> (
-                        (Test const *) pTestLib,
-                        gName,
-                        "removeLastNotOf",
-                        vOffsetRLNO
+                        tLib (), gName, "removeLastNotOf", vOffsetRLNO
                 ),
                 underTest,
                 & cds :: Collection < E > :: removeLastNotOf,
@@ -732,6 +760,20 @@ inline namespace ctc450 {
         );
 
         return allOk;
+    }
+
+
+    template <typename E, typename C, typename T, typename TC = T>
+    auto collectionTest_450_Group (
+        Test const * const pTestLib, cds::StringLiteral const gName,
+        std::initializer_list<E> const & underTestData,
+        std::initializer_list<std::initializer_list<E>> const & dataGroups,
+        std::initializer_list<std::initializer_list<E>> const & resultGroups
+    ) noexcept -> bool {
+
+        return
+                collectionTest_450_Group1 <E, C, T, TC> (pTestLib, gName, underTestData, dataGroups, resultGroups) &&
+                collectionTest_450_Group2 <E, C, T, TC> (pTestLib, gName, underTestData, dataGroups, resultGroups);
     }
 
     template <typename E, typename C>

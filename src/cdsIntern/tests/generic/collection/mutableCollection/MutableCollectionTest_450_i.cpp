@@ -10,78 +10,68 @@ auto MutableCollectionTest::tests_00450_00499_i () noexcept -> bool {
 
     bool allOk = true;
 
-    using namespace data;
-
-    auto const iData = composeTestObject <int> ();
-    auto const iDataGroups = composeTestDataGroups <int> ();
-    auto const iResultGroups = composeTestResultGroups <int> ();
-
-    auto const iiData = composeMapTestObject <int> ();
-    auto const iiDataGroups = composeMapTestDataGroups <int> ();
-    auto const iiResultGroups = composeMapTestResultGroups <int> ();
-
-    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntArray", [&]{
+    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntArray", [this, &allOk]{
 
         using E = int;
         using C = cds::Array <E>;
 
         allOk = allOk && mutableCollectionTest_450_All <E, C> (
                 this,
-                iData,
-                iDataGroups,
-                iResultGroups
+                data::iData,
+                data::iDataGroups,
+                data::iResultGroups
         );
     });
 
-    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntLinkedList", [&]{
+    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntLinkedList", [this, &allOk]{
 
         using E = int;
         using C = cds::LinkedList <E>;
 
         allOk = allOk && mutableCollectionTest_450_All <E, C> (
                 this,
-                iData,
-                iDataGroups,
-                iResultGroups
+                data::iData,
+                data::iDataGroups,
+                data::iResultGroups
         );
     });
 
-    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntHashMap", [&]{
+    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntHashMap", [this, &allOk]{
 
         using E = cds::MapEntry <int, int>;
         using C = cds::HashMap <int, int>;
 
         allOk = allOk && mutableCollectionTest_450_All <E, C> (
                 this,
-                iiData,
-                iiDataGroups,
-                iiResultGroups
+                data::iiData,
+                data::iiDataGroups,
+                data::iiResultGroups
         );
     });
 
-    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntTreeMap", [&]{
+    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntTreeMap", [this, &allOk]{
 
         using E = cds::MapEntry <int, int>;
         using C = cds::TreeMap <int, int>;
 
         allOk = allOk && mutableCollectionTest_450_All <E, C> (
                 this,
-                iiData,
-                iiDataGroups,
-                iiResultGroups
+                data::iiData,
+                data::iiDataGroups,
+                data::iiResultGroups
         );
     });
 
-    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntLinkedHashMap", [&]{
+    this->executeSubtest ( "MutableCollectionTestGroup-RemoveOf-" __CDS_cpplang_core_version_name " : MCTG-00450-RO-" __CDS_cpplang_core_version_name " : IntToIntLinkedHashMap", [this, &allOk]{
 
         using E = cds::MapEntry <int, int>;
         using C = cds::LinkedHashMap <int, int>;
 
         allOk = allOk && mutableCollectionTest_450_All <E, C> (
                 this,
-                iiData,
-                iiDataGroups,
-                iiResultGroups
+                data::iiData,
+                data::iiDataGroups,
+                data::iiResultGroups
         );
     });
 
