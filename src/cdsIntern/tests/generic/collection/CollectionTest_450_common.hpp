@@ -4,8 +4,10 @@
 #include "CollectionTest.h"
 #include "CollectionTest_common.hpp"
 #include <CDS/Tuple>
+#include <initializer_list>
+#include "CollectionTest_450_data.hpp"
 
-namespace {
+inline namespace ctc450 {
     template <typename E, typename I>
     using RemovePfn = Size (cds::Collection <E> :: *) (Size, I const &);
 
