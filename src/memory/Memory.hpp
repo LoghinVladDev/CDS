@@ -64,7 +64,7 @@ namespace cds {
             __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressEnable
 
             template < typename T, typename ... ArgumentTypes >
-            inline auto create ( ArgumentTypes ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+            inline auto create ( ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
                 void * pRawMemory = nullptr;
 
                 try {

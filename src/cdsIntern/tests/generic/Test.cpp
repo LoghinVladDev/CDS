@@ -170,3 +170,30 @@ auto Test::logError(const char * format, ...) const noexcept -> void {
     va_end(args);
     printLock.unlock();
 }
+
+auto Test::versionedString(cds::StringView str) const noexcept -> cds::String {
+
+    String final;
+    final.reserve(str.size());
+
+    bool format = false;
+
+    for (auto chr : str) {
+        if (chr == '%') {
+            format = true;
+        } else if (format) {
+
+            if (chr == 'v') {
+                final += __CDS_cpplang_core_version_name;
+            } else {
+                final = final + '%' + chr;
+            }
+
+            format = false;
+        } else {
+             final += chr;
+        }
+    }
+
+    return final;
+}

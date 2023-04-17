@@ -194,6 +194,8 @@ namespace glob {
         auto log( cds :: String const & text) const noexcept -> void;
         auto log( const char * format, ... ) const noexcept -> void;
 
+        auto versionedString (cds::StringView str) const noexcept -> cds::String;
+
         virtual ~Test() noexcept = default;
     };
 

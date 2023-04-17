@@ -2,6 +2,8 @@
 #include <CDS/Tuple>
 #include <CDS/Array>
 #include <tuple>
+#include <CDS/Union>
+#include <CDS/Function>
 
 
 int main () {

@@ -17,6 +17,8 @@
 #define __CDS_compiler_version GCC_VERSION /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_gcc
 
+#define __CDS_compiler_make_version(__major, __minor, __patch) (((__major) * 10000) + ((__minor) * 100) + (__patch))
+
 #endif
 
 #endif //CDS_GCC_HPP

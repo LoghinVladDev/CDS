@@ -129,7 +129,7 @@ namespace cds {
 
         if ( isNew ) {
             new ( pEntry ) EntryType (
-                    cds :: forward < __TKeyType > ( key ),
+                    std :: forward < __TKeyType > ( key ),
                     ValueType ()
             );
         }

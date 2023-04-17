@@ -13,6 +13,8 @@
 #include <CDS/Pair>
 #include <CDS/memory/UniquePointer>
 #include <CDS/util/JSON>
+#include "functional/FunctionTest.hpp"
+
 
 namespace {
 
@@ -33,6 +35,8 @@ namespace {
 
     using glob::JsonTest;
 
+    using glob::FunctionTest;
+
     template <typename TestType>
     __CDS_NoDiscard auto createTest (cds::StringView name) noexcept -> Pair <UniquePointer <Test>, String> {
         return {cds::makeUnique <TestType> (), name};
@@ -41,7 +45,6 @@ namespace {
 
 
 auto main () -> int {
-
 
     auto const start = std::chrono::high_resolution_clock::now();
 
@@ -55,16 +58,18 @@ auto main () -> int {
             createTest <MutableCollectionTest> ("MutableCollectionTest"),
             createTest <SetTest> ("SetTest"),
             createTest <ListTest> ("ListTest"),
-            createTest <JsonTest> ("JsonTest")
+            createTest <JsonTest> ("JsonTest"),
+            createTest <FunctionTest> ("FunctionTest")
     );
 
-    uint32 failedTestCount = 0U;
+    cds::Array <cds::meta::RemoveReference <decltype (tests [0])> const *> failedTestPointerGroup;
+
     uint32 successfulTestCount = 0U;
     auto const totalTestCount = static_cast <uint32> (tests.size());
 
     for ( auto & t : tests ) {
         if ( ! test ( * t.first(), t.second() ) ) {
-            ++ failedTestCount;
+            (void) failedTestPointerGroup.pushBack (& t);
         } else {
             ++ successfulTestCount;
         }
@@ -76,7 +81,14 @@ auto main () -> int {
 
     double const power = std::pow(10, 9);
     std::cout << "Total Duration: " << diff.count() << " nanoseconds ( " << (static_cast < double > (diff.count()) / power) << " seconds )" << '\n';
-    std::cout << "Out of " << totalTestCount << " tests, " << successfulTestCount << " passed and " << failedTestCount << " failed\n";
+    std::cout << "Out of " << totalTestCount << " tests, " << successfulTestCount << " passed and " << failedTestPointerGroup.size() << " failed\n";\
+
+    if (! failedTestPointerGroup.empty()) {
+        std::cout << "Failed tests:\n";
+        for (auto const *pTest: failedTestPointerGroup) {
+            std::cout << "\t" << pTest->second() << '\n';
+        }
+    }
 
     return 0;
 }

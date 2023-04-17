@@ -99,11 +99,6 @@
 
 namespace cds {
 
-    template < typename T, typename U = T >
-    constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && {
-        return std::forward < T > (value);
-    }
-
     template<typename T, typename U = T>
     constexpr auto exchange(T & obj, U && newValue) -> T {
         return std::exchange(obj, newValue);
@@ -126,11 +121,6 @@ namespace cds {
 #define __CDS_cpplang_ConstexprConstructorNonEmptyBody __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 
 namespace cds {
-
-    template < typename T >
-    constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && {
-        return static_cast < T && > ( value );
-    }
 
     template < typename T, typename U = T >
     inline auto exchange ( T & obj, U && newValue ) -> T {

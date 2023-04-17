@@ -4,9 +4,10 @@
 
 #include "FunctionTest.hpp"
 
-auto glob::FunctionTest::execute () noexcept -> bool {
+int main () {
+    glob::FunctionTest ().start ( "FunctionTest" );
 
-    bool allOk = true;
-
-    return allOk;
+    return 0;
 }
+
+

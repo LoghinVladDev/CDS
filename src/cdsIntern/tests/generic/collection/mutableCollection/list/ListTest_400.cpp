@@ -405,6 +405,14 @@ namespace {
                     tData.valueCaseNo,
                     tData.offsetCaseNo
                 );
+
+                cds::Array <E> rAsStr = opResult;
+                pTestLib->logError (
+                        "\tExpected : %s. Resulted : %s.",
+                        rAsStr.toString().cStr(),
+                        lRef.toString().cStr()
+                );
+
                 return false;
             }
             
@@ -1205,7 +1213,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
                                 { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
@@ -1218,7 +1226,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
                                 { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
@@ -1231,7 +1239,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1Case1, resMultiple1Case2, resMultiple1Case3, resMultiple1Case4 },
                                 { resMultiple2Case1, resMultiple2Case2, resMultiple2Case3, resMultiple2Case4 },
@@ -1244,7 +1252,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>>(
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { resMultiple1RevCase1, resMultiple1RevCase2, resMultiple1RevCase3, resMultiple1RevCase4 },
                                 { resMultiple2RevCase1, resMultiple2RevCase2, resMultiple2RevCase3, resMultiple2RevCase4 },
@@ -1324,7 +1332,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::begin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
                                 { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
@@ -1337,7 +1345,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::rbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
                                 { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },
@@ -1350,7 +1358,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::cbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1Case1, aresMultiple1Case2, aresMultiple1Case3, aresMultiple1Case4 },
                                 { aresMultiple2Case1, aresMultiple2Case2, aresMultiple2Case3, aresMultiple2Case4 },
@@ -1363,7 +1371,7 @@ namespace {
                 tNo, initValues, pTestLib, & List<__EnclosedType>::crbegin,
                 cds::makeTuple <cds::Array <cds::Size>, cds::Array <cds::Array <__EnclosedType>>, cds::Array <cds::Array <bool>>, cds::Array <cds::Array <cds::Array <__EnclosedType>>>> (
                         {case1Offset, case2Offset, case3Offset, case4Offset },
-                        { {multipleValues1}, {multipleValues2}, {multipleValues3} },
+                        { multipleValues1, multipleValues2, multipleValues3 },
                         { { true, true, true, false }, { true, true, true, false }, { true, true, true, false } }, {
                                 { aresMultiple1RevCase1, aresMultiple1RevCase2, aresMultiple1RevCase3, aresMultiple1RevCase4 },
                                 { aresMultiple2RevCase1, aresMultiple2RevCase2, aresMultiple2RevCase3, aresMultiple2RevCase4 },

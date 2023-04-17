@@ -908,7 +908,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                 _type ( __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __type ) {
 
             this->_data.data().pObject = new typename __hidden :: __impl :: __JsonElementAdapterProperties < __ElementType > :: __AdaptedType (
-                    cds :: forward < __ElementType > ( value )
+                    std :: forward < __ElementType > ( value )
             );
         }
 

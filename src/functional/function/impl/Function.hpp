@@ -152,6 +152,49 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                 return String ( cds :: meta :: Type < __FirstType > :: name () ) + ", " + __functionToStringTypeReduce < __RemainingTypes ... > ();
             }
 
+
+            template <typename T, typename V>
+            struct __FunctionTypeConversionCheck : cds::meta::__impl::__IsConvertible<T, V> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            template <>
+            struct __FunctionTypeConversionCheck <void, void> : cds::meta::TrueType {};
+
+            template <typename T>
+            struct __FunctionTypeConversionCheck <T, T &> : cds::meta::FalseType {};
+
+
+            template <typename __ReturnType, typename ...>              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FunctionTypeConversionChecker {                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <typename __ReceivedReturnType>                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                constexpr static auto __validate () noexcept -> bool {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    static_assert (
+                            __FunctionTypeConversionCheck <__ReceivedReturnType, __ReturnType> :: value,
+                            "Unable to convert received return type to interface return type"
+                    );
+
+                    return __FunctionTypeConversionCheck <__ReceivedReturnType, __ReturnType> :: value;
+                }
+            };
+
+
+            template <typename __ReturnType, typename __FirstArgType, typename ... __ArgumentTypes>                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FunctionTypeConversionChecker <__ReturnType, __FirstArgType, __ArgumentTypes ... > {                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <typename __ReceivedReturnType, typename __ReceivedFirstArgType, typename ... __ReceivedArgumentTypes> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                constexpr static auto __validate () noexcept -> bool {                                                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                    static_assert (
+                            __FunctionTypeConversionCheck <__FirstArgType, __ReceivedFirstArgType> :: value,
+                            "Unable to convert Interface Parameter Type to Received Function Parameter Type"
+                    );
+
+                    return
+                            __FunctionTypeConversionCheck <__FirstArgType, __ReceivedFirstArgType> :: value &&
+                            __FunctionTypeConversionChecker < __ReturnType, __ArgumentTypes ... > :: template __validate <
+                                    __ReceivedReturnType, __ReceivedArgumentTypes ...
+                            > ();
+                }
+            };
+
         } /* namespace __impl */
     } /* namespace __hidden */
 
@@ -187,6 +230,16 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             __ReceivedReturnType ( * function ) ( __ReceivedArgumentTypes ... )
     ) noexcept :
             _functionObject ( reinterpret_cast < __hidden :: __impl :: __GenericFunctionObject > ( function ) ) {
+
+        static_assert (
+                __hidden :: __impl :: __FunctionTypeConversionChecker <
+                        __ReturnType, __ArgumentTypes ...
+                > :: template __validate <
+                        __ReceivedReturnType,
+                        __ReceivedArgumentTypes ...
+                > (),
+                "Type Conversion Check Failed."
+        );
 
         this->_adapterGroup = cds :: __hidden :: __impl :: __FunctionAdapter <
                 __ReturnType ( __ArgumentTypes ... ),
