@@ -563,7 +563,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __nodeDestructor
             > :: __rbt_empty () const -> bool {
 
-                return this->_size == 0;
+                return this->_pRoot == nullptr;
             }
 
 
@@ -912,8 +912,9 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     __nodeDestructor
             > :: __rbt_clear () noexcept -> void {
 
-                if ( this->__rbt_empty() )
+                if ( this->__rbt_empty() ) {
                     return;
+                }
 
                 auto        pCurrentNode    = this->_pRoot;
 
@@ -944,7 +945,8 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     }
                 }
 
-                this->_size = 0ULL;
+                this->_size     = 0ULL;
+                this->_pRoot    = nullptr;
             }
 
 
