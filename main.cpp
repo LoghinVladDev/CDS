@@ -1,141 +1,242 @@
-#include <iostream>
-#include <cassert>
-#include <tuple>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+#include <CDS/HashSet>
+#include <CDS/LinkedHashSet>
+#include <CDS/HashMap>
+#include <CDS/LinkedHashMap>
 
-template <typename T>
-class Tree {
-private:
-    struct Node {
-        T       value;
-        /* representation of child number */
-        Node  * children    {nullptr};
-        int     childCount  {0};
-    };
+using namespace cds;
 
+class DefaultCopyMove : public cds :: Object {
 public:
-    Tree () noexcept;
+    DefaultCopyMove () noexcept = default;
+    DefaultCopyMove ( DefaultCopyMove const & ) noexcept = default;
+    DefaultCopyMove ( DefaultCopyMove && ) noexcept = default;
 
-    auto add_node (T const & value, Node * pParent = nullptr) noexcept -> Node *;
-    auto get_node (T const & value) noexcept -> Node *;
-    auto delete_node (Node const * pNode) noexcept -> void;
-    auto find (bool (* pfnValidate) (T const &)) noexcept -> Node *;
-    auto insert (Node * pParent, int index, Node const * pToInsert) noexcept -> Node *;
-    auto sort (Node * pTargetNode, bool (* pfnSort) (T const &, T const &)) noexcept -> void;
-    auto count (Node const * pTargetNode = nullptr) const noexcept -> int;
-
-
-    /* can be const qualified */
-    auto get_node (T const & value) const noexcept -> Node const *;
-    /* as above */
-    auto find (bool (* pfnCompare) (T const &, T const &)) const noexcept -> Node const *;
-    /* while pfnSort can be made nullptr, if only relying on 'if pfnSort null, use <' is incorrect.
-     * Given type T can have no 'operator <' overload */
-    auto sort (Node * pTargetNode) noexcept -> void;
+    auto toString () const noexcept -> String override {
+        return "Default, Copy, Move";
+    }
 };
 
-struct ENoLessOverload {
-private:
-    int x;
-    int y;
-
+class DefaultCopy : public cds :: Object {
 public:
-    ENoLessOverload (int x) : x (x) {}
+    DefaultCopy () noexcept = default;
+    DefaultCopy ( DefaultCopy const & ) noexcept = default;
+    DefaultCopy ( DefaultCopy && ) noexcept = delete;
+
+    auto toString () const noexcept -> String override {
+        return "DefaultCopy";
+    }
 };
 
-template <typename T>
-auto equal (T const & a, T const & b) {return a == b;}
+class DefaultMove : public cds :: Object {
+public:
+    DefaultMove () noexcept = default;
+    DefaultMove ( DefaultMove const & ) noexcept = delete;
+    DefaultMove ( DefaultMove && ) noexcept = default;
 
-template <typename T>
-auto greater (T const & a, T const & b) {return a > b;}
+    auto toString () const noexcept -> String override {
+        return "DefaultMove";
+    }
+};
 
-template <typename T>
-auto less (T const & a, T const & b) {return a < b;}
+class CopyMove : public cds :: Object {
+public:
+    CopyMove () noexcept = delete;
+    CopyMove ( CopyMove const & ) noexcept = default;
+    CopyMove ( CopyMove && ) noexcept = default;
 
-auto main () -> int {
+    auto toString () const noexcept -> String override {
+        return "CopyMove";
+    }
+};
 
-    Tree <int> tree;
-    auto * pAddedNode = tree.add_node(3);
-    tree.add_node(5, pAddedNode);
-    tree.add_node(1, pAddedNode);
+class Move : public cds :: Object {
+public:
+    Move () noexcept = delete;
+    Move ( Move const & ) noexcept = delete;
+    Move ( Move && ) noexcept = default;
 
-    assert (tree.count() == 3);
+    auto toString () const noexcept -> String override {
+        return "Move";
+    }
+};
 
-    assert (tree.find([](int const & nValue) {return nValue == 3;}) != nullptr);
-    assert (tree.find([](int const & nValue) {return nValue == 1;}) != nullptr);
-    assert (tree.find([](int const & nValue) {return nValue == 5;}) != nullptr);
-    assert (tree.find([](int const & nValue) {return nValue == 2;}) == nullptr);
-    assert (tree.find([](int const & nValue) {return nValue == 7;}) == nullptr);
-    assert (tree.find([](int const & nValue) {return nValue == 8;}) == nullptr);
+class Copy : public cds :: Object {
+public:
+    Copy () noexcept = delete;
+    Copy ( Copy const & ) noexcept = default;
+    Copy ( Copy && ) noexcept = delete;
 
-    assert (tree.count(tree.find([](int const & nValue){ return nValue == 3; })) == 2);
-    assert (tree.count(tree.find([](int const & nValue){ return nValue == 1; })) == 0);
-    assert (tree.count(tree.find([](int const & nValue){ return nValue == 5; })) == 0);
-    assert (tree.count(tree.find([](int const & nValue){ return nValue == 7; })) == 0);
+    auto toString () const noexcept -> String override {
+        return "Copy";
+    }
+};
 
-    /*
-     * initial tree is:
-     *      3
-     *    1   5
-     * resulted tree should be
-     *      3
-     *    1   5
-     *        3
-     *      1   5
-     * */
-    tree.insert (
-            tree.find([](int const & nValue) {return nValue == 5;}),
-            0,
-            tree.find([](int const & nValue) {return nValue == 1;})
-    );
+class Default : public cds :: Object {
+public:
+    Default () noexcept = default;
+    Default ( Default const & ) noexcept = delete;
+    Default ( Default && ) noexcept = delete;
 
-    assert (tree.count() == 6);
-    assert (tree.count(tree.find([](int const & nValue) {return nValue == 3;})) == 5);
-    assert (tree.count (tree.find([](int const & nValue) {return nValue == 5;})) == 3);
+    auto toString () const noexcept -> String override {
+        return "Default";
+    }
+};
 
-    tree.delete_node(tree.find([](int const &nValue) {return nValue == 5;}));
-    assert (tree.count() == 2);
-    assert (tree.count(tree.find([](int const & nValue) {return nValue == 3;})) == 1);
+class None : public cds :: Object {
+public:
+    None () noexcept = delete;
+    None ( None const & ) noexcept = delete;
+    None ( None && ) noexcept = delete;
 
-    auto * p7Node = tree.add_node (7, tree.find([](int const & nValue) {return nValue == 3;}));
-    auto * p4Node = tree.add_node (4, p7Node);
-    (void) tree.add_node (2, p4Node);
-    auto * p10Node = tree.add_node (10, p7Node);
-    (void) tree.add_node (4, p10Node);
+    auto toString () const noexcept -> String override {
+        return "None";
+    }
+};
 
-    assert (tree.count(tree.find([](int const & nValue){return nValue == 4;})) == 1);
-    tree.sort (p7Node, [](int const &a, int const& b) {return a > b;});
-    /* nodes swaped, search will be different */
-    assert (tree.count(tree.find([](int const & nValue){return nValue == 4;})) == 0);
-    tree.sort (p7Node);
-    assert (tree.count(tree.find([](int const & nValue){return nValue == 4;})) == 1);
-    tree.sort (p7Node, & greater <int>);
-    assert (tree.count(tree.find([](int const & nValue){return nValue == 4;})) == 0);
-    tree.sort (pAddedNode, & less <int>);
-    assert (tree.count(tree.find([](int const & nValue){return nValue == 4;})) == 1);
+#include <CDS/Tuple>
 
+int main () {
 
-    Tree <std::tuple <std::string, int>> treeNotComparable;
-    auto * pRoot = treeNotComparable.add_node (std::make_tuple ("root", 3));
-    treeNotComparable.add_node (std::make_tuple ("leftLeaf", 2), pRoot);
-    treeNotComparable.add_node (std::make_tuple ("rightLeaf", 1), pRoot);
+    cds :: Array < DefaultCopyMove > a;
+    cds :: Array < DefaultCopy > b;
+    cds :: Array < DefaultMove > c;
+    cds :: Array < CopyMove > d;
+    cds :: Array < Move > e;
+    cds :: Array < Copy > f;
+    cds :: Array < Default > g;
+    cds :: Array < None > h;
 
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "root"; }) != nullptr);
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "Root"; }) == nullptr);
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "Root" || std::get <1> (nValue) == 2; }) != nullptr);
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "root" && std::get <1> (nValue) == 3; }) != nullptr);
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "root" && std::get <1> (nValue) == 2; }) == nullptr);
-    assert (treeNotComparable.find([](auto const & nValue) { return std::get <0> (nValue) == "Root" || std::get <1> (nValue) == 4; }) == nullptr);
+    cds :: Array < DefaultCopyMove > const ac;
+    cds :: Array < DefaultCopy > const bc;
+    cds :: Array < DefaultMove > const cc;
+    cds :: Array < CopyMove > const dc;
+    cds :: Array < Move > const ec;
+    cds :: Array < Copy > const fc;
+    cds :: Array < Default > const gc;
+    cds :: Array < None > const hc;
 
-    assert (treeNotComparable.count() == 3);
-    assert (2 == treeNotComparable.count(
-            treeNotComparable.find ([](auto const & nValue) { return std::get <0> (nValue) == "root"; })
-    ));
-    assert (0 == treeNotComparable.count(
-            treeNotComparable.find ([](auto const & nValue) { return std::get <0> (nValue) == "leftLeaf"; })
-    ));
-    assert (0 == treeNotComparable.count(
-            treeNotComparable.find ([](auto const & nValue) { return std::get <1> (nValue) == 1; })
-    ));
+    cds :: LinkedList < DefaultCopyMove > la;
+    cds :: LinkedList < DefaultCopy > lb;
+    cds :: LinkedList < DefaultMove > lc;
+    cds :: LinkedList < CopyMove > ld;
+    cds :: LinkedList < Move > le;
+    cds :: LinkedList < Copy > lf;
+    cds :: LinkedList < Default > lg;
+    cds :: LinkedList < None > lh;
+
+    cds :: LinkedList < DefaultCopyMove > const lac;
+    cds :: LinkedList < DefaultCopy > const lbc;
+    cds :: LinkedList < DefaultMove > const lcc;
+    cds :: LinkedList < CopyMove > const ldc;
+    cds :: LinkedList < Move > const lec;
+    cds :: LinkedList < Copy > const lfc;
+    cds :: LinkedList < Default > const lgc;
+    cds :: LinkedList < None > const lhc;
+
+    cds :: HashSet < DefaultCopyMove > hsla;
+    cds :: HashSet < DefaultCopy > hslb;
+    cds :: HashSet < DefaultMove > hslc;
+    cds :: HashSet < CopyMove > hsld;
+    cds :: HashSet < Move > hsle;
+    cds :: HashSet < Copy > hslf;
+    cds :: HashSet < Default > hslg;
+    cds :: HashSet < None > hslh;
+
+    cds :: HashSet < DefaultCopyMove > const hslac;
+    cds :: HashSet < DefaultCopy > const hslbc;
+    cds :: HashSet < DefaultMove > const hslcc;
+    cds :: HashSet < CopyMove > const hsldc;
+    cds :: HashSet < Move > const hslec;
+    cds :: HashSet < Copy > const hslfc;
+    cds :: HashSet < Default > const hslgc;
+    cds :: HashSet < None > const hslhc;
+
+    cds :: HashMap < DefaultCopyMove, DefaultCopyMove > hmla;
+    cds :: HashMap < DefaultCopy, DefaultCopy > hmlb;
+    cds :: HashMap < DefaultMove, DefaultMove > hmlc;
+    cds :: HashMap < CopyMove, CopyMove > hmld;
+    cds :: HashMap < Move, Move > hmle;
+    cds :: HashMap < Copy, Copy > hmlf;
+    cds :: HashMap < Default, Default > hmlg;
+    cds :: HashMap < None, None > hmlh;
+
+    cds :: HashMap < DefaultCopyMove, DefaultCopyMove > const hmlac;
+    cds :: HashMap < DefaultCopy, DefaultCopy > const hmlbc;
+    cds :: HashMap < DefaultMove, DefaultMove > const hmlcc;
+    cds :: HashMap < CopyMove, CopyMove > const hmldc;
+    cds :: HashMap < Move, Move > const hmlec;
+    cds :: HashMap < Copy, Copy > const hmlfc;
+    cds :: HashMap < Default, Default > const hmlgc;
+    cds :: HashMap < None, None > const hmlhc;
+
+    cds :: LinkedHashSet < DefaultCopyMove > lhsla;
+    cds :: LinkedHashSet < DefaultCopy > lhslb;
+    cds :: LinkedHashSet < DefaultMove > lhslc;
+    cds :: LinkedHashSet < CopyMove > lhsld;
+    cds :: LinkedHashSet < Move > lhsle;
+    cds :: LinkedHashSet < Copy > lhslf;
+    cds :: LinkedHashSet < Default > lhslg;
+    cds :: LinkedHashSet < None > lhslh;
+
+    cds :: LinkedHashSet < DefaultCopyMove > const lhslac;
+    cds :: LinkedHashSet < DefaultCopy > const lhslbc;
+    cds :: LinkedHashSet < DefaultMove > const lhslcc;
+    cds :: LinkedHashSet < CopyMove > const lhsldc;
+    cds :: LinkedHashSet < Move > const lhslec;
+    cds :: LinkedHashSet < Copy > const lhslfc;
+    cds :: LinkedHashSet < Default > const lhslgc;
+    cds :: LinkedHashSet < None > const lhslhc;
+
+    cds :: LinkedHashMap < DefaultCopyMove, DefaultCopyMove > lhmla;
+    cds :: LinkedHashMap < DefaultCopy, DefaultCopy > lhmlb;
+    cds :: LinkedHashMap < DefaultMove, DefaultMove > lhmlc;
+    cds :: LinkedHashMap < CopyMove, CopyMove > lhmld;
+    cds :: LinkedHashMap < Move, Move > lhmle;
+    cds :: LinkedHashMap < Copy, Copy > lhmlf;
+    cds :: LinkedHashMap < Default, Default > lhmlg;
+    cds :: LinkedHashMap < None, None > lhmlh;
+
+    cds :: LinkedHashMap < DefaultCopyMove, DefaultCopyMove > const lhmlac;
+    cds :: LinkedHashMap < DefaultCopy, DefaultCopy > const lhmlbc;
+    cds :: LinkedHashMap < DefaultMove, DefaultMove > const lhmlcc;
+    cds :: LinkedHashMap < CopyMove, CopyMove > const lhmldc;
+    cds :: LinkedHashMap < Move, Move > const lhmlec;
+    cds :: LinkedHashMap < Copy, Copy > const lhmlfc;
+    cds :: LinkedHashMap < Default, Default > const lhmlgc;
+    cds :: LinkedHashMap < None, None > const lhmlhc;
+
+    cds :: Array < int > arr = { 5, 4, 3, 2, 1 };
+    cds :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
+
+    Collection < int > & c2 = arr;
+
+//    arr.forEach ( [] ( int v ) { v = 3; } );
+//    arr.forEach ( [] ( int & v ) { v = 3; } );
+//    arr.forEach ( [] ( int const & v ) { (void)v; } );
+//    arrc.forEach ( [] ( int v ) { v = 3; } );
+////    arrc.forEach ( [] ( int & v ) { /*v = 3;*/ v; } );
+//    arrc.forEach ( [] ( int const & v ) { (void)v; } );
+//
+//    arr.forEach ( [] ( auto v ) { v = 3; } );
+//    arr.forEach ( [] ( auto & v ) { v = 3; } );
+//    arr.forEach ( [] ( auto const & v ) { (void)v; } );
+//    arrc.forEach ( [] ( auto v ) { v = 3; } );
+//    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
+//    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
+
+    (void)arrc.findLastThat ( [](int v){return true;} );
+    std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
+    * arr.begin() = 3;
+//    arr.insertBefore ( arr.begin(), 3 );
+    std :: cout << arrc.sub < cds :: Array > ( 1, 3 );
+    std :: cout << arrc.sub < cds :: Array < int > > ( 1, 3 ) << '\n';
+
+    arr.sort();
+    std :: cout << arr << '\n';
+    arr.sort([](int a, int b){ return a > b; });
+    std :: cout << arr << '\n';
 
     return 0;
 }
