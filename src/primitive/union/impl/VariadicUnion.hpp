@@ -631,7 +631,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 if ( this->_holder == __UnionTargetPackTypeTraits :: __directInitIndex ) {
-                    * static_cast < typename __UnionTargetPackTypeTraits :: __DirectInitType * > ( static_cast < void * > ( & this->_memory [0U] ) ) = cds :: forward < __TargetElementType > ( element );
+                    * static_cast < typename __UnionTargetPackTypeTraits :: __DirectInitType * > ( static_cast < void * > ( & this->_memory [0U] ) ) = std :: forward < __TargetElementType > ( element );
                     return;
                 }
 
@@ -665,7 +665,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             ) noexcept -> void {
 
                 if ( this->_holder == __UnionTargetPackTypeTraits :: __convertInitIndex ) {
-                    * static_cast < typename __UnionTargetPackTypeTraits :: __ConvertInitType * > ( static_cast < void * > ( & this->_memory [0U] ) ) = cds :: forward < __TargetElementType > ( element );
+                    * static_cast < typename __UnionTargetPackTypeTraits :: __ConvertInitType * > ( static_cast < void * > ( & this->_memory [0U] ) ) = std :: forward < __TargetElementType > ( element );
                     return;
                 }
 
