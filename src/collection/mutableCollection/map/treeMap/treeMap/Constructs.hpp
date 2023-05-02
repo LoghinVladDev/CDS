@@ -249,7 +249,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                                     __Comparator
                             >,
                             typename Map < __KeyType, __ValueType > :: EntryType,
-                            typename Map < __KeyType, __ValueType > :: EntryType const
+                            typename Map < __KeyType, __ValueType > :: EntryType
                     >;
 
 
